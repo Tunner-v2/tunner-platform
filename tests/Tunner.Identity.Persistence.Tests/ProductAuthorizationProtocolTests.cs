@@ -2291,7 +2291,13 @@ public sealed class ProductAuthorizationProtocolTests(SessionListingPostgresFixt
         });
         try
         {
-            Assert.NotNull(content); Assert.Same(scenario.Host.Clock, content.Clock); await content.InitializeAsync(); return (scenario, content);
+            Assert.NotNull(content); Assert.Same(scenario.Host.Clock, content.Clock);
+            // Create synchronizes this shared clock to system time. Content intervals require PostgreSQL microsecond precision.
+            // Advance by at most nine ticks; never move behind the already authenticated session.
+            var remainder = scenario.Host.Clock.GetUtcNow().UtcTicks % TimeSpan.TicksPerMicrosecond;
+            if (remainder != 0) scenario.Host.Clock.Advance(TimeSpan.FromTicks(TimeSpan.TicksPerMicrosecond - remainder));
+            Assert.Equal(0, scenario.Host.Clock.GetUtcNow().UtcTicks % TimeSpan.TicksPerMicrosecond);
+            await content.InitializeAsync(); return (scenario, content);
         }
         catch { await scenario.DisposeAsync(); throw; }
     }

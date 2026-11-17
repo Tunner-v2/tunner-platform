@@ -20,7 +20,7 @@
   ],
   "scope": "Standalone opted-in governed Product wording with explicit owner-qualified semantics, shared exact Content availability, and existing-host native protocol tests. Preserve original014 DONE, business/security/permissions/defaults. Existing inventory additions, Identity module reference and Recovery-only StepUp bridge receive bounded currentness using retained qualification; no historical feature audit or production selection.",
   "candidate": {
-    "state": "UNAPPLIED_INDEPENDENT_SOURCE_REVIEW_PASS_RUNTIME_PENDING",
+    "state": "APPLIED_COMPILE_PASS_21_PURE_AND24_NATIVE_PASS_TWO_FIXTURE_CASES_PENDING",
     "patch_ref": "artifacts/p2-019-content-20261116/product-authorization-presentation.patch",
     "sha256": "08ba52319f5ef3d1dce6fd75a42d09549c3800f273c1238356ede250fcbec6a8",
     "authored_cases": 29
@@ -30,5 +30,6 @@
     "governance/evidence/P2-003-RV006-VALIDATION.json",
     "governance/evidence/P2-009-RV009-VALIDATION.json"
   ],
-  "boundaries": "Technical compatibility scope; whole P2-019 Product acceptance and all production/provider values/activation, protected-main merge and release remain separate."
+  "boundaries": "Technical compatibility scope; whole P2-019 Product acceptance and all production/provider values/activation, protected-main merge and release remain separate.",
+  "current_qualification": {"source_sha":"6b777ca69cf1140bd75aa87942ede80285dac499","pure":{"executed":21,"passed":21,"failed":0,"source_sha":"6b777ca69cf1140bd75aa87942ede80285dac499","receipt_ref":"governance/evidence/p2-019-content-20261116/native/product-presentation-6b777ca6/presentation.trx"},"native_initial":{"executed":26,"passed":24,"failed":2,"not_executed":0,"timed_out":false,"accepted":false,"owned_containers_remaining":0,"borrowed_preserved":true,"source_sha":"6b777ca69cf1140bd75aa87942ede80285dac499","receipt_ref":"governance/evidence/p2-019-content-20261116/native/cfc067f3cc684210a4032c6fac719c34/summary.json"},"fixture_repair":{"classification":"TEST_FIXTURE_CLOCK_PRECISION","diagnosis":"Both native facts fail Content publication seeding before BeginContinuation: system-synchronized shared clock has sub-microsecond ticks rejected by existing SQL precision guard.","patch_ref":"artifacts/p2-019-content-20261116/product-published-fixture-precision.patch","sha256":"403792704b41c5273c991755fdc90cf82e36b8d9b8175e711ba2411aae4f73ad","change":"One private test factory advances shared clock0–9ticks before seeding and asserts microsecond precision. Production/validators/all original journey assertions unchanged; independent exact-delta source reviewPASS.","rerun":"ONLY two failed ProductAuthorizationProtocolTests.PublishedContent facts; no rerun of21pure or24successful native cases."},"boundary":"All six new ContentPG,11 oldRecoveryreader and7 existingContent cases actuallyPASS. Both new Product native journeys fail before request creation during fixture seeding. No Product/wholeWork19 runtime acceptance inferred."}
 }
