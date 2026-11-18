@@ -10,6 +10,16 @@
     "transition_ref": "governance/evidence/p2-016-notifications-20261115/native-gates/product-acceptance-transition-cce334fe.json"
   },
   "native_readiness": {
+    "source_sha": "0b82204112180869de74e1f4d87a2a7039736b98",
+    "qualified_behavior_carrier": "2881372e10c8a086167d5e06f83dbd6bfdfc160a",
+    "outcome": "READY",
+    "failures": [],
+    "exit_code": 0,
+    "ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/p016-ready-0b822041.json",
+    "sha256": "4a407d9ef610f0c40c37c1830ce304e3e90510494cdd34ac5abaccbec7f3bed8",
+    "boundary": "Actual current native gate, not Product acceptance, DONE, held143 qualification or release."
+  },
+  "prior_native_readiness": {
     "source_sha": "cce334fe5c55c8087343024775ab543368be3ea9",
     "outcome": "READY",
     "failures": [],
@@ -99,14 +109,14 @@
   "source_currentness_reconciliation": {
     "carrier_commit_sha": "2881372e10c8a086167d5e06f83dbd6bfdfc160a",
     "previous_carrier_commit_sha": "06b20de2b2b0303a1213259c877b990169b9e380",
-    "result": "SOURCE_AND_RUNTIME_PASS_NATIVE_READINESS_PENDING",
+    "result": "SOURCE_RECONCILED_NATIVE_READY",
     "unchanged_owned_paths": 30,
     "changed_owned_paths": [{"path":"tests/Tunner.Worker.Tests/OutboxReceiveBrokerFixture.cs","git_blob":"695b3dd39fb52a112310e3fffcc38cc7ab2aa213","sha256":"3616dc50b7a201d2b8a2e68bf59f2072d4eb7975a218f7120d65c461b6c3d9a8","change":"Portable fixture delegation only for absent native run ID; native admission/ownership and production code unchanged.","qualification":"Actual6receiver cases at ec3d plus current CI27Worker/1417Identity, including those6 and the real hosted IdentityPostCommitTests case, allPASS. Not a new78-case Windows run."}],
     "actual_ci_merge": "8734dcaf292f269e7be347be02cbd80389c03546",
     "full_tree_equals_carrier": "0f4a8b85e141bb3d6a53c181a71f8ba8d6fb5aab",
     "qualification_ref": "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
     "independent_review": "Existing independent source/QA reviewer verified exact current raw hashes/case identities and all31owned objects/filtered working files. Original78integrated run, smoke, prior carriers and role assessments remain historical evidence.",
-    "boundary": "Minimal active-work-item source binding only. Native READY/Product acceptance remain separate; no held143execution, image waiver, production activation, merge or release."
+    "boundary": "Minimal active-work-item source binding with actual nativeREADY at0b822041. Product acceptance remains pending; no held143execution, image waiver, production activation, merge or release."
   },
   "prior_source_currentness_reconciliation": {
     "carrier_commit_sha": "06b20de2b2b0303a1213259c877b990169b9e380",
@@ -178,7 +188,7 @@
     "tests/Tunner.Worker.Tests/RabbitMqOutboxReceiverIntegrationTests.cs",
     "tests/Tunner.Worker.Tests/RabbitMqOutboxReceiverTests.cs"
   ],
-  "checked_at": "2026-11-16T03:18:26Z",
+  "checked_at": "2026-11-18T21:40:29Z",
   "integrated_qualification": {
     "result": "PASS",
     "source_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475",
