@@ -3,8 +3,9 @@
   "scope_id": "TUN-P2-019",
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "phase": "READY_PENDING_PRODUCT_ACCEPTANCE_AND_GLOBAL_CI",
-  "native_readiness": {"checked_commit_sha":"f2819dcf897eff937b115066992bcb5016dd33f4","validated_behavior_carrier":"96685959ef4e87b319e214e615407517c1c3a64b","command":"governance gate check TUN-P2-019","outcome":"READY","exit_code":0,"failures":[],"satisfied_checks":18,"receipt_ref":"governance/evidence/p2-019-content-20261116/integration-gate-f2819dcf/native-ready.json","boundary":"Actual fresh P019 engineering gate. Product acceptance, GLOBAL CI, protected-main integration, production activation and release remain separate; private HOST defect stays unresolved."},
+  "phase": "CURRENT_SOURCE_QUALIFIED_NATIVE_READINESS_PENDING",
+  "native_readiness": {"outcome":"PENDING","qualified_behavior_carrier":"6acba21c35fddc0ddb9e79efbdf5d7a0299cde04","previous_current_check":"NOT_READY for twelve source-currentness bindings only","previous_current_ref":"artifacts/p2-019-content-20261116/p019-readiness-6acba21c.json","boundary":"No current READY, Product acceptance, held143 qualification or whole-CI PASS inferred."},
+  "historical_native_readiness": {"checked_commit_sha":"f2819dcf897eff937b115066992bcb5016dd33f4","validated_behavior_carrier":"96685959ef4e87b319e214e615407517c1c3a64b","command":"governance gate check TUN-P2-019","outcome":"READY","exit_code":0,"failures":[],"satisfied_checks":18,"receipt_ref":"governance/evidence/p2-019-content-20261116/integration-gate-f2819dcf/native-ready.json","boundary":"Actual fresh P019 engineering gate. Product acceptance, GLOBAL CI, protected-main integration, production activation and release remain separate; private HOST defect stays unresolved."},
   "qualification_correction": {
     "detected_at": "2026-11-17T23:01:24Z",
     "source_sha": "5b8f13b18611a16fab13d6c635d216606dd9e4ba",
@@ -49,6 +50,26 @@
   },
   "engineering_review_recorded_at": "2026-11-17T21:00:36Z",
   "current_delivery_summary": {
+    "result": "CURRENT_SOURCE_QUALIFIED_NATIVE_READINESS_PENDING",
+    "source_commit_sha": "6acba21c35fddc0ddb9e79efbdf5d7a0299cde04",
+    "recorded_at": "2026-11-18T22:13:32Z",
+    "configuration_families": 16,
+    "governed_consumer_adapters": 12,
+    "source_semantics": "156 owned paths:144 unchanged vs96685959 plus12 exact-source-qualified changes below. Original functional/UI outcomes and actual SHAs remain in historical_delivery_summary; no new combined93browser or Windows run is claimed.",
+    "ui_evidence_ref": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
+    "current_qualification": {
+      "evidence_refs": ["governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json","governance/evidence/TUN-P2-019-TEST001-VALIDATION.json","governance/evidence/p2-019-content-20261116/fixture-compatibility-2c0daf3c/browser-results.json","governance/evidence/p2-019-content-20261116/fixture-compatibility-2c0daf3c/browser-execution.json","governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json"],
+      "recovery_configuration_test": "ExactD7 source:37/37 actual Windows13 and37/37 retained Linux cases. Historical qualified source reuse, not heldC1/143 execution.",
+      "content_lifecycle_test": "Exact7c source:12/12 actual PostgreSQL including all5new cases; retained current Linux class36/36PASS.",
+      "fixture_and_two_browser_specs": "Four fixture/project/starter files and2specs:closedTEST0017c plus actual8C1 strict-TLS passes, actual starter start/status and3early guards. Original21mock checks remain historical.",
+      "admin_native_version_ui": "ThreeAdmin files and configuration spec retain exacte9ed blobs:6scoped browserPASS, including both TOTP/Recovery13/15 edit/review/history/rollback cases. Current generic webCI excludes configuration-admin and is not used for these4paths.",
+      "review": "Root plus existing independent source/QA reviewer verified all12 mappings, unchanged144objects, exact qualified/current source identity and original raw results. No extra people, suite execution or held qualification claimed.",
+      "child_sources": "New SQL/migration and isolated fixture files remain separately owned and qualified by closedTUN-P2-019-TEST001; unchanged7cobjects. No orphaned or silently expanded parent vector.",
+      "ci": "Current head6ac/run44404133234 baseline and executedwebSUCCESS, wholeworkflowFAIL fromLGTM/aggregate only. Application/test/tool/contract code is unchanged from qualified288 with retained1912PASS; no image/production/merge/release approval."
+    },
+    "boundary": "Three held compatibility revisions remain ACTIVE/NON_BLOCKING with empty blocked_scope. Their local143 remains0executed; this source binding does not close them. Product acceptance and native readiness remain separate."
+  },
+  "historical_delivery_summary": {
     "result": "ENGINEERING_QUALIFIED_NATIVE_READINESS_PENDING",
     "source_commit_sha": "96685959ef4e87b319e214e615407517c1c3a64b",
     "recorded_at": "2026-11-17T21:00:36Z",
@@ -511,8 +532,8 @@
   "device_publication_qualification": {"patch_ref":"artifacts/p2-019-content-20261116/device-publication.patch","sha256":"2b8706160ed9d165db86726fe8e87dc60e7ec6f46ff50bc26ea1c0c6e876c6ec","source_review":"PASS independent solution-architect/cyber-security review; Content-beforeDevice lock order, exact live transaction witness reuse, async browser preparation and complete local post-save temporal bounds","authored_cases":18,"runtime":"PASS scoped Device19 distinct identities across retained18=17PASS1FAIL and targeted5PASS; actual sources/equivalence in current_increment_qualification","boundaries":"Presentation-only opt-in; existing proof, target, trust and session effects preserved. No production values or activation.","binding_repair_patch_sha256":"65e1dea86fad85be1af985b4a739df4e2966d4511aace98081c117f165081610","focused_receipt_ref":"governance/evidence/p2-019-content-20261116/native/1cb9e925d1064eceb9cba1915b95906b/summary.json"},
   "recovery_browser_qualification": {"source_sha":"004603cf242c26c359b85103372016bb01fca3e1","compile":"PASS zero warnings/errors","pure":{"executed":24,"passed":24,"failed":0,"receipt_ref":"governance/evidence/p2-019-content-20261116/native/recovery-browser-004603cf/presentation.trx"},"initial_public":{"executed":4,"passed":3,"failed":1,"accepted":false,"receipt_ref":"governance/evidence/p2-019-content-20261116/native/321ca8d2c3134d6d8791d2b8b82d2c17/summary.json"},"test_correction":"Only new bootstrap test expected404 on unregistered anonymous route; existing BFF fallback returns401. Correct expectation and independently assert real endpoint inventory contains Login but no Recovery routes. Production and prior assertions unchanged; rerun only failed identity.","private_fixed123":"PASS at1bf59717 exact corrected build0748b2dc; initial121/123 failure retained in private_recovery_initial_16468b07","focused_public":{"source_sha":"35a121aa540778f9961a2d59ccc7d4783f44d3c9","executed":1,"passed":1,"failed":0,"accepted":true,"receipt_ref":"governance/evidence/p2-019-content-20261116/native/7eb7099a2aca4b959228669100676c32/summary.json"},"distinct_passing_identities":28,"source_equivalence":"Application source unchanged004603cf→35a121aa; retain24pure and3successfulpublic at004603cf, correctedbootstrap identity at35a121aa. Original4=3PASS1FAIL remains retained; no single28case run claimed."},
   "pending_increment": {"scope":"Qualified Recovery/Device compatibility increment","source_sha":"1bf5971739f163d15777498b211ff0f48f677bc8","engineering":"PASS actual123private+17protocol+6resource; retained28Recoverybrowser/19Device/35shared at actual sources","native_closure":"CLOSED after three nativeALLOWED checks at298dcaff","next":"P005/006 currentness and two solution bridges reconciled without original closure changes. Continue remaining shared bindings and manual Content/Admin composition after its pending isolated-session grant. Work19 context performance remains separately unresolved; no equivalent retry.","whole_work_item":"IN_PROGRESS/PENDING"},
-  "tested_commit_sha": "96685959ef4e87b319e214e615407517c1c3a64b",
-  "validated_commit_sha": "96685959ef4e87b319e214e615407517c1c3a64b",
+  "tested_commit_sha": "6acba21c35fddc0ddb9e79efbdf5d7a0299cde04",
+  "validated_commit_sha": "6acba21c35fddc0ddb9e79efbdf5d7a0299cde04",
   "owned_behavior_paths": [
     "web/tests/browser-testing/admin-security.spec.ts",
     "web/tests/browser-testing/governed-content-flow.spec.ts",
