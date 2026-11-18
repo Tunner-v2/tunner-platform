@@ -188,6 +188,9 @@ public sealed class IdentityRuntimeRecoveryCodeConfigurationTests(SessionListing
             c with { HashIterations = 9_999 }, c with { MaximumHashWork = 20_001 }, c with { MaximumGenerationAttempts = 9 }, c with { MaximumConcurrentWork = 2 }, c with { MaximumWorkDuration = TimeSpan.FromSeconds(11) } };
         foreach (var changed in variations) Assert.False(native.Supports(changed.ToProfile()));
         Assert.Throws<ArgumentException>(() => (c with { NativeIdentityVersion = "unsupported" }).ToProfile());
+        var differentSupportedVersion = c with { NativeIdentityVersion = c.NativeIdentityVersion == "10.0.13" ? "10.0.15" : "10.0.13" };
+        Assert.False(native.Supports(differentSupportedVersion.ToProfile()));
+        Assert.Throws<InvalidOperationException>(() => new RecoveryCodeNative(differentSupportedVersion.ToProfile()));
     }
 
     [Fact]
@@ -250,7 +253,7 @@ public sealed class IdentityRuntimeRecoveryCodeConfigurationTests(SessionListing
     private static PasskeyConfigurationValues PasskeyValues() => new("fixture-passkey-v1", "authentication.example.test", AuthenticationTestHost.Origin, TimeSpan.FromMinutes(1), TimeSpan.FromSeconds(30), TimeSpan.FromMinutes(2), PasskeyRevocationSessionEffect.PreserveExistingSessions,
         "required", new[] { -7 }, 32, 32768, 4, 4, "fixture-enrollment-v1", "fixture-revocation-v1", "fixture-processing", "fixture-retention", "required", "none",
         new Dictionary<string, string> { [PasskeyPolicy.AssuranceKey(false, false)] = "fixture-passkey-assurance", [PasskeyPolicy.AssuranceKey(true, false)] = "fixture-syncable-unbacked-assurance", [PasskeyPolicy.AssuranceKey(true, true)] = "fixture-syncable-backed-assurance" });
-    private static RecoveryCodeConfigurationCrypto Crypto(long work) => new("fixture-recovery-crypto-v1", "10.0.13", 2, 2, 10_000, work, 8, 1, TimeSpan.FromSeconds(10));
+    private static RecoveryCodeConfigurationCrypto Crypto(long work) => new("fixture-recovery-crypto-v1", Tunner.Testing.Totp.NativeTotpCodeFixture.IdentityVersion, 2, 2, 10_000, work, 8, 1, TimeSpan.FromSeconds(10));
     private static RecoveryCodeConfigurationVersion Candidate(RuntimeConfigurationTestEnvironment env, string version, long work = 20_000) => new(
         new(version, "ACTIVE", "RECOVERY_CODES", env.Interval, null, ["client-proposed-evidence-is-not-authority"]),
         new(version, AuthenticationTestHost.Origin, Crypto(work), "NATIVE_HEX32_V1", "fixture-recovery-delivery-v1", TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(5), 2, 8,

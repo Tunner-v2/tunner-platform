@@ -7,6 +7,21 @@ namespace Tunner.Testing.Totp;
 /// <summary>Test-only native framework adapter, shared by tests and the private browser oracle.</summary>
 internal static class NativeTotpCodeFixture
 {
+    // Explicit synthetic test-runtime admission; never selects a production policy.
+    internal static string? IdentityInformationalVersion =>
+        typeof(AuthenticatorTokenProvider<IdentityUserAdapter>).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+    internal static string IdentityVersion => RequireIdentityVersion(IdentityInformationalVersion);
+
+    internal static string RequireIdentityVersion(string? informationalVersion)
+    {
+        var separator = informationalVersion?.IndexOf('+') ?? -1;
+        if (informationalVersion is null || separator <= 0 || separator == informationalVersion.Length - 1)
+            throw new InvalidOperationException("The explicitly supported Identity test runtime is unavailable.");
+        var version = informationalVersion[..separator];
+        return version is "10.0.13" or "10.0.15" ? version :
+            throw new InvalidOperationException("The explicitly supported Identity test runtime is unavailable.");
+    }
+
     internal static string NativeCode(string seed, int counterOffset = 0)
     {
         var assembly = typeof(AuthenticatorTokenProvider<IdentityUserAdapter>).Assembly;

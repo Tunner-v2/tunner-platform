@@ -44,8 +44,22 @@ public sealed class RecoveryCodeNativeTests
     }
 
     // Explicit finite synthetic work profile; never a production policy selection.
-    internal static RecoveryCodeCryptoProfile Profile() => new("fixture-recovery-crypto-v1", "10.0.13", 2, 2,
+    internal static RecoveryCodeCryptoProfile Profile() => new("fixture-recovery-crypto-v1", Tunner.Testing.Totp.NativeTotpCodeFixture.IdentityVersion, 2, 2,
         10_000, 20_000, 8, 1, TimeSpan.FromSeconds(10));
+
+    [Fact]
+    public void SyntheticProfilesAdmitOnlyExplicitIdentityVersionsWithBuildMetadata()
+    {
+        Console.WriteLine("IDENTITY_TEST_ASSEMBLY_INFORMATIONAL_VERSION=" + Tunner.Testing.Totp.NativeTotpCodeFixture.IdentityInformationalVersion);
+        Assert.Equal("10.0.13", Tunner.Testing.Totp.NativeTotpCodeFixture.RequireIdentityVersion("10.0.13+fixture"));
+        Assert.Equal("10.0.15", Tunner.Testing.Totp.NativeTotpCodeFixture.RequireIdentityVersion("10.0.15+fixture"));
+        string?[] rejected = [null, string.Empty, "10.0.13", "10.0.15", "10.0.13+", "10.0.15+", "10.0.14+fixture", "10.0.16+fixture"];
+        foreach (var value in rejected)
+            Assert.Throws<InvalidOperationException>(() => Tunner.Testing.Totp.NativeTotpCodeFixture.RequireIdentityVersion(value));
+        Assert.Equal(typeof(Microsoft.AspNetCore.Identity.PasswordHasher<IdentityUserAdapter>).Assembly,
+            typeof(Microsoft.AspNetCore.Identity.AuthenticatorTokenProvider<IdentityUserAdapter>).Assembly);
+        Assert.Equal(Profile().NativeIdentityVersion, new TotpTests.Profile().Policy.NativeVerifierVersion);
+    }
 
     [Fact]
     public void CanonicalizationIsAsciiOnlyBoundedAndDoesNotPrintValues()

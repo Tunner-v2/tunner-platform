@@ -21,7 +21,7 @@ public sealed class TotpTests(IdentityPostgresFixture fixture) : IClassFixture<I
     // All policy/content/provider data below is synthetic isolated test input, never a production selection.
     internal sealed class Profile : ITotpPolicySource, ITotpSeedStore, ITotpMutationEligibilitySource, ITotpMfaRequirementSource, ITotpPresentationSource, IAssurancePolicySource, IStepUpPresentationSource
     {
-        internal TotpPolicy Policy { get; set; } = new("fixture-totp-v1", Origin, "Fixture only", "10.0.13", "SHA1", 6, 30, 2,
+        internal TotpPolicy Policy { get; set; } = new("fixture-totp-v1", Origin, "Fixture only", Tunner.Testing.Totp.NativeTotpCodeFixture.IdentityVersion, "SHA1", 6, 30, 2,
             TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(10), TimeSpan.FromMinutes(15), 10_000, 16, 3, 8,
             TotpSessionEffect.PreserveExistingSessions, TotpSessionEffect.PreserveExistingSessions, TotpReplacementOrdering.IndependentEnrollment,
             TotpResetBehavior.RetireAffectedFactorThenSeparateEnrollment, "fixture-proof", "fixture-proof", "fixture-proof", "fixture-proof",

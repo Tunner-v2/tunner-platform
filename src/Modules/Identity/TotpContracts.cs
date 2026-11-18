@@ -24,7 +24,7 @@ public sealed record TotpPolicy(string Version, string Origin, string Issuer, st
                 ResetAssurancePolicyVersion, OperationProofAssurance, SecretBindingVersion, ProcessingReference, RetentionReference }.Any(string.IsNullOrWhiteSpace) ||
             !Uri.TryCreate(Origin, UriKind.Absolute, out var uri) || uri.Scheme != "https" || uri.UserInfo.Length != 0 ||
             Origin != uri.GetLeftPart(UriPartial.Authority) || Issuer.Any(char.IsControl) ||
-            NativeVerifierVersion != "10.0.13" || Algorithm != "SHA1" || Digits != 6 || PeriodSeconds != 30 || NativeWindowSteps != 2 ||
+            NativeVerifierVersion is not ("10.0.13" or "10.0.15") || Algorithm != "SHA1" || Digits != 6 || PeriodSeconds != 30 || NativeWindowSteps != 2 ||
             EnrollmentLifetime <= TimeSpan.Zero || ResultRecoveryLifetime <= TimeSpan.Zero || MaximumClockDeviation < TimeSpan.Zero ||
             MaximumVerificationDuration <= TimeSpan.Zero || MaximumVerificationDuration > TimeSpan.FromMinutes(1) ||
             ReplayRetention < TimeSpan.FromSeconds(150) + MaximumClockDeviation * 2 + MaximumVerificationDuration ||

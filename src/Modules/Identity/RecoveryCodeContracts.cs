@@ -10,7 +10,7 @@ public sealed class RecoveryCodeCryptoProfile
         int hashIterations, long maximumHashWork, int maximumGenerationAttempts, int maximumConcurrentWork,
         TimeSpan maximumWorkDuration)
     {
-        if (string.IsNullOrWhiteSpace(version) || version.Length > 256 || version.Any(char.IsControl) || nativeIdentityVersion != "10.0.13" || codesPerSet <= 0 ||
+        if (string.IsNullOrWhiteSpace(version) || version.Length > 256 || version.Any(char.IsControl) || nativeIdentityVersion is not ("10.0.13" or "10.0.15") || codesPerSet <= 0 ||
             maximumCodesPerSet < codesPerSet || hashIterations <= 0 || maximumHashWork <= 0 ||
             (long)maximumCodesPerSet * hashIterations > maximumHashWork || maximumGenerationAttempts < codesPerSet ||
             maximumConcurrentWork <= 0 || maximumWorkDuration <= TimeSpan.Zero)

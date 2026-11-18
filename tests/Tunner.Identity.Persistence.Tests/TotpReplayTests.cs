@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -18,6 +19,30 @@ public sealed class TotpReplayTests(IdentityPostgresFixture fixture) : IClassFix
         var error = await new TotpNativeVerifier(context, host.Clock).AcceptAsync(factor, profile.Policy, profile.Seed(reference), code, CancellationToken.None);
         await context.SaveChangesAsync(); if (rollback) await tx.RollbackAsync(); else await tx.CommitAsync(); return error;
     }
+    [Fact]
+    public async Task DifferentSupportedNativeVersionRejectsWithoutUsingCodeOrChangingFactor()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await StartTotp(db, profile); await host.SeedAsync(db);
+        var enrolled = await Enroll(host, profile, await Login(host)); var seed = profile.Seed(enrolled.Reference); var code = NativeCode(seed, 1);
+        string factorBefore; string claimsBefore;
+        await using (var before = db.Context())
+        {
+            factorBefore = JsonSerializer.Serialize(await before.Set<TotpAuthenticatorRow>().AsNoTracking().SingleAsync());
+            claimsBefore = JsonSerializer.Serialize(await before.Set<TotpUsedCodeRow>().AsNoTracking().OrderBy(x => x.ClaimId).ToArrayAsync());
+        }
+        var original = profile.Policy;
+        profile.Policy = original with { NativeVerifierVersion = original.NativeVerifierVersion == "10.0.13" ? "10.0.15" : "10.0.13" };
+        profile.Policy.Validate();
+        Assert.Equal("DEPENDENCY_UNAVAILABLE", await Accept(db, host, profile, enrolled.Reference, code));
+        await using (var after = db.Context())
+        {
+            Assert.Equal(factorBefore, JsonSerializer.Serialize(await after.Set<TotpAuthenticatorRow>().AsNoTracking().SingleAsync()));
+            Assert.Equal(claimsBefore, JsonSerializer.Serialize(await after.Set<TotpUsedCodeRow>().AsNoTracking().OrderBy(x => x.ClaimId).ToArrayAsync()));
+        }
+        profile.Policy = original;
+        Assert.Null(await Accept(db, host, profile, enrolled.Reference, code));
+    }
+
     [Fact]
     public async Task NativeFullWindowBoundedHistoryRejectsAToBToAAndRetainsActivationClaim()
     {
