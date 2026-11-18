@@ -22,6 +22,7 @@ public sealed class OutboxReceiveBrokerFixture : IAsyncLifetime
     private readonly string instance = Guid.NewGuid().ToString("N");
     private readonly string password = Guid.NewGuid().ToString("N");
     private IContainer? container;
+    private IContainer? portable;
     private DockerClient? docker;
     private string? run;
     private string[] volumes = [];
@@ -41,10 +42,11 @@ public sealed class OutboxReceiveBrokerFixture : IAsyncLifetime
     {
         get
         {
-            if (container is null) throw SkipException.ForSkip("The admitted isolated container profile is required.");
+            var active = portable ?? container;
+            if (active is null) throw SkipException.ForSkip("The admitted isolated container profile is required.");
             return new ConnectionFactory
             {
-                HostName = "127.0.0.1", Port = container.GetMappedPublicPort(5672), UserName = "fixture", Password = password,
+                HostName = portable?.Hostname ?? "127.0.0.1", Port = active.GetMappedPublicPort(5672), UserName = "fixture", Password = password,
                 AutomaticRecoveryEnabled = false, RequestedConnectionTimeout = TimeSpan.FromSeconds(10),
                 ClientProvidedName = "tunner-test:owned-outbox-receive"
             };
@@ -55,7 +57,13 @@ public sealed class OutboxReceiveBrokerFixture : IAsyncLifetime
     {
         if (!TestHarnessProfiles.IsContainerExecutionEnabled()) return;
         run = Environment.GetEnvironmentVariable("TUNNER_SESSION_LISTING_RUN_ID");
-        if (run is null) return;
+        if (run is null)
+        {
+            portable = TestcontainersBaseline.CreateRabbitMqContainer("fixture", password);
+            try { await portable.StartAsync(); }
+            catch { await DisposeAsync(); throw; }
+            return;
+        }
         var admittedEngine = Environment.GetEnvironmentVariable("TUNNER_SESSION_LISTING_ENGINE_ID");
         var endpoint = Environment.GetEnvironmentVariable("DOCKER_HOST");
         if (run.Length != 32 || run.Any(c => !char.IsAsciiHexDigitLower(c)) || admittedEngine != Engine ||
@@ -105,6 +113,7 @@ public sealed class OutboxReceiveBrokerFixture : IAsyncLifetime
 
     public async Task StopAsync()
     {
+        if (portable is not null) { await portable.StopAsync(); return; }
         if (container is null || docker is null) throw new InvalidOperationException("The owned RabbitMQ fixture is unavailable.");
         RequireOwned(await docker.Containers.InspectContainerAsync(container.Id));
         await container.StopAsync();
@@ -112,6 +121,7 @@ public sealed class OutboxReceiveBrokerFixture : IAsyncLifetime
 
     public async Task StartAsync()
     {
+        if (portable is not null) { await portable.StartAsync(); return; }
         if (container is null || docker is null) throw new InvalidOperationException("The owned RabbitMQ fixture is unavailable.");
         RequireOwned(await docker.Containers.InspectContainerAsync(container.Id));
         await container.StartAsync();
@@ -121,6 +131,7 @@ public sealed class OutboxReceiveBrokerFixture : IAsyncLifetime
     {
         try
         {
+            if (portable is not null) await portable.DisposeAsync();
             if (container is not null && docker is not null)
             {
                 string? id;
@@ -150,6 +161,6 @@ public sealed class OutboxReceiveBrokerFixture : IAsyncLifetime
             }
             CleanupVerified = true;
         }
-        finally { docker?.Dispose(); docker = null; container = null; }
+        finally { docker?.Dispose(); docker = null; container = null; portable = null; }
     }
 }
