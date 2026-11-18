@@ -1,8 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using System.Text.Json;
 using Npgsql;
 using Tunner.Database;
+using Tunner.Database.Audit;
+using Tunner.Database.Outbox;
 using Tunner.Platform.Policies;
 using Tunner.PresentationContent;
 using Xunit;
@@ -190,6 +194,122 @@ public sealed class PresentationContentLifecycleTests(SessionListingPostgresFixt
         await using var db = await fixture.CreateDatabaseAsync(); var env = new PresentationContentTestEnvironment(db, new TestClock()); await env.InitializeAsync();
         await env.PublishTextAsync("login.heading", "fixture immutable"); await using var context = env.Context();
         var error = await Assert.ThrowsAsync<PostgresException>(() => context.Database.ExecuteSqlRawAsync(sql)); Assert.Equal("55000", error.SqlState);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("null")]
+    [InlineData("{}")]
+    [InlineData("{")]
+    public async Task IntegritySnapshotReadRejectsMissingNullIncompleteOrMalformedSelectedProfile(string? snapshot)
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var env = new PresentationContentTestEnvironment(db, new TestClock()); await env.InitializeAsync();
+        var publication = await env.PublishTextAsync("login.heading", "fixture integrity control"); await using var context = env.Context();
+        Assert.True(await context.Database.SqlQuery<bool>($"SELECT presentation_content.valid_publication({publication.PublicationReference}) AS \"Value\"").SingleAsync());
+        var digest = await context.Database.SqlQuery<string>($"SELECT \"TextDigest\" AS \"Value\" FROM presentation_content.versions WHERE \"Id\"={publication.VersionReference}").SingleAsync();
+        var target = publication.PublicationReference.ToString("N"); const string actor = "fixture-publisher";
+        const string controlVersion = "fixture-control-snapshot";
+        const string rejectedVersion = "fixture-invalid-snapshot";
+        var controlProfile = env.Profile with { Metadata = new(controlVersion, "ACTIVE", env.Scope, env.Interval, null, ["fixture-profile-approval"]) };
+        var controlEvent = await StageEffectAsync(controlVersion, controlProfile.Snapshot);
+        Assert.True(await HasEffectAsync(controlEvent, controlVersion));
+        // Construct a complete matching causal pair for this exact selected profile, rather than
+        // relying on the original publication's differently bound profileVersion to reject it.
+        var rejectedEvent = await StageEffectAsync(rejectedVersion, snapshot);
+        try
+        {
+            Assert.False(await HasEffectAsync(rejectedEvent, rejectedVersion));
+        }
+        catch (PostgresException error) when (snapshot == "{" && error.SqlState == "22P02")
+        {
+            // Invalid JSON is an allowed denial; no other database failure is accepted.
+        }
+        Assert.False(await context.Database.SqlQueryRaw<bool>("SELECT presentation_content.valid_publication(NULL::uuid) AS \"Value\"").SingleAsync());
+        Assert.False(await context.Database.SqlQuery<bool>($"SELECT presentation_content.valid_publication({Guid.NewGuid()}) AS \"Value\"").SingleAsync());
+        Assert.True(await HasEffectAsync(controlEvent, controlVersion));
+        Assert.True(await context.Database.SqlQuery<bool>($"SELECT presentation_content.valid_publication({publication.PublicationReference}) AS \"Value\"").SingleAsync());
+        Assert.All(await context.Set<AuditEventRecord>().AsNoTracking().ToArrayAsync(), audit => Assert.True(audit.VerifyIntegrity()));
+
+        Task<bool> HasEffectAsync(Guid eventReference, string profileVersion) => context.Database.SqlQuery<bool>(
+            $"SELECT presentation_content.has_effect({eventReference},{env.Scope},{profileVersion},{nameof(ContentOperation.Publish)},{target},{digest},{actor}) AS \"Value\"").SingleAsync();
+
+        async Task<Guid> StageEffectAsync(string profileVersion, string? selectedSnapshot)
+        {
+            if (selectedSnapshot is not null)
+                await context.Database.ExecuteSqlInterpolatedAsync($"INSERT INTO presentation_content.profiles (\"Scope\",\"Version\",\"Snapshot\") VALUES ({env.Scope},{profileVersion},{selectedSnapshot})");
+            var contract = env.Profile.Effects[ContentOperation.Publish]; var eventId = Guid.NewGuid(); var at = env.Clock.GetUtcNow();
+            const string operation = "OP-fixture-snapshot", correlation = "fixture-snapshot-correlation", evidence = "fixture-authorization-evidence";
+            EfAuditAppender.StageAppend(context, new(eventId, at, new(actor, "fixture-content-actor", [evidence]), contract.AuditAction,
+                operation, correlation, [new(target, "1")], contract.AuditResult, env.Profile.Classification, env.Profile.AuditRetentionClassReference,
+                policyVersionReferences: [profileVersion], evidenceReferences: [evidence]));
+            context.Set<OutboxMessage>().Add(new(eventId, contract.EnvelopeVersion, contract.EventType!, contract.EventSchemaVersion!, at, contract.Source,
+                target, env.Profile.Classification, JsonSerializer.Serialize(new { reference = target, scope = env.Scope, profileVersion,
+                    revision = 1, contentDigest = digest, authorizationEvidenceReference = evidence }), "1", operation, correlation));
+            await context.SaveChangesAsync(); return eventId;
+        }
+    }
+
+    [Fact]
+    public async Task PopulatedSnapshotReadMigrationDowngradeAndReapplyPreserveFunctionsExecutionAclAndAllOwnerData()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var env = new PresentationContentTestEnvironment(db, new TestClock()); await env.InitializeAsync();
+        var publication = await env.PublishTextAsync("login.heading", "fixture migration control"); await using var context = env.Context();
+        var migrator = context.GetService<IMigrator>(); var migrations = (await context.Database.GetAppliedMigrationsAsync()).ToArray();
+        Assert.Equal("20261118175300_P2ContentIntegritySnapshotRead", migrations[^1]);
+        const string definitionsSql = """
+            SELECT jsonb_object_agg(p.proname,pg_get_functiondef(p.oid))::text AS "Value"
+            FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+            WHERE n.nspname='presentation_content' AND p.proname IN ('has_effect','valid_publication')
+            """;
+        const string otherFunctionsSql = """
+            SELECT jsonb_object_agg(p.proname,pg_get_functiondef(p.oid))::text AS "Value"
+            FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+            WHERE n.nspname='presentation_content' AND p.proname NOT IN ('has_effect','valid_publication')
+            """;
+        const string aclSql = """
+            SELECT jsonb_object_agg(p.proname,p.proacl::text)::text AS "Value"
+            FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+            WHERE n.nspname='presentation_content' AND p.proname IN ('has_effect','valid_publication')
+            """;
+        const string dataSql = """
+            SELECT jsonb_build_object(
+              'profiles',(SELECT jsonb_agg(to_jsonb(t) ORDER BY t."Scope",t."Version") FROM presentation_content.profiles t),
+              'definitions',(SELECT jsonb_agg(to_jsonb(t) ORDER BY t."Scope",t."ProfileVersion",t."Key") FROM presentation_content.definitions t),
+              'variants',(SELECT jsonb_agg(to_jsonb(t) ORDER BY t."Scope",t."ProfileVersion",t."Reference") FROM presentation_content.variants t),
+              'proposals',(SELECT jsonb_agg(to_jsonb(t) ORDER BY t."Id") FROM presentation_content.proposals t),
+              'versions',(SELECT jsonb_agg(to_jsonb(t) ORDER BY t."Id") FROM presentation_content.versions t),
+              'publications',(SELECT jsonb_agg(to_jsonb(t) ORDER BY t."Id") FROM presentation_content.publications t),
+              'audit',(SELECT jsonb_agg(to_jsonb(t) ORDER BY t.event_id) FROM audit.events t),
+              'outbox',(SELECT jsonb_agg(to_jsonb(t) ORDER BY t.event_id) FROM platform.outbox_messages t))::text AS "Value"
+            """;
+        var originalAcl = await context.Database.SqlQueryRaw<string>(aclSql).SingleAsync();
+        await context.Database.ExecuteSqlRawAsync("""
+            REVOKE EXECUTE ON FUNCTION presentation_content.has_effect(uuid,text,text,text,text,text,text),
+              presentation_content.valid_publication(uuid) FROM PUBLIC;
+            """);
+        var executionAcl = await context.Database.SqlQueryRaw<string>(aclSql).SingleAsync(); Assert.NotEqual(originalAcl, executionAcl);
+        var upgraded = await context.Database.SqlQueryRaw<string>(definitionsSql).SingleAsync();
+        var otherFunctions = await context.Database.SqlQueryRaw<string>(otherFunctionsSql).SingleAsync();
+        var ownerData = await context.Database.SqlQueryRaw<string>(dataSql).SingleAsync();
+        Assert.Contains("WITH profile_value AS MATERIALIZED", upgraded, StringComparison.Ordinal);
+        await migrator.MigrateAsync("20261116075423_P2ContentChangeReason");
+        Assert.Equal(migrations[..^1], (await context.Database.GetAppliedMigrationsAsync()).ToArray());
+        var restored = await context.Database.SqlQueryRaw<string>(definitionsSql).SingleAsync();
+        Assert.NotEqual(upgraded, restored); Assert.DoesNotContain("profile_value", restored, StringComparison.Ordinal);
+        Assert.Equal(executionAcl, await context.Database.SqlQueryRaw<string>(aclSql).SingleAsync());
+        Assert.Equal(otherFunctions, await context.Database.SqlQueryRaw<string>(otherFunctionsSql).SingleAsync());
+        Assert.Equal(ownerData, await context.Database.SqlQueryRaw<string>(dataSql).SingleAsync());
+        Assert.True(await context.Database.SqlQuery<bool>($"SELECT presentation_content.valid_publication({publication.PublicationReference}) AS \"Value\"").SingleAsync());
+        await migrator.MigrateAsync();
+        Assert.Equal(migrations, (await context.Database.GetAppliedMigrationsAsync()).ToArray());
+        Assert.Equal(upgraded, await context.Database.SqlQueryRaw<string>(definitionsSql).SingleAsync());
+        Assert.Equal(executionAcl, await context.Database.SqlQueryRaw<string>(aclSql).SingleAsync());
+        Assert.Equal(otherFunctions, await context.Database.SqlQueryRaw<string>(otherFunctionsSql).SingleAsync());
+        Assert.Equal(ownerData, await context.Database.SqlQueryRaw<string>(dataSql).SingleAsync());
+        Assert.True(await context.Database.SqlQuery<bool>($"SELECT presentation_content.valid_publication({publication.PublicationReference}) AS \"Value\"").SingleAsync());
+        await using var scope = env.Open(); var resolved = await scope.Application.ResolveAsync(new(env.Scope, env.Variant, env.Clock.GetUtcNow()));
+        Assert.Equal(publication.PublicationReference.ToString("N"), Assert.Single(resolved.Content).Value.PublicationReference);
+        Assert.Equal("fixture migration control", Assert.Single(resolved.Content).Value.Text);
     }
 
     [Fact]

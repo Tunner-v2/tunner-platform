@@ -13,11 +13,15 @@
     "tools/browser-testing/BrowserTestIdentityConfiguration.cs",
     "tools/browser-testing/browser-test-identity-configuration-content.json",
     "web/tests/browser-testing/admin-security.spec.ts",
-    "web/tests/browser-testing/governed-content-flow.spec.ts"
+    "web/tests/browser-testing/governed-content-flow.spec.ts",
+    "src/Modules/PresentationContent/ContentIntegritySnapshotReadSql.cs",
+    "src/Modules/PresentationContent/Migrations/20261118175300_P2ContentIntegritySnapshotRead.cs",
+    "src/Modules/PresentationContent/Migrations/20261118175300_P2ContentIntegritySnapshotRead.Designer.cs",
+    "tests/Tunner.Identity.Persistence.Tests/PresentationContentLifecycleTests.cs"
   ],
   "authorization_ref": "governance/evidence/TUN-P2-019-SYNTHETIC-ADMIN-AUTHORIZATION.json",
   "approved_patch_sha256": "21ecf240136c4dff8490deddc02c3b64a9e6083930f78e4f1eb8408e787ae9e6",
-  "boundary": "Isolated explicit test fixture only; original P019 Product acceptance, production values/activation, merge and release remain separate. No execution or PASS claimed before qualification.",
+  "boundary": "Owner-authorized isolated fixture and necessary semantics-preserving Content SQL performance correction under the existing P2/P019 development goal. No production policies/activation or parent Product acceptance, merge or release is implied.",
   "implementation_observation": {
     "approved_patch_applied": true,
     "patch_sha256": "21ecf240136c4dff8490deddc02c3b64a9e6083930f78e4f1eb8408e787ae9e6",
@@ -28,5 +32,29 @@
     "pure_starter_boundary": "Mocked status bridge and actual AST-loaded starter functions; not real TLS/service qualification.",
     "environment_failure": "Initial build was blocked by DLL locks from the verified existing app process; only that owned process was stopped, then the unlocked build passed. Database/mail services, data and keys were preserved.",
     "actual_https_browser_execution": "PENDING at a committed candidate; no browser PASS claimed."
+  },
+  "first_real_qualification": {
+    "source_candidate": "d9170ef92d501df7556557a8f3f523bbd3fd343d",
+    "new_cases": 3,
+    "passed": 1,
+    "failed": 2,
+    "retained_cases_executed": 0,
+    "pass": "Real new-binary Content-only default; exact3actors, Identity actor admission rejected and Identity routes absent; owned process/scratch cleanup completed.",
+    "failure": "Enabled Identity workspace exceeds current existing request/UI waits; successful authorized probe returned all16 scopes/288published keys in9527ms. Content integrity SQL executed13094.574ms with2.466ms planning. No test timeout/assertion changes.",
+    "raw_results_ref": "artifacts/p2-019-content-20261116/manual-identity-d9170ef9/new/results.json",
+    "defect_ref": "governance/defects/DEF-TUN-P2-019-PERF-001.yaml",
+    "status": "PENDING focused production read-path correction and rerun of affected cases only; no final runtime PASS."
+  },
+  "sql_performance_preapplication": {
+    "patch_sha256": "c0511a6f2ea3fbd2663b1ef67bfc925d35c365e31ed4234b0e3e1c8802591eba",
+    "paths": [
+      "src/Modules/PresentationContent/ContentIntegritySnapshotReadSql.cs",
+      "src/Modules/PresentationContent/Migrations/20261118175300_P2ContentIntegritySnapshotRead.cs",
+      "src/Modules/PresentationContent/Migrations/20261118175300_P2ContentIntegritySnapshotRead.Designer.cs"
+    ],
+    "architecture_review": "Independent root source review PASS for same Content owner/function signatures/predicates, query-local snapshot parsing and reversible owner migration; no new module/provider/API or architecture decision. Historical installer/migrations/model snapshot remain untouched.",
+    "security_review": "Independent Cyber source review PASS; exact inverse transformation preserves predicates, scope/currentness/causal/audit/SoD bindings; no grants/security-definer/cache. Malformed selected JSON must remain denied/unavailable in qualification.",
+    "required_qualification": "Existing7 real PostgreSQL integrity/migration cases, NULL/missing/malformed selected-input denial, populated upgrade/down/up properties/ACL/data preservation, same288-key query and two failed enabled-mode journeys at original deadlines.",
+    "runtime_result": "PENDING; no SQL application or performance improvement yet claimed."
   }
 }

@@ -51,7 +51,7 @@ $genericRule = $scannerAst.FindAll({ param($node) $node -is [System.Management.A
     ForEach-Object { try { $_.SafeGetValue() } catch { } } |
     Where-Object { $_.Contains('Name') -and $_.Name -eq 'generic-secret-assignment' } |
     Select-Object -First 1
-if ($null -eq $genericRule -or $configuration.allowances.Count -ne 5) { throw 'Secret-scan qualification inputs changed; review the case set.' }
+if ($null -eq $genericRule -or $configuration.allowances.Count -ne 6) { throw 'Secret-scan qualification inputs changed; review the case set.' }
 $reviewedMatches = @(
     foreach ($allowance in $configuration.allowances) {
         $content = [IO.File]::ReadAllText((Join-Path $RepositoryRoot $allowance.path))

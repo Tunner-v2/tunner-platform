@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-019-PERF-001",
+  "work_item_id": "TUN-P2-019-TEST001",
+  "classification": "BUG",
+  "severity": "SEV-2",
+  "status": "IN_PROGRESS",
+  "environment": "Approved isolated real PostgreSQL/HTTPS Identity configuration fixture at d9170ef9;288-key published chrome,16 configured scopes.",
+  "description": "Two enabled-mode browser journeys fail while the Content-only default passes. A single authorized probe returned HTTP200/all16workspaces in9527ms; one read-only EXPLAIN ANALYZE of the existing Content publication-integrity query took13094.574ms execution/2.466ms planning. Repeated profile Snapshot::jsonb casts in Content-owned causal integrity functions are the mechanical optimization candidate; their individual CPU share is not separately measured. Preserve every validity/causal/currentness check and typed result; do not raise test timeouts or cache PASS.",
+  "expected_behavior_ref": "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+  "evidence": [
+    "governance/evidence/TUN-P2-019-TEST001-VALIDATION.json"
+  ],
+  "affected_versions": [
+    "d9170ef92d501df7556557a8f3f523bbd3fd343d"
+  ],
+  "created_at": "2026-11-18T17:54:17.671431+00:00",
+  "updated_at": "2026-11-18T17:54:17.671431+00:00"
+}

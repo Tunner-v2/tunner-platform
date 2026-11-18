@@ -4,9 +4,9 @@
   "milestone_id": "P2",
   "revision_ref": null,
   "sprint_id": null,
-  "title": "Qualify explicitly opted-in isolated Identity configuration browser testing",
+  "title": "Qualify isolated Identity configuration workflows and required Content read performance correction",
   "status": "IN_PROGRESS",
-  "type": "TEST_FIXTURE",
+  "type": "TECHNICAL",
   "authority_refs": [
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
     "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
@@ -21,7 +21,8 @@
     "Require explicit SyntheticIdentityConfiguration together with existing GovernedContent/SyntheticAdmin, correct saved-mode/readiness matching, Development/loopback HTTPS and server-backed nonrenewable sessions. Reject mixed domains, stale/switched sessions, foreign CSRF and undeclared actors.",
     "Verify all16 existing Identity configuration workspaces and real typed draft/approval/publication/history/rollback boundaries with independent test actors and existing qualified synthetic inputs. No production values or User provider activation.",
     "This technical TEST_FIXTURE scope validates already-implemented P019 code; it does not admit unfinished business features, accept P019 or change its PRODUCT_ACCEPTANCE checkpoint. Production frontend components/routes/Figma and domain business rules remain unchanged; reuse the existing fixture controls/theme and exact qualified browser-test wording.",
-    "Run focused real PostgreSQL/HTTPS tests and existing Content-only regression, preserve source/test commit binding and independent security/QA review, and retain GLOBAL_UI regression before technical completion."
+    "Run focused real PostgreSQL/HTTPS tests and existing Content-only regression, preserve source/test commit binding and independent security/QA review, and retain GLOBAL_UI regression before technical completion.",
+    "Resolve confirmed DEF-TUN-P2-019-PERF-001 through the smallest Content-owned mechanical SQL snapshot parsing optimization and correct owner upgrade/rollback path; preserve historical migration semantics, all predicates/causal/currentness/audit checks and public signatures. Independent architecture/security review and existing forgery/tamper plus real288-key query/HTTP qualification are required before closure; production business rules/policies/activation remain unchanged."
   ],
   "prerequisites": [],
   "blockers": [],
@@ -33,7 +34,8 @@
     "compliance": false,
     "security": true,
     "devops": true,
-    "support": false
+    "support": false,
+    "migration": true
   },
   "activated_roles": [
     "full-stack-engineer",
@@ -43,13 +45,15 @@
     "devops-engineer",
     "frontend-engineer",
     "ui-ux-engineer",
-    "end-user-ux-reviewer"
+    "end-user-ux-reviewer",
+    "solution-architect"
   ],
   "required_tests": [
     "explicit opt-in/default/invalid saved flag and matching readiness states",
     "six-actor authentication/Origin/CSRF/body/cookie/switch matrix and cross-domain denials",
     "all16 real typed workspaces plus draft/validate/approve/publish/history/rollback and separation-of-duties negatives",
-    "Content-only regression, no User runtime activation, existing GLOBAL_UI regression"
+    "Content-only regression, no User runtime activation, existing GLOBAL_UI regression",
+    "Content integrity existing forgery/tamper/causal regressions and same288-key query/real workspace before-after timing, without timeout relaxation"
   ],
   "required_evidence": [
     "governance/evidence/TUN-P2-019-SYNTHETIC-ADMIN-AUTHORIZATION.json",
@@ -58,7 +62,9 @@
   "product_acceptance_required": false,
   "context_policy": "TASK",
   "todos": [],
-  "defects": [],
+  "defects": [
+    "DEF-TUN-P2-019-PERF-001"
+  ],
   "created_at": "2026-11-18T16:47:22.000841+00:00",
-  "updated_at": "2026-11-18T16:47:22.000841+00:00"
+  "updated_at": "2026-11-18T17:54:17.671431+00:00"
 }
