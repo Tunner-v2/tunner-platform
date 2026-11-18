@@ -25,13 +25,21 @@ public sealed class SessionListingPostgresFixture : IAsyncLifetime
 {
     private const string Image = "sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873";
     private IContainer? container;
+    private IdentityPostgresFixture? portable;
     private DockerClient? docker;
     private string[] ownedVolumes = [];
     public async Task InitializeAsync()
     {
         if (!TestHarnessProfiles.IsContainerExecutionEnabled()) return;
         var run = Environment.GetEnvironmentVariable("TUNNER_SESSION_LISTING_RUN_ID");
-        if (run is null) return; // This dedicated local profile must not fail unrelated integration runs.
+        if (run is null)
+        {
+            // The ordinary container opt-in uses the shared portable CI fixture.
+            // Its explicit-local delegation requires a non-null run ID, so these branches cannot recurse.
+            portable = new();
+            await portable.InitializeAsync();
+            return;
+        }
         var engine = Environment.GetEnvironmentVariable("TUNNER_SESSION_LISTING_ENGINE_ID");
         var endpoint = Environment.GetEnvironmentVariable("DOCKER_HOST");
         if (run is not { Length: 32 } || run.Any(c => !char.IsAsciiHexDigitLower(c)) || string.IsNullOrWhiteSpace(engine) ||
@@ -68,6 +76,7 @@ public sealed class SessionListingPostgresFixture : IAsyncLifetime
     }
     internal async Task<IdentityTestDatabase> CreateDatabaseAsync()
     {
+        if (portable is not null) return await portable.CreateDatabaseAsync();
         if (container is null) throw SkipException.ForSkip("Explicit isolated session-listing integration profile required.");
         var admin = new NpgsqlConnectionStringBuilder { Host = "127.0.0.1", Port = container.GetMappedPublicPort(5432), Database = "postgres", Username = "tunner" };
         return new(await RecoveryCodeIdentityDatabaseProvisioning.CreateAsync(admin, null));
@@ -76,6 +85,7 @@ public sealed class SessionListingPostgresFixture : IAsyncLifetime
     {
         try
         {
+            if (portable is not null) await portable.DisposeAsync();
             if (container is not null)
             {
                 var id = container.Id;
