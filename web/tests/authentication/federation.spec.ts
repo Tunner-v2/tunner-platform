@@ -34,7 +34,8 @@ for(const provider of ['Google','Microsoft'] as const)test(provider+' starts wit
 test('A current principal supplies Start CSRF only and does not imply sign-in success',async({page})=>{
  const state=await setup(page);state.authenticated=true;
  await page.route('**/authentication/federation/start',route=>{state.start++;expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-current-principal-csrf');return route.abort('connectionreset')});
- await page.goto('/login');await page.getByRole('button',{name:'Google',exact:true}).click();await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeVisible();await expect(page).toHaveURL(/\/login$/);expect(state.start).toBe(1);
+ await page.goto('/login');const started=page.waitForRequest(request=>request.method()==='POST'&&request.url().endsWith('/authentication/federation/start'));
+ await page.getByRole('button',{name:'Google',exact:true}).click();await started;await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeEnabled();await expect(page).toHaveURL(/\/login$/);expect(state.start).toBe(1);
 });
 test('Non401 session failure does not rotate anonymous context or prepare a new operation',async({page})=>{
  const state=await setup(page);state.sessionStatus=503;
@@ -44,7 +45,8 @@ test('Non401 session failure does not rotate anonymous context or prepare a new 
 });
 for(const badPath of ['/authentication/federation/microsoft/challenge','/authentication/federation/google/challenge?attempt=not-allowed','https://fixture.example.test/challenge'])test('Start rejects unbound challenge path '+badPath,async({page})=>{
  const state=await setup(page);await page.route('**/authentication/federation/start',route=>{state.start++;const body=route.request().postDataJSON();return route.fulfill({json:{authenticated:false,operation:operation('PREPARED',{requestId:body.requestId}),challengePath:badPath}})});
- await page.goto('/login');await page.getByRole('button',{name:'Google',exact:true}).click();await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeVisible();await expect(page).toHaveURL(/\/login$/);expect(state.start).toBe(1);
+ await page.goto('/login');const started=page.waitForResponse(response=>response.request().method()==='POST'&&response.url().endsWith('/authentication/federation/start'));
+ await page.getByRole('button',{name:'Google',exact:true}).click();await started;await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeEnabled();await expect(page).toHaveURL(/\/login$/);expect(state.start).toBe(1);
 });
 test('Restored VERIFIED requires explicit completion with exact original result and current CSRF',async({page})=>{
  const state=await setup(page,operation('VERIFIED'));state.authenticated=true;
