@@ -8,7 +8,7 @@
   "title": "Qualify bounded native runtime and confirmed CI integration corrections",
   "revision_type": "CORRECTIVE",
   "status": "ACTIVE",
-  "reason": "Confirmed CI integration failures require bounded13/15 native capability qualification and the exact shared test corrections. Existing algorithms, wire shape, work/replay limits and exact installed-version guards remain unchanged. Independent source/security review and actual Windows13 tests pass; Linux15, final reviews and native closure remain mandatory. No production profile or activation is selected.",
+  "reason": "Existing bounded13/15 native capability and confirmed CI corrections are qualified on Windows13 and Linux15. Exact-version guards, algorithms, wire shape and work/replay limits remain unchanged. Existing independent security/technical reviews pass; native lifecycle gates remain required without selecting production values.",
   "authority_refs": [
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
   ],
@@ -85,6 +85,24 @@
   "evidence_refs": [
     "governance/evidence/P2-009-RV015-VALIDATION.json"
   ],
+  "git_state": {
+    "repository_changed": true,
+    "tested_commit_sha": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+    "validated_commit_sha": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+    "work_item_commit_shas": [
+      "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/",
+      "docs/project/",
+      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/",
+      "%SystemDrive%/",
+      ".vscode/",
+      "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode/"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  },
   "created_at": "2026-11-18T12:58:27.3189500+00:00",
   "closed_at": null,
   "product_acceptance_required": false

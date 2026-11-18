@@ -3,17 +3,18 @@
   "scope_id": "P2-009-RV015",
   "owner_work_item": "TUN-P2-009",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+  "validated_commit_sha": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
   "actual_tested_commit_sha": "36563dd35e5d1d4e84aaff5869163510b9bdbe41",
   "owned_behavior_paths": [
     "web/tests/contracts.test.tsx",
     "src/Modules/Identity/RecoveryCodeContracts.cs",
     "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs"
   ],
-  "qualification": "Windows13:132 affected cases PASS atd7e3fe11. Actual Linux15:1412 PASS, including all132 affected identities, at merge36563dd35 with exact tree equivalence to branchd5578374. Recovery native generation/profile/work limits, wrong-supported-version rejection and typed configuration/HTTP guards are covered on both qualified runtimes. Source/currentness/context/native closure remain pending; no whole-CI or private HOST PASS.",
+  "qualification": "Windows13:132 affected cases PASS atd7e3fe11. Actual Linux15:1412 PASS, including all132 affected identities, at merge36563dd35 with exact tree equivalence to branchd5578374. Recovery native generation/profile/work limits, wrong-supported-version rejection and typed configuration/HTTP guards are covered on both qualified runtimes. All owned Git objects are unchanged through bd3739d3; lifecycle closure remains pending; no whole-CI or private HOST PASS.",
   "evidence_refs": [
+    "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
     "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
     "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-windows13-d7e3fe11.trx",
     "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-security-source-review.json",
@@ -26,7 +27,7 @@
     "governance/reviews/REV-P2-009-RV015-tester-qa-engineer.yaml",
     "governance/reviews/REV-P2-009-RV015-cyber-security-engineer.yaml"
   ],
-  "boundaries": "Native runtime qualification condition is fulfilled. Current source binding, context and native lifecycle gates still apply. Original Product acceptance, failed whole CI, private HOST defect and production policy/activation/merge/release remain separate.",
+  "boundaries": "Qualified native/source compatibility only. Historical executions and CRLF source hashes are preserved. No whole-CI, private Recovery HOST, Product, production activation, merge or release acceptance is implied.",
   "source_hashes": {
     "web/tests/contracts.test.tsx": "25acbbb1b1e786bce25980b4607c38f3778088669a77b5dd79db5c19f100065b",
     "src/Modules/Identity/RecoveryCodeContracts.cs": "3e84b2f5ca357d44019453f5ee14886939139303972908c7347fdf5f0aee3d8c",
@@ -36,5 +37,5 @@
   "source_sha256_path": "web/tests/contracts.test.tsx",
   "qualified_carrier": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
   "qualified_git_tree": "b290cbdac0fca36ef1e84b12b824a5e8c7ae1911",
-  "source_binding_meaning": "Future tested/validated SHA will be a committed classification carrier. Actual per-run executions retain original Windowsd7, Linuxmerge36563 and frontend/federation sources; no run at another SHA is invented."
+  "source_binding_meaning": "d5578374 is the predeclared ancestor carrier whose full Git tree equals actual Linux merge36563dd3. Owned vectors and exact-version guards are unchanged through bd3739d3. Actual Windowsd7/Linuxmerge36563/federation0e executions remain distinct; current collector uses e9ed44/44, with da27 historical43 retained. Native source hashes describe original Windows CRLF bytes, not LF Git bytes. No new execution at the carrier or HEAD is invented."
 }

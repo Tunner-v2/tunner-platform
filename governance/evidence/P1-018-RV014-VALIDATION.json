@@ -3,9 +3,10 @@
   "scope_id": "P1-018-RV014",
   "owner_work_item": "TUN-P1-018",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
+  "validated_commit_sha": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
+  "tested_commit_semantics": "Committed source carrier, not a claim of a new execution. Every owned Git object exactly equals its explicitly retained actual_tested_commit_sha; existing test identities and source-specific results are reused.",
   "actual_tested_commit_sha": "e9ed840054263dc7a015fd2dbfcb7eb9782afe02",
   "owned_behavior_paths": [
     "web/tests/contracts.test.tsx"
@@ -21,5 +22,5 @@
     "governance/reviews/REV-P1-018-RV014-full-stack-engineer.yaml",
     "governance/reviews/REV-P1-018-RV014-tester-qa-engineer.yaml"
   ],
-  "boundaries": "Technical test-only correction; historical Product closure is preserved. Current source-carrier/context and native transition/closure checks remain pending. Failed CI, unavailable Linux native marker/TRX, dependency/container security blockers and private Recovery HOST qualification are not promoted to PASS."
+  "boundaries": "Existing test-only technical correction, with original execution and role assessments preserved. Source carrier bd3739d3 owns byte-identical Git objects to actual_tested_commit_sha; no fresh test run or broader Product, full-CI, image, private Recovery HOST, merge or release acceptance is claimed."
 }

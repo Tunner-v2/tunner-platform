@@ -7,7 +7,7 @@
   "parent_milestone_revision_id": null,
   "title": "Qualify the confirmed shared CI test correction without changing historical acceptance",
   "revision_type": "CORRECTIVE",
-  "status": "PROPOSED",
+  "status": "VALIDATION",
   "reason": "A complete all-owner scan of the current CI repairs identifies this historical source owner. Use the existing eligible P1-RV001-001 implementation and exact already executed focused tests; preserve original closure, application behavior and production/release boundaries. No additional test framework or duplicate qualification is requested.",
   "authority_refs": [
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
@@ -36,6 +36,25 @@
   "evidence_refs": [
     "governance/evidence/P2-003-RV007-VALIDATION.json"
   ],
+  "git_state": {
+    "repository_changed": true,
+    "tested_commit_sha": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
+    "validated_commit_sha": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
+    "work_item_commit_shas": [
+      "3ccfe3fd62879c218425df7cbf8e9124c9ccfe55",
+      "bd3739d3a2cca24b1152d7d08ab3517a6351a324"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/",
+      "docs/project/",
+      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/",
+      "%SystemDrive%/",
+      ".vscode/",
+      "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode/"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  },
   "created_at": "2026-11-18T13:47:43.1233504+00:00",
   "closed_at": null,
   "product_acceptance_required": false

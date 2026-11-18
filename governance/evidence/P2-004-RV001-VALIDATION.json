@@ -3,9 +3,10 @@
   "scope_id": "P2-004-RV001",
   "owner_work_item": "TUN-P2-004",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
+  "validated_commit_sha": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
+  "tested_commit_semantics": "Committed source carrier, not a claim of a new execution. Every owned Git object exactly equals its explicitly retained actual_tested_commit_sha; existing test identities and source-specific results are reused.",
   "actual_tested_commit_sha": "e9ed840054263dc7a015fd2dbfcb7eb9782afe02",
   "owned_behavior_paths": [
     "web/tests/contracts.test.tsx"
@@ -20,5 +21,5 @@
     "governance/reviews/REV-P2-004-RV001-full-stack-engineer.yaml",
     "governance/reviews/REV-P2-004-RV001-tester-qa-engineer.yaml"
   ],
-  "boundaries": "Test-only confirmed CI correction within eligible P1-RV001-001. No application functionality, historical Product closure, original test assertions, native-profile guards or vulnerability gates changed. No Ubuntu CI or private Recovery HOST PASS claimed."
+  "boundaries": "Existing test-only technical correction, with original execution and role assessments preserved. Source carrier bd3739d3 owns byte-identical Git objects to actual_tested_commit_sha; no fresh test run or broader Product, full-CI, image, private Recovery HOST, merge or release acceptance is claimed."
 }
