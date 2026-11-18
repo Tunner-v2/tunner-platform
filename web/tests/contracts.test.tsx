@@ -1,4 +1,6 @@
 import { authenticationRoutes } from '../apps/user/authentication.routes';
+import {parseCandidate,type Candidate} from '../apps/admin/configuration.api';
+import {formForScope,formFromCandidate,candidateFromForm,candidateFields,candidateSchema,flattenForm} from '../apps/admin/configuration.validation';
 import './totp.contracts.test';
 import './recovery-codes.contracts.test';
 import { passkeyRoutes } from '../apps/user/passkeys.routes';
@@ -84,4 +86,36 @@ test('every implemented screen route agrees with the central inventory and known
  const forms=inventory.items.filter(row=>row.kind==='FORM'&&row.status==='IMPLEMENTED');const formScreens=new Map(inventory.items.filter(row=>row.kind==='SCREEN'&&(row.status==='IMPLEMENTED'||row.status==='TEST_FIXTURE')).map(row=>[row.id,row]));
  const parentIds=(form:(typeof forms)[number])=>[...new Set([...(form.screen_id===undefined?[]:[form.screen_id]),...(form.screen_ids??[])])];
  assert.ok(forms.every(form=>parentIds(form).length>0&&parentIds(form).every(parentId=>formScreens.has(parentId))));for(const form of forms){for(const parentId of parentIds(form)){const parent=formScreens.get(parentId);assert.ok(parent?.guard);assert.ok(parent?.pathname?.startsWith('/'));}}assert.ok(forms.some(form=>form.id==='FORM-LOGIN'));assert.equal(new Set(forms.map(form=>form.id)).size,forms.length);
+});
+
+test('Admin native Identity versions 13 and 15 round-trip without defaults or coercion',()=>{
+ const interval={from:'2099-01-01T00:00:00Z',includesFrom:true,until:null,includesUntil:false};
+ const raw=(family:'Totp'|'RecoveryCodes',nativeVersion:string):{metadata:unknown;values:Record<string,unknown>}=>({
+  metadata:{versionId:'fixture-native-policy',status:'ACTIVE',scope:family==='Totp'?'TOTP':'RECOVERY_CODES',effectiveInterval:interval,supersedesVersionId:null,approvalEvidenceReferences:['fixture-owner-evidence']},
+  values:family==='Totp'?{
+   version:'fixture-native-policy',origin:'https://totp.fixture.example.test',issuer:'Fixture only',nativeVerifierVersion:nativeVersion,algorithm:'SHA1',digits:6,periodSeconds:30,nativeWindowSteps:2,
+   enrollmentLifetime:'00:05:00',resultRecoveryLifetime:'00:05:00',maximumClockDeviation:'00:00:00',maximumVerificationDuration:'00:00:10',replayRetention:'00:03:00',replayHashIterations:10000,maximumLiveReplayClaims:16,maximumActiveAuthenticators:3,maximumPendingOperations:8,
+   disableSessionEffect:1,resetSessionEffect:2,replacementOrdering:2,resetBehavior:1,enrollmentAssurancePolicyVersion:'fixture-enroll',disableAssurancePolicyVersion:'fixture-disable',resetAssurancePolicyVersion:'fixture-reset',operationProofAssurance:'fixture-proof',mfaAssurances:{pwd:'fixture-mfa'},secretBindingVersion:'fixture-secret-ref',processingReference:'fixture-processing',retentionReference:'fixture-retention'
+  }:{
+   version:'fixture-native-policy',origin:'https://recovery.fixture.example.test',crypto:{version:'fixture-crypto',nativeIdentityVersion:nativeVersion,codesPerSet:5,maximumCodesPerSet:10,hashIterations:10,maximumHashWork:'9007199254740995',maximumGenerationAttempts:10,maximumConcurrentWork:2,maximumWorkDuration:'00:00:10.0000001'},
+   formatProfileVersion:'NATIVE_HEX32_V1',deliveryProfileVersion:'fixture-delivery',operationLifetime:'00:05:00.0000001',resultRecoveryLifetime:'00:05:00',maximumActiveSets:2,maximumPendingOperations:4,generationAdmission:1,replacementMechanism:1,sessionEffect:1,deliveryMechanism:1,generateAssurancePolicyVersion:'fixture-generate',replaceAssurancePolicyVersion:'fixture-replace',consumptionAccountAttemptLimit:2,consumptionNetworkAttemptLimit:5,processingReference:'fixture-processing',retentionReference:'fixture-retention'
+  }
+ });
+ const versionOf=(candidate:Candidate)=>candidate.family==='Totp'?candidate.value.values.nativeVerifierVersion:candidate.family==='RecoveryCodes'?candidate.value.values.crypto.nativeIdentityVersion:undefined;
+ for(const family of ['Totp','RecoveryCodes'] as const){
+  const scope={family},field=family==='Totp'?'nativeVerifierVersion':'crypto.nativeIdentityVersion',diff='values.'+field;
+  assert.equal(formForScope(scope).fields[field],'');
+  for(const version of ['10.0.13','10.0.15'] as const){
+   const original=parseCandidate(family,raw(family,version)),form=formFromCandidate(original);
+   assert.equal(versionOf(original),version);assert.equal(form.fields[field],version);
+   assert.equal(validateTunnerForm(candidateSchema(scope,form,16384),flattenForm(form)).valid,true);
+   const posted=candidateFromForm(form,scope);assert.deepEqual(posted,original);assert.deepEqual(parseCandidate(family,posted.value),original);
+   assert.equal(candidateFields(original).find(row=>row.key===diff)?.value,version);
+   for(const rejected of ['', '10.0.14','10.0.15 ','15']){
+    assert.throws(()=>parseCandidate(family,raw(family,rejected)));
+    const changed={...form,fields:{...form.fields,[field]:rejected}};
+    const result=validateTunnerForm(candidateSchema(scope,changed,16384),flattenForm(changed));assert.equal(result.valid,false);assert.ok(result.errors[field]);assert.throws(()=>candidateFromForm(changed,scope));
+   }
+  }
+ }
 });
