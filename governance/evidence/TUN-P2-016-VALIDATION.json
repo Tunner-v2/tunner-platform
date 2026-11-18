@@ -94,9 +94,21 @@
   ],
   "acceptance_boundary": "Actual execution receipts retain their exact original SHAs. No Product acceptance for P2-016, whole-P2 completion, production activation, protected-main merge or release is inferred.",
   "validation_kind": "COMMITTED",
-  "tested_commit_sha": "06b20de2b2b0303a1213259c877b990169b9e380",
-  "validated_commit_sha": "06b20de2b2b0303a1213259c877b990169b9e380",
+  "tested_commit_sha": "2881372e10c8a086167d5e06f83dbd6bfdfc160a",
+  "validated_commit_sha": "2881372e10c8a086167d5e06f83dbd6bfdfc160a",
   "source_currentness_reconciliation": {
+    "carrier_commit_sha": "2881372e10c8a086167d5e06f83dbd6bfdfc160a",
+    "previous_carrier_commit_sha": "06b20de2b2b0303a1213259c877b990169b9e380",
+    "result": "SOURCE_AND_RUNTIME_PASS_NATIVE_READINESS_PENDING",
+    "unchanged_owned_paths": 30,
+    "changed_owned_paths": [{"path":"tests/Tunner.Worker.Tests/OutboxReceiveBrokerFixture.cs","git_blob":"695b3dd39fb52a112310e3fffcc38cc7ab2aa213","sha256":"3616dc50b7a201d2b8a2e68bf59f2072d4eb7975a218f7120d65c461b6c3d9a8","change":"Portable fixture delegation only for absent native run ID; native admission/ownership and production code unchanged.","qualification":"Actual6receiver cases at ec3d plus current CI27Worker/1417Identity, including those6 and the real hosted IdentityPostCommitTests case, allPASS. Not a new78-case Windows run."}],
+    "actual_ci_merge": "8734dcaf292f269e7be347be02cbd80389c03546",
+    "full_tree_equals_carrier": "0f4a8b85e141bb3d6a53c181a71f8ba8d6fb5aab",
+    "qualification_ref": "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
+    "independent_review": "Existing independent source/QA reviewer verified exact current raw hashes/case identities and all31owned objects/filtered working files. Original78integrated run, smoke, prior carriers and role assessments remain historical evidence.",
+    "boundary": "Minimal active-work-item source binding only. Native READY/Product acceptance remain separate; no held143execution, image waiver, production activation, merge or release."
+  },
+  "prior_source_currentness_reconciliation": {
     "carrier_commit_sha": "06b20de2b2b0303a1213259c877b990169b9e380",
     "previous_carrier_commit_sha": "804123a8667b0601feb4a6a63a2b9ade82bc3acd",
     "result": "SOURCE_RECONCILED_NATIVE_READY",
