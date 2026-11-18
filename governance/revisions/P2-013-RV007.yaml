@@ -5,10 +5,10 @@
   "original_scope_id": "TUN-P2-013",
   "parent_revision_id": "P2-013-RV006",
   "parent_milestone_revision_id": null,
-  "title": "Execute session fixture in the existing portable CI profile",
+  "title": "Execute session fixture in the existing portable CI profile and shared fixture compatibility",
   "revision_type": "CORRECTIVE",
   "status": "ACTIVE",
-  "reason": "Confirmed current GitHub CI failures require the bounded test-only repair implemented in eligible P1-RV001-001. Preserve historical feature closure and all application behavior; record current committed focused qualification and independent review. Do not waive container vulnerabilities or private runtime obligations.",
+  "reason": "Retain the original qualified correction and separately authorized shared local fixture source compatibility. Reuse the actual recorded tests, current1912-pass CI and exact7c fixture bytes; preserve original feature closure, default User behavior, native guards and production boundaries. No new application behavior is implemented in this revision.",
   "authority_refs": [
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
   ],
@@ -19,12 +19,16 @@
     "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
     "governance/evidence/P2-013-RV007-VALIDATION.json",
     "governance/reviews/REV-P2-013-RV007-full-stack-engineer.yaml",
-    "governance/reviews/REV-P2-013-RV007-tester-qa-engineer.yaml"
+    "governance/reviews/REV-P2-013-RV007-tester-qa-engineer.yaml",
+    "tools/browser-testing/Tunner.BrowserTesting.csproj",
+    "governance/evidence/TUN-P2-019-TEST001-VALIDATION.json",
+    "governance/evidence/TUN-P2-019-SYNTHETIC-IDENTITY-AUTHORIZATION.json"
   ],
   "impact_classification": "NON_BLOCKING",
   "blocked_scope": [],
   "acceptance_criteria": [
-    "The exact affected test file passes its relevant committed-source tests without removing assertions or weakening qualified native-profile guards; original feature and release boundaries remain intact."
+    "The exact affected test file passes its relevant committed-source tests without removing assertions or weakening qualified native-profile guards; original feature and release boundaries remain intact.",
+    "The exact inherited shared host/starter vector matches the owner-authorized and separately qualified fixture, with independent security evidence from its closed technical task; preserve default-off/isolation behavior and every original domain/native invariant."
   ],
   "prerequisites": [],
   "work_items": [],
@@ -36,25 +40,6 @@
   "evidence_refs": [
     "governance/evidence/P2-013-RV007-VALIDATION.json"
   ],
-  "git_state": {
-    "repository_changed": true,
-    "tested_commit_sha": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
-    "validated_commit_sha": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
-    "work_item_commit_shas": [
-      "da27cec467ad94183ac5320eae4a48998fca1cc6",
-      "bd3739d3a2cca24b1152d7d08ab3517a6351a324"
-    ],
-    "closure_commit_sha": null,
-    "remaining_uncommitted_paths": [
-      "docs/context/current/",
-      "docs/project/",
-      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/",
-      "%SystemDrive%/",
-      ".vscode/",
-      "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode/"
-    ],
-    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
-  },
   "created_at": "2026-11-18T12:58:53.3242984+00:00",
   "closed_at": null,
   "product_acceptance_required": false

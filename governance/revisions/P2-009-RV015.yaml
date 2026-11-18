@@ -5,10 +5,10 @@
   "original_scope_id": "TUN-P2-009",
   "parent_revision_id": "P2-009-RV014",
   "parent_milestone_revision_id": null,
-  "title": "Qualify bounded native runtime and confirmed CI integration corrections",
+  "title": "Qualify bounded native runtime and confirmed CI integration corrections and shared fixture compatibility",
   "revision_type": "CORRECTIVE",
   "status": "ACTIVE",
-  "reason": "Existing bounded13/15 native capability and confirmed CI corrections are qualified on Windows13 and Linux15. Exact-version guards, algorithms, wire shape and work/replay limits remain unchanged. Existing independent security/technical reviews pass; native lifecycle gates remain required without selecting production values.",
+  "reason": "Retain the original qualified correction and separately authorized shared local fixture source compatibility. Reuse the actual recorded tests, current1912-pass CI and exact7c fixture bytes; preserve original feature closure, default User behavior, native guards and production boundaries. No new application behavior is implemented in this revision.",
   "authority_refs": [
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
   ],
@@ -66,13 +66,19 @@
     "governance/reviews/REV-P2-010-RV016-tester-qa-engineer.yaml",
     "src/Modules/Identity/RecoveryCodeContracts.cs",
     "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs",
-    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-security-source-review.json"
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-security-source-review.json",
+    "tools/browser-testing/Program.cs",
+    "tools/browser-testing/Tunner.BrowserTesting.csproj",
+    "governance/evidence/TUN-P2-019-TEST001-VALIDATION.json",
+    "governance/evidence/TUN-P2-019-SYNTHETIC-IDENTITY-AUTHORIZATION.json",
+    "governance/reviews/REV-P2-009-RV015-cyber-security-engineer.yaml"
   ],
   "impact_classification": "NON_BLOCKING",
   "blocked_scope": [],
   "acceptance_criteria": [
     "The exact affected test file passes its relevant committed-source tests without removing assertions or weakening qualified native-profile guards; original feature and release boundaries remain intact.",
-    "Require official upstream comparison, independent security review, unchanged exact installed-version guards, wrong-version negatives and actual affected Windows13/Linux15 tests with direct Identity assembly-version measurement before native15 qualification or closure. No production selection."
+    "Require official upstream comparison, independent security review, unchanged exact installed-version guards, wrong-version negatives and actual affected Windows13/Linux15 tests with direct Identity assembly-version measurement before native15 qualification or closure. No production selection.",
+    "The exact inherited shared host/starter vector matches the owner-authorized and separately qualified fixture, with independent security evidence from its closed technical task; preserve default-off/isolation behavior and every original domain/native invariant."
   ],
   "prerequisites": [],
   "work_items": [],
@@ -85,24 +91,6 @@
   "evidence_refs": [
     "governance/evidence/P2-009-RV015-VALIDATION.json"
   ],
-  "git_state": {
-    "repository_changed": true,
-    "tested_commit_sha": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
-    "validated_commit_sha": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
-    "work_item_commit_shas": [
-      "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b"
-    ],
-    "closure_commit_sha": null,
-    "remaining_uncommitted_paths": [
-      "docs/context/current/",
-      "docs/project/",
-      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/",
-      "%SystemDrive%/",
-      ".vscode/",
-      "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode/"
-    ],
-    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
-  },
   "created_at": "2026-11-18T12:58:27.3189500+00:00",
   "closed_at": null,
   "product_acceptance_required": false

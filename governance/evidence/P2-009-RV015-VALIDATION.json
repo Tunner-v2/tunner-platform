@@ -3,14 +3,16 @@
   "scope_id": "P2-009-RV015",
   "owner_work_item": "TUN-P2-009",
   "validation_kind": "COMMITTED",
-  "result": "PASS",
-  "tested_commit_sha": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
-  "validated_commit_sha": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
   "actual_tested_commit_sha": "36563dd35e5d1d4e84aaff5869163510b9bdbe41",
   "owned_behavior_paths": [
     "web/tests/contracts.test.tsx",
     "src/Modules/Identity/RecoveryCodeContracts.cs",
-    "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs"
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs",
+    "tools/browser-testing/Program.cs",
+    "tools/browser-testing/Tunner.BrowserTesting.csproj"
   ],
   "qualification": "Windows13:132 affected cases PASS atd7e3fe11. Actual Linux15:1412 PASS, including all132 affected identities, at merge36563dd35 with exact tree equivalence to branchd5578374. Recovery native generation/profile/work limits, wrong-supported-version rejection and typed configuration/HTTP guards are covered on both qualified runtimes. All owned Git objects are unchanged through bd3739d3; lifecycle closure remains pending; no whole-CI or private HOST PASS.",
   "evidence_refs": [
@@ -18,7 +20,9 @@
     "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
     "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-windows13-d7e3fe11.trx",
     "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-security-source-review.json",
-    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-linux15-d5578374.trx"
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-linux15-d5578374.trx",
+    "governance/evidence/TUN-P2-019-TEST001-VALIDATION.json",
+    "governance/evidence/TUN-P2-019-SYNTHETIC-IDENTITY-AUTHORIZATION.json"
   ],
   "source_sha256": "25acbbb1b1e786bce25980b4607c38f3778088669a77b5dd79db5c19f100065b",
   "context_ref": null,
@@ -27,7 +31,7 @@
     "governance/reviews/REV-P2-009-RV015-tester-qa-engineer.yaml",
     "governance/reviews/REV-P2-009-RV015-cyber-security-engineer.yaml"
   ],
-  "boundaries": "Qualified native/source compatibility only. Historical executions and CRLF source hashes are preserved. No whole-CI, private Recovery HOST, Product, production activation, merge or release acceptance is implied.",
+  "boundaries": "Expanded technical compatibility only. Preserve all original actual test sources and historical hashes, original accepted feature closure, qualified native guards and separate Product/production/merge/release gates. PENDING until committed-source and existing review/closure checks complete.",
   "source_hashes": {
     "web/tests/contracts.test.tsx": "25acbbb1b1e786bce25980b4607c38f3778088669a77b5dd79db5c19f100065b",
     "src/Modules/Identity/RecoveryCodeContracts.cs": "3e84b2f5ca357d44019453f5ee14886939139303972908c7347fdf5f0aee3d8c",
@@ -37,5 +41,29 @@
   "source_sha256_path": "web/tests/contracts.test.tsx",
   "qualified_carrier": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
   "qualified_git_tree": "b290cbdac0fca36ef1e84b12b824a5e8c7ae1911",
-  "source_binding_meaning": "d5578374 is the predeclared ancestor carrier whose full Git tree equals actual Linux merge36563dd3. Owned vectors and exact-version guards are unchanged through bd3739d3. Actual Windowsd7/Linuxmerge36563/federation0e executions remain distinct; current collector uses e9ed44/44, with da27 historical43 retained. Native source hashes describe original Windows CRLF bytes, not LF Git bytes. No new execution at the carrier or HEAD is invented."
+  "source_binding_meaning": "Pending committed classification carrier for the expanded source vector. Original actual executions remain at their recorded SHAs; fixture qualification at7c and CI merge daa9/tree-equivalent bd are reused by exact source identity, not represented as a new execution. Historical Windows CRLF source hashes and all13/15 native/version-guard evidence remain unchanged.",
+  "prior_qualified_binding": {
+    "validated_commit_sha": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+    "tested_commit_sha": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+    "owned_behavior_paths": [
+      "web/tests/contracts.test.tsx",
+      "src/Modules/Identity/RecoveryCodeContracts.cs",
+      "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs"
+    ],
+    "result": "PASS"
+  },
+  "tested_commit_semantics": "Pending committed classification carrier for the expanded source vector. Original actual executions remain at their recorded SHAs; fixture qualification at7c and CI merge daa9/tree-equivalent bd are reused by exact source identity, not represented as a new execution.",
+  "fixture_compatibility": {
+    "qualification_scope": "Original qualification statements and source hashes apply to prior_qualified_binding.owned_behavior_paths. Added inherited paths use the separately source-bound fixture qualification below; no all-path single-run claim.",
+    "authorization_ref": "governance/evidence/TUN-P2-019-SYNTHETIC-IDENTITY-AUTHORIZATION.json",
+    "qualification_ref": "governance/evidence/TUN-P2-019-TEST001-VALIDATION.json",
+    "actual_fixture_source": "7c626363893b29c9130fb3bdc23942d15eaea570",
+    "ci_branch_source": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
+    "ci_actual_checkout": "daa9c4699bf020fa2ab30c3edd8c83d11a8ab3bf",
+    "inherited_paths": [
+      "tools/browser-testing/Program.cs",
+      "tools/browser-testing/Tunner.BrowserTesting.csproj"
+    ],
+    "boundary": "Exact already-authorized host/starter bytes. The closed fixture retains21 AST/mock function-status checks,7 real browser and12 real PostgreSQL cases; these are distinct qualifications, not21 HTTP journeys. Original default-mode PASS remains atd917. Current CI1912PASS is separately source-bound. No production values or User providers are activated."
+  }
 }

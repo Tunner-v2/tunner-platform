@@ -3,17 +3,22 @@
   "scope_id": "P2-005-RV001",
   "owner_work_item": "TUN-P2-005",
   "validation_kind": "COMMITTED",
-  "result": "PASS",
-  "tested_commit_sha": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
-  "validated_commit_sha": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
-  "tested_commit_semantics": "Committed source carrier, not a claim of a new execution. Every owned Git object exactly equals its explicitly retained actual_tested_commit_sha; existing test identities and source-specific results are reused.",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "tested_commit_semantics": "Pending committed classification carrier for the expanded source vector. Original actual executions remain at their recorded SHAs; fixture qualification at7c and CI merge daa9/tree-equivalent bd are reused by exact source identity, not represented as a new execution.",
   "actual_tested_commit_sha": "e9ed840054263dc7a015fd2dbfcb7eb9782afe02",
   "owned_behavior_paths": [
-    "web/tests/contracts.test.tsx"
+    "web/tests/contracts.test.tsx",
+    "tools/browser-testing/Program.cs",
+    "tools/browser-testing/Tunner.BrowserTesting.csproj",
+    "tools/dev/tunner-browser.ps1"
   ],
   "qualification": "44/44 Node contracts and typecheck PASS at e9ed8400; preserve every screen route/form-parent assertion and exact supported native-version roundtrip/rejection. No browser or whole-CI PASS is inferred.",
   "evidence_refs": [
-    "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json"
+    "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
+    "governance/evidence/TUN-P2-019-TEST001-VALIDATION.json",
+    "governance/evidence/TUN-P2-019-SYNTHETIC-IDENTITY-AUTHORIZATION.json"
   ],
   "source_sha256": "25acbbb1b1e786bce25980b4607c38f3778088669a77b5dd79db5c19f100065b",
   "context_ref": null,
@@ -21,5 +26,27 @@
     "governance/reviews/REV-P2-005-RV001-full-stack-engineer.yaml",
     "governance/reviews/REV-P2-005-RV001-tester-qa-engineer.yaml"
   ],
-  "boundaries": "Existing test-only technical correction, with original execution and role assessments preserved. Source carrier bd3739d3 owns byte-identical Git objects to actual_tested_commit_sha; no fresh test run or broader Product, full-CI, image, private Recovery HOST, merge or release acceptance is claimed."
+  "boundaries": "Expanded technical compatibility only. Preserve all original actual test sources and historical hashes, original accepted feature closure, qualified native guards and separate Product/production/merge/release gates. PENDING until committed-source and existing review/closure checks complete.",
+  "prior_qualified_binding": {
+    "validated_commit_sha": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
+    "tested_commit_sha": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
+    "owned_behavior_paths": [
+      "web/tests/contracts.test.tsx"
+    ],
+    "result": "PASS"
+  },
+  "fixture_compatibility": {
+    "qualification_scope": "Original qualification statements and source hashes apply to prior_qualified_binding.owned_behavior_paths. Added inherited paths use the separately source-bound fixture qualification below; no all-path single-run claim.",
+    "authorization_ref": "governance/evidence/TUN-P2-019-SYNTHETIC-IDENTITY-AUTHORIZATION.json",
+    "qualification_ref": "governance/evidence/TUN-P2-019-TEST001-VALIDATION.json",
+    "actual_fixture_source": "7c626363893b29c9130fb3bdc23942d15eaea570",
+    "ci_branch_source": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
+    "ci_actual_checkout": "daa9c4699bf020fa2ab30c3edd8c83d11a8ab3bf",
+    "inherited_paths": [
+      "tools/browser-testing/Program.cs",
+      "tools/browser-testing/Tunner.BrowserTesting.csproj",
+      "tools/dev/tunner-browser.ps1"
+    ],
+    "boundary": "Exact already-authorized host/starter bytes. The closed fixture retains21 AST/mock function-status checks,7 real browser and12 real PostgreSQL cases; these are distinct qualifications, not21 HTTP journeys. Original default-mode PASS remains atd917. Current CI1912PASS is separately source-bound. No production values or User providers are activated."
+  }
 }
