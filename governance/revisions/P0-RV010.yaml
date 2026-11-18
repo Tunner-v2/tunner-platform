@@ -8,7 +8,7 @@
   "title": "Adopt validated development security image repairs without scan waivers",
   "revision_type": "SECURITY",
   "status": "ACTIVE",
-  "reason": "The user requests fixes for actual GitHub scan failures. Preserve closed P0 and P0-RV009 while repairing maintained OpenBao and aligning CI/development image references only after full-image scans and compatibility checks. LGTM signed-plugin failures remain enforced; no merge, publication, deployment, removal or trust override is authorized. The subsequent explicit dev/test signing approval permits only the additional Tunner verifier described in ADR-LGTM-DEV-SIGNING-20261028; production trust remains excluded. Subsequent explicit consent permits only the reviewed source-bound dev/test Tempo VEX corrections, with expiry/rejection reviews and every other finding still blocking. On 2026-11-18 the owner stopped image remediation while retaining required CI, and separately authorized the bounded Audit Remediation fixture diagnosis/repair/verification. This existing CI scope retains that test-only correction; image acceptance criteria remain blocking and unchanged.",
+  "reason": "The user requests fixes for actual GitHub scan failures. Preserve closed P0 and P0-RV009 while repairing maintained OpenBao and aligning CI/development image references only after full-image scans and compatibility checks. LGTM signed-plugin failures remain enforced; no merge, publication, deployment, removal or trust override is authorized. The subsequent explicit dev/test signing approval permits only the additional Tunner verifier described in ADR-LGTM-DEV-SIGNING-20261028; production trust remains excluded. Subsequent explicit consent permits only the reviewed source-bound dev/test Tempo VEX corrections, with expiry/rejection reviews and every other finding still blocking. On 2026-11-18 the owner stopped image remediation while retaining required CI, and separately authorized the bounded Audit Remediation fixture diagnosis/repair/verification. This existing CI scope retains that test-only correction; image acceptance criteria remain blocking and unchanged. A distinct downstream GLOBAL_UI failure was confined to ten existing evidence files with byte-normalization drift. Scoped checkout attributes preserve their recorded hashes. The owner separately authorized only if:always on the existing evidence upload after automatic review rejection; all existing artifact paths, retention and blocking checks remain.",
   "authority_refs": [
     "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
@@ -19,7 +19,12 @@
   "defect_refs": [],
   "change_refs": [
     "tests/Tunner.AuditRemediation.FunctionalTests/Program.cs",
-    "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json"
+    "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
+    ".gitattributes",
+    ".github/workflows/security-supply-chain.yml",
+    "governance/evidence/p2-019-content-20261116/recovery-password-mapping-d81d4f9f/9e1ffadcba6a44209d5d27518ba52fae/focused.trx",
+    "governance/evidence/p2-019-content-20261116/session-revocation-binding-b9b35fd2/1134eb379b1140e9910b731429172a0c/focused.trx",
+    "governance/evidence/p2-019-content-20261116/session-bulk-binding-371a2c8e/18237542a0cc4fc9b61178ffe86080ae/focused.trx"
   ],
   "impact_classification": "NON_BLOCKING",
   "blocked_scope": [],
