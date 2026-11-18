@@ -3,7 +3,7 @@
   "scope_id": "TUN-P2-019",
   "validation_kind": "COMMITTED",
   "result": "PASS",
-  "phase": "READY_PENDING_PRODUCT_ACCEPTANCE_AND_GLOBAL_CI",
+  "phase": "DONE_SCOPED_FOUNDATION_PREPRODUCTION_GATES_SEPARATE",
   "native_readiness": {"checked_commit_sha":"7162c8b45c17c390a8f64f07609c67df7f418cb4","validated_behavior_carrier":"6acba21c35fddc0ddb9e79efbdf5d7a0299cde04","command":"governance gate check TUN-P2-019","outcome":"READY","exit_code":0,"failures":[],"receipt_ref":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/p019-readiness-7162c8b4.json","receipt_sha256":"546ba26db02417459397842e83daab2c907ef927cdd9a2a89f915880a280b251","recorded_at":"2026-11-18T22:20:17Z","previous_current_check":"Initial6ac NOT_READY for12 source-currentness bindings; those exact-source qualifications were restored once without rerunning suites.","boundary":"Actual engineering READY only. Product acceptance, held143, LGTM, privateHOST defect, production activation, protected-main merge and release remain separate."},
   "historical_native_readiness": {"checked_commit_sha":"f2819dcf897eff937b115066992bcb5016dd33f4","validated_behavior_carrier":"96685959ef4e87b319e214e615407517c1c3a64b","command":"governance gate check TUN-P2-019","outcome":"READY","exit_code":0,"failures":[],"satisfied_checks":18,"receipt_ref":"governance/evidence/p2-019-content-20261116/integration-gate-f2819dcf/native-ready.json","boundary":"Actual fresh P019 engineering gate. Product acceptance, GLOBAL CI, protected-main integration, production activation and release remain separate; private HOST defect stays unresolved."},
   "qualification_correction": {
@@ -19,9 +19,10 @@
     "resolution": {"result":"ENGINEERING_INTEGRATION_CORRECTION_SATISFIED","recorded_at":"2026-11-18T01:00:49Z","checked_commit_sha":"27ba48ccbf8889b7ec847244d5518c5577ad6d50","qualified_open_binding_source_carrier":"462e269ad5c701034aceb7374f15f0c249a87529","open_feature_native_checked_commit_sha":"0262ebc6dd3c1abf6ce40114b909ccd4aef7cbdd","open_feature_gate_refs":["governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/feature-readiness/TUN-P2-007-ready.json","governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/feature-readiness/TUN-P2-007-execution.json","governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/feature-readiness/TUN-P2-008-ready.json","governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/feature-readiness/TUN-P2-008-execution.json"],"additional_closed_source_bridges":["P2-009-RV012","P2-010-RV013","P2-013-RV005"],"source_bridge_close_checked_commit_sha":"8091f12cb2baa92f3b00b63de3cafef81ff4a76a","source_bridge_closed_commit_sha":"27ba48ccbf8889b7ec847244d5518c5577ad6d50","source_bridge_closure_refs":["governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/native-closures/P2-009-RV012.json","governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/native-closures/P2-010-RV013.json","governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/native-closures/P2-013-RV005.json"],"shared_delta_qualification_ref":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/shared-qualification.json","owned_behavior_equivalence":{"baseline_source_carrier":"96685959ef4e87b319e214e615407517c1c3a64b","checked_commit_sha":"27ba48ccbf8889b7ec847244d5518c5577ad6d50","declared_paths":156,"changed_committed_paths":[],"changed_working_tree_owned_paths":[],"method":"Git diff over exactly the156 declared behavior paths confirms matching committed blobs and no working-tree source drift; no unchanged suite rerun."},"retained_history":"The original twelve functional bridges, original test execution SHAs, failed5b8 gates, premature-completion correction and separately tracked private HTTPS host failure remain unchanged. The three extra source bridges qualify only the shared completed-Passkey UI correction.","current_p019_native_readiness":{"outcome":"READY","checked_commit_sha":"f2819dcf897eff937b115066992bcb5016dd33f4","failures":[],"satisfied_checks":18,"receipt_ref":"governance/evidence/p2-019-content-20261116/integration-gate-f2819dcf/native-ready.json"},"acceptance_boundary":"Engineering integration correction only. Work19 remains PRODUCT_ACCEPTANCE pending the real user reply; GLOBAL UI/CI, Product, production activation, merge and release are not approved."}
   },
   "lifecycle_progress": {
-    "current_state": "PRODUCT_ACCEPTANCE",
-    "product_acceptance": "PENDING_USER_REPLY",
-    "basis": "Completed independent technical review and executed acceptance evidence; native sequential checks allowed IN_PROGRESS to CODE_REVIEW, CODE_REVIEW to VALIDATION and VALIDATION to PRODUCT_ACCEPTANCE. This state awaits Product consent; it does not record consent or DONE.",
+    "current_state": "DONE",
+    "product_acceptance": "ACCEPTED_BY_AUTHORIZED_PRODUCT_OWNER",
+    "product_acceptance_ref": "governance/evidence/TUN-P2-019-PRODUCT-ACCEPTANCE.json",
+    "basis": "Explicit scoped Product acceptance call490e8a059f204dd9ba1dc911988e9601, actual nativeREADY7162c8b4 and actual PRODUCT_ACCEPTANCE-to-DONE ALLOWED at1cb44190. Metadata-only closure preserves tested/validated carrier6ac and every original execution; no held143, image, production, merge or release approval inferred.",
     "transition_refs": [
       "governance/evidence/p2-019-content-20261116/final-qualification-96685959/code-review-transition.json",
       "governance/evidence/p2-019-content-20261116/final-qualification-96685959/validation-transition.json",
@@ -50,7 +51,7 @@
   },
   "engineering_review_recorded_at": "2026-11-17T21:00:36Z",
   "current_delivery_summary": {
-    "result": "ENGINEERING_READY_PRODUCT_ACCEPTANCE_PENDING",
+    "result": "DONE_PRODUCT_ACCEPTED_SCOPED_FOUNDATION",
     "source_commit_sha": "6acba21c35fddc0ddb9e79efbdf5d7a0299cde04",
     "recorded_at": "2026-11-18T22:13:32Z",
     "configuration_families": 16,
@@ -384,7 +385,9 @@
       }
     ]
   },
-  "remaining_scope": [
+  "remaining_scope": [],
+  "remaining_external_obligations": ["Production owners supply the existing typed_owner_handoff inputs before enablement; absent sources keep production unavailable.","Private Recovery HOST and the held143/three compatibility revisions remain separately tracked and unqualified.","Protected-main integration, production activation, release and whole-P2 acceptance remain separate."],
+  "pre_acceptance_remaining_scope": [
     "Commit the required acceptance-record delta, then run and record actual native Work19 source/evidence/readiness and current context/project handoff checks; this record does not declare READY or DONE.",
     "Obtain genuine Product Owner acceptance through the existing native gate; no technical role review or fixture grant substitutes for Product approval.",
     "Before production enablement, the named Product/Content, Security, Compliance, Admin authorization and DevOps owners must provide the qualified typed inputs indexed in typed_owner_handoff. That independent preproduction handoff selects no values, grants, workforce adapter or activation.",
