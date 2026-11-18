@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-009-RV013",
+  "owner_work_item": "TUN-P2-009",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryCodePrivateIntegrationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs"
+  ],
+  "phase": "COMMITTED_CLASSIFICATION_CANDIDATE_REVIEW_AND_NATIVE_CHECKS_PENDING",
+  "scope": "Narrow retained-source compatibility only; no repair or runtime acceptance of the separate private HTTPS HOST failure.",
+  "prepared_at_commit_sha": "de545f7ca0ef8222ea8735087911758ce98d2398",
+  "source_qualification": {
+    "pure_classifier": {
+      "actual_source_sha": "96685959ef4e87b319e214e615407517c1c3a64b",
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "current_source_equal": true,
+      "test_identities": [
+        "Tunner.Identity.Persistence.Tests.RecoveryCodeNativeTests.HostStartupClassificationBoundsWrappersAndRecognizesOnlyTheFixedTlsSentinel",
+        "Tunner.Identity.Persistence.Tests.RecoveryCodeNativeTests.HostStartupClassificationDoesNotRetainForeignPayloads"
+      ],
+      "execution_ref": "governance/evidence/p2-019-content-20261116/host-classifier-96685959/execution.json",
+      "tests_ref": "governance/evidence/p2-019-content-20261116/host-classifier-96685959/tests.trx",
+      "boundary": "Pure safe category/privacy/wrapper/sentinel tests; no Docker, private host or wire execution."
+    },
+    "historical_native": {
+      "actual_source_sha": "1bf5971739f163d15777498b211ff0f48f677bc8",
+      "executed": 123,
+      "passed": 123,
+      "receipt_ref": "governance/evidence/p2-019-content-20261116/native-recovery-1bf59717/private-receipt.json",
+      "build_binding_ref": "governance/evidence/p2-019-content-20261116/native-recovery-1bf59717/build-binding.json",
+      "boundary": "Retained original-source result only; not a fresh current binary or proof that the HOST defect is fixed."
+    },
+    "exact_diagnostic_source_paths": [
+      "tests/Tunner.Identity.Persistence.Tests/RecoveryCodePrivateIntegrationTests.cs",
+      "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs"
+    ]
+  },
+  "review_refs": [
+    "governance/reviews/REV-P2-009-RV013-full-stack-engineer.yaml",
+    "governance/reviews/REV-P2-009-RV013-tester-qa-engineer.yaml",
+    "governance/reviews/REV-P2-009-RV013-solution-architect.yaml",
+    "governance/reviews/REV-P2-009-RV013-cyber-security-engineer.yaml",
+    "governance/reviews/REV-P2-009-RV013-auditor.yaml"
+  ],
+  "shared_context_selection": "P2-009-RV013",
+  "context_ref": null,
+  "context_status": "PENDING_SHARED_NATIVE_TASK_BUILD_AND_VERIFY",
+  "runtime_tracking_context": {
+    "defect_ref": "governance/defects/DEF-TUN-P2-009-HTTPS-HOST-001.yaml",
+    "status": "IN_PROGRESS_UNFULFILLED",
+    "diagnostic_revisions": [
+      "P2-009-RV011",
+      "P2-010-RV012"
+    ],
+    "diagnostic_statuses": "ACTIVE_PENDING_WITH_ORIGINAL_RUNTIME_CRITERIA_AND_DEFECT_LINKS_UNCHANGED",
+    "boundary": "Context reference only for this source bridge; this record does not resolve, close or satisfy those diagnostic/runtime scopes."
+  },
+  "boundaries": "Technical/source qualification remains PENDING until the preclassified candidate, five actual contract reviews, shared CURRENT context and native committed-state checks. No fresh123, HOST restoration, Product, GLOBAL UI/CI, production activation or release claim."
+}
