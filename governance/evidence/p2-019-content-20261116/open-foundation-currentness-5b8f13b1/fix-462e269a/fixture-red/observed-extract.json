@@ -1,0 +1,26 @@
+{
+  "receipt_kind": "OBSERVED_EXTRACT_NOT_FULL_PLAYWRIGHT_REPORT",
+  "source_sha": "5b8f13b18611a16fab13d6c635d216606dd9e4ba",
+  "raw_local_report": "artifacts/p2-019-content-20261116/passkey-completed-reload-red-5b8f13b1/results.json",
+  "raw_report_sha256": "10f0a93013077ef5eda3a080b766b737ce4a968b823c39470407b928218b9e0f",
+  "stats": {
+    "startTime": "2026-11-17T23:12:46.618Z",
+    "duration": 12399.067,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "test_file": "web/tests/passkeys/passkeys.spec.ts",
+      "title": "@regression Completed revocation reload verifies the exact result without false pending or another mutation",
+      "id": "74b2887b23599a1b6d52-52bafa570eaf0c9fe92d",
+      "status": "failed",
+      "retry": 0,
+      "duration_ms": 7497
+    }
+  ],
+  "execution_ref": "governance\\evidence\\p2-019-content-20261116\\open-foundation-currentness-5b8f13b1\\fix-462e269a\\fixture-red/execution.json",
+  "boundary": "Meaningful RED against unchanged production source; new test uncommitted. False pending count expected zero, actual one."
+}

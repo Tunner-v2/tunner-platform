@@ -1,0 +1,25 @@
+{
+  "receipt_kind": "OBSERVED_EXTRACT_NOT_FULL_PLAYWRIGHT_REPORT",
+  "source_sha": "5b8f13b18611a16fab13d6c635d216606dd9e4ba",
+  "raw_local_report": "artifacts/p2-019-content-20261116/passkey-browser-5b8f13b1/results.json",
+  "raw_report_sha256": "98357c2051599e9e9831b2b0e80fff43835961520ffb7d170da1383586908858",
+  "test_file": "web/tests/browser-testing/passkeys-flow.spec.ts",
+  "test_title": "real native passkeys complete approved onboarding, sign-in, proof, enrollment and self-removal",
+  "test_id": "b320c679f71e7df82560-428ec5012a180d2e0b39",
+  "result": "passed",
+  "subsequent_finding": "This original sanity journey lacked a completed-reload assertion. Its screenshot exposed the false pending defect later reproduced RED and corrected in42dfecf3. This receipt is not final completed-reload UX qualification; the strengthened passing journey is retained under fix-462e269a/browser-real.",
+  "case_duration_ms": 25594,
+  "retry": 0,
+  "stats": {
+    "startTime": "2026-11-17T23:01:40.977Z",
+    "duration": 27741.787,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "execution_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/passkey-browser/execution.json",
+  "tls": {"node_use_system_ca": "1", "ignore_https_errors": false},
+  "screenshot": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/passkey-browser/real-native-passkeys-removed.png",
+  "boundary": "One existing real passkey journey against the isolated local application. Original assertions remain unchanged. The earlier selector attempt executed zero tests and is retained under initial-no-tests; it is not counted as a product failure or a passing journey. No TOTP journey, physical authenticator, whole-P2 or private Recovery cohort qualification is claimed. Raw report with machine-local configuration remains at its original ignored path."
+}

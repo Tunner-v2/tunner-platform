@@ -2,8 +2,19 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-019",
   "validation_kind": "COMMITTED",
-  "result": "PASS",
-  "phase": "ENGINEERING_READY_PRODUCT_ACCEPTANCE_PENDING",
+  "result": "PENDING",
+  "phase": "OPEN_FOUNDATION_SOURCE_BINDING_CORRECTION",
+  "qualification_correction": {
+    "detected_at": "2026-11-17T23:01:24Z",
+    "source_sha": "5b8f13b18611a16fab13d6c635d216606dd9e4ba",
+    "finding": "Current native P2-007/P2-008 readiness rejects stale shared-source and UI bindings. TODO-INTEGRATION001 explicitly includes these open bindings, so its earlier DONE status was premature. The twelve closed functional bridges and original actual test results remain intact.",
+    "action": "Reopen the existing integration TODO, reconcile only the qualified affected source/UI inputs, preserve actual execution identities and rerun affected native gates. Prior native_readiness below remains a historical actual receipt, not proof that this correction is complete.",
+    "failed_gate_refs": [
+      "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/TUN-P2-007-ready.json",
+      "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/TUN-P2-008-ready.json"
+    ],
+    "product_acceptance": "PENDING_USER_REPLY_NO_CLOSURE_AUTHORIZED"
+  },
   "lifecycle_progress": {
     "current_state": "PRODUCT_ACCEPTANCE",
     "product_acceptance": "PENDING_USER_REPLY",

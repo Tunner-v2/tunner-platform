@@ -31,8 +31,8 @@
   "result": "PASS",
   "proposal_status": "UNAPPLIED_ROOT_REVIEW_CANDIDATE_NOT_NATIVE_GATE_RESULT",
   "recorded_at": "2026-11-11T05:11:48.794Z",
-  "tested_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
-  "inventory_sha256": "c45b886b94591f8facaf4ca3f7d3d8b2490d3edb69c27cc3467c204664698bad",
+  "tested_commit_sha": "462e269ad5c701034aceb7374f15f0c249a87529",
+  "inventory_sha256": "5dd8b4e8954a0f04d6e72791b3070190c5a2fa78453c356cc1fb7b214b5d0e1d",
   "owned_behavior_paths": [
     "docs/contracts/ui-inventory.json",
     "src/Modules/Identity/AuthenticationEndpoints.cs",
@@ -14034,6 +14034,22 @@
     }
   ],
   "source_binding": {
+    "current_source_carrier_sha": "462e269ad5c701034aceb7374f15f0c249a87529",
+    "historical_source_binding_pointer": "#/historical_source_binding_before_20261117",
+    "open_foundation_currentness_20261117": {
+      "recorded_at": "2026-11-17T23:38:22.5023134+00:00",
+      "prior_envelope_carrier_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
+      "prior_inventory_sha256": "c45b886b94591f8facaf4ca3f7d3d8b2490d3edb69c27cc3467c204664698bad",
+      "current_source_carrier_sha": "462e269ad5c701034aceb7374f15f0c249a87529",
+      "preserved_item_count": 17,
+      "inventory_slice_deep_equal": true,
+      "unchanged_frontend_except": ["web/apps/user/passkeys.tsx"],
+      "qualified_backend_sources": [{"actual_execution_source_sha":"1bf5971739f163d15777498b211ff0f48f677bc8","unchanged_paths":["src/Modules/Identity/AuthenticationEndpoints.cs","src/Modules/Identity/StepUpApplication.cs"],"qualification_ref":{"path":"governance/evidence/p2-019-content-20261116/native-recovery-1bf59717/private-receipt.json","sha256":"0f3581bcba32ed98cbe88d977d19daff37b239b43ee58cdb3c3d4810b7dd7955"},"boundary":"Original 123-case execution at 1bf59717 retained as historical source-qualified evidence; no new or current-source private cohort is claimed."},{"actual_execution_source_sha":"2b1bb960434aa49824c4899fc46f3e2533aff4ac","unchanged_paths":["src/Modules/Identity/SessionRevocationBrowser.cs"],"qualification_ref":{"path":"governance/evidence/p2-019-content-20261116/native/47e5fb7acd26408f8a1a2835e790b662/summary.json","sha256":"06763582b54e24e7ae01b00f6e1203f385b34acfc2029fd0c5247b4d9c402093"},"boundary":"Actual ten-case session qualification at its original source; no passkey or TOTP journey is inferred from this receipt."},{"actual_execution_source_sha":"94f04a133921ef7f6fa41b5b43d3d3965a6f10d3","unchanged_paths":["src/Modules/Identity/IdentityWebAssets.cs"],"qualification_ref":{"path":"governance/evidence/p2-019-content-20261116/shared-assets-94f04a13/summary.json","sha256":"1ebd26341a7e33fc45b5cbd91fca6d15eae351b0d4dd69bd84de02dcb90ad58c"},"boundary":"Four actual default-host checks plus separately retained wrapper qualification; these four checks are not runtime fixture journeys."}],
+      "passkey_completed_reload_qualification": {"changed_owned_path":"web/apps/user/passkeys.tsx","production_fix_source_sha":"42dfecf308d029f530237d84c4c42145a8df9040","production_fix_equal_current_carrier":true,"fixture_green":{"execution_ref":{"path":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/fixture-green/execution.json","sha256":"9a1236f7e616b26c11de3bb38262711c19a4b2527e6066c12262a35c6820bf7f"},"observed_extract_ref":{"path":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/fixture-green/observed-extract.json","sha256":"f439983aad9bec94ab809897c862e212868f09c707f8c1c7a2fffec20678a565"},"passed":4,"failed":0,"skipped":0,"boundary":"Completed reload and failed exact-read recovery, prior authorized reload, lost enrollment response and cross-tab immutable original; actual execution at 42dfecf3."},"real_journey":{"execution_ref":{"path":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/browser-real/execution.json","sha256":"6a7cd021bd82eb8fb596c5ee1ed533f9c5c95cf1f8480864fbc7a05444dddbd9"},"observed_extract_ref":{"path":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/browser-real/observed-extract.json","sha256":"e0a7f96064647ac7aab3a284c163c1414fc08c0b5cb5749d39d71f95d0bf701c"},"screenshot_ref":{"path":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/browser-real/real-native-passkeys-removed.png","sha256":"1087119a661551eacd666c6f59e160fef988e45165ed0d483c3a1cd01bca8e9a"},"passed":1,"failed":0,"skipped":0,"ignore_https_errors":false,"boundary":"Actual strengthened passkey journey at 462e269a, including completed reload/no false pending, both removed and server-qualified enrollment availability; no TOTP journey."},"failed_history":{"red_ref":{"path":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/fixture-red/observed-extract.json","sha256":"2f8e5c50a0741a79578e18588eb8efff409693e7557a3d656d27b470a5aa44d5"},"initial_real_ref":{"path":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/browser-initial-failure/observed-extract.json","sha256":"ba2c7f603c653338134a6247c4afc5269c537d244fb92eb7da348dcbf673e2bc"},"boundary":"Original RED at unchanged 5b8 application and original failed 42df real journey remain failed. The latter failed at the final unsynchronized logout/navigation assertion; network cancellation was not directly established."}},
+      "boundary": "Scoped current-carrier binding only. Every original item/check/screenshot/visual consent and historical actual execution/source witness remains unchanged. No new TOTP execution, current private Recovery cohort, closed-owner evidence update, blanket P019 UI approval, lifecycle closure or Product acceptance is claimed."
+    }
+  },
+  "historical_source_binding_before_20261117": {
     "current_source_ref": {
       "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/source-binding.json",
       "sha256": "f5d5fe3e66915e931667eb4a8445a6548f4c36132ab7a2f8352aded253d8ad15"

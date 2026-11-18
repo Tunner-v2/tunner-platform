@@ -1,0 +1,26 @@
+{
+  "receipt_kind": "OBSERVED_EXTRACT_NOT_FULL_PLAYWRIGHT_REPORT",
+  "source_sha": "42dfecf308d029f530237d84c4c42145a8df9040",
+  "raw_local_report": "artifacts/p2-019-content-20261116/passkey-completed-reload-real-42dfecf3/results.json",
+  "raw_report_sha256": "5974d907d56400d6d55b878d9f358afb8bf57070b3f9dcb86fe5fd73d4b21ebe",
+  "stats": {
+    "startTime": "2026-11-17T23:25:06.323Z",
+    "duration": 29917.768,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "test_file": "web/tests/browser-testing/passkeys-flow.spec.ts",
+      "title": "real native passkeys complete approved onboarding, sign-in, proof, enrollment and self-removal",
+      "id": "b320c679f71e7df82560-428ec5012a180d2e0b39",
+      "status": "failed",
+      "retry": 0,
+      "duration_ms": 27783
+    }
+  ],
+  "execution_ref": "governance\\evidence\\p2-019-content-20261116\\open-foundation-currentness-5b8f13b1\\fix-462e269a\\browser-initial-failure/execution.json",
+  "boundary": "Whole case FAILED at final immediate-navigation logout assertion. New completed-reload checks passed, but no whole-journey PASS is claimed. Actual network cancellation was not directly established."
+}
