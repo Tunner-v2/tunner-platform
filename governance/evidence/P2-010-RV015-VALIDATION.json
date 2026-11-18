@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-010-RV015",
+  "owner_work_item": "TUN-P2-010",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "tools/browser-testing/BrowserTestHost.cs"
+  ],
+  "phase": "PRECLASSIFICATION_CURRENT_SOURCE_AND_NATIVE_CHECKS_PENDING",
+  "source_equivalence": {
+    "checked_commit_sha": "e8fb57db30399dc92faeb579363ac923419a11ba",
+    "common_unchanged_source_carrier": "96685959ef4e87b319e214e615407517c1c3a64b",
+    "all16_union_paths_equal": true,
+    "this_scope_owned_count": 1,
+    "footprint_basis": "Original work-item ownership plus every CLOSED revision, including earlier superseded owner paths; ACTIVE diagnostic scopes are not counted as closed proof.",
+    "complete_declared_scope_union": 174,
+    "closed_revision_count_at_9849017d": 13
+  },
+  "qualification_groups": {
+    "C": {
+      "source_carrier": "d114784293ac0ab21b360073cc7c799ea340b2f5",
+      "paths": [
+        "tools/browser-testing/BrowserTestHost.cs"
+      ],
+      "evidence_refs": [
+        "governance/evidence/p2-019-content-20261116/admin-browser-d1147842/initial-results.json",
+        "governance/evidence/p2-019-content-20261116/admin-browser-d1147842/switch-repair-results.json",
+        "governance/evidence/p2-019-content-20261116/admin-browser-d1147842/query-repair-results.json",
+        "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode-bounded-b1d5becc.json",
+        "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/production-guard-b1d5becc.json"
+      ],
+      "qualification": "Four distinct passing isolated Admin/default/refusal identities across retained runs, plus separately attributed default-mode and Production-refusal checks. Earlier failures remain retained; not a single four-case invocation or private-host qualification.",
+      "source_equal_through_checked_head": true
+    }
+  },
+  "unresolved_runtime_boundary": {
+    "defect_ref": "governance/defects/DEF-TUN-P2-009-HTTPS-HOST-001.yaml",
+    "status": "OPEN_RUNTIME_UNFULFILLED",
+    "diagnostic_revisions": [
+      "P2-009-RV011",
+      "P2-010-RV012"
+    ],
+    "preservation": "Both diagnostic scopes retain their ACTIVE/PENDING state, original full-runtime criteria and defect links. This source bridge does not repair or close them."
+  },
+  "context_ref": null,
+  "context_status": "PENDING_ROOT_SHARED_TASK_CONTEXT",
+  "acceptance_boundary": "Classification only: result and binding SHAs remain PENDING/null until the root candidate, current affected child/source qualification, reviews and native checks. Actual old test sources/counts are retained. No fresh123, current private HOST PASS, Product acceptance, GLOBAL UI/CI, activation or release is claimed."
+}
