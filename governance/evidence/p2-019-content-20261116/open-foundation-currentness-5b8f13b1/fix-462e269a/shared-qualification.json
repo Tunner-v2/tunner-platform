@@ -12,7 +12,7 @@
     "web/tests/browser-testing/passkeys-flow.spec.ts"
   ],
   "closed_owner_revisions": ["P2-009-RV012", "P2-010-RV013", "P2-013-RV005"],
-  "revision_state": "PROPOSED_NOT_CLOSED",
+  "revision_state": "VALIDATION_NOT_CLOSED",
   "actual_executions": {
     "red": {"source_head": "5b8f13b18611a16fab13d6c635d216606dd9e4ba", "failed": 1, "note": "Production unchanged; new regression uncommitted. Retained as failed.", "ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/fixture-red/observed-extract.json"},
     "fixture_green": {"source_sha": "42dfecf308d029f530237d84c4c42145a8df9040", "passed": 4, "ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/fixture-green/observed-extract.json"},
@@ -35,7 +35,7 @@
     ]
   },
   "scoped_ui_gate": {"scope": "TUN-P2-007", "outcome": "PASS", "covered_items": 9, "failures": [], "checked_commit_sha": "bb8314d58a50c09a8b1296a9e65ed79028285db8", "receipt_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/scoped-ui/TUN-P2-007.json"},
-  "shared_context": "PENDING_ONE_PACK_WITH_ALL_THREE_OWNER_LINEAGES_HASH_BOUND",
+  "shared_context": {"selected_scope":"P2-009-RV012","built_at_commit_sha":"ba82f555b87b911435d7b858b3eaa03ab28887c3","verification_outcome":"CURRENT","verification_boundary":"Actual verification at ACTIVE before metadata-only validation/closure; not a claim that a changed pack remains current.","included_items":100,"owner_lineages":3,"scope_bound_reviews":18,"role_contracts":6,"exact_delta_paths":3,"scoped_ui_receipt_included":true,"manifest_ref":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/shared-context/manifest.json","manifest_sha256":"265d5ccb9973c5d2f2433253ceabebdabdc144cc9ff81ed6c433792c047345ee","actual_verify_ref":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/shared-context/verify.json"},
   "global_ci_ui": "PENDING_SIX_EXISTING_RECOVERY_KEYBOARD_CHECK_MAPPINGS",
   "boundary": "Narrow shared passkey state correction only. Recovery, Federation and Session owner domain behavior is unchanged. Original closed records and their whole-UI historical limits remain intact. No new TOTP/private Recovery cohort, whole-P2 qualification, human Product/CODEOWNER approval, production activation or release is claimed."
 }
