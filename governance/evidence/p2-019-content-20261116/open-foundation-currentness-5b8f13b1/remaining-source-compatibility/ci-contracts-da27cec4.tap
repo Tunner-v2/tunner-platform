@@ -1,0 +1,268 @@
+TAP version 13
+# Subtest: TOTP code grammar preserves leading zeroes and mirrors the server ASCII separators and raw bound
+ok 1 - TOTP code grammar preserves leading zeroes and mirrors the server ASCII separators and raw bound
+  ---
+  duration_ms: 12.3692
+  type: 'test'
+  ...
+# Subtest: TOTP reconciliation rejects another operation, selected source, kind or expected version
+ok 2 - TOTP reconciliation rejects another operation, selected source, kind or expected version
+  ---
+  duration_ms: 6.2132
+  type: 'test'
+  ...
+# Subtest: one-time disclosure requires exact original IDs and matching local otpauth/manual-key material without raw diagnostics
+ok 3 - one-time disclosure requires exact original IDs and matching local otpauth/manual-key material without raw diagnostics
+  ---
+  duration_ms: 3.9878
+  type: 'test'
+  ...
+# Subtest: MFA-required is not final authentication and final recovery requires the exact request receipt
+ok 4 - MFA-required is not final authentication and final recovery requires the exact request receipt
+  ---
+  duration_ms: 5.3071
+  type: 'test'
+  ...
+# Subtest: terminal result cannot turn a generic session loss or another factor action into confirmed removal
+ok 5 - terminal result cannot turn a generic session loss or another factor action into confirmed removal
+  ---
+  duration_ms: 1.7363
+  type: 'test'
+  ...
+# Subtest: server replay rejection keeps its safe classification and selects the published TOTP replay variant
+ok 6 - server replay rejection keeps its safe classification and selects the published TOTP replay variant
+  ---
+  duration_ms: 49.8979
+  type: 'test'
+  ...
+# Subtest: current factor capabilities remain explicit and a missing server capability fails closed without raw diagnostics
+ok 7 - current factor capabilities remain explicit and a missing server capability fails closed without raw diagnostics
+  ---
+  duration_ms: 5.1075
+  type: 'test'
+  ...
+# Subtest: recovery options preserve both independently admitted actions without choosing capacity or targets
+ok 8 - recovery options preserve both independently admitted actions without choosing capacity or targets
+  ---
+  duration_ms: 7.5367
+  type: 'test'
+  ...
+# Subtest: safe recovery options and operation reads reject a delivery field even when null
+ok 9 - safe recovery options and operation reads reject a delivery field even when null
+  ---
+  duration_ms: 8.9546
+  type: 'test'
+  ...
+# Subtest: missing published current impact never becomes an enabled pending operation
+ok 10 - missing published current impact never becomes an enabled pending operation
+  ---
+  duration_ms: 3.8515
+  type: 'test'
+  ...
+# Subtest: safe versions, profiles and explicit count bounds fail closed before use
+ok 11 - safe versions, profiles and explicit count bounds fail closed before use
+  ---
+  duration_ms: 4.925
+  type: 'test'
+  ...
+# Subtest: current publication must match held original version, digest, key, facts and exact interval
+ok 12 - current publication must match held original version, digest, key, facts and exact interval
+  ---
+  duration_ms: 8.1062
+  type: 'test'
+  ...
+# Subtest: start reconciliation is exact original owner identity and kind, not a new request
+ok 13 - start reconciliation is exact original owner identity and kind, not a new request
+  ---
+  duration_ms: 0.704
+  type: 'test'
+  ...
+# Subtest: safe completed operation means unavailable, never a fresh display grant
+ok 14 - safe completed operation means unavailable, never a fresh display grant
+  ---
+  duration_ms: 0.7934
+  type: 'test'
+  ...
+# Subtest: winning delivery is synchronously captured before safe completion and only once
+ok 15 - winning delivery is synchronously captured before safe completion and only once
+  ---
+  duration_ms: 7.4453
+  type: 'test'
+  ...
+# Subtest: owner and proof request identifiers are independently bound
+ok 16 - owner and proof request identifiers are independently bound
+  ---
+  duration_ms: 1.0207
+  type: 'test'
+  ...
+# Subtest: all immutable set, context and profile bindings must match the held original
+ok 17 - all immutable set, context and profile bindings must match the held original
+  ---
+  duration_ms: 1.8386
+  type: 'test'
+  ...
+# Subtest: delivery count, uniqueness and canonical response representation are admitted before capture
+ok 18 - delivery count, uniqueness and canonical response representation are admitted before capture
+  ---
+  duration_ms: 1.376
+  type: 'test'
+  ...
+# Subtest: a canceled or stale receiver cannot capture a late winning body
+ok 19 - a canceled or stale receiver cannot capture a late winning body
+  ---
+  duration_ms: 0.403
+  type: 'test'
+  ...
+# Subtest: unexpected recipient, terminal combination and extra carrier fields reject rather than strip
+ok 20 - unexpected recipient, terminal combination and extra carrier fields reject rather than strip
+  ---
+  duration_ms: 0.7439
+  type: 'test'
+  ...
+# Subtest: legacy completion and body-loss status remain safe without manufacturing delivery
+ok 21 - legacy completion and body-loss status remain safe without manufacturing delivery
+  ---
+  duration_ms: 0.4642
+  type: 'test'
+  ...
+# Subtest: SSR is browser-independent with plain brand and no icon
+ok 22 - SSR is browser-independent with plain brand and no icon
+  ---
+  duration_ms: 24.1761
+  type: 'test'
+  ...
+# Subtest: native button defaults to button, with explicit owner submit supported
+ok 23 - native button defaults to button, with explicit owner submit supported
+  ---
+  duration_ms: 3.1325
+  type: 'test'
+  ...
+# Subtest: owner disabled and busy state preserved
+ok 24 - owner disabled and busy state preserved
+  ---
+  duration_ms: 1.6325
+  type: 'test'
+  ...
+# Subtest: content text is escaped and provenance is preserved
+ok 25 - content text is escaped and provenance is preserved
+  ---
+  duration_ms: 5.0721
+  type: 'test'
+  ...
+# Subtest: published templates render escaped bounded variables and retain original provenance
+ok 26 - published templates render escaped bounded variables and retain original provenance
+  ---
+  duration_ms: 7.5923
+  type: 'test'
+  ...
+# Subtest: missing required key fails without fallback
+ok 27 - missing required key fails without fallback
+  ---
+  duration_ms: 1.7457
+  type: 'test'
+  ...
+# Subtest: mismatched key or locale and unpublished snapshots fail
+ok 28 - mismatched key or locale and unpublished snapshots fail
+  ---
+  duration_ms: 5.0809
+  type: 'test'
+  ...
+# Subtest: missing provenance and blank required copy fail
+ok 29 - missing provenance and blank required copy fail
+  ---
+  duration_ms: 3.9
+  type: 'test'
+  ...
+# Subtest: resolver receives bounded surface/locale/audience context
+ok 30 - resolver receives bounded surface/locale/audience context
+  ---
+  duration_ms: 1.8871
+  type: 'test'
+  ...
+# Subtest: required theme/content boundaries fail explicitly
+ok 31 - required theme/content boundaries fail explicitly
+  ---
+  duration_ms: 1.2003
+  type: 'test'
+  ...
+# Subtest: invalid modes/surfaces fail rather than silently applying defaults
+ok 32 - invalid modes/surfaces fail rather than silently applying defaults
+  ---
+  duration_ms: 0.7312
+  type: 'test'
+  ...
+# Subtest: empty locale/audience is rejected
+ok 33 - empty locale/audience is rejected
+  ---
+  duration_ms: 0.5717
+  type: 'test'
+  ...
+# Subtest: field label/help/error IDs and noncolor text preserve associations
+ok 34 - field label/help/error IDs and noncolor text preserve associations
+  ---
+  duration_ms: 2.7697
+  type: 'test'
+  ...
+# Subtest: absent optional slots stay absent
+ok 35 - absent optional slots stay absent
+  ---
+  duration_ms: 1.2617
+  type: 'test'
+  ...
+# Subtest: generated label IDs are unique
+ok 36 - generated label IDs are unique
+  ---
+  duration_ms: 2.2449
+  type: 'test'
+  ...
+# Subtest: nested surface providers preserve independent DOM boundaries
+ok 37 - nested surface providers preserve independent DOM boundaries
+  ---
+  duration_ms: 1.8374
+  type: 'test'
+  ...
+# Subtest: placeholder requires its own published copy and provenance while retaining the visible label
+ok 38 - placeholder requires its own published copy and provenance while retaining the visible label
+  ---
+  duration_ms: 2.031
+  type: 'test'
+  ...
+# Subtest: typed schemas enforce required, format, range and cross-field rules using domain keys
+ok 39 - typed schemas enforce required, format, range and cross-field rules using domain keys
+  ---
+  duration_ms: 4.3337
+  type: 'test'
+  ...
+# Subtest: schema form-level errors and published summary remain separate from field rules
+ok 40 - schema form-level errors and published summary remain separate from field rules
+  ---
+  duration_ms: 2.5761
+  type: 'test'
+  ...
+# Subtest: domain schemas use current policy and do not inherit historical Figma password or age restrictions
+ok 41 - domain schemas use current policy and do not inherit historical Figma password or age restrictions
+  ---
+  duration_ms: 5.19
+  type: 'test'
+  ...
+# Subtest: DOB schema is calendar-safe and rejects future dates without client age eligibility policy
+ok 42 - DOB schema is calendar-safe and rejects future dates without client age eligibility policy
+  ---
+  duration_ms: 0.3958
+  type: 'test'
+  ...
+# Subtest: every implemented screen route agrees with the central inventory and known BFF fallback contract
+ok 43 - every implemented screen route agrees with the central inventory and known BFF fallback contract
+  ---
+  duration_ms: 2.0899
+  type: 'test'
+  ...
+1..43
+# tests 43
+# suites 0
+# pass 43
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 774.7721

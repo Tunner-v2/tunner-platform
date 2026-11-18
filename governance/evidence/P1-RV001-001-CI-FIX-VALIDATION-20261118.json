@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "result": "LOCAL_CI_DEFECT_FIXES_QUALIFIED_REMOTE_CHECKS_PENDING",
+  "tested_commit_sha": "da27cec467ad94183ac5320eae4a48998fca1cc6",
+  "recorded_at": "2026-11-18T13:01:53.954400+00:00",
+  "ci_observation": {
+    "run_id": 44239649051,
+    "head_sha": "2dcaf39a79d01f82a066c045147252f0fe76b374",
+    "outcome": "FAILURE",
+    "failed_jobs": [
+      "Web build tests and dependency audit",
+      "Security baseline",
+      "LGTM image scan",
+      "Container security gate"
+    ],
+    "six_other_image_scans": "PASS",
+    "scope": "Two local test defects fixed; whole CI and LGTM are not passing."
+  },
+  "web": {
+    "tests": 43,
+    "passed": 43,
+    "failed": 0,
+    "skipped": 0,
+    "typecheck_exit_code": 0,
+    "source_sha256": "9f769c623933d451daaa74eca10fc052cc394a386c5a74801aefee0de94fbb7f",
+    "raw_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-contracts-da27cec4.tap",
+    "raw_sha256": "2f06e6cbd39627e605d8c335b329f85047575156c8c29f7cbc40edcbd3bec556",
+    "execution_ref": "artifacts/p1-rv001-20261118/route-contract-da27cec4/execution.json"
+  },
+  "session_listing": {
+    "tests": 11,
+    "passed": 11,
+    "failed": 0,
+    "skipped": 0,
+    "runtime": "Windows Docker engine, existing portable profile with container opt-in and no native run ID; not Ubuntu CI execution.",
+    "raw_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-session-listing-da27cec4.trx",
+    "raw_sha256": "1110adefe9665d6583f37605cfb2102f963b85f379a11619db65c4ab5718bb1c",
+    "earlier_broader_observation": "26 actual passing cases at frozen precommit sources retained separately; not added to committed11 count.",
+    "cleanup": "Fixture-owned containers verified absent; borrowed browser resources preserved."
+  },
+  "independent_review": {
+    "reviewer": "root AI, independent of the two specialist code authors",
+    "finding": "PASS for bounded test fixes: route/form assertions retained; portable delegation uses complementary absent/non-null run-ID branches; native engine/image/npipe/ownership guards unchanged. No application/policy/UI changes, skipped cohorts, severity reductions or workflow modifications."
+  },
+  "p011_assessment": "The owned broad read-only assessment was cancelled when test source changed; exit1 with no eligibility result. No fresh P011 admission is claimed.",
+  "browser_runtime": "Existing User Login and synthetic Admin HTTP200 with normal Windows TLS; approved starter and existing PG25432/Mailpit28025 restored.",
+  "boundary": "Existing P1 remediation remains IN_PROGRESS. LGTM HIGH findings, private Recovery HOST defect, pending Product acceptance, protected-main merge and production/release remain separate.",
+  "test_source_owners": [
+    "P2-009-RV015",
+    "P2-013-RV007",
+    "P2-004-RV001",
+    "P2-005-RV001",
+    "P2-007-RV001",
+    "P2-008-RV001"
+  ],
+  "source_ownership_boundary": "The same web correction touches five accepted foundation source maps, and the fixture touches Sessions. These six minimal technical revisions reuse the same43+11 actual tests and two role assessments; they do not reopen Product scope or rerun old qualifications."
+}

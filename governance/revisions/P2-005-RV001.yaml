@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-005-RV001",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-005",
+  "parent_revision_id": null,
+  "parent_milestone_revision_id": null,
+  "title": "Retain qualified shared route and form test correction",
+  "revision_type": "CORRECTIVE",
+  "status": "ACTIVE",
+  "reason": "One confirmed shared contracts.test.tsx CI defect affects the accepted foundation source classification. Reuse actual43 passing contract tests and typecheck at da27cec4, independent technical review and the same bounded CI evidence. No application, historical Product acceptance or approved behavior change.",
+  "authority_refs": [
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [
+    "web/tests/contracts.test.tsx",
+    "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
+    "governance/evidence/P2-005-RV001-VALIDATION.json",
+    "governance/reviews/REV-P2-005-RV001-full-stack-engineer.yaml",
+    "governance/reviews/REV-P2-005-RV001-tester-qa-engineer.yaml"
+  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "The exact shared test correction retains all existing domain assertions and checks all current routes/form parents; preserve historical closure with committed test-only source lineage."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "full-stack-engineer",
+    "tester-qa-engineer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P2-005-RV001-VALIDATION.json"
+  ],
+  "created_at": "2026-11-18T13:06:57.5075050+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}
