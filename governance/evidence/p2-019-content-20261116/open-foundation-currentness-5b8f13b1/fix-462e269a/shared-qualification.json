@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "qualification_id": "PASSKEY-COMPLETED-RELOAD-462e269a",
-  "result": "PENDING",
+  "result": "PASS",
   "source_review_result": "PASS",
   "source_carrier": "462e269ad5c701034aceb7374f15f0c249a87529",
   "production_fix_source": "42dfecf308d029f530237d84c4c42145a8df9040",
@@ -34,7 +34,7 @@
       {"role": "auditor", "version": "1.0.0", "skill": ".agent/skills/auditor/SKILL.md", "sha256": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921", "result": "PASS", "assessment": "Actual source attribution retained; no aggregate cohort, Product/CODEOWNER acceptance or unexecuted native closure claim."}
     ]
   },
-  "scoped_ui_gate": "PENDING_CURRENT_P007_NINE_ITEM_CHECK",
+  "scoped_ui_gate": {"scope": "TUN-P2-007", "outcome": "PASS", "covered_items": 9, "failures": [], "checked_commit_sha": "bb8314d58a50c09a8b1296a9e65ed79028285db8", "receipt_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/scoped-ui/TUN-P2-007.json"},
   "shared_context": "PENDING_ONE_PACK_WITH_ALL_THREE_OWNER_LINEAGES_HASH_BOUND",
   "global_ci_ui": "PENDING_SIX_EXISTING_RECOVERY_KEYBOARD_CHECK_MAPPINGS",
   "boundary": "Narrow shared passkey state correction only. Recovery, Federation and Session owner domain behavior is unchanged. Original closed records and their whole-UI historical limits remain intact. No new TOTP/private Recovery cohort, whole-P2 qualification, human Product/CODEOWNER approval, production activation or release is claimed."
