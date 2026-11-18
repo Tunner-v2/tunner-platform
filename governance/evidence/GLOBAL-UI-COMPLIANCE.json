@@ -2,11 +2,11 @@
   "schema_version": 1,
   "scope_id": "GLOBAL_UI",
   "result": "PASS",
-  "recorded_at": "2026-11-18T04:20:38.689898+00:00",
-  "tested_commit_sha": "0f268b06e619ceab21de9e541d6dfe5a7fcc797f",
-  "tested_commit_semantics": "Current reviewed source carrier for native evaluation; original per-row run SHAs, evidence objects, consents and screenshots are preserved. This is aggregation, not execution of one current global browser/native cohort.",
+  "recorded_at": "2026-11-18T14:46:42.421328+00:00",
+  "tested_commit_sha": "e9ed840054263dc7a015fd2dbfcb7eb9782afe02",
+  "tested_commit_semantics": "Current committed source carrier; eight P019 native-version UI rows reuse six actual browser and44 Node cases at e9ed. The other115 row objects and their actual historical execution/consent identities remain unchanged. No fresh aggregate123/73 browser or native15 runtime execution is claimed.",
   "inventory_sha256": "5dd8b4e8954a0f04d6e72791b3070190c5a2fa78453c356cc1fb7b214b5d0e1d",
-  "gate_status": "PENDING_ACTUAL_GLOBAL_NATIVE_CHECK",
+  "gate_status": "PENDING_ACTUAL_CURRENT_NATIVE_UI_RECHECK",
   "owned_behavior_paths": [
     "docs/contracts/session-bulk-revocation-contract.md",
     "docs/contracts/session-listing-contract.md",
@@ -298,7 +298,8 @@
     "web/tests/step-up/federation.spec.ts",
     "web/tests/step-up/step-up.spec.ts",
     "web/tests/totp/ui/totp.spec.ts",
-    "web/tsconfig.json"
+    "web/tsconfig.json",
+    "web/tests/contracts.test.tsx"
   ],
   "items": [
     {
@@ -1817,7 +1818,7 @@
     },
     {
       "id": "A-ID-SETTINGS-Totp-edit",
-      "assessment": "Totp edit: exact qualified scope/candidate and typed values, canonical route/history/reload guards, authoritative server capabilities, shared fields/error/focus and responsive rendering. Read-only validator constants and qualified TOTP labels retain original numeric wire values; no owner defaults.",
+      "assessment": "Totp edit: exact qualified scope/candidate and typed values, canonical route/history/reload guards, authoritative server capabilities, shared fields/error/focus and responsive rendering. Read-only validator constants and qualified TOTP labels retain original numeric wire values; no owner defaults. Current e9ed8400 compatibility: native Identity version is an explicit blank-on-new-draft shared Select admitting only 10.0.13 or 10.0.15; existing candidates preserve the exact version through save, compare, history and exact-target prospective rollback. The prior validator constants, owner authority, routes, styles, permission checks and UNKNOWN/retry behavior retain their existing contracts. Six controlled-BFF browser cases and 44 Node contracts qualify this frontend change, not native runtime 15 or a production policy selection. Compatible pattern reuse is covered by the existing P2-019 delegated UI authority; earlier consent and original execution evidence remain historical.",
       "checks": [
         {
           "id": "URL-001",
@@ -1885,6 +1886,18 @@
             {
               "sha256": "241d73984f0edfdde492e302c82d3155d2da65c8316c07127df71f5ef117195b",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-edit-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-1440.png",
+              "sha256": "2fa7b8d5900f6a9a03596520f3682ec3d85711fbf3354d9f63bc6e74186b1961"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-390.png",
+              "sha256": "c90fb9efcae2a1d14b0fa413199a236bf68f628574f89c77f71bd54f2dbfe56b"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-320.png",
+              "sha256": "6740040f75f8d89b1a2254cd97b1d2f7d69b0024d3dbbe2a03792896eeece799"
             }
           ]
         },
@@ -1895,6 +1908,18 @@
             {
               "sha256": "241d73984f0edfdde492e302c82d3155d2da65c8316c07127df71f5ef117195b",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-edit-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-1440.png",
+              "sha256": "2fa7b8d5900f6a9a03596520f3682ec3d85711fbf3354d9f63bc6e74186b1961"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-390.png",
+              "sha256": "c90fb9efcae2a1d14b0fa413199a236bf68f628574f89c77f71bd54f2dbfe56b"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-320.png",
+              "sha256": "6740040f75f8d89b1a2254cd97b1d2f7d69b0024d3dbbe2a03792896eeece799"
             }
           ]
         },
@@ -1905,6 +1930,18 @@
             {
               "sha256": "241d73984f0edfdde492e302c82d3155d2da65c8316c07127df71f5ef117195b",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-edit-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-1440.png",
+              "sha256": "2fa7b8d5900f6a9a03596520f3682ec3d85711fbf3354d9f63bc6e74186b1961"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-390.png",
+              "sha256": "c90fb9efcae2a1d14b0fa413199a236bf68f628574f89c77f71bd54f2dbfe56b"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-320.png",
+              "sha256": "6740040f75f8d89b1a2254cd97b1d2f7d69b0024d3dbbe2a03792896eeece799"
             }
           ]
         },
@@ -1935,6 +1972,18 @@
             {
               "sha256": "241d73984f0edfdde492e302c82d3155d2da65c8316c07127df71f5ef117195b",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-edit-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-1440.png",
+              "sha256": "2fa7b8d5900f6a9a03596520f3682ec3d85711fbf3354d9f63bc6e74186b1961"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-390.png",
+              "sha256": "c90fb9efcae2a1d14b0fa413199a236bf68f628574f89c77f71bd54f2dbfe56b"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-320.png",
+              "sha256": "6740040f75f8d89b1a2254cd97b1d2f7d69b0024d3dbbe2a03792896eeece799"
             }
           ]
         },
@@ -1945,6 +1994,10 @@
             {
               "sha256": "72feb9c4f92478f53cf5d2af9094105b938f4334cb0e7812d953e440e0437985",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
             }
           ]
         },
@@ -1955,6 +2008,18 @@
             {
               "sha256": "241d73984f0edfdde492e302c82d3155d2da65c8316c07127df71f5ef117195b",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-edit-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-1440.png",
+              "sha256": "2fa7b8d5900f6a9a03596520f3682ec3d85711fbf3354d9f63bc6e74186b1961"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-390.png",
+              "sha256": "c90fb9efcae2a1d14b0fa413199a236bf68f628574f89c77f71bd54f2dbfe56b"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-320.png",
+              "sha256": "6740040f75f8d89b1a2254cd97b1d2f7d69b0024d3dbbe2a03792896eeece799"
             }
           ]
         }
@@ -1983,6 +2048,30 @@
         {
           "sha256": "951f22ac3bf8c61938e2f82bcb15a332fb5aedb520c1f848ef059684035e9ebb",
           "path": "artifacts/p2-019-content-20261116/additional-settings-ui-review/totp-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-1440.png",
+          "sha256": "2fa7b8d5900f6a9a03596520f3682ec3d85711fbf3354d9f63bc6e74186b1961"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-390.png",
+          "sha256": "c90fb9efcae2a1d14b0fa413199a236bf68f628574f89c77f71bd54f2dbfe56b"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-320.png",
+          "sha256": "6740040f75f8d89b1a2254cd97b1d2f7d69b0024d3dbbe2a03792896eeece799"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-required-1440.png",
+          "sha256": "347ad25e1d44293f52e8fe107c2b4426774600e0ca61163a5f08aeb9f4eb6f4c"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-required-390.png",
+          "sha256": "b7c63e6281b59dc8cd60c63664fe98f4760dbf147bcc6cf532b1176725a6ab19"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-required-320.png",
+          "sha256": "ee66959a7876739607b86698008c0edafb65837d486c667ac8f8e49d0d7a8ccd"
         }
       ],
       "deviations": [
@@ -2011,7 +2100,7 @@
     },
     {
       "id": "A-ID-SETTINGS-Totp-review",
-      "assessment": "Totp review: exact qualified scope/candidate and typed values, canonical route/history/reload guards, authoritative server capabilities, shared fields/error/focus and responsive rendering. Read-only validator constants and qualified TOTP labels retain original numeric wire values; no owner defaults.",
+      "assessment": "Totp review: exact qualified scope/candidate and typed values, canonical route/history/reload guards, authoritative server capabilities, shared fields/error/focus and responsive rendering. Read-only validator constants and qualified TOTP labels retain original numeric wire values; no owner defaults. Current e9ed8400 compatibility: native Identity version is an explicit blank-on-new-draft shared Select admitting only 10.0.13 or 10.0.15; existing candidates preserve the exact version through save, compare, history and exact-target prospective rollback. The prior validator constants, owner authority, routes, styles, permission checks and UNKNOWN/retry behavior retain their existing contracts. Six controlled-BFF browser cases and 44 Node contracts qualify this frontend change, not native runtime 15 or a production policy selection. Compatible pattern reuse is covered by the existing P2-019 delegated UI authority; earlier consent and original execution evidence remain historical.",
       "checks": [
         {
           "id": "URL-001",
@@ -2079,6 +2168,18 @@
             {
               "sha256": "619b96655d49bf4d5fe7ea18df1ee5406b691e6c0f150becf983037e434498e8",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-review-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-1440.png",
+              "sha256": "5870f4663b8f129ce8e9ec215bb95cd3884139aef6414bd86ad3e952918e385d"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-390.png",
+              "sha256": "6fde08aab57c66810411d962b1f945707c2e661c7a793f41016af83cb8cbf16f"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-320.png",
+              "sha256": "9c71856974ce9adcca4d4252418d083f38781947eed612bda143658b97656d25"
             }
           ]
         },
@@ -2089,6 +2190,18 @@
             {
               "sha256": "619b96655d49bf4d5fe7ea18df1ee5406b691e6c0f150becf983037e434498e8",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-review-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-1440.png",
+              "sha256": "5870f4663b8f129ce8e9ec215bb95cd3884139aef6414bd86ad3e952918e385d"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-390.png",
+              "sha256": "6fde08aab57c66810411d962b1f945707c2e661c7a793f41016af83cb8cbf16f"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-320.png",
+              "sha256": "9c71856974ce9adcca4d4252418d083f38781947eed612bda143658b97656d25"
             }
           ]
         },
@@ -2099,6 +2212,18 @@
             {
               "sha256": "619b96655d49bf4d5fe7ea18df1ee5406b691e6c0f150becf983037e434498e8",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-review-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-1440.png",
+              "sha256": "5870f4663b8f129ce8e9ec215bb95cd3884139aef6414bd86ad3e952918e385d"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-390.png",
+              "sha256": "6fde08aab57c66810411d962b1f945707c2e661c7a793f41016af83cb8cbf16f"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-320.png",
+              "sha256": "9c71856974ce9adcca4d4252418d083f38781947eed612bda143658b97656d25"
             }
           ]
         },
@@ -2129,6 +2254,18 @@
             {
               "sha256": "619b96655d49bf4d5fe7ea18df1ee5406b691e6c0f150becf983037e434498e8",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-review-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-1440.png",
+              "sha256": "5870f4663b8f129ce8e9ec215bb95cd3884139aef6414bd86ad3e952918e385d"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-390.png",
+              "sha256": "6fde08aab57c66810411d962b1f945707c2e661c7a793f41016af83cb8cbf16f"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-320.png",
+              "sha256": "9c71856974ce9adcca4d4252418d083f38781947eed612bda143658b97656d25"
             }
           ]
         },
@@ -2139,6 +2276,10 @@
             {
               "sha256": "72feb9c4f92478f53cf5d2af9094105b938f4334cb0e7812d953e440e0437985",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
             }
           ]
         },
@@ -2149,6 +2290,18 @@
             {
               "sha256": "619b96655d49bf4d5fe7ea18df1ee5406b691e6c0f150becf983037e434498e8",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-review-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-1440.png",
+              "sha256": "5870f4663b8f129ce8e9ec215bb95cd3884139aef6414bd86ad3e952918e385d"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-390.png",
+              "sha256": "6fde08aab57c66810411d962b1f945707c2e661c7a793f41016af83cb8cbf16f"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-320.png",
+              "sha256": "9c71856974ce9adcca4d4252418d083f38781947eed612bda143658b97656d25"
             }
           ]
         }
@@ -2169,6 +2322,18 @@
         {
           "sha256": "951f22ac3bf8c61938e2f82bcb15a332fb5aedb520c1f848ef059684035e9ebb",
           "path": "artifacts/p2-019-content-20261116/additional-settings-ui-review/totp-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-1440.png",
+          "sha256": "5870f4663b8f129ce8e9ec215bb95cd3884139aef6414bd86ad3e952918e385d"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-390.png",
+          "sha256": "6fde08aab57c66810411d962b1f945707c2e661c7a793f41016af83cb8cbf16f"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-review-320.png",
+          "sha256": "9c71856974ce9adcca4d4252418d083f38781947eed612bda143658b97656d25"
         }
       ],
       "deviations": [
@@ -2197,7 +2362,7 @@
     },
     {
       "id": "A-ID-SETTINGS-Totp-history",
-      "assessment": "Totp history: exact qualified scope/candidate and typed values, canonical route/history/reload guards, authoritative server capabilities, shared fields/error/focus and responsive rendering. Read-only validator constants and qualified TOTP labels retain original numeric wire values; no owner defaults.",
+      "assessment": "Totp history: exact qualified scope/candidate and typed values, canonical route/history/reload guards, authoritative server capabilities, shared fields/error/focus and responsive rendering. Read-only validator constants and qualified TOTP labels retain original numeric wire values; no owner defaults. Current e9ed8400 compatibility: native Identity version is an explicit blank-on-new-draft shared Select admitting only 10.0.13 or 10.0.15; existing candidates preserve the exact version through save, compare, history and exact-target prospective rollback. The prior validator constants, owner authority, routes, styles, permission checks and UNKNOWN/retry behavior retain their existing contracts. Six controlled-BFF browser cases and 44 Node contracts qualify this frontend change, not native runtime 15 or a production policy selection. Compatible pattern reuse is covered by the existing P2-019 delegated UI authority; earlier consent and original execution evidence remain historical.",
       "checks": [
         {
           "id": "URL-001",
@@ -2265,6 +2430,18 @@
             {
               "sha256": "5d4e3a462b2d7e1900552d6701762a51ae92dbfc5b344670480131c31c51fd87",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-history-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-1440.png",
+              "sha256": "5d4e3a462b2d7e1900552d6701762a51ae92dbfc5b344670480131c31c51fd87"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-390.png",
+              "sha256": "46fdbd825275f623fc77b318a95abaf903534458d1d37bf36e3c16bf610a00d3"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-320.png",
+              "sha256": "f636c281ae5e4955922f44be6ce01305d698ac4c77ef0026c4be8fda484523d3"
             }
           ]
         },
@@ -2275,6 +2452,18 @@
             {
               "sha256": "5d4e3a462b2d7e1900552d6701762a51ae92dbfc5b344670480131c31c51fd87",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-history-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-1440.png",
+              "sha256": "5d4e3a462b2d7e1900552d6701762a51ae92dbfc5b344670480131c31c51fd87"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-390.png",
+              "sha256": "46fdbd825275f623fc77b318a95abaf903534458d1d37bf36e3c16bf610a00d3"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-320.png",
+              "sha256": "f636c281ae5e4955922f44be6ce01305d698ac4c77ef0026c4be8fda484523d3"
             }
           ]
         },
@@ -2285,6 +2474,18 @@
             {
               "sha256": "5d4e3a462b2d7e1900552d6701762a51ae92dbfc5b344670480131c31c51fd87",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-history-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-1440.png",
+              "sha256": "5d4e3a462b2d7e1900552d6701762a51ae92dbfc5b344670480131c31c51fd87"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-390.png",
+              "sha256": "46fdbd825275f623fc77b318a95abaf903534458d1d37bf36e3c16bf610a00d3"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-320.png",
+              "sha256": "f636c281ae5e4955922f44be6ce01305d698ac4c77ef0026c4be8fda484523d3"
             }
           ]
         },
@@ -2315,6 +2516,18 @@
             {
               "sha256": "5d4e3a462b2d7e1900552d6701762a51ae92dbfc5b344670480131c31c51fd87",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-history-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-1440.png",
+              "sha256": "5d4e3a462b2d7e1900552d6701762a51ae92dbfc5b344670480131c31c51fd87"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-390.png",
+              "sha256": "46fdbd825275f623fc77b318a95abaf903534458d1d37bf36e3c16bf610a00d3"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-320.png",
+              "sha256": "f636c281ae5e4955922f44be6ce01305d698ac4c77ef0026c4be8fda484523d3"
             }
           ]
         },
@@ -2325,6 +2538,10 @@
             {
               "sha256": "72feb9c4f92478f53cf5d2af9094105b938f4334cb0e7812d953e440e0437985",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
             }
           ]
         },
@@ -2335,6 +2552,18 @@
             {
               "sha256": "5d4e3a462b2d7e1900552d6701762a51ae92dbfc5b344670480131c31c51fd87",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-history-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-1440.png",
+              "sha256": "5d4e3a462b2d7e1900552d6701762a51ae92dbfc5b344670480131c31c51fd87"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-390.png",
+              "sha256": "46fdbd825275f623fc77b318a95abaf903534458d1d37bf36e3c16bf610a00d3"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-320.png",
+              "sha256": "f636c281ae5e4955922f44be6ce01305d698ac4c77ef0026c4be8fda484523d3"
             }
           ]
         }
@@ -2355,6 +2584,18 @@
         {
           "sha256": "951f22ac3bf8c61938e2f82bcb15a332fb5aedb520c1f848ef059684035e9ebb",
           "path": "artifacts/p2-019-content-20261116/additional-settings-ui-review/totp-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-1440.png",
+          "sha256": "5d4e3a462b2d7e1900552d6701762a51ae92dbfc5b344670480131c31c51fd87"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-390.png",
+          "sha256": "46fdbd825275f623fc77b318a95abaf903534458d1d37bf36e3c16bf610a00d3"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-history-320.png",
+          "sha256": "f636c281ae5e4955922f44be6ce01305d698ac4c77ef0026c4be8fda484523d3"
         }
       ],
       "deviations": [
@@ -2383,7 +2624,7 @@
     },
     {
       "id": "FORM-ADMIN-IDENTITY-TOTP",
-      "assessment": "Totp edit: exact qualified scope/candidate and typed values, canonical route/history/reload guards, authoritative server capabilities, shared fields/error/focus and responsive rendering. Read-only validator constants and qualified TOTP labels retain original numeric wire values; no owner defaults.",
+      "assessment": "Totp edit: exact qualified scope/candidate and typed values, canonical route/history/reload guards, authoritative server capabilities, shared fields/error/focus and responsive rendering. Read-only validator constants and qualified TOTP labels retain original numeric wire values; no owner defaults. Current e9ed8400 compatibility: native Identity version is an explicit blank-on-new-draft shared Select admitting only 10.0.13 or 10.0.15; existing candidates preserve the exact version through save, compare, history and exact-target prospective rollback. The prior validator constants, owner authority, routes, styles, permission checks and UNKNOWN/retry behavior retain their existing contracts. Six controlled-BFF browser cases and 44 Node contracts qualify this frontend change, not native runtime 15 or a production policy selection. Compatible pattern reuse is covered by the existing P2-019 delegated UI authority; earlier consent and original execution evidence remain historical.",
       "checks": [
         {
           "id": "VAL-001",
@@ -2392,6 +2633,14 @@
             {
               "sha256": "72feb9c4f92478f53cf5d2af9094105b938f4334cb0e7812d953e440e0437985",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
+              "sha256": "070b8cb69c3f2c93940c29f9168b8f9abf934d550b7ca285879e23d8aacea4da"
             }
           ]
         },
@@ -2402,6 +2651,14 @@
             {
               "sha256": "72feb9c4f92478f53cf5d2af9094105b938f4334cb0e7812d953e440e0437985",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
+              "sha256": "070b8cb69c3f2c93940c29f9168b8f9abf934d550b7ca285879e23d8aacea4da"
             }
           ]
         },
@@ -2412,6 +2669,10 @@
             {
               "sha256": "3a84e9785e1e378f9ee8a9376b458dd545aeef91eb8a05e62b1cfd375fa9a7db",
               "path": "governance/evidence/p2-019-content-20261116/native/6fde6c694d924e408a0d3b148fbefd9a/product-authorization.trx"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
+              "sha256": "070b8cb69c3f2c93940c29f9168b8f9abf934d550b7ca285879e23d8aacea4da"
             }
           ]
         },
@@ -2422,6 +2683,14 @@
             {
               "sha256": "72feb9c4f92478f53cf5d2af9094105b938f4334cb0e7812d953e440e0437985",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
+              "sha256": "070b8cb69c3f2c93940c29f9168b8f9abf934d550b7ca285879e23d8aacea4da"
             }
           ]
         },
@@ -2432,6 +2701,14 @@
             {
               "sha256": "72feb9c4f92478f53cf5d2af9094105b938f4334cb0e7812d953e440e0437985",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
+              "sha256": "070b8cb69c3f2c93940c29f9168b8f9abf934d550b7ca285879e23d8aacea4da"
             }
           ]
         },
@@ -2442,6 +2719,22 @@
             {
               "sha256": "241d73984f0edfdde492e302c82d3155d2da65c8316c07127df71f5ef117195b",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-edit-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-required-1440.png",
+              "sha256": "347ad25e1d44293f52e8fe107c2b4426774600e0ca61163a5f08aeb9f4eb6f4c"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-required-390.png",
+              "sha256": "b7c63e6281b59dc8cd60c63664fe98f4760dbf147bcc6cf532b1176725a6ab19"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-required-320.png",
+              "sha256": "ee66959a7876739607b86698008c0edafb65837d486c667ac8f8e49d0d7a8ccd"
             }
           ]
         },
@@ -2452,6 +2745,14 @@
             {
               "sha256": "72feb9c4f92478f53cf5d2af9094105b938f4334cb0e7812d953e440e0437985",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
+              "sha256": "070b8cb69c3f2c93940c29f9168b8f9abf934d550b7ca285879e23d8aacea4da"
             }
           ]
         },
@@ -2462,6 +2763,14 @@
             {
               "sha256": "72feb9c4f92478f53cf5d2af9094105b938f4334cb0e7812d953e440e0437985",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
+              "sha256": "070b8cb69c3f2c93940c29f9168b8f9abf934d550b7ca285879e23d8aacea4da"
             }
           ]
         },
@@ -2472,6 +2781,18 @@
             {
               "sha256": "241d73984f0edfdde492e302c82d3155d2da65c8316c07127df71f5ef117195b",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-edit-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-1440.png",
+              "sha256": "2fa7b8d5900f6a9a03596520f3682ec3d85711fbf3354d9f63bc6e74186b1961"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-390.png",
+              "sha256": "c90fb9efcae2a1d14b0fa413199a236bf68f628574f89c77f71bd54f2dbfe56b"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-320.png",
+              "sha256": "6740040f75f8d89b1a2254cd97b1d2f7d69b0024d3dbbe2a03792896eeece799"
             }
           ]
         },
@@ -2482,6 +2803,18 @@
             {
               "sha256": "241d73984f0edfdde492e302c82d3155d2da65c8316c07127df71f5ef117195b",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-edit-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-1440.png",
+              "sha256": "2fa7b8d5900f6a9a03596520f3682ec3d85711fbf3354d9f63bc6e74186b1961"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-390.png",
+              "sha256": "c90fb9efcae2a1d14b0fa413199a236bf68f628574f89c77f71bd54f2dbfe56b"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-320.png",
+              "sha256": "6740040f75f8d89b1a2254cd97b1d2f7d69b0024d3dbbe2a03792896eeece799"
             }
           ]
         },
@@ -2492,6 +2825,18 @@
             {
               "sha256": "241d73984f0edfdde492e302c82d3155d2da65c8316c07127df71f5ef117195b",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-edit-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-1440.png",
+              "sha256": "2fa7b8d5900f6a9a03596520f3682ec3d85711fbf3354d9f63bc6e74186b1961"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-390.png",
+              "sha256": "c90fb9efcae2a1d14b0fa413199a236bf68f628574f89c77f71bd54f2dbfe56b"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-320.png",
+              "sha256": "6740040f75f8d89b1a2254cd97b1d2f7d69b0024d3dbbe2a03792896eeece799"
             }
           ]
         },
@@ -2522,6 +2867,18 @@
             {
               "sha256": "241d73984f0edfdde492e302c82d3155d2da65c8316c07127df71f5ef117195b",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-edit-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-1440.png",
+              "sha256": "2fa7b8d5900f6a9a03596520f3682ec3d85711fbf3354d9f63bc6e74186b1961"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-390.png",
+              "sha256": "c90fb9efcae2a1d14b0fa413199a236bf68f628574f89c77f71bd54f2dbfe56b"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-320.png",
+              "sha256": "6740040f75f8d89b1a2254cd97b1d2f7d69b0024d3dbbe2a03792896eeece799"
             }
           ]
         },
@@ -2532,6 +2889,10 @@
             {
               "sha256": "72feb9c4f92478f53cf5d2af9094105b938f4334cb0e7812d953e440e0437985",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
             }
           ]
         },
@@ -2542,6 +2903,18 @@
             {
               "sha256": "241d73984f0edfdde492e302c82d3155d2da65c8316c07127df71f5ef117195b",
               "path": "governance/evidence/p2-019-content-20261116/ui/current-799b1490/configuration-799b1490-effects__totp-edit-1440.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-1440.png",
+              "sha256": "2fa7b8d5900f6a9a03596520f3682ec3d85711fbf3354d9f63bc6e74186b1961"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-390.png",
+              "sha256": "c90fb9efcae2a1d14b0fa413199a236bf68f628574f89c77f71bd54f2dbfe56b"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-320.png",
+              "sha256": "6740040f75f8d89b1a2254cd97b1d2f7d69b0024d3dbbe2a03792896eeece799"
             }
           ]
         }
@@ -2570,6 +2943,30 @@
         {
           "sha256": "951f22ac3bf8c61938e2f82bcb15a332fb5aedb520c1f848ef059684035e9ebb",
           "path": "artifacts/p2-019-content-20261116/additional-settings-ui-review/totp-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-1440.png",
+          "sha256": "2fa7b8d5900f6a9a03596520f3682ec3d85711fbf3354d9f63bc6e74186b1961"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-390.png",
+          "sha256": "c90fb9efcae2a1d14b0fa413199a236bf68f628574f89c77f71bd54f2dbfe56b"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-edit-320.png",
+          "sha256": "6740040f75f8d89b1a2254cd97b1d2f7d69b0024d3dbbe2a03792896eeece799"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-required-1440.png",
+          "sha256": "347ad25e1d44293f52e8fe107c2b4426774600e0ca61163a5f08aeb9f4eb6f4c"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-required-390.png",
+          "sha256": "b7c63e6281b59dc8cd60c63664fe98f4760dbf147bcc6cf532b1176725a6ab19"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/Totp-native-required-320.png",
+          "sha256": "ee66959a7876739607b86698008c0edafb65837d486c667ac8f8e49d0d7a8ccd"
         }
       ],
       "deviations": [
@@ -34756,7 +35153,7 @@
     },
     {
       "id": "A-ID-SETTINGS-RecoveryCodes-edit",
-      "assessment": "RecoveryCodes edit: existing 27-value policy, six read-only constructor constraints and 21 owner inputs; exact decimal Int64 round-trip and36-row review/history; governed required/format/range/cross-field and authoritative backend validation, current capability checks, safe retries, shared errors, canonical routing and responsive keyboard/accessibility checks. No policy values, native code issuance or production activation selected. Initial failures were test-baseline/label-selector defects; only those tests changed before focused reruns.",
+      "assessment": "RecoveryCodes edit: existing 27-value policy, five read-only constructor constraints and 22 explicit owner inputs; exact decimal Int64 round-trip and36-row review/history; governed required/format/range/cross-field and authoritative backend validation, current capability checks, safe retries, shared errors, canonical routing and responsive keyboard/accessibility checks. No policy values, native code issuance or production activation selected. Initial failures were test-baseline/label-selector defects; only those tests changed before focused reruns. Current e9ed8400 compatibility: native Identity version is an explicit blank-on-new-draft shared Select admitting only 10.0.13 or 10.0.15; existing candidates preserve the exact version through save, compare, history and exact-target prospective rollback. The prior validator constants, owner authority, routes, styles, permission checks and UNKNOWN/retry behavior retain their existing contracts. Six controlled-BFF browser cases and 44 Node contracts qualify this frontend change, not native runtime 15 or a production policy selection. Compatible pattern reuse is covered by the existing P2-019 delegated UI authority; earlier consent and original execution evidence remain historical.",
       "checks": [
         {
           "id": "URL-001",
@@ -34837,6 +35234,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-1440.png",
+              "sha256": "164b62d08bc1d5977f11e62fe45a1094c32c8b8e97c21c2b1522759b1a50d75a"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-390.png",
+              "sha256": "e8eb7562472825eeea085ec38de39cdf90085c5ec5df354df7bba478ccbc87a7"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-320.png",
+              "sha256": "8477129cc5c5cda6229cdd76c7209f5827109928bb752f52bfdf0710a1d0df8e"
             }
           ]
         },
@@ -34859,6 +35268,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-1440.png",
+              "sha256": "164b62d08bc1d5977f11e62fe45a1094c32c8b8e97c21c2b1522759b1a50d75a"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-390.png",
+              "sha256": "e8eb7562472825eeea085ec38de39cdf90085c5ec5df354df7bba478ccbc87a7"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-320.png",
+              "sha256": "8477129cc5c5cda6229cdd76c7209f5827109928bb752f52bfdf0710a1d0df8e"
             }
           ]
         },
@@ -34881,6 +35302,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-1440.png",
+              "sha256": "164b62d08bc1d5977f11e62fe45a1094c32c8b8e97c21c2b1522759b1a50d75a"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-390.png",
+              "sha256": "e8eb7562472825eeea085ec38de39cdf90085c5ec5df354df7bba478ccbc87a7"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-320.png",
+              "sha256": "8477129cc5c5cda6229cdd76c7209f5827109928bb752f52bfdf0710a1d0df8e"
             }
           ]
         },
@@ -34923,6 +35356,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-1440.png",
+              "sha256": "164b62d08bc1d5977f11e62fe45a1094c32c8b8e97c21c2b1522759b1a50d75a"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-390.png",
+              "sha256": "e8eb7562472825eeea085ec38de39cdf90085c5ec5df354df7bba478ccbc87a7"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-320.png",
+              "sha256": "8477129cc5c5cda6229cdd76c7209f5827109928bb752f52bfdf0710a1d0df8e"
             }
           ]
         },
@@ -34937,6 +35382,10 @@
             {
               "sha256": "fa69da8fc3432a87267ca88476469c5d1663c455bc4a7b9a13afe376f8118b6d",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-f793e93e/results.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
             }
           ]
         },
@@ -34959,6 +35408,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-1440.png",
+              "sha256": "164b62d08bc1d5977f11e62fe45a1094c32c8b8e97c21c2b1522759b1a50d75a"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-390.png",
+              "sha256": "e8eb7562472825eeea085ec38de39cdf90085c5ec5df354df7bba478ccbc87a7"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-320.png",
+              "sha256": "8477129cc5c5cda6229cdd76c7209f5827109928bb752f52bfdf0710a1d0df8e"
             }
           ]
         }
@@ -34995,6 +35456,30 @@
         {
           "sha256": "34775eb9839a457c660982b747006c743cb7deae26a2168091b5536ca84529a1",
           "path": "artifacts/p2-019-content-20261116/recovery-code-policy-ui-review/recovery-codes-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-1440.png",
+          "sha256": "164b62d08bc1d5977f11e62fe45a1094c32c8b8e97c21c2b1522759b1a50d75a"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-390.png",
+          "sha256": "e8eb7562472825eeea085ec38de39cdf90085c5ec5df354df7bba478ccbc87a7"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-320.png",
+          "sha256": "8477129cc5c5cda6229cdd76c7209f5827109928bb752f52bfdf0710a1d0df8e"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-required-1440.png",
+          "sha256": "d6640c0e329f2c8b872d6474d7524f69982eba0add9245f9d0523723c0a9ef54"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-required-390.png",
+          "sha256": "87696661ab4aa94d6f8d0195d7615c6f3d7d561abc0787c2dfce62ec26785a2d"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-required-320.png",
+          "sha256": "f9c22179150ca5f89e52f9b0b4a1fbaa8c434786e22343fcbcb63330cc30c8f9"
         }
       ],
       "deviations": [
@@ -35009,7 +35494,7 @@
     },
     {
       "id": "A-ID-SETTINGS-RecoveryCodes-review",
-      "assessment": "RecoveryCodes review: existing 27-value policy, six read-only constructor constraints and 21 owner inputs; exact decimal Int64 round-trip and36-row review/history; governed required/format/range/cross-field and authoritative backend validation, current capability checks, safe retries, shared errors, canonical routing and responsive keyboard/accessibility checks. No policy values, native code issuance or production activation selected. Initial failures were test-baseline/label-selector defects; only those tests changed before focused reruns.",
+      "assessment": "RecoveryCodes review: existing 27-value policy, five read-only constructor constraints and 22 explicit owner inputs; exact decimal Int64 round-trip and36-row review/history; governed required/format/range/cross-field and authoritative backend validation, current capability checks, safe retries, shared errors, canonical routing and responsive keyboard/accessibility checks. No policy values, native code issuance or production activation selected. Initial failures were test-baseline/label-selector defects; only those tests changed before focused reruns. Current e9ed8400 compatibility: native Identity version is an explicit blank-on-new-draft shared Select admitting only 10.0.13 or 10.0.15; existing candidates preserve the exact version through save, compare, history and exact-target prospective rollback. The prior validator constants, owner authority, routes, styles, permission checks and UNKNOWN/retry behavior retain their existing contracts. Six controlled-BFF browser cases and 44 Node contracts qualify this frontend change, not native runtime 15 or a production policy selection. Compatible pattern reuse is covered by the existing P2-019 delegated UI authority; earlier consent and original execution evidence remain historical.",
       "checks": [
         {
           "id": "URL-001",
@@ -35090,6 +35575,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-1440.png",
+              "sha256": "daf4274982f3b6cb7d4573d3008a039df2abcf249e34b3550b05d1753a2cf210"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-390.png",
+              "sha256": "e8aa6feb37f67c38d9a6addd7b88ea27ff7b4c766ed608b46f56db409479f22e"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-320.png",
+              "sha256": "8bb1e0b047ed64250d05bd21dbad4b515fd6ac422c8920a0fc4a57ec890770ff"
             }
           ]
         },
@@ -35112,6 +35609,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-1440.png",
+              "sha256": "daf4274982f3b6cb7d4573d3008a039df2abcf249e34b3550b05d1753a2cf210"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-390.png",
+              "sha256": "e8aa6feb37f67c38d9a6addd7b88ea27ff7b4c766ed608b46f56db409479f22e"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-320.png",
+              "sha256": "8bb1e0b047ed64250d05bd21dbad4b515fd6ac422c8920a0fc4a57ec890770ff"
             }
           ]
         },
@@ -35134,6 +35643,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-1440.png",
+              "sha256": "daf4274982f3b6cb7d4573d3008a039df2abcf249e34b3550b05d1753a2cf210"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-390.png",
+              "sha256": "e8aa6feb37f67c38d9a6addd7b88ea27ff7b4c766ed608b46f56db409479f22e"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-320.png",
+              "sha256": "8bb1e0b047ed64250d05bd21dbad4b515fd6ac422c8920a0fc4a57ec890770ff"
             }
           ]
         },
@@ -35176,6 +35697,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-1440.png",
+              "sha256": "daf4274982f3b6cb7d4573d3008a039df2abcf249e34b3550b05d1753a2cf210"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-390.png",
+              "sha256": "e8aa6feb37f67c38d9a6addd7b88ea27ff7b4c766ed608b46f56db409479f22e"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-320.png",
+              "sha256": "8bb1e0b047ed64250d05bd21dbad4b515fd6ac422c8920a0fc4a57ec890770ff"
             }
           ]
         },
@@ -35190,6 +35723,10 @@
             {
               "sha256": "fa69da8fc3432a87267ca88476469c5d1663c455bc4a7b9a13afe376f8118b6d",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-f793e93e/results.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
             }
           ]
         },
@@ -35212,6 +35749,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-1440.png",
+              "sha256": "daf4274982f3b6cb7d4573d3008a039df2abcf249e34b3550b05d1753a2cf210"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-390.png",
+              "sha256": "e8aa6feb37f67c38d9a6addd7b88ea27ff7b4c766ed608b46f56db409479f22e"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-320.png",
+              "sha256": "8bb1e0b047ed64250d05bd21dbad4b515fd6ac422c8920a0fc4a57ec890770ff"
             }
           ]
         }
@@ -35240,6 +35789,18 @@
         {
           "sha256": "34775eb9839a457c660982b747006c743cb7deae26a2168091b5536ca84529a1",
           "path": "artifacts/p2-019-content-20261116/recovery-code-policy-ui-review/recovery-codes-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-1440.png",
+          "sha256": "daf4274982f3b6cb7d4573d3008a039df2abcf249e34b3550b05d1753a2cf210"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-390.png",
+          "sha256": "e8aa6feb37f67c38d9a6addd7b88ea27ff7b4c766ed608b46f56db409479f22e"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-review-320.png",
+          "sha256": "8bb1e0b047ed64250d05bd21dbad4b515fd6ac422c8920a0fc4a57ec890770ff"
         }
       ],
       "deviations": [
@@ -35254,7 +35815,7 @@
     },
     {
       "id": "A-ID-SETTINGS-RecoveryCodes-history",
-      "assessment": "RecoveryCodes history: existing 27-value policy, six read-only constructor constraints and 21 owner inputs; exact decimal Int64 round-trip and36-row review/history; governed required/format/range/cross-field and authoritative backend validation, current capability checks, safe retries, shared errors, canonical routing and responsive keyboard/accessibility checks. No policy values, native code issuance or production activation selected. Initial failures were test-baseline/label-selector defects; only those tests changed before focused reruns.",
+      "assessment": "RecoveryCodes history: existing 27-value policy, five read-only constructor constraints and 22 explicit owner inputs; exact decimal Int64 round-trip and36-row review/history; governed required/format/range/cross-field and authoritative backend validation, current capability checks, safe retries, shared errors, canonical routing and responsive keyboard/accessibility checks. No policy values, native code issuance or production activation selected. Initial failures were test-baseline/label-selector defects; only those tests changed before focused reruns. Current e9ed8400 compatibility: native Identity version is an explicit blank-on-new-draft shared Select admitting only 10.0.13 or 10.0.15; existing candidates preserve the exact version through save, compare, history and exact-target prospective rollback. The prior validator constants, owner authority, routes, styles, permission checks and UNKNOWN/retry behavior retain their existing contracts. Six controlled-BFF browser cases and 44 Node contracts qualify this frontend change, not native runtime 15 or a production policy selection. Compatible pattern reuse is covered by the existing P2-019 delegated UI authority; earlier consent and original execution evidence remain historical.",
       "checks": [
         {
           "id": "URL-001",
@@ -35335,6 +35896,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-1440.png",
+              "sha256": "4f16a5d990e2595d878b1dafc4960749c9d1789ccec749f4bbf430cf9347af34"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-390.png",
+              "sha256": "32e7d20fb7fa529be64d29de2d9c28e5fd7806f500b9fa6e7621fe8ac0d711cc"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-320.png",
+              "sha256": "b673af6d017a5f280d787dd038647db7a9bafe570ace941d67710e05f414d7ea"
             }
           ]
         },
@@ -35357,6 +35930,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-1440.png",
+              "sha256": "4f16a5d990e2595d878b1dafc4960749c9d1789ccec749f4bbf430cf9347af34"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-390.png",
+              "sha256": "32e7d20fb7fa529be64d29de2d9c28e5fd7806f500b9fa6e7621fe8ac0d711cc"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-320.png",
+              "sha256": "b673af6d017a5f280d787dd038647db7a9bafe570ace941d67710e05f414d7ea"
             }
           ]
         },
@@ -35379,6 +35964,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-1440.png",
+              "sha256": "4f16a5d990e2595d878b1dafc4960749c9d1789ccec749f4bbf430cf9347af34"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-390.png",
+              "sha256": "32e7d20fb7fa529be64d29de2d9c28e5fd7806f500b9fa6e7621fe8ac0d711cc"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-320.png",
+              "sha256": "b673af6d017a5f280d787dd038647db7a9bafe570ace941d67710e05f414d7ea"
             }
           ]
         },
@@ -35421,6 +36018,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-1440.png",
+              "sha256": "4f16a5d990e2595d878b1dafc4960749c9d1789ccec749f4bbf430cf9347af34"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-390.png",
+              "sha256": "32e7d20fb7fa529be64d29de2d9c28e5fd7806f500b9fa6e7621fe8ac0d711cc"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-320.png",
+              "sha256": "b673af6d017a5f280d787dd038647db7a9bafe570ace941d67710e05f414d7ea"
             }
           ]
         },
@@ -35435,6 +36044,10 @@
             {
               "sha256": "fa69da8fc3432a87267ca88476469c5d1663c455bc4a7b9a13afe376f8118b6d",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-f793e93e/results.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
             }
           ]
         },
@@ -35457,6 +36070,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-1440.png",
+              "sha256": "4f16a5d990e2595d878b1dafc4960749c9d1789ccec749f4bbf430cf9347af34"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-390.png",
+              "sha256": "32e7d20fb7fa529be64d29de2d9c28e5fd7806f500b9fa6e7621fe8ac0d711cc"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-320.png",
+              "sha256": "b673af6d017a5f280d787dd038647db7a9bafe570ace941d67710e05f414d7ea"
             }
           ]
         }
@@ -35485,6 +36110,18 @@
         {
           "sha256": "34775eb9839a457c660982b747006c743cb7deae26a2168091b5536ca84529a1",
           "path": "artifacts/p2-019-content-20261116/recovery-code-policy-ui-review/recovery-codes-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-1440.png",
+          "sha256": "4f16a5d990e2595d878b1dafc4960749c9d1789ccec749f4bbf430cf9347af34"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-390.png",
+          "sha256": "32e7d20fb7fa529be64d29de2d9c28e5fd7806f500b9fa6e7621fe8ac0d711cc"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-history-320.png",
+          "sha256": "b673af6d017a5f280d787dd038647db7a9bafe570ace941d67710e05f414d7ea"
         }
       ],
       "deviations": [
@@ -35499,7 +36136,7 @@
     },
     {
       "id": "FORM-ADMIN-IDENTITY-RECOVERY-CODES",
-      "assessment": "RecoveryCodes form: existing 27-value policy, six read-only constructor constraints and 21 owner inputs; exact decimal Int64 round-trip and36-row review/history; governed required/format/range/cross-field and authoritative backend validation, current capability checks, safe retries, shared errors, canonical routing and responsive keyboard/accessibility checks. No policy values, native code issuance or production activation selected. Initial failures were test-baseline/label-selector defects; only those tests changed before focused reruns.",
+      "assessment": "RecoveryCodes form: existing 27-value policy, five read-only constructor constraints and 22 explicit owner inputs; exact decimal Int64 round-trip and36-row review/history; governed required/format/range/cross-field and authoritative backend validation, current capability checks, safe retries, shared errors, canonical routing and responsive keyboard/accessibility checks. No policy values, native code issuance or production activation selected. Initial failures were test-baseline/label-selector defects; only those tests changed before focused reruns. Current e9ed8400 compatibility: native Identity version is an explicit blank-on-new-draft shared Select admitting only 10.0.13 or 10.0.15; existing candidates preserve the exact version through save, compare, history and exact-target prospective rollback. The prior validator constants, owner authority, routes, styles, permission checks and UNKNOWN/retry behavior retain their existing contracts. Six controlled-BFF browser cases and 44 Node contracts qualify this frontend change, not native runtime 15 or a production policy selection. Compatible pattern reuse is covered by the existing P2-019 delegated UI authority; earlier consent and original execution evidence remain historical.",
       "checks": [
         {
           "id": "VAL-001",
@@ -35512,6 +36149,14 @@
             {
               "sha256": "fa69da8fc3432a87267ca88476469c5d1663c455bc4a7b9a13afe376f8118b6d",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-f793e93e/results.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
+              "sha256": "070b8cb69c3f2c93940c29f9168b8f9abf934d550b7ca285879e23d8aacea4da"
             }
           ]
         },
@@ -35526,6 +36171,14 @@
             {
               "sha256": "fa69da8fc3432a87267ca88476469c5d1663c455bc4a7b9a13afe376f8118b6d",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-f793e93e/results.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
+              "sha256": "070b8cb69c3f2c93940c29f9168b8f9abf934d550b7ca285879e23d8aacea4da"
             }
           ]
         },
@@ -35544,6 +36197,10 @@
             {
               "sha256": "51324b5bbe7e8d6ffcee44b3846bcc836e034c0ac44bb33afd6f9a41d6f8e1dd",
               "path": "governance/evidence/p2-019-content-20261116/native/8de3433199994b108efbce50b3cde904/product-authorization.trx"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
+              "sha256": "070b8cb69c3f2c93940c29f9168b8f9abf934d550b7ca285879e23d8aacea4da"
             }
           ]
         },
@@ -35558,6 +36215,14 @@
             {
               "sha256": "fa69da8fc3432a87267ca88476469c5d1663c455bc4a7b9a13afe376f8118b6d",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-f793e93e/results.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
+              "sha256": "070b8cb69c3f2c93940c29f9168b8f9abf934d550b7ca285879e23d8aacea4da"
             }
           ]
         },
@@ -35572,6 +36237,14 @@
             {
               "sha256": "fa69da8fc3432a87267ca88476469c5d1663c455bc4a7b9a13afe376f8118b6d",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-f793e93e/results.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
+              "sha256": "070b8cb69c3f2c93940c29f9168b8f9abf934d550b7ca285879e23d8aacea4da"
             }
           ]
         },
@@ -35586,6 +36259,22 @@
             {
               "sha256": "fa69da8fc3432a87267ca88476469c5d1663c455bc4a7b9a13afe376f8118b6d",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-f793e93e/results.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-required-1440.png",
+              "sha256": "d6640c0e329f2c8b872d6474d7524f69982eba0add9245f9d0523723c0a9ef54"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-required-390.png",
+              "sha256": "87696661ab4aa94d6f8d0195d7615c6f3d7d561abc0787c2dfce62ec26785a2d"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-required-320.png",
+              "sha256": "f9c22179150ca5f89e52f9b0b4a1fbaa8c434786e22343fcbcb63330cc30c8f9"
             }
           ]
         },
@@ -35600,6 +36289,14 @@
             {
               "sha256": "fa69da8fc3432a87267ca88476469c5d1663c455bc4a7b9a13afe376f8118b6d",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-f793e93e/results.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
+              "sha256": "070b8cb69c3f2c93940c29f9168b8f9abf934d550b7ca285879e23d8aacea4da"
             }
           ]
         },
@@ -35614,6 +36311,14 @@
             {
               "sha256": "fa69da8fc3432a87267ca88476469c5d1663c455bc4a7b9a13afe376f8118b6d",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-f793e93e/results.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
+              "sha256": "070b8cb69c3f2c93940c29f9168b8f9abf934d550b7ca285879e23d8aacea4da"
             }
           ]
         },
@@ -35636,6 +36341,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-1440.png",
+              "sha256": "164b62d08bc1d5977f11e62fe45a1094c32c8b8e97c21c2b1522759b1a50d75a"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-390.png",
+              "sha256": "e8eb7562472825eeea085ec38de39cdf90085c5ec5df354df7bba478ccbc87a7"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-320.png",
+              "sha256": "8477129cc5c5cda6229cdd76c7209f5827109928bb752f52bfdf0710a1d0df8e"
             }
           ]
         },
@@ -35658,6 +36375,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-1440.png",
+              "sha256": "164b62d08bc1d5977f11e62fe45a1094c32c8b8e97c21c2b1522759b1a50d75a"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-390.png",
+              "sha256": "e8eb7562472825eeea085ec38de39cdf90085c5ec5df354df7bba478ccbc87a7"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-320.png",
+              "sha256": "8477129cc5c5cda6229cdd76c7209f5827109928bb752f52bfdf0710a1d0df8e"
             }
           ]
         },
@@ -35680,6 +36409,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-1440.png",
+              "sha256": "164b62d08bc1d5977f11e62fe45a1094c32c8b8e97c21c2b1522759b1a50d75a"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-390.png",
+              "sha256": "e8eb7562472825eeea085ec38de39cdf90085c5ec5df354df7bba478ccbc87a7"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-320.png",
+              "sha256": "8477129cc5c5cda6229cdd76c7209f5827109928bb752f52bfdf0710a1d0df8e"
             }
           ]
         },
@@ -35722,6 +36463,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-1440.png",
+              "sha256": "164b62d08bc1d5977f11e62fe45a1094c32c8b8e97c21c2b1522759b1a50d75a"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-390.png",
+              "sha256": "e8eb7562472825eeea085ec38de39cdf90085c5ec5df354df7bba478ccbc87a7"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-320.png",
+              "sha256": "8477129cc5c5cda6229cdd76c7209f5827109928bb752f52bfdf0710a1d0df8e"
             }
           ]
         },
@@ -35736,6 +36489,10 @@
             {
               "sha256": "fa69da8fc3432a87267ca88476469c5d1663c455bc4a7b9a13afe376f8118b6d",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-f793e93e/results.json"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+              "sha256": "3dc591b36bace4ed9d1833a11152c51237804941db59930c99e174cc32957bba"
             }
           ]
         },
@@ -35758,6 +36515,18 @@
             {
               "sha256": "811c854e1288927f03707ca910a4acb4fe23d31d8c04261e4f553e0a02f686bb",
               "path": "governance/evidence/p2-019-content-20261116/ui/recovery-policy-19619f20-initial/configuration-RecoveryCode-4bc44-board-correction-and-reflow__recovery-codes-edit-768.png"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-1440.png",
+              "sha256": "164b62d08bc1d5977f11e62fe45a1094c32c8b8e97c21c2b1522759b1a50d75a"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-390.png",
+              "sha256": "e8eb7562472825eeea085ec38de39cdf90085c5ec5df354df7bba478ccbc87a7"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-320.png",
+              "sha256": "8477129cc5c5cda6229cdd76c7209f5827109928bb752f52bfdf0710a1d0df8e"
             }
           ]
         }
@@ -35794,6 +36563,30 @@
         {
           "sha256": "34775eb9839a457c660982b747006c743cb7deae26a2168091b5536ca84529a1",
           "path": "artifacts/p2-019-content-20261116/recovery-code-policy-ui-review/recovery-codes-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-1440.png",
+          "sha256": "164b62d08bc1d5977f11e62fe45a1094c32c8b8e97c21c2b1522759b1a50d75a"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-390.png",
+          "sha256": "e8eb7562472825eeea085ec38de39cdf90085c5ec5df354df7bba478ccbc87a7"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-edit-320.png",
+          "sha256": "8477129cc5c5cda6229cdd76c7209f5827109928bb752f52bfdf0710a1d0df8e"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-required-1440.png",
+          "sha256": "d6640c0e329f2c8b872d6474d7524f69982eba0add9245f9d0523723c0a9ef54"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-required-390.png",
+          "sha256": "87696661ab4aa94d6f8d0195d7615c6f3d7d561abc0787c2dfce62ec26785a2d"
+        },
+        {
+          "path": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/RecoveryCodes-native-required-320.png",
+          "sha256": "f9c22179150ca5f89e52f9b0b4a1fbaa8c434786e22343fcbcb63330cc30c8f9"
         }
       ],
       "deviations": [
@@ -41814,7 +42607,7 @@
     "A-ID-SETTINGS-Registration-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-Registration-edit",
       "row_object_preserved": true,
@@ -41823,7 +42616,7 @@
     "A-ID-SETTINGS-Registration-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-Registration-review",
       "row_object_preserved": true,
@@ -41832,7 +42625,7 @@
     "A-ID-SETTINGS-Registration-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-Registration-history",
       "row_object_preserved": true,
@@ -41841,7 +42634,7 @@
     "FORM-ADMIN-IDENTITY-REGISTRATION": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-REGISTRATION",
       "row_object_preserved": true,
@@ -41850,7 +42643,7 @@
     "A-ID-SETTINGS-Totp-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-Totp-edit",
       "row_object_preserved": true,
@@ -41859,7 +42652,7 @@
     "A-ID-SETTINGS-Totp-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-Totp-review",
       "row_object_preserved": true,
@@ -41868,7 +42661,7 @@
     "A-ID-SETTINGS-Totp-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-Totp-history",
       "row_object_preserved": true,
@@ -41877,7 +42670,7 @@
     "FORM-ADMIN-IDENTITY-TOTP": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-TOTP",
       "row_object_preserved": true,
@@ -41886,7 +42679,7 @@
     "A-ID-SETTINGS-Authentication-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-Authentication-edit",
       "row_object_preserved": true,
@@ -41895,7 +42688,7 @@
     "A-ID-SETTINGS-Assurance-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-Assurance-edit",
       "row_object_preserved": true,
@@ -41904,7 +42697,7 @@
     "A-ID-SETTINGS-AuthenticationContent-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-AuthenticationContent-edit",
       "row_object_preserved": true,
@@ -41913,7 +42706,7 @@
     "A-ID-SETTINGS-Authentication-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-Authentication-review",
       "row_object_preserved": true,
@@ -41922,7 +42715,7 @@
     "A-ID-SETTINGS-Assurance-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-Assurance-review",
       "row_object_preserved": true,
@@ -41931,7 +42724,7 @@
     "A-ID-SETTINGS-AuthenticationContent-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-AuthenticationContent-review",
       "row_object_preserved": true,
@@ -41940,7 +42733,7 @@
     "A-ID-SETTINGS-Authentication-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-Authentication-history",
       "row_object_preserved": true,
@@ -41949,7 +42742,7 @@
     "A-ID-SETTINGS-Assurance-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-Assurance-history",
       "row_object_preserved": true,
@@ -41958,7 +42751,7 @@
     "A-ID-SETTINGS-AuthenticationContent-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-AuthenticationContent-history",
       "row_object_preserved": true,
@@ -41967,7 +42760,7 @@
     "FORM-ADMIN-IDENTITY-AUTHENTICATION": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-AUTHENTICATION",
       "row_object_preserved": true,
@@ -41976,7 +42769,7 @@
     "FORM-ADMIN-IDENTITY-ASSURANCE": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-ASSURANCE",
       "row_object_preserved": true,
@@ -41985,7 +42778,7 @@
     "FORM-ADMIN-IDENTITY-CONTENT-BINDING": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-CONTENT-BINDING",
       "row_object_preserved": true,
@@ -41994,7 +42787,7 @@
     "FORM-ADMIN-IDENTITY-SEARCH": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-SEARCH",
       "row_object_preserved": true,
@@ -42003,7 +42796,7 @@
     "FORM-ADMIN-IDENTITY-PUBLICATION": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-PUBLICATION",
       "row_object_preserved": true,
@@ -42012,7 +42805,7 @@
     "A-CNT-01": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-CNT-01",
       "row_object_preserved": true,
@@ -42021,7 +42814,7 @@
     "A-CNT-01-REVIEW": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-CNT-01-REVIEW",
       "row_object_preserved": true,
@@ -42030,7 +42823,7 @@
     "A-CNT-01-HISTORY": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-CNT-01-HISTORY",
       "row_object_preserved": true,
@@ -42039,7 +42832,7 @@
     "FORM-ADMIN-CONTENT-SEARCH": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-CONTENT-SEARCH",
       "row_object_preserved": true,
@@ -42048,7 +42841,7 @@
     "FORM-ADMIN-CONTENT-DRAFT": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-CONTENT-DRAFT",
       "row_object_preserved": true,
@@ -42057,7 +42850,7 @@
     "FORM-ADMIN-CONTENT-PUBLICATION": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-CONTENT-PUBLICATION",
       "row_object_preserved": true,
@@ -42066,7 +42859,7 @@
     "A-ID-SETTINGS-RegistrationContent-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-RegistrationContent-edit",
       "row_object_preserved": true,
@@ -42075,7 +42868,7 @@
     "A-ID-SETTINGS-RegistrationContent-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-RegistrationContent-review",
       "row_object_preserved": true,
@@ -42084,7 +42877,7 @@
     "A-ID-SETTINGS-RegistrationContent-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-RegistrationContent-history",
       "row_object_preserved": true,
@@ -42093,7 +42886,7 @@
     "FORM-ADMIN-IDENTITY-REGISTRATION-CONTENT-BINDING": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-REGISTRATION-CONTENT-BINDING",
       "row_object_preserved": true,
@@ -42102,7 +42895,7 @@
     "A-ID-SETTINGS-Passkey-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-Passkey-edit",
       "row_object_preserved": true,
@@ -42111,7 +42904,7 @@
     "A-ID-SETTINGS-Passkey-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-Passkey-review",
       "row_object_preserved": true,
@@ -42120,7 +42913,7 @@
     "A-ID-SETTINGS-Passkey-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-Passkey-history",
       "row_object_preserved": true,
@@ -42129,7 +42922,7 @@
     "FORM-ADMIN-IDENTITY-PASSKEY": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-PASSKEY",
       "row_object_preserved": true,
@@ -42138,7 +42931,7 @@
     "A-ID-SETTINGS-TotpContent-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-TotpContent-edit",
       "row_object_preserved": true,
@@ -42147,7 +42940,7 @@
     "A-ID-SETTINGS-TotpContent-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-TotpContent-review",
       "row_object_preserved": true,
@@ -42156,7 +42949,7 @@
     "A-ID-SETTINGS-TotpContent-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-TotpContent-history",
       "row_object_preserved": true,
@@ -42165,7 +42958,7 @@
     "FORM-ADMIN-IDENTITY-TOTP-CONTENT-BINDING": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-TOTP-CONTENT-BINDING",
       "row_object_preserved": true,
@@ -42174,7 +42967,7 @@
     "A-ID-SETTINGS-PasskeyContent-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-PasskeyContent-edit",
       "row_object_preserved": true,
@@ -42183,7 +42976,7 @@
     "A-ID-SETTINGS-PasskeyContent-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-PasskeyContent-review",
       "row_object_preserved": true,
@@ -42192,7 +42985,7 @@
     "A-ID-SETTINGS-PasskeyContent-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-PasskeyContent-history",
       "row_object_preserved": true,
@@ -42201,7 +42994,7 @@
     "FORM-ADMIN-IDENTITY-PASSKEY-CONTENT-BINDING": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-PASSKEY-CONTENT-BINDING",
       "row_object_preserved": true,
@@ -42210,7 +43003,7 @@
     "A-ID-SETTINGS-StepUpContent-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-StepUpContent-edit",
       "row_object_preserved": true,
@@ -42219,7 +43012,7 @@
     "A-ID-SETTINGS-StepUpContent-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-StepUpContent-review",
       "row_object_preserved": true,
@@ -42228,7 +43021,7 @@
     "A-ID-SETTINGS-StepUpContent-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-StepUpContent-history",
       "row_object_preserved": true,
@@ -42237,7 +43030,7 @@
     "FORM-ADMIN-IDENTITY-STEP-UP-CONTENT-BINDING": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-STEP-UP-CONTENT-BINDING",
       "row_object_preserved": true,
@@ -42246,7 +43039,7 @@
     "A-ID-SETTINGS-RecoveryCodes-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-RecoveryCodes-edit",
       "row_object_preserved": true,
@@ -42255,7 +43048,7 @@
     "A-ID-SETTINGS-RecoveryCodes-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-RecoveryCodes-review",
       "row_object_preserved": true,
@@ -42264,7 +43057,7 @@
     "A-ID-SETTINGS-RecoveryCodes-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-RecoveryCodes-history",
       "row_object_preserved": true,
@@ -42273,7 +43066,7 @@
     "FORM-ADMIN-IDENTITY-RECOVERY-CODES": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-RECOVERY-CODES",
       "row_object_preserved": true,
@@ -42282,7 +43075,7 @@
     "A-ID-SETTINGS-SessionListing-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-SessionListing-edit",
       "row_object_preserved": true,
@@ -42291,7 +43084,7 @@
     "A-ID-SETTINGS-SessionListing-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-SessionListing-review",
       "row_object_preserved": true,
@@ -42300,7 +43093,7 @@
     "A-ID-SETTINGS-SessionListing-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-SessionListing-history",
       "row_object_preserved": true,
@@ -42309,7 +43102,7 @@
     "FORM-ADMIN-IDENTITY-SESSION-LISTING": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-SESSION-LISTING",
       "row_object_preserved": true,
@@ -42318,7 +43111,7 @@
     "A-ID-SETTINGS-SessionListingContent-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-SessionListingContent-edit",
       "row_object_preserved": true,
@@ -42327,7 +43120,7 @@
     "A-ID-SETTINGS-SessionListingContent-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-SessionListingContent-review",
       "row_object_preserved": true,
@@ -42336,7 +43129,7 @@
     "A-ID-SETTINGS-SessionListingContent-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-SessionListingContent-history",
       "row_object_preserved": true,
@@ -42345,7 +43138,7 @@
     "FORM-ADMIN-IDENTITY-SESSION-LISTING-CONTENT-BINDING": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-SESSION-LISTING-CONTENT-BINDING",
       "row_object_preserved": true,
@@ -42354,7 +43147,7 @@
     "A-ID-SETTINGS-SessionRevocationContent-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-SessionRevocationContent-edit",
       "row_object_preserved": true,
@@ -42363,7 +43156,7 @@
     "A-ID-SETTINGS-SessionRevocationContent-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-SessionRevocationContent-review",
       "row_object_preserved": true,
@@ -42372,7 +43165,7 @@
     "A-ID-SETTINGS-SessionRevocationContent-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-SessionRevocationContent-history",
       "row_object_preserved": true,
@@ -42381,7 +43174,7 @@
     "FORM-ADMIN-IDENTITY-SESSION-REVOCATION-CONTENT-BINDING": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-SESSION-REVOCATION-CONTENT-BINDING",
       "row_object_preserved": true,
@@ -42390,7 +43183,7 @@
     "A-ID-SETTINGS-SessionBulkRevocationContent-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-SessionBulkRevocationContent-edit",
       "row_object_preserved": true,
@@ -42399,7 +43192,7 @@
     "A-ID-SETTINGS-SessionBulkRevocationContent-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-SessionBulkRevocationContent-review",
       "row_object_preserved": true,
@@ -42408,7 +43201,7 @@
     "A-ID-SETTINGS-SessionBulkRevocationContent-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-SessionBulkRevocationContent-history",
       "row_object_preserved": true,
@@ -42417,7 +43210,7 @@
     "FORM-ADMIN-IDENTITY-SESSION-BULK-REVOCATION-CONTENT-BINDING": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-SESSION-BULK-REVOCATION-CONTENT-BINDING",
       "row_object_preserved": true,
@@ -42426,7 +43219,7 @@
     "A-ID-SETTINGS-RecoveryPasswordContent-edit": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-RecoveryPasswordContent-edit",
       "row_object_preserved": true,
@@ -42435,7 +43228,7 @@
     "A-ID-SETTINGS-RecoveryPasswordContent-review": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-RecoveryPasswordContent-review",
       "row_object_preserved": true,
@@ -42444,7 +43237,7 @@
     "A-ID-SETTINGS-RecoveryPasswordContent-history": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "A-ID-SETTINGS-RecoveryPasswordContent-history",
       "row_object_preserved": true,
@@ -42453,7 +43246,7 @@
     "FORM-ADMIN-IDENTITY-RECOVERY-PASSWORD-CONTENT-BINDING": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "FORM-ADMIN-IDENTITY-RECOVERY-PASSWORD-CONTENT-BINDING",
       "row_object_preserved": true,
@@ -42462,7 +43255,7 @@
     "DEV-ADMIN-CONTENT-BOOTSTRAP": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
-        "sha256": "1a37e047440bfe431e5c732711523dcdf229fa15b5bb8845cb2a75dddad863d5"
+        "sha256": "625cac65943547225ebdead724b6f93e3bdcebe0e13289330003c8841c2de34a"
       },
       "source_item_id": "DEV-ADMIN-CONTENT-BOOTSTRAP",
       "row_object_preserved": true,
@@ -42542,7 +43335,7 @@
     }
   },
   "source_binding": {
-    "source_carrier_sha": "0f268b06e619ceab21de9e541d6dfe5a7fcc797f",
+    "source_carrier_sha": "e9ed840054263dc7a015fd2dbfcb7eb9782afe02",
     "required_registered_files": [
       "docs/contracts/ui-inventory.json",
       "src/Modules/Identity/AuthenticationEndpoints.cs",
@@ -42743,7 +43536,7 @@
     ],
     "current_owned_source_unchanged_from_carrier": true,
     "comparison": "Every owned path exists in the source carrier and git diff of the exact owned vector is empty. No whole native private build/source manifest or current123 qualification is implied.",
-    "owner_evidence_reuse": "117 selected current qualified owner rows plus six newly qualified Recovery rows. Overlaps are resolved by the recorded owner-origin map; P014 supplies existing Login rows and the two reused Login rows from P011 are not duplicated.",
+    "owner_evidence_reuse": "Eight source-requalified P019 native-version UI rows and115 unchanged owner row objects, including retained six Recovery rows. Existing P014 Login precedence and all original per-run identities remain unchanged.",
     "actual_execution_identity_preserved": true
   },
   "historical_global_before_20261118": {
@@ -42815,7 +43608,7 @@
     },
     "boundary": "Historical GLOBAL proof retained through its exact Git object and original binding; old21rows are not duplicated or relabeled as current executions."
   },
-  "review_provenance": "Existing actual owner assessments, source/receipt qualification and visual consents remain attached to their unchanged row objects. No new specialist/human approval, acceptance or fresh execution is inferred by this consolidation.",
+  "review_provenance": "Independent source/render review of the eight changed P019 rows under current QA/Frontend/UIUX/End-user contracts, plus existing owner assessments. P019 delegated authority permits the compatible shared Select refinement; no new human Product acceptance or native15 runtime qualification is inferred.",
   "limits": [
     "123 live inventory items are represented;44 PLANNED items are not assigned implemented PASS.",
     "Scoped P011 native UI8PASS is retained separately; no actual GLOBAL native gate PASS has yet been claimed.",

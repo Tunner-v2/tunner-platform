@@ -1,0 +1,19 @@
+[WebServer] (node:22968) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./content.routes" without a file extension (apps/admin/vite.config.ts:4:30). Add the file extension
+[WebServer]   - import "./configuration.routes" without a file extension (apps/admin/vite.config.ts:5:34). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 6 tests using 1 worker
+
+(node:24208) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\configuration-admin\configuration.spec.ts:174:84 › Totp typed policy validates, preserves retry intent and reviews every immutable field at 1440 (12.7s)
+  ok 2 tests\configuration-admin\configuration.spec.ts:174:84 › Totp typed policy validates, preserves retry intent and reviews every immutable field at 390 (11.5s)
+  ok 3 tests\configuration-admin\configuration.spec.ts:336:31 › RecoveryCodes typed policy preserves exact Int64 validation retry and immutable history at 1440 (14.9s)
+  ok 4 tests\configuration-admin\configuration.spec.ts:336:31 › RecoveryCodes typed policy preserves exact Int64 validation retry and immutable history at 390 (14.9s)
+  ok 5 tests\configuration-admin\configuration.spec.ts:478:55 › Totp native 13 and 15 remain explicit through edit review history and rollback (19.0s)
+  ok 6 tests\configuration-admin\configuration.spec.ts:478:55 › RecoveryCodes native 13 and 15 remain explicit through edit review history and rollback (17.9s)
+
+  6 passed (1.6m)
