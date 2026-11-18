@@ -295,7 +295,7 @@
   },
   "secret_scan_correction": {
     "original_ci_result": "FAILURE at five generic-secret-assignment matches; SAST passed beforehand.",
-    "classification": "Independent bounded Cyber review classifies three public synthetic/nonfunctional vectors and two bare runtime-identifier references; no values disclosed. Exact five source files equal executed d557 source.",
+    "classification": "Independent bounded Cyber review classifies three public synthetic/nonfunctional vectors and two bare runtime-identifier references; no values disclosed. The original five source contexts matched executed d557 at initial review; subsequent authorized fixture tests extend the Admin spec.",
     "implementation_commit": "ac5dfbae",
     "scope": "Only exact relative path/rule/matched-UTF8-SHA256 allowances. All four detection patterns unchanged; no directory/marker-prefix bypass or test assertion change.",
     "focused_cases_passed": 48,
@@ -303,6 +303,16 @@
     "exact_reviewed_matches": 5,
     "unreviewed_matches": 0,
     "lf_blob_fingerprints_verified": 5,
+    "fixture_extension": {
+      "implementation_commit": "d2c5001a5d90a8678d46b84ce5ea63c9d5e4892b",
+      "classification": "One additional exact bare bootstrapResponse identifier in the authorized Admin fixture test; no credential value or test/source reshaping.",
+      "focused_cases_passed": 52,
+      "actual_repo_files_scanned": 7829,
+      "exact_reviewed_matches": 6,
+      "unreviewed_matches": 0,
+      "lf_blob_fingerprints_verified": 6,
+      "boundary": "Actual source validation at committed d2c5001a passed 52 focused cases and scanned7829 files with six exact reviewed matches. Four detection rules unchanged. Required CI remains pending."
+    },
     "independent_root_review": "PASS for exact scoped implementation and meaningful positive/negative/malformed configuration cases.",
     "whole_ci_status": "Unexecuted after correction; required CI remains pending. Known dependency/container blockers remain strict."
   }

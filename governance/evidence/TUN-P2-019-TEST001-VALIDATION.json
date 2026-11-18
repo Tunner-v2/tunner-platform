@@ -2,9 +2,9 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-019-TEST001",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "7c626363893b29c9130fb3bdc23942d15eaea570",
+  "validated_commit_sha": "7c626363893b29c9130fb3bdc23942d15eaea570",
   "owned_behavior_paths": [
     "tools/browser-testing/Program.cs",
     "tools/browser-testing/Tunner.BrowserTesting.csproj",
@@ -31,7 +31,7 @@
     "pure_starter_cases": 21,
     "pure_starter_boundary": "Mocked status bridge and actual AST-loaded starter functions; not real TLS/service qualification.",
     "environment_failure": "Initial build was blocked by DLL locks from the verified existing app process; only that owned process was stopped, then the unlocked build passed. Database/mail services, data and keys were preserved.",
-    "actual_https_browser_execution": "PENDING at a committed candidate; no browser PASS claimed."
+    "actual_https_browser_execution": "Actual normal-TLS enabled2 and retained5 cases PASS at committed7c626363; details below."
   },
   "first_real_qualification": {
     "source_candidate": "d9170ef92d501df7556557a8f3f523bbd3fd343d",
@@ -41,9 +41,9 @@
     "retained_cases_executed": 0,
     "pass": "Real new-binary Content-only default; exact3actors, Identity actor admission rejected and Identity routes absent; owned process/scratch cleanup completed.",
     "failure": "Enabled Identity workspace exceeds current existing request/UI waits; successful authorized probe returned all16 scopes/288published keys in9527ms. Content integrity SQL executed13094.574ms with2.466ms planning. No test timeout/assertion changes.",
-    "raw_results_ref": "artifacts/p2-019-content-20261116/manual-identity-d9170ef9/new/results.json",
+    "raw_results_ref": "governance/evidence/p2-019-content-20261116/manual-identity-7c626363/initial-results-d9170ef9.json",
     "defect_ref": "governance/defects/DEF-TUN-P2-019-PERF-001.yaml",
-    "status": "PENDING focused production read-path correction and rerun of affected cases only; no final runtime PASS."
+    "status": "Historical initial failure retained. The later committed correction and unchanged-deadline reruns pass as recorded below."
   },
   "sql_performance_preapplication": {
     "patch_sha256": "c0511a6f2ea3fbd2663b1ef67bfc925d35c365e31ed4234b0e3e1c8802591eba",
@@ -55,6 +55,20 @@
     "architecture_review": "Independent root source review PASS for same Content owner/function signatures/predicates, query-local snapshot parsing and reversible owner migration; no new module/provider/API or architecture decision. Historical installer/migrations/model snapshot remain untouched.",
     "security_review": "Independent Cyber source review PASS; exact inverse transformation preserves predicates, scope/currentness/causal/audit/SoD bindings; no grants/security-definer/cache. Malformed selected JSON must remain denied/unavailable in qualification.",
     "required_qualification": "Existing7 real PostgreSQL integrity/migration cases, NULL/missing/malformed selected-input denial, populated upgrade/down/up properties/ACL/data preservation, same288-key query and two failed enabled-mode journeys at original deadlines.",
-    "runtime_result": "PENDING; no SQL application or performance improvement yet claimed."
+    "runtime_result": "PASS12 real PostgreSQL cases at7c626363: original7 plus4 selected-profile rejection rows and1 populated migration roundtrip. Both owned containers and volumes removed; borrowed services preserved."
+  },
+  "committed_qualification": {
+    "source_sha": "7c626363893b29c9130fb3bdc23942d15eaea570",
+    "evidence_directory": "governance/evidence/p2-019-content-20261116/manual-identity-7c626363",
+    "postgresql": {"passed":12,"failed":0,"skipped":0,"raw_file":"content-integrity.trx","sha256":"c4ed48deced8c11051675a815df66523ca89934b206f8f1fa8f67d189291ae21"},
+    "browser": {"enabled_passed":2,"retained_passed":5,"failed":0,"skipped":0,"flaky":0,"enabled_file":"enabled-results.json","retained_file":"retained-results.json","strict_tls":true,"workers":1,"test_assertions_and_deadlines_unchanged":true},
+    "default_mode_reuse": "The distinct Content-only default case passed atd9170ef9 with the same fixture implementation. Original1PASS/2FAIL receipt is retained; it was not rerun or represented as part of a fresh8-case execution. Current retained5 include the real Content publication/restore journey against the optimized owner functions.",
+    "performance": {"sql_before_ms":13094.574,"sql_after_ms":1261.062,"workspace_before_ms":9527,"workspace_after_ms":1802.0784,"selected_publications":288,"invalid_publications":0,"workspaces":16,"content_keys":288,"boundary":"Single before/after observations, not a distribution or production SLA; original waits unchanged."},
+    "browser_coverage": "Six-actor Origin/CSRF/body/cookie/switch and cross-domain negatives; all16 typed workspaces; exact288-key provenance; separate-author/approver/publisher chains, receipt replay, current-head checks, two publications and actual prospective restore of approvedv1; User Login unchanged. Applicable Axe and responsive1440/768/320 assertions passed.",
+    "coverage_limits": "Malformed-profile rows directly exercise has_effect. ACL roundtrip compares execution ACLs but is not a restricted-role execution test. This is local fixture/store-only qualification, not production policy/provider activation or wholeP019 acceptance.",
+    "reviews": "Backend author ran12PG cases; separate QA author ran7browser cases; independent Cyber reviewed exact SQL/fixture/test sources; root independently reviewed architecture/test causality and three actual rendered frames. Disclosed AI assessments, not separate human approvals.",
+    "compile_correction": "First test build caught an internal-property access. One-line public JsonSerializer.Serialize uses the identical serialization; committed7c test build passed0warnings/errors. Original failed log retained locally.",
+    "transport_correction": "Initial measurement probe failed sandbox certificate trust before HTTP. Reuse of the approved desktop user context/system CA passed normal TLS; no certificate validation bypass or trust change.",
+    "native_ui_gate": "PENDING final source-carrier check; no native gate PASS inferred from browser results."
   }
 }
