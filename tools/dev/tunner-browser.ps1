@@ -5,7 +5,8 @@ param(
     [switch]$NoBrowser,
     [switch]$SkipCertificateTrust,
     [switch]$GovernedContent,
-    [switch]$SyntheticAdmin
+    [switch]$SyntheticAdmin,
+    [switch]$SyntheticIdentityConfiguration
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -102,6 +103,8 @@ function Read-BrowserState {
     if ($value.GovernedContent -isnot [bool]) { throw 'Invalid saved Content fixture mode.' }
     if ($null -eq $value.PSObject.Properties['SyntheticAdmin']) { $value | Add-Member -NotePropertyName SyntheticAdmin -NotePropertyValue $false }
     if ($null -eq $value.PSObject.Properties['AdminPort']) { $value | Add-Member -NotePropertyName AdminPort -NotePropertyValue 0 }
+    if ($null -eq $value.PSObject.Properties['SyntheticIdentityConfiguration']) { $value | Add-Member -NotePropertyName SyntheticIdentityConfiguration -NotePropertyValue $false }
+    if ($value.SyntheticIdentityConfiguration -isnot [bool] -or ($value.SyntheticIdentityConfiguration -and (-not $value.GovernedContent -or -not $value.SyntheticAdmin))) { throw 'Invalid saved synthetic Identity configuration mode.' }
     if ($value.SyntheticAdmin -isnot [bool] -or ($value.SyntheticAdmin -and -not $value.GovernedContent) -or
         ($value.AdminPort -ne 0 -and ($value.AdminPort -lt 1024 -or $value.AdminPort -gt 65535 -or @($value.ApplicationPort,$value.PostgresPort,$value.SmtpPort,$value.MailpitPort) -contains $value.AdminPort))) {
         throw 'Invalid isolated synthetic Admin fixture state.'
@@ -122,7 +125,9 @@ function Get-BrowserStatus {
         if ($State.SyntheticAdmin) {
             if ($State.AdminPort -eq 0) { return $false }
             $admin = [TunnerBrowserLocalHttps]::Get(('https://localhost:' + $State.AdminPort + '/browser-testing/status'),$State.CertificateSha256) | ConvertFrom-Json
-            return $admin.ready -and $admin.syntheticAdmin -and $admin.mode -eq $State.Mode -and $admin.instanceId -eq $State.InstanceId
+            $identityStatus = $admin.PSObject.Properties['syntheticIdentityConfiguration']
+            $identityReady = if ($null -eq $identityStatus) { -not $State.SyntheticIdentityConfiguration } else { $identityStatus.Value -is [bool] -and $identityStatus.Value -eq $State.SyntheticIdentityConfiguration }
+            return $admin.ready -and $admin.syntheticAdmin -and $admin.mode -eq $State.Mode -and $admin.instanceId -eq $State.InstanceId -and $identityReady
         }
         return $true
     } catch { return $false }
@@ -136,6 +141,7 @@ function Show-BrowserAddresses {
         Write-Host ('Synthetic Admin actors: https://localhost:' + $State.AdminPort + '/browser-testing/admin')
         Write-Host 'Explicit local fixture only: author edits/validates, approver approves, publisher publishes. This is not workforce sign-in or production approval.'
     }
+    if ($State.SyntheticIdentityConfiguration) { Write-Host ('Separate synthetic Identity configuration: https://localhost:' + $State.AdminPort + '/browser-testing/admin') }
     Write-Host ('Identity verification test (sign in first): https://localhost:' + $State.ApplicationPort + '/browser-testing/step-up')
     Write-Host ('Verification inbox: http://127.0.0.1:' + $State.MailpitPort)
     Write-Host ('PostgreSQL: 127.0.0.1:' + $State.PostgresPort + ' -> container 5432; database tunner_browser_testing')
@@ -208,6 +214,8 @@ try {
     if ($Command -in @('start','restart')) {
         $requestedContent = if ($PSBoundParameters.ContainsKey('GovernedContent')) { [bool]$GovernedContent } elseif ($null -ne $state) { $state.GovernedContent } else { $false }
         $requestedAdmin = if ($PSBoundParameters.ContainsKey('SyntheticAdmin')) { [bool]$SyntheticAdmin } elseif (-not $requestedContent) { $false } elseif ($null -ne $state) { $state.SyntheticAdmin } else { $false }
+        $requestedIdentity = if ($PSBoundParameters.ContainsKey('SyntheticIdentityConfiguration')) { [bool]$SyntheticIdentityConfiguration } elseif (-not $requestedAdmin) { $false } elseif ($null -ne $state) { $state.SyntheticIdentityConfiguration } else { $false }
+        if ($requestedIdentity -and (-not $requestedContent -or -not $requestedAdmin)) { throw 'Synthetic Identity configuration requires both explicit governed Content and synthetic Admin.' }
         if ($requestedAdmin -and -not $requestedContent) { throw 'Synthetic Admin requires the explicitly selected governed Content fixture.' }
     }
     if ($Command -eq 'status') {
@@ -233,6 +241,7 @@ try {
             throw 'Use restart with the requested -GovernedContent value to change the isolated fixture mode.'
         }
         if ($state.SyntheticAdmin -ne $requestedAdmin) { throw 'Use restart with the requested -SyntheticAdmin value to change the isolated fixture mode.' }
+        if ($state.SyntheticIdentityConfiguration -ne $requestedIdentity) { throw 'Use restart with the requested -SyntheticIdentityConfiguration value to change the isolated fixture mode.' }
         Write-Host 'Already running. Use the restart command to rebuild after code changes.'; Show-BrowserAddresses $state; Open-BrowserAddresses $state; return
     }
     Stop-BrowserHost $state
@@ -247,7 +256,9 @@ try {
     if ($PSBoundParameters.ContainsKey('GovernedContent')) { $state.GovernedContent = [bool]$GovernedContent }
     if ($null -eq $state.PSObject.Properties['SyntheticAdmin']) { $state | Add-Member -NotePropertyName SyntheticAdmin -NotePropertyValue $false }
     if ($null -eq $state.PSObject.Properties['AdminPort']) { $state | Add-Member -NotePropertyName AdminPort -NotePropertyValue 0 }
+    if ($null -eq $state.PSObject.Properties['SyntheticIdentityConfiguration']) { $state | Add-Member -NotePropertyName SyntheticIdentityConfiguration -NotePropertyValue $false }
     $state.SyntheticAdmin = $requestedAdmin
+    $state.SyntheticIdentityConfiguration = $requestedIdentity
     if ($state.SyntheticAdmin -and $state.AdminPort -eq 0) {
         $state.AdminPort = Select-LocalPort -Preferred 24444 -ExcludedPorts @($state.ApplicationPort,$state.PostgresPort,$state.SmtpPort,$state.MailpitPort)
     }

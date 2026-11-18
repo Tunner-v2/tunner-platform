@@ -13,7 +13,7 @@ import {randomUUID} from 'node:crypto';
 test.use({ignoreHTTPSErrors:false});
 const repository=fileURLToPath(new URL('../../../',import.meta.url));
 const runtime=JSON.parse(readFileSync(join(repository,'artifacts/browser-testing/runtime.json'),'utf8').replace(/^\uFEFF/,'')) as {
-  Mode:string;ApplicationPort:number;AdminPort:number;PostgresPort:number;SmtpPort:number;CertificateThumbprint:string;GovernedContent:boolean;SyntheticAdmin:boolean;
+  Mode:string;ApplicationPort:number;AdminPort:number;PostgresPort:number;SmtpPort:number;CertificateThumbprint:string;GovernedContent:boolean;SyntheticAdmin:boolean;SyntheticIdentityConfiguration?:boolean;InstanceId:string;
 };
 const adminOrigin='https://localhost:'+runtime.AdminPort;
 const userOrigin='https://localhost:'+runtime.ApplicationPort;
@@ -114,6 +114,42 @@ test('Synthetic Admin cookie remains surface-bound and actor switching invalidat
   }
 });
 
+test('Synthetic Identity six fixed actors retain Origin CSRF cookie switching and cross-domain authority boundaries',async()=>{
+  test.setTimeout(120000);requireFixture();expect(runtime.SyntheticIdentityConfiguration).toBe(true);
+  const status=await local(adminOrigin+'/browser-testing/status');expect(status.status).toBe(200);
+  expect(JSON.parse(status.body) as unknown).toMatchObject({mode:runtime.Mode,instanceId:runtime.InstanceId,ready:true,governedContent:true,syntheticAdmin:true,syntheticIdentityConfiguration:true});
+  const roles=['author','approver','publisher','identity-author','identity-approver','identity-publisher'] as const;
+  for(let index=0;index<roles.length;index++){
+    const selected=roles[index]!,next=roles[(index+1)%roles.length]!,jar=new CookieJar();let token=await bootstrap(jar);
+    const body=JSON.stringify({actor:selected}),own=selected.startsWith('identity-')?'/identity/configuration/workspace':'/content/workspace',other=selected.startsWith('identity-')?'/content/workspace':'/identity/configuration/workspace';
+    for(const rejected of [
+      await session(jar,token,body,null),await session(jar,token,body,userOrigin),await session(jar,'',body),
+      await session(jar,token,JSON.stringify({actor:selected,accountId:'fixture-untrusted-selector'})),
+      await session(jar,token,'{"actor":"'+selected+'","actor":"'+next+'"}'),
+      await session(jar,token,JSON.stringify({actor:selected}),adminOrigin,'text/plain')
+    ].entries()){
+      expect(rejected[1].status).toBe([403,403,400,400,400,415][rejected[0]]);expect(issued(rejected[1].headers)).toBe(false);
+    }
+    const admitted=await session(jar,token,body);expect(admitted.status).toBe(204);expect(issued(admitted.headers)).toBe(true);jar.accept(admitted.headers);
+    const flags=admitted.headers.getSetCookie().find(value=>value.startsWith(adminCookie+'='))?.toLowerCase()??'';
+    expect(flags.includes('httponly')&&flags.includes('secure')&&flags.includes('samesite=lax'),'Admin cookie keeps foundation security attributes').toBe(true);
+    expect((await local(adminOrigin+own,{headers:{Cookie:jar.header()}})).status).toBe(200);
+    expect((await local(adminOrigin+other,{headers:{Cookie:jar.header()}})).status).toBe(403);
+    const previous=jar.pair(adminCookie);expect(Boolean(previous)).toBe(true);
+    expect((await local(userOrigin+'/authentication/session',{headers:{Cookie:previous}})).status).toBe(401);
+    expect((await local(userOrigin+'/authentication/session',{headers:{Cookie:jar.renamed(adminCookie,userCookie)}})).status).toBe(401);
+    const denied=await session(jar,'invalid-csrf',JSON.stringify({actor:next}));expect(denied.status).toBe(400);expect(issued(denied.headers)).toBe(false);
+    expect((await local(adminOrigin+own,{headers:{Cookie:previous}})).status).toBe(200);
+    token=await bootstrap(jar);const ended=await session(jar,token,JSON.stringify({actor:next}));expect(ended.status).toBe(202);jar.accept(ended.headers);
+    expect((await local(adminOrigin+own,{headers:{Cookie:previous}})).status).toBe(401);
+    token=await bootstrap(jar);const replacement=await session(jar,token,JSON.stringify({actor:next}));expect(replacement.status).toBe(204);jar.accept(replacement.headers);
+    expect((await local(adminOrigin+own,{headers:{Cookie:previous}})).status).toBe(401);
+    expect((await local(adminOrigin+(next.startsWith('identity-')?'/identity/configuration/workspace':'/content/workspace'),{headers:{Cookie:jar.header()}})).status).toBe(200);
+    // Retire only this loop's selected synthetic session; never touch another browser or the host.
+    token=await bootstrap(jar);expect((await session(jar,token,JSON.stringify({actor:next}))).status).toBe(202);
+  }
+});
+
 type OwnedChild={child:ChildProcess;closed:Promise<number|null>;isClosed:()=>boolean};
 function startChild(assembly:string,config:string,environment:'Production'|'Development'):OwnedChild{
   let closed=false;
@@ -140,6 +176,38 @@ async function closeServer(server:Server){await new Promise<void>((resolveClosed
 async function stopOwned(child:OwnedChild){
   if(!child.isClosed())child.child.kill();await bounded(child.closed,10000);expect(child.isClosed(),'owned child must be closed before scratch cleanup').toBe(true);
 }
+
+test('Synthetic Identity defaults off while the real Content-only Admin retains exactly its original three actors',async()=>{
+ test.setTimeout(150000);requireFixture();
+ const assembly=resolve(repository,'tools/browser-testing/bin/Debug/net10.0/Tunner.BrowserTesting.dll');expect(existsSync(assembly)).toBe(true);
+ const parent=resolve(repository,'artifacts/browser-testing');mkdirSync(parent,{recursive:true});const scratch=mkdtempSync(join(parent,'identity-default-')),canonicalParent=realpathSync(parent),ownedRelative=relative(canonicalParent,realpathSync(scratch));
+ expect(ownedRelative.startsWith('identity-default-')&&!ownedRelative.includes(sep)&&!lstatSync(scratch).isSymbolicLink()).toBe(true);
+ let child:OwnedChild|undefined,userReservation:Awaited<ReturnType<typeof reserve>>|undefined,adminReservation:Awaited<ReturnType<typeof reserve>>|undefined;
+ try{
+  userReservation=await reserve();adminReservation=await reserve();const origin='https://localhost:'+adminReservation.port,userPort=userReservation.port,adminPort=adminReservation.port;
+  const config=join(scratch,'runtime.json');writeFileSync(config,JSON.stringify({Mode:runtime.Mode,InstanceId:randomUUID(),ApplicationPort:userPort,PostgresPort:runtime.PostgresPort,SmtpPort:runtime.SmtpPort,CertificateThumbprint:runtime.CertificateThumbprint,GovernedContent:true,SyntheticAdmin:true,AdminPort:adminPort}));
+  await closeServer(userReservation.server);userReservation=undefined;await closeServer(adminReservation.server);adminReservation=undefined;
+  child=startChild(assembly,config,'Development');const deadline=Date.now()+90000;let ready=false;
+  while(Date.now()<deadline&&!child.isClosed()){
+   try{const response=await local(origin+'/browser-testing/status');if(response.status===200){const status=JSON.parse(response.body) as {ready?:unknown;syntheticAdmin?:unknown;syntheticIdentityConfiguration?:unknown};if(status.ready===true&&status.syntheticAdmin===true&&status.syntheticIdentityConfiguration===false){ready=true;break;}}}catch{/* Bounded startup only; never export private process or response details. */}
+   await new Promise(resolvePoll=>setTimeout(resolvePoll,250));
+  }
+  expect(ready,'Content-only Admin must be ready with Identity configuration disabled by default').toBe(true);
+  const jar=new CookieJar(),bootstrapResponse=await local(origin+'/browser-testing/admin');expect(bootstrapResponse.status).toBe(200);jar.accept(bootstrapResponse.headers);
+  const actors=[...bootstrapResponse.body.matchAll(/data-actor="([^"]+)"/g)].map(match=>match[1]);expect(actors).toEqual(['author','approver','publisher']);expect(bootstrapResponse.body.includes('data-identity="true"')).toBe(false);
+  const token=bootstrapResponse.body.match(/name="tunner-csrf" content="([^"]+)"/)?.[1];expect(Boolean(token)).toBe(true);
+  const headers={Cookie:jar.header(),Origin:origin,'Content-Type':'application/json',[csrfHeader]:token!};
+  for(const actor of ['identity-author','identity-approver','identity-publisher']){const denied=await local(origin+'/browser-testing/admin/session',{method:'POST',headers,body:JSON.stringify({actor})});expect(denied.status).toBe(400);expect(issued(denied.headers)).toBe(false);}
+  const admitted=await local(origin+'/browser-testing/admin/session',{method:'POST',headers,body:JSON.stringify({actor:'author'})});expect(admitted.status).toBe(204);jar.accept(admitted.headers);
+  expect((await local(origin+'/content/workspace',{headers:{Cookie:jar.header()}})).status).toBe(200);
+  for(const path of ['/identity/configuration/workspace','/identity/settings/authentication'])expect((await local(origin+path,{headers:{Cookie:jar.header()}})).status).toBe(404);
+ }finally{
+  let closed=child===undefined;try{if(child){await stopOwned(child);closed=true;}}finally{
+   if(userReservation)await closeServer(userReservation.server);if(adminReservation)await closeServer(adminReservation.server);
+   if(closed&&realpathSync(scratch)===resolve(canonicalParent,ownedRelative)&&ownedRelative.startsWith('identity-default-')&&!ownedRelative.includes(sep)&&!lstatSync(scratch).isSymbolicLink())rmSync(scratch,{recursive:true,force:true});
+  }
+ }
+});
 
 test('Synthetic Admin Production is refused before config IO and legacy governed mode does not activate a saved Admin port',async()=>{
   test.setTimeout(150000);requireFixture();

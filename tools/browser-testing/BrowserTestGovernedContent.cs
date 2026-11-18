@@ -34,11 +34,14 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
     private const string Author = "synthetic-local-author", Approver = "synthetic-local-approver", Publisher = "synthetic-local-publisher";
     private readonly int adminPort;
     private readonly ContentGovernanceProfile? chromeProfile;
+    private readonly bool identityConfigurationEnabled;
+    private readonly IReadOnlyDictionary<string, string>? identityWording;
+    private readonly ContentGovernanceProfile? identityProfile;
     private readonly Dictionary<string, AdminContentSession> sessions = new(StringComparer.Ordinal);
     private readonly object sessionGate = new();
     private bool initialized;
 
-    internal BrowserTestGovernedContent(BrowserTestHostOptions options, int? selectedAdminPort = null)
+    internal BrowserTestGovernedContent(BrowserTestHostOptions options, int? selectedAdminPort = null, bool syntheticIdentityConfiguration = false)
     {
         this.options = options; RequireIsolated();
         using var proposal = JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "browser-test-authentication-content.json")));
@@ -56,6 +59,14 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
         if (selectedAdminPort is not null && (adminPort is < 1024 or > 65535 || new[] { options.Port, options.SmtpPort }.Contains(adminPort)))
             throw new InvalidOperationException("Explicit distinct isolated Admin HTTPS port required.");
         chromeProfile = selectedAdminPort is null ? null : Profile(ChromeScope, Chrome);
+        identityConfigurationEnabled = syntheticIdentityConfiguration;
+        if (syntheticIdentityConfiguration)
+        {
+            if (selectedAdminPort is null) throw new InvalidOperationException("Synthetic Identity configuration requires explicit synthetic Admin.");
+            identityWording = JsonSerializer.Deserialize<Dictionary<string, string>>(File.ReadAllText(Path.Combine(AppContext.BaseDirectory,
+                "browser-test-identity-configuration-content.json"))) ?? throw new InvalidOperationException("Synthetic Identity configuration wording is unavailable.");
+            identityProfile = Profile(BrowserTestIdentityConfiguration.ChromeScope, identityWording);
+        }
     }
 
     private void RequireIsolated()
@@ -82,7 +93,8 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
     {
         RequireIsolated();
         if (!Interval.Contains(at)) throw new ContentUnavailableException();
-        return scope == Scope ? profile : scope == ChromeScope && chromeProfile is not null ? chromeProfile : throw new ContentUnavailableException();
+        return scope == Scope ? profile : scope == ChromeScope && chromeProfile is not null ? chromeProfile :
+            scope == BrowserTestIdentityConfiguration.ChromeScope && identityProfile is not null ? identityProfile : throw new ContentUnavailableException();
     }
 
     public AuthenticationContentBinding RequireQualified(AuthenticationPolicy policy, DateTimeOffset at)
@@ -104,6 +116,8 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
         await InitializeProfileAsync(database, application, profile, wording, cancellationToken).ConfigureAwait(false);
         if (chromeProfile is { } chrome)
             await InitializeProfileAsync(database, application, chrome, Chrome, cancellationToken).ConfigureAwait(false);
+        if (identityProfile is { } identity)
+            await InitializeProfileAsync(database, application, identity, identityWording!, cancellationToken).ConfigureAwait(false);
         initialized = true;
     }
 
@@ -155,7 +169,7 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
         {
             owner.RequireIsolated(); cancellationToken.ThrowIfCancellationRequested();
             var actor = request.Operation switch { ContentOperation.Approve => "synthetic-local-approver", ContentOperation.Publish or ContentOperation.Rollback => "synthetic-local-publisher", _ => "synthetic-local-author" };
-            return ValueTask.FromResult(new ContentAuthorizationDecision(request.Digest, seed && (request.Scope == Scope || owner.chromeProfile is not null && request.Scope == ChromeScope), actor,
+            return ValueTask.FromResult(new ContentAuthorizationDecision(request.Digest, seed && (request.Scope == Scope || owner.chromeProfile is not null && request.Scope == ChromeScope || owner.identityProfile is not null && request.Scope == BrowserTestIdentityConfiguration.ChromeScope), actor,
                 ContentActorKind.Human, "synthetic-local-fixture", "synthetic-local-content-authorization-v1", Evidence, Interval));
         }
     }
@@ -178,6 +192,13 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
             operation is ContentOperation.Browse or ContentOperation.Preview or ContentOperation.History ? null : "fixture.local.content." + operation,
             operation is ContentOperation.Browse or ContentOperation.Preview or ContentOperation.History ? null : "1")));
 
+    internal void RequireIdentityConfiguration()
+    {
+        RequireAdmin();
+        if (!identityConfigurationEnabled || identityProfile is null) throw new InvalidOperationException("Synthetic Identity configuration was not explicitly selected.");
+    }
+    private bool IsIdentityActor(string actor) => identityConfigurationEnabled && BrowserTestIdentityConfiguration.IsActor(actor);
+
     internal WebApplication CreateAdmin(IAuthenticationPolicySource authenticationPolicies)
     {
         RequireAdmin(); if (!initialized) throw new InvalidOperationException("Synthetic publications must be ready first.");
@@ -199,9 +220,12 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
             builder.Services.AddSingleton<IAdminContentHttpProfileSource>(this); builder.Services.AddSingleton<IContentBrowseBudgetSource>(this);
             builder.Services.AddSingleton<IAuthenticationPolicySource>(authenticationPolicies); builder.Services.AddSingleton<IAuthenticationContentBindingSource>(this);
             builder.Services.AddTunnerAdminAuthenticationContentPreview();
+            if (identityConfigurationEnabled)
+                new BrowserTestIdentityConfiguration(this, authenticationPolicies.RequireEffective(DateTimeOffset.UtcNow).Version, options.Origin)
+                    .Configure(builder.Services, options.ConnectionString);
         });
         app.MapGet("/browser-testing/status", (HttpContext http) =>
-        { RequireLocalRequest(http); return new { mode = options.Mode, instanceId = options.RunId, ready = initialized, governedContent = true, syntheticAdmin = true }; }).AllowAnonymous();
+        { RequireLocalRequest(http); return new { mode = options.Mode, instanceId = options.RunId, ready = initialized, governedContent = true, syntheticAdmin = true, syntheticIdentityConfiguration = identityConfigurationEnabled }; }).AllowAnonymous();
         var themeLinks = MapFixtureTheme(app);
         app.MapGet("/browser-testing/admin", IResult (HttpContext http, IAntiforgery antiforgery) =>
         {
@@ -211,7 +235,7 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
             // Same CSP as BffWebAssets.Render; the isolated custom HTML must retain frame and self-only protections.
             http.Response.Headers.ContentSecurityPolicy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";
             var token = antiforgery.GetAndStoreTokens(http).RequestToken ?? throw new InvalidOperationException("Synthetic Admin CSRF unavailable.");
-            return Results.Content(BootstrapPage.Replace("CSRF_TOKEN", WebUtility.HtmlEncode(token), StringComparison.Ordinal)
+            return Results.Content(BootstrapPage.Replace("IDENTITY_FIXTURE_ACTIONS", identityConfigurationEnabled ? IdentityBootstrapActions : "", StringComparison.Ordinal).Replace("CSRF_TOKEN", WebUtility.HtmlEncode(token), StringComparison.Ordinal)
                 .Replace("ADMIN_THEME_LINKS", themeLinks, StringComparison.Ordinal), "text/html; charset=utf-8");
         }).AllowAnonymous();
         app.MapGet("/browser-testing/admin/bootstrap.js", (HttpContext http) =>
@@ -231,6 +255,7 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
                 var fields = body.RootElement.EnumerateObject().ToArray();
                 if (fields.Length != 1 || fields[0].Name != "actor" || fields[0].Value.ValueKind != JsonValueKind.String) return Results.BadRequest();
                 var actor = fields[0].Value.GetString() switch { "author" => Author, "approver" => Approver, "publisher" => Publisher, _ => null };
+                if (actor is null && identityConfigurationEnabled) actor = BrowserTestIdentityConfiguration.Actor(fields[0].Value.GetString());
                 if (actor is null) return Results.BadRequest();
                 var previous = http.User.FindFirstValue(SessionClaim);
                 if (previous is not null)
@@ -246,7 +271,7 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
                 {
                     foreach (var expired in sessions.Where(x => !x.Value.EffectiveInterval.Contains(now)).Select(x => x.Key).ToArray()) sessions.Remove(expired);
                     if (sessions.Count >= 32) return Results.StatusCode(503);
-                    sessions.Add(id, new(actor, id, ContentActorKind.Human, Evidence, new(now, true, until, false)));
+                    sessions.Add(id, new(actor, id, ContentActorKind.Human, IsIdentityActor(actor) ? BrowserTestIdentityConfiguration.Evidence : Evidence, new(now, true, until, false)));
                 }
                 var principal = new ClaimsPrincipal(new ClaimsIdentity([new(ClaimTypes.NameIdentifier, actor), new(SessionClaim, id)], Scheme));
                 try { await http.SignInAsync(Scheme, principal, new AuthenticationProperties { IssuedUtc = now, ExpiresUtc = until, AllowRefresh = false }).ConfigureAwait(false); }
@@ -321,9 +346,10 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
             context.Principal.FindAll(SessionClaim).Count() != 1)
             throw new InvalidOperationException("Only the fixed isolated Admin bootstrap may issue this cookie.");
         var now = (context.Options.TimeProvider ?? TimeProvider.System).GetUtcNow();
-        var session = await RequireCurrentAsync(context.Principal, now, http.RequestAborted).ConfigureAwait(false);
-        if (session is null || session.ActorReference is not (Author or Approver or Publisher) || session.ActorKind != ContentActorKind.Human ||
-            session.QualificationReference != Evidence || session.SessionReference != context.Principal.FindFirstValue(SessionClaim) ||
+        var session = await CurrentServerSessionAsync(context.Principal, now, http.RequestAborted).ConfigureAwait(false);
+        var qualification = session is not null && IsIdentityActor(session.ActorReference) ? BrowserTestIdentityConfiguration.Evidence : Evidence;
+        if (session is null || session.ActorReference is not (Author or Approver or Publisher) && !IsIdentityActor(session.ActorReference) || session.ActorKind != ContentActorKind.Human ||
+            session.QualificationReference != qualification || session.SessionReference != context.Principal.FindFirstValue(SessionClaim) ||
             context.Properties.IssuedUtc is not { } issued || context.Properties.ExpiresUtc is not { } expires ||
             issued > now || expires <= now || expires <= issued || session.EffectiveInterval.Until is not { } until ||
             // AuthenticationProperties encodes issue/expiry instants at whole-second precision.
@@ -341,7 +367,18 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
     }
     private static void NoStore(HttpContext http)
     { http.Response.Headers.CacheControl = "no-store"; http.Response.Headers["Referrer-Policy"] = "no-referrer"; }
-    public ValueTask<AdminContentSession?> RequireCurrentAsync(ClaimsPrincipal principal, DateTimeOffset at, CancellationToken cancellationToken)
+    public async ValueTask<AdminContentSession?> RequireCurrentAsync(ClaimsPrincipal principal, DateTimeOffset at, CancellationToken cancellationToken)
+    {
+        var session = await CurrentServerSessionAsync(principal, at, cancellationToken).ConfigureAwait(false);
+        return session is not null && session.ActorReference is (Author or Approver or Publisher) && session.QualificationReference == Evidence ? session : null;
+    }
+    internal async ValueTask<AdminContentSession?> RequireIdentitySessionAsync(ClaimsPrincipal principal, DateTimeOffset at, CancellationToken cancellationToken)
+    {
+        RequireIdentityConfiguration();
+        var session = await CurrentServerSessionAsync(principal, at, cancellationToken).ConfigureAwait(false);
+        return session is not null && IsIdentityActor(session.ActorReference) && session.QualificationReference == BrowserTestIdentityConfiguration.Evidence ? session : null;
+    }
+    private ValueTask<AdminContentSession?> CurrentServerSessionAsync(ClaimsPrincipal principal, DateTimeOffset at, CancellationToken cancellationToken)
     {
         RequireAdmin(); cancellationToken.ThrowIfCancellationRequested(); var id = principal.FindFirstValue(SessionClaim);
         lock (sessionGate)
@@ -405,13 +442,17 @@ internal sealed class BrowserTestGovernedContent : IContentTransactionLocalProfi
     // Diagnostic fixture controls only, outside the production Admin screens. No URL credential, arbitrary claim or return target.
     // Approved Admin ThemeProvider attributes, typography/card/actions and native compiled PrimaryButton classes.
     // This remains the same isolated actor control; no new application workflow, custom stylesheet or auth action.
+    private const string IdentityBootstrapActions = """
+<section class="content-section"><h2>Isolated Identity configuration</h2><p>Separate synthetic Identity actors only. These isolated store publications do not activate User providers or replace the local User policies.</p>
+<div class="content-actions"><button type="button" class="tn-primary-button" data-presentation="standard" data-appearance="filled" data-actor="identity-author" data-identity="true">Use Identity author</button> <button type="button" class="tn-primary-button" data-presentation="standard" data-appearance="filled" data-actor="identity-approver" data-identity="true">Use Identity approver</button> <button type="button" class="tn-primary-button" data-presentation="standard" data-appearance="filled" data-actor="identity-publisher" data-identity="true">Use Identity publisher</button></div></section>
+""";
     private const string BootstrapPage = """
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Isolated Admin fixture</title><meta name="tunner-csrf" content="CSRF_TOKEN">ADMIN_THEME_LINKS<script src="/browser-testing/admin/bootstrap.js" defer></script></head>
 <body><div class="tn-theme" data-tunner-surface="admin" data-tunner-theme="light"><div class="admin-content">
 <a class="content-skip" href="#fixture-main">Skip to content</a><header class="content-header"><div class="content-brand"><span class="tn-brand">Tunner</span></div></header>
 <main id="fixture-main" class="content-main"><section class="content-panel" aria-labelledby="fixture-title"><div class="content-panel-heading"><h1 id="fixture-title">Isolated Admin fixture</h1></div>
 <p>Synthetic local test data only. This is not workforce authentication or a production approval.</p><p>Select a fixed synthetic actor. Author edits and validates; approver approves; publisher publishes. The Content owner enforces separate actors.</p>
-<div class="content-editor-footer"><div class="content-actions"><button type="button" class="tn-primary-button" data-presentation="standard" data-appearance="filled" data-actor="author">Use synthetic author</button> <button type="button" class="tn-primary-button" data-presentation="standard" data-appearance="filled" data-actor="approver">Use synthetic approver</button> <button type="button" class="tn-primary-button" data-presentation="standard" data-appearance="filled" data-actor="publisher">Use synthetic publisher</button></div></div>
+<div class="content-editor-footer"><div class="content-actions"><button type="button" class="tn-primary-button" data-presentation="standard" data-appearance="filled" data-actor="author">Use synthetic author</button> <button type="button" class="tn-primary-button" data-presentation="standard" data-appearance="filled" data-actor="approver">Use synthetic approver</button> <button type="button" class="tn-primary-button" data-presentation="standard" data-appearance="filled" data-actor="publisher">Use synthetic publisher</button></div></div>IDENTITY_FIXTURE_ACTIONS
 <p id="message" role="status" aria-live="polite"></p></section></main></div></div></body></html>
 """;
     private const string BootstrapScript = """
@@ -430,7 +471,7 @@ for (const button of document.querySelectorAll('[data-actor]')) button.addEventL
       response = await signIn();
     }
     if (response.status !== 204) throw new Error('unavailable');
-    window.location.assign('/admin/content');
+    window.location.assign(button.dataset.identity === 'true' ? '/identity/settings/authentication' : '/admin/content');
   } catch { document.getElementById('message').textContent = 'The isolated session could not start. Reload this page and try again.'; buttons.forEach(item => item.disabled = false); }
 });
 """;

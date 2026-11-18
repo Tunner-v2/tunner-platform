@@ -78,7 +78,7 @@
     "boundary": "Affected cases only, not a fresh full119 browser or CI PASS."
   },
   "native_compatibility_qualification": {
-    "state": "WINDOWS13_QUALIFIED_LINUX15_PENDING",
+    "state": "WINDOWS13_AND_LINUX15_RUNTIME_QUALIFIED_CLOSURE_PENDING",
     "supported_mechanism_candidate": [
       "10.0.13",
       "10.0.15"
@@ -88,7 +88,7 @@
     "amended_patch_sha256": "bdd7f08020c6c0861d1afe6e84325cb623659d8f406c32751152f328e0bb0c69",
     "root_delta_review": "Only public installed assembly-version measurement is added in a new test; production native guards unchanged.",
     "upstream_comparison": "Nine exact official13/15 source files byte-identical.",
-    "runtime15_pass": false,
+    "runtime15_pass": true,
     "production_profile_selected": false,
     "tested_source_sha": "d7e3fe11e639add5d15deee281fa8e74b019ba5e",
     "actual_windows_identity_informational_version": "10.0.13+4099f83977f4d29604a9aeb971fb0a7bc1d5f699",
@@ -98,7 +98,17 @@
     "windows_raw_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-windows13-d7e3fe11.trx",
     "windows_raw_sha256": "b933d1eabbdc705d7124e64977c76051801449f6cd6838e2abda219c49d1204a",
     "review_sha256": "c0a88c0424523bab75b6614951bd9942c5491cbb834b60aa471c1db5b0114bc4",
-    "count_boundary": "Three admission cases precede and are included within132 distinct affected cases; not135. No private123 or Linux15 run."
+    "count_boundary": "132 affected identities pass on each runtime; they are included in Linux1412, not added to it. Three admission cases are included in132. No private123 qualification or production profile selection is inferred.",
+    "actual_linux_identity_informational_version": "10.0.15+8e0f8ed2312954727f8919d7d1c2f78b483b4ee7",
+    "linux_total_passed": 1412,
+    "linux_affected_passed": 132,
+    "linux_failed": 0,
+    "linux_skipped": 0,
+    "linux_raw_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-linux15-d5578374.trx",
+    "linux_raw_sha256": "50091f2702b7743f77a63d2346bde3ab372bcbf8234abe35854a91b12d9be836",
+    "actual_ci_checkout_sha": "36563dd35e5d1d4e84aaff5869163510b9bdbe41",
+    "qualified_branch_carrier": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+    "exact_shared_git_tree": "b290cbdac0fca36ef1e84b12b824a5e8c7ae1911"
   },
   "worker_portable": {
     "source_sha": "ec3d312746512b41f0d2e0877fa30231ba38c47c",
@@ -248,5 +258,52 @@
     "preserved": "Existing pinned action, paths, permissions, retention, missing-file error and blocking checks. Failed earlier steps still fail the job.",
     "focused_validation": "27 CI result/enforced-check contract checks PASS; static security/supply-chain validation PASS.",
     "new_execution_status": "Pending committed-source CI; no failed-run artifact upload is retroactively claimed."
+  },
+  "qualified_ci_provenance": {
+    "run_id": 44343784736,
+    "branch_head": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+    "actual_merge_checkout": "36563dd35e5d1d4e84aaff5869163510b9bdbe41",
+    "checkout_meaning": "refs/remotes/pull/22/merge per actual checkout log",
+    "merge_parents": [
+      "bcf8f8da10131a10060e04587259779048bbe8d0",
+      "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b"
+    ],
+    "exact_tree_sha_for_both": "b290cbdac0fca36ef1e84b12b824a5e8c7ae1911",
+    "artifact_id": 14446177192,
+    "artifact_bytes": 485329,
+    "artifact_sha256": "fd0bfdfcfbcfb61647c5ed5b6437bb49d6fdcdd300cfbeee27f4bfa4075d5134",
+    "artifact_digest_verified": true,
+    "identity_raw_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-linux15-d5578374.trx",
+    "worker_raw_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-worker-linux-d5578374.trx",
+    "global_ui_items_passed": 123,
+    "global_ui_failures": 0,
+    "audit_fixture_checks_passed": 13,
+    "ci_enforcement_checks_passed": 27,
+    "whole_baseline": "FAILURE at later secret scan; no whole-CI PASS",
+    "boundary": "Actual execution was at the merge SHA, whose full tracked tree exactly equals the recorded branch carrier. Two original raw TRX members retained once; no test regeneration."
+  },
+  "worker_linux_qualification": {
+    "raw_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-worker-linux-d5578374.trx",
+    "raw_sha256": "20bb186bb696bb17f20de7f5e2ae34d0abf8d77244c6ce021a2e09e7e541bdfc",
+    "passed": 27,
+    "failed": 0,
+    "skipped": 0,
+    "exact_broker_cases_passed": 6,
+    "actual_checkout_sha": "36563dd35e5d1d4e84aaff5869163510b9bdbe41",
+    "branch_tree_equivalent": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+    "boundary": "Six exact RabbitMqOutboxReceiverIntegrationTests identities; no broader substring count or new production broker activation."
+  },
+  "secret_scan_correction": {
+    "original_ci_result": "FAILURE at five generic-secret-assignment matches; SAST passed beforehand.",
+    "classification": "Independent bounded Cyber review classifies three public synthetic/nonfunctional vectors and two bare runtime-identifier references; no values disclosed. Exact five source files equal executed d557 source.",
+    "implementation_commit": "ac5dfbae",
+    "scope": "Only exact relative path/rule/matched-UTF8-SHA256 allowances. All four detection patterns unchanged; no directory/marker-prefix bypass or test assertion change.",
+    "focused_cases_passed": 48,
+    "actual_repo_files_scanned": 7812,
+    "exact_reviewed_matches": 5,
+    "unreviewed_matches": 0,
+    "lf_blob_fingerprints_verified": 5,
+    "independent_root_review": "PASS for exact scoped implementation and meaningful positive/negative/malformed configuration cases.",
+    "whole_ci_status": "Unexecuted after correction; required CI remains pending. Known dependency/container blockers remain strict."
   }
 }

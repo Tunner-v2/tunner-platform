@@ -6,28 +6,35 @@
   "result": "PENDING",
   "tested_commit_sha": null,
   "validated_commit_sha": null,
-  "actual_tested_commit_sha": "da27cec467ad94183ac5320eae4a48998fca1cc6",
+  "actual_tested_commit_sha": "36563dd35e5d1d4e84aaff5869163510b9bdbe41",
   "owned_behavior_paths": [
     "web/tests/contracts.test.tsx",
     "src/Modules/Identity/RecoveryCodeContracts.cs",
     "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs"
   ],
-  "qualification": "Actual affected Windows13 native132 and current frontend44/6 pass at their recorded sources; extended native15 qualification, current context and native closure remain pending.",
+  "qualification": "Windows13:132 affected cases PASS atd7e3fe11. Actual Linux15:1412 PASS, including all132 affected identities, at merge36563dd35 with exact tree equivalence to branchd5578374. Recovery native generation/profile/work limits, wrong-supported-version rejection and typed configuration/HTTP guards are covered on both qualified runtimes. Source/currentness/context/native closure remain pending; no whole-CI or private HOST PASS.",
   "evidence_refs": [
     "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
     "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-windows13-d7e3fe11.trx",
-    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-security-source-review.json"
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-security-source-review.json",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-linux15-d5578374.trx"
   ],
-  "source_sha256": "9f769c623933d451daaa74eca10fc052cc394a386c5a74801aefee0de94fbb7f",
+  "source_sha256": "25acbbb1b1e786bce25980b4607c38f3778088669a77b5dd79db5c19f100065b",
   "context_ref": null,
   "review_refs": [
     "governance/reviews/REV-P2-009-RV015-full-stack-engineer.yaml",
-    "governance/reviews/REV-P2-009-RV015-tester-qa-engineer.yaml"
+    "governance/reviews/REV-P2-009-RV015-tester-qa-engineer.yaml",
+    "governance/reviews/REV-P2-009-RV015-cyber-security-engineer.yaml"
   ],
-  "boundaries": "Current implementation/source review and local13 qualification do not establish Linux15 support or production profile selection. Original executions remain at their actual SHAs; all runtime15 and closure gates remain required.",
+  "boundaries": "Native runtime qualification condition is fulfilled. Current source binding, context and native lifecycle gates still apply. Original Product acceptance, failed whole CI, private HOST defect and production policy/activation/merge/release remain separate.",
   "source_hashes": {
     "web/tests/contracts.test.tsx": "25acbbb1b1e786bce25980b4607c38f3778088669a77b5dd79db5c19f100065b",
     "src/Modules/Identity/RecoveryCodeContracts.cs": "3e84b2f5ca357d44019453f5ee14886939139303972908c7347fdf5f0aee3d8c",
     "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs": "ebf48ccfee217dd4b9f184e8f7d4f508fecf2aee5a9bd7559f9a34c5c3c61494"
-  }
+  },
+  "prior_test_only_execution_sha": "da27cec467ad94183ac5320eae4a48998fca1cc6",
+  "source_sha256_path": "web/tests/contracts.test.tsx",
+  "qualified_carrier": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+  "qualified_git_tree": "b290cbdac0fca36ef1e84b12b824a5e8c7ae1911",
+  "source_binding_meaning": "Future tested/validated SHA will be a committed classification carrier. Actual per-run executions retain original Windowsd7, Linuxmerge36563 and frontend/federation sources; no run at another SHA is invented."
 }

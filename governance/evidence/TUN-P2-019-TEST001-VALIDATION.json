@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-019-TEST001",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "tools/browser-testing/Program.cs",
+    "tools/browser-testing/Tunner.BrowserTesting.csproj",
+    "tools/browser-testing/BrowserTestGovernedContent.cs",
+    "tools/dev/tunner-browser.ps1",
+    "tools/browser-testing/BrowserTestIdentityConfiguration.cs",
+    "tools/browser-testing/browser-test-identity-configuration-content.json",
+    "web/tests/browser-testing/admin-security.spec.ts",
+    "web/tests/browser-testing/governed-content-flow.spec.ts"
+  ],
+  "authorization_ref": "governance/evidence/TUN-P2-019-SYNTHETIC-ADMIN-AUTHORIZATION.json",
+  "approved_patch_sha256": "21ecf240136c4dff8490deddc02c3b64a9e6083930f78e4f1eb8408e787ae9e6",
+  "boundary": "Isolated explicit test fixture only; original P019 Product acceptance, production values/activation, merge and release remain separate. No execution or PASS claimed before qualification.",
+  "implementation_observation": {
+    "approved_patch_applied": true,
+    "patch_sha256": "21ecf240136c4dff8490deddc02c3b64a9e6083930f78e4f1eb8408e787ae9e6",
+    "precommit_build_exit_code": 0,
+    "precommit_build_warnings": 0,
+    "precommit_build_errors": 0,
+    "pure_starter_cases": 21,
+    "pure_starter_boundary": "Mocked status bridge and actual AST-loaded starter functions; not real TLS/service qualification.",
+    "environment_failure": "Initial build was blocked by DLL locks from the verified existing app process; only that owned process was stopped, then the unlocked build passed. Database/mail services, data and keys were preserved.",
+    "actual_https_browser_execution": "PENDING at a committed candidate; no browser PASS claimed."
+  }
+}

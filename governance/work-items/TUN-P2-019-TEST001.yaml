@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-019-TEST001",
+  "milestone_id": "P2",
+  "revision_ref": null,
+  "sprint_id": null,
+  "title": "Qualify explicitly opted-in isolated Identity configuration browser testing",
+  "status": "IN_PROGRESS",
+  "type": "TEST_FIXTURE",
+  "authority_refs": [
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md"
+  ],
+  "flow_refs": [],
+  "contract_refs": [],
+  "decision_refs": [],
+  "acceptance_criteria": [
+    "Apply only the owner-authorized six-file patch21ecf240136c4dff8490deddc02c3b64a9e6083930f78e4f1eb8408e787ae9e6 and necessary focused defect/test corrections. Separate fixed synthetic Identity author/approver/publisher permissions; preserve Content-only defaults, Content actors, exact Origin/CSRF, isolated Admin cookies/keys and live-resource ownership.",
+    "Require explicit SyntheticIdentityConfiguration together with existing GovernedContent/SyntheticAdmin, correct saved-mode/readiness matching, Development/loopback HTTPS and server-backed nonrenewable sessions. Reject mixed domains, stale/switched sessions, foreign CSRF and undeclared actors.",
+    "Verify all16 existing Identity configuration workspaces and real typed draft/approval/publication/history/rollback boundaries with independent test actors and existing qualified synthetic inputs. No production values or User provider activation.",
+    "This technical TEST_FIXTURE scope validates already-implemented P019 code; it does not admit unfinished business features, accept P019 or change its PRODUCT_ACCEPTANCE checkpoint. Production frontend components/routes/Figma and domain business rules remain unchanged; reuse the existing fixture controls/theme and exact qualified browser-test wording.",
+    "Run focused real PostgreSQL/HTTPS tests and existing Content-only regression, preserve source/test commit binding and independent security/QA review, and retain GLOBAL_UI regression before technical completion."
+  ],
+  "prerequisites": [],
+  "blockers": [],
+  "impact": {
+    "architecture": false,
+    "ui": false,
+    "sdk": false,
+    "financial": false,
+    "compliance": false,
+    "security": true,
+    "devops": true,
+    "support": false
+  },
+  "activated_roles": [
+    "full-stack-engineer",
+    "tester-qa-engineer",
+    "cyber-security-engineer",
+    "auditor",
+    "devops-engineer",
+    "frontend-engineer",
+    "ui-ux-engineer",
+    "end-user-ux-reviewer"
+  ],
+  "required_tests": [
+    "explicit opt-in/default/invalid saved flag and matching readiness states",
+    "six-actor authentication/Origin/CSRF/body/cookie/switch matrix and cross-domain denials",
+    "all16 real typed workspaces plus draft/validate/approve/publish/history/rollback and separation-of-duties negatives",
+    "Content-only regression, no User runtime activation, existing GLOBAL_UI regression"
+  ],
+  "required_evidence": [
+    "governance/evidence/TUN-P2-019-SYNTHETIC-ADMIN-AUTHORIZATION.json",
+    "governance/evidence/TUN-P2-019-TEST001-VALIDATION.json"
+  ],
+  "product_acceptance_required": false,
+  "context_policy": "TASK",
+  "todos": [],
+  "defects": [],
+  "created_at": "2026-11-18T16:47:22.000841+00:00",
+  "updated_at": "2026-11-18T16:47:22.000841+00:00"
+}
