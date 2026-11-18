@@ -1,4 +1,5 @@
 using System.Text;
+using DotNet.Testcontainers.Containers;
 using RabbitMQ.Client;
 using Tunner.Testing;
 using Tunner.Worker.Messaging;
@@ -16,6 +17,7 @@ public sealed partial class OutboxDispatchCoordinatorTests
         var password = Guid.NewGuid().ToString("N");
         await using var broker = TestcontainersBaseline.CreateRabbitMqContainer("fixture", password);
         await broker.StartAsync();
+        await RequireBrokerStartupAsync(broker);
         var endpoint = new Uri($"amqp://fixture:{password}@{broker.Hostname}:{broker.GetMappedPublicPort(5672)}");
         await using var connection = await new ConnectionFactory { Uri = endpoint }.CreateConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
@@ -48,6 +50,7 @@ public sealed partial class OutboxDispatchCoordinatorTests
         var password = Guid.NewGuid().ToString("N");
         await using var broker = TestcontainersBaseline.CreateRabbitMqContainer("fixture", password);
         await broker.StartAsync();
+        await RequireBrokerStartupAsync(broker);
         var endpoint = new Uri($"amqp://fixture:{password}@{broker.Hostname}:{broker.GetMappedPublicPort(5672)}");
         await using (var connection = await new ConnectionFactory { Uri = endpoint }.CreateConnectionAsync())
         await using (var channel = await connection.CreateChannelAsync())
@@ -72,6 +75,14 @@ public sealed partial class OutboxDispatchCoordinatorTests
         using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(10));
         await Assert.ThrowsAnyAsync<Exception>(() => new OutboxDispatchCoordinator(pending, unavailable, new FixedTimeProvider(PublishedAtUtc)).DispatchPendingAsync(1, timeout.Token));
         Assert.Empty(pending.MarkAttempts);
+    }
+
+    private static async Task RequireBrokerStartupAsync(IContainer broker)
+    {
+        // An open TCP port does not establish RabbitMQ application readiness.
+        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        var ready = await broker.ExecAsync(["rabbitmqctl", "--timeout", "30", "await_startup"], timeout.Token);
+        Assert.Equal(0, ready.ExitCode);
     }
 
     private static void RequireRabbitMqTests()

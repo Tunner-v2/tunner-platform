@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-P1-CI-RABBITMQ-STARTUP-001",
+  "work_item_id": "P1-RV001-001",
+  "classification": "BUG",
+  "severity": "SEV-2",
+  "status": "OPEN",
+  "environment": "Required Linux CI44392682412 at branch2c0daf3c; Worker26/27PASS.",
+  "description": "RealBrokerNackAndUnavailableBrokerLeaveTheOutboxPending fails opening its initial AMQP connection before outbox assertions: connection.start never received / pipe completed. Shared fixture checks TCP only. Startup race is a hypothesis; bounded application readiness is the focused setup correction, pending CI. No production delivery defect is established.",
+  "expected_behavior_ref": "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+  "evidence": ["governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json"],
+  "affected_versions": ["2c0daf3ceb1c7c35f8c8347393e64951132d2627"],
+  "created_at": "2026-11-18T21:07:59+00:00",
+  "updated_at": "2026-11-18T21:07:59+00:00"
+}

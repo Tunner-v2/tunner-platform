@@ -18,6 +18,8 @@
   "decision_refs": [],
   "defect_refs": [],
   "change_refs": [
+    "tests/Tunner.Worker.Tests/RabbitMqOutboxIntegrationTests.cs",
+    "governance/defects/DEF-P1-CI-RABBITMQ-STARTUP-001.yaml",
     "tests/Tunner.AuditRemediation.FunctionalTests/Program.cs",
     "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
     ".gitattributes",
@@ -30,7 +32,8 @@
   "blocked_scope": [],
   "acceptance_criteria": [
     "Repair only approved security/development image and CI scope; preserve full component scans, HIGH/CRITICAL thresholds, signed plugin integrity, current ports/storage/APIs and protected integration gates; no unresolved finding is waived.",
-    "The owner-authorized fixture correction materializes only real declared missing revision files with source/destination containment, preserving native validation, original eligibility/authority/context assertions and terminal record bytes; it does not imply image remediation or release acceptance."
+    "The owner-authorized fixture correction materializes only real declared missing revision files with source/destination containment, preserving native validation, original eligibility/authority/context assertions and terminal record bytes; it does not imply image remediation or release acceptance.",
+    "For the distinct CI44392682412 Worker setup failure, require bounded RabbitMQ application startup before the original AMQP/outbox assertions. Preserve the pinned image, shared TCP fixture, production publisher and all NACK/unavailable/pending assertions. Qualify through required Linux CI; do not retry the user-held local143 backend cohort or resume image remediation."
   ],
   "prerequisites": [],
   "work_items": [],
