@@ -211,7 +211,7 @@ public sealed class PresentationContentLifecycleTests(SessionListingPostgresFixt
         const string controlVersion = "fixture-control-snapshot";
         const string rejectedVersion = "fixture-invalid-snapshot";
         var controlProfile = env.Profile with { Metadata = new(controlVersion, "ACTIVE", env.Scope, env.Interval, null, ["fixture-profile-approval"]) };
-        var controlEvent = await StageEffectAsync(controlVersion, controlProfile.Snapshot);
+        var controlEvent = await StageEffectAsync(controlVersion, JsonSerializer.Serialize(controlProfile));
         Assert.True(await HasEffectAsync(controlEvent, controlVersion));
         // Construct a complete matching causal pair for this exact selected profile, rather than
         // relying on the original publication's differently bound profileVersion to reject it.
