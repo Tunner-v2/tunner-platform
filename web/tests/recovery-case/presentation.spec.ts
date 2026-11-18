@@ -1,4 +1,5 @@
 import {test,expect} from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 import type {Page} from '@playwright/test';
 import type {RecoveryViewModel} from '../../apps/user/recovery';
 import type {RecoveryFixtureSnapshot} from '../../fixtures/recovery-case/main';
@@ -43,4 +44,40 @@ for(const kind of ['pending-review','unknown'] as const)test(kind+' permits only
 test('Partial result details block Finish; complete supplied details still require an explicit action',async({page})=>{
  const model:Extract<RecoveryViewModel,{kind:'result'}>={kind:'result',goal,canCheck:true,canCancel:false,canBackToSignIn:true,detailsAvailable:true,effects:null,followUps:[],canFinish:true};await setup(page,model);await expect(page.getByRole('button',{name:'Finish',exact:true})).toBeDisabled();expect((await snapshot(page)).calls.finish).toBe(0);await noRestorationClaim(page);
  await page.evaluate(model=>window.recoveryPresentationFixture.configure(model),{...model,effects:[{reference:'effect-A',labelKey:'fixture.effect.label',valueKey:'fixture.effect.value'}]});await expect(page.getByText('Fixture authoritative value',{exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'Finish',exact:true})).toBeEnabled();expect((await snapshot(page)).calls.finish).toBe(0);await page.getByRole('button',{name:'Finish',exact:true}).click();await expect.poll(async()=>(await snapshot(page)).calls.finish).toBe(1);await noRestorationClaim(page);
+});
+
+test('Recovery conditional presentation supports keyboard activation and accessible tablet narrow reflow',async({page})=>{
+ test.setTimeout(60000);
+ for(const width of [768,320]){
+  await page.setViewportSize({width,height:1024});
+  const accessible=async()=>{
+   await page.evaluate(()=>document.fonts.ready);
+   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+   const card=await page.locator('.recovery-card').boundingBox();expect(card).not.toBeNull();expect(card!.x).toBeGreaterThanOrEqual(0);expect(card!.x+card!.width).toBeLessThanOrEqual(width);
+   expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);
+  };
+  await setup(page,entry);await expect(page.locator('h1')).toBeFocused();await page.keyboard.press('Tab');
+  await expect(page.getByLabel('Email address',{exact:true})).toBeFocused();await page.keyboard.type('person@example.test');await page.keyboard.press('Tab');
+  await expect(page.getByRole('radio',{name:/Fixture offered goal A/})).toBeFocused();await page.keyboard.press('ArrowDown');
+  const selected=page.getByRole('radio',{name:/Fixture offered goal B/});await expect(selected).toBeFocused();await expect(selected).toHaveAttribute('aria-checked','true');
+  await page.keyboard.press('Space');await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Continue',exact:true})).toBeFocused();await page.keyboard.press('Enter');
+  await expect.poll(async()=>(await snapshot(page)).calls.start).toBe(1);expect((await snapshot(page)).chosenGoal).toBe('offered-B');await accessible();
+  await setup(page,code);await expect(page.locator('h1')).toBeFocused();await page.keyboard.press('Tab');const input=page.getByLabel('Recovery code',{exact:true});await expect(input).toBeFocused();
+  await page.keyboard.press('Enter');await expect(input).toBeFocused();await expect(input).toHaveAttribute('aria-invalid','true');await expect(page.getByRole('alert')).toHaveText('Check the highlighted details');
+  expect(await input.evaluate(field=>(field.getAttribute('aria-describedby')??'').split(/\s+/).some(id=>document.getElementById(id)?.textContent==='Enter a recovery code.'))).toBe(true);await accessible();
+  await page.keyboard.type('public-required-field-value');await expect(input).not.toHaveAttribute('aria-invalid','true');await expect(page.getByRole('alert')).toHaveCount(0);
+  await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Show recovery code',exact:true})).toBeFocused();await page.keyboard.press('Enter');await expect(input).toHaveAttribute('type','text');
+  await page.keyboard.press('Space');await expect(input).toHaveAttribute('type','password');await page.keyboard.press('Tab');
+  await expect(page.getByRole('button',{name:'Verify recovery code',exact:true})).toBeFocused();await page.keyboard.press('Enter');
+  await expect.poll(async()=>(await snapshot(page)).calls.code).toBe(1);await expect(input).toHaveValue('');expect((await snapshot(page)).codeDomEmptyAtCallback).toBe(true);await noRestorationClaim(page);
+  await setup(page,{kind:'proof-choice',goal,choices:[{reference:'offered-proof',labelKey:'fixture.proof',canSelect:true}],canCheck:true,canCancel:true});
+  await page.keyboard.press('Tab');const choice=page.getByRole('button',{name:'Fixture admitted method',exact:true});await expect(choice).toBeFocused();await page.keyboard.press('Enter');
+  await expect.poll(async()=>(await snapshot(page)).calls.choose).toBe(1);await expect(choice).toBeEnabled();await accessible();
+  await setup(page,{kind:'pending-review',goal,canCheck:true,canCancel:false,canBackToSignIn:true});await page.keyboard.press('Tab');
+  const check=page.getByRole('button',{name:'Check recovery status',exact:true});await expect(check).toBeFocused();await page.keyboard.press('Enter');await expect.poll(async()=>(await snapshot(page)).calls.check).toBe(1);await expect(check).toBeEnabled();await accessible();
+  await setup(page,{kind:'result',goal,detailsAvailable:true,effects:[{reference:'effect-A',labelKey:'fixture.effect.label',valueKey:'fixture.effect.value'}],followUps:[],canFinish:true,canCheck:true,canCancel:false,canBackToSignIn:true});
+  await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Check recovery status',exact:true})).toBeFocused();await page.keyboard.press('Tab');
+  await expect(page.getByRole('button',{name:'Finish',exact:true})).toBeFocused();await page.keyboard.press('Enter');await expect.poll(async()=>(await snapshot(page)).calls.finish).toBe(1);await accessible();await noRestorationClaim(page);
+  expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length,search:location.search,hash:location.hash}))).toEqual({local:0,session:0,search:'',hash:''});
+ }
 });

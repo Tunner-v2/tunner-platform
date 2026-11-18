@@ -1,4 +1,5 @@
 import {test,expect} from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 import type {Page} from '@playwright/test';
 import authentication from '../../apps/user/authentication.content.proposal.json' with {type:'json'};
 import recovery from '../../apps/user/recovery.content.proposal.json' with {type:'json'};
@@ -98,4 +99,37 @@ test('Actual password result exposes only supplied effects without automatic sig
 });
 test('Leaving during Start fences late response; returning reacquires only the server original',async({page})=>{
  const state=await fixture(page);let release!:()=>void;state.holdStart=new Promise<void>(resolve=>{release=resolve;});await start(page);await expect.poll(()=>state.starts).toBe(1);await page.goto('/login');release();await expect(page.getByRole('heading',{name:authentication.content['login.heading'],exact:true})).toBeVisible();await expect(page).toHaveURL(/\/login$/);await page.goto('/recovery');await assertUnavailableProof(page);expect(state.starts).toBe(1);expect(state.repairs).toBe(0);
+});
+
+test('Recovery approved routes support keyboard activation and accessible tablet narrow reflow',async({page})=>{
+ test.setTimeout(60000);
+ for(const width of [768,320]){
+  await page.setViewportSize({width,height:1024});const state=await fixture(page);
+  const accessible=async()=>{
+   await page.evaluate(()=>document.fonts.ready);
+   expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+   const card=await page.locator('.recovery-card').boundingBox();expect(card).not.toBeNull();expect(card!.x).toBeGreaterThanOrEqual(0);expect(card!.x+card!.width).toBeLessThanOrEqual(width);
+   expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);
+  };
+  await page.goto('/recovery');await expect(page.getByRole('heading',{name:'Recover your account',exact:true})).toBeFocused();
+  await page.keyboard.press('Tab');const email=page.getByLabel('Email address',{exact:true});await expect(email).toBeFocused();
+  await page.keyboard.press('Enter');await expect(email).toBeFocused();await expect(email).toHaveAttribute('aria-invalid','true');expect(state.starts).toBe(0);
+  await expect(page.getByRole('alert')).toHaveText(recovery.content['recovery.error.highlighted']);await accessible();
+  await email.fill('person@example.test');await expect(email).not.toHaveAttribute('aria-invalid','true');
+  await page.keyboard.press('Tab');const radio=page.getByRole('radio');await expect(radio).toBeFocused();await expect(radio).toHaveAttribute('aria-checked','false');
+  await page.keyboard.press('Space');await expect(radio).toHaveAttribute('aria-checked','true');
+  await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Continue',exact:true})).toBeFocused();await page.keyboard.press('Enter');
+  await assertUnavailableProof(page);await expect(page.getByRole('heading',{name:'Verify this recovery request',exact:true})).toBeFocused();
+  expect(state.starts).toBe(1);const retained=state.operation!.requestId;await accessible();
+  await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Check recovery status',exact:true})).toBeFocused();
+  await page.keyboard.press('Tab');await expect(page.getByRole('button',{name:'Cancel request',exact:true})).toBeFocused();await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/\/recovery\/result$/);const resultHeading=page.getByRole('heading',{name:'Recovery request cancelled',exact:true});await expect(resultHeading).toBeFocused();
+  expect(state.cancels).toBe(1);expect(state.operation!.requestId).toBe(retained);await accessible();
+  await page.keyboard.press('Tab');const check=page.getByRole('button',{name:'Check recovery status',exact:true});await expect(check).toBeFocused();await page.keyboard.press('Enter');
+  await expect.poll(()=>state.results).toBe(1);await expect(check).toBeEnabled();
+  await resultHeading.focus();await page.keyboard.press('Tab');await expect(check).toBeFocused();await page.keyboard.press('Tab');
+  await expect(page.getByRole('button',{name:'Back to sign in',exact:true})).toBeFocused();await page.keyboard.press('Enter');await expect(page).toHaveURL(/\/login$/);
+  expect({starts:state.starts,cancels:state.cancels,results:state.results,repairs:state.repairs}).toEqual({starts:1,cancels:1,results:1,repairs:0});
+  expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length,search:location.search,hash:location.hash}))).toEqual({local:0,session:0,search:'',hash:''});
+ }
 });
