@@ -1,0 +1,30 @@
+{
+  "sourceSha": "2c0daf3ceb1c7c35f8c8347393e64951132d2627",
+  "recordedUtc": "2026-11-18T20:19:06.5225266+00:00",
+  "testBuildPassed": true,
+  "hostBuildPassed": true,
+  "testsStarted": false,
+  "fixtureResourcesCreated": 0,
+  "imagePulls": 0,
+  "result": "BLOCKED_BEFORE_TEST_EXECUTION",
+  "attempts": [
+    {
+      "attempt": 1,
+      "stage": "CLI_ENGINE_PREFLIGHT",
+      "code": "TWO_SLASH_LEGACY_PIPE_UNAVAILABLE"
+    },
+    {
+      "attempt": 2,
+      "stage": "CLI_ENGINE_PREFLIGHT",
+      "code": "TWO_SLASH_CURRENT_PIPE_UNAVAILABLE"
+    },
+    {
+      "attempt": 3,
+      "stage": "CACHED_IMAGE_PREFLIGHT",
+      "code": "RYUK_0_14_TAG_NOT_INSPECTABLE"
+    }
+  ],
+  "confirmedDiagnosis": "Docker CLI canonical four-slash current endpoint reaches the expected engine; cached-image inspection remains blocked.",
+  "engine": "b81c329c-42bf-4ce2-812c-2570fbcda327",
+  "stoppedPerFailurePolicy": true
+}

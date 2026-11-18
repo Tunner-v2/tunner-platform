@@ -1,0 +1,34 @@
+{
+  "source_sha": "2c0daf3ceb1c7c35f8c8347393e64951132d2627",
+  "kind": "Actual existing starter invocation; not mocked HTTPS or21 fresh unit cases",
+  "positive_start": {
+    "exit_code": 0,
+    "build_warnings": 0,
+    "build_errors": 0,
+    "services": "existing PostgreSQL and Mailpit remained healthy; no image changes"
+  },
+  "negative_starts": [
+    {
+      "case": 1,
+      "exit": 1,
+      "expectedGuard": true
+    },
+    {
+      "case": 2,
+      "exit": 1,
+      "expectedGuard": true
+    },
+    {
+      "case": 3,
+      "exit": 1,
+      "expectedGuard": true
+    }
+  ],
+  "negative_scope": "Explicit Identity=true with Content/Admin combinations false/false,true/false,false/true; actual declared guard rejects before prerequisites, process/service mutation or certificate work",
+  "runtime_json_sha256_before_and_after": "C348126177A8FBEC410BA7A6716E82D035854EAA566BC858668442FD5DB4B02F",
+  "runtime_json_bytes_preserved": true,
+  "actual_status_exit_code": 0,
+  "existing_starter_sha256": "ef520c4a1d19d802619cc03614268f69d46855f03ddf74d5276ca2d9a6a6a829",
+  "historical_mock_cases": "Original21 remain at their original receipt; current starter bytes exactly match, but no fresh21 execution is claimed",
+  "backend_143": "Not executed; three preflights stopped, user directed keep blocked"
+}
