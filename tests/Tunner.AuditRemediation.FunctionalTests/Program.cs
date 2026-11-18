@@ -35,8 +35,10 @@ try
         Check(AuthorityApplication.Verify(fixture).ExitCode != 0, "supplemental manifest drift is rejected");
         File.WriteAllBytes(manifestPath, bytes);
         // Model this branch explicitly; the live backlog must not decide fixture eligibility.
-        IsolateNoEligibleWork(fixture);
+        IsolateNoEligibleWork(repository, fixture);
         var next = GovernanceApplication.Next(fixture);
+        if (next.ExitCode != 0)
+            Console.Error.WriteLine(JsonSerializer.Serialize(((NextPayload)next.Payload).Diagnostics.Take(5)));
         Check(next.ExitCode == 0 && ((NextPayload)next.Payload).Items.All(item => !item.Actionable),
             "fixture explicitly has no eligible work");
         var originalProject = Path.Combine(fixture.FullName, "docs", "project", "HANDOFF.md");
@@ -106,7 +108,7 @@ static void Copy(string source, string destination)
         Copy(directory, Path.Combine(destination, Path.GetFileName(directory)));
 }
 
-static void IsolateNoEligibleWork(DirectoryInfo fixture)
+static void IsolateNoEligibleWork(DirectoryInfo repository, DirectoryInfo fixture)
 {
     string[] terminal = ["DONE", "CLOSED", "CANCELED", "SUPERSEDED", "DUPLICATE", "NOT_APPLICABLE"];
     foreach (var directory in new[] { "work-items", "revisions" })
@@ -116,6 +118,24 @@ static void IsolateNoEligibleWork(DirectoryInfo fixture)
             var yaml = new YamlStream();
             using (var reader = File.OpenText(path)) yaml.Load(reader);
             var record = (YamlMappingNode)yaml.Documents.Single().RootNode;
+            if (directory == "revisions" && record.Children.TryGetValue(new YamlScalarNode("change_refs"), out var changes) &&
+                changes is YamlSequenceNode references)
+            {
+                // Native validation still resolves the real declared files; do not copy whole source trees.
+                foreach (YamlScalarNode reference in references.Children)
+                {
+                    var logical = reference.Value ?? throw new InvalidOperationException("Fixture change reference is empty.");
+                    var source = Path.GetFullPath(Path.Combine(repository.FullName, logical));
+                    var destination = Path.GetFullPath(Path.Combine(fixture.FullName, logical));
+                    if (Path.IsPathRooted(logical) || logical.Contains('\\', StringComparison.Ordinal) ||
+                        RepositoryRootResolver.ToLogicalPath(repository, source) != logical ||
+                        RepositoryRootResolver.ToLogicalPath(fixture, destination) != logical)
+                        throw new InvalidOperationException("Fixture change reference escaped its repository boundary.");
+                    if (File.Exists(destination)) continue;
+                    Directory.CreateDirectory(Path.GetDirectoryName(destination)!);
+                    File.Copy(source, destination);
+                }
+            }
             var field = new YamlScalarNode("status");
             if (record.Children[field] is not YamlScalarNode status)
                 throw new InvalidOperationException("Fixture record has no scalar status.");

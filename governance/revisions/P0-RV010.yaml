@@ -8,7 +8,7 @@
   "title": "Adopt validated development security image repairs without scan waivers",
   "revision_type": "SECURITY",
   "status": "ACTIVE",
-  "reason": "The user requests fixes for actual GitHub scan failures. Preserve closed P0 and P0-RV009 while repairing maintained OpenBao and aligning CI/development image references only after full-image scans and compatibility checks. LGTM signed-plugin failures remain enforced; no merge, publication, deployment, removal or trust override is authorized. The subsequent explicit dev/test signing approval permits only the additional Tunner verifier described in ADR-LGTM-DEV-SIGNING-20261028; production trust remains excluded. Subsequent explicit consent permits only the reviewed source-bound dev/test Tempo VEX corrections, with expiry/rejection reviews and every other finding still blocking.",
+  "reason": "The user requests fixes for actual GitHub scan failures. Preserve closed P0 and P0-RV009 while repairing maintained OpenBao and aligning CI/development image references only after full-image scans and compatibility checks. LGTM signed-plugin failures remain enforced; no merge, publication, deployment, removal or trust override is authorized. The subsequent explicit dev/test signing approval permits only the additional Tunner verifier described in ADR-LGTM-DEV-SIGNING-20261028; production trust remains excluded. Subsequent explicit consent permits only the reviewed source-bound dev/test Tempo VEX corrections, with expiry/rejection reviews and every other finding still blocking. On 2026-11-18 the owner stopped image remediation while retaining required CI, and separately authorized the bounded Audit Remediation fixture diagnosis/repair/verification. This existing CI scope retains that test-only correction; image acceptance criteria remain blocking and unchanged.",
   "authority_refs": [
     "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
@@ -17,11 +17,15 @@
   ],
   "decision_refs": [],
   "defect_refs": [],
-  "change_refs": [],
+  "change_refs": [
+    "tests/Tunner.AuditRemediation.FunctionalTests/Program.cs",
+    "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json"
+  ],
   "impact_classification": "NON_BLOCKING",
   "blocked_scope": [],
   "acceptance_criteria": [
-    "Repair only approved security/development image and CI scope; preserve full component scans, HIGH/CRITICAL thresholds, signed plugin integrity, current ports/storage/APIs and protected integration gates; no unresolved finding is waived."
+    "Repair only approved security/development image and CI scope; preserve full component scans, HIGH/CRITICAL thresholds, signed plugin integrity, current ports/storage/APIs and protected integration gates; no unresolved finding is waived.",
+    "The owner-authorized fixture correction materializes only real declared missing revision files with source/destination containment, preserving native validation, original eligibility/authority/context assertions and terminal record bytes; it does not imply image remediation or release acceptance."
   ],
   "prerequisites": [],
   "work_items": [],
