@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-010-RV016",
+  "owner_work_item": "TUN-P2-010",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "actual_tested_commit_sha": "0e771a95352a1cf9490c431e8f2b8f932607c2d6",
+  "owned_behavior_paths": [
+    "web/tests/authentication/federation.spec.ts",
+    "src/Modules/Identity/TotpContracts.cs"
+  ],
+  "qualification": "Actual affected Windows13 native132 and current frontend44/6 pass at their recorded sources; extended native15 qualification, current context and native closure remain pending.",
+  "evidence_refs": [
+    "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-windows13-d7e3fe11.trx",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-security-source-review.json"
+  ],
+  "source_sha256": "58f7b5e4ca74f1d76b5f84fdb695deadb5faa5797c714b64fb7fa661ced4e6bf",
+  "context_ref": null,
+  "review_refs": [
+    "governance/reviews/REV-P2-010-RV016-full-stack-engineer.yaml",
+    "governance/reviews/REV-P2-010-RV016-tester-qa-engineer.yaml"
+  ],
+  "boundaries": "Current implementation/source review and local13 qualification do not establish Linux15 support or production profile selection. Original executions remain at their actual SHAs; all runtime15 and closure gates remain required.",
+  "source_hashes": {
+    "web/tests/authentication/federation.spec.ts": "58f7b5e4ca74f1d76b5f84fdb695deadb5faa5797c714b64fb7fa661ced4e6bf",
+    "src/Modules/Identity/TotpContracts.cs": "699cc1b0b957e9d21882aaca4c04ba51b687dba2449bcd2553fe645bdfeffb9d"
+  }
+}

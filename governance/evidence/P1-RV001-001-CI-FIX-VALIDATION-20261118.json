@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "scope_id": "P1-RV001-001",
-  "result": "LOCAL_CI_DEFECT_FIXES_QUALIFIED_REMOTE_CHECKS_PENDING",
+  "result": "LOCAL_TEST_CORRECTIONS_PASS_INTEGRATION_BLOCKED",
   "tested_commit_sha": "da27cec467ad94183ac5320eae4a48998fca1cc6",
   "recorded_at": "2026-11-18T13:01:53.954400+00:00",
   "ci_observation": {
@@ -47,12 +47,116 @@
   "browser_runtime": "Existing User Login and synthetic Admin HTTP200 with normal Windows TLS; approved starter and existing PG25432/Mailpit28025 restored.",
   "boundary": "Existing P1 remediation remains IN_PROGRESS. LGTM HIGH findings, private Recovery HOST defect, pending Product acceptance, protected-main merge and production/release remain separate.",
   "test_source_owners": [
-    "P2-009-RV015",
-    "P2-013-RV007",
     "P2-004-RV001",
     "P2-005-RV001",
     "P2-007-RV001",
-    "P2-008-RV001"
+    "P2-008-RV001",
+    "P2-009-RV015",
+    "P2-010-RV016",
+    "P2-013-RV007"
   ],
-  "source_ownership_boundary": "The same web correction touches five accepted foundation source maps, and the fixture touches Sessions. These six minimal technical revisions reuse the same43+11 actual tests and two role assessments; they do not reopen Product scope or rerun old qualifications."
+  "source_ownership_boundary": "Three confirmed CI test corrections across seven historical source owners. Reuse actual43+11 tests atda27 and4 browser identities at0e771, plus two bounded role assessments; no new aggregate test run or Product reopening.",
+  "subsequent_ci_observation": {
+    "run_id": 44310347326,
+    "head_sha": "da27cec467ad94183ac5320eae4a48998fca1cc6",
+    "web": "Original43 contract issue cleared; later authentication cohort117PASS/2FAIL from premature federation assertions. Baseline remains live at last observation, not PASS."
+  },
+  "federation_sequencing": {
+    "tested_commit_sha": "0e771a95352a1cf9490c431e8f2b8f932607c2d6",
+    "tests": 4,
+    "passed": 4,
+    "failed": 0,
+    "skipped": 0,
+    "typecheck_exit_code": 0,
+    "source_sha256": "58f7b5e4ca74f1d76b5f84fdb695deadb5faa5797c714b64fb7fa661ced4e6bf",
+    "raw_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-federation-sequencing-0e771a95.json",
+    "raw_sha256": "2a2ebe47843aab409d644e29a5e1eef18ab8bb9ea72299870847fcd11fba4acd",
+    "boundary": "Affected cases only, not a fresh full119 browser or CI PASS."
+  },
+  "native_compatibility_qualification": {
+    "state": "WINDOWS13_QUALIFIED_LINUX15_PENDING",
+    "supported_mechanism_candidate": [
+      "10.0.13",
+      "10.0.15"
+    ],
+    "review_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-security-source-review.json",
+    "reviewed_original_patch_sha256": "1882fa710615ab00837e0056d550fd26a081997c097f640312233e3846009709",
+    "amended_patch_sha256": "bdd7f08020c6c0861d1afe6e84325cb623659d8f406c32751152f328e0bb0c69",
+    "root_delta_review": "Only public installed assembly-version measurement is added in a new test; production native guards unchanged.",
+    "upstream_comparison": "Nine exact official13/15 source files byte-identical.",
+    "runtime15_pass": false,
+    "production_profile_selected": false,
+    "tested_source_sha": "d7e3fe11e639add5d15deee281fa8e74b019ba5e",
+    "actual_windows_identity_informational_version": "10.0.13+4099f83977f4d29604a9aeb971fb0a7bc1d5f699",
+    "windows_distinct_cases": 132,
+    "windows_failed": 0,
+    "windows_skipped": 0,
+    "windows_raw_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-windows13-d7e3fe11.trx",
+    "windows_raw_sha256": "b933d1eabbdc705d7124e64977c76051801449f6cd6838e2abda219c49d1204a",
+    "review_sha256": "c0a88c0424523bab75b6614951bd9942c5491cbb834b60aa471c1db5b0114bc4",
+    "count_boundary": "Three admission cases precede and are included within132 distinct affected cases; not135. No private123 or Linux15 run."
+  },
+  "worker_portable": {
+    "source_sha": "ec3d312746512b41f0d2e0877fa30231ba38c47c",
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0,
+    "raw_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-worker-portable-ec3d3127.trx",
+    "raw_sha256": "0f941d2706feb60dd8bdc74d47e0f13afb7bc832b2c1f99104647d462ecd992e",
+    "boundary": "Real portable RabbitMQ on Windows; native ownership branch preserved, owned resources removed."
+  },
+  "migration_regression": {
+    "source_sha": "3ccfe3fd62879c218425df7cbf8e9124c9ccfe55",
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "raw_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-identity-migration-3ccfe3fd.trx",
+    "raw_sha256": "86f77d77eae2339e718b289eed69f1e1542dceac6d968e66a3f5c26d0deabfc6",
+    "boundary": "Actual PostgreSQL guard23514/exact partial history/full reapply/account and outbox preservation; no migration source edited."
+  },
+  "admin_ui_update": {
+    "source_sha": "e9ed840054263dc7a015fd2dbfcb7eb9782afe02",
+    "node_passed": 44,
+    "browser_passed": 6,
+    "browser_failed": 0,
+    "browser_skipped": 0,
+    "browser_raw_ref": "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/browser-results.json",
+    "ui_owner_items": 73,
+    "global_ui_items": 123,
+    "ui_native_result": "PASS_ACTUAL_AT_7ffb8119",
+    "boundary": "Exact committed UI/native checks and local mock-backed flows; not native15 or whole feature acceptance.",
+    "native_reports": [
+      {
+        "scope": "TUN-P2-019",
+        "covered": 73,
+        "outcome": "PASS",
+        "path": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ui-p019-e9ed8400-corrected-evidence.json",
+        "sha256": "98b85b3fe8ee49f00fc1e51926173eed4dbdfcd5a1899de304c0684084050bbe"
+      },
+      {
+        "scope": "GLOBAL_UI",
+        "covered": 123,
+        "outcome": "PASS",
+        "path": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ui-global-e9ed8400.json",
+        "sha256": "2b4d83e527922a62b056c3a9048c8f59dcb8303643a0eccdbadd41ec99b1f16d"
+      }
+    ],
+    "retained_invocation_failure": {
+      "classification": "SCOPED_COMMAND_USED_DEFAULT_GLOBAL_EVIDENCE",
+      "path": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ui-p019-e9ed8400.json",
+      "correction": "Explicit --evidence selected the correct committed owner packet; corrected scope73PASS. Global123 alreadyPASS. No source/test expectation change."
+    }
+  },
+  "lgtm_retry_decision": {
+    "question_call_id": "call_268cf79d9bf94623963d29a3656f9bb5",
+    "explicit_user_answer": "Continue P2 and required CI; stop image remediation (Recommended)",
+    "image_remediation_stopped": true,
+    "required_changed_source_ci_authorized": true,
+    "vendor_candidate": "grafana/otel-lgtm:0.41.0@sha256:2e3290657f2f2a256c7a9175f097424a3ac5b54840741ace433e108e109348b6",
+    "candidate_high": 84,
+    "candidate_critical": 0,
+    "candidate_raw_sha256": "c4c32cf346a4d8181923924035eb2bee0750664c59a54ea9151fdda84f1ab5dc",
+    "boundary": "Strict container gate remains blocking; no scan waiver, release or merge approval."
+  },
+  "ui_portability_fix": "All778 current global hash references verified.28 preexisting hash-referenced approved PNGs were not tracked; exact originals committed once at their existing paths, without regeneration or duplicate bundles."
 }

@@ -5,10 +5,10 @@
   "original_scope_id": "TUN-P2-008",
   "parent_revision_id": null,
   "parent_milestone_revision_id": null,
-  "title": "Retain qualified shared route and form test correction",
+  "title": "Qualify bounded native runtime and confirmed CI integration corrections",
   "revision_type": "CORRECTIVE",
   "status": "ACTIVE",
-  "reason": "One confirmed shared contracts.test.tsx CI defect affects the accepted foundation source classification. Reuse actual43 passing contract tests and typecheck at da27cec4, independent technical review and the same bounded CI evidence. No application, historical Product acceptance or approved behavior change.",
+  "reason": "Confirmed CI integration failures require bounded13/15 native capability qualification and the exact shared test corrections. Existing algorithms, wire shape, work/replay limits and exact installed-version guards remain unchanged. Independent source/security review and actual Windows13 tests pass; Linux15, final reviews and native closure remain mandatory. No production profile or activation is selected.",
   "authority_refs": [
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
   ],
@@ -19,19 +19,26 @@
     "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
     "governance/evidence/P2-008-RV001-VALIDATION.json",
     "governance/reviews/REV-P2-008-RV001-full-stack-engineer.yaml",
-    "governance/reviews/REV-P2-008-RV001-tester-qa-engineer.yaml"
+    "governance/reviews/REV-P2-008-RV001-tester-qa-engineer.yaml",
+    "src/Modules/Identity/TotpContracts.cs",
+    "tests/Shared/NativeTotpCodeFixture.cs",
+    "tests/Tunner.Identity.Persistence.Tests/TotpTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/TotpReplayTests.cs",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-security-source-review.json"
   ],
   "impact_classification": "NON_BLOCKING",
   "blocked_scope": [],
   "acceptance_criteria": [
-    "The exact shared test correction retains all existing domain assertions and checks all current routes/form parents; preserve historical closure with committed test-only source lineage."
+    "The exact shared test correction retains all existing domain assertions and checks all current routes/form parents; preserve historical closure with committed test-only source lineage.",
+    "Require official upstream comparison, independent security review, unchanged exact installed-version guards, wrong-version negatives and actual affected Windows13/Linux15 tests with direct Identity assembly-version measurement before native15 qualification or closure. No production selection."
   ],
   "prerequisites": [],
   "work_items": [],
   "required_gates": [],
   "required_roles": [
     "full-stack-engineer",
-    "tester-qa-engineer"
+    "tester-qa-engineer",
+    "cyber-security-engineer"
   ],
   "evidence_refs": [
     "governance/evidence/P2-008-RV001-VALIDATION.json"

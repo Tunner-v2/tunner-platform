@@ -5,10 +5,10 @@
   "original_scope_id": "TUN-P2-009",
   "parent_revision_id": "P2-009-RV014",
   "parent_milestone_revision_id": null,
-  "title": "Correct shared route and form contract coverage",
+  "title": "Qualify bounded native runtime and confirmed CI integration corrections",
   "revision_type": "CORRECTIVE",
   "status": "ACTIVE",
-  "reason": "Confirmed current GitHub CI failures require the bounded test-only repair implemented in eligible P1-RV001-001. Preserve historical feature closure and all application behavior; record current committed focused qualification and independent review. Do not waive container vulnerabilities or private runtime obligations.",
+  "reason": "Confirmed CI integration failures require bounded13/15 native capability qualification and the exact shared test corrections. Existing algorithms, wire shape, work/replay limits and exact installed-version guards remain unchanged. Independent source/security review and actual Windows13 tests pass; Linux15, final reviews and native closure remain mandatory. No production profile or activation is selected.",
   "authority_refs": [
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
   ],
@@ -54,19 +54,33 @@
     "governance/work-items/TUN-P2-013.yaml",
     "governance/evidence/TUN-P2-013-VALIDATION.json",
     "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-contracts-da27cec4.tap",
-    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-session-listing-da27cec4.trx"
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-session-listing-da27cec4.trx",
+    "governance/revisions/P2-010-RV016.yaml",
+    "governance/evidence/P2-010-RV016-VALIDATION.json",
+    "web/tests/authentication/federation.spec.ts",
+    "web/apps/user/federation.sign-in.tsx",
+    "governance/work-items/TUN-P2-010.yaml",
+    "governance/evidence/TUN-P2-010-VALIDATION.json",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-federation-sequencing-0e771a95.json",
+    "governance/reviews/REV-P2-010-RV016-full-stack-engineer.yaml",
+    "governance/reviews/REV-P2-010-RV016-tester-qa-engineer.yaml",
+    "src/Modules/Identity/RecoveryCodeContracts.cs",
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-security-source-review.json"
   ],
   "impact_classification": "NON_BLOCKING",
   "blocked_scope": [],
   "acceptance_criteria": [
-    "The exact affected test file passes its relevant committed-source tests without removing assertions or weakening qualified native-profile guards; original feature and release boundaries remain intact."
+    "The exact affected test file passes its relevant committed-source tests without removing assertions or weakening qualified native-profile guards; original feature and release boundaries remain intact.",
+    "Require official upstream comparison, independent security review, unchanged exact installed-version guards, wrong-version negatives and actual affected Windows13/Linux15 tests with direct Identity assembly-version measurement before native15 qualification or closure. No production selection."
   ],
   "prerequisites": [],
   "work_items": [],
   "required_gates": [],
   "required_roles": [
     "full-stack-engineer",
-    "tester-qa-engineer"
+    "tester-qa-engineer",
+    "cyber-security-engineer"
   ],
   "evidence_refs": [
     "governance/evidence/P2-009-RV015-VALIDATION.json"
