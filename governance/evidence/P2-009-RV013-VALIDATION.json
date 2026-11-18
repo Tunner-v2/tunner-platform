@@ -10,7 +10,9 @@
     "tests/Tunner.Identity.Persistence.Tests/RecoveryCodePrivateIntegrationTests.cs",
     "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs"
   ],
-  "phase": "SOURCE_QUALIFIED_NATIVE_CLOSURE_PENDING",
+  "phase": "NATIVE_SOURCE_COMPATIBILITY_CLOSURE_PASS",
+  "closure_gate_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/P2-009-RV013-close.json",
+  "closure_gate_evaluated_sha": "ff5d70d257c716fb71ad85492e0b3f186838f834",
   "scope": "Narrow retained-source compatibility only; no repair or runtime acceptance of the separate private HTTPS HOST failure.",
   "prepared_at_commit_sha": "de545f7ca0ef8222ea8735087911758ce98d2398",
   "source_qualification": {
@@ -49,9 +51,10 @@
     "governance/reviews/REV-P2-009-RV013-auditor.yaml"
   ],
   "shared_context_selection": "P2-009-RV013",
-  "context_ref": "artifacts/p2-019-content-20261116/context-retained-source-compatibility/manifest.json",
-  "context_status": "ACTUALLY_VERIFIED_CURRENT_AT_ACTIVE_BEFORE_METADATA_ONLY_CLOSURE",
-  "context_verification": {"selected_scope":"P2-009-RV013","source_commit_sha":"852bdaa118fd12c31590771cd505267bbedae06d","outcome":"CURRENT","findings":[],"included":102,"roles":5,"scope_bound_reviews":10,"owner_revisions":2,"manifest_sha256":"9f9b0ea603205935718282d8282add8806f9da31416646b77b8ada2d78ce9728","receipt_ref":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/context-verify.json","boundary":"Actual verification before metadata-only validation and closure; not a post-metadata freshness or current private runtime claim."},
+  "context_ref": "artifacts/p2-019-content-20261116/context-retained-source-corrected/manifest.json",
+  "context_status": "ACTUALLY_VERIFIED_CURRENT_AT_VALIDATION_BEFORE_METADATA_ONLY_CLOSURE",
+  "context_verification_before_json_correction": {"selected_scope":"P2-009-RV013","source_commit_sha":"852bdaa118fd12c31590771cd505267bbedae06d","outcome":"CURRENT","findings":[],"included":102,"roles":5,"scope_bound_reviews":10,"owner_revisions":2,"manifest_sha256":"9f9b0ea603205935718282d8282add8806f9da31416646b77b8ada2d78ce9728","receipt_ref":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/context-verify.json","boundary":"Actual verification before metadata-only validation and closure; not a post-metadata freshness or current private runtime claim."},
+  "context_verification": {"selected_scope":"P2-009-RV013","source_commit_sha":"e326f212f3702862cdc419c705418e9156bdb8f7","outcome":"CURRENT","findings":[],"included":102,"roles":5,"scope_bound_reviews":10,"owner_revisions":2,"owned_paths":14,"manifest_sha256":"440ccfbb4cab0b8b91312232f8278e3c9f32f2f3f2e7056d5d6515cf92d12904","receipt_ref":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/corrected-context-verify.json","boundary":"Actual corrected context verification before final metadata-only closure. Earlier context and initial JSON-related NOT_READY are retained; no private-runtime or global acceptance claimed."},
   "runtime_tracking_context": {
     "defect_ref": "governance/defects/DEF-TUN-P2-009-HTTPS-HOST-001.yaml",
     "status": "IN_PROGRESS_UNFULFILLED",
