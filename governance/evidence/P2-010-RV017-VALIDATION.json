@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-010-RV017",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "docs/contracts/ui-inventory.json"
+  ],
+  "scope": "Metadata-only compatibility for two amended Recovery rows and two additions. All ten Federation rows, all non-P011 rows and root metadata unchanged.",
+  "qualification": "Pending committed-carrier comparison. Actual native scoped10/global125 PASS at f3d9c86a is reused; actual UI source carrier remains f77f4853. No runtime rerun or new application behavior.",
+  "source_sha256": "8b62097d5505a8f9171ddd72f562aa9a0ef1fc36b76de76a4b0184caa0fbd255",
+  "source_sha256_path": "docs/contracts/ui-inventory.json",
+  "source_hashes": {
+    "docs/contracts/ui-inventory.json": "8b62097d5505a8f9171ddd72f562aa9a0ef1fc36b76de76a4b0184caa0fbd255"
+  },
+  "evidence_refs": [
+    "governance/evidence/p2-019-content-20261116/native-recovery-46041e95/native-gates-f3d9c86a.json"
+  ],
+  "acceptance_classification": {
+    "product_acceptance_required": false,
+    "reason": "Technical inventory compatibility only; preserves all existing Product decisions and closed runtime proofs."
+  },
+  "review_refs": [
+    "governance/reviews/REV-P2-010-RV017-governance-engineer.yaml",
+    "governance/reviews/REV-P2-010-RV017-tester-qa-engineer.yaml",
+    "governance/reviews/REV-P2-010-RV017-auditor.yaml"
+  ]
+}
