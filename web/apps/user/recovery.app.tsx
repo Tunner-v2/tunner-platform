@@ -1,7 +1,7 @@
 import {createRoot} from 'react-dom/client';
 import {useEffect,useRef,useState} from 'react';
 import {ContentUnavailable,navigatePath,useRouteLocation} from '@tunner/ui';
-import {RecoveryPresentation} from './recovery';
+import {RecoveryPresentation,recoveryContactSchema} from './recovery';
 import type {RecoveryEntry,RecoveryPasswordEntry,RecoveryViewModel} from './recovery';
 import {loadRecoveryOptions,parseRecoveryOperation,prepareRecoveryContact,recoveryCommand,repairRecoveryPassword,RecoveryHttpError} from './recovery.api';
 import type {RecoveryBootstrap,RecoveryOperation,RecoveryOptions,RecoveryOriginal,RecoveryProof} from './recovery.api';
@@ -24,7 +24,7 @@ function view(options:RecoveryOptions,operation:RecoveryOperation|undefined,held
  if(!operation)return {kind:'entry',goals:options.goals,canStart:false,canBackToSignIn:true};
  if(operation.status==='AWAITING_PROOF'){
   if(selection?.stage==='password')return {...common,kind:'password-repair',canRepair:operation.canSubmitRepair,passwordMinimumLength:options.repair.passwordMinimumLength,passwordMaximumLength:options.repair.passwordMaximumLength,canBackToSignIn:true};
-  if(selection?.stage==='code')return {...common,kind:'recovery-code',canVerify:operation.canSubmitRepair,purpose:selection.kind==='contact'?'contact':'recovery',submitLabelKey:'recovery.action.continue'};
+  if(selection?.stage==='code')return {...common,kind:'recovery-code',canVerify:operation.canSubmitRepair,purpose:selection.kind==='contact'?'contact':'recovery',...(selection.kind==='contact'&&options.contact?{proofDigits:options.contact.proofDigits}:{}),submitLabelKey:'recovery.action.continue'};
   return {...common,kind:'proof-choice',choices:(['code','passkey','contact'] as const).filter(kind=>available(options,kind)).map(kind=>({reference:kind,labelKey:'recovery.proof.'+kind+'.label',descriptionKey:'recovery.proof.'+kind+'.description',canSelect:operation.canSubmitRepair}))};
  }
  if(operation.status==='CANCELLED')return {...common,kind:'cancelled',canBackToSignIn:true};
@@ -122,6 +122,7 @@ function RecoveryApp(){
  function submitCode(code:string){
   const selection=selected.current;
   if(flight.current||!selection||selection.stage!=='code'||!code||!options||!operation||!matchesSelection(selection,options,operation))return;
+  if(selection.kind==='contact'&&(!options.contact||!recoveryContactSchema(options.contact.proofDigits).safeParse({recoveryCode:code}).success))return;
   selection.code=code;selection.stage='password';setError(undefined);navigatePath(recoveryRoutes.repair.pathname);
  }
  async function repair(entry:RecoveryPasswordEntry){

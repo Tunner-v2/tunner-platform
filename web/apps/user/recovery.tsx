@@ -17,7 +17,7 @@ interface RecoveryCaseView {goal:RecoveryGoalOption|null;canCheck:boolean;canCan
 export type RecoveryViewModel=
  | {kind:'entry';goals:readonly RecoveryGoalOption[];canStart:boolean;canBackToSignIn:boolean}
  | (RecoveryCaseView&{kind:'proof-choice';choices:readonly RecoveryProofChoice[]})
- | (RecoveryCaseView&{kind:'recovery-code';canVerify:boolean;submitLabelKey?:string;purpose?:'recovery'|'contact'})
+ | (RecoveryCaseView&{kind:'recovery-code';canVerify:boolean;submitLabelKey?:string;purpose?:'recovery'|'contact';proofDigits?:number})
  | (RecoveryCaseView&{kind:'password-repair';canRepair:boolean;passwordMinimumLength:number;passwordMaximumLength:number;canBackToSignIn:boolean})
  | (RecoveryCaseView&{kind:'password-repair-status';state:'pending'|'unknown'|'updated';canViewResult:boolean;canBackToSignIn:boolean})
  | (RecoveryCaseView&{kind:'expired'})
@@ -41,6 +41,14 @@ function optionKeys(option:RecoveryGoalOption){return [option.labelKey,...(optio
 function uniqueReferences(values:readonly {reference:string}[]){return values.every(value=>value.reference.trim().length>0)&&new Set(values.map(value=>value.reference)).size===values.length;}
 function validPasswordBounds(minimum:number,maximum:number){return Number.isSafeInteger(minimum)&&Number.isSafeInteger(maximum)&&minimum>0&&maximum>=minimum;}
 
+function validContactDigits(proofDigits:number|undefined){return Number.isInteger(proofDigits)&&proofDigits!>=6&&proofDigits!<=9;}
+
+/** Mirrors the current contact owner format only; codes remain opaque strings with leading zeros. */
+export function recoveryContactSchema(proofDigits:number){
+ if(!validContactDigits(proofDigits))throw new Error('Missing recovery contact requirements');
+ return z.object({recoveryCode:z.string().min(1,'recovery.contact.error').refine(value=>value.length===proofDigits&&/^[0-9]+$/.test(value),'recovery.contact.format')});
+}
+
 /** Advisory recovery validation; requirements come from the original request, independently checked by the server. */
 export function recoveryPasswordSchema(minimum:number,maximum:number){
  if(!validPasswordBounds(minimum,maximum))throw new Error('Missing recovery password requirements');
@@ -61,7 +69,7 @@ export function recoveryPresentationKeys(model:RecoveryViewModel):string[]{
    for(const choice of model.choices)keys.push(...optionKeys(choice));
   }else if(model.kind==='recovery-code'){
    const scope=model.purpose==='contact'?'recovery.contact.':'recovery.code.';
-   keys.push(...['heading','description','label','show','hide'].map(key=>scope+key),model.submitLabelKey??'recovery.code.verify',model.purpose==='contact'?'recovery.contact.error':'recovery.error.code','recovery.error.highlighted');
+   keys.push(...['heading','description','label','show','hide'].map(key=>scope+key),model.submitLabelKey??'recovery.code.verify',model.purpose==='contact'?'recovery.contact.error':'recovery.error.code',...(model.purpose==='contact'?['recovery.contact.format']:[]),'recovery.error.highlighted');
   }
   else if(model.kind==='password-repair')keys.push(...['heading','description','password','confirmation','requirements','submit','boundary'].map(key=>'recovery.repair.'+key),'recovery.action.back',...['passwordRequired','passwordLength','passwordConfirmationRequired','passwordConfirmation','highlighted'].map(key=>'recovery.error.'+key));
   else if(model.kind==='password-repair-status')keys.push(...['heading','description','noticeHeading','noticeDescription'].map(key=>'recovery.repair.'+model.state+'.'+key),...(model.state==='pending'?['recovery.repair.submit']:model.state==='unknown'?['recovery.action.back']:['recovery.repair.updated.boundary','recovery.repair.updated.viewResult']));
@@ -80,6 +88,7 @@ export function RecoveryPresentation(props:RecoveryPresentationProps){
   if(!props.viewKey.trim())throw new Error('Missing recovery view identity');
   if(props.model.kind==='entry'&&!uniqueReferences(props.model.goals)||props.model.kind==='proof-choice'&&!uniqueReferences(props.model.choices))throw new Error('Invalid offered references');
   if(props.model.kind==='result'&&(props.model.effects&&!uniqueReferences(props.model.effects)||props.model.followUps&&!uniqueReferences(props.model.followUps)))throw new Error('Invalid result references');
+  if(props.model.kind==='recovery-code'&&props.model.purpose==='contact'&&!validContactDigits(props.model.proofDigits))throw new Error('Recovery contact is unavailable');
   if(props.model.kind==='password-repair'&&(!validPasswordBounds(props.model.passwordMinimumLength,props.model.passwordMaximumLength)||typeof props.callbacks.onRepair!=='function'))throw new Error('Recovery repair is unavailable');
   if(props.model.kind==='password-repair-status'&&props.model.state==='updated'&&props.model.canViewResult===true&&typeof props.callbacks.onViewResult!=='function')throw new Error('Recovery result handoff is unavailable');
   requirePublished(props.content,props.locale,[...recoveryPresentationKeys(props.model),...(props.errorKey?[props.errorKey]:[]),...Object.values(props.fieldErrors??{}).filter((key):key is string=>!!key)]);
@@ -126,7 +135,7 @@ function RecoveryBody(props:RecoveryPresentationProps){
    {model.kind!=='entry'&&<GoalContext goal={model.goal}/>}
    {model.kind==='entry'?<EntryForm model={model} disabled={disabled} fieldErrors={props.fieldErrors} onEdit={edited} onSubmit={entry=>action.run(()=>callbacks.onStart(entry))}/>:
     model.kind==='proof-choice'?<><div className="step-up-choices">{model.choices.map(choice=><button className="step-up-choice" key={choice.reference} type="button" disabled={disabled||!model.goal||choice.canSelect!==true} onClick={()=>void action.run(()=>callbacks.onChooseProof(choice.reference))}><strong><ContentText contentKey={choice.labelKey}/></strong>{choice.descriptionKey&&<small><ContentText contentKey={choice.descriptionKey}/></small>}<span aria-hidden="true">›</span></button>)}</div><p className="recovery-explanation"><ContentText contentKey={model.choices.length===0?'recovery.entry.optionsUnavailable':'recovery.proof.permitted'}/></p></>:
-    model.kind==='recovery-code'?<CodeForm key={(model.goal?.reference??'unavailable')+':'+(model.purpose??'recovery')} disabled={disabled||model.canVerify!==true||!model.goal} purpose={model.purpose} submitLabelKey={model.submitLabelKey} fieldErrors={props.fieldErrors} onEdit={edited} onSubmit={code=>action.run(()=>callbacks.onSubmitCode(code))}/>:
+    model.kind==='recovery-code'?<CodeForm key={(model.goal?.reference??'unavailable')+':'+(model.purpose??'recovery')+':'+(model.proofDigits??'')} disabled={disabled||model.canVerify!==true||!model.goal} purpose={model.purpose} proofDigits={model.proofDigits} submitLabelKey={model.submitLabelKey} fieldErrors={props.fieldErrors} onEdit={edited} onSubmit={code=>action.run(()=>callbacks.onSubmitCode(code))}/>:
     model.kind==='password-repair'?<><PasswordRepairForm key={(model.goal?.reference??'unavailable')+':'+model.passwordMinimumLength+':'+model.passwordMaximumLength} minimum={model.passwordMinimumLength} maximum={model.passwordMaximumLength} disabled={disabled||model.canRepair!==true||!model.goal} fieldErrors={props.fieldErrors} onEdit={edited} onSubmit={entry=>action.run(()=>callbacks.onRepair!(entry))}/><p className="recovery-explanation"><ContentText contentKey="recovery.repair.boundary"/></p></>:
     model.kind==='password-repair-status'?<><Notice state={'repair.'+model.state}/>{model.state==='updated'&&<p className="recovery-explanation"><ContentText contentKey="recovery.repair.updated.boundary"/></p>}</>:
     model.kind==='expired'?<Notice state="expired" error/>:
@@ -175,10 +184,11 @@ function EntryForm({model,disabled,fieldErrors,onEdit,onSubmit}:{model:Extract<R
  </form>;
 }
 
-function CodeForm({disabled,purpose,submitLabelKey,fieldErrors,onEdit,onSubmit}:{disabled:boolean;purpose:'recovery'|'contact'|undefined;submitLabelKey:string|undefined;fieldErrors:RecoveryFieldErrors|undefined;onEdit:()=>void;onSubmit:(code:string)=>Promise<void>}){
+function CodeForm({disabled,purpose,proofDigits,submitLabelKey,fieldErrors,onEdit,onSubmit}:{disabled:boolean;purpose:'recovery'|'contact'|undefined;proofDigits:number|undefined;submitLabelKey:string|undefined;fieldErrors:RecoveryFieldErrors|undefined;onEdit:()=>void;onSubmit:(code:string)=>Promise<void>}){
  const [code,setCode]=useState(''),[visible,setVisible]=useState(false);const element=useRef<HTMLFormElement>(null);
  const scope=purpose==='contact'?'recovery.contact.':'recovery.code.';
- const form=useTunnerForm(z.object({recoveryCode:z.string().min(1,purpose==='contact'?'recovery.contact.error':'recovery.error.code')}),{recoveryCode:code});
+ const schema=purpose==='contact'?recoveryContactSchema(proofDigits!):z.object({recoveryCode:z.string().min(1,'recovery.error.code')});
+ const form=useTunnerForm(schema,{recoveryCode:code});
  function clearInput(target:HTMLFormElement|null){const input=target?.elements.namedItem('recoveryCode');if(input instanceof HTMLInputElement)input.value='';}
  useEffect(()=>{if(disabled){clearInput(element.current);setCode('');setVisible(false);form.reset();}},[disabled]);
  useEffect(()=>{const current=element.current;const clear=()=>{clearInput(current);setCode('');setVisible(false);form.reset();};window.addEventListener('pagehide',clear);return()=>{clearInput(current);window.removeEventListener('pagehide',clear);};},[]);
