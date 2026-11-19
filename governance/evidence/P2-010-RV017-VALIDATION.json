@@ -2,14 +2,14 @@
   "schema_version": 1,
   "scope_id": "P2-010-RV017",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "5dd4436267dfad2056746d8126981e8c50e73e46",
+  "validated_commit_sha": "5dd4436267dfad2056746d8126981e8c50e73e46",
   "owned_behavior_paths": [
     "docs/contracts/ui-inventory.json"
   ],
   "scope": "Metadata-only compatibility for two amended Recovery rows and two additions. All ten Federation rows, all non-P011 rows and root metadata unchanged.",
-  "qualification": "Pending committed-carrier comparison. Actual native scoped10/global125 PASS at f3d9c86a is reused; actual UI source carrier remains f77f4853. No runtime rerun or new application behavior.",
+  "qualification": "Actual committed-carrier inventory comparison PASS at5dd44362: two amended Recovery rows/two additions,165 unchanged retained rows, all10 Federation rows/root metadata unchanged. Inventory Git blob equals f77/f3d. Actual native scoped10/global125 UI PASS at f3d is reused; no runtime or browser rerun at this metadata carrier. Native APPROVED and ACTIVE checks ALLOWED; context GENERATED and verified CURRENT before activation.",
   "source_sha256": "8b62097d5505a8f9171ddd72f562aa9a0ef1fc36b76de76a4b0184caa0fbd255",
   "source_sha256_path": "docs/contracts/ui-inventory.json",
   "source_hashes": {
@@ -26,5 +26,44 @@
     "governance/reviews/REV-P2-010-RV017-governance-engineer.yaml",
     "governance/reviews/REV-P2-010-RV017-tester-qa-engineer.yaml",
     "governance/reviews/REV-P2-010-RV017-auditor.yaml"
-  ]
+  ],
+  "git_state": {
+    "repository_changed": true,
+    "tested_commit_sha": "5dd4436267dfad2056746d8126981e8c50e73e46",
+    "validated_commit_sha": "5dd4436267dfad2056746d8126981e8c50e73e46",
+    "work_item_commit_shas": [
+      "5dd4436267dfad2056746d8126981e8c50e73e46"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/",
+      "docs/project/",
+      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/",
+      "%SystemDrive%/",
+      ".vscode/",
+      "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode/"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  },
+  "inventory_comparison": {
+    "result": "PASS",
+    "tested_commit_sha": "5dd4436267dfad2056746d8126981e8c50e73e46",
+    "old_count": 167,
+    "new_count": 169,
+    "amended": [
+      "U-AUTH-RECOVERY-VERIFY",
+      "FORM-RECOVERY-CODE"
+    ],
+    "added": [
+      "U-AUTH-RECOVERY-REPAIR",
+      "FORM-RECOVERY-PASSWORD-REPAIR"
+    ],
+    "removed": [],
+    "retained_identical": 165,
+    "federation_identical": 10,
+    "root_metadata_unchanged": true,
+    "inventory_sha256": "8b62097d5505a8f9171ddd72f562aa9a0ef1fc36b76de76a4b0184caa0fbd255",
+    "blob": "1b24617880074b072205f5176a64592e152df1d9"
+  },
+  "context_ref": "artifacts/p2-019-content-20261116/native-recovery-46041e95/rv017-context/manifest.json"
 }
