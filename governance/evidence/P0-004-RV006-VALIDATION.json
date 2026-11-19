@@ -3,6 +3,15 @@
   "scope_id": "P0-004-RV006",
   "validation_kind": "COMMITTED",
   "result": "PENDING",
+  "immutable_history_increment": {
+    "source_commit": "5395961d92b8a87f492f13589d5ec4c7c41d9a2b",
+    "scope": "Propagate existing assessment into historical revision validation. Resolve HEAD freshly per validation and reuse only full-SHA history reads through the existing failure/UTF8 reader. No validation or closure-result caching; all live controls remain.",
+    "build": "PASS, isolated output, no restore, zero warnings/errors,15.79seconds",
+    "focused": "PASS40 closed-revision ownership checks via existing --revision-committed-proof-only, terminal tool session62102; includes six new freshness/tamper/reuse assertions",
+    "full_functional": "PASS via existing full functional entrypoint, terminal tool session82965; no rerun for log collection and no complete raw-stdout claim",
+    "context_qualification": {"result": "UNRESOLVED_TIME_BOUNDARY", "scope": "TUN-P2-019 TASK", "limit_seconds": 300, "duration_ms": 300311, "completed_within_bound": false, "process_exit_code": -1, "stderr_characters": 0, "raw_receipt_ref": "artifacts/p2-011-recovery-20261112/proof-assessment-qualification/execution.json", "boundary": "Wrapper stopped only its owned qualification process/tree at the required deadline. No successful context generation/currentness or end-to-end speedup is inferred."},
+    "next_action": "Escalate remaining real-repository traversal delay under existing retry policy. Do not repeat qualification or expand diagnostic work without user direction. RV006 stays ACTIVE/PENDING; no gate/P0/authority/Product/production/release change."
+  },
   "utf8_git_read_increment": {
     "phase": "REGRESSION_PASS_P016_ADMISSION_ELIGIBLE",
     "cause": "Both actual closed-record comparison hash pairs are reproduced exactly by decoding their UTF-8 Git bytes as CP437. The HEAD blobs and worktree records are structurally identical; the literal U+2013 reason character was misdecoded, not edited. No historical record repair is justified.",
