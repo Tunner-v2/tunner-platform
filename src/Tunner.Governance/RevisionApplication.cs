@@ -161,7 +161,7 @@ public static class RevisionApplication
 
     private static CommandResult CloseCheckCore(DirectoryInfo repository, string id, CommittedProofAssessment assessment)
     {
-        var validation = (ValidationPayload)GovernanceApplication.Validate(repository).Payload;
+        var validation = (ValidationPayload)GovernanceApplication.Validate(repository, assessment).Payload;
         if (!validation.IsValid) return Result("revision close-check", id, "NOT_READY", validation.Diagnostics.Select(x => x.Message));
         var records = GovernanceApplication.LoadRecords(repository, []);
         var revision = Revisions(records).SingleOrDefault(x => x.Identifier == id);
@@ -215,14 +215,15 @@ public static class RevisionApplication
         return Result("revision close-check", id, failures.Count == 0 ? "PASS" : "NOT_READY", failures);
     }
 
-    internal static void AddDiagnostics(DirectoryInfo repository, IReadOnlyList<GovernanceRecord> records, List<Diagnostic> diagnostics)
+    internal static void AddDiagnostics(DirectoryInfo repository, IReadOnlyList<GovernanceRecord> records, List<Diagnostic> diagnostics,
+        CommittedProofAssessment assessment, string? head)
     {
         JsonSchema? revisionSchema = null;
         foreach (var revision in Revisions(records))
         {
             try
             {
-                foreach (var failure in SchemaFailures(repository, revision, ref revisionSchema).Concat(RecordFailures(repository, revision, records)))
+                foreach (var failure in SchemaFailures(repository, revision, ref revisionSchema).Concat(RecordFailures(repository, revision, records, assessment, head)))
                     diagnostics.Add(Diagnostic.Error(revision.Path, revision.Root.Start, "GOV_REVISION_INVALID", failure));
             }
             catch (Exception exception) when (exception is InvalidOperationException or IOException or JsonException)
@@ -317,7 +318,8 @@ public static class RevisionApplication
         return failures;
     }
 
-    private static List<string> RecordFailures(DirectoryInfo repository, GovernanceRecord revision, IReadOnlyList<GovernanceRecord> records)
+    private static List<string> RecordFailures(DirectoryInfo repository, GovernanceRecord revision, IReadOnlyList<GovernanceRecord> records,
+        CommittedProofAssessment? assessment = null, string? head = null)
     {
         var failures = new List<string>();
         var original = ResolveOriginal(records, revision.Scalar("original_scope_id") ?? "");
@@ -356,7 +358,11 @@ public static class RevisionApplication
                 failures.Add($"Revision {time} must be an ISO timestamp");
         if (NullValue(revision.Scalar("created_at")) is null) failures.Add("Revision creation timestamp is required");
         if ((revision.Scalar("status") == "CLOSED") != (NullValue(revision.Scalar("closed_at")) is not null)) failures.Add("closed_at is required exactly when Revision is CLOSED");
-        var old = Parse(Git(repository, "show", "HEAD:" + RepositoryRootResolver.ToLogicalPath(repository, revision.Path)));
+        var logicalPath = RepositoryRootResolver.ToLogicalPath(repository, revision.Path);
+        var old = Parse(assessment is not null && CommittedEvidenceApplication.IsSha(head)
+            ? assessment.ReadImmutableGit(repository, ["show", head + ":" + logicalPath],
+                () => Git(repository, "show", head + ":" + logicalPath))
+            : Git(repository, "show", "HEAD:" + logicalPath));
         if (old is not null)
         {
             var fields = GovernanceApplication.Fields(old);

@@ -30,11 +30,17 @@ public static class GovernanceApplication
     ];
 
     public static CommandResult Validate(DirectoryInfo repository)
+        => Validate(repository, new CommittedProofAssessment(repository));
+
+    internal static CommandResult Validate(DirectoryInfo repository, CommittedProofAssessment assessment)
     {
         var diagnostics = new List<Diagnostic>();
         AddAuthorityDiagnostics(repository, diagnostics);
         var schemas = SchemaCatalog.Load(repository, diagnostics);
         var records = LoadRecords(repository, diagnostics);
+        // Resolve mutable HEAD again for every validation; only explicit historical objects may be reused.
+        var head = records.Any(record => record.Type.DefinitionName == "revision")
+            ? RevisionApplication.Git(repository, "rev-parse", "--verify", "HEAD") : null;
         _ = IntegrationPolicy.Load(repository, diagnostics);
         JsonSchema? gitStateSchema = null;
 
@@ -82,7 +88,7 @@ public static class GovernanceApplication
         }
 
         AddAuthorityResolutionDiagnostics(records, diagnostics);
-        RevisionApplication.AddDiagnostics(repository, records, diagnostics);
+        RevisionApplication.AddDiagnostics(repository, records, diagnostics, assessment, head);
 
         var isValid = diagnostics.All(item => item.Severity != "ERROR");
         return new CommandResult(isValid ? 0 : 1, "validate", new ValidationPayload(isValid, records.Count, diagnostics));
@@ -129,7 +135,7 @@ public static class GovernanceApplication
         // A single assessment reuses identical prerequisite proof; new commands always start fresh.
         var committedReadiness = new Dictionary<(string PrerequisiteId, string EffectiveState), bool>();
         var assessment = new CommittedProofAssessment(repository);
-        var validation = (ValidationPayload)Validate(repository).Payload;
+        var validation = (ValidationPayload)Validate(repository, assessment).Payload;
         diagnostics.AddRange(validation.Diagnostics);
 
         var authority = AuthorityApplication.Verify(repository);

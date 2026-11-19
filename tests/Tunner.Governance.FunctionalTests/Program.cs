@@ -1112,6 +1112,56 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
         }
         finally { File.WriteAllBytes(schemaPath, schemaBytes); }
         Check(((ValidationPayload)GovernanceApplication.Validate(fixture).Payload).IsValid, "restoring exact schema and record bytes restores valid evaluation");
+        var validationAssessment = new CommittedProofAssessment(fixture);
+        var initialValidation = GovernanceApplication.Validate(fixture, validationAssessment);
+        var validationComputations = validationAssessment.ImmutableGitComputations;
+        var repeatedValidation = GovernanceApplication.Validate(fixture, validationAssessment);
+        Check(initialValidation.ExitCode == 0 && validationComputations > 0 &&
+            validationAssessment.ImmutableGitComputations == validationComputations &&
+            GovernanceApplication.Serialize(repeatedValidation) == GovernanceApplication.Serialize(initialValidation) &&
+            GovernanceApplication.Serialize(repeatedValidation) == GovernanceApplication.Serialize(GovernanceApplication.Validate(fixture)),
+            "same assessment reuses committed history objects with identical repeated and fresh validation output");
+        try
+        {
+            EditRevision(secondRevisionPath, "reason", "Changed live history after cached validation");
+            var validation = (ValidationPayload)GovernanceApplication.Validate(fixture, validationAssessment).Payload;
+            Check(!validation.IsValid && validation.Diagnostics.Any(x => x.File == secondRevisionPath &&
+                x.Message == "closed Revision history is immutable; later work requires a new Revision"),
+                "same assessment compares cached committed history against changed live Revision bytes");
+        }
+        finally { File.WriteAllBytes(secondRevisionPath, secondRevisionBytes); }
+        try
+        {
+            File.Delete(secondRevisionPath);
+            var validation = (ValidationPayload)GovernanceApplication.Validate(fixture, validationAssessment).Payload;
+            Check(!validation.IsValid && validation.Diagnostics.Any(x => x.Code == "GOV_REVISION_HISTORY_DELETED"),
+                "same assessment still rejects a deleted tracked Revision after committed history was cached");
+        }
+        finally { File.WriteAllBytes(secondRevisionPath, secondRevisionBytes); }
+        try
+        {
+            var library = JsonNode.Parse(File.ReadAllText(schemaPath))!;
+            library["$defs"]!["gitState"]!["properties"]!["repository_changed"]!["type"] = "string";
+            File.WriteAllText(schemaPath, library.ToJsonString());
+            var validation = (ValidationPayload)GovernanceApplication.Validate(fixture, validationAssessment).Payload;
+            Check(!validation.IsValid && validation.Diagnostics.Any(x => x.Code == "GOV_GIT_STATE_SCHEMA"),
+                "same assessment rereads edited schema bytes rather than reusing validation acceptance");
+        }
+        finally { File.WriteAllBytes(schemaPath, schemaBytes); }
+        var priorHead = RunGitOutput(fixture, "rev-parse", "HEAD");
+        const string headAdvancePath = "docs/validation-head-advance.txt";
+        File.WriteAllText(Path.Combine(fixture.FullName, headAdvancePath), "Unrelated fixture commit; closed history is unchanged.");
+        RunGit(fixture, "add", "--", headAdvancePath);
+        RunGit(fixture, "commit", "--quiet", "-m", "Advance immutable history baseline fixture");
+        var beforeHeadAdvance = validationAssessment.ImmutableGitComputations;
+        var advancedValidation = GovernanceApplication.Validate(fixture, validationAssessment);
+        Check(advancedValidation.ExitCode == 0 && priorHead != RunGitOutput(fixture, "rev-parse", "HEAD") &&
+            validationAssessment.ImmutableGitComputations > beforeHeadAdvance,
+            "same assessment resolves advanced HEAD and reads its distinct committed history objects");
+        var advancedComputations = validationAssessment.ImmutableGitComputations;
+        Check(GovernanceApplication.Serialize(GovernanceApplication.Validate(fixture, validationAssessment)) ==
+            GovernanceApplication.Serialize(advancedValidation) && validationAssessment.ImmutableGitComputations == advancedComputations,
+            "unchanged advanced HEAD reuses immutable objects while validation runs again");
         var assessment = new CommittedProofAssessment(fixture);
         var originalRecord = GovernanceApplication.LoadRecords(fixture, []).Single(record => record.Identifier == originalId);
         Check(CommitReadinessApplication.Check(fixture, originalRecord, null, assessment).Count == 0,
