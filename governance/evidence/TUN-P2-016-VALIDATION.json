@@ -2,11 +2,12 @@
   "schema_version": 1,
   "scope_id": "TUN-P2-016",
   "result": "PASS",
-  "phase": "ENGINEERING_READY_PRODUCT_ACCEPTANCE_PENDING",
+  "phase": "DONE_SCOPED_FOUNDATION_PREPRODUCTION_GATES_SEPARATE",
   "lifecycle_progress": {
-    "current_state": "PRODUCT_ACCEPTANCE",
-    "product_acceptance": "PENDING_USER_REPLY",
-    "basis": "Actual readiness at cce334fe is READY with no failures and all six required technical reviews accepted. Native VALIDATION to PRODUCT_ACCEPTANCE check is ALLOWED. This records no Product consent or DONE.",
+    "current_state": "DONE",
+    "product_acceptance": "ACCEPTED_BY_AUTHORIZED_PRODUCT_OWNER",
+    "product_acceptance_ref": "governance/evidence/TUN-P2-016-PRODUCT-ACCEPTANCE.json",
+    "basis": "Explicit scoped Product acceptance call006b01b88758422b9721729cb25076cb; actual nativeREADY0b822041 and actual PRODUCT_ACCEPTANCE-to-DONE ALLOWED at08d2e456. All31owned behavior paths retain qualified carrier288. Metadata-only closure preserves original78/smoke/fixture run identities and every separate held/production/merge/release boundary.",
     "transition_ref": "governance/evidence/p2-016-notifications-20261115/native-gates/product-acceptance-transition-cce334fe.json"
   },
   "native_readiness": {
@@ -92,7 +93,9 @@
   ],
   "raw_evidence": "governance/evidence/p2-016-notifications-20261115/native/<run_id>/{launch.json,summary.json,product-authorization.trx}",
   "environment": "Existing qualified native runner reused without duplication. Actual PostgreSQL, exact cached fixture image, owned resources removed and borrowed browser resources preserved on every recorded run. No image changes, production configuration or provider delivery claim.",
-  "remaining": [
+  "remaining": [],
+  "remaining_external_obligations": ["Production notification/content/policy/provider inputs and activation remain separately governed.","Held143, private Recovery HOST, LGTM and full-P2 qualification remain separate.","Protected-main integration and release require their applicable approvals."],
+  "pre_acceptance_remaining": [
     "Obtain scoped Product acceptance before DONE",
     "Refresh final bounded context and pass native closure check after acceptance",
     "Integrate through protected-main review; production activation and release remain separately authorized"
@@ -116,7 +119,7 @@
     "full_tree_equals_carrier": "0f4a8b85e141bb3d6a53c181a71f8ba8d6fb5aab",
     "qualification_ref": "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
     "independent_review": "Existing independent source/QA reviewer verified exact current raw hashes/case identities and all31owned objects/filtered working files. Original78integrated run, smoke, prior carriers and role assessments remain historical evidence.",
-    "boundary": "Minimal active-work-item source binding with actual nativeREADY at0b822041. Product acceptance remains pending; no held143execution, image waiver, production activation, merge or release."
+    "boundary": "Qualified source binding with actual nativeREADY0b822041 and separately recorded scoped Product acceptance. No held143execution, image waiver, production activation, merge or release."
   },
   "prior_source_currentness_reconciliation": {
     "carrier_commit_sha": "06b20de2b2b0303a1213259c877b990169b9e380",
