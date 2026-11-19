@@ -9,6 +9,7 @@
   "actual_tested_commit_sha": "8f0f82e6db86d3dcb087252fbf62c7dbcafa20cc",
   "qualified_git_tree": "4d0c8f740c8ed6717c4ee49c474648919fdbfdeb",
   "native_gates": {
+    "closure_transition": {"outcome": "ALLOWED", "findings": [], "checked_head": "1625f65e", "scope": "Actual check includes corrected full-SHA revision lineage in the worktree; final commit contains that same correction and closure metadata. Four tested source files remain unchanged."},
     "validation_transition": {"outcome": "ALLOWED", "findings": [], "checked_head": "181f01d3"},
     "schema": {"is_valid": true, "records": 1834, "diagnostics": [], "checked_head": "181f01d3"}
   },
@@ -64,5 +65,6 @@
     "governance/evidence/p2-008-replay-clock-20261119/ci-result.json"
   ],
   "qualification": "Test-input correction PASS: build and one pure fixture-input regression pass locally on10.0.13. Required Linux CI44529594557 passes1913 platform/installer tests, including1418 Identity, the exact previously failing case, all replay-class cases and captured fixture regression with measured10.0.15. Baseline and Web jobs pass; whole workflow remains FAILED on the separate container gate. Actual executed sources and original failing result are retained. No held local143 qualification or parentRV001 promotion.",
-  "boundaries": "No production verifier/policy/runtime admission/security change. Keep P2-008-RV001, P2-009-RV015 and P2-013-RV007 held; no local143, helper/image inspection or remediation, Product/merge/production/release approval."
+  "boundaries": "No production verifier/policy/runtime admission/security change. Keep P2-008-RV001, P2-009-RV015 and P2-013-RV007 held; no local143, helper/image inspection or remediation, Product/merge/production/release approval.",
+  "next_action": "Publish this technical correction on existing draftPR22 without merge/auto-merge/release. Continue P2-011 owner slice only after the user publishes FRD17/catalog32 and actual source/control references from existing governed admission proposal; do not repeat direction approval or weaken held qualifications/container gate."
 }
