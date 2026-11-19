@@ -22,11 +22,13 @@
   ],
   "evidence_refs": [
     "governance/evidence/P2-008-RV002-CI-FAILURE.json",
-    "governance/evidence/P2-008-RV002-VALIDATION.json"
+    "governance/evidence/P2-008-RV002-VALIDATION.json",
+    "governance/evidence/p2-008-replay-clock-20261119/ci-result.json",
+    "governance/evidence/p2-008-replay-clock-20261119/fixture-boundary.trx"
   ],
   "findings": [
     "Root implementation/source assessment: four test-only paths; production/native/policy/version/clock/transaction behavior unchanged. Default fixture overload still samples current UTC; new overload permits exact captured-counter inputs. Enrollment optional factory preserves existing callers. Original replay, activation, five-claim and retention expectations remain. Pure boundary regression checks compensation across a fixed30-second boundary.",
-    "Source review only; no execution PASS is implied. Required tests remain in pending primary evidence."
+    "Final root evidence assessment: committed8d build and local pure1/1PASS; actual Linux checkout8f0f82e6 log and GitAPI establish exact tree equality4d0c8f74 with8d. All1913 platform/installer tests pass, including1418 Identity and exact corrected case. Four source blobs remain unchanged. Baseline/Web SUCCESS; entire workflow FAILURE on separate container gate. No held qualification or Product/release claim."
   ],
   "required_actions": [],
   "context_expansion_requested": false,

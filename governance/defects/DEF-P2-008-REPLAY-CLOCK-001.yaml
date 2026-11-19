@@ -4,7 +4,7 @@
   "work_item_id": "TUN-P2-008",
   "classification": "TEST_DEFECT",
   "severity": "SEV-3",
-  "status": "OPEN",
+  "status": "RESOLVED",
   "environment": "LINUX_REQUIRED_CI",
   "description": "NativeFullWindowBoundedHistory samples UTC independently for activation, replay and plus/minus2 edges. Across a30-second boundary the supposed new minus2 code can equal an already accepted minus1 token; activation replay can also recompute a different token. CI44521433656 failed CODE_REPLAYED at the edge assertion. Original case start/end straddle12:26; individual token sample instants were not logged. No production replay defect demonstrated.",
   "expected_behavior_ref": "governance/revisions/P2-008-RV002.yaml",
