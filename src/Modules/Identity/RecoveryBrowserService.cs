@@ -70,7 +70,8 @@ public sealed class RecoveryBrowserService
                 new(true, policy.Values.PasswordMinimumLength, policy.Values.PasswordMaximumLength, policy.Values.SessionEffect.ToString(), publication.EffectLabelKey, publication.EffectValueKey), operation,
                 policy.Values.PasskeyRecoveryProfile is null ? null : application.PasswordPasskeyCapability(origin, clock.GetUtcNow()),
                 policy.Values.ContactRecoveryProfile is { } contact ? new ContactCapability(application.ContactAvailable(origin, clock.GetUtcNow()), contact.ProofDigits) : null,
-                policy.Values.GovernedRecoveryProfile is null ? null : new GovernedCapability(application.GovernedAvailable(origin, clock.GetUtcNow()))));
+                policy.Values.GovernedRecoveryProfile is null ? null : new GovernedCapability(application.GovernedAvailable(origin, clock.GetUtcNow())),
+                new CodeCapability(application.PasswordCodeAvailable)));
         }
         catch (RecoveryBrowserContextException) { return Problem(403, "BROWSER_CONTEXT_REQUIRED"); }
         catch (InvalidOperationException) { return Problem(503, "RECOVERY_UNAVAILABLE"); }
@@ -225,7 +226,8 @@ public sealed class RecoveryBrowserService
         [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] OperationView? Operation,
         [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] RecoveryPasskeyCapability? Passkey,
         [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] ContactCapability? Contact,
-        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] GovernedCapability? GovernedReview);
+        [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] GovernedCapability? GovernedReview, CodeCapability Code);
+    private sealed record CodeCapability(bool Available);
     private sealed record GovernedCapability(bool Available);
     private sealed record ContactCapability(bool Available, int ProofDigits);
     private sealed record PasskeyOptionsView(Guid RequestId, Guid CeremonyId, JsonElement PublicKey, DateTimeOffset ExpiresAt);

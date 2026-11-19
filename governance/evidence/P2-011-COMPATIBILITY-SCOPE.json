@@ -27,7 +27,14 @@
     "P2-004-UI001-RV006",
     "P2-004-UI002-RV006"
   ],
+  "v04_shared_control_extension": {
+    "revision_ref": "P1-018-RV009",
+    "source_path": "web/packages/ui/src/controls.tsx",
+    "scope": "Optional TextField helpValues forwards bounded variables to the existing ContentText help slot. Existing callers omit the property and retain identical label/help/error markup and behavior. No validator, domain policy, theme, session or permission changes.",
+    "validation_scope": "Current shared contract tests and V04 help/error association, Unicode requirements and browser focus checks; original closed source/test identities remain retained."
+  },
   "shared_paths": [
+    "web/packages/ui/src/controls.tsx",
     "src/Modules/Identity/IdentityPersistenceDbContext.cs",
     "src/Modules/Identity/IdentityModelConfiguration.cs",
     "src/Modules/Identity/PasskeyRows.cs",

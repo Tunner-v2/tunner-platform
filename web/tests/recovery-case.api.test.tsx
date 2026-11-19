@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {parseRecoveryOperation,parseRecoveryOptions,recoveryCommand,RecoveryHttpError} from '../apps/user/recovery.api';
+import {parseRecoveryOperation,parseRecoveryOptions,prepareRecoveryContact,recoveryCommand,repairRecoveryPassword,RecoveryHttpError} from '../apps/user/recovery.api';
 
 const requestId='12121212-3434-4567-8989-121212121212',otherId='23232323-4545-4678-8989-232323232323';
 const original={requestId,goalReference:'fixture-goal',version:1};
@@ -41,4 +41,40 @@ test('Unadvertised recovery stops before mutation; a different returned original
 test('A generic proof rejection retains neither backend problem details nor an account-existence outcome',async()=>{
  const previous=globalThis.fetch;globalThis.fetch=async input=>String(input)==='/authentication/options'?Response.json(context):Response.json({error_code:'RECOVERY_PROOF_REJECTED',private_fixture_detail:'not-for-client-state'},{status:400});
  try{await assert.rejects(recoveryCommand('result',original,new AbortController().signal),(error:unknown)=>error instanceof RecoveryHttpError&&error.kind==='unknown'&&!JSON.stringify(error).includes('not-for-client-state')&&!('details' in error));}finally{globalThis.fetch=previous;}
+});
+
+test('Unavailable passkey omits its maximum without disabling advertised code/contact recovery',()=>{
+ const parsed=parseRecoveryOptions({...options(),code:{available:true},passkey:{available:false},contact:{available:true,proofDigits:6}});
+ assert.equal(parsed.code?.available,true);assert.equal(parsed.passkey?.maximumCredentialJsonBytes,undefined);assert.equal(parsed.contact?.proofDigits,6);
+ assert.equal(parseRecoveryOptions(options()).code,undefined);
+});
+
+test('Code and contact repair submit exact atomic commands with current CSRF and native version',async()=>{
+ const previous=globalThis.fetch,requests:{path:string;body:unknown;csrf:string|null}[]=[];let reads=0;
+ globalThis.fetch=async(input,init)=>{const path=String(input);if(path==='/authentication/options')return Response.json({...context,csrfToken:'fresh-'+(++reads)});requests.push({path,body:JSON.parse(String(init?.body)),csrf:new Headers(init?.headers).get('X-Tunner-CSRF')});return Response.json({operation:{...operation(),status:'PASSWORD_REPAIRED_NO_SESSION',version:2,canCancel:false,canSubmitRepair:false,result}});};
+ const entry={password:'Synthetic password',passwordConfirmation:'Synthetic password'},parsed=parseRecoveryOptions({...options(),code:{available:true},contact:{available:true,proofDigits:6}}),signal=new AbortController().signal;
+ try{
+  assert.equal((await repairRecoveryPassword(original,{kind:'code',code:'synthetic-code'},entry,parsed,signal)).authenticated,false);
+  await repairRecoveryPassword(original,{kind:'contact',challengeId:otherId,code:'123456'},entry,parsed,signal);
+  assert.deepEqual(requests,[{path:'/recovery/repair',body:{requestId,expectedVersion:1,...entry,code:'synthetic-code'},csrf:'fresh-1'},{path:'/recovery/contact/repair',body:{requestId,expectedVersion:1,...entry,challengeId:otherId,code:'123456'},csrf:'fresh-2'}]);
+ }finally{globalThis.fetch=previous;}
+});
+
+test('Contact preparation binds the returned challenge to the original and rejects substitution',async()=>{
+ const previous=globalThis.fetch,paths:string[]=[];let returnedId=requestId;
+ globalThis.fetch=async(input,init)=>{const path=String(input);paths.push(path);if(path==='/authentication/options')return Response.json(context);assert.deepEqual(JSON.parse(String(init?.body)),{requestId});return Response.json({requestId:returnedId,challengeId:otherId,expiresAt:'2099-01-01T00:00:00Z'});};
+ try{assert.equal((await prepareRecoveryContact(original,new AbortController().signal)).challengeId,otherId);returnedId=otherId;await assert.rejects(prepareRecoveryContact(original,new AbortController().signal),(error:unknown)=>error instanceof RecoveryHttpError&&error.kind==='changed');assert.deepEqual(paths,['/authentication/options','/recovery/contact/options','/authentication/options','/recovery/contact/options']);}finally{globalThis.fetch=previous;}
+});
+
+test('Missing composition capabilities stop repair before network or browser proof interaction',async()=>{
+ const previous=globalThis.fetch;let calls=0;globalThis.fetch=async()=>{calls++;throw new Error('must not send');};
+ const entry={password:'Synthetic password',passwordConfirmation:'Synthetic password'},signal=new AbortController().signal;
+ try{for(const proof of [{kind:'code',code:'synthetic'},{kind:'contact',code:'123456',challengeId:otherId},{kind:'passkey'}] as const)await assert.rejects(repairRecoveryPassword(original,proof,entry,parseRecoveryOptions(options()),signal),(error:unknown)=>error instanceof RecoveryHttpError&&error.kind==='unavailable');assert.equal(calls,0);}finally{globalThis.fetch=previous;}
+});
+
+test('Recognized password validation is distinct from private proof rejection and neither retries',async()=>{
+ const previous=globalThis.fetch;let mutations=0,code='VALIDATION_ERROR';
+ globalThis.fetch=async input=>String(input)==='/authentication/options'?Response.json(context):(mutations++,Response.json({error_code:code,detail:'private-fixture-detail'},{status:400}));
+ const parsed=parseRecoveryOptions({...options(),code:{available:true}}),entry={password:'Synthetic password',passwordConfirmation:'Synthetic password'};
+ try{for(const expected of ['validation','unknown']){await assert.rejects(repairRecoveryPassword(original,{kind:'code',code:'synthetic'},entry,parsed,new AbortController().signal),(error:unknown)=>error instanceof RecoveryHttpError&&error.kind===expected&&!JSON.stringify(error).includes('private-fixture-detail'));code='RECOVERY_PROOF_REJECTED';}assert.equal(mutations,2);}finally{globalThis.fetch=previous;}
 });

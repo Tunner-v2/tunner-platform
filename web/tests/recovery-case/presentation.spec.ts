@@ -7,7 +7,8 @@ import type {RecoveryFixtureSnapshot} from '../../fixtures/recovery-case/main';
 const goal={reference:'offered-A',labelKey:'fixture.goal.a'},other={reference:'offered-B',labelKey:'fixture.goal.b'};
 const entry:RecoveryViewModel={kind:'entry',goals:[goal,other],canStart:true,canBackToSignIn:true};
 const code:RecoveryViewModel={kind:'recovery-code',goal,canVerify:true,canCheck:true,canCancel:true};
-async function setup(page:Page,model:RecoveryViewModel,options:{holdCode?:boolean;missingKey?:string}={}){
+const repair:RecoveryViewModel={kind:'password-repair',goal,canRepair:true,passwordMinimumLength:3,passwordMaximumLength:6,canCheck:true,canCancel:true,canBackToSignIn:true};
+async function setup(page:Page,model:RecoveryViewModel,options:{holdCode?:boolean;holdRepair?:boolean;missingKey?:string;missingRepairCallback?:boolean}={}){
  await page.goto('/registration/');await page.waitForFunction(()=>!!window.recoveryPresentationFixture);await page.evaluate(({model,options})=>window.recoveryPresentationFixture.configure(model,options),{model,options});await expect(page.locator('.recovery-card')).toBeVisible();
 }
 async function snapshot(page:Page):Promise<RecoveryFixtureSnapshot>{return page.evaluate(()=>window.recoveryPresentationFixture.snapshot());}
@@ -17,6 +18,58 @@ test('Empty entry focuses real email input, shares field/summary errors and clea
  await setup(page,entry);await expect(page.getByRole('radio',{checked:true})).toHaveCount(0);await expect(page.getByText('Fixture unoffered goal',{exact:true})).toHaveCount(0);
  await page.getByRole('button',{name:'Continue',exact:true}).click();const email=page.getByLabel('Email address',{exact:true});await expect(email).toBeFocused();await expect(email).toHaveAttribute('aria-invalid','true');await expect(page.getByRole('alert')).toHaveText('Check the highlighted details');expect((await snapshot(page)).calls.start).toBe(0);
  await email.fill('person@example.test');await page.getByRole('radio',{name:/Fixture offered goal B/}).click();await expect(email).not.toHaveAttribute('aria-invalid','true');await expect(page.getByRole('alert')).toHaveCount(0);await page.getByRole('button',{name:'Continue',exact:true}).click();await expect.poll(async()=>(await snapshot(page)).calls.start).toBe(1);expect((await snapshot(page)).chosenGoal).toBe('offered-B');
+});
+
+test('Password repair empty submit, blur, mismatch and supplied bounds share correction and first-invalid focus',async({page})=>{
+ await setup(page,repair);const password=page.getByLabel('New password',{exact:true}),confirmation=page.getByLabel('Confirm password',{exact:true}),save=page.getByRole('button',{name:'Save new password',exact:true});
+ await expect(page.getByText('Use 3 to 6 characters for this request.',{exact:true})).toBeVisible();await expect(page.locator('form')).toHaveAttribute('novalidate','');
+ await save.click();await expect(password).toBeFocused();await expect(password).toHaveAttribute('aria-invalid','true');await expect(confirmation).toHaveAttribute('aria-invalid','true');await expect(page.getByRole('alert')).toHaveText('Check the highlighted details');expect((await snapshot(page)).calls.repair).toBe(0);
+ expect(await password.evaluate(field=>(field.getAttribute('aria-describedby')??'').split(/\s+/).some(id=>document.getElementById(id)?.textContent==='Enter a new password.'))).toBe(true);
+ expect(await password.evaluate(field=>(field.getAttribute('aria-describedby')??'').split(/\s+/).some(id=>document.getElementById(id)?.textContent==='Use 3 to 6 characters for this request.'))).toBe(true);
+ await password.fill('abc');await confirmation.fill('abd');await save.click();await expect(confirmation).toBeFocused();await expect(page.getByText('The passwords do not match.',{exact:true})).toBeVisible();
+ await confirmation.fill('abc');await expect(page.getByRole('alert')).toHaveCount(0);await expect(confirmation).not.toHaveAttribute('aria-invalid','true');
+ for(const value of ['ab','abcdefg']){await password.fill(value);await confirmation.fill(value);await save.click();await expect(password).toBeFocused();await expect(page.getByText('Use a password within the length requirements shown for this request.',{exact:true})).toBeVisible();expect((await snapshot(page)).calls.repair).toBe(0);}
+ await password.fill('😀😀😀');await confirmation.fill('😀😀😀');await expect(page.getByRole('alert')).toHaveCount(0);await save.click();await expect.poll(async()=>(await snapshot(page)).calls.repair).toBe(1);await expect(page.locator('input')).toHaveCount(0);await expect(page.getByRole('heading',{name:'Password updated',exact:true})).toBeVisible();expect((await snapshot(page)).passwordArgumentsMatch).toBe(true);expect((await snapshot(page)).passwordDomEmptyAtCallback).toBe(true);
+ await setup(page,repair);await page.getByLabel('New password',{exact:true}).focus();await page.keyboard.press('Tab');await expect(page.getByLabel('New password',{exact:true})).toHaveAttribute('aria-invalid','true');await expect(page.getByText('Enter a new password.',{exact:true})).toBeVisible();await noRestorationClaim(page);
+});
+
+test('Password repair clears both DOM secrets before callback and prevents pending duplicate actions',async({page})=>{
+ await setup(page,repair,{holdRepair:true});await page.getByLabel('New password',{exact:true}).fill('abc');await page.getByLabel('Confirm password',{exact:true}).fill('abc');
+ await page.locator('form').evaluate((form:HTMLFormElement)=>{form.requestSubmit();form.requestSubmit();});await expect.poll(async()=>(await snapshot(page)).calls.repair).toBe(1);const observed=await snapshot(page);expect(observed.passwordArgumentsMatch).toBe(true);expect(observed.passwordDomEmptyAtCallback).toBe(true);
+ await expect(page.locator('input')).toHaveCount(0);await expect(page.getByRole('heading',{name:'Updating your password',exact:true})).toBeVisible();
+ for(const name of ['Save new password','Check recovery status'])await expect(page.getByRole('button',{name,exact:true})).toBeDisabled();for(const name of ['Cancel request','Back to sign in'])await expect(page.getByRole('button',{name,exact:true})).toHaveCount(0);
+ await expect(page.getByRole('status')).toContainText('No completed password update is confirmed yet.');await expect(page.getByRole('alert')).toHaveCount(0);await page.evaluate(()=>window.recoveryPresentationFixture.releaseRepair());await expect(page.getByRole('heading',{name:'Password updated',exact:true})).toBeFocused();const viewResult=page.getByRole('button',{name:'View recovery result',exact:true});await expect(viewResult).toBeEnabled();await expect(page.getByRole('button')).toHaveCount(1);await viewResult.click();expect((await snapshot(page)).calls.viewResult).toBe(1);expect((await snapshot(page)).calls.repair).toBe(1);await noRestorationClaim(page);
+});
+
+test('Password repair clears on context replacement, pagehide and unknown-state unmount without persistence',async({page})=>{
+ await setup(page,repair);const password=page.getByLabel('New password',{exact:true}),confirmation=page.getByLabel('Confirm password',{exact:true});
+ await password.fill('abc');await confirmation.fill('abc');const previousPassword=await password.elementHandle(),previousConfirmation=await confirmation.elementHandle();await page.evaluate(()=>window.recoveryPresentationFixture.replaceContext());await expect(password).toHaveValue('');await expect(confirmation).toHaveValue('');
+ for(const field of [previousPassword,previousConfirmation])expect(await field!.evaluate(element=>(element as HTMLInputElement).value)).toBe('');
+ await password.fill('abc');await confirmation.fill('abc');expect(await page.evaluate(()=>{const fields=[...document.querySelectorAll<HTMLInputElement>('input[type=password]')];dispatchEvent(new PageTransitionEvent('pagehide',{persisted:true}));return fields.every(field=>field.value==='');})).toBe(true);await expect(password).toHaveValue('');await expect(confirmation).toHaveValue('');await page.evaluate(()=>dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true})));
+ await password.fill('abc');await confirmation.fill('abc');const detached=await password.elementHandle();await page.evaluate(model=>window.recoveryPresentationFixture.configure(model),{kind:'password-repair-status',state:'unknown',goal,canCheck:true,canCancel:false,canBackToSignIn:true,canViewResult:false} as RecoveryViewModel);await expect(page.getByRole('heading',{name:'Check your password update',exact:true})).toBeVisible();await expect(page.locator('input')).toHaveCount(0);expect(await detached!.evaluate(element=>(element as HTMLInputElement).value)).toBe('');
+ expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length,search:location.search,hash:location.hash}))).toEqual({local:0,session:0,search:'',hash:''});expect((await snapshot(page)).calls.repair).toBe(0);await noRestorationClaim(page);
+});
+
+test('Password repair missing callback, bounds or publication fail closed with no secret fields or actions',async({page})=>{
+ await setup(page,repair);
+ for(const options of [{missingRepairCallback:true},{missingKey:'recovery.repair.requirements'},{missingKey:'recovery.error.passwordConfirmation'}]){await page.evaluate(({model,options})=>window.recoveryPresentationFixture.configure(model,options),{model:repair,options});await expect(page.getByRole('alert')).toHaveText('The request could not be completed.');await expect(page.locator('input,button')).toHaveCount(0);}
+ await page.evaluate(model=>window.recoveryPresentationFixture.configure(model),{...repair,passwordMinimumLength:7,passwordMaximumLength:6});await expect(page.getByRole('alert')).toHaveText('The request could not be completed.');await expect(page.locator('input,button')).toHaveCount(0);
+});
+
+test('Password repair contact proof reuses shared code errors and only continues with opaque nonempty input',async({page})=>{
+ await setup(page,{...code,purpose:'contact',submitLabelKey:'recovery.action.continue'});const input=page.getByLabel('Verification code',{exact:true});await expect(page.getByRole('heading',{name:'Enter your verification code',exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'Verify recovery code',exact:true})).toHaveCount(0);await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(input).toBeFocused();await expect(page.getByText('Enter a verification code.',{exact:true})).toBeVisible();
+ await input.fill('opaque-public-fixture');await expect(input).not.toHaveAttribute('aria-invalid','true');await page.getByRole('button',{name:'Continue',exact:true}).click();await expect.poll(async()=>(await snapshot(page)).calls.code).toBe(1);await expect(input).toHaveValue('');expect((await snapshot(page)).codeDomEmptyAtCallback).toBe(true);await noRestorationClaim(page);
+});
+
+test('Password repair presentation reflows accessibly and captures normal/error/pending/unknown/success at four widths',async({page},testInfo)=>{
+ test.setTimeout(120000);
+ for(const width of [1440,768,390,320]){
+  await page.setViewportSize({width,height:1024});await setup(page,repair,{holdRepair:true});await page.evaluate(()=>document.fonts.ready);
+  const capture=async(state:string)=>{const height=width===390&&(state==='normal'||state==='pending')?900:width===390&&state==='error'?1050:width===320&&state==='unknown'?900:1024;await page.setViewportSize({width,height});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);const card=await page.locator('.recovery-card').boundingBox();expect(card).not.toBeNull();expect(card!.x).toBeGreaterThanOrEqual(0);expect(card!.x+card!.width).toBeLessThanOrEqual(width);await page.screenshot({path:testInfo.outputPath('password-repair-'+state+'-'+width+'.png'),fullPage:true});};
+  await capture('normal');await page.getByRole('button',{name:'Save new password',exact:true}).click();await expect(page.getByLabel('New password',{exact:true})).toBeFocused();await capture('error');expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);
+  await page.getByLabel('New password',{exact:true}).fill('abc');await page.getByLabel('Confirm password',{exact:true}).fill('abc');await page.getByRole('button',{name:'Save new password',exact:true}).click();await expect.poll(async()=>(await snapshot(page)).calls.repair).toBe(1);await expect(page.locator('input')).toHaveCount(0);await expect(page.getByRole('heading',{name:'Updating your password',exact:true})).toBeVisible();await capture('pending');await page.evaluate(()=>window.recoveryPresentationFixture.releaseRepair());await expect(page.getByRole('heading',{name:'Password updated',exact:true})).toBeVisible();await capture('success');
+  await page.evaluate(model=>window.recoveryPresentationFixture.configure(model),{kind:'password-repair-status',state:'unknown',goal,canCheck:true,canCancel:false,canBackToSignIn:true,canViewResult:false} as RecoveryViewModel);await expect(page.locator('input')).toHaveCount(0);await expect(page.getByRole('heading',{name:'Check your password update',exact:true})).toBeVisible();await capture('unknown');await noRestorationClaim(page);
+ }
 });
 test('Valid email without a goal focuses the actual first offered radio and never invents selection',async({page})=>{
  await setup(page,entry);await page.getByLabel('Email address',{exact:true}).fill('person@example.test');await page.getByRole('button',{name:'Continue',exact:true}).click();await expect(page.getByRole('radio',{name:/Fixture offered goal A/})).toBeFocused();await expect(page.getByRole('radio',{checked:true})).toHaveCount(0);await expect(page.getByText('Select the help you need.',{exact:true})).toBeVisible();expect((await snapshot(page)).calls.start).toBe(0);

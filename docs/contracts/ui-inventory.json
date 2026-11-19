@@ -1121,15 +1121,28 @@
     {
       "id": "U-AUTH-RECOVERY-VERIFY", "kind": "SCREEN", "status": "IMPLEMENTED", "app": "user", "module": "Identity.Recovery", "title": "Original recovery proof",
       "pathname": "/recovery/verify", "runtime_pathname": "/recovery/verify", "parameter_schema": {},
-      "guard": "Actual protected original from options or exact-request result; AWAITING_PROOF is not verified. Missing original returns neutral entry; current atomic-repair-only capability exposes no code-only proof action.",
+      "guard": "Actual protected original from options or exact-request result; AWAITING_PROOF is not verified. Offer only advertised composition methods; code collection remains transient until the exact atomic password-repair command. Missing original returns neutral entry.",
       "owner_scopes": ["TUN-P2-011"],
       "authority_refs": ["docs/authority/current/development/17_Account_Identity_and_Session_FRD.md","docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md","docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"],
       "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"2:4"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"98:27"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"70:1257"}],
       "source_paths": ["web/apps/user/recovery.app.tsx","web/apps/user/recovery.api.ts","web/apps/user/recovery.routes.ts","web/apps/user/recovery.tsx","web/apps/user/recovery.css","web/apps/user/recovery.content.proposal.json"],
-      "component_ids": ["COMP-RECOVERY-PRESENTATION"], "form_ids": [],
+      "component_ids": ["COMP-RECOVERY-PRESENTATION"], "form_ids": ["FORM-RECOVERY-CODE"],
       "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS", "routing_state": "IMPLEMENTED_VALIDATION_PENDING", "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
       "consent_ref": "governance/evidence/TUN-P2-011-VISUAL-CONSENT.json", "approved_visual_scope_ids": ["011-V02"],
-      "acceptance_boundary": "PENDING. Existing approved empty-choice/options-unavailable composition supplies exact-original status/cancel only. No fake verified transition or independent code POST. Additional atomic password-repair composition remains proposed011-V04, not implemented or approved by this row."
+      "acceptance_boundary": "PENDING. V04 consent permits continuation to atomic password repair; code collection alone proves nothing. Missing capabilities retain empty-choice presentation. Current native/browser and committed-source UI gates remain required."
+    },
+    {
+      "id": "U-AUTH-RECOVERY-REPAIR", "kind": "SCREEN", "status": "IMPLEMENTED", "app": "user", "module": "Identity.Recovery", "title": "Original recovery password repair",
+      "pathname": "/recovery/repair", "runtime_pathname": "/recovery/repair", "parameter_schema": {},
+      "guard": "Protected original browser selector and current native policy/publication; exact request/goal/version and transient selected proof. Reload/history without transient proof returns verification. Native proof and password validation remain authoritative; no automatic sign-in.",
+      "owner_scopes": ["TUN-P2-011"],
+      "authority_refs": ["docs/authority/current/development/17_Account_Identity_and_Session_FRD.md","docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md","docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"],
+      "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"2:4"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"70:539"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"70:1257"}],
+      "source_paths": ["web/apps/user/recovery.app.tsx","web/apps/user/recovery.api.ts","web/apps/user/recovery.routes.ts","web/apps/user/recovery.tsx","web/apps/user/recovery.css","web/apps/user/recovery.content.proposal.json","src/Modules/Identity/RecoveryEndpoints.cs"],
+      "component_ids": ["COMP-RECOVERY-PRESENTATION"], "form_ids": ["FORM-RECOVERY-PASSWORD-REPAIR"],
+      "design_status": "PRODUCT_OWNER_APPROVED_SCOPED_ADAPTATIONS", "routing_state": "IMPLEMENTED_VALIDATION_PENDING", "visual_state": "IMPLEMENTATION_REQUIRES_CURRENT_RENDERED_EVIDENCE",
+      "consent_ref": "governance/evidence/TUN-P2-011-V04-VISUAL-CONSENT.json", "approved_visual_scope_ids": ["011-V04"],
+      "acceptance_boundary": "PENDING. V04 visual/navigation approval and bounded backend integration authorization do not establish passing tests, feature acceptance or governed-disposition admission. Current rendered/browser/native and committed-source gates remain required."
     },
     {
       "id": "U-AUTH-RECOVERY-RESULT", "kind": "SCREEN", "status": "IMPLEMENTED", "app": "user", "module": "Identity.Recovery", "title": "Original recovery status and result",
@@ -1157,12 +1170,22 @@
     {
       "id": "FORM-RECOVERY-CODE", "kind": "FORM", "status": "IMPLEMENTED", "app": "user", "module": "Identity.Recovery", "title": "Conditional recovery-code presentation", "pathname": null, "runtime_pathname": null, "screen_id": "U-AUTH-RECOVERY-VERIFY",
       "owner_scopes": ["TUN-P2-011"], "fields": ["recoveryCode"],
-      "guard": "Presentation-only conditional capability. Current public ATOMIC_REPAIR_ONLY contract does not admit this standalone form/action; no code-only POST exists.",
+      "guard": "Advertised code/contact capability and exact original; collect only transient proof for the following atomic password-repair command. No code-only verification POST or verified transition exists.",
       "authority_refs": ["docs/authority/current/development/17_Account_Identity_and_Session_FRD.md","docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"],
       "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"70:539"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"70:1257"}],
       "source_paths": ["web/apps/user/recovery.tsx","web/apps/user/recovery.css","web/apps/user/recovery.content.proposal.json"],
-      "consent_ref": "governance/evidence/TUN-P2-011-VISUAL-CONSENT.json", "approved_visual_scope_ids": ["011-V02"], "validation_state": "PRESENTATION_IMPLEMENTED_PUBLIC_ADMISSION_UNAVAILABLE",
+      "consent_ref": "governance/evidence/TUN-P2-011-V04-VISUAL-CONSENT.json", "approved_visual_scope_ids": ["011-V04"], "validation_state": "IMPLEMENTED_SOURCE_VALIDATION_PENDING",
       "acceptance_boundary": "PENDING. Transient input has required-only shared validation and synchronous callback/pagehide/context DOM clearing with duplicate protection; it does not define format or prove admission. Component tests are not a public repair flow or whole-feature acceptance."
+    },
+    {
+      "id": "FORM-RECOVERY-PASSWORD-REPAIR", "kind": "FORM", "status": "IMPLEMENTED", "app": "user", "module": "Identity.Recovery", "title": "Original recovery new password", "pathname": null, "runtime_pathname": null, "screen_id": "U-AUTH-RECOVERY-REPAIR",
+      "owner_scopes": ["TUN-P2-011"], "fields": ["password","passwordConfirmation"],
+      "guard": "Server-supplied rune length bounds and confirmation through shared typed validation; authoritative backend password/blocklist/proof validation. Clear secret DOM/state on submission, navigation and pagehide; prevent duplicate mutations.",
+      "authority_refs": ["docs/authority/current/development/17_Account_Identity_and_Session_FRD.md","docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"],
+      "figma_refs": [{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"70:539"},{"file_key":"apNbwvAgdn1xIxYH1oiaSC","node_id":"70:1257"}],
+      "source_paths": ["web/apps/user/recovery.tsx","web/apps/user/recovery.app.tsx","web/apps/user/recovery.api.ts","web/apps/user/recovery.content.proposal.json","web/packages/ui/src/controls.tsx"],
+      "consent_ref": "governance/evidence/TUN-P2-011-V04-VISUAL-CONSENT.json", "approved_visual_scope_ids": ["011-V04"], "validation_state": "IMPLEMENTED_SOURCE_VALIDATION_PENDING",
+      "acceptance_boundary": "PENDING. Native and integrated browser tests, current rendered evidence and source bindings are required; no result or authentication is inferred from successful client validation."
     },
     {
       "id": "COMP-RECOVERY-PRESENTATION", "kind": "COMPONENT", "status": "IMPLEMENTED", "app": "user", "module": "Identity.Recovery", "title": "Shared recovery presentation", "pathname": null, "runtime_pathname": null,

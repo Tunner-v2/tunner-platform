@@ -12,6 +12,8 @@ internal sealed partial class RecoveryCaseApplication
     internal void ApplyPassword(RecoveryCaseRow row, IdentityUserAdapter user, string preparedHash) => authentication.ApplyRecoveryPassword(row, user, preparedHash);
     internal bool PasswordAvailable => passwordPolicies is not null && hierarchy is not null && passwordBlocklist is not null &&
         authenticationPolicies is not null && partitions is not null;
+    // Public composition capability only; the native owner still admits each exact proof and case.
+    internal bool PasswordCodeAvailable => PasswordAvailable && codes is not null;
     internal RecoveryPasswordPolicyVersion PasswordCurrent(string origin, DateTimeOffset at)
     {
         if (!PasswordAvailable) throw new InvalidOperationException("Recovery password owner is unavailable.");

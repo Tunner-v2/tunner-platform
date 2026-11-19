@@ -11,8 +11,8 @@ export function PrimaryButton({ labelKey, presentation = 'standard', appearance 
   return <button {...native} type={type} className="tn-primary-button" data-presentation={presentation} data-appearance={appearance}><ContentText contentKey={labelKey} /></button>;
 }
 type NativeInput = Pick<InputHTMLAttributes<HTMLInputElement>, 'id' | 'name' | 'type' | 'value' | 'onChange' | 'onBlur' | 'onFocus' | 'disabled' | 'readOnly' | 'required' | 'autoComplete' | 'inputMode' | 'maxLength' | 'minLength'>;
-export interface TextFieldProps extends NativeInput { labelKey: string; helpKey?: string | undefined; errorKey?: string | undefined; errorDetails?: ReactNode; placeholderKey?: string; presentation?: 'standard' | 'spacious' | 'verification' }
-export function TextField({ labelKey, helpKey, errorKey, errorDetails, placeholderKey, presentation = 'standard', id, type = 'text', ...native }: TextFieldProps) {
+export interface TextFieldProps extends NativeInput { labelKey: string; helpKey?: string | undefined; helpValues?: Readonly<Record<string,string>>; errorKey?: string | undefined; errorDetails?: ReactNode; placeholderKey?: string; presentation?: 'standard' | 'spacious' | 'verification' }
+export function TextField({ labelKey, helpKey, helpValues, errorKey, errorDetails, placeholderKey, presentation = 'standard', id, type = 'text', ...native }: TextFieldProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const label = usePublishedContent(labelKey);
@@ -21,7 +21,7 @@ export function TextField({ labelKey, helpKey, errorKey, errorDetails, placehold
   return <div className="tn-text-field" data-presentation={presentation}>
     <label htmlFor={inputId} {...contentProvenance(label)}>{label.text}</label>
     <input {...native} {...(placeholderKey ? contentProvenance(placeholder) : {})} placeholder={placeholderKey ? placeholder.text : undefined} id={inputId} type={type} className="tn-input" aria-invalid={errorKey ? true : undefined} aria-describedby={descriptions} />
-    {helpKey && <span className="tn-field-help" id={`${inputId}-help`}><ContentText contentKey={helpKey} /></span>}
+    {helpKey && <span className="tn-field-help" id={`${inputId}-help`}><ContentText contentKey={helpKey} {...(helpValues?{values:helpValues}:{})} /></span>}
     {errorKey && <FieldError id={`${inputId}-error`} contentKey={errorKey}>{errorDetails}</FieldError>}
   </div>;
 }

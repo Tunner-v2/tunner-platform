@@ -28,6 +28,16 @@
     "Figma, Drive and FigJam remain read-only; owner-held design backfill remains tracked.",
     "Implement only within native eligibility; actual URL/VAL/UX and integrated/security acceptance remain required."
   ],
+  "separate_implementation_authorization": {
+    "source_question_call_id": "call_723e2d7076ef43fbb400d0c892dc84de",
+    "selected_answer": "Authorize bounded Recovery backend/API integration (Recommended)",
+    "patch_ref": "artifacts/p2-011-recovery-20261112/v04-integration-authorization/backend-api.patch",
+    "patch_sha256": "7bc925f56c392c14317dc84e02c8876d0930c77ce5d4d4780f369005d15887f7",
+    "review_ref": "artifacts/p2-011-recovery-20261112/v04-integration-authorization/REVIEW.md",
+    "review_sha256": "d4dc5f85da5de4a2e8b46c9e77e381f530abc5ff2a83d7195d70a1013ec89296",
+    "scope": "Four-file backend/API patch and bounded client/controller integration with existing atomic code, passkey and contact repair endpoints; independent review and focused tests remain required.",
+    "exclusions": ["Production activation", "Governed-review producer/source contracts", "New proof methods", "Automatic sign-in", "Figma/Drive changes", "Merge", "Release"]
+  },
   "authority_refs": [
     "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
     "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
