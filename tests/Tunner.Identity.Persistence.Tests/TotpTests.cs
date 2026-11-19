@@ -104,12 +104,14 @@ public sealed class TotpTests(IdentityPostgresFixture fixture) : IClassFixture<I
             await host.Post("/authentication/step-up/totp", new { requestId = view.GetProperty("requestId").GetGuid(), attemptId = Guid.NewGuid(), authenticatorReference = proofFactor, code = totpCode }, cookies, csrf);
         Assert.Equal(HttpStatusCode.OK, result.StatusCode); return pending with { Cookies = Merge(cookies, result), Csrf = csrf };
     }
-    internal static async Task<Pending> Enroll(AuthenticationTestHost host, Profile profile, string cookies)
+    internal static async Task<Pending> Enroll(AuthenticationTestHost host, Profile profile, string cookies, Func<string, Task<string>>? activationCodeFactory = null)
     {
         var pending = await Authorize(host, await Begin(host, cookies));
         using var disclosed = await host.Post("/account/totp/enrollment/disclose", new { requestId = pending.RequestId, enrollmentId = pending.EnrollmentId }, pending.Cookies, pending.Csrf);
         Assert.Equal(HttpStatusCode.OK, disclosed.StatusCode);
-        using var activated = await host.Post("/account/totp/enrollment/activate", new { requestId = pending.RequestId, enrollmentId = pending.EnrollmentId, attemptId = Guid.NewGuid(), code = NativeCode(profile.Seed(pending.Reference)) }, pending.Cookies, pending.Csrf);
+        var seed = profile.Seed(pending.Reference);
+        var activationCode = activationCodeFactory is null ? NativeCode(seed) : await activationCodeFactory(seed);
+        using var activated = await host.Post("/account/totp/enrollment/activate", new { requestId = pending.RequestId, enrollmentId = pending.EnrollmentId, attemptId = Guid.NewGuid(), code = activationCode }, pending.Cookies, pending.Csrf);
         Assert.Equal(HttpStatusCode.OK, activated.StatusCode); return pending with { Cookies = Merge(pending.Cookies, activated) };
     }
     // Invoke the pinned framework's own base32 and RFC6238 helpers solely to create native fixtures. No copied OTP math.

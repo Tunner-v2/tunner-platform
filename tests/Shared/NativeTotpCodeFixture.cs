@@ -23,6 +23,9 @@ internal static class NativeTotpCodeFixture
     }
 
     internal static string NativeCode(string seed, int counterOffset = 0)
+        => NativeCode(seed, DateTimeOffset.UtcNow, counterOffset);
+
+    internal static string NativeCode(string seed, DateTimeOffset instant, int counterOffset = 0)
     {
         var assembly = typeof(AuthenticatorTokenProvider<IdentityUserAdapter>).Assembly;
         var decoder = assembly.GetType("Microsoft.AspNetCore.Identity.Base32", throwOnError: true)!.GetMethod("FromBase32", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)!;
@@ -30,7 +33,7 @@ internal static class NativeTotpCodeFixture
         try
         {
             var compute = assembly.GetType("Microsoft.AspNetCore.Identity.Rfc6238AuthenticationService", throwOnError: true)!.GetMethod("ComputeTotp", BindingFlags.Static | BindingFlags.NonPublic)!;
-            return ((int)compute.Invoke(null, [bytes, (ulong)(DateTimeOffset.UtcNow.ToUnixTimeSeconds() / 30 + counterOffset), null])!).ToString("D6", System.Globalization.CultureInfo.InvariantCulture);
+            return ((int)compute.Invoke(null, [bytes, (ulong)(instant.ToUnixTimeSeconds() / 30 + counterOffset), null])!).ToString("D6", System.Globalization.CultureInfo.InvariantCulture);
         }
         finally { System.Security.Cryptography.CryptographicOperations.ZeroMemory(bytes); }
     }

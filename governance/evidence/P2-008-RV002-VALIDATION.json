@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-008-RV002",
+  "owner_work_item": "TUN-P2-008",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "tests/Shared/NativeTotpCodeFixture.cs",
+    "tests/Tunner.Identity.Persistence.Tests/TotpTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/TotpReplayTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/NativeTotpCodeFixtureTests.cs"
+  ],
+  "review_refs": [
+    "governance/reviews/REV-P2-008-RV002-full-stack-engineer.yaml",
+    "governance/reviews/REV-P2-008-RV002-tester-qa-engineer.yaml",
+    "governance/reviews/REV-P2-008-RV002-cyber-security-engineer.yaml"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P2-008-RV002-CI-FAILURE.json"
+  ],
+  "qualification": "Test-input timing correction only. Actual CI failed one of1417 Identity cases across the12:26 UTC boundary. Capture exact native activation and window tokens once, preserve all replay/history assertions, and fail explicitly if admitted window is exhausted. Local pure fixture regression and required Linux CI remain unexecuted for this patch.",
+  "boundaries": "No production verifier/policy/runtime admission/security change. Keep P2-008-RV001, P2-009-RV015 and P2-013-RV007 held; no local143, helper/image inspection or remediation, Product/merge/production/release approval."
+}

@@ -47,12 +47,38 @@ public sealed class TotpReplayTests(IdentityPostgresFixture fixture) : IClassFix
     public async Task NativeFullWindowBoundedHistoryRejectsAToBToAAndRetainsActivationClaim()
     {
         await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await StartTotp(db, profile); await host.SeedAsync(db);
-        var enrolled = await Enroll(host, profile, await Login(host)); var seed = profile.Seed(enrolled.Reference);
-        var first = NativeCode(seed, -1); var second = NativeCode(seed, 1);
-        Assert.Null(await Accept(db, host, profile, enrolled.Reference, first)); Assert.Null(await Accept(db, host, profile, enrolled.Reference, second));
-        Assert.Equal("CODE_REPLAYED", await Accept(db, host, profile, enrolled.Reference, first));
-        Assert.Equal("CODE_REPLAYED", await Accept(db, host, profile, enrolled.Reference, NativeCode(seed)));
-        Assert.Null(await Accept(db, host, profile, enrolled.Reference, NativeCode(seed, -2))); Assert.Null(await Accept(db, host, profile, enrolled.Reference, NativeCode(seed, 2)));
+        var codes = new Dictionary<int, string>(); long counter = -1;
+        var enrolled = await Enroll(host, profile, await Login(host), async seed =>
+        {
+            // The native verifier reads system time. Admit one fresh window before activation;
+            // never retry a failed acceptance or regenerate a claimed token after a rollover.
+            var periodMilliseconds = profile.Policy.PeriodSeconds * 1000L;
+            var elapsed = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() % periodMilliseconds;
+            using var admission = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+            if (elapsed >= 5000)
+                await Task.Delay(TimeSpan.FromMilliseconds(periodMilliseconds - elapsed + 1), admission.Token);
+            var instant = DateTimeOffset.UtcNow;
+            Assert.True(instant.ToUnixTimeMilliseconds() % periodMilliseconds < 5000,
+                "Native TOTP fixture missed its fresh-window admission budget.");
+            counter = instant.ToUnixTimeSeconds() / profile.Policy.PeriodSeconds;
+            codes = Enumerable.Range(-2, 5).ToDictionary(offset => offset,
+                offset => Tunner.Testing.Totp.NativeTotpCodeFixture.NativeCode(seed, instant, offset));
+            Assert.Equal(5, codes.Values.Distinct(StringComparer.Ordinal).Count());
+            return codes[0];
+        });
+        void RequireSameWindow() => Assert.True(DateTimeOffset.UtcNow.ToUnixTimeSeconds() / profile.Policy.PeriodSeconds == counter,
+            "Native TOTP fixture exhausted its captured window; no acceptance was retried.");
+        async Task<string?> AcceptCaptured(int offset)
+        {
+            RequireSameWindow();
+            var result = await Accept(db, host, profile, enrolled.Reference, codes[offset]);
+            RequireSameWindow();
+            return result;
+        }
+        Assert.Null(await AcceptCaptured(-1)); Assert.Null(await AcceptCaptured(1));
+        Assert.Equal("CODE_REPLAYED", await AcceptCaptured(-1));
+        Assert.Equal("CODE_REPLAYED", await AcceptCaptured(0));
+        Assert.Null(await AcceptCaptured(-2)); Assert.Null(await AcceptCaptured(2));
         await using var read = db.Context(); var claims = await read.Set<TotpUsedCodeRow>().ToArrayAsync(); Assert.Equal(5, claims.Length);
         Assert.All(claims, x => Assert.True(x.ExpiresAt - x.AcceptedAt >= TimeSpan.FromSeconds(150) + profile.Policy.MaximumClockDeviation * 2 + profile.Policy.MaximumVerificationDuration));
     }
