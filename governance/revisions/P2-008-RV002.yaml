@@ -7,7 +7,7 @@
   "parent_milestone_revision_id": null,
   "title": "Stabilize native TOTP replay-window test inputs",
   "revision_type": "CORRECTIVE",
-  "status": "ACTIVE",
+  "status": "VALIDATION",
   "reason": "Test-only CI44521433656 correction: independently sampled wall-clock codes can repeat an earlier counter at line55; activation replay also recomputes its input. Original TUN-P2-008 authority and production behavior remain unchanged. Use the existing byte-verified Doc9 test/evidence authority; do not assert the generated current FRD alias is byte-verified. Preserve the separate user-held143 qualification and image-remediation stop.",
   "authority_refs": [
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
