@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "recording_authorization": {
+    "source_question_call_id": "call_2019b6cb2e4046e884968828f321a901",
+    "selected_answer": "Authorize exact recording and gated technical closure (Recommended)",
+    "scope": "Reviewed 16-file technical recording; only P2-009-RV011 and P2-010-RV012 may close after all required native gates pass. Product, production/provider activation, image remediation, protected-main merge and release remain excluded."
+  },
+  "scope_ids": [
+    "P2-009-RV011",
+    "P2-010-RV012"
+  ],
+  "result": "PASS_SCOPED_NATIVE_QUALIFICATION",
+  "recorded_at": "2026-11-19T21:43:25.830Z",
+  "actual_tested_commit_sha": "46041e95c6535caa6a3889a40d8f6cf36802c12f",
+  "build_binding_sha256": "acc15564480630c5d27fb717f7526c68f849d4df0ecb2ae2aa7b0d96e5c11982",
+  "protocol_cases": 17,
+  "resource_cases": 6,
+  "private_cases": 123,
+  "first_host_case_passed": true,
+  "https_recovery_case_passed": true,
+  "protocol_controls": {
+    "SOURCE_BOUND": true,
+    "FRAMES_STRICT": true,
+    "ACK_REQUIRED": true,
+    "OUTPUT_CONTAINED": true,
+    "PROCESS_CLOSED": true,
+    "SURFACES_REMOVED": true,
+    "PROXY_DIRECT": true,
+    "TELEMETRY_DISABLED": true
+  },
+  "resource_controls": {
+    "SOURCE_BOUND": true,
+    "OWNERS_RETAINED": true,
+    "CREATED_BEFORE_START": true,
+    "FORCED_CLOSE_VERIFIED": true,
+    "RECONCILED_EXACT": true,
+    "CONTAINERS_ABSENT": true,
+    "VOLUMES_ABSENT": true,
+    "CONFIGURATIONS_ABSENT": true,
+    "BORROWED_PRESERVED": true,
+    "CAPACITY_VERIFIED": true
+  },
+  "private_controls": {
+    "caseExecutionSettled": true,
+    "ownershipVerified": true,
+    "noLogPersistenceVerified": true,
+    "containerAbsentVerified": true,
+    "borrowedPostgresPreserved": true,
+    "cleanupVerified": true,
+    "dockerConfigurationAbsentVerified": true,
+    "containmentVerified": true,
+    "sensitiveAccepted": true
+  },
+  "raw_refs": [
+    {
+      "path": "governance/evidence/p2-019-content-20261116/native-recovery-46041e95/private123.json",
+      "sha256": "5d248f73a0380b4956c0cab0fdb783db980d915e257007e7d7839a14f0fad514"
+    },
+    {
+      "path": "governance/evidence/p2-019-content-20261116/native-recovery-46041e95/protocol-details.json",
+      "sha256": "cd9770c46030ccb909bbfdfbb595f42681da061154220a4c092ef8411f9df755"
+    },
+    {
+      "path": "governance/evidence/p2-019-content-20261116/native-recovery-46041e95/protocol-qualification.json",
+      "sha256": "9e4d7e4c88478a9c2be0602a1056cdcb2429e1f8ace64566ca7e6333b893905e"
+    },
+    {
+      "path": "governance/evidence/p2-019-content-20261116/native-recovery-46041e95/resource-details.json",
+      "sha256": "a20ce2ded8b22a5cbc0214030c7d3ce8ff18808da4fd3046af6b60441d98dba5"
+    },
+    {
+      "path": "governance/evidence/p2-019-content-20261116/native-recovery-46041e95/resource-qualification.json",
+      "sha256": "5966018fd4fe1e306c1a40a81a159211447d192965a7e88a3d73bce100c4ecea"
+    }
+  ],
+  "pure_classifier_qualification": {
+    "actual_tested_commit_sha": "9d42e94cf34c68628fdf8e105def23c2ce9c685a",
+    "path": "governance/evidence/p2-019-content-20261116/backend-resume-20261119/backend-143.trx",
+    "sha256": "3f982813a534a8e702b10f0f7414c8df617b83ab2681343384bfc5d903fbd842",
+    "cases": [
+      "HostStartupClassificationDoesNotRetainForeignPayloads",
+      "HostStartupClassificationBoundsWrappersAndRecognizesOnlyTheFixedTlsSentinel"
+    ],
+    "owned_source_unchanged": [
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryCodePrivateIntegrationTests.cs",
+        "qualified_blob_oid": "daa86f7afc083bc1da741898d36df3c764dee343",
+        "current_blob_oid": "daa86f7afc083bc1da741898d36df3c764dee343"
+      },
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs",
+        "qualified_blob_oid": "df8c0bed0cfcfeca521ad0e5ad1e848587fadace",
+        "current_blob_oid": "df8c0bed0cfcfeca521ad0e5ad1e848587fadace"
+      },
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/FederationPrivateIntegrationTests.cs",
+        "qualified_blob_oid": "2f639926efc4e534f91cba8d7ce8a862a45431dc",
+        "current_blob_oid": "2f639926efc4e534f91cba8d7ce8a862a45431dc"
+      }
+    ]
+  },
+  "reviewer": "/root/totp_replay_diagnosis, one independent AI reviewer applying five role contracts",
+  "historical_failure_ref": "governance/evidence/p2-019-content-20261116/final-qualification-63fb7514/private-initial-host-failure.json",
+  "limits": [
+    "Actual execution at46041 only; subsequent contact client changes are not part of this run.",
+    "No combined current real-browser/native V04 qualification, production activation, Product acceptance, merge or release."
+  ]
+}

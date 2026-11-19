@@ -2,11 +2,11 @@
   "schema_version": 1,
   "scope_id": "GLOBAL_UI",
   "result": "PASS",
-  "recorded_at": "2026-11-18T14:46:42.421328+00:00",
-  "tested_commit_sha": "7c626363893b29c9130fb3bdc23942d15eaea570",
-  "tested_commit_semantics": "Current committed source carrier7c626363; all123 original item objects retain their actual historical execution/consent identities. Changed P019 fixture helper/test paths are independently qualified by enabled2/retained5 actual browserPASS at7c; original production React/theme/routes and earlier native-version UI qualification are preserved. No fresh aggregate123/73 execution or wholeP2 acceptance is claimed.",
-  "inventory_sha256": "5dd8b4e8954a0f04d6e72791b3070190c5a2fa78453c356cc1fb7b214b5d0e1d",
-  "gate_status": "PENDING_ACTUAL_CURRENT_NATIVE_UI_RECHECK",
+  "recorded_at": "2026-11-19T21:41:56.718Z",
+  "tested_commit_sha": "f77f4853fc1b59c36cc5108cdb30197d5106afc2",
+  "tested_commit_semantics": "Current source qualification carrier f77:117 unrelated row objects and original execution/consent provenance unchanged; six Recovery rows replaced and two appended from current scoped owner. Actual new contact17/4/4 at f77, prior V04 frozen/e685 and backend/native46041 runs retain separate identities. No global test aggregate or old-source execution is relabelled f77.",
+  "inventory_sha256": "8b62097d5505a8f9171ddd72f562aa9a0ef1fc36b76de76a4b0184caa0fbd255",
+  "gate_status": "PENDING_UPDATED_AGGREGATION_COMMIT_AND_ACTUAL_NATIVE_GLOBAL_UI_CHECK",
   "owned_behavior_paths": [
     "docs/contracts/session-bulk-revocation-contract.md",
     "docs/contracts/session-listing-contract.md",
@@ -58,11 +58,15 @@
     "src/Modules/Identity/PublishedSessionListingPresentationSource.cs",
     "src/Modules/Identity/PublishedStepUpPresentationSource.cs",
     "src/Modules/Identity/PublishedTotpPresentationSource.cs",
+    "src/Modules/Identity/RecoveryBrowserService.cs",
     "src/Modules/Identity/RecoveryCodeAccountView.cs",
     "src/Modules/Identity/RecoveryCodeConfigurationValues.cs",
     "src/Modules/Identity/RecoveryCodeEndpoints.cs",
     "src/Modules/Identity/RecoveryCodeExecution.cs",
     "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs",
+    "src/Modules/Identity/RecoveryEndpoints.cs",
+    "src/Modules/Identity/RecoveryPasswordApplication.cs",
+    "src/Modules/Identity/RecoveryPasswordPasskeyApplication.cs",
     "src/Modules/Identity/RegistrationApplication.cs",
     "src/Modules/Identity/RegistrationEndpoints.cs",
     "src/Modules/Identity/RegistrationPersonalInformation.cs",
@@ -288,8 +292,11 @@
     "web/tests/browser-testing/sessions-flow.spec.ts",
     "web/tests/configuration-admin/configuration.spec.ts",
     "web/tests/content-admin/content.spec.ts",
+    "web/tests/contracts.test.tsx",
     "web/tests/devices.api.test.tsx",
     "web/tests/devices/devices.spec.ts",
+    "web/tests/recovery-case.api.test.tsx",
+    "web/tests/recovery-case.presentation.test.tsx",
     "web/tests/recovery-case/presentation.spec.ts",
     "web/tests/sessions.api.test.tsx",
     "web/tests/sessions.bulk.api.test.tsx",
@@ -298,8 +305,7 @@
     "web/tests/step-up/federation.spec.ts",
     "web/tests/step-up/step-up.spec.ts",
     "web/tests/totp/ui/totp.spec.ts",
-    "web/tsconfig.json",
-    "web/tests/contracts.test.tsx"
+    "web/tsconfig.json"
   ],
   "items": [
     {
@@ -13009,6 +13015,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13028,6 +13038,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13047,6 +13061,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13066,6 +13084,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13085,6 +13107,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13117,6 +13143,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13140,6 +13170,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13163,6 +13197,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13186,6 +13224,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13209,6 +13251,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13232,6 +13278,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13243,6 +13293,10 @@
             {
               "path": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/recovery-keyboard-approved-routes-final.json",
               "sha256": "0c13a387a77fdfbea4d5c275b6fc0f05fd302c026dec398e467b2e4a542f1dca"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13266,6 +13320,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         }
@@ -13331,6 +13389,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13350,6 +13412,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13369,6 +13435,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13388,6 +13458,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13407,6 +13481,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -13439,6 +13521,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -13462,6 +13552,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13485,6 +13579,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -13508,6 +13610,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13531,6 +13637,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -13554,6 +13668,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13565,6 +13683,14 @@
             {
               "path": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/recovery-keyboard-approved-routes-final.json",
               "sha256": "0c13a387a77fdfbea4d5c275b6fc0f05fd302c026dec398e467b2e4a542f1dca"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -13588,6 +13714,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         }
@@ -13616,6 +13750,10 @@
         {
           "path": "governance/evidence/p2-011-recovery-20261112/ui-51a80e5/visual/reference/proof-expired-320.png",
           "sha256": "c92f4d2b61533445c981584e61c7304a1caabdd6a12c81180a863a5c9a0ac191"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-format-error-320.png",
+          "sha256": "be86fd593f93e8a2de78059aa9bf08526594e6feffd9f87a3a966cad8f98ae17"
         }
       ],
       "deviations": []
@@ -13653,6 +13791,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13672,6 +13814,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13691,6 +13837,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13710,6 +13860,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13729,6 +13883,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13761,6 +13919,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13784,6 +13946,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13807,6 +13973,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13830,6 +14000,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13853,6 +14027,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13876,6 +14054,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13887,6 +14069,10 @@
             {
               "path": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/recovery-keyboard-approved-routes-final.json",
               "sha256": "0c13a387a77fdfbea4d5c275b6fc0f05fd302c026dec398e467b2e4a542f1dca"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13910,6 +14096,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         }
@@ -13967,6 +14157,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -13986,6 +14180,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14001,6 +14199,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/browser-aba6daf/new-journey-summary.json",
               "sha256": "94b7524ab2bc2c0a13b360e1079cb0d0cd3c7e0d8f6bcc3b1f9c9b3a45ced5ab"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14020,6 +14222,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14039,6 +14245,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14058,6 +14268,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14077,6 +14291,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14096,6 +14314,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14119,6 +14341,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14142,6 +14368,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14165,6 +14395,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14188,6 +14422,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14211,6 +14449,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14234,6 +14476,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14245,6 +14491,10 @@
             {
               "path": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/recovery-keyboard-approved-routes-final.json",
               "sha256": "0c13a387a77fdfbea4d5c275b6fc0f05fd302c026dec398e467b2e4a542f1dca"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14268,6 +14518,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         }
@@ -14329,6 +14583,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14348,6 +14610,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14376,6 +14646,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14395,6 +14673,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14414,6 +14700,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14433,6 +14727,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14452,6 +14754,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14475,6 +14785,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14498,6 +14816,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14521,6 +14843,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14544,6 +14874,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14567,6 +14901,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14590,6 +14932,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14601,6 +14947,14 @@
             {
               "path": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/recovery-keyboard-conditional-presentation-final.json",
               "sha256": "abaaec939f66bf2486fce3366374a76262ce6196ae3c6f932251227e45c92f61"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14624,6 +14978,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         }
@@ -14644,6 +15006,10 @@
         {
           "path": "governance/evidence/p2-011-recovery-20261112/ui-51a80e5/visual/reference/proof-expired-320.png",
           "sha256": "c92f4d2b61533445c981584e61c7304a1caabdd6a12c81180a863a5c9a0ac191"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-format-error-320.png",
+          "sha256": "be86fd593f93e8a2de78059aa9bf08526594e6feffd9f87a3a966cad8f98ae17"
         }
       ],
       "deviations": []
@@ -14685,6 +15051,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14704,6 +15078,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14732,6 +15114,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14751,6 +15141,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14770,6 +15168,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14789,6 +15195,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14808,6 +15222,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14831,6 +15253,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14854,6 +15284,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14877,6 +15311,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14900,6 +15342,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14923,6 +15369,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14946,6 +15400,10 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
             }
           ]
         },
@@ -14957,6 +15415,14 @@
             {
               "path": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/recovery-keyboard-conditional-presentation-final.json",
               "sha256": "abaaec939f66bf2486fce3366374a76262ce6196ae3c6f932251227e45c92f61"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         },
@@ -14980,6 +15446,14 @@
             {
               "path": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
               "sha256": "06ed916b4a5a2fe9a618319c3e24fe597b87caddc53697b96b158b3910a6a4a6"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
             }
           ]
         }
@@ -15056,6 +15530,10 @@
         {
           "path": "governance/evidence/p2-011-recovery-20261112/ui-51a80e5/visual/reference/status-unknown-320.png",
           "sha256": "48b8e8ae53ce288bd977b89523f106543ff140c2067eec33ec14e4caf6d8181a"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-format-error-320.png",
+          "sha256": "be86fd593f93e8a2de78059aa9bf08526594e6feffd9f87a3a966cad8f98ae17"
         }
       ],
       "deviations": []
@@ -42223,6 +42701,772 @@
         }
       ],
       "deviations": []
+    },
+    {
+      "id": "U-AUTH-RECOVERY-REPAIR",
+      "kind": "SCREEN",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "2:4"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:539"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "assessment_boundary": "011-V04 technical UI only; earlier frozen WIP execution and new committed3 remain distinct. No full native browser or Product acceptance.",
+      "checks": [
+        {
+          "id": "URL-001",
+          "result": "PASS",
+          "description": "Actual code/contact/passkey router enters /recovery/repair; pending/UNKNOWN/updated retain that pathname; explicit View recovery result opens /recovery/result. New3 repeats real router journey at768/390/320.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/authentication-integrated-fidelity-final.json",
+              "sha256": "1531e79c6366aab0eeda55276c19dd3185b4ae0e36db3d40c33aa67dfc49d805"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
+            }
+          ]
+        },
+        {
+          "id": "URL-002",
+          "result": "PASS",
+          "description": "Canonical route table/current browser assertions require correct pathname and empty query/fragment. No secret or full-screen state is encoded by hash-only routing.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/authentication-integrated-fidelity-final.json",
+              "sha256": "1531e79c6366aab0eeda55276c19dd3185b4ae0e36db3d40c33aa67dfc49d805"
+            }
+          ]
+        },
+        {
+          "id": "URL-003",
+          "result": "PASS",
+          "description": "Actual Back/Forward/reload clears transient proof and safely returns open originals to verification without mutation replay. Direct/refresh stage is reconstructed from server original.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/authentication-integrated-fidelity-final.json",
+              "sha256": "1531e79c6366aab0eeda55276c19dd3185b4ae0e36db3d40c33aa67dfc49d805"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
+            }
+          ]
+        },
+        {
+          "id": "URL-004",
+          "result": "PASS",
+          "description": "Pending/UNKNOWN/updated are safe local states on /recovery/repair. Check reads only original status; handoff has canonical result path. No modal/anchor/query-state surface is introduced.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/authentication-integrated-fidelity-final.json",
+              "sha256": "1531e79c6366aab0eeda55276c19dd3185b4ae0e36db3d40c33aa67dfc49d805"
+            }
+          ]
+        },
+        {
+          "id": "URL-005",
+          "result": "PASS",
+          "description": "Changed capability/publication holds mutation; exact original/version and history/reload proof guards block wrong-stage reentry. Native3 additionally proves unavailable policy/publication GET redirect without cookie and separate credential POST metadata.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/browser-composition.trx",
+              "sha256": "f68793402f11aa66830cdc215f7b37ed4b3b07517dca97caf32747b453461ed0"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
+            }
+          ]
+        },
+        {
+          "id": "URL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "Repair owns no OAuth/Product-origin or external redirect operation. Existing qualified Login rows retain original provenance; repair adds no redirect target.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md"
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "One AI reviewer compared six approved V04 images and local Figma-derived shell references to actual approved-width frames. Corrected pending/UNKNOWN/updated compositions match approved scope; conditional content/controls explicitly qualified.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-browser-fidelity-final.json",
+              "sha256": "dbdc38d6cf9402256723abe87c4de8b901ecd053f3ae684d97aeb9375effc225"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Existing glow SVGs/local fonts/Tunner/footer and authentication/recovery CSS are retained and source-bound; no approved background/glow omitted.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-browser-fidelity-final.json",
+              "sha256": "dbdc38d6cf9402256723abe87c4de8b901ecd053f3ae684d97aeb9375effc225"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Password/confirmation reuse canonical fields/help/errors/buttons/context tokens. Optional helpValues forwards existing interpolation, reviewed with actual SSR15 and root-observed shared44 contracts.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-ssr-fidelity-final.json",
+              "sha256": "10a6dc8a57df45a557b7d074c2a947ebfc305b1c2f6a254a3c8917e8c081a851"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Explicit011-V04 Product Owner consent covers route/composition and states; no unapproved new visual system.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-011-V04-VISUAL-CONSENT.json",
+              "sha256": "b5809d4ee9701ed63f5f904b34d762291de00235917bc73584fbed5f72822c4b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "FRD17 server proof/goal/effect authority preserved; pending in-flight lock controls commands, update does not assert restored access. Producer/contact-independent authority/production remain outside scope.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-011-V04-VISUAL-CONSENT.json",
+              "sha256": "b5809d4ee9701ed63f5f904b34d762291de00235917bc73584fbed5f72822c4b"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Approved Figma-derived styles/tokens are reused; TailAdmin defaults do not override screen. Existing500px recovery card/shared fields/buttons/fonts/glows visually checked.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-browser-fidelity-final.json",
+              "sha256": "dbdc38d6cf9402256723abe87c4de8b901ecd053f3ae684d97aeb9375effc225"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Component6 checks error-state axe/containment and20 captures at1440/768/390/320. New committed3 exercises actual router at768/390/320; exact reference dimensions separated from responsive-only variants.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-browser-fidelity-final.json",
+              "sha256": "dbdc38d6cf9402256723abe87c4de8b901ecd053f3ae684d97aeb9375effc225"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "One immutable increment receipt links consent/FRD/Figma mappings,20 hashed actual/six approved captures, raw runs/source witnesses and reviewed conditional variations.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-browser-fidelity-final.json",
+              "sha256": "dbdc38d6cf9402256723abe87c4de8b901ecd053f3ae684d97aeb9375effc225"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-error-1440.png",
+          "sha256": "1f18cde4fa1238d2a5e74a72abc05f0310cf5ce66422a6a41615665b338817af"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-error-320.png",
+          "sha256": "ba969e954d07cac86b0f60283138ec34f26cd9ce93f52c1a66a3beb516f62dee"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-error-390.png",
+          "sha256": "93e079e38606a2bcd126724969759925c96eb23d3cfe612be0a83a7299d8b590"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-error-768.png",
+          "sha256": "907a39dc775c7c99fcf044f62b1edd1727cc822bec58273b151221471a97ebc2"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-normal-1440.png",
+          "sha256": "890ed5138ddfa36bb3e2a215a2574db39b17d4dd22a5488d2aebb44953dbcb65"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-normal-320.png",
+          "sha256": "3692969355c1a55ebaf5943ba9b7c5b7eb75b7a59abf9a39b2cc30c1dd00c411"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-normal-390.png",
+          "sha256": "4754a3bc59ab5a2e980caefefb27f47853d90d6387c52ba988b1bf69f8461588"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-normal-768.png",
+          "sha256": "8be3ce40705ff1cf245f61b473249157d759b378879c54df0ddc06006102b996"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-pending-1440.png",
+          "sha256": "08ad8c4dfa67941d8f0be596e3ace57d0259632fc29c52ff8a9b1bc852779823"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-pending-320.png",
+          "sha256": "f8defd36ee71e742ea9b09a2d3a63b4df006f6fbb1c5932e846186ba915d56bc"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-pending-390.png",
+          "sha256": "1a4751e85258529fe91b86f45d0302a9b726999d60dda5b01701869a0a42a661"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-pending-768.png",
+          "sha256": "84b2863fd55c7d1615c0769ee9f2f5b6e46fa130f63def9898599fd0a264dd27"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-success-1440.png",
+          "sha256": "282b02113a876cd0e70934cd6bbccac02f2ce430cc88c342156a52b288c4179e"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-success-320.png",
+          "sha256": "4b05b32ae224e57203c1cbe0938f0a7424757e0d04969cf696f23c83f1035d85"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-success-390.png",
+          "sha256": "39ce97e62a42b70bbb121ed4f7448bbbb94dbee604693fe010ffa0e15e03011d"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-success-768.png",
+          "sha256": "4dc9c803065aeeba26b57150b04015d3fc29f1a41d30275666f9f129800cae85"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-unknown-1440.png",
+          "sha256": "85d2603f0e57b889da897199ef1511aaafdbd6e4cdf4a184a7179b5e3bab2b1c"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-unknown-320.png",
+          "sha256": "9c514c60dc7b7bdcf037fbc6b873091a2a6e62b3e8fd9d0c0e3fb7e811422ddc"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-unknown-390.png",
+          "sha256": "99ce5734148109ff955e90fa0201590620e3bf707bc653f4ae28d8c48f187271"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-unknown-768.png",
+          "sha256": "b77b75cdcde7a6c26b9567bf6f0d51c8222e1b7e13db7e0ec0a05d961d5b571f"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/reference/password-repair-error-390.png",
+          "sha256": "c9f8766f3db67e9734080f22bea7f26dd543932344ade17430814cd4a36c5216"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/reference/password-repair-normal-1440.png",
+          "sha256": "6e0c705fceaa85e0be1ea4ccde479180c5212cf7af2acbd5b16686b525beb10f"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/reference/password-repair-normal-390.png",
+          "sha256": "2a90c5540b334735a9aeae28f74ec7b1c5a0e6121c9573122580e1208a0a3a9f"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/reference/password-repair-pending-390.png",
+          "sha256": "85067a3ac50d33989a06ceda5d602d223973ad813d7cedb305e81e83615ea015"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/reference/password-repair-success-1440.png",
+          "sha256": "074600d0e64af835690b7f6eb016ec31c08d2f0e463da82b91da55f8daffb5a0"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/reference/password-repair-unknown-320.png",
+          "sha256": "e19c3d001dbcd93ba6e17cd3a164c7cccaeca3b1cf695172c26b377cbba6b34e"
+        }
+      ],
+      "deviations": [
+        {
+          "scope_id": "011-V04",
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-011-V04-VISUAL-CONSENT.json",
+            "sha256": "b5809d4ee9701ed63f5f904b34d762291de00235917bc73584fbed5f72822c4b"
+          }
+        }
+      ]
+    },
+    {
+      "id": "FORM-RECOVERY-PASSWORD-REPAIR",
+      "kind": "FORM",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:539"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "assessment_boundary": "011-V04 technical UI only; earlier frozen WIP execution and new committed3 remain distinct. No full native browser or Product acceptance.",
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Actual empty/mismatch/supplied inclusive rune bounds and correction use shared field/summary errors and first-invalid focus; no registration-specific rule.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-browser-fidelity-final.json",
+              "sha256": "dbdc38d6cf9402256723abe87c4de8b901ecd053f3ae684d97aeb9375effc225"
+            }
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Actual form has noValidate and shared schema/TextField/FieldError/FormErrorSummary. Browser constraint bubbles are not sole feedback; cross-device3 submits actual empty controller form.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-browser-fidelity-final.json",
+              "sha256": "dbdc38d6cf9402256723abe87c4de8b901ecd053f3ae684d97aeb9375effc225"
+            }
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Independent native malformed/password bypass refusals are actually qualified by private123 at46041, including password/contact validity. Backend C# is unchanged by frontend-only f77; older579 native109/SQL13 retain historical provenance. No native rerun or combined browser-native repair E2E at f77 is asserted.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/native-579c274/private109-summary.json",
+              "sha256": "7cd7d7fbe7520f1285ab110bf516541889675ce934c189ca946a6f3ab2d0ab62"
+            },
+            {
+              "path": "governance/evidence/p2-019-content-20261116/native-recovery-46041e95/private123.json",
+              "sha256": "5d248f73a0380b4956c0cab0fdb783db980d915e257007e7d7839a14f0fad514"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Actual integrated native VALIDATION_ERROR maps to published passwordRejected on verification/reselection. Generic proof rejection stays UNKNOWN; private details/account_exists/credentials are not shown or retained.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/authentication-integrated-fidelity-final.json",
+              "sha256": "1531e79c6366aab0eeda55276c19dd3185b4ae0e36db3d40c33aa67dfc49d805"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Actual blur/submit/correction focus and help/error associations; both DOM secrets clear before callback and on pagehide/context/unmount. Pending has no inputs; duplicate commands held. New3 repeats router validation at768/390/320.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-browser-fidelity-final.json",
+              "sha256": "dbdc38d6cf9402256723abe87c4de8b901ecd053f3ae684d97aeb9375effc225"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Actual error390 uses approved1050 viewport and shared red borders/error/summary/focus tokens. Full-page1061 differs due conditional actions, not clipped controls. No unsupported pixel-match claim.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-browser-fidelity-final.json",
+              "sha256": "dbdc38d6cf9402256723abe87c4de8b901ecd053f3ae684d97aeb9375effc225"
+            }
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Server-published min/max/exact confirmation remain authority; rune counting matches independent native validator. Synthetic3..6/goal fixtures choose no production values; old Figma password text is not copied.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-ssr-fidelity-final.json",
+              "sha256": "10a6dc8a57df45a557b7d074c2a947ebfc305b1c2f6a254a3c8917e8c081a851"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Controlled-response end-to-end browser router/validation passes1440(final10) and768/390/320(new committed3), with component6 four-width capture/axe/error coverage. Not combined current native+BFF repair E2E.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/cross-device3.json",
+              "sha256": "d23ff9528d483d90e3299e930cf81272dd996a805fada0ba04851cd59fe8c9d1"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "One AI reviewer compared six approved V04 images and local Figma-derived shell references to actual approved-width frames. Corrected pending/UNKNOWN/updated compositions match approved scope; conditional content/controls explicitly qualified.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-browser-fidelity-final.json",
+              "sha256": "dbdc38d6cf9402256723abe87c4de8b901ecd053f3ae684d97aeb9375effc225"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Existing glow SVGs/local fonts/Tunner/footer and authentication/recovery CSS are retained and source-bound; no approved background/glow omitted.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-browser-fidelity-final.json",
+              "sha256": "dbdc38d6cf9402256723abe87c4de8b901ecd053f3ae684d97aeb9375effc225"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Password/confirmation reuse canonical fields/help/errors/buttons/context tokens. Optional helpValues forwards existing interpolation, reviewed with actual SSR15 and root-observed shared44 contracts.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-ssr-fidelity-final.json",
+              "sha256": "10a6dc8a57df45a557b7d074c2a947ebfc305b1c2f6a254a3c8917e8c081a851"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Explicit011-V04 Product Owner consent covers route/composition and states; no unapproved new visual system.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-011-V04-VISUAL-CONSENT.json",
+              "sha256": "b5809d4ee9701ed63f5f904b34d762291de00235917bc73584fbed5f72822c4b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "FRD17 server proof/goal/effect authority preserved; pending in-flight lock controls commands, update does not assert restored access. Producer/contact-independent authority/production remain outside scope.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/TUN-P2-011-V04-VISUAL-CONSENT.json",
+              "sha256": "b5809d4ee9701ed63f5f904b34d762291de00235917bc73584fbed5f72822c4b"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Approved Figma-derived styles/tokens are reused; TailAdmin defaults do not override screen. Existing500px recovery card/shared fields/buttons/fonts/glows visually checked.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-browser-fidelity-final.json",
+              "sha256": "dbdc38d6cf9402256723abe87c4de8b901ecd053f3ae684d97aeb9375effc225"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Component6 checks error-state axe/containment and20 captures at1440/768/390/320. New committed3 exercises actual router at768/390/320; exact reference dimensions separated from responsive-only variants.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-browser-fidelity-final.json",
+              "sha256": "dbdc38d6cf9402256723abe87c4de8b901ecd053f3ae684d97aeb9375effc225"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "One immutable increment receipt links consent/FRD/Figma mappings,20 hashed actual/six approved captures, raw runs/source witnesses and reviewed conditional variations.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+              "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/presentation-browser-fidelity-final.json",
+              "sha256": "dbdc38d6cf9402256723abe87c4de8b901ecd053f3ae684d97aeb9375effc225"
+            },
+            {
+              "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+              "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-error-1440.png",
+          "sha256": "1f18cde4fa1238d2a5e74a72abc05f0310cf5ce66422a6a41615665b338817af"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-error-320.png",
+          "sha256": "ba969e954d07cac86b0f60283138ec34f26cd9ce93f52c1a66a3beb516f62dee"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-error-390.png",
+          "sha256": "93e079e38606a2bcd126724969759925c96eb23d3cfe612be0a83a7299d8b590"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-error-768.png",
+          "sha256": "907a39dc775c7c99fcf044f62b1edd1727cc822bec58273b151221471a97ebc2"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-normal-1440.png",
+          "sha256": "890ed5138ddfa36bb3e2a215a2574db39b17d4dd22a5488d2aebb44953dbcb65"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-normal-320.png",
+          "sha256": "3692969355c1a55ebaf5943ba9b7c5b7eb75b7a59abf9a39b2cc30c1dd00c411"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-normal-390.png",
+          "sha256": "4754a3bc59ab5a2e980caefefb27f47853d90d6387c52ba988b1bf69f8461588"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-normal-768.png",
+          "sha256": "8be3ce40705ff1cf245f61b473249157d759b378879c54df0ddc06006102b996"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-pending-1440.png",
+          "sha256": "08ad8c4dfa67941d8f0be596e3ace57d0259632fc29c52ff8a9b1bc852779823"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-pending-320.png",
+          "sha256": "f8defd36ee71e742ea9b09a2d3a63b4df006f6fbb1c5932e846186ba915d56bc"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-pending-390.png",
+          "sha256": "1a4751e85258529fe91b86f45d0302a9b726999d60dda5b01701869a0a42a661"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-pending-768.png",
+          "sha256": "84b2863fd55c7d1615c0769ee9f2f5b6e46fa130f63def9898599fd0a264dd27"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-success-1440.png",
+          "sha256": "282b02113a876cd0e70934cd6bbccac02f2ce430cc88c342156a52b288c4179e"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-success-320.png",
+          "sha256": "4b05b32ae224e57203c1cbe0938f0a7424757e0d04969cf696f23c83f1035d85"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-success-390.png",
+          "sha256": "39ce97e62a42b70bbb121ed4f7448bbbb94dbee604693fe010ffa0e15e03011d"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-success-768.png",
+          "sha256": "4dc9c803065aeeba26b57150b04015d3fc29f1a41d30275666f9f129800cae85"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-unknown-1440.png",
+          "sha256": "85d2603f0e57b889da897199ef1511aaafdbd6e4cdf4a184a7179b5e3bab2b1c"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-unknown-320.png",
+          "sha256": "9c514c60dc7b7bdcf037fbc6b873091a2a6e62b3e8fd9d0c0e3fb7e811422ddc"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-unknown-390.png",
+          "sha256": "99ce5734148109ff955e90fa0201590620e3bf707bc653f4ae28d8c48f187271"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/rendered/password-repair-unknown-768.png",
+          "sha256": "b77b75cdcde7a6c26b9567bf6f0d51c8222e1b7e13db7e0ec0a05d961d5b571f"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/reference/password-repair-error-390.png",
+          "sha256": "c9f8766f3db67e9734080f22bea7f26dd543932344ade17430814cd4a36c5216"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/reference/password-repair-normal-1440.png",
+          "sha256": "6e0c705fceaa85e0be1ea4ccde479180c5212cf7af2acbd5b16686b525beb10f"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/reference/password-repair-normal-390.png",
+          "sha256": "2a90c5540b334735a9aeae28f74ec7b1c5a0e6121c9573122580e1208a0a3a9f"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/reference/password-repair-pending-390.png",
+          "sha256": "85067a3ac50d33989a06ceda5d602d223973ad813d7cedb305e81e83615ea015"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/reference/password-repair-success-1440.png",
+          "sha256": "074600d0e64af835690b7f6eb016ec31c08d2f0e463da82b91da55f8daffb5a0"
+        },
+        {
+          "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/reference/password-repair-unknown-320.png",
+          "sha256": "e19c3d001dbcd93ba6e17cd3a164c7cccaeca3b1cf695172c26b377cbba6b34e"
+        }
+      ],
+      "deviations": [
+        {
+          "scope_id": "011-V04",
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-011-V04-VISUAL-CONSENT.json",
+            "sha256": "b5809d4ee9701ed63f5f904b34d762291de00235917bc73584fbed5f72822c4b"
+          }
+        }
+      ]
     }
   ],
   "item_origins": {
@@ -43282,7 +44526,7 @@
     "U-AUTH-07": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-011-UI-COMPLIANCE.json",
-        "sha256": "e251bbcd33526b9160fd3749ccec063e05011639ab556aa15fed7beb1455de46"
+        "sha256": "320a037105cd4eccc5a95597be5b4ff4ca9db7e656f8ffc14c9e720845d66802"
       },
       "source_item_id": "U-AUTH-07",
       "row_object_preserved": true,
@@ -43291,7 +44535,7 @@
     "U-AUTH-RECOVERY-VERIFY": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-011-UI-COMPLIANCE.json",
-        "sha256": "e251bbcd33526b9160fd3749ccec063e05011639ab556aa15fed7beb1455de46"
+        "sha256": "320a037105cd4eccc5a95597be5b4ff4ca9db7e656f8ffc14c9e720845d66802"
       },
       "source_item_id": "U-AUTH-RECOVERY-VERIFY",
       "row_object_preserved": true,
@@ -43300,7 +44544,7 @@
     "U-AUTH-RECOVERY-RESULT": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-011-UI-COMPLIANCE.json",
-        "sha256": "e251bbcd33526b9160fd3749ccec063e05011639ab556aa15fed7beb1455de46"
+        "sha256": "320a037105cd4eccc5a95597be5b4ff4ca9db7e656f8ffc14c9e720845d66802"
       },
       "source_item_id": "U-AUTH-RECOVERY-RESULT",
       "row_object_preserved": true,
@@ -43309,7 +44553,7 @@
     "FORM-RECOVERY-ENTRY": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-011-UI-COMPLIANCE.json",
-        "sha256": "e251bbcd33526b9160fd3749ccec063e05011639ab556aa15fed7beb1455de46"
+        "sha256": "320a037105cd4eccc5a95597be5b4ff4ca9db7e656f8ffc14c9e720845d66802"
       },
       "source_item_id": "FORM-RECOVERY-ENTRY",
       "row_object_preserved": true,
@@ -43318,7 +44562,7 @@
     "FORM-RECOVERY-CODE": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-011-UI-COMPLIANCE.json",
-        "sha256": "e251bbcd33526b9160fd3749ccec063e05011639ab556aa15fed7beb1455de46"
+        "sha256": "320a037105cd4eccc5a95597be5b4ff4ca9db7e656f8ffc14c9e720845d66802"
       },
       "source_item_id": "FORM-RECOVERY-CODE",
       "row_object_preserved": true,
@@ -43327,15 +44571,33 @@
     "COMP-RECOVERY-PRESENTATION": {
       "source_envelope": {
         "path": "governance/evidence/TUN-P2-011-UI-COMPLIANCE.json",
-        "sha256": "e251bbcd33526b9160fd3749ccec063e05011639ab556aa15fed7beb1455de46"
+        "sha256": "320a037105cd4eccc5a95597be5b4ff4ca9db7e656f8ffc14c9e720845d66802"
       },
       "source_item_id": "COMP-RECOVERY-PRESENTATION",
+      "row_object_preserved": true,
+      "original_execution_and_consent_identity_preserved": true
+    },
+    "U-AUTH-RECOVERY-REPAIR": {
+      "source_envelope": {
+        "path": "governance/evidence/TUN-P2-011-UI-COMPLIANCE.json",
+        "sha256": "320a037105cd4eccc5a95597be5b4ff4ca9db7e656f8ffc14c9e720845d66802"
+      },
+      "source_item_id": "U-AUTH-RECOVERY-REPAIR",
+      "row_object_preserved": true,
+      "original_execution_and_consent_identity_preserved": true
+    },
+    "FORM-RECOVERY-PASSWORD-REPAIR": {
+      "source_envelope": {
+        "path": "governance/evidence/TUN-P2-011-UI-COMPLIANCE.json",
+        "sha256": "320a037105cd4eccc5a95597be5b4ff4ca9db7e656f8ffc14c9e720845d66802"
+      },
+      "source_item_id": "FORM-RECOVERY-PASSWORD-REPAIR",
       "row_object_preserved": true,
       "original_execution_and_consent_identity_preserved": true
     }
   },
   "source_binding": {
-    "source_carrier_sha": "7c626363893b29c9130fb3bdc23942d15eaea570",
+    "source_carrier_sha": "f77f4853fc1b59c36cc5108cdb30197d5106afc2",
     "required_registered_files": [
       "docs/contracts/ui-inventory.json",
       "src/Modules/Identity/AuthenticationEndpoints.cs",
@@ -43360,6 +44622,7 @@
       "src/Modules/Identity/RecoveryCodeEndpoints.cs",
       "src/Modules/Identity/RecoveryCodeExecution.cs",
       "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs",
+      "src/Modules/Identity/RecoveryEndpoints.cs",
       "src/Modules/Identity/RegistrationApplication.cs",
       "src/Modules/Identity/RegistrationEndpoints.cs",
       "src/Modules/Identity/RegistrationPersonalInformation.cs",
@@ -43535,9 +44798,20 @@
       "web/packages/ui/vite.config.ts"
     ],
     "current_owned_source_unchanged_from_carrier": true,
-    "comparison": "Every owned path exists unchanged in committed7c626363. Two fixture helper/test paths changed since the earlier carrier and have actual7c normal-TLS qualification; all123 item objects retain their historical execution identities.",
-    "owner_evidence_reuse": "All123 original owner rows are preserved. P019 envelope additionally binds the authorized Identity fixture qualification and three current screenshots; original native-version UI and other owner run/consent identities remain unchanged.",
-    "actual_execution_identity_preserved": true
+    "comparison": "All298 owned paths match committed f77, current HEAD and filtered working objects;197 registered paths covered. Existing292 ownership retained plus six qualified Recovery source/test inputs. No unrelated item behavior change or repeat aggregate test is asserted.",
+    "owner_evidence_reuse": "117 unrelated item rows retained exactly, including deduplicated Login rows. Only eight Recovery rows imported from current ten-item P011 envelope; its original and contact-only immutable receipts preserve all source/execution identities.",
+    "actual_execution_identity_preserved": true,
+    "recovery_increment": {
+      "source_envelope": {
+        "path": "governance/evidence/TUN-P2-011-UI-COMPLIANCE.json",
+        "sha256": "320a037105cd4eccc5a95597be5b4ff4ca9db7e656f8ffc14c9e720845d66802"
+      },
+      "contact_qualification": {
+        "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+        "sha256": "e49365fed27f22e72dc6fa2fd65292e5827a3c91091f31fdcb1e3e8e22cf44dd"
+      },
+      "previous_global_source_carrier": "7c626363893b29c9130fb3bdc23942d15eaea570"
+    }
   },
   "historical_global_before_20261118": {
     "git_ref": "0f268b06e619ceab21de9e541d6dfe5a7fcc797f:governance/evidence/GLOBAL-UI-COMPLIANCE.json",
@@ -43608,11 +44882,12 @@
     },
     "boundary": "Historical GLOBAL proof retained through its exact Git object and original binding; old21rows are not duplicated or relabeled as current executions."
   },
-  "review_provenance": "Independent source/render review of the eight changed P019 rows under current QA/Frontend/UIUX/End-user contracts, plus existing owner assessments. P019 delegated authority permits the compatible shared Select refinement; no new human Product acceptance or native15 runtime qualification is inferred.",
+  "review_provenance": "Independent source/render review of the eight changed P019 rows under current QA/Frontend/UIUX/End-user contracts, plus existing owner assessments. P019 delegated authority permits the compatible shared Select refinement; no new human Product acceptance or native15 runtime qualification is inferred. Recovery-only aggregation refresh imports current owner qualification; no new role layers or human approval. Contact format follows existing native authority and shared error pattern.",
   "limits": [
-    "123 live inventory items are represented;44 PLANNED items are not assigned implemented PASS.",
-    "Scoped P011 native UI8PASS is retained separately; no actual GLOBAL native gate PASS has yet been claimed.",
-    "P011 feature admission/completion, diagnostic private HTTPS HOST repair, fresh private123, P2 Product acceptance, production activation, protected-main merge and release remain separate."
+    "125 live inventory items represented;44 PLANNED items receive no implemented PASS.",
+    "Current aggregation awaits root review/commit and actual GLOBAL native UI gate. Prior scoped/global/native runs retain original source identities.",
+    "Contact17/4/4 actually ran at f77; prior UI cohorts and backend/private123 at46041 are source-qualified reuse, not rerun or combined real-native repair browser proof.",
+    "Whole011/P2 lifecycle, Product acceptance, production activation, merge and release remain separate."
   ],
-  "acceptance": "Evidence consolidation for actual native GLOBAL UI evaluation only. Native gate outcome remains pending until root executes it."
+  "acceptance": "Updated owner-evidence aggregation for actual native GLOBAL UI evaluation after review and commit; no feature/Product/production/merge/release acceptance."
 }
