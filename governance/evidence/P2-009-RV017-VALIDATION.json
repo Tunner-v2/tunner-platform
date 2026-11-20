@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-009-RV017",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "context_ref": "artifacts/p2-011-recovery-20261112/v04-currentness-context/manifest.json",
+  "context_scope": "One bounded coordinating RV017 pack includes all six related revision/evidence records, common three role contracts and shared authority. Explicit owned_behavior_paths remain scope-specific; no historical DONE fallback or broader ownership.",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "docs/contracts/ui-inventory.json",
+    "src/Modules/Identity/RecoveryBrowserService.cs",
+    "src/Modules/Identity/RecoveryEndpoints.cs",
+    "web/tests/authentication/recovery.spec.ts",
+    "web/tests/recovery-case/presentation.spec.ts"
+  ],
+  "qualification": "PENDING final committed-carrier equality and native lifecycle checks. Reuse existing actual qualification; no runtime rerun at the future metadata carrier.",
+  "review_group_ref": "governance/evidence/P2-011-COMPATIBILITY-SCOPE.json",
+  "review_group_key": "v04_source_currentness",
+  "source_comparison": {
+    "commit_sha": "9e53e339e68f6f7761e500f2e1b98d3ecfa5c2d2",
+    "records": 44,
+    "unique_owned_paths": 373,
+    "git_object_comparisons": 892,
+    "unique_changed_paths": 6
+  },
+  "evidence_refs": [
+    "governance/evidence/p2-019-content-20261116/native-recovery-46041e95/native-gates-f3d9c86a.json",
+    "governance/evidence/p2-019-content-20261116/native-recovery-46041e95/qualification.json",
+    "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+    "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-qualified-reuse.json",
+    "governance/evidence/TUN-P2-011-UI-COMPLIANCE.json",
+    "governance/evidence/P0-004-RV008-VALIDATION.json"
+  ],
+  "review_refs": [
+    "governance/reviews/REV-P2-009-RV017-governance-engineer.yaml",
+    "governance/reviews/REV-P2-009-RV017-tester-qa-engineer.yaml",
+    "governance/reviews/REV-P2-009-RV017-auditor.yaml"
+  ],
+  "boundaries": "Technical source qualification only. No new journey execution, Product, wholeCI, production, protected-main merge or release acceptance.",
+  "inventory_comparison": {
+    "prior_items": 167,
+    "current_items": 169,
+    "amended": [
+      "U-AUTH-RECOVERY-VERIFY",
+      "FORM-RECOVERY-CODE"
+    ],
+    "added": [
+      "U-AUTH-RECOVERY-REPAIR",
+      "FORM-RECOVERY-PASSWORD-REPAIR"
+    ],
+    "removed": [],
+    "owner_rows_unchanged": 7,
+    "root_metadata_unchanged": true,
+    "sha256": "8b62097d5505a8f9171ddd72f562aa9a0ef1fc36b76de76a4b0184caa0fbd255"
+  },
+  "actual_execution_sources": {
+    "backend": "46041e95c6535caa6a3889a40d8f6cf36802c12f",
+    "focused_frontend": "f77f4853fc1b59c36cc5108cdb30197d5106afc2",
+    "legacy_keyboard": "0f268b06e619ceab21de9e541d6dfe5a7fcc797f",
+    "note": "Two C# blobs equal46041; both specs equalf77. Preserve original keyboard execution/body/source; no f77 keyboard rerun claim.",
+    "prerequisite_revision": "P0-004-RV008",
+    "real_child_historical_binding": "P2-009-RV014-001 at0f has same childID/revision_ref; current owner originalTUN-P2-009 lists the child. Original child remains untouched."
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-006-RV002",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "context_ref": "artifacts/p2-011-recovery-20261112/v04-currentness-context/manifest.json",
+  "context_scope": "One bounded coordinating RV017 pack includes all six related revision/evidence records, common three role contracts and shared authority. Explicit owned_behavior_paths remain scope-specific; no historical DONE fallback or broader ownership.",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "docs/contracts/ui-inventory.json"
+  ],
+  "qualification": "PENDING final committed-carrier equality and native lifecycle checks. Reuse existing actual qualification; no runtime rerun at the future metadata carrier.",
+  "review_group_ref": "governance/evidence/P2-011-COMPATIBILITY-SCOPE.json",
+  "review_group_key": "v04_source_currentness",
+  "source_comparison": {
+    "commit_sha": "9e53e339e68f6f7761e500f2e1b98d3ecfa5c2d2",
+    "records": 44,
+    "unique_owned_paths": 373,
+    "git_object_comparisons": 892,
+    "unique_changed_paths": 6
+  },
+  "evidence_refs": [
+    "governance/evidence/p2-019-content-20261116/native-recovery-46041e95/native-gates-f3d9c86a.json",
+    "governance/evidence/TUN-P2-011-UI-COMPLIANCE.json",
+    "governance/evidence/GLOBAL-UI-COMPLIANCE.json"
+  ],
+  "review_refs": [
+    "governance/reviews/REV-P2-006-RV002-governance-engineer.yaml",
+    "governance/reviews/REV-P2-006-RV002-tester-qa-engineer.yaml",
+    "governance/reviews/REV-P2-006-RV002-auditor.yaml"
+  ],
+  "boundaries": "Technical source qualification only. No new journey execution, Product, wholeCI, production, protected-main merge or release acceptance.",
+  "inventory_comparison": {
+    "prior_items": 167,
+    "current_items": 169,
+    "amended": [
+      "U-AUTH-RECOVERY-VERIFY",
+      "FORM-RECOVERY-CODE"
+    ],
+    "added": [
+      "U-AUTH-RECOVERY-REPAIR",
+      "FORM-RECOVERY-PASSWORD-REPAIR"
+    ],
+    "removed": [],
+    "owner_rows_unchanged": 3,
+    "root_metadata_unchanged": true,
+    "sha256": "8b62097d5505a8f9171ddd72f562aa9a0ef1fc36b76de76a4b0184caa0fbd255"
+  }
+}

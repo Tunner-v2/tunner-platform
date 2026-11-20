@@ -10,21 +10,32 @@
   "status": "PROPOSED",
   "reason": "One bounded source comparison identified exact approved V04 deltas underlying the current Recovery eligibility refusal. Preserve all closed ancestors and actual historical executions; qualify only the declared changed paths using existing genuine source-bound tests and reviews.",
   "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
   ],
   "decision_refs": [],
   "defect_refs": [],
-  "change_refs": [],
+  "change_refs": [
+    "web/packages/ui/src/controls.tsx",
+    "governance/evidence/P2-010-RV018-VALIDATION.json"
+  ],
   "impact_classification": "NON_BLOCKING",
   "blocked_scope": [],
   "acceptance_criteria": [
-    "Own only web/packages/ui/src/controls.tsx. Require exact current-source qualification and genuine scoped technical review using retained actual native123, V04/contact browser/component tests and current UI125 evidence as applicable. Preserve original Product acceptance, history and gate semantics. No application logic, new business/design/policy, production activation, merge or release."
+    "Qualify only web/packages/ui/src/controls.tsx through retained genuine evidence and committed-carrier source equality. Preserve original closure, acceptance and runtime execution identities; no application/policy/design changes, new execution, production, merge or release. Only optional helpValues interpolation; existing calls retain default behavior."
   ],
   "prerequisites": [],
   "work_items": [],
   "required_gates": [],
-  "required_roles": [],
-  "evidence_refs": [],
-  "created_at": "2026-11-20T00:46:31.1698386\u002B00:00",
-  "closed_at": null
+  "required_roles": [
+    "governance-engineer",
+    "tester-qa-engineer",
+    "auditor"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P2-010-RV018-VALIDATION.json"
+  ],
+  "created_at": "2026-11-20T00:46:31.1698386+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
 }
