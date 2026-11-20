@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "recovery_identifier_scan_correction": {
-    "phase": "LOCAL_VALIDATION_PASS_CI_PENDING",
+    "phase": "CI_BASELINE_AND_WEB_PASS_CONTAINER_BLOCKED",
     "ci_run": 44642404082,
     "source_commit_sha": "2eb6a7e6259a61a5fc393e86c9ecefbf552d76d4",
     "owned_paths": ["tools/security/secret-scan-allowances.json", "tools/validation/Validate-TunnerSecretsSource.ps1"],
@@ -14,7 +14,17 @@
       "tools/security/secret-scan-allowances.json": "5a0ed31d5614788c2ffb60fb318f181d85a993d5",
       "tools/validation/Validate-TunnerSecretsSource.ps1": "1e48e2397d3f6d7018cce4670f16f61320d51841"
     },
-    "prior_ci": "44642404082 platform/installer, global125 UI, web/dependency, CI-enforcement27, runtime-image coverage7, static source and SAST7928 PASS. Secret scan stopped the remaining baseline on this benign identifier. LGTM remains separately blocked; remediation stopped."
+    "prior_ci": "44642404082 platform/installer, global125 UI, web/dependency, CI-enforcement27, runtime-image coverage7, static source and SAST7928 PASS. Secret scan stopped the remaining baseline on this benign identifier. LGTM remains separately blocked; remediation stopped.",
+    "qualified_ci": {
+      "run_id": 44646285887,
+      "triggering_head_sha": "0ba20d58343395696567fe5840c8a34c6671ce72",
+      "baseline_job_id": 135989599008,
+      "baseline_result": "SUCCESS",
+      "web_job_id": 135989598713,
+      "web_result": "SUCCESS",
+      "container_gate_result": "FAILURE_KNOWN_LGTM",
+      "boundary": "Actual GitHub job results; standard PR-merge checkout is not relabeled as execution at workspace HEAD. Image remediation remains stopped; no whole-CI, production, merge or release PASS."
+    }
   },
   "scope_id": "P1-RV001-001",
   "result": "LOCAL_TEST_CORRECTIONS_PASS_INTEGRATION_BLOCKED",
