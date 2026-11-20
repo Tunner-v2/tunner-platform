@@ -1,0 +1,289 @@
+using System.Collections.Concurrent;
+using System.Net;
+using System.Net.Http.Json;
+using System.Text.Json;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.DependencyInjection;
+using Tunner.Database.Outbox;
+using Tunner.Platform.Policies;
+using Xunit;
+using static Tunner.Identity.Persistence.Tests.AuthenticationTestHost;
+
+namespace Tunner.Identity.Persistence.Tests;
+
+public sealed class TotpTests(IdentityPostgresFixture fixture) : IClassFixture<IdentityPostgresFixture>
+{
+    // All policy/content/provider data below is synthetic isolated test input, never a production selection.
+    internal sealed class Profile : ITotpPolicySource, ITotpSeedStore, ITotpMutationEligibilitySource, ITotpMfaRequirementSource, ITotpPresentationSource, IAssurancePolicySource, IStepUpPresentationSource
+    {
+        internal TotpPolicy Policy { get; set; } = new("fixture-totp-v1", Origin, "Fixture only", Tunner.Testing.Totp.NativeTotpCodeFixture.IdentityVersion, "SHA1", 6, 30, 2,
+            TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(5), TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(10), TimeSpan.FromMinutes(15), 10_000, 16, 3, 8,
+            TotpSessionEffect.PreserveExistingSessions, TotpSessionEffect.PreserveExistingSessions, TotpReplacementOrdering.IndependentEnrollment,
+            TotpResetBehavior.RetireAffectedFactorThenSeparateEnrollment, "fixture-proof", "fixture-proof", "fixture-proof", "fixture-proof",
+            new Dictionary<string, string> { ["pwd"] = "fixture-mfa", ["passkey"] = "fixture-mfa" }, "fixture-binding", "fixture-processing", "fixture-retention");
+        private readonly ConcurrentDictionary<TotpSeedReference, (TotpSeedBinding Binding, string Seed)> values = new();
+        internal bool RequireMfa { get; set; }
+        internal bool AllowMutation { get; set; } = true;
+        internal bool ThrowAfterCreate { get; set; }
+        internal bool ThrowBeforeCreate { get; set; }
+        internal string AssuranceVersion { get; set; } = "fixture-proof";
+        internal int Creates;
+        internal Action? BeforeMfaDecision { get; set; }
+        public TotpPolicy RequireEffective(DateTimeOffset effectiveAt) { Policy.Validate(); return Policy; }
+        public TotpSeedReference Allocate(TotpSeedBinding binding) => new("fixture-vault", "fixture/data/totp/" + binding.AuthenticatorReference.ToString("N") + "/" + binding.Generation.ToString("N"), 1);
+        public Task CreateOnceAsync(TotpSeedBinding binding, TotpSeedReference reference, string seed, CancellationToken cancellationToken)
+        {
+            Interlocked.Increment(ref Creates);
+            if (ThrowBeforeCreate) throw new InvalidOperationException("Synthetic unknown provider result.");
+            if (reference != Allocate(binding) || !values.TryAdd(reference, (binding, seed))) throw new InvalidOperationException("Synthetic CAS rejection.");
+            if (ThrowAfterCreate) throw new InvalidOperationException("Synthetic lost create response."); return Task.CompletedTask;
+        }
+        public Task<TotpSeedValue?> ReadAsync(TotpSeedBinding binding, TotpSeedReference reference, CancellationToken cancellationToken) =>
+            Task.FromResult(values.TryGetValue(reference, out var item) && item.Binding == binding ? new TotpSeedValue(item.Seed) : null);
+        internal string Seed(Guid reference) => values.Single(x => x.Value.Binding.AuthenticatorReference == reference).Value.Seed;
+        public ValueTask<TotpMutationEligibilityDecision> RequireAsync(TotpMutationEligibilityRequest request, CancellationToken cancellationToken) =>
+            ValueTask.FromResult(new TotpMutationEligibilityDecision(request.AccountId, request.AccountVersion, request.AuthenticatorReference, request.AuthenticatorVersion,
+                request.Operation, request.AlternativeMethodsDigest, AllowMutation, "fixture-eligibility", "fixture-evidence", Interval(request.EffectiveAt)));
+        public ValueTask<TotpMfaRequirementDecision> RequireAsync(TotpMfaRequirementRequest request, CancellationToken cancellationToken)
+        {
+            BeforeMfaDecision?.Invoke();
+            return ValueTask.FromResult(new TotpMfaRequirementDecision(request.AccountId, request.AccountVersion, request.PrimaryMethod, request.PrimaryAssurance, RequireMfa,
+                "fixture-mfa-requirement", "fixture-evidence", Interval(request.EffectiveAt), TimeSpan.FromMinutes(2)));
+        }
+        public TotpPresentation RequirePublished(TotpPolicy policy) => new("en", TotpPresentation.RequiredKeys.Select(x => new RegistrationPublishedText(x, "fixture", "fixture", "SYNTHETIC-TEST-ONLY", "en", "PUBLISHED", "Fixture only")));
+        public StepUpPresentation RequirePublished(AssurancePolicyVersion policy)
+        {
+            var existing = new StepUpBrowserTests.Presentation().RequirePublished(policy).Content.Values;
+            return new("en", existing.Concat(StepUpPresentation.TotpRequiredKeys.Select(x => new RegistrationPublishedText(x, "fixture", "fixture", "SYNTHETIC-TEST-ONLY", "en", "PUBLISHED", "Fixture only"))).GroupBy(x => x.Key, StringComparer.Ordinal).Select(x => x.Last()));
+        }
+        public AssurancePolicyVersion RequireEffective(AssurancePolicyScope scope, DateTimeOffset executedAt, string? expectedVersion = null)
+        {
+            if (expectedVersion is not null && expectedVersion != AssuranceVersion) throw new AssurancePolicyVersionConflictException();
+            return new(new(AssuranceVersion, "ACTIVE", scope, Interval(executedAt), null, ["SYNTHETIC-TEST-ONLY"]), "fixture-proof", TimeSpan.FromMinutes(5),
+                new Dictionary<string, string> { ["pwd"] = "fixture-proof", ["totp"] = "fixture-proof" });
+        }
+        private static EffectivePolicyInterval Interval(DateTimeOffset now) => new(now.AddHours(-1), true, now.AddHours(1), false);
+    }
+    internal static async Task<AuthenticationTestHost> StartTotp(IdentityTestDatabase db, Profile profile, Action<IServiceCollection>? configure = null)
+    {
+        var host = await Start(db, services =>
+        {
+            services.AddSingleton<ITotpPolicySource>(profile); services.AddSingleton<ITotpSeedStore>(profile); services.AddSingleton<ITotpMutationEligibilitySource>(profile);
+            services.AddSingleton<ITotpMfaRequirementSource>(profile); services.AddSingleton<ITotpPresentationSource>(profile); services.AddSingleton<IAssurancePolicySource>(profile);
+            services.AddSingleton<IStepUpPresentationSource>(profile);
+            configure?.Invoke(services);
+        });
+        host.Clock.SynchronizeToSystem(); return host;
+    }
+    internal sealed record Pending(Guid RequestId, Guid EnrollmentId, Guid Reference, string Cookies, string Csrf);
+    internal static async Task<string> Login(AuthenticationTestHost host)
+    {
+        var boot = await host.Options(); using var response = await host.Post("/authentication/sign-in", Command(boot.Key), boot.Cookies, boot.Csrf);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode); return Merge(boot.Cookies, response);
+    }
+    internal static async Task<Pending> Begin(AuthenticationTestHost host, string cookies, string kind = "ENROLL", Guid? reference = null, long version = 0)
+    {
+        using var options = await host.Get("/account/totp/options", cookies); Assert.Equal(HttpStatusCode.OK, options.StatusCode);
+        var view = await options.Content.ReadFromJsonAsync<JsonElement>(); var request = view.GetProperty("requestId").GetGuid(); var csrf = view.GetProperty("csrfToken").GetString()!;
+        cookies = Merge(cookies, options);
+        using var started = await host.Post("/account/totp/" + (kind == "ENROLL" ? "enrollment" : kind.ToLowerInvariant()) + "/start",
+            new { requestId = request, authenticatorReference = reference, expectedVersion = version }, cookies, csrf);
+        Assert.Equal(HttpStatusCode.OK, started.StatusCode); var operation = await started.Content.ReadFromJsonAsync<JsonElement>();
+        return new(request, operation.GetProperty("enrollmentId").GetGuid(), operation.GetProperty("authenticatorReference").GetGuid(), Merge(cookies, started), csrf);
+    }
+    internal static async Task<Pending> Authorize(AuthenticationTestHost host, Pending pending, string? totpCode = null, Guid? proofFactor = null)
+    {
+        using var options = await host.Get("/authentication/step-up/options", pending.Cookies); Assert.Equal(HttpStatusCode.OK, options.StatusCode);
+        var view = await options.Content.ReadFromJsonAsync<JsonElement>(); var cookies = Merge(pending.Cookies, options); var csrf = view.GetProperty("csrfToken").GetString()!;
+        using var result = totpCode is null ? await host.Post("/authentication/step-up/password", new { requestId = view.GetProperty("requestId").GetGuid(), password = Password }, cookies, csrf) :
+            await host.Post("/authentication/step-up/totp", new { requestId = view.GetProperty("requestId").GetGuid(), attemptId = Guid.NewGuid(), authenticatorReference = proofFactor, code = totpCode }, cookies, csrf);
+        Assert.Equal(HttpStatusCode.OK, result.StatusCode); return pending with { Cookies = Merge(cookies, result), Csrf = csrf };
+    }
+    internal static async Task<Pending> Enroll(AuthenticationTestHost host, Profile profile, string cookies, Func<string, Task<string>>? activationCodeFactory = null)
+    {
+        var pending = await Authorize(host, await Begin(host, cookies));
+        using var disclosed = await host.Post("/account/totp/enrollment/disclose", new { requestId = pending.RequestId, enrollmentId = pending.EnrollmentId }, pending.Cookies, pending.Csrf);
+        Assert.Equal(HttpStatusCode.OK, disclosed.StatusCode);
+        var seed = profile.Seed(pending.Reference);
+        var activationCode = activationCodeFactory is null ? NativeCode(seed) : await activationCodeFactory(seed);
+        using var activated = await host.Post("/account/totp/enrollment/activate", new { requestId = pending.RequestId, enrollmentId = pending.EnrollmentId, attemptId = Guid.NewGuid(), code = activationCode }, pending.Cookies, pending.Csrf);
+        Assert.Equal(HttpStatusCode.OK, activated.StatusCode); return pending with { Cookies = Merge(pending.Cookies, activated) };
+    }
+    // Invoke the pinned framework's own base32 and RFC6238 helpers solely to create native fixtures. No copied OTP math.
+    internal static string NativeCode(string seed, int counterOffset = 0) =>
+        Tunner.Testing.Totp.NativeTotpCodeFixture.NativeCode(seed, counterOffset);
+    [Fact]
+    public async Task FreshProofOneTimeDisclosureAndFirstNativeCodeAreSeparateAtomicStages()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await StartTotp(db, profile); await host.SeedAsync(db);
+        var pending = await Begin(host, await Login(host));
+        using (var early = await host.Post("/account/totp/enrollment/disclose", new { requestId = pending.RequestId, enrollmentId = pending.EnrollmentId }, pending.Cookies, pending.Csrf)) Assert.Equal(HttpStatusCode.Forbidden, early.StatusCode);
+        Assert.Equal(0, profile.Creates); pending = await Authorize(host, pending);
+        using (var disclosed = await host.Post("/account/totp/enrollment/disclose", new { requestId = pending.RequestId, enrollmentId = pending.EnrollmentId }, pending.Cookies, pending.Csrf))
+        {
+            Assert.Equal(HttpStatusCode.OK, disclosed.StatusCode); Assert.True(disclosed.Headers.CacheControl?.NoStore);
+            var response = await disclosed.Content.ReadFromJsonAsync<JsonElement>(); Assert.True(response.GetProperty("manualKey").GetString()!.Length > 0);
+            var nativeUri = response.GetProperty("otpAuthUri").GetString()!.StartsWith("otpauth://", StringComparison.Ordinal); Assert.True(nativeUri);
+        }
+        await using (var read = db.Context()) { Assert.Equal("INACTIVE", (await read.Set<TotpAuthenticatorRow>().SingleAsync()).State); Assert.Empty(await read.Set<TotpUsedCodeRow>().ToArrayAsync()); }
+        using (var repeated = await host.Post("/account/totp/enrollment/disclose", new { requestId = pending.RequestId, enrollmentId = pending.EnrollmentId }, pending.Cookies, pending.Csrf)) Assert.Equal(HttpStatusCode.Conflict, repeated.StatusCode);
+        var code = NativeCode(profile.Seed(pending.Reference)); var attempt = Guid.NewGuid();
+        using (var active = await host.Post("/account/totp/enrollment/activate", new { requestId = pending.RequestId, enrollmentId = pending.EnrollmentId, attemptId = attempt, code }, pending.Cookies, pending.Csrf)) Assert.Equal(HttpStatusCode.OK, active.StatusCode);
+        using (var retry = await host.Post("/account/totp/enrollment/activate", new { requestId = pending.RequestId, enrollmentId = pending.EnrollmentId, attemptId = attempt, code }, pending.Cookies, pending.Csrf)) Assert.Equal(HttpStatusCode.OK, retry.StatusCode);
+        await using var check = db.Context(); Assert.Equal("ACTIVE", (await check.Set<TotpAuthenticatorRow>().SingleAsync()).State); Assert.Single(await check.Set<TotpUsedCodeRow>().ToArrayAsync());
+        Assert.Equal(1, await check.Set<OutboxMessage>().CountAsync(x => x.EventType == "AuthenticatorAdded"));
+        Assert.True(await check.Database.SqlQueryRaw<int>("SELECT count(*)::integer AS \"Value\" FROM identity.\"AspNetUserTokens\"").SingleAsync() == 0);
+        var payloads = await check.Set<OutboxMessage>().Select(x => x.Payload).ToArrayAsync(); Assert.True(payloads.All(x => !x.Contains(profile.Seed(pending.Reference), StringComparison.Ordinal) && !x.Contains(code, StringComparison.Ordinal)));
+    }
+    [Theory]
+    [InlineData(true)] [InlineData(false)]
+    public async Task UnknownProviderCreateReconcilesOnlyItsImmutableTargetAndNeverRegenerates(bool created)
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile { ThrowAfterCreate = created, ThrowBeforeCreate = !created };
+        await using var host = await StartTotp(db, profile); await host.SeedAsync(db); var pending = await Authorize(host, await Begin(host, await Login(host)));
+        using (var first = await host.Post("/account/totp/enrollment/disclose", new { requestId = pending.RequestId, enrollmentId = pending.EnrollmentId }, pending.Cookies, pending.Csrf)) Assert.Equal(HttpStatusCode.ServiceUnavailable, first.StatusCode);
+        using (var reconciled = await host.Post("/account/totp/enrollment/disclose", new { requestId = pending.RequestId, enrollmentId = pending.EnrollmentId }, pending.Cookies, pending.Csrf)) Assert.Equal(created ? HttpStatusCode.OK : HttpStatusCode.ServiceUnavailable, reconciled.StatusCode);
+        Assert.Equal(1, profile.Creates);
+    }
+    [Theory]
+    [InlineData("DISABLE", TotpSessionEffect.PreserveExistingSessions)]
+    [InlineData("DISABLE", TotpSessionEffect.RevokeFactorSessions)]
+    [InlineData("RESET", TotpSessionEffect.PreserveExistingSessions)]
+    [InlineData("RESET", TotpSessionEffect.RevokeFactorSessions)]
+    public async Task SeparateDisableAndResetUseOwnExactProofAndExplicitFactorSessionEffect(string kind, TotpSessionEffect effect)
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); profile.Policy = profile.Policy with { DisableSessionEffect = effect, ResetSessionEffect = effect };
+        await using var host = await StartTotp(db, profile); await host.SeedAsync(db); var enrolled = await Enroll(host, profile, await Login(host));
+        profile.RequireMfa = true; var boot = await host.Options();
+        using var primary = await host.Post("/authentication/sign-in", Command(boot.Key), boot.Cookies, boot.Csrf); var cookies = Merge(boot.Cookies, primary);
+        using var mfaOptions = await host.Get("/authentication/totp/options", cookies); var view = await mfaOptions.Content.ReadFromJsonAsync<JsonElement>(); cookies = Merge(cookies, mfaOptions);
+        using var mfa = await host.Post("/authentication/totp/complete", new { requestId = boot.Key, authenticatorReference = enrolled.Reference, code = NativeCode(profile.Seed(enrolled.Reference), 1) }, cookies, view.GetProperty("csrfToken").GetString());
+        Assert.Equal(HttpStatusCode.OK, mfa.StatusCode); cookies = Merge(cookies, mfa);
+        var mutation = await Authorize(host, await Begin(host, cookies, kind, enrolled.Reference, 2), NativeCode(profile.Seed(enrolled.Reference), 2), enrolled.Reference);
+        using var live = await host.Get("/authentication/session", mutation.Cookies); Assert.Equal(effect == TotpSessionEffect.PreserveExistingSessions ? HttpStatusCode.OK : HttpStatusCode.Unauthorized, live.StatusCode);
+        if (effect == TotpSessionEffect.RevokeFactorSessions)
+        {
+            using var terminal = await host.Get("/account/totp/terminal-options", mutation.Cookies); Assert.Equal(HttpStatusCode.OK, terminal.StatusCode);
+            var terminalView = await terminal.Content.ReadFromJsonAsync<JsonElement>(); Assert.Equal(mutation.RequestId, terminalView.GetProperty("recovery").GetProperty("requestId").GetGuid());
+            Assert.True(terminalView.GetProperty("recovery").GetProperty("currentSessionEnds").GetBoolean()); Assert.True(terminalView.GetProperty("signInRequired").GetBoolean());
+            using var wrongResult = await host.Post("/account/totp/terminal-result", new { requestId = Guid.NewGuid(), enrollmentId = mutation.EnrollmentId }, Merge(mutation.Cookies, terminal), terminalView.GetProperty("csrfToken").GetString()); Assert.Equal(HttpStatusCode.NotFound, wrongResult.StatusCode);
+        }
+        await using var read = db.Context(); var factor = await read.Set<TotpAuthenticatorRow>().SingleAsync(); Assert.Equal("DISABLED", factor.State); Assert.Equal(3, factor.Version);
+        var operation = await read.Set<TotpOperationRow>().SingleAsync(x => x.EnrollmentId == mutation.EnrollmentId); Assert.Equal(kind, operation.Kind); Assert.Equal("COMPLETED", operation.State);
+        Assert.Equal(2, await read.Set<TotpOperationRow>().CountAsync()); Assert.Equal(1, profile.Creates);
+    }
+    [Fact]
+    public async Task RequiredMfaCreatesNoEarlySessionAndLostFinalResponseRecoversWithoutCode()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await StartTotp(db, profile); await host.SeedAsync(db);
+        var enrolled = await Enroll(host, profile, await Login(host)); profile.RequireMfa = true; var boot = await host.Options();
+        using var primary = await host.Post("/authentication/sign-in", Command(boot.Key), boot.Cookies, boot.Csrf); Assert.Equal(HttpStatusCode.OK, primary.StatusCode);
+        Assert.Equal("MFA_REQUIRED", (await primary.Content.ReadFromJsonAsync<JsonElement>()).GetProperty("status").GetString()); var cookies = Merge(boot.Cookies, primary);
+        await using (var read = db.Context()) { Assert.Equal(1, await read.Set<AuthenticationSessionRow>().CountAsync()); Assert.Single(await read.Set<TotpPendingAuthenticationRow>().ToArrayAsync()); }
+        await AssertPendingSelectorBindings(db, host, cookies);
+        using var options = await host.Get("/authentication/totp/options", cookies); Assert.Equal(HttpStatusCode.OK, options.StatusCode);
+        var view = await options.Content.ReadFromJsonAsync<JsonElement>(); cookies = Merge(cookies, options); var csrf = view.GetProperty("csrfToken").GetString();
+        var code = NativeCode(profile.Seed(enrolled.Reference), 1);
+        using (var completed = await host.Post("/authentication/totp/complete", new { requestId = boot.Key, authenticatorReference = enrolled.Reference, code }, cookies, csrf)) Assert.Equal(HttpStatusCode.OK, completed.StatusCode);
+        // Deliberately discard final Set-Cookie response, then recover using original protected pending attempt only.
+        using var recovered = await host.Post("/authentication/totp/result", new { requestId = boot.Key }, cookies, csrf); Assert.Equal(HttpStatusCode.OK, recovered.StatusCode);
+        using var session = await host.Get("/authentication/session", Merge(cookies, recovered)); Assert.Equal(HttpStatusCode.OK, session.StatusCode);
+        await using var check = db.Context(); Assert.Equal(2, await check.Set<AuthenticationSessionRow>().CountAsync()); Assert.Equal(2, await check.Set<TotpUsedCodeRow>().CountAsync());
+        Assert.Equal("COMPLETED", (await check.Set<TotpPendingAuthenticationRow>().SingleAsync()).State);
+    }
+    private static async Task AssertPendingSelectorBindings(IdentityTestDatabase db, AuthenticationTestHost host, string cookies)
+    {
+        using var scope = host.Services.CreateScope(); var provider = scope.ServiceProvider.GetRequiredService<IDataProtectionProvider>();
+        var http = new DefaultHttpContext(); http.Request.Headers.Cookie = cookies;
+        Assert.True(AuthenticationEndpoints.TryBrowser(http, AuthenticationEndpoints.Protector(provider), host.Clock.GetUtcNow(), out var browser), "MFA_ORIGINAL_BROWSER_UNAVAILABLE");
+        var selected = JsonSerializer.Deserialize<TotpMfaSelection>(provider.CreateProtector("Tunner.User.Totp.PendingAuthentication.v1").Unprotect(http.Request.Cookies[TotpBrowserService.MfaCookieName]!))!;
+        Assert.True(AuthenticationIdentity.Digest(browser!.Nonce) == selected.BrowserDigest, "MFA_BROWSER_NONCE_MISMATCH");
+        await using var context = db.Context(); var pending = await context.Set<TotpPendingAuthenticationRow>().SingleAsync();
+        Assert.True(pending.PendingId == selected.PendingId && pending.RequestId == selected.RequestId && pending.BrowserDigest == selected.BrowserDigest && pending.Origin == selected.Origin, "MFA_PENDING_SELECTOR_BINDING_MISMATCH");
+        Assert.True(pending.RecoveryExpiresAt == selected.ExpiresAt, "MFA_SELECTOR_PERSISTED_TIMESTAMP_MISMATCH");
+    }
+    [Fact]
+    public async Task AdditiveMigrationRoundTripPreservesOldAuthModelAndInstallsImmutableGuards()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); await using var context = db.Context(); Assert.False(context.Database.HasPendingModelChanges());
+        var guards = await context.Database.SqlQueryRaw<int>("SELECT count(*)::integer AS \"Value\" FROM pg_trigger WHERE tgname IN ('totp_authenticator_guard','totp_operation_guard','totp_pending_guard','totp_replay_guard','totp_attempt_guard') AND NOT tgisinternal").SingleAsync(); Assert.Equal(5, guards);
+        await context.GetService<IMigrator>().MigrateAsync("20261110092326_P2PasskeyOperationProofs"); await context.Database.MigrateAsync(); Assert.False(context.Database.HasPendingModelChanges());
+    }
+    [Fact]
+    public async Task LiveTotpEvidencePreventsDestructiveMigrationDowngrade()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await StartTotp(db, profile); await host.SeedAsync(db);
+        var enrolled = await Enroll(host, profile, await Login(host)); await using var context = db.Context();
+        var error = await Assert.ThrowsAsync<Npgsql.PostgresException>(() => context.GetService<IMigrator>().MigrateAsync("20261110092326_P2PasskeyOperationProofs"));
+        Assert.Equal("23514", error.SqlState); Assert.True(await context.Set<TotpAuthenticatorRow>().AnyAsync(x => x.AuthenticatorReference == enrolled.Reference && x.State == "ACTIVE"));
+        Assert.Single(await context.Set<TotpUsedCodeRow>().ToArrayAsync());
+    }
+    [Fact]
+    public async Task OriginalPendingAttemptCannotBecomePrimaryOnlyAfterRequirementChanges()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile { RequireMfa = true }; await using var host = await StartTotp(db, profile); await host.SeedAsync(db);
+        var boot = await host.Options(); using var first = await host.Post("/authentication/sign-in", Command(boot.Key), boot.Cookies, boot.Csrf); Assert.Equal(HttpStatusCode.OK, first.StatusCode);
+        profile.RequireMfa = false;
+        using var changed = await host.Post("/authentication/sign-in", Command(boot.Key), Merge(boot.Cookies, first), boot.Csrf); Assert.Equal(HttpStatusCode.Conflict, changed.StatusCode);
+        await using var context = db.Context(); Assert.Empty(await context.Set<AuthenticationSessionRow>().ToArrayAsync()); Assert.Equal("PENDING", (await context.Set<TotpPendingAuthenticationRow>().SingleAsync()).State);
+    }
+    [Fact]
+    public async Task PendingMfaOptionsRequireItsExactOriginalAuthenticationBrowser()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile { RequireMfa = true }; await using var host = await StartTotp(db, profile); await host.SeedAsync(db);
+        var boot = await host.Options(); using var primary = await host.Post("/authentication/sign-in", Command(boot.Key), boot.Cookies, boot.Csrf); Assert.Equal(HttpStatusCode.OK, primary.StatusCode);
+        var original = Merge(boot.Cookies, primary); var other = await host.Options();
+        var pendingSelection = original.Split(';', StringSplitOptions.TrimEntries).Single(x => x.StartsWith(TotpBrowserService.MfaCookieName + "=", StringComparison.Ordinal));
+        using var wrongBrowser = await host.Get("/authentication/totp/options", other.Cookies + "; " + pendingSelection); Assert.Equal(HttpStatusCode.NotFound, wrongBrowser.StatusCode);
+        using var correct = await host.Get("/authentication/totp/options", original); Assert.Equal(HttpStatusCode.OK, correct.StatusCode);
+    }
+    [Theory]
+    [InlineData("idle")] [InlineData("assurance")]
+    public async Task ActivationFinalBoundaryRejectsExpiredSessionOrChangedConsumedProofAndRollsBackCode(string boundary)
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await StartTotp(db, profile);
+        if (boundary == "idle") host.Policies.Policy = host.Policies.Policy with { IdleLifetime = TimeSpan.FromSeconds(1) };
+        await host.SeedAsync(db); var pending = await Authorize(host, await Begin(host, await Login(host)));
+        using (var disclosure = await host.Post("/account/totp/enrollment/disclose", new { requestId = pending.RequestId, enrollmentId = pending.EnrollmentId }, pending.Cookies, pending.Csrf)) Assert.Equal(HttpStatusCode.OK, disclosure.StatusCode);
+        var uses = 0;
+        host.Access.BeforeDecision = request =>
+        {
+            if (request.Operation == TotpApplication.EnrollmentScope.Operation && ++uses == 2)
+            {
+                if (boundary == "idle") host.Clock.Advance(TimeSpan.FromSeconds(2)); else profile.AssuranceVersion = "fixture-proof-v2";
+            }
+        };
+        using var response = await host.Post("/account/totp/enrollment/activate", new { requestId = pending.RequestId, enrollmentId = pending.EnrollmentId, attemptId = Guid.NewGuid(), code = NativeCode(profile.Seed(pending.Reference)) }, pending.Cookies, pending.Csrf);
+        Assert.True(response.StatusCode is HttpStatusCode.Forbidden or HttpStatusCode.Conflict);
+        await using var read = db.Context(); Assert.Equal("INACTIVE", (await read.Set<TotpAuthenticatorRow>().SingleAsync()).State); Assert.Empty(await read.Set<TotpUsedCodeRow>().ToArrayAsync());
+        Assert.Equal(0, await read.Set<OutboxMessage>().CountAsync(x => x.EventType == "AuthenticatorAdded")); Assert.Equal("AWAITING_FIRST_CODE", (await read.Set<TotpOperationRow>().SingleAsync()).State);
+    }
+    [Fact]
+    public async Task LostStartResponseRecoversExactOperationWithoutCreatingAnotherEnrollmentAndCancelIsSafe()
+    {
+        await using var db = await fixture.CreateDatabaseAsync(); var profile = new Profile(); await using var host = await StartTotp(db, profile); await host.SeedAsync(db); var cookies = await Login(host);
+        using var options = await host.Get("/account/totp/options", cookies); var view = await options.Content.ReadFromJsonAsync<JsonElement>(); cookies = Merge(cookies, options);
+        var request = view.GetProperty("requestId").GetGuid(); var csrf = view.GetProperty("csrfToken").GetString();
+        using (var lost = await host.Post("/account/totp/enrollment/start", new { requestId = request }, cookies, csrf)) Assert.Equal(HttpStatusCode.OK, lost.StatusCode);
+        using var recovery = await host.Post("/account/totp/start-result", new { requestId = request, kind = "ENROLL", expectedVersion = 0 }, cookies, csrf); Assert.Equal(HttpStatusCode.OK, recovery.StatusCode);
+        var original = await recovery.Content.ReadFromJsonAsync<JsonElement>(); cookies = Merge(cookies, recovery);
+        using var cancelled = await host.Post("/account/totp/cancel", new { requestId = request, enrollmentId = original.GetProperty("enrollmentId").GetGuid() }, cookies, csrf); Assert.Equal(HttpStatusCode.OK, cancelled.StatusCode);
+        await using var read = db.Context(); Assert.Single(await read.Set<TotpOperationRow>().ToArrayAsync()); Assert.Empty(await read.Set<TotpAuthenticatorRow>().ToArrayAsync()); Assert.Equal(0, profile.Creates);
+    }
+    [Fact]
+    public void PublishedTotpContentRequiresEveryApprovedSemanticFieldAndErrorVariant()
+    {
+        var profile = new Profile(); var full = profile.RequirePublished(profile.Policy); Assert.Equal(TotpPresentation.RequiredKeys.Count, full.Content.Count);
+        Assert.Contains("totp.selection.optionLabel", TotpPresentation.RequiredKeys); Assert.Contains("totp.error.replayed", TotpPresentation.RequiredKeys);
+        Assert.DoesNotContain("optionLabel", TotpPresentation.RequiredKeys); Assert.Equal(TotpPresentation.RequiredKeys.Count, TotpPresentation.RequiredKeys.Distinct(StringComparer.Ordinal).Count());
+        Assert.Throws<ArgumentException>(() => new TotpPresentation("en", full.Content.Values.Where(x => x.Key != "totp.error.code")));
+        var assurance = profile.RequireEffective(TotpApplication.EnrollmentScope, DateTimeOffset.UtcNow, "fixture-proof");
+        var partial = new StepUpPresentation("en", profile.RequirePublished(assurance).Content.Values.Where(x => x.Key != "stepUp.totp.error.code")); Assert.Throws<ArgumentException>(() => partial.RequireTotpPublished());
+        profile.RequirePublished(assurance).RequireTotpPublished();
+    }
+}

@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-010-RV014",
+  "owner_work_item": "TUN-P2-010",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "11f80d705120855c9766424d2c91711f8646990f",
+  "validated_commit_sha": "11f80d705120855c9766424d2c91711f8646990f",
+  "owned_behavior_paths": [
+    "docs/contracts/ui-inventory.json",
+    "src/Modules/Identity/AuthenticationEndpoints.cs",
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+    "src/Modules/Identity/IdentityWebAssets.cs",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+    "src/Modules/Identity/RecoveryCodeAccountView.cs",
+    "src/Modules/Identity/RecoveryCodeExecution.cs",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "tests/Shared/RecoveryCodeOwnedDockerFixture.cs",
+    "tests/Tunner.Identity.Persistence.Tests/FederationPrivateIntegrationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeExecution.cs",
+    "tools/recovery-native-testing/cases.json"
+  ],
+  "phase": "NATIVE_SOURCE_COMPATIBILITY_CLOSURE_PASS",
+  "closure_gate_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/P2-010-RV014-close.json",
+  "closure_gate_evaluated_sha": "e326f212f3702862cdc419c705418e9156bdb8f7",
+  "scope": "Narrow retained-source compatibility only; no repair or runtime acceptance of the separate private HTTPS HOST failure.",
+  "prepared_at_commit_sha": "de545f7ca0ef8222ea8735087911758ce98d2398",
+  "source_qualification": {
+    "pure_classifier": {
+      "actual_source_sha": "96685959ef4e87b319e214e615407517c1c3a64b",
+      "executed": 2,
+      "passed": 2,
+      "failed": 0,
+      "current_source_equal": true,
+      "test_identities": [
+        "Tunner.Identity.Persistence.Tests.RecoveryCodeNativeTests.HostStartupClassificationBoundsWrappersAndRecognizesOnlyTheFixedTlsSentinel",
+        "Tunner.Identity.Persistence.Tests.RecoveryCodeNativeTests.HostStartupClassificationDoesNotRetainForeignPayloads"
+      ],
+      "execution_ref": "governance/evidence/p2-019-content-20261116/host-classifier-96685959/execution.json",
+      "tests_ref": "governance/evidence/p2-019-content-20261116/host-classifier-96685959/tests.trx",
+      "boundary": "Pure safe category/privacy/wrapper/sentinel tests; no Docker, private host or wire execution."
+    },
+    "historical_native": {
+      "actual_source_sha": "1bf5971739f163d15777498b211ff0f48f677bc8",
+      "executed": 123,
+      "passed": 123,
+      "receipt_ref": "governance/evidence/p2-019-content-20261116/native-recovery-1bf59717/private-receipt.json",
+      "build_binding_ref": "governance/evidence/p2-019-content-20261116/native-recovery-1bf59717/build-binding.json",
+      "boundary": "Retained original-source result only; not a fresh current binary or proof that the HOST defect is fixed."
+    },
+    "ten_retained_source_paths": [
+      "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+      "src/Modules/Identity/IdentityWebAssets.cs",
+      "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+      "src/Modules/Identity/RecoveryCodeAccountView.cs",
+      "src/Modules/Identity/RecoveryCodeExecution.cs",
+      "src/Modules/Identity/StepUpApplication.cs",
+      "tests/Shared/RecoveryCodeOwnedDockerFixture.cs",
+      "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeExecution.cs",
+      "tools/recovery-native-testing/cases.json"
+    ],
+    "ten_paths_equal_to_1bf": true,
+    "host_only_diagnostic_join": {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationPrivateIntegrationTests.cs",
+      "actual_source_carrier": "96685959ef4e87b319e214e615407517c1c3a64b",
+      "current_source_equal": true,
+      "change": "DatabaseFailure retains first precedence; only FEDERATION_MFA_HOST invokes the bounded safe HostFailure classifier; all other checkpoints retain the original fallback.",
+      "source_review_refs": [
+        "governance/evidence/P2-010-RV012-VALIDATION.json",
+        "governance/evidence/P2-009-RV011-VALIDATION.json"
+      ],
+      "runtime_integration_boundary": "Independently reviewed source join, not an executed current private-host recovery."
+    },
+    "inventory": {
+      "method": "Both Git stdout and working file parsed from UTF-8 JSON BYTES; no locale/default text decoding.",
+      "closed_base_carrier": "58023be5299d024cf2ae0bf05bbcbda2f1384e26",
+      "retained_original_items": 94,
+      "all_original_items_deep_equal": true,
+      "qualified_1bf_items_retained": 154,
+      "all_1bf_items_deep_equal": true,
+      "current_items": 167,
+      "additional_items": 73,
+      "additional_items_match_p019_qualified_scope": true,
+      "current_p019_ui_ref": "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
+      "historical_federation_ui_ref": "governance/evidence/TUN-P2-010-UI-COMPLIANCE.json",
+      "boundary": "Existing original94 item objects unchanged; new73 covered by their exact P019 scoped evidence. No blanket GLOBAL UI or new original-domain whole-UI execution claim."
+    }
+  },
+  "review_refs": [
+    "governance/reviews/REV-P2-010-RV014-full-stack-engineer.yaml",
+    "governance/reviews/REV-P2-010-RV014-tester-qa-engineer.yaml",
+    "governance/reviews/REV-P2-010-RV014-solution-architect.yaml",
+    "governance/reviews/REV-P2-010-RV014-cyber-security-engineer.yaml",
+    "governance/reviews/REV-P2-010-RV014-auditor.yaml"
+  ],
+  "shared_context_selection": "P2-009-RV013",
+  "context_ref": "artifacts/p2-019-content-20261116/context-retained-source-corrected/manifest.json",
+  "context_status": "ACTUALLY_VERIFIED_CURRENT_AT_VALIDATION_BEFORE_METADATA_ONLY_CLOSURE",
+  "context_verification_before_json_correction": {"selected_scope":"P2-009-RV013","source_commit_sha":"852bdaa118fd12c31590771cd505267bbedae06d","outcome":"CURRENT","findings":[],"included":102,"roles":5,"scope_bound_reviews":10,"owner_revisions":2,"manifest_sha256":"9f9b0ea603205935718282d8282add8806f9da31416646b77b8ada2d78ce9728","receipt_ref":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/context-verify.json","boundary":"Actual verification before metadata-only validation and closure; not a post-metadata freshness or current private runtime claim."},
+  "context_verification": {"selected_scope":"P2-009-RV013","source_commit_sha":"e326f212f3702862cdc419c705418e9156bdb8f7","outcome":"CURRENT","findings":[],"included":102,"roles":5,"scope_bound_reviews":10,"owner_revisions":2,"owned_paths":14,"manifest_sha256":"440ccfbb4cab0b8b91312232f8278e3c9f32f2f3f2e7056d5d6515cf92d12904","receipt_ref":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/corrected-context-verify.json","boundary":"Actual corrected context verification before final metadata-only closure. Earlier context and initial JSON-related NOT_READY are retained; no private-runtime or global acceptance claimed."},
+  "runtime_tracking_context": {
+    "defect_ref": "governance/defects/DEF-TUN-P2-009-HTTPS-HOST-001.yaml",
+    "status": "IN_PROGRESS_UNFULFILLED",
+    "diagnostic_revisions": [
+      "P2-009-RV011",
+      "P2-010-RV012"
+    ],
+    "diagnostic_statuses": "ACTIVE_PENDING_WITH_ORIGINAL_RUNTIME_CRITERIA_AND_DEFECT_LINKS_UNCHANGED",
+    "boundary": "Context reference only for this source bridge; this record does not resolve, close or satisfy those diagnostic/runtime scopes."
+  },
+  "boundaries": "Source compatibility only; classified carrier 11f80d705120855c9766424d2c91711f8646990f preserves actual execution identities966/1bf and current scoped UI proof. Context verification and native closure are recorded separately. HOST restoration, diagnostic runtime criteria, fresh123, GLOBAL UI/CI, Product, production activation and release remain unfulfilled.",
+  "already_qualified_exclusion": {
+    "path": "web/apps/user/passkeys.tsx",
+    "closed_revision": "P2-010-RV013",
+    "reason": "Already covered by the preceding completed-Passkey source bridge; not re-owned here."
+  }
+}

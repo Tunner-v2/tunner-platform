@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -17,7 +16,8 @@ namespace Tunner.Identity.Persistence;
 public sealed partial class RegistrationApplication(
     IdentityPersistenceDbContext database, IRegistrationPolicySource policies,
     IRegistrationPasswordBlocklist blocklist, IDataProtectionProvider protection,
-    IRegistrationNotificationDispatcher notifications, TimeProvider timeProvider, AccountPersonalInformationApplication personalInformation) : IRegistrationApplication
+    IRegistrationNotificationDispatcher notifications, TimeProvider timeProvider, AccountPersonalInformationApplication personalInformation,
+    IEnumerable<IFederationProfileSource>? federationProfiles = null) : IRegistrationApplication
 {
     private readonly IDataProtector credentialProtection = protection.CreateProtector("Tunner.Identity.Registration.Credential.v1");
     private readonly IDataProtector challengeProtection = protection.CreateProtector("Tunner.Identity.Registration.Challenge.v1");
@@ -151,22 +151,7 @@ public sealed partial class RegistrationApplication(
         }
         else
         {
-            await LockAsync("email:" + operation.NormalizedEmail, cancellationToken).ConfigureAwait(false);
-            var account = await database.Accounts.SingleAsync(x => x.AccountId == operation.AccountId, cancellationToken).ConfigureAwait(false);
-            var contact = await database.VerifiedContacts.SingleAsync(x => x.ContactId == operation.ContactId, cancellationToken).ConfigureAwait(false);
-            var collision = await database.VerifiedContacts.AnyAsync(x => x.AccountId != account.AccountId && x.NormalizedEmail == operation.NormalizedEmail && x.State == ContactVerificationState.Verified && x.AnonymizedAtUtc == null, cancellationToken).ConfigureAwait(false);
-            if (account.State != AccountState.VerificationPending || contact.State != ContactVerificationState.Unverified || collision || operation.ProtectedCredential is null)
-                result = Failure(operation.OperationId, "NOT_FOUND_OR_NOT_DISCLOSABLE", operation);
-            else
-            {
-                var user = await database.Users.SingleAsync(x => x.AccountId == account.AccountId, cancellationToken).ConfigureAwait(false);
-                user.PasswordHash = credentialProtection.Unprotect(operation.ProtectedCredential); user.EmailConfirmed = true;
-                user.SecurityStamp = Guid.NewGuid().ToString("N"); user.ConcurrencyStamp = Guid.NewGuid().ToString("N");
-                contact.State = ContactVerificationState.Verified; contact.Version++; contact.EvidenceReference = "contact-proof:" + operation.OperationId;
-                operation.Stage = "PERSONAL_INFORMATION"; operation.Version++; ClearMaterial(operation);
-                AddEvent(operation, "VerifiedContactChanged", contact.ContactId.ToString("N"), contact.Version, now);
-                result = Result(operation);
-            }
+            result = await CompleteRegistrationContactAsync(operation, now, cancellationToken).ConfigureAwait(false);
         }
         await database.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
         if (result.ErrorCode is null) result = await DescribeAsync(operation, now, cancellationToken).ConfigureAwait(false);
@@ -239,9 +224,13 @@ public sealed partial class RegistrationApplication(
     /// <summary>Trusted notification consumer retry entry; not an HTTP endpoint. Adapter deduplicates DeliveryId.</summary>
     public async Task<bool> DispatchNotificationAsync(Guid deliveryId, CancellationToken cancellationToken = default)
     {
-        var now = timeProvider.GetUtcNow(); policies.RequireEffective(now).Validate();
+        var now = timeProvider.GetUtcNow(); var policy = policies.RequireEffective(now); policy.Validate();
         var row = await database.Set<RegistrationOperationRow>().AsNoTracking().SingleOrDefaultAsync(x => x.DeliveryId == deliveryId, cancellationToken).ConfigureAwait(false);
         if (row is null || row.Status != "REQUIRES_ACTION" || row.ExpiresAt <= now || row.PurgeAfter <= now || row.ProtectedAddress is null) return false;
+        // Verification retries retain VerifyAsync's policy-version and proof-material prerequisites.
+        // Existing-account notices intentionally have neither a proposed credential nor an Account binding.
+        if ((row.AccountId is not null || row.ProtectedCredential is not null) &&
+            (row.PolicyVersion != policy.Version || row.ProtectedCode is null || row.ProtectedDigest is null)) return false;
         await notifications.QueueAsync(new RegistrationNotification(deliveryId, addressProtection.Unprotect(row.ProtectedAddress),
             row.ProtectedCode is null ? null : challengeProtection.Unprotect(row.ProtectedCode), row.TemplateVersion), cancellationToken).ConfigureAwait(false);
         return true;
@@ -268,24 +257,16 @@ public sealed partial class RegistrationApplication(
         { OperationId = id, Kind = kind, IdempotencyKey = key, ResultJson = JsonSerializer.Serialize(result with { PersonalInformation = null }) });
     private void SetChallenge(RegistrationOperationRow row, RegistrationPolicy policy, DateTimeOffset now)
     {
-        var bound = (int)Math.Pow(10, policy.ProofDigits);
         var previous = row.ProtectedCode is null ? null : challengeProtection.Unprotect(row.ProtectedCode);
-        string code;
-        do { code = RandomNumberGenerator.GetInt32(bound).ToString("D" + policy.ProofDigits.ToString(CultureInfo.InvariantCulture), CultureInfo.InvariantCulture); }
-        while (StringComparer.Ordinal.Equals(previous, code));
-        row.ProtectedCode = challengeProtection.Protect(code);
-        row.ProtectedDigest = Convert.ToBase64String(challengeProtection.Protect(Digest(row, code)));
+        var prepared = IdentityContactChallenge.Create(challengeProtection, row.OperationId.ToString("N") + ":" + row.PolicyVersion, policy.ProofDigits, previous);
+        row.ProtectedCode = prepared.Code; row.ProtectedDigest = prepared.Digest;
         row.TemplateVersion = policy.VerificationTemplateVersion; row.DeliveryId = Guid.NewGuid(); row.Attempts = 0;
         row.ExpiresAt = now + policy.ProofLifetime; row.ResendAfter = now + policy.ResendCooldown; row.PurgeAfter = now + policy.PendingMaterialRetention;
     }
-    private static byte[] Digest(RegistrationOperationRow row, string code) => SHA256.HashData(Encoding.UTF8.GetBytes(row.OperationId.ToString("N") + ":" + row.PolicyVersion + ":" + code));
+    private static byte[] Digest(RegistrationOperationRow row, string code) => IdentityContactChallenge.Digest(row.OperationId.ToString("N") + ":" + row.PolicyVersion, code);
     private static PasswordHasher<IdentityUserAdapter> Hasher(RegistrationPolicy policy) => new(Options.Create(new PasswordHasherOptions
         { CompatibilityMode = PasswordHasherCompatibilityMode.IdentityV3, IterationCount = policy.PasswordHashIterations }));
-    private static bool ValidEmail(string? email)
-    {
-        if (string.IsNullOrWhiteSpace(email) || email.Trim().Length > 256) return false;
-        return MailAddress.TryCreate(email.Trim(), out var parsed) && StringComparer.Ordinal.Equals(parsed.Address, email.Trim());
-    }
+    private static bool ValidEmail(string? email) => IdentityEmail.IsValid(email);
     private static string OperationReference(Guid id) => "OP-" + id.ToString("N");
     private static RegistrationResult Result(RegistrationOperationRow row) => new(row.OperationId, row.CorrelationId, row.Status,
         row.Version, row.ErrorCode, row.Status == "REQUIRES_ACTION" ? row.Stage == "VERIFY_CONTACT" || row.Stage == "LEGACY" ? row.ExpiresAt : row.PurgeAfter : null,
@@ -298,7 +279,15 @@ public sealed partial class RegistrationApplication(
             JsonSerializer.Serialize(new { reference = subject }), version.ToString(CultureInfo.InvariantCulture), OperationReference(row.OperationId), row.CorrelationId));
     private async Task<RegistrationResult> CompleteAsync(IDbContextTransaction transaction, RegistrationResult result, RegistrationOperationRow? delivery, CancellationToken ct)
     {
-        await database.SaveChangesAsync(ct).ConfigureAwait(false); await transaction.CommitAsync(ct).ConfigureAwait(false);
+        var federatedActivation = database.ChangeTracker.Entries<RegistrationOperationRow>().Where(entry => entry.Entity.Mode == "FEDERATED" &&
+            entry.Entity.OperationId == result.OperationId && entry.Entity.Status == "SUCCEEDED").Select(entry => entry.Entity).SingleOrDefault();
+        var mustCheckActivation = federatedActivation is not null && database.ChangeTracker.Entries<AccountRow>().Any(entry =>
+            entry.State == EntityState.Modified && entry.Entity.AccountId == federatedActivation.AccountId && entry.Entity.State == AccountState.Active &&
+            entry.OriginalValues.GetValue<AccountState>(nameof(AccountRow.State)) == AccountState.VerificationPending);
+        await database.SaveChangesAsync(ct).ConfigureAwait(false);
+        if (mustCheckActivation && !await FederatedActivationCurrentAsync(federatedActivation!,ct).ConfigureAwait(false))
+            throw new InvalidOperationException("Federated registration activation authority changed before commit.");
+        await transaction.CommitAsync(ct).ConfigureAwait(false);
         if (delivery?.DeliveryId is { } id && delivery.ProtectedAddress is not null && delivery.Status == "REQUIRES_ACTION")
         {
             var notice = new RegistrationNotification(id, addressProtection.Unprotect(delivery.ProtectedAddress),

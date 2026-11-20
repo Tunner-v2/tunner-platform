@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "recorded_at": "2026-11-11T09:07:44.198110+00:00",
+  "observed_head": "3c9d4c388b2acff1c61f9f01ed6fee55d39b2d70",
+  "observed_work_item_state": "IN_PROGRESS",
+  "phase": "ARTIFACT_ONLY_TECHNICAL_SEAM_REVIEW",
+  "implementation_authorized_by_this_packet": false,
+  "tests_executed": false,
+  "production_profile_selected": false,
+  "status": "PROPOSED_CLOSED_PRIVATE_EXTENSION_NOT_IMPLEMENTED",
+  "existing_routes": "/authentication/step-up/password, /passkey, /passkey/continue, /totp, /totp/continue",
+  "winning_optional_field": "recoveryCodeFirstDelivery",
+  "fixed_fields": [
+    "kind=RECOVERY_CODES_FIRST_DELIVERY_V1",
+    "ownerRequestId",
+    "stepUpRequestId",
+    "operationReference",
+    "setReference",
+    "ownerContextDigest",
+    "deliveryProfileVersion",
+    "formatProfileVersion",
+    "bounded codes array"
+  ],
+  "server_binding": "Payload binding must equal the actual protected frame and committed recovery outcome. No Account/session identity or mutable policy is accepted from the response/request body as authority.",
+  "client_binding": "Parent holds the expected owner request/operation/set/context/profile binding from StartChange; shared bootstrap holds stepUpRequestId. Require the original live view/controller/current operation immediately before the recovery-only synchronous consumer; discard on cancellation or stale receiver. Returned fields compared only to each other are insufficient.",
+  "native_metadata": "Existing passkey requestId/attemptId/ceremonyId and current TOTP proof selection are preserved. Owner request ID and step-up/native IDs remain distinct.",
+  "safe_schemas": "No first-delivery field in options/completed/reconciliation/original-result/cancel DTOs. Detect an unexpected field rather than silently dropping it as the current generic parsers do.",
+  "transport": "Dedicated deferred IResult owns one serialization through finally, strict no-store/no-referrer and pre-write cancellation/binding validation. No later GET, escrow cookie, persisted plaintext or general DTO logging.",
+  "view_and_download": {
+    "actual_consent": {
+      "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+      "sha256": "4b24a9a648ef659bc8d430f10e6474fb11d70e1945712b41a0ea687567f0d698"
+    },
+    "canonical_lf_sha256": "772d59bd6bbce193be87b7d03f8527ed10c5f707fa2c1051b5af1dafc7878d1e",
+    "rule": "One volatile view can display and request at most one optional local download from that same held payload. No automatic download, second fetch or repeat request. Requested/completed transfer does not assert human custody or saved/displayed receipt. Clear on close/unmount/departure.",
+    "still_unselected": [
+      "production code count",
+      "format selection",
+      "hash/work values",
+      "replacement/session effects"
+    ]
+  }
+}

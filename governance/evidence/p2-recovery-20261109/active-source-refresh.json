@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2_ACTIVE_SOURCE_REFRESH",
+  "result": "PASS_EXECUTED_COMPONENTS_AND_EXACT_INPUT_EQUIVALENCE",
+  "validated_commit_sha": "80ea799cbfc0f9f9ad721723d1944fefae7e97bd",
+  "recorded_at": "2026-11-09T11:55:55.831Z",
+  "scope_ids": [
+    "TUN-P2-002",
+    "TUN-P2-003",
+    "TUN-P2-005"
+  ],
+  "execution_evidence_refs": [
+    "governance/evidence/P2-001-007-AUDIT-20261109.json",
+    "governance/evidence/p2-recovery-20261109/test-index.json"
+  ],
+  "accounts_executed_counters": "<Counters total=\"57\" executed=\"57\" passed=\"57\" failed=\"0\" error=\"0\" timeout=\"0\" aborted=\"0\" inconclusive=\"0\" passedButRunAborted=\"0\" notRunnable=\"0\" notExecuted=\"0\" disconnected=\"0\" warning=\"0\" completed=\"0\" inProgress=\"0\" pending=\"0\" />",
+  "project_input_equivalence": [
+    {
+      "suite": "accounts",
+      "executed_at_sha": "16a06672058dbc4074647611f893481bbb87e6e2",
+      "validated_at_sha": "80ea799cbfc0f9f9ad721723d1944fefae7e97bd",
+      "project_reference_closure": [
+        "tests/Tunner.Accounts.Tests/Tunner.Accounts.Tests.csproj",
+        "src/Modules/Accounts/Tunner.Accounts.csproj"
+      ],
+      "compared_paths": [
+        "tests/Tunner.Accounts.Tests",
+        "src/Modules/Accounts",
+        "Directory.Build.props",
+        "Directory.Build.targets",
+        "Directory.Packages.props",
+        "NuGet.Config",
+        "global.json",
+        "Tunner.Platform.slnx"
+      ],
+      "result": "GIT_OBJECT_IDENTICAL",
+      "delta": ""
+    },
+    {
+      "suite": "identity",
+      "executed_at_sha": "74a998585c5f51303c3031ac488003a5dccab58d",
+      "validated_at_sha": "80ea799cbfc0f9f9ad721723d1944fefae7e97bd",
+      "project_reference_closure": [
+        "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+        "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+        "src/Modules/Accounts/Tunner.Accounts.csproj",
+        "src/Tunner.Database/Tunner.Database.csproj",
+        "src/Tunner.Platform/Tunner.Platform.csproj",
+        "src/Tunner.Database.Migrations/Tunner.Database.Migrations.csproj",
+        "src/Tunner.Testing/Tunner.Testing.csproj",
+        "src/Tunner.User.Bff/Tunner.User.Bff.csproj",
+        "src/Tunner.Observability/Tunner.Observability.csproj"
+      ],
+      "compared_paths": [
+        "tests/Tunner.Identity.Persistence.Tests",
+        "src/Modules/Identity",
+        "src/Modules/Accounts",
+        "src/Tunner.Database",
+        "src/Tunner.Platform",
+        "src/Tunner.Database.Migrations",
+        "src/Tunner.Testing",
+        "src/Tunner.User.Bff",
+        "src/Tunner.Observability",
+        "Directory.Build.props",
+        "Directory.Build.targets",
+        "Directory.Packages.props",
+        "NuGet.Config",
+        "global.json",
+        "Tunner.Platform.slnx",
+        "web/apps/user/step-up.content.proposal.json",
+        "web/apps/user/authentication.content.proposal.json",
+        "web/apps/user/content.proposal.json",
+        "docs/contracts/registration-onboarding.openapi.json"
+      ],
+      "result": "GIT_OBJECT_IDENTICAL",
+      "delta": ""
+    }
+  ],
+  "authentication_browser_input_equivalence": {
+    "executed_at_sha": "c208fdd589ac5bcac9055eb39f8cbe184ccdd123",
+    "validated_at_sha": "80ea799cbfc0f9f9ad721723d1944fefae7e97bd",
+    "compared_paths": [
+      "web/apps",
+      "web/packages",
+      "web/fixtures",
+      "web/tests/authentication",
+      "web/tests/browser-testing",
+      "web/package.json",
+      "web/pnpm-lock.yaml",
+      "web/pnpm-workspace.yaml",
+      "web/tsconfig.json",
+      "web/playwright.authentication.config.ts",
+      "web/playwright.browser-testing.config.ts"
+    ],
+    "result": "GIT_OBJECT_IDENTICAL"
+  },
+  "method": "Resolve actual ProjectReference closure recursively from test projects, compare all tracked project-directory inputs and shared build/configuration inputs between actual execution and validation candidate. Identity file-copy content inputs are included. Existing real test results retained; no claim of rerunning unchanged suites at this metadata candidate.",
+  "boundary": "Current engineering source proof only. Full governance enforcement regression is running independently. Production policy/content, final Product acceptance and remaining P2 implementation are pending."
+}

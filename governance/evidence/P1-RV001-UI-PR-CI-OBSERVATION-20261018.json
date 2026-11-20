@@ -1,0 +1,355 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001",
+  "status": "OPEN_RELEASE_BLOCKING",
+  "observation_kind": "APPEND_ONLY_CURRENT_UI_PR_CI",
+  "observed_commit_sha": "bce02c74157cebf6095a3b5c1b7a0e292ccdca72",
+  "observed_at": "2026-10-18T21:59:38.023Z",
+  "pr_url": "https://github.com/Tunner-v2/tunner-platform/pull/18",
+  "existing_defect_ref": "governance/defects/DEF-P1-CONTAINER-SCAN-001.yaml",
+  "previous_receipt_ref": "governance/evidence/P1-RV001-SECURITY-FINDINGS.json",
+  "checks": [
+    {
+      "name": "enable-automerge",
+      "status": "completed",
+      "conclusion": "skipped",
+      "html_url": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39169982739/job/117800832012"
+    },
+    {
+      "name": "Container image scan (busybox:1.37.0)",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39169982779/job/117800830979"
+    },
+    {
+      "name": "Container image scan (redis:8.10.2)",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39169982779/job/117800830864"
+    },
+    {
+      "name": "Container image scan (openbao/openbao:2.7.0)",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39169982779/job/117800830838"
+    },
+    {
+      "name": "Container image scan (axllent/mailpit:v1.31.3)",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39169982779/job/117800830831"
+    },
+    {
+      "name": "Container image scan (rabbitmq:4.3.6-management)",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39169982779/job/117800830813"
+    },
+    {
+      "name": "Container image scan (postgres:18.6)",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39169982779/job/117800830801"
+    },
+    {
+      "name": "Security baseline",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39169982779/job/117800830791"
+    },
+    {
+      "name": "Container image scan (grafana/otel-lgtm:0.34.0)",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39169982779/job/117800830772"
+    },
+    {
+      "name": "Web build tests and dependency audit",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39169982779/job/117800830613"
+    },
+    {
+      "name": "create-pull-request",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39169978577/job/117800819417"
+    }
+  ],
+  "container_comparison": [
+    {
+      "image": "openbao/openbao:2.7.0",
+      "cves": [
+        "CVE-2026-78667",
+        "CVE-2026-78669",
+        "CVE-2026-97031"
+      ],
+      "totals": [
+        {
+          "total": 4,
+          "high": 4,
+          "critical": 0
+        }
+      ],
+      "same_cve_set": true,
+      "same_totals": true
+    },
+    {
+      "image": "axllent/mailpit:v1.31.3",
+      "cves": [
+        "CVE-2026-78667",
+        "CVE-2026-78669",
+        "CVE-2026-97031"
+      ],
+      "totals": [
+        {
+          "total": 4,
+          "high": 4,
+          "critical": 0
+        }
+      ],
+      "same_cve_set": true,
+      "same_totals": true
+    },
+    {
+      "image": "postgres:18.6",
+      "cves": [
+        "CVE-2025-61726",
+        "CVE-2025-61729",
+        "CVE-2025-68121",
+        "CVE-2026-25679",
+        "CVE-2026-27145",
+        "CVE-2026-32280",
+        "CVE-2026-32281",
+        "CVE-2026-32283",
+        "CVE-2026-33811",
+        "CVE-2026-33814",
+        "CVE-2026-33818",
+        "CVE-2026-39820",
+        "CVE-2026-39821",
+        "CVE-2026-39822",
+        "CVE-2026-39836",
+        "CVE-2026-42499",
+        "CVE-2026-42504",
+        "CVE-2026-56853",
+        "CVE-2026-56858",
+        "CVE-2026-56859",
+        "CVE-2026-56860",
+        "CVE-2026-56862",
+        "CVE-2026-78667",
+        "CVE-2026-78669",
+        "CVE-2026-97031"
+      ],
+      "totals": [
+        {
+          "total": 25,
+          "high": 24,
+          "critical": 1
+        }
+      ],
+      "same_cve_set": true,
+      "same_totals": true
+    },
+    {
+      "image": "grafana/otel-lgtm:0.34.0",
+      "cves": [
+        "CVE-2026-100349",
+        "CVE-2026-100351",
+        "CVE-2026-100352",
+        "CVE-2026-100353",
+        "CVE-2026-100354",
+        "CVE-2026-103111",
+        "CVE-2026-21728",
+        "CVE-2026-25679",
+        "CVE-2026-25681",
+        "CVE-2026-27136",
+        "CVE-2026-27145",
+        "CVE-2026-28377",
+        "CVE-2026-29181",
+        "CVE-2026-32280",
+        "CVE-2026-32281",
+        "CVE-2026-32283",
+        "CVE-2026-33811",
+        "CVE-2026-33814",
+        "CVE-2026-33818",
+        "CVE-2026-39820",
+        "CVE-2026-39821",
+        "CVE-2026-39822",
+        "CVE-2026-39836",
+        "CVE-2026-39883",
+        "CVE-2026-42499",
+        "CVE-2026-42504",
+        "CVE-2026-43871",
+        "CVE-2026-46600",
+        "CVE-2026-56851",
+        "CVE-2026-56852",
+        "CVE-2026-56853",
+        "CVE-2026-56854",
+        "CVE-2026-56858",
+        "CVE-2026-56859",
+        "CVE-2026-56860",
+        "CVE-2026-56862",
+        "CVE-2026-78667",
+        "CVE-2026-78669",
+        "CVE-2026-84304",
+        "CVE-2026-84445",
+        "CVE-2026-84782",
+        "CVE-2026-86145",
+        "CVE-2026-89161",
+        "CVE-2026-97031"
+      ],
+      "totals": [
+        {
+          "total": 7,
+          "high": 7,
+          "critical": 0
+        },
+        {
+          "total": 10,
+          "high": 10,
+          "critical": 0
+        },
+        {
+          "total": 4,
+          "high": 4,
+          "critical": 0
+        },
+        {
+          "total": 5,
+          "high": 5,
+          "critical": 0
+        },
+        {
+          "total": 19,
+          "high": 19,
+          "critical": 0
+        },
+        {
+          "total": 5,
+          "high": 5,
+          "critical": 0
+        },
+        {
+          "total": 5,
+          "high": 5,
+          "critical": 0
+        },
+        {
+          "total": 4,
+          "high": 4,
+          "critical": 0
+        },
+        {
+          "total": 4,
+          "high": 4,
+          "critical": 0
+        },
+        {
+          "total": 4,
+          "high": 4,
+          "critical": 0
+        },
+        {
+          "total": 35,
+          "high": 35,
+          "critical": 0
+        },
+        {
+          "total": 15,
+          "high": 15,
+          "critical": 0
+        },
+        {
+          "total": 22,
+          "high": 22,
+          "critical": 0
+        },
+        {
+          "total": 21,
+          "high": 21,
+          "critical": 0
+        },
+        {
+          "total": 16,
+          "high": 16,
+          "critical": 0
+        },
+        {
+          "total": 4,
+          "high": 4,
+          "critical": 0
+        },
+        {
+          "total": 12,
+          "high": 12,
+          "critical": 0
+        },
+        {
+          "total": 4,
+          "high": 4,
+          "critical": 0
+        },
+        {
+          "total": 8,
+          "high": 8,
+          "critical": 0
+        },
+        {
+          "total": 8,
+          "high": 8,
+          "critical": 0
+        },
+        {
+          "total": 5,
+          "high": 5,
+          "critical": 0
+        },
+        {
+          "total": 18,
+          "high": 18,
+          "critical": 0
+        },
+        {
+          "total": 18,
+          "high": 18,
+          "critical": 0
+        },
+        {
+          "total": 17,
+          "high": 17,
+          "critical": 0
+        }
+      ],
+      "same_cve_set": false,
+      "same_totals": false
+    }
+  ],
+  "lgtm_added_cve_ids": [
+    "CVE-2026-100349",
+    "CVE-2026-56851"
+  ],
+  "raw_log_receipts": [
+    {
+      "path": "artifacts/global-ui-20261017/ci-openbao-bce02c7.log",
+      "sha256": "2752dfcbe3caa8e67c611e8ab69ad2d98ca88c968c43a1a4e96ab5bcec1c0ae6"
+    },
+    {
+      "path": "artifacts/global-ui-20261017/ci-mailpit-bce02c7.log",
+      "sha256": "e1555c4d431fe711c799a9e005460dbbf684fb2ab7c51b7b96d4c72581eaaba1"
+    },
+    {
+      "path": "artifacts/global-ui-20261017/ci-postgres-bce02c7.log",
+      "sha256": "db039f6c6eca8aae431e64522c777b5341d3e129c58c76f08dd734b792ab0b1f"
+    },
+    {
+      "path": "artifacts/global-ui-20261017/ci-lgtm-bce02c7.log",
+      "sha256": "630bea7b56cf9f0abd4ab045ff863f5bf09293d44ecafc11c8793ec4843e6c5d"
+    },
+    {
+      "path": "artifacts/global-ui-20261017/ci-auto-pr-bce02c7.log",
+      "sha256": "374e5cabc806670e908274b7d526738f3e211bbb430e593be63cba2411f3a194"
+    }
+  ],
+  "scope_boundary": "No image,version,severity,security waiver,release or source implementation changed by this observation. Current UI checks and security-baseline job PASS do not waive the four container failures.",
+  "automation_finding": "Existing create-pull-request job attempts enablePullRequestAutoMerge for draft PR18 and exits1. PR intentionally remains draft; automatic merge is disabled. No attempt was made to bypass this human integration boundary."
+}

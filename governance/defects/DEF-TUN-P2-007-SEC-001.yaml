@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-007-SEC-001",
+  "work_item_id": "TUN-P2-007",
+  "classification": "SECURITY_DEFECT",
+  "severity": "SEV-2",
+  "status": "RESOLVED",
+  "environment": "Independent review of in-progress terminal passkey revocation candidate",
+  "description": "Owner eligibility/access or proof/session/policy validity can expire during later awaited verification; earlier sampled time or owner interval alone cannot establish current final authorization. Required correction: Carry actual owner eligibility/access validity bounds and provenance through the narrow typed outcome/receipt and existing operation state. After all awaited authority verification, make one fresh synchronous final decision check of those bounds, proof/session expiry, policy/version and exact causal binding immediately before final atomic flush/commit. On failure roll back credential/session/proof/outbox effects. No recursive verification, skip flag or parallel authorization ledger.",
+  "expected_behavior_ref": "docs/contracts/operation-step-up-contract.md",
+  "evidence": [
+    "governance/evidence/TUN-P2-007-SECURITY-REVIEW.json",
+    "governance/evidence/TUN-P2-007-DEFECT-VERIFICATION-20261110.json",
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json"
+  ],
+  "affected_versions": [],
+  "created_at": "2026-11-09T17:18:34.121Z",
+  "updated_at": "2026-11-10T12:48:20.365Z"
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-011",
+  "approval_kind": "SCOPED_VISUAL_AND_NAVIGATION_ADAPTATION",
+  "result": "PRODUCT_OWNER_APPROVED",
+  "source_question_call_id": "call_9d66303d2e1948ccbd8b60ce60735122",
+  "selected_answer": "Approve 011-V04 visual/navigation scope (Recommended)",
+  "actor": "Requesting user, established authorized Product Owner",
+  "recorded_at": "2026-11-19T13:36:22.842Z",
+  "review_packet": {
+    "path": "artifacts/p2-011-recovery-20261112/credential-repair-review/review.html",
+    "sha256": "3737faca41f51d5d05b5d679e5fe6a088f390cc0cc94e314ab9537df36cb9a8f"
+  },
+  "exact_scopes": {
+    "path": "artifacts/p2-011-recovery-20261112/credential-repair-review/exactscopes.md",
+    "sha256": "c7b154dc79783d7ba63c5d63e5159c4e64c4655f343d092ab8a1f03afba92cd1"
+  },
+  "approved_scopes": [
+    {
+      "id": "011-V04",
+      "pathname": "/recovery/repair",
+      "scope": "Original-request password repair using the approved recovery shell and shared New password/confirmation fields, validation, pending/UNKNOWN/unavailable and confirmed-password-update states. Server owns capability, original case, goal, password requirements, proof and effects."
+    }
+  ],
+  "limits": [
+    "Visual/navigation scope only; no automatic sign-in, unrelated-factor repair, production policy/value selection, provider qualification, full feature acceptance, merge or release.",
+    "Missing governed disposition producer and contact-independent subject/source contracts remain unavailable pending authoritative updates.",
+    "Figma, Drive and FigJam remain read-only; owner-held design backfill remains tracked.",
+    "Implement only within native eligibility; actual URL/VAL/UX and integrated/security acceptance remain required."
+  ],
+  "separate_implementation_authorization": {
+    "source_question_call_id": "call_723e2d7076ef43fbb400d0c892dc84de",
+    "selected_answer": "Authorize bounded Recovery backend/API integration (Recommended)",
+    "patch_ref": "artifacts/p2-011-recovery-20261112/v04-integration-authorization/backend-api.patch",
+    "patch_sha256": "7bc925f56c392c14317dc84e02c8876d0930c77ce5d4d4780f369005d15887f7",
+    "review_ref": "artifacts/p2-011-recovery-20261112/v04-integration-authorization/REVIEW.md",
+    "review_sha256": "d4dc5f85da5de4a2e8b46c9e77e381f530abc5ff2a83d7195d70a1013ec89296",
+    "scope": "Four-file backend/API patch and bounded client/controller integration with existing atomic code, passkey and contact repair endpoints; independent review and focused tests remain required.",
+    "exclusions": ["Production activation", "Governed-review producer/source contracts", "New proof methods", "Automatic sign-in", "Figma/Drive changes", "Merge", "Release"]
+  },
+  "authority_refs": [
+    "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+    "docs/development/P2_011_RECOVERY_REFINEMENT.md"
+  ]
+}

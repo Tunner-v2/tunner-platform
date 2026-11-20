@@ -1,0 +1,692 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P1-018",
+  "result": "PASS",
+  "recorded_at": "2026-11-10T12:35:24.364Z",
+  "tested_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+  "inventory_sha256": "346d631ce5ec6ce433b5ea58eae6df54bb8f98ac3deec1f4af77ff57e0146299",
+  "owned_behavior_paths": [
+    "docs/contracts/ui-inventory.json",
+    "web/fixtures/ui/fixture.css",
+    "web/fixtures/ui/index.html",
+    "web/fixtures/ui/main.tsx",
+    "web/fixtures/ui/package.json",
+    "web/fixtures/ui/vite.config.ts",
+    "web/packages/ui/package.json",
+    "web/packages/ui/src/content.tsx",
+    "web/packages/ui/src/controls.tsx",
+    "web/packages/ui/src/dialog.tsx",
+    "web/packages/ui/src/forms.tsx",
+    "web/packages/ui/src/index.ts",
+    "web/packages/ui/src/navigation.ts",
+    "web/packages/ui/src/theme.generated.ts",
+    "web/packages/ui/src/theme.tsx",
+    "web/packages/ui/styles/components.css",
+    "web/packages/ui/styles/index.css",
+    "web/packages/ui/styles/tailwind.generated.css",
+    "web/packages/ui/styles/tokens.generated.css",
+    "web/packages/ui/theme.tokens.json",
+    "web/packages/ui/tools/build-theme.mjs",
+    "web/packages/ui/vite.config.ts"
+  ],
+  "items": [
+    {
+      "id": "SHARED-FORM-USER",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "additional_observed_design_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257",
+          "reference_image": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-70-1257.png"
+        }
+      ],
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Required/format/confirmation errors have approved field appearance. Exact per-item case groups: foundation.user",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Native constraint bubbles are not sole feedback. Exact per-item case groups: foundation.user",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "NOT_APPLICABLE",
+          "reason": "Sole shared-control development fixture has no backend/domain mutation. Mock submit/schema behavior is not independent backend validation; actual forms have their own backend groups.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+            "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md"
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "NOT_APPLICABLE",
+          "reason": "Sole shared-control development fixture has no backend/domain mutation. Mock submit/schema behavior is not independent backend validation; actual forms have their own backend groups.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+            "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md"
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Clear/focus/association/safe-value/duplicate protection. Exact per-item case groups: foundation.user",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Approved validation variants and screenshots. Exact per-item case groups: foundation.user",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current domain authority overrides stale Figma business copy. Exact per-item case groups: foundation.user",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "End-to-end route/validation regression across supported sizes. Exact per-item case groups: foundation.user",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Faithful approved screen/component. Exact per-item case groups: foundation.user",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "The approved design has a flat surface rather than a glow illustration. Its actual panel, surrounding surface and backdrop remain applicable fidelity checks.. Exact per-item case groups: foundation.user",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/shared-user-validation-desktop.png",
+              "sha256": "bd025d313bae5afc971ba4ee2028fe9b4f9e89f24df32da90bdd0e267692eab3"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/shared-user-validation-mobile.png",
+              "sha256": "8de57fe0dc7a164eadf226e23a2c3af5365b37cdd839950e3e935d7d0aad4aa2"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Reuse approved field/token patterns. Exact per-item case groups: foundation.user",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Novel patterns require actual scoped consent. Exact per-item case groups: foundation.user",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "UI/domain conflicts documented and approved. Exact per-item case groups: foundation.user",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "No TailAdmin-default visual override. Exact per-item case groups: foundation.user",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Responsive/accessibility evidence without unapproved drift. Exact per-item case groups: foundation.user",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Link exact design/FRD/screenshots/consent/source. Exact per-item case groups: foundation.user",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/shared-user-validation-desktop.png",
+          "sha256": "bd025d313bae5afc971ba4ee2028fe9b4f9e89f24df32da90bdd0e267692eab3",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-foundation-35ef6c3/shared-user-validation-desktop.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/shared-user-validation-mobile.png",
+          "sha256": "8de57fe0dc7a164eadf226e23a2c3af5365b37cdd839950e3e935d7d0aad4aa2",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-foundation-35ef6c3/shared-user-validation-mobile.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/reference/figma/figma-70-1257.png",
+          "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-70-1257.png"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/ui/AMD0009/approved-four-scope-consent.json",
+            "sha256": "ef9942ec0c8989f4db7679021eeabea697710ed0abc9f3b8bea9f5a5763fcaf6"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SHARED-FORM-ADMIN",
+      "figma_refs": [
+        "https://www.figma.com/design/3F9tAviUejTYpYvRJt8gM1?node-id=49-131",
+        "https://www.figma.com/design/3F9tAviUejTYpYvRJt8gM1?node-id=49-132",
+        "https://www.figma.com/design/3F9tAviUejTYpYvRJt8gM1?node-id=49-133",
+        "https://www.figma.com/design/apNbwvAgdn1xIxYH1oiaSC?node-id=70-1257"
+      ],
+      "additional_observed_design_refs": [],
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Required/format/confirmation errors have approved field appearance. Exact per-item case groups: foundation.admin",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Native constraint bubbles are not sole feedback. Exact per-item case groups: foundation.admin",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "NOT_APPLICABLE",
+          "reason": "Sole shared-control development fixture has no backend/domain mutation. Mock submit/schema behavior is not independent backend validation; actual forms have their own backend groups.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+            "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md"
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "NOT_APPLICABLE",
+          "reason": "Sole shared-control development fixture has no backend/domain mutation. Mock submit/schema behavior is not independent backend validation; actual forms have their own backend groups.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+            "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md"
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Clear/focus/association/safe-value/duplicate protection. Exact per-item case groups: foundation.admin",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Approved validation variants and screenshots. Exact per-item case groups: foundation.admin",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current domain authority overrides stale Figma business copy. Exact per-item case groups: foundation.admin",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "End-to-end route/validation regression across supported sizes. Exact per-item case groups: foundation.admin",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Faithful approved screen/component. Exact per-item case groups: foundation.admin",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "The approved design has a flat surface rather than a glow illustration. Its actual panel, surrounding surface and backdrop remain applicable fidelity checks.. Exact per-item case groups: foundation.admin",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/admin-input-idle-reference-788.png",
+              "sha256": "0d0dc84b92dac4ce7ea94896fc97410019465864ae58eb79ce5ae8fd9b004bf2"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/shared-admin-validation-desktop.png",
+              "sha256": "c1b395b65204e5746cbf3be192e133c82674e51d786bfb81b1ef4dba60518218"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/shared-admin-validation-mobile.png",
+              "sha256": "f587bd84fad51c79a3e4cd63e81188e39659153a47a3f5c356c66ed90354e6f7"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Reuse approved field/token patterns. Exact per-item case groups: foundation.admin",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Novel patterns require actual scoped consent. Exact per-item case groups: foundation.admin",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "UI/domain conflicts documented and approved. Exact per-item case groups: foundation.admin",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "No TailAdmin-default visual override. Exact per-item case groups: foundation.admin",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Responsive/accessibility evidence without unapproved drift. Exact per-item case groups: foundation.admin",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Link exact design/FRD/screenshots/consent/source. Exact per-item case groups: foundation.admin",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json",
+              "sha256": "d2e3e4815b591644706ddf3aef81e31f7bb808de5c9ff573d20838a42819f73b"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/admin-input-idle-reference-788.png",
+          "sha256": "0d0dc84b92dac4ce7ea94896fc97410019465864ae58eb79ce5ae8fd9b004bf2",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-foundation-35ef6c3/admin-input-idle-reference-788.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/shared-admin-validation-desktop.png",
+          "sha256": "c1b395b65204e5746cbf3be192e133c82674e51d786bfb81b1ef4dba60518218",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-foundation-35ef6c3/shared-admin-validation-desktop.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/shared-admin-validation-mobile.png",
+          "sha256": "f587bd84fad51c79a3e4cd63e81188e39659153a47a3f5c356c66ed90354e6f7",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-foundation-35ef6c3/shared-admin-validation-mobile.png"
+        },
+        {
+          "path": "governance/evidence/ui/AMD0009/admin-input-figma-approved.png",
+          "sha256": "f97786f114a652b7fcd4764135b7317d9d7d89356ed1225de012439a7ef38fb9",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/AMD0009/admin-input-figma-approved.png"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/ui/AMD0009/approved-four-scope-consent.json",
+            "sha256": "ef9942ec0c8989f4db7679021eeabea697710ed0abc9f3b8bea9f5a5763fcaf6"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/ui/AMD0009/approved-admin-border-consent.json",
+            "sha256": "434d71aeed541f6c69fe3223384f6bc5d27f151c8d0c50ace2eaeb8ef5d6f3eb"
+          }
+        }
+      ]
+    }
+  ],
+  "source_binding": {
+    "tested_carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+    "actual_execution_shas_retained": true,
+    "cohort_equivalence": [
+      {
+        "cohort": "Current authentication21 and shared verification22",
+        "sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+        "paths": [
+          "web/apps/user",
+          "web/packages/ui",
+          "web/fixtures/authentication",
+          "web/tests/authentication",
+          "web/fixtures/step-up",
+          "web/tests/step-up",
+          "web/playwright.authentication.config.ts",
+          "web/playwright.step-up.config.ts",
+          "web/package.json",
+          "web/pnpm-lock.yaml",
+          "web/tsconfig.json"
+        ],
+        "carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_INPUTS",
+        "changed_paths": []
+      },
+      {
+        "cohort": "Foundation16",
+        "sha": "35ef6c3b64881cf50833209b739f0e47a43f5679",
+        "paths": [
+          "web/packages/ui",
+          "web/fixtures/ui",
+          "web/tests/browser",
+          "web/playwright.config.ts",
+          "web/package.json",
+          "web/pnpm-lock.yaml"
+        ],
+        "carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_INPUTS",
+        "changed_paths": []
+      },
+      {
+        "cohort": "Current native14 recovery and runtime server",
+        "sha": "80a32abb3c215a212bfa34bb7678c742d3cf765d",
+        "paths": [
+          "src",
+          "tests",
+          "tools/browser-testing",
+          "Directory.Build.props",
+          "Directory.Build.targets",
+          "Directory.Packages.props",
+          "global.json",
+          "NuGet.Config"
+        ],
+        "carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_INPUTS",
+        "changed_paths": []
+      }
+    ],
+    "native_full_predecessor": {
+      "source_sha": "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+      "passed": 224,
+      "limitation": "Full224 remains actual executionat0ef; onlylaterC#delta is two-use localname clarification in PasskeySignInRecovery.cs, followedby actual14 recoveryat80a. No fullrun relabeling."
+    }
+  },
+  "review_provenance": "Executing-agent scope-by-scope technical review, with actual UI specialist187checks/all8currentrenders and independent read-only native/source reviews. Root inspected corrected Remove1440/Login320, owning Figma/reference evidence and actual current reports. No new Product consent or independent human role is claimed.",
+  "limits": [
+    "CurrentEdge60/Firefox60 andregistration24 execute at745; authentication21/shared22 atb0 have exact unchanged declared inputs. Foundation16 staysat35ef with unchanged sharedfixture inputs. Native224 remainsat0ef and recovery14at80a; currentC#unchanged80a→745.",
+    "Realreport has4PASS at745; native virtualauthenticator case is included in4 and is not counted twice. Physical hardware, nativeFirefox/Safari and production session policy are not certified.",
+    "Original historical map andRED7of8/b0backgroundwait59of60 reports remain retained. Current8feedbackcaptures and8regressions resolveclipping/focus; all17narrowperitemNAs convertedtoapplicablechecks.",
+    "WindowsPlaywrightWebKit actualStrictfailure retained withunchangedassertion andgoverned017followup; localtechnicalscope doesnotclaimproductionbrowsermatrixacceptance.",
+    "Axe0 isboundedautomation; recordedcontrastincompletes retain manualcontrastfacts. No blanketWCAGcertification, futureOAuth014 or allP2acceptance.",
+    "ScopedProductvisualconsent isactualuserapproval; manualFigma/Driveupdates remain owner-held andread-onlyforAI."
+  ],
+  "acceptance": "Technical per-item current implementation evidence for native UI gate evaluation. No wholeP2, productionbrowsermatrix, Figma/Drivewrite, newProductpolicy, protectedmainmerge, deployment or release acceptance."
+}

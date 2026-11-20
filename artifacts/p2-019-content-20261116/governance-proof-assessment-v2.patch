@@ -1,0 +1,396 @@
+--- a/src/Tunner.Governance/CommittedEvidenceApplication.cs
++++ b/src/Tunner.Governance/CommittedEvidenceApplication.cs
+@@ -1,6 +1,9 @@
+ using System.Diagnostics;
++using System.Runtime.CompilerServices;
+ using System.Text.Json;
+ using System.Text.RegularExpressions;
++
++[assembly: InternalsVisibleTo("Tunner.Governance.FunctionalTests")]
+ 
+ namespace Tunner.Governance;
+ 
+@@ -21,6 +24,9 @@
+         return process.ExitCode == 0 ? output.Trim() : "";
+     }
+ 
++    internal static string Git(DirectoryInfo repository, CommittedProofAssessment assessment, params string[] arguments)
++        => assessment.ReadImmutableGit(repository, arguments, () => Git(repository, arguments));
++
+     internal static string? ClosureSha(DirectoryInfo repository, GovernanceRecord record)
+     {
+         foreach (var reference in record.StringList(record.Type.DefinitionName == "revision" ? "evidence_refs" : "required_evidence"))
+@@ -39,12 +45,15 @@
+     }
+ 
+     internal static IEnumerable<string> Check(DirectoryInfo repository, GovernanceRecord record, GitStateDefinition state)
++        => Check(repository, record, state, new CommittedProofAssessment(repository));
++
++    internal static IEnumerable<string> Check(DirectoryInfo repository, GovernanceRecord record, GitStateDefinition state, CommittedProofAssessment assessment)
+     {
+         if (state.ValidatedCommitSha is not { } sha || !IsSha(sha)) yield break;
+-        if (Git(repository, "merge-base", sha, "HEAD") != sha) yield return "validated SHA must belong to current Git ancestry";
++        if (Git(repository, assessment, "merge-base", sha, "HEAD") != sha) yield return "validated SHA must belong to current Git ancestry";
+         foreach (var commit in state.WorkItemCommitShas)
+-            if (!IsSha(commit) || Git(repository, "merge-base", commit, "HEAD") != commit) yield return "work-item commit lineage must resolve in current ancestry";
+-        if (state.ClosureCommitSha is { } closure && (!IsSha(closure) || Git(repository, "merge-base", closure, "HEAD") != closure))
++            if (!IsSha(commit) || Git(repository, assessment, "merge-base", commit, "HEAD") != commit) yield return "work-item commit lineage must resolve in current ancestry";
++        if (state.ClosureCommitSha is { } closure && (!IsSha(closure) || Git(repository, assessment, "merge-base", closure, "HEAD") != closure))
+             yield return "closure SHA must resolve in current ancestry";
+         var matched = false;
+         RevisionCommittedProofResolver? revisionProof = null;
+@@ -67,7 +76,7 @@
+                 if (!root.TryGetProperty("result", out var result) || result.GetString() != "PASS") yield return "committed validation evidence must pass";
+                 if (!root.TryGetProperty("owned_behavior_paths", out var paths) || paths.ValueKind != JsonValueKind.Array) { yield return "committed evidence must classify owned behavior paths"; continue; }
+                 if (paths.GetArrayLength() == 0) yield return "repository-changing evidence must own at least one behavior path";
+-                var committedEnvelope = Git(repository, "show", sha + ":" + reference);
++                var committedEnvelope = Git(repository, assessment, "show", sha + ":" + reference);
+                 JsonDocument? candidate;
+                 try { candidate = JsonDocument.Parse(committedEnvelope); }
+                 catch (JsonException) { candidate = null; }
+@@ -87,12 +96,12 @@
+                 {
+                     var logical = item.ValueKind == JsonValueKind.String ? item.GetString() : null;
+                     if (logical is null || logical.Contains("..", StringComparison.Ordinal) || logical.Contains('\\') || Path.IsPathRooted(logical)) { yield return "owned behavior paths must be repository-relative"; continue; }
+-                    revisionProof ??= new RevisionCommittedProofResolver(repository, record);
++                    revisionProof ??= new RevisionCommittedProofResolver(repository, record, assessment);
+                     var effectiveSha = revisionProof.Resolve(logical, out var proofFailure);
+                     if (proofFailure is not null) { yield return proofFailure; continue; }
+-                    var expected = Git(repository, "rev-parse", (effectiveSha ?? sha) + ":" + logical);
+-                    var current = Git(repository, "rev-parse", "HEAD:" + logical);
+-                    var working = Git(repository, "hash-object", "--", logical);
++                    var expected = Git(repository, assessment, "rev-parse", (effectiveSha ?? sha) + ":" + logical);
++                    var current = Git(repository, assessment, "rev-parse", "HEAD:" + logical);
++                    var working = Git(repository, assessment, "hash-object", "--", logical);
+                     if (expected.Length == 0 || expected != current || expected != working)
+                         yield return $"owned behavior changed after validated SHA: {logical}";
+                 }
+@@ -101,3 +110,52 @@
+         if (!matched) yield return "repository-changing readiness requires a scope-bound committed validation evidence envelope";
+     }
+ }
++
++
++// One assessment only. Memoize immutable object reads, never live closure or acceptance results.
++internal sealed class CommittedProofAssessment(DirectoryInfo repository)
++{
++    private readonly string root = Path.GetFullPath(repository.FullName);
++    private readonly Dictionary<string, string> objects = new(StringComparer.Ordinal);
++    private readonly HashSet<string> inProgress = new(StringComparer.Ordinal);
++    internal int ImmutableGitComputations { get; private set; }
++
++    internal string ReadImmutableGit(DirectoryInfo repository, IReadOnlyList<string> arguments, Func<string> read)
++    {
++        RequireRepository(repository);
++        if (!IsImmutable(arguments)) return read();
++        var key = JsonSerializer.Serialize(arguments);
++        if (objects.TryGetValue(key, out var prior)) return prior;
++        ImmutableGitComputations++;
++        var value = read();
++        // The existing Git adapter returns empty on failure. Never retain missing/failed reads.
++        if (value.Length != 0) objects.Add(key, value);
++        return value;
++    }
++
++    internal CommandResult CloseCheck(DirectoryInfo repository, string id, Func<CommandResult> compute)
++    {
++        RequireRepository(repository);
++        if (!inProgress.Add(id))
++            return new(1, "revision close-check", new RevisionOperationPayload(id, "NOT_READY", ["cyclic committed Revision proof: " + id], []));
++        try { return compute(); } // Every call reruns ALL live closure controls, including roles and their evidence.
++        finally { inProgress.Remove(id); }
++    }
++
++    private void RequireRepository(DirectoryInfo repository)
++    {
++        if (!StringComparer.Ordinal.Equals(root, Path.GetFullPath(repository.FullName)))
++            throw new ArgumentException("A committed proof assessment belongs to one exact repository.", nameof(repository));
++    }
++
++    private static bool IsImmutable(IReadOnlyList<string> arguments)
++        => arguments.Count == 2 && arguments[0] is "show" or "rev-parse" && IsObject(arguments[1]) ||
++            arguments.Count == 3 && arguments[0] == "rev-parse" && arguments[1] == "--verify" &&
++                arguments[2].Length == 49 && arguments[2].EndsWith("^{commit}", StringComparison.Ordinal) &&
++                CommittedEvidenceApplication.IsSha(arguments[2][..40]) ||
++            arguments.Count == 3 && arguments[0] == "merge-base" &&
++                CommittedEvidenceApplication.IsSha(arguments[1]) && CommittedEvidenceApplication.IsSha(arguments[2]);
++
++    private static bool IsObject(string value)
++        => value.Length > 41 && value[40] == ':' && CommittedEvidenceApplication.IsSha(value[..40]);
++}
+--- a/src/Tunner.Governance/CommitReadinessApplication.cs
++++ b/src/Tunner.Governance/CommitReadinessApplication.cs
+@@ -35,6 +35,9 @@
+     }
+ 
+     public static IReadOnlyList<string> Check(DirectoryInfo repository, GovernanceRecord record, string? effectiveState = null)
++        => Check(repository, record, effectiveState, new CommittedProofAssessment(repository));
++
++    internal static IReadOnlyList<string> Check(DirectoryInfo repository, GovernanceRecord record, string? effectiveState, CommittedProofAssessment assessment)
+     {
+         var state = Read(record);
+         if (state is null)
+@@ -61,20 +64,21 @@
+         if (state.RemainingUncommittedClassification is null || !AllowedClassifications.Contains(state.RemainingUncommittedClassification, StringComparer.Ordinal)) failures.Add("remaining_uncommitted_classification is unsupported");
+         if (StringComparer.Ordinal.Equals(state.RemainingUncommittedClassification, "WORK_ITEM_OWNED")) failures.Add("work-item-owned uncommitted changes block local readiness and completion");
+         if (StringComparer.Ordinal.Equals(state.RemainingUncommittedClassification, "NONE") && state.RemainingUncommittedPaths.Count > 0) failures.Add("classification NONE cannot list remaining uncommitted paths");
+-        if (state.ValidatedCommitSha is not null && !GitCommitExists(repository, state.ValidatedCommitSha)) failures.Add("validated_commit_sha does not resolve to a local Git commit");
+-        if (state.TestedCommitSha is not null && !GitCommitExists(repository, state.TestedCommitSha)) failures.Add("tested_commit_sha does not resolve to a local Git commit");
+-        failures.AddRange(CommittedEvidenceApplication.Check(repository, record, state));
++        if (state.ValidatedCommitSha is not null && !GitCommitExists(repository, state.ValidatedCommitSha, assessment)) failures.Add("validated_commit_sha does not resolve to a local Git commit");
++        if (state.TestedCommitSha is not null && !GitCommitExists(repository, state.TestedCommitSha, assessment)) failures.Add("tested_commit_sha does not resolve to a local Git commit");
++        failures.AddRange(CommittedEvidenceApplication.Check(repository, record, state, assessment));
+         return failures;
+     }
+ 
+     public static IReadOnlyList<string> Audit(DirectoryInfo repository, string? milestoneId)
+     {
++        var assessment = new CommittedProofAssessment(repository);
+         var diagnostics = new List<Diagnostic>();
+         var records = GovernanceApplication.LoadRecords(repository, diagnostics);
+         var findings = diagnostics.Where(item => item.Severity == "ERROR").Select(item => $"record parse issue: {item.Code}").ToList();
+         foreach (var record in records.Where(item => item.Type.DefinitionName == "work-item" && (milestoneId is null || StringComparer.Ordinal.Equals(item.Scalar("milestone_id"), milestoneId)) && new[] { "VALIDATION", "PRODUCT_ACCEPTANCE", "LOCAL_VALIDATED", "READY_FOR_MERGE", "DONE" }.Contains(item.Scalar("status"), StringComparer.Ordinal)).OrderBy(item => item.Identifier, StringComparer.Ordinal))
+         {
+-            findings.AddRange(Check(repository, record, "LOCAL_VALIDATED").Select(item => $"{record.Identifier}: {item}"));
++            findings.AddRange(Check(repository, record, "LOCAL_VALIDATED", assessment).Select(item => $"{record.Identifier}: {item}"));
+         }
+         return findings;
+     }
+@@ -102,11 +106,11 @@
+     private static bool? ParseBoolean(string? value) => value?.ToLowerInvariant() switch { "true" => true, "false" => false, _ => null };
+     private static string? NullIfEmpty(string? value) => string.IsNullOrWhiteSpace(value) || StringComparer.Ordinal.Equals(value, "null") ? null : value;
+ 
+-    private static bool GitCommitExists(DirectoryInfo repository, string sha)
++    private static bool GitCommitExists(DirectoryInfo repository, string sha, CommittedProofAssessment assessment)
+     {
+         try
+         {
+-            return CommittedEvidenceApplication.IsSha(sha) && CommittedEvidenceApplication.Git(repository, "rev-parse", "--verify", sha + "^{commit}") == sha;
++            return CommittedEvidenceApplication.IsSha(sha) && CommittedEvidenceApplication.Git(repository, assessment, "rev-parse", "--verify", sha + "^{commit}") == sha;
+         }
+         catch (System.ComponentModel.Win32Exception)
+         {
+--- a/src/Tunner.Governance/RevisionCommittedProofResolver.cs
++++ b/src/Tunner.Governance/RevisionCommittedProofResolver.cs
+@@ -8,12 +8,14 @@
+     private readonly DirectoryInfo repository;
+     private readonly IReadOnlyList<GovernanceRecord> records;
+     private readonly GovernanceRecord[] candidates;
++    private readonly CommittedProofAssessment assessment;
+     private readonly Dictionary<string, (string? Sha, HashSet<string> Paths)> classifications = new(StringComparer.Ordinal);
+     private readonly Dictionary<string, bool> validated = new(StringComparer.Ordinal);
+ 
+-    internal RevisionCommittedProofResolver(DirectoryInfo repository, GovernanceRecord original)
++    internal RevisionCommittedProofResolver(DirectoryInfo repository, GovernanceRecord original, CommittedProofAssessment assessment)
+     {
+         this.repository = repository;
++        this.assessment = assessment;
+         records = GovernanceApplication.LoadRecords(repository, []);
+         var originalId = original.Type.DefinitionName == "revision" ? original.Scalar("original_scope_id") : original.Identifier;
+         var sameScope = records.Where(r => r.Type.DefinitionName == "revision" && r.Scalar("revision_scope") == "WORK_ITEM" &&
+@@ -50,7 +52,7 @@
+                 {
+                     valid = revision.StringList("evidence_refs").All(IsCommitted) && reviewFiles.All(r =>
+                         IsCommitted(RepositoryRootResolver.ToLogicalPath(repository, r.Path))) &&
+-                        RevisionApplication.CloseCheck(repository, revision.Identifier).ExitCode == 0;
++                        RevisionApplication.CloseCheck(repository, revision.Identifier, assessment).ExitCode == 0;
+                 }
+                 catch (Exception exception) when (exception is JsonException or InvalidOperationException)
+                 {
+@@ -77,7 +79,7 @@
+         var matched = false;
+         foreach (var reference in revision.StringList("evidence_refs").Where(r => Path.GetExtension(r) == ".json"))
+         {
+-            var text = CommittedEvidenceApplication.Git(repository, "show", sha + ":" + reference);
++            var text = CommittedEvidenceApplication.Git(repository, assessment, "show", sha + ":" + reference);
+             try
+             {
+                 using var document = JsonDocument.Parse(text);
+--- a/src/Tunner.Governance/RevisionApplication.cs
++++ b/src/Tunner.Governance/RevisionApplication.cs
+@@ -153,6 +153,12 @@
+     }
+ 
+     public static CommandResult CloseCheck(DirectoryInfo repository, string id)
++        => CloseCheck(repository, id, new CommittedProofAssessment(repository));
++
++    internal static CommandResult CloseCheck(DirectoryInfo repository, string id, CommittedProofAssessment assessment)
++        => assessment.CloseCheck(repository, id, () => CloseCheckCore(repository, id, assessment));
++
++    private static CommandResult CloseCheckCore(DirectoryInfo repository, string id, CommittedProofAssessment assessment)
+     {
+         var validation = (ValidationPayload)GovernanceApplication.Validate(repository).Payload;
+         if (!validation.IsValid) return Result("revision close-check", id, "NOT_READY", validation.Diagnostics.Select(x => x.Message));
+@@ -169,9 +175,9 @@
+         foreach (var evidence in revision.StringList("evidence_refs"))
+             if (!SafeFile(repository, evidence)) failures.Add($"required Revision evidence missing: {evidence}");
+         if (CommitReadinessApplication.Read(revision)?.RepositoryChanged != true) failures.Add("repository-native Revision closure requires repository-changing committed-state lineage");
+-        failures.AddRange(CommitReadinessApplication.Check(repository, revision));
++        failures.AddRange(CommitReadinessApplication.Check(repository, revision, null, assessment));
+         var committedState = CommitReadinessApplication.Read(revision);
+-        if (committedState?.RepositoryChanged == true && committedState.ValidatedCommitSha is { } sha && Parse(Git(repository, "show", sha + ":" + RepositoryRootResolver.ToLogicalPath(repository, revision.Path))) is null)
++        if (committedState?.RepositoryChanged == true && committedState.ValidatedCommitSha is { } sha && Parse(CommittedEvidenceApplication.Git(repository, assessment, "show", sha + ":" + RepositoryRootResolver.ToLogicalPath(repository, revision.Path))) is null)
+             failures.Add("validated SHA must contain this Revision record");
+         foreach (var workId in revision.StringList("work_items"))
+         {
+@@ -183,7 +189,7 @@
+             }
+             var work = records.SingleOrDefault(x => x.Type.DefinitionName == "work-item" && x.Identifier == workId);
+             if (work is null || work.Scalar("revision_ref") != id || work.Scalar("status") != "DONE") failures.Add($"Revision child is not complete and linked: {workId}");
+-            else failures.AddRange(((GatePayload)GovernanceApplication.CheckGate(repository, workId).Payload).Failures.Select(x => $"{workId}: {x}"));
++            else failures.AddRange(((GatePayload)GovernanceApplication.CheckGate(repository, workId, assessment).Payload).Failures.Select(x => $"{workId}: {x}"));
+         }
+         foreach (var gateId in revision.StringList("required_gates"))
+         {
+--- a/src/Tunner.Governance/GovernanceApplication.cs
++++ b/src/Tunner.Governance/GovernanceApplication.cs
+@@ -124,6 +124,7 @@
+         var integrationActions = new List<IntegrationAction>();
+         // A single assessment reuses identical prerequisite proof; new commands always start fresh.
+         var committedReadiness = new Dictionary<(string PrerequisiteId, string EffectiveState), bool>();
++        var assessment = new CommittedProofAssessment(repository);
+         var validation = (ValidationPayload)Validate(repository).Payload;
+         diagnostics.AddRange(validation.Diagnostics);
+ 
+@@ -151,7 +152,7 @@
+                 continue;
+             }
+ 
+-            var reasons = ReadinessReasons(repository, record, workItems, dependencies, integrationPolicy, allowValidatedP0Prerequisites, committedReadiness);
++            var reasons = ReadinessReasons(repository, record, workItems, dependencies, integrationPolicy, allowValidatedP0Prerequisites, committedReadiness, assessment);
+             var revisionReasons = RevisionApplication.BlockingReasons(records, record);
+             reasons.AddRange(revisionReasons);
+             integrationActions.AddRange(PendingIntegrationActions(repository, record, workItems, dependencies, integrationPolicy));
+@@ -175,6 +176,9 @@
+     }
+ 
+     public static CommandResult CheckGate(DirectoryInfo repository, string workItemId)
++        => CheckGate(repository, workItemId, new CommittedProofAssessment(repository));
++
++    internal static CommandResult CheckGate(DirectoryInfo repository, string workItemId, CommittedProofAssessment assessment)
+     {
+         var diagnostics = new List<Diagnostic>();
+         var records = LoadRecords(repository, diagnostics);
+@@ -184,9 +188,9 @@
+             return new CommandResult(2, "gate check", new GatePayload(workItemId, "NOT_FOUND", ["work item does not exist"], []));
+         }
+ 
+-        var failures = ReadinessReasons(repository, workItem, workItems, DependencyRecords(records), IntegrationPolicy.Load(repository, diagnostics), HasApprovedP0LocalIntegration(records));
++        var failures = ReadinessReasons(repository, workItem, workItems, DependencyRecords(records), IntegrationPolicy.Load(repository, diagnostics), HasApprovedP0LocalIntegration(records), assessment: assessment);
+         failures.AddRange(RevisionApplication.BlockingReasons(records, workItem));
+-        failures.AddRange(CommitReadinessApplication.Check(repository, workItem, "LOCAL_VALIDATED"));
++        failures.AddRange(CommitReadinessApplication.Check(repository, workItem, "LOCAL_VALIDATED", assessment));
+         var authority = AuthorityApplication.Verify(repository);
+         if (authority.ExitCode != 0)
+         {
+@@ -665,7 +669,7 @@
+     }
+ 
+     private static List<string> ReadinessReasons(DirectoryInfo repository, GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy, bool allowValidatedP0Prerequisites,
+-        Dictionary<(string PrerequisiteId, string EffectiveState), bool>? committedReadiness = null)
++        Dictionary<(string PrerequisiteId, string EffectiveState), bool>? committedReadiness = null, CommittedProofAssessment? assessment = null)
+     {
+         var failures = new List<string>();
+         foreach (var prerequisite in workItem.StringList("prerequisites"))
+@@ -702,7 +706,7 @@
+             var proofKey = (prerequisiteRecord.Identifier, effectiveState ?? prerequisiteRecord.Scalar("status") ?? "UNKNOWN");
+             if (committedReadiness is null || !committedReadiness.TryGetValue(proofKey, out var hasCommittedState))
+             {
+-                hasCommittedState = HasRequiredCommittedState(repository, prerequisiteRecord, effectiveState);
++                hasCommittedState = HasRequiredCommittedState(repository, prerequisiteRecord, effectiveState, assessment);
+                 if (committedReadiness is not null) committedReadiness[proofKey] = hasCommittedState;
+             }
+             if (!hasCommittedState)
+@@ -762,7 +766,7 @@
+     private static bool RequiresCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null)
+         => CommitReadinessApplication.IsRequired(repository, record, state);
+ 
+-    private static bool HasRequiredCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null)
++    private static bool HasRequiredCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null, CommittedProofAssessment? assessment = null)
+     {
+         if (!RequiresCommittedState(repository, record, state))
+         {
+@@ -770,7 +774,7 @@
+         }
+ 
+         return CommitReadinessApplication.Read(record) is not null
+-            && CommitReadinessApplication.Check(repository, record, state).Count == 0;
++            && CommitReadinessApplication.Check(repository, record, state, assessment ?? new CommittedProofAssessment(repository)).Count == 0;
+     }
+ 
+     private static bool IsPrerequisiteReady(DirectoryInfo repository, GovernanceRecord workItem, GovernanceRecord prerequisite, GovernanceRecord? declaration, string readiness, bool allowValidatedP0Prerequisites)
+--- a/tests/Tunner.Governance.FunctionalTests/Program.cs
++++ b/tests/Tunner.Governance.FunctionalTests/Program.cs
+@@ -944,12 +944,24 @@
+             EditRevision(revisionFile, "status", "VALIDATION");
+             EditRevision(revisionFile, "product_acceptance_required", false);
+             EditRevision(revisionFile, "evidence_refs", new[] { proof });
++            EditRevision(revisionFile, "required_roles", new[] { "auditor" });
++            var reviewEvidence = "governance/evidence/" + id + "-role-proof.json";
++            var review = "governance/reviews/" + id + "-auditor.yaml";
++            File.WriteAllText(Path.Combine(fixture.FullName, reviewEvidence), "{}");
++            File.WriteAllText(Path.Combine(fixture.FullName, review), JsonSerializer.Serialize(new
++            {
++                schema_version = 1, review_id = "REV-" + id + "-auditor", work_item_id = id, role = "auditor", status = "PASS", result = "PASS",
++                reviewed_at = "2026-10-17T00:00:00Z", skill_id = "auditor", skill_version = "1.0.0", skill_hash = new string('a', 64),
++                authority_refs = new[] { "docs/authority/mirror.txt" }, context_artifacts = new[] { "governance/revisions/" + id + ".yaml" },
++                evidence_refs = new[] { reviewEvidence }, findings = Array.Empty<string>(), blocking_findings = Array.Empty<string>(),
++                required_actions = Array.Empty<string>(), context_expansion_requested = false
++            }));
+             foreach (var path in owned) File.WriteAllText(Path.Combine(fixture.FullName, path), value);
+             File.WriteAllText(Path.Combine(fixture.FullName, proof), JsonSerializer.Serialize(new
+             {
+                 scope_id = id, validation_kind = "COMMITTED", owned_behavior_paths = owned
+             }));
+-            RunGit(fixture, ["add", "--", "governance/revisions/" + id + ".yaml", proof, .. owned]);
++            RunGit(fixture, ["add", "--", "governance/revisions/" + id + ".yaml", proof, review, reviewEvidence, .. owned]);
+             RunGit(fixture, "commit", "--quiet", "-m", "Revision validation candidate");
+             var sha = RunGitOutput(fixture, "rev-parse", "HEAD");
+             EditRevision(revisionFile, "git_state", State(sha));
+@@ -997,8 +1009,46 @@
+         Close(second, true);
+         Check(AuditCommittedFixture(fixture), "later path owner and unchanged prior-owner paths compose");
+         Check(RevisionApplication.CloseCheck(fixture, first).ExitCode == 0, "prior revision proof resolves strictly later ownership without recursion to itself");
++        var assessment = new CommittedProofAssessment(fixture);
++        var originalRecord = GovernanceApplication.LoadRecords(fixture, []).Single(record => record.Identifier == originalId);
++        Check(CommitReadinessApplication.Check(fixture, originalRecord, null, assessment).Count == 0,
++            "assessment retains complete three-path/two-Revision live closure proof");
++        var immutableComputations = assessment.ImmutableGitComputations;
++        var repeated = RevisionApplication.CloseCheck(fixture, first, assessment);
++        Check(immutableComputations > 0 && repeated.ExitCode == 0 && assessment.ImmutableGitComputations == immutableComputations &&
++            GovernanceApplication.Serialize(repeated) == GovernanceApplication.Serialize(RevisionApplication.CloseCheck(fixture, first)),
++            "repeated nested closure reuses immutable Git reads with identical fresh public output");
++        var roleEvidencePath = Path.Combine(fixture.FullName, "governance/evidence/" + first + "-role-proof.json");
++        var roleEvidenceBytes = File.ReadAllBytes(roleEvidencePath);
++        File.Delete(roleEvidencePath);
++        try
++        {
++            var withdrawn = RevisionApplication.CloseCheck(fixture, first, assessment);
++            Check(withdrawn.ExitCode != 0 && ((RevisionOperationPayload)withdrawn.Payload).Findings.Any(finding => finding.Contains("role review", StringComparison.Ordinal)),
++                "same assessment rejects withdrawn required-role evidence outside direct Revision evidence");
++            Check(RevisionApplication.CloseCheck(fixture, first).ExitCode != 0,
++                "fresh public assessment also rejects withdrawn required-role evidence");
++        }
++        finally { File.WriteAllBytes(roleEvidencePath, roleEvidenceBytes); }
++        var changedProof = File.ReadAllBytes(firstProofPath);
++        File.WriteAllText(firstProofPath, File.ReadAllText(firstProofPath).Replace("\"PASS\"", "\"FAIL\"", StringComparison.Ordinal));
++        Check(RevisionApplication.CloseCheck(fixture, first, assessment).ExitCode != 0,
++            "same assessment reruns changed direct evidence controls");
++        File.WriteAllBytes(firstProofPath, changedProof);
++        File.Delete(firstProofPath);
++        try { Check(RevisionApplication.CloseCheck(fixture, first, assessment).ExitCode != 0,
++            "same assessment reruns missing direct evidence controls"); }
++        finally { File.WriteAllBytes(firstProofPath, changedProof); }
++        var cycle = new CommittedProofAssessment(fixture);
++        var cyclic = cycle.CloseCheck(fixture, first, () => cycle.CloseCheck(fixture, first,
++            () => throw new InvalidOperationException("Cyclic proof must not recurse into another computation.")));
++        Check(cyclic.ExitCode != 0 && ((RevisionOperationPayload)cyclic.Payload).Findings.Any(finding => finding.Contains("cyclic", StringComparison.Ordinal)),
++            "in-progress closure is refused rather than accepted");
+         File.WriteAllText(Path.Combine(fixture.FullName, originalPaths[0]), "original");
+         Check(!AuditCommittedFixture(fixture), "unvalidated rollback cannot fall back to original or earlier revision proof");
++        Check(RevisionApplication.CloseCheck(fixture, second, assessment).ExitCode != 0 &&
++            RevisionApplication.CloseCheck(fixture, second).ExitCode != 0,
++            "same and fresh assessments independently rerun changed current owned-source checks");
+         File.WriteAllText(Path.Combine(fixture.FullName, originalPaths[0]), "revision-two");
+         File.WriteAllText(Path.Combine(fixture.FullName, originalPaths[2]), "unclaimed-drift");
+         Check(!AuditCommittedFixture(fixture), "an unclaimed original path still requires original proof");

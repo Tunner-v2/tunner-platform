@@ -1,0 +1,228 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "<repo-root>\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "../artifacts/p2-007-passkeys-20261109/ui-review/cross-engine.real-webkit.config.mjs"
+    ],
+    "configFile": "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\cross-engine.real-webkit.config.mjs",
+    "rootDir": "<repo-root>/web/tests/browser-testing",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo-root>/artifacts/p2-007-passkeys-20261109/ui-review/20261110-cross-engine-webkit-real/run-details",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo-root>/web/tests/browser-testing",
+        "testIgnore": [],
+        "testMatch": [
+          "**/manual-flow.spec.ts",
+          "**/authentication-flow.spec.ts"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\20261110-cross-engine-webkit-real\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "authentication-flow.spec.ts",
+      "file": "authentication-flow.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "verified local account signs in and completes operation-bound verification through the real BFF",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 21064,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"Strict\"\u001b[39m\nReceived: \u001b[31m\"None\"\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"Strict\"\u001b[39m\nReceived: \u001b[31m\"None\"\u001b[39m\n    at <repo-root>\\web\\tests\\browser-testing\\authentication-flow.spec.ts:14:200",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\browser-testing\\authentication-flow.spec.ts",
+                      "column": 200,
+                      "line": 14
+                    },
+                    "snippet": "  12 |  await page.getByLabel('Password',{exact:true}).fill(password);await page.getByRole('button',{name:'Confirm',exact:true}).click();await expect(page.getByRole('dialog')).toHaveCount(0);await expect(page.getByRole('status')).toHaveText('Verification completed');expect(completedPosts).toBe(1);expect(page.url()).toBe(actionUrl);\n  13 |  await page.reload();await page.getByRole('button',{name:'Verify identity',exact:true}).click();await expect(page.getByRole('status')).toHaveText('Verification completed');await expect(page.getByRole('dialog')).toHaveCount(0);expect(completedPosts).toBe(1);\n> 14 |  const stepCookie=(await page.context().cookies()).find(c=>c.name==='__Host-Tunner.StepUp');expect(stepCookie?.httpOnly).toBe(true);expect(stepCookie?.secure).toBe(true);expect(stepCookie?.sameSite).toBe('Strict');\n     |                                                                                                                                                                                                        ^\n  15 |  expect(await page.evaluate(()=>({search:location.search,hash:location.hash,visibleProof:document.cookie.includes('__Host-Tunner.StepUp')}))).toEqual({search:'',hash:'',visibleProof:false});await page.screenshot({path:'../artifacts/browser-testing/step-up-real-completed.png',fullPage:true});\n  16 |  await page.goto('/signed-in');\n  17 |  const cookie=(await page.context().cookies()).find(c=>c.name==='__Host-Tunner.User.Session');expect(cookie?.httpOnly).toBe(true);expect(cookie?.secure).toBe(true);expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length,hasBearer:document.cookie.includes('__Host-Tunner.User.Session')}))).toEqual({local:0,session:0,hasBearer:false});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\browser-testing\\authentication-flow.spec.ts",
+                        "column": 200,
+                        "line": 14
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"Strict\"\u001b[39m\nReceived: \u001b[31m\"None\"\u001b[39m\n\n  12 |  await page.getByLabel('Password',{exact:true}).fill(password);await page.getByRole('button',{name:'Confirm',exact:true}).click();await expect(page.getByRole('dialog')).toHaveCount(0);await expect(page.getByRole('status')).toHaveText('Verification completed');expect(completedPosts).toBe(1);expect(page.url()).toBe(actionUrl);\n  13 |  await page.reload();await page.getByRole('button',{name:'Verify identity',exact:true}).click();await expect(page.getByRole('status')).toHaveText('Verification completed');await expect(page.getByRole('dialog')).toHaveCount(0);expect(completedPosts).toBe(1);\n> 14 |  const stepCookie=(await page.context().cookies()).find(c=>c.name==='__Host-Tunner.StepUp');expect(stepCookie?.httpOnly).toBe(true);expect(stepCookie?.secure).toBe(true);expect(stepCookie?.sameSite).toBe('Strict');\n     |                                                                                                                                                                                                        ^\n  15 |  expect(await page.evaluate(()=>({search:location.search,hash:location.hash,visibleProof:document.cookie.includes('__Host-Tunner.StepUp')}))).toEqual({search:'',hash:'',visibleProof:false});await page.screenshot({path:'../artifacts/browser-testing/step-up-real-completed.png',fullPage:true});\n  16 |  await page.goto('/signed-in');\n  17 |  const cookie=(await page.context().cookies()).find(c=>c.name==='__Host-Tunner.User.Session');expect(cookie?.httpOnly).toBe(true);expect(cookie?.secure).toBe(true);expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length,hasBearer:document.cookie.includes('__Host-Tunner.User.Session')}))).toEqual({local:0,session:0,hasBearer:false});\n    at <repo-root>\\web\\tests\\browser-testing\\authentication-flow.spec.ts:14:200"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T11:21:15.772Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\20261110-cross-engine-webkit-real\\run-details\\authentication-flow-verifi-c1588-cation-through-the-real-BFF\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\browser-testing\\authentication-flow.spec.ts",
+                    "column": 200,
+                    "line": 14
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b6dd7814dceceb1a5216-ae8e9791fcdd9d7e0813",
+          "file": "authentication-flow.spec.ts",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "manual-flow.spec.ts",
+      "file": "manual-flow.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "real HTTPS registration and SMTP verification complete through the isolated starter",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7573,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T11:21:37.707Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "106ef54e8b3d706ebbd8-68bfd494d47eeacba183",
+          "file": "manual-flow.spec.ts",
+          "line": 3,
+          "column": 1
+        },
+        {
+          "title": "isolated host retains the real HTTPS origin and antiforgery boundaries",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 363,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T11:21:45.377Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "106ef54e8b3d706ebbd8-6ee64990ebb881fef845",
+          "file": "manual-flow.spec.ts",
+          "line": 8,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-10T11:21:14.885Z",
+    "duration": 30920.671,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

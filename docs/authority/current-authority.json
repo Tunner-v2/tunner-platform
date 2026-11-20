@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "VERIFIED_DRIVE_READBACK",
-  "effective_authority": "Locked Documentation Baseline 1.6.0 + accepted ADR/PDR records + AMD-0001 + AMD-0002 + AMD-0003 + AMD-0004 + AMD-0005 + AMD-0007 + PDR-0011 (PDR-0007 superseded prospectively) + AMD-0008 (approved Figma visual fidelity and Product Owner visual consent)",
+  "effective_authority": "Locked Documentation Baseline 1.6.0 + accepted ADR/PDR records + AMD-0001 + AMD-0002 + AMD-0003 + AMD-0004 + AMD-0005 + AMD-0007 + PDR-0011 (PDR-0007 superseded prospectively) + AMD-0008 (approved Figma visual fidelity and Product Owner visual consent) + AMD-0009 (global URL routing and governed reusable form validation)",
   "baseline": {
     "version": "1.6.0",
     "status": "ACTIVE_LOCKED",
@@ -66,6 +66,14 @@
       "path": "docs/authority/current/decisions",
       "source_id": "1DErZZpc3rIwzfpADnDzD9a361draTuhW",
       "source_url": "https://drive.google.com/file/d/1DErZZpc3rIwzfpADnDzD9a361draTuhW/view"
+    },
+    {
+      "id": "AMD-0009",
+      "status": "APPROVED_ACTIVE",
+      "applicability": "GLOBAL",
+      "path": "docs/authority/current/decisions",
+      "source_id": "1VeaNofocTrsbXwdePg8VSVuembRQxr7A",
+      "source_url": "https://drive.google.com/file/d/1VeaNofocTrsbXwdePg8VSVuembRQxr7A/view"
     }
   ],
   "bundle": {
@@ -96,7 +104,7 @@
     "development_path": "docs/authority/current/development",
     "pre_p0_version": "1.0.7",
     "pre_p0_file_count": 58,
-    "precedence": "Current approved synchronized FRDs + AMD-0007/PDR-0011, other active approved amendments, then locked historical baseline; PDR-0007 remains historical only.",
+    "precedence": "Current approved synchronized FRDs + AMD-0007/PDR-0011, other active approved amendments, then locked historical baseline; PDR-0007 remains historical only.; AMD-0008/AMD-0009 govern global frontend visual, routing and validation scope without changing domain authority or enabling a plane.",
     "visual_fidelity_manifest_path": "docs/authority/current/visual-fidelity-manifest.json"
   },
   "active_product_decisions": [
@@ -106,5 +114,11 @@
       "supersedes": "PDR-0007",
       "source_id": "1lat_JTLL9kKTcQiIADgBH1yi-9bEleTz"
     }
-  ]
+  ],
+  "global_ui_compliance": {
+    "revision_ref": "P0-RV006",
+    "source_verified_at": "2026-10-18T02:14:27.980Z",
+    "report_ref": "docs/development/GLOBAL_UI_COMPLIANCE_REPORT.md",
+    "source_index_id": "1c5Ni8LGgQ-2JxpacoPAopSCO-al23ut2"
+  }
 }

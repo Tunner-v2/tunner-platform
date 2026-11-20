@@ -4,7 +4,7 @@
   "milestone_id": "P2",
   "sprint_id": null,
   "title": "Passkey registration authentication and revocation",
-  "status": "BACKLOG",
+  "status": "DONE",
   "type": "FEATURE",
   "authority_refs": [
     "docs/authority/current-authority.json",
@@ -18,7 +18,12 @@
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
     "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
     "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
-    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md"
+    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+    "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+    "docs/authority/current/development/35_AI_Agent_Skill_Catalog_and_Review_Contracts.md",
+    "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
   ],
   "flow_refs": [
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
@@ -33,7 +38,8 @@
   "acceptance_criteria": [
     "Implement WebAuthn/passkey ceremonies under approved relying-party/origin and security policy configuration.",
     "Keep credentials inactive until successful ceremony, retain public metadata only, and require authorized step-up for mutations.",
-    "Never receive/log passkey private material; use current primary-source standards/framework evidence."
+    "Never receive/log passkey private material; use current primary-source standards/framework evidence.",
+    "Implement actual policy-eligible passkey verification through shared exact-operation proof issuance/consumption and owner transaction before full P2-007 acceptance; primary authentication alone is insufficient."
   ],
   "prerequisites": [
     "TUN-P2-003",
@@ -48,7 +54,7 @@
     "financial": false,
     "compliance": true,
     "security": true,
-    "devops": false,
+    "devops": true,
     "support": false,
     "api": true,
     "provider": true
@@ -65,19 +71,119 @@
     "frontend-engineer",
     "end-user-ux-reviewer",
     "content-writer",
-    "rd-engineer"
+    "rd-engineer",
+    "devops-engineer",
+    "project-manager"
   ],
   "required_tests": [
     "ceremony origin/challenge/replay failures",
     "inactive enrollment and credential revocation",
-    "cross-browser accessible approved ceremony UI"
+    "cross-browser accessible approved ceremony UI",
+    "passkey operation proof valid/wrong-binding/replay/expiry/policy/concurrency/rollback/unknown browser recovery, preserving password consumers"
   ],
   "required_evidence": [
-    "governance/evidence/TUN-P2-007-VALIDATION.json"
+    "governance/evidence/TUN-P2-004-008-PRODUCT-ACCEPTANCE.json",
+    "governance/evidence/TUN-P2-007-VALIDATION.json",
+    "governance/evidence/TUN-P2-007-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/TUN-P2-007-RD-SOURCES.json",
+    "docs/development/P2_007_PASSKEY_SCOPE.md",
+    "governance/evidence/TUN-P2-007-STARTUP-REVIEWS.json",
+    "governance/evidence/TUN-P2-007-ROLE-REVIEWS.json",
+    "governance/evidence/TUN-P2-007-UI-PROPOSAL.json",
+    "governance/evidence/TUN-P2-007-SECURITY-REVIEW.json",
+    "governance/evidence/TUN-P2-007-METHOD-MATRIX.json",
+    "governance/evidence/TUN-P2-007-FRONTEND-REVIEW.json",
+    "governance/evidence/TUN-P2-007-EXECUTION-HISTORY.json",
+    "governance/evidence/TUN-P2-007-RESUME-AUTHORITY-20261110.json",
+    "governance/evidence/TUN-P2-007-NAVIGATION-CONSENT-20261110.json",
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json",
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+    "governance/evidence/TUN-P2-007-DEFECT-VERIFICATION-20261110.json",
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/case-catalog.json",
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-007-ui-check.json",
+    "governance/evidence/TUN-P2-007-SECURITY-SCANS-20261110.json",
+    "governance/evidence/TUN-P2-007-FINAL-REVIEW-PROVENANCE-20261110.json",
+    "governance/evidence/P2-007-UI-REVISION-CLOSURE-20261110.json",
+    "governance/evidence/TUN-P2-007-LOCAL-READINESS-20261110.json",
+    "docs/development/P2_007_HANDOFF_20261110.md",
+    "governance/evidence/TUN-P2-007-TOTP-CURRENT-SOURCE-COMPATIBILITY-20261111.json",
+    "governance/evidence/TUN-P2-007-UI-COMPLIANCE-TOTP-20261111.json",
+    "governance/evidence/p2-008-totp-20261110/parent007-compatibility/947f8b0/source-witness.json",
+    "governance/evidence/p2-008-totp-20261110/parent007-compatibility/947f8b0/authority-and-item-resolution.json"
   ],
   "context_policy": "TASK",
-  "todos": [],
-  "defects": [],
+  "todos": [
+    "TODO-TUN-P2-007-DESIGN001",
+    "TODO-TUN-P2-007-STEPUP001",
+    "TODO-TUN-P2-007-SOURCE001",
+    "TODO-TUN-P2-007-NAV001"
+  ],
+  "defects": [
+    "DEF-TUN-P2-007-DATA-001",
+    "DEF-TUN-P2-007-UI-001",
+    "DEF-TUN-P2-007-SEC-001",
+    "DEF-TUN-P2-007-UI-002",
+    "DEF-TUN-P2-007-UI-003",
+    "DEF-TUN-P2-007-UI-004",
+    "DEF-TUN-P2-007-UI-005",
+    "DEF-TUN-P2-007-SEC-002",
+    "DEF-TUN-P2-007-UI-006",
+    "DEF-TUN-P2-007-UI-007",
+    "DEF-TUN-P2-007-UI-008",
+    "DEF-TUN-P2-007-UI-009"
+  ],
   "created_at": "2026-10-16T17:48:49.296Z",
-  "updated_at": "2026-10-16T17:48:49.296Z"
+  "updated_at": "2026-11-11T05:30:06.510107+00:00",
+  "ui_evidence_ref": "governance/evidence/TUN-P2-007-UI-COMPLIANCE-TOTP-20261111.json",
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "462e269ad5c701034aceb7374f15f0c249a87529",
+    "tested_commit_sha": "462e269ad5c701034aceb7374f15f0c249a87529",
+    "work_item_commit_shas": [
+      "6e587c32f094c5582f1c3aeefe3a582644f01594",
+      "39afa3221aedf6da4cdcde95ba256f4d86bb95b4",
+      "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+      "80a32abb3c215a212bfa34bb7678c742d3cf765d",
+      "35ef6c3b64881cf50833209b739f0e47a43f5679",
+      "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
+      "312af8855526c8e557f5156957f5386237738b15",
+      "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+      "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "c1981e77094211f3e2dcc4c7658911b89ed66825",
+      "dc064a8dcdbca461c81d8d2f0469cea5efc44a65",
+      "9b46232a2fa5925953fbdf0232a34a5ebb8b1ad6",
+      "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+      "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+      "acd474e6d028b7abe5a48b2361a984f960384674",
+      "947f8b090b4f74a474a71e47badcb595424bd734",
+      "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+      "51a80e5f4104292966eef5601747b86ed666c6d9",
+      "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+      "ea731ea0a62d5fbc673d84f17864c3c283b582e7",
+      "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
+      "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+      "1e8cc76bd5b22aceb169b44d446c0df049410b73",
+      "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
+      "98807ebe4bb7cb4e74b1aecf938a9edb8c243475",
+      "462e269ad5c701034aceb7374f15f0c249a87529"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
 }

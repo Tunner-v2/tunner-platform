@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-006",
+  "result": "PASS_POLICY_SELECTION_SLICE_ONLY",
+  "tested_commit_sha": "6e3552234a0cb93ce22d7e1e8d5194de459a7486",
+  "validated_commit_sha": "6e3552234a0cb93ce22d7e1e8d5194de459a7486",
+  "tests": {
+    "passed": 13,
+    "failed": 0,
+    "skipped": 0,
+    "new_assurance_policy_cases": 12,
+    "existing_authentication_policy_regression": 1
+  },
+  "build": {
+    "result": "PASS",
+    "warnings": 0,
+    "errors": 0
+  },
+  "source_hash_method": "SHA256 of UTF8 source with CRLF normalized to LF",
+  "owned_behavior_hashes": {
+    "src/Modules/Identity/AssurancePolicy.cs": "4a94d655d6d90e37e397483ce92ca335abd1dc369b942d74387f49f2b4bf3a0f",
+    "tests/Tunner.Identity.Persistence.Tests/AssurancePolicyTests.cs": "30a39887c9276a7e963504ae7677b74339a68a5f70121b2cdc37679badb99d7b"
+  },
+  "evidence_sha256": {
+    "governance/evidence/p2-006-policy-20261108/tests.json": "1ff90f315c7cbd6c1d39f0ea11a4e943755ab719a34217357f40b21f8ff44d43",
+    "governance/evidence/p2-006-policy-20261108/build-and-tests.log": "9b0b1c9513979d5a2e348aac339a52fd37cca270ce23cadf1875b9f7762290a0",
+    "governance/evidence/p2-006-policy-20261108/first-build-failure.log": "a0f797dbebbf199c0a173cba79ef3d194cd6593a360af3993e707787c707f8b2"
+  },
+  "evidence_normalization": "Raw local TRX retained under artifacts/p2-006-assurance-20261108/policy-tests and bound by SHA256 in tests.json. Committed summaries omit machine identity. Logs normalize CRLF and checkout prefix; the local TRX pathname is replaced with its evidence pointer.",
+  "initial_failure": {
+    "source": "0677f7ee9761cdf231d876ec19f284a757ea3ade",
+    "cause": "Mandatory CA1512/CA1822 analyzers; corrected using standard range guard and readonly instance error-code property without suppressions."
+  },
+  "implementation": "Immutable scoped assurance policy inputs, explicit method mappings and lifetimes; exact effective-time selection through P1 resolver; missing/draft/ambiguous/version-conflict rejection. No production defaults or assurance ordering invented.",
+  "review_provenance": "Executing-agent implementation/security/QA assessment; startup contracts are not independent human or final feature acceptance.",
+  "production_runtime_enabled": false,
+  "new_ui_implemented": false,
+  "whole_work_item_complete": false,
+  "remaining": [
+    "Operation/session/resource/context-bound fresh proof issuance and atomic one-use consumption",
+    "Expiry, current session/restriction, replay/concurrency and full integration tests",
+    "Configured approved runtime policy evidence before affected paths are enabled",
+    "Actual Figma/content/UI route/validation/visual evidence and browser workflow acceptance"
+  ],
+  "next_action": "Implement the persistent operation-bound step-up proof lifecycle inside Identity; reuse current server-managed sessions and transactional primitives. Keep security image remediation separate."
+}

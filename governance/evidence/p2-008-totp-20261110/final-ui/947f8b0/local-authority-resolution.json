@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "scope": "TUN-P2-008",
+  "type": "BOUNDED_LOCAL_CAPTURE_AUTHORITY_RESOLUTION",
+  "recordedAt": "2026-11-11 05:02:29 UTC",
+  "disposition": "UNKNOWN_ENVIRONMENT_OBSERVATION_RETAINED_NOT_AN_AUTOMATIC_LOCAL_BLOCKER",
+  "authority": [
+    {
+      "path": "docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md",
+      "sections": "3-5",
+      "basis": "Use existing authority; do not invent missing-authority blockers or a new architecture obligation."
+    },
+    {
+      "path": "docs/authority/current/development/06_Environment_Configuration_Secrets_and_Deployment.md",
+      "section": "5",
+      "basis": "Secrets belong behind the secret-store abstraction and must not be in source/logs/screenshots/evidence."
+    },
+    {
+      "path": "docs/authority/current/development/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+      "section": "11",
+      "basis": "Authentication secrets/security evidence are RESTRICTED; classification controls access/logging/export/test use."
+    },
+    {
+      "path": "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+      "sections": "6;Admin/Support controls",
+      "basis": "TOTP seed lifecycle and first-code activation; no Admin/Support seed exposure; safe security payloads."
+    },
+    {
+      "path": "docs/authority/current/development/33_Production_Readiness_Compliance_and_Release_Gates.md",
+      "section": "1",
+      "basis": "Production/release promotion is separately governed; technical tests are not release authority."
+    }
+  ],
+  "authorityWitness": {
+    "path": "artifacts/p2-008-totp-20261110/final-engineering-review/four-role-75988ad/review-inputs-and-executions.json",
+    "sha256": "07be863783496f7072bf5206a99e6461bbdf74c8a9d97a9796ae22c11f7d33ea"
+  },
+  "originalControlScope": [
+    "governance/evidence/TUN-P2-008-SENSITIVE-QA-PLAN.json",
+    "web/tests/totp/sensitive/README.md",
+    "Protected private pipes, fixed sanitized receipts, no raw diagnostics or automatic screenshots/trace/video/HAR/debug/reporters, bounded input/process/surface controls, owned ephemeral profiles/artifact roots and verified cleanup.",
+    "These controls remain fully required. They explicitly do not prove exhaustive OS memory/disk representations or global-host filesystem absence."
+  ],
+  "observation": {
+    "relativePath": "%SystemDrive%/ProgramData/Microsoft/Windows/Caches",
+    "files": 4,
+    "creator": "UNKNOWN",
+    "contents": "UNREAD",
+    "ownership": "UNPROVED",
+    "classification": "NEITHER_HARMLESS_NOR_SENSITIVE_ESTABLISHED",
+    "preservation": "Existing bytes remain unmodified/undeleted; metadata only.",
+    "metadataEvidence": {
+      "path": "artifacts/p2-008-totp-20261110/unexpected-windows-path/metadata-only.json",
+      "sha256": "c1de85b0d10b973e6f21f7b5b3801cd2a336f09bddb947a4db25851b755af7b0"
+    }
+  },
+  "publicEvidence": [
+    {
+      "path": "artifacts/p2-008-totp-20261110/windows-env-parity-reviewed/public-probe-20261111T042611989Z.json",
+      "sha256": "b89f4f416e04a63b91bd5cbbdec2e796513463d455d39b3343c3d95810e06959",
+      "result": "Both old/fixed env public happy Chromium/owned cleanup PASS; neither reproduced literal cache."
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/windows-env-parity-reviewed/public-webauthn-probe-20261111T043357513Z.json",
+      "result": "Root-executed old/fixed env WebAuthn initialization-only public/owned cleanup PASS; neither reproduced literal cache. No account/credential creation/lookup/export."
+    }
+  ],
+  "resolution": {
+    "automaticLocalBlocker": false,
+    "newGlobalFilesystemRequirement": false,
+    "newProductDecision": false,
+    "reason": "No inspected authority states that unattributed file metadata outside the defined owned control surface itself proves a seed/log leak or fails LOCAL engineering. Existing facts establish neither a secret-bearing diagnostic nor an owned-control violation. Do not silently widen or weaken the original capture boundary.",
+    "localScope": "Local engineering/UI scope may pass when its actual committed tests and every original private/owned/capture/cleanup predicate pass, with this UNKNOWN observation and limitations carried explicitly.",
+    "conditionalBlock": "New evidence of an actual secret/security-boundary violation or failed original owned control blocks the affected acceptance under existing authority; it cannot be waived by this classification.",
+    "prohibitedClaims": [
+      "No global-host filesystem cleanliness or exhaustive privacy proof.",
+      "No harmless-cache, sensitive-cache, seed/OTP exposure or breach conclusion.",
+      "No deletion/cleanup of these existing files based on inferred ownership.",
+      "No Product/human/production/Edge/WebKit/legal-retention approval."
+    ]
+  },
+  "relationToEarlierDisposition": "Append-only authority resolution clarifies that the earlier UNKNOWN/preserved disposition is an observation, not a newly invented automatic LOCAL gate. Earlier metadata, failed runs and public evidence remain unchanged.",
+  "newProbeOrPrivateAccessOrSourceMutation": false
+}

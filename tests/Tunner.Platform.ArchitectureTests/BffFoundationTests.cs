@@ -65,6 +65,7 @@ public sealed class BffFoundationTests(BffFoundationFixture fixture) : IClassFix
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.True(response.Headers.CacheControl?.NoStore);
         Assert.Contains("nosniff", response.Headers.GetValues("X-Content-Type-Options"));
+        Assert.Equal("no-referrer", Assert.Single(response.Headers.GetValues("Referrer-Policy")));
         Assert.False(response.Headers.Contains("Set-Cookie"));
     }
 
@@ -201,6 +202,7 @@ public sealed class BffFoundationTests(BffFoundationFixture fixture) : IClassFix
             await AssertProblem(invalid, HttpStatusCode.BadRequest, "VALIDATION_ERROR");
             using var valid = await host.Send(new(verb), "/_fixture/write", session.Cookie + "; " + csrf.Cookie, host.Origin, csrf.Token);
             Assert.Equal(HttpStatusCode.OK, valid.StatusCode);
+            Assert.Equal("no-referrer", Assert.Single(valid.Headers.GetValues("Referrer-Policy")));
         }
     }
 
@@ -352,6 +354,7 @@ public sealed class BffFoundationTests(BffFoundationFixture fixture) : IClassFix
     {
         Assert.Equal(status, response.StatusCode);
         Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+        Assert.Equal("no-referrer", Assert.Single(response.Headers.GetValues("Referrer-Policy")));
         var text = await response.Content.ReadAsStringAsync();
         using var document = JsonDocument.Parse(text);
         Assert.Equal((int)status, document.RootElement.GetProperty("status").GetInt32());

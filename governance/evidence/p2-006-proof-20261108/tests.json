@@ -1,0 +1,645 @@
+{
+  "tested_commit": "32a682ebce4b4b83523936d4bdb8f5312be18b6b",
+  "total": 127,
+  "passed": 127,
+  "failed": 0,
+  "skipped": 0,
+  "raw_trx_sha256": "61544409304415c57a8fbb2d2613b69f721a4c6ab2b8b66dccaa4c7877e1af14",
+  "tests": [
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AssurancePolicyTests.CannotBorrowAnotherOperationOrContextPolicy(operation: \"FIXTURE.CHANGE-CONTACT\", context: \"fixture.user-bff\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0001088"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AssurancePolicyTests.CannotBorrowAnotherOperationOrContextPolicy(operation: \"fixture.change-contact\", context: \"other-context\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0016344"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AssurancePolicyTests.CannotBorrowAnotherOperationOrContextPolicy(operation: \"other-operation\", context: \"fixture.user-bff\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.0008402"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AssurancePolicyTests.DiagnosticStringsDoNotDumpPolicyContextOrMappings",
+      "outcome": "Passed",
+      "duration": "00:00:00.0004798"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AssurancePolicyTests.DuplicateVersionIdentitiesAreRejectedByTheSharedResolver",
+      "outcome": "Passed",
+      "duration": "00:00:00.0009064"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AssurancePolicyTests.ExpectedVersionCannotSelectSupersededPolicy",
+      "outcome": "Passed",
+      "duration": "00:00:00.0013887"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AssurancePolicyTests.MissingDraftAndAmbiguousPoliciesFailClosed",
+      "outcome": "Passed",
+      "duration": "00:00:00.0018841"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AssurancePolicyTests.RequiresExplicitCompletePolicyValues",
+      "outcome": "Passed",
+      "duration": "00:00:00.1862480"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AssurancePolicyTests.ResolvesExactActiveOperationContextAndExplicitMethodMapping",
+      "outcome": "Passed",
+      "duration": "00:00:00.0076830"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AssurancePolicyTests.SnapshotsMappingsAndCatalogInputsSoCallersCannotMutateAnApprovedVersion",
+      "outcome": "Passed",
+      "duration": "00:00:00.0049130"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AssurancePolicyTests.UnconfiguredAndDifferentlyCasedMethodsHaveNoImplicitAssurance",
+      "outcome": "Passed",
+      "duration": "00:00:00.0007600"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AssurancePolicyTests.UsesExecutionTimeIncludingEffectiveBoundaryWithoutFallback",
+      "outcome": "Passed",
+      "duration": "00:00:00.0012763"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationPolicyTests.DraftMissingAndAmbiguousPoliciesCannotSilentlyActivateAuthentication",
+      "outcome": "Passed",
+      "duration": "00:00:00.1939354"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.ActivityCannotExtendAbsoluteExpiryAndRememberUsesExplicitPolicy",
+      "outcome": "Passed",
+      "duration": "00:00:05.7514094"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.CanonicalScreensGuardDirectEntryAndDoNotExposeAnAlternateHtmlRoute",
+      "outcome": "Passed",
+      "duration": "00:00:03.0852898"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.ClosedPendingAndUnverifiedCredentialsAreRejectedWithoutDisclosure(state: Active, confirmed: False)",
+      "outcome": "Passed",
+      "duration": "00:00:03.4270639"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.ClosedPendingAndUnverifiedCredentialsAreRejectedWithoutDisclosure(state: Closed, confirmed: True)",
+      "outcome": "Passed",
+      "duration": "00:00:03.0773603"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.ClosedPendingAndUnverifiedCredentialsAreRejectedWithoutDisclosure(state: VerificationPending, confirmed: True)",
+      "outcome": "Passed",
+      "duration": "00:00:03.1345185"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.ConcurrentSuccessfulRetryKeepsOneSessionAndCannotReviveAfterLogout",
+      "outcome": "Passed",
+      "duration": "00:00:03.0255685"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.CurrentAuthorityImmediatelyInvalidatesExistingSession(change: \"closed\")",
+      "outcome": "Passed",
+      "duration": "00:00:08.3242517"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.CurrentAuthorityImmediatelyInvalidatesExistingSession(change: \"contact\")",
+      "outcome": "Passed",
+      "duration": "00:00:07.4149207"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.CurrentAuthorityImmediatelyInvalidatesExistingSession(change: \"restriction\")",
+      "outcome": "Passed",
+      "duration": "00:00:03.9524316"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.CurrentAuthorityImmediatelyInvalidatesExistingSession(change: \"stamp\")",
+      "outcome": "Passed",
+      "duration": "00:00:03.7713441"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.ForeignOrAdminCookieDoesNotAuthenticateAndStorageCannotExtendSessionIdentity",
+      "outcome": "Passed",
+      "duration": "00:00:05.1280899"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.IdleExpiryIsAuthoritativeAndNeverResurrected",
+      "outcome": "Passed",
+      "duration": "00:00:02.9373738"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.InvalidUnknownDuplicateOversizedAndUnboundPayloadsCannotBypassBackendValidation",
+      "outcome": "Passed",
+      "duration": "00:00:02.8260177"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.LegacyPasswordAuthenticatesWithoutRegistrationMinimumAndAbuseIsBoundToIdentifier",
+      "outcome": "Passed",
+      "duration": "00:00:02.9597751"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.MissingOrStaleTrustedAuthorityCannotCreateSession",
+      "outcome": "Passed",
+      "duration": "00:00:02.9855975"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.PasswordEstablishesOpaqueHostOnlySessionAndSignOutRevokesIt",
+      "outcome": "Passed",
+      "duration": "00:00:03.1477385"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.ReauthenticationRotatesLookupKeyAndImmediatelyRejectsOldCookie(signInPath: \"/authentication/sign-in\")",
+      "outcome": "Passed",
+      "duration": "00:00:03.0448076"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.ReauthenticationRotatesLookupKeyAndImmediatelyRejectsOldCookie(signInPath: \"/AUTHENTICATION/SIGN-IN\")",
+      "outcome": "Passed",
+      "duration": "00:00:03.0151602"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.ReauthenticationRotatesLookupKeyAndImmediatelyRejectsOldCookie(signInPath: \"/authentication/sign-in/\")",
+      "outcome": "Passed",
+      "duration": "00:00:03.1308544"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.TrustedMaintenanceClearsExpiredBearerMaterialWithoutAUserRequestOrDuplicateEvents",
+      "outcome": "Passed",
+      "duration": "00:00:03.0774316"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.TrustedScopedAccessControlsRestrictionsAndMinorAgeAloneDoesNotDeny(state: Active, allowed: True)",
+      "outcome": "Passed",
+      "duration": "00:00:02.9513151"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.TrustedScopedAccessControlsRestrictionsAndMinorAgeAloneDoesNotDeny(state: Closing, allowed: False)",
+      "outcome": "Passed",
+      "duration": "00:00:03.1505837"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.TrustedScopedAccessControlsRestrictionsAndMinorAgeAloneDoesNotDeny(state: Closing, allowed: True)",
+      "outcome": "Passed",
+      "duration": "00:00:02.9169299"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.TrustedScopedAccessControlsRestrictionsAndMinorAgeAloneDoesNotDeny(state: Restricted, allowed: False)",
+      "outcome": "Passed",
+      "duration": "00:00:02.8613832"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.AuthenticationTests.TrustedScopedAccessControlsRestrictionsAndMinorAgeAloneDoesNotDeny(state: Restricted, allowed: True)",
+      "outcome": "Passed",
+      "duration": "00:00:02.8365847"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.AccountAndSharedOutboxCommitOrRollbackTogether",
+      "outcome": "Passed",
+      "duration": "00:00:05.1415991"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.AccountConcurrencyAdvancesOneVersionAndPreservesHistory",
+      "outcome": "Passed",
+      "duration": "00:00:02.5314735"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.ActiveAccountMayHaveNoAgeOrHistoricalUnderageEvidenceButPartialLegacyEvidenceStillFails",
+      "outcome": "Passed",
+      "duration": "00:00:00.8473191"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.DirectSqlCannotRewriteIdentityOrBypassVersionEvidence(sql: \"DELETE FROM accounts.account_state_versions\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.7925979"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.DirectSqlCannotRewriteIdentityOrBypassVersionEvidence(sql: \"DELETE FROM accounts.accounts\")",
+      "outcome": "Passed",
+      "duration": "00:00:01.3545528"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.DirectSqlCannotRewriteIdentityOrBypassVersionEvidence(sql: \"TRUNCATE accounts.account_state_versions\")",
+      "outcome": "Passed",
+      "duration": "00:00:01.1908355"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.DirectSqlCannotRewriteIdentityOrBypassVersionEvidence(sql: \"UPDATE accounts.account_state_versions SET state='\"···)",
+      "outcome": "Passed",
+      "duration": "00:00:01.0480400"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.DirectSqlCannotRewriteIdentityOrBypassVersionEvidence(sql: \"UPDATE accounts.accounts SET account_id='ACC-repla\"···)",
+      "outcome": "Passed",
+      "duration": "00:00:04.1604536"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.DirectSqlCannotRewriteIdentityOrBypassVersionEvidence(sql: \"UPDATE accounts.accounts SET state='RESTRICTED'\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.9689070"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.EmptyDowngradeReappliesAndPopulatedDowngradeRefusesDataLoss",
+      "outcome": "Passed",
+      "duration": "00:00:02.8668345"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.ExternalIdentityUsesProviderAndImmutableSubjectRatherThanEmail",
+      "outcome": "Passed",
+      "duration": "00:00:01.7464593"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.FrameworkStoresRoundTripWithoutActivatingAuthenticationOrTokenServer",
+      "outcome": "Passed",
+      "duration": "00:00:01.5610086"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.MigrationRoundTripOwnsAccountStateAndExcludesRawDob",
+      "outcome": "Passed",
+      "duration": "00:00:01.8904114"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.PersistenceRequiresAnExplicitConnection",
+      "outcome": "Passed",
+      "duration": "00:00:00.0115736"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.VerifiedEmailUniquenessIsAtomicWhileUnverifiedCandidatesDoNotReplaceIt",
+      "outcome": "Passed",
+      "duration": "00:00:00.9146523"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationBffTests.ActualHttpsBffKeepsRegistrationAnonymousAndRequiresOriginCsrfAndProtectedBrowserContext",
+      "outcome": "Passed",
+      "duration": "00:00:03.6331887"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationBffTests.ActualHttpsFlowVerifiesContactBeforePersonalInformationAndActivatesUnder18WithoutSession",
+      "outcome": "Passed",
+      "duration": "00:00:06.7388615"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationBffTests.BackendIndependentlyRejectsAllThreeFormsWhenClientValidationIsBypassed",
+      "outcome": "Passed",
+      "duration": "00:00:04.6837801"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationBffTests.KnownScreenFallbackPreservesApiAndAssetFailures",
+      "outcome": "Passed",
+      "duration": "00:00:04.4133574"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationBffTests.OpenApiSeparatesInitialRegistrationAndVerifiedPersonalInformation",
+      "outcome": "Passed",
+      "duration": "00:00:00.0249855"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationBffTests.OversizedMalformedAndObsoleteDobRequestsHaveSafeFailuresWithoutCanonicalEffects",
+      "outcome": "Passed",
+      "duration": "00:00:03.9316495"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationBffTests.ProtectedProgressRecoversOnlyItsOwnServerStageAndRestartPreservesAccountEvidence",
+      "outcome": "Passed",
+      "duration": "00:00:07.9451625"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationBffTests.PublishedContentAndExplicitSecurityProvidersAreMandatory",
+      "outcome": "Passed",
+      "duration": "00:00:00.0393775"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.CallerBindingAndActiveAccountResponsesDoNotExposeOrResetAnAccount",
+      "outcome": "Passed",
+      "duration": "00:00:00.7564924"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.ConcurrentProofsActivateExactlyOnceAndNeverOverwriteTheWinningCredential",
+      "outcome": "Passed",
+      "duration": "00:00:01.6824439"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.ConcurrentRegistrationUsesOneCanonicalAccountAndBindsEachProposedCredentialToItsOwnProof",
+      "outcome": "Passed",
+      "duration": "00:00:01.1046456"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.CurrentTrustedConsentControlsOnlyItsPolicyAndNeverGrantsPayerAuthority(source: \"GUARDIAN\", schoolAllowed: False, accepted: True)",
+      "outcome": "Passed",
+      "duration": "00:00:05.3206093"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.CurrentTrustedConsentControlsOnlyItsPolicyAndNeverGrantsPayerAuthority(source: \"SCHOOL\", schoolAllowed: False, accepted: False)",
+      "outcome": "Passed",
+      "duration": "00:00:01.1357413"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.CurrentTrustedConsentControlsOnlyItsPolicyAndNeverGrantsPayerAuthority(source: \"SCHOOL\", schoolAllowed: True, accepted: True)",
+      "outcome": "Passed",
+      "duration": "00:00:01.1626557"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.ExpiredProofAndStaleVersionCannotActivate",
+      "outcome": "Passed",
+      "duration": "00:00:00.7622250"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.ForwardUpgradePreservesHistoricalPdr0007RejectionWithoutRelabelingOrActivation",
+      "outcome": "Passed",
+      "duration": "00:00:00.9980147"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.MaterialExpiryPurgesPendingSecretsAndPopulatedDowngradeIsRefused",
+      "outcome": "Passed",
+      "duration": "00:00:00.7448328"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.MissingAndAmbiguousPolicyFailBeforeAnyAuthoritativeMutation",
+      "outcome": "Passed",
+      "duration": "00:00:00.5582840"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.MissingJurisdictionPolicyCannotPersistProfileOrActivate",
+      "outcome": "Passed",
+      "duration": "00:00:01.1346531"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.MissingNoticesAndMismatchedConfirmationCannotRegister(notices: False, confirmation: \"a very long unique test passphrase\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.8236785"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.MissingNoticesAndMismatchedConfirmationCannotRegister(notices: True, confirmation: \"\")",
+      "outcome": "Passed",
+      "duration": "00:00:01.1801527"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.MissingNoticesAndMismatchedConfirmationCannotRegister(notices: True, confirmation: \"mismatch\")",
+      "outcome": "Passed",
+      "duration": "00:00:00.8737306"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.NetworkAbuseBudgetAndPasswordBlocklistDoNotCreateAccounts",
+      "outcome": "Passed",
+      "duration": "00:00:00.6070690"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.PasswordPolicyCountsUnicodeCodePointsAndNoticeVersionsMustBeCurrent",
+      "outcome": "Passed",
+      "duration": "00:00:01.3958557"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.PersonalInformationIsBoundVersionedAndRejectsFutureBirthWithoutSideEffects",
+      "outcome": "Passed",
+      "duration": "00:00:00.8745594"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.PostCommitNotificationFailurePreservesCanonicalStateAndReferenceOnlyOutbox",
+      "outcome": "Passed",
+      "duration": "00:00:01.8401715"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.ProfileReplayAndConcurrentSubmissionsKeepOneCanonicalProfileAndActivation",
+      "outcome": "Passed",
+      "duration": "00:00:02.0470205"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.ProofOpensNormalPersonalInformationAndUnder18DoesNotDenyAccount",
+      "outcome": "Passed",
+      "duration": "00:00:01.6944616"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.ProtectedProfileExpiresWithoutRawDobInEventsDiagnosticsOrHistory",
+      "outcome": "Passed",
+      "duration": "00:00:00.9249533"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.RecoveryIsBrowserBoundAndNotificationRetriesUseCommittedStableReferences",
+      "outcome": "Passed",
+      "duration": "00:00:00.7285071"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.RegistrationAndSuccessfulVerificationReplayWithoutNewCanonicalEffects",
+      "outcome": "Passed",
+      "duration": "00:00:00.9157013"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.RegistrationWaitsForProofThenCommitsCredentialStateAndOutboxTogether",
+      "outcome": "Passed",
+      "duration": "00:00:01.9218566"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.ResendReplayPreservesIdentityAndOldProofCannotActivate",
+      "outcome": "Passed",
+      "duration": "00:00:03.6201410"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.ResendsStopAtTheEffectivePolicyBudget",
+      "outcome": "Passed",
+      "duration": "00:00:02.7664118"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.Turning18ReevaluatesCurrentCapabilityWithoutReplacingAccountOrChangingHistoricalEvidence",
+      "outcome": "Passed",
+      "duration": "00:00:00.7445434"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.RegistrationTests.WrongProofAttemptsAndResendCooldownAreEnforcedFromPolicy",
+      "outcome": "Passed",
+      "duration": "00:00:01.0211564"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.AdminUnauthenticatedWrongOriginOrInvalidContextCannotConstructTrustedCaller",
+      "outcome": "Passed",
+      "duration": "00:00:02.8366129"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ConcurrentConsumptionExecutesExactlyOneMutation",
+      "outcome": "Passed",
+      "duration": "00:00:02.9980286"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ConcurrentIssuanceReturnsOneOriginalProofAndEndedOperationCannotBeReissued",
+      "outcome": "Passed",
+      "duration": "00:00:03.1975382"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ExactOperationRestrictionDoesNotBecomeGeneralSessionRevocation",
+      "outcome": "Passed",
+      "duration": "00:00:02.8601705"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ExpiryBeforeOrDuringMutationNeverAuthorizesAndCleanupIsIdempotent(during: False)",
+      "outcome": "Passed",
+      "duration": "00:00:02.8655349"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ExpiryBeforeOrDuringMutationNeverAuthorizesAndCleanupIsIdempotent(during: True)",
+      "outcome": "Passed",
+      "duration": "00:00:02.9812546"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.FreshCredentialsAndExplicitMethodAssuranceAreRequired(change: \"empty\")",
+      "outcome": "Passed",
+      "duration": "00:00:02.8197345"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.FreshCredentialsAndExplicitMethodAssuranceAreRequired(change: \"insufficient\")",
+      "outcome": "Passed",
+      "duration": "00:00:02.9194122"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.FreshCredentialsAndExplicitMethodAssuranceAreRequired(change: \"long\")",
+      "outcome": "Passed",
+      "duration": "00:00:02.8474474"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.FreshCredentialsAndExplicitMethodAssuranceAreRequired(change: \"wrong\")",
+      "outcome": "Passed",
+      "duration": "00:00:02.9096950"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.FreshProofIsConsumedOnceWithoutUpgradingSessionAndEventsContainOnlySafeReferences",
+      "outcome": "Passed",
+      "duration": "00:00:03.0946189"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.MigrationRoundTripRestoresProofConstraintsAndHasNoPendingModelChanges",
+      "outcome": "Passed",
+      "duration": "00:00:00.6794263"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.PolicyFailureAfterLocalMutationRollsBackInsteadOfConsumingProof",
+      "outcome": "Passed",
+      "duration": "00:00:03.0310983"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ProofCannotAuthorizeDifferentBindings(change: \"context\")",
+      "outcome": "Passed",
+      "duration": "00:00:03.1300100"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ProofCannotAuthorizeDifferentBindings(change: \"correlation\")",
+      "outcome": "Passed",
+      "duration": "00:00:03.0800617"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ProofCannotAuthorizeDifferentBindings(change: \"digest\")",
+      "outcome": "Passed",
+      "duration": "00:00:03.6756292"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ProofCannotAuthorizeDifferentBindings(change: \"key\")",
+      "outcome": "Passed",
+      "duration": "00:00:03.6790794"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ProofCannotAuthorizeDifferentBindings(change: \"operation-id\")",
+      "outcome": "Passed",
+      "duration": "00:00:03.9938518"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ProofCannotAuthorizeDifferentBindings(change: \"operation\")",
+      "outcome": "Passed",
+      "duration": "00:00:07.2605720"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ProofCannotAuthorizeDifferentBindings(change: \"resource\")",
+      "outcome": "Passed",
+      "duration": "00:00:03.4187917"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ProofCannotAuthorizeDifferentBindings(change: \"session\")",
+      "outcome": "Passed",
+      "duration": "00:00:04.8180612"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ProofCannotAuthorizeDifferentBindings(change: \"version\")",
+      "outcome": "Passed",
+      "duration": "00:00:07.5598822"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ProofExpiryIsClippedToCurrentSessionAndPolicyInterval(bound: \"policy\")",
+      "outcome": "Passed",
+      "duration": "00:00:02.9049777"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.ProofExpiryIsClippedToCurrentSessionAndPolicyInterval(bound: \"session\")",
+      "outcome": "Passed",
+      "duration": "00:00:02.8666215"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.RevocationOrChangedAccountAuthorityPreventsAnAlreadyIssuedProof(change: \"closed\")",
+      "outcome": "Passed",
+      "duration": "00:00:03.1163385"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.RevocationOrChangedAccountAuthorityPreventsAnAlreadyIssuedProof(change: \"contact\")",
+      "outcome": "Passed",
+      "duration": "00:00:02.9481019"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.RevocationOrChangedAccountAuthorityPreventsAnAlreadyIssuedProof(change: \"restriction\")",
+      "outcome": "Passed",
+      "duration": "00:00:02.9821812"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.RevocationOrChangedAccountAuthorityPreventsAnAlreadyIssuedProof(change: \"session\")",
+      "outcome": "Passed",
+      "duration": "00:00:02.9399146"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.RevocationOrChangedAccountAuthorityPreventsAnAlreadyIssuedProof(change: \"stamp\")",
+      "outcome": "Passed",
+      "duration": "00:00:02.9144803"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.SqlCannotEditBindingsExtendExpiryOrReviveEndedProofAndCompositeForeignKeyBindsAccount",
+      "outcome": "Passed",
+      "duration": "00:00:03.0480429"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.StepUpAbuseLimitsAreIndependentButReuseCurrentAuthenticationPolicyValues",
+      "outcome": "Passed",
+      "duration": "00:00:03.1060705"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.TargetConflictAndThrownMutationRollBackBothProofAndTargetAndAllowSafeRetry",
+      "outcome": "Passed",
+      "duration": "00:00:02.9496098"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.UnavailableOrChangedPolicyFailsClosedWithoutMutation(change: \"ambiguous\")",
+      "outcome": "Passed",
+      "duration": "00:00:02.9164824"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.UnavailableOrChangedPolicyFailsClosedWithoutMutation(change: \"auth-unavailable\")",
+      "outcome": "Passed",
+      "duration": "00:00:03.1319905"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.UnavailableOrChangedPolicyFailsClosedWithoutMutation(change: \"draft\")",
+      "outcome": "Passed",
+      "duration": "00:00:02.9830400"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.UnavailableOrChangedPolicyFailsClosedWithoutMutation(change: \"missing\")",
+      "outcome": "Passed",
+      "duration": "00:00:03.0164418"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.UnavailableOrChangedPolicyFailsClosedWithoutMutation(change: \"stale\")",
+      "outcome": "Passed",
+      "duration": "00:00:03.0985301"
+    },
+    {
+      "test": "Tunner.Identity.Persistence.Tests.StepUpTests.VerifiedContactCannotBeRevokedConcurrentlyInsideTheAuthorizedMutation",
+      "outcome": "Passed",
+      "duration": "00:00:03.0856012"
+    }
+  ]
+}

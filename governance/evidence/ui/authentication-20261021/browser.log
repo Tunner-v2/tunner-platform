@@ -1,0 +1,82 @@
+$ playwright test && playwright test --config playwright.registration.config.ts && playwright test --config playwright.authentication.config.ts
+[WebServer] (node:18116) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 16 tests using 1 worker
+
+(node:25572) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\browser\admin-contrast-review.spec.ts:2:1 › Admin shared field idle border at approved reference dimensions (3.6s)
+  ok  2 tests\browser\foundation.spec.ts:5:3 › user: source metrics, structural roles and font load (1.6s)
+  ok  3 tests\browser\foundation.spec.ts:19:3 › user: keyboard focus, controlled typing and no implicit submit (2.3s)
+  ok  4 tests\browser\foundation.spec.ts:27:3 › user: error descriptions and source-aligned focus (2.2s)
+  ok  5 tests\browser\foundation.spec.ts:33:3 › user: publication refresh updates copy and provenance (1.8s)
+  ok  6 tests\browser\foundation.spec.ts:5:3 › admin: source metrics, structural roles and font load (1.7s)
+  ok  7 tests\browser\foundation.spec.ts:19:3 › admin: keyboard focus, controlled typing and no implicit submit (2.0s)
+  ok  8 tests\browser\foundation.spec.ts:27:3 › admin: error descriptions and source-aligned focus (1.5s)
+  ok  9 tests\browser\foundation.spec.ts:33:3 › admin: publication refresh updates copy and provenance (1.3s)
+  ok 10 tests\browser\foundation.spec.ts:38:1 › axe WCAG 2.2 AA reports no violations (3.0s)
+  ok 11 tests\browser\foundation.spec.ts:39:1 › narrow width reflows long content without clipping (1.6s)
+  ok 12 tests\browser\foundation.spec.ts:45:1 › isolated surface roles and TailAdmin bridge survive side-by-side use (1.5s)
+  ok 13 tests\browser\foundation.spec.ts:49:1 › fonts and rendering use only local assets and no persisted state (1.2s)
+  ok 14 tests\browser\foundation.spec.ts:54:1 › nested Admin mode does not leak into either surrounding User control (1.1s)
+  ok 15 tests\browser\foundation.spec.ts:60:2 › user: shared validation handles submit, blur, correction, focus and duplicate submission (4.6s)
+  ok 16 tests\browser\foundation.spec.ts:60:2 › admin: shared validation handles submit, blur, correction, focus and duplicate submission (4.6s)
+
+  16 passed (45.8s)
+[WebServer] (node:31768) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 22 tests using 1 worker
+
+(node:25708) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\registration\global-compliance.spec.ts:18:2 › all five canonical screens: direct entry refresh guard and responsive reference at 1440 (10.4s)
+  ok  2 tests\registration\global-compliance.spec.ts:31:2 › FORM-REGISTRATION empty invalid corrected and server-rejected states at 1440 (3.3s)
+  ok  3 tests\registration\global-compliance.spec.ts:41:2 › FORM-VERIFY-EMAIL empty format correction server rejection and guarded transition at 1440 (2.7s)
+  ok  4 tests\registration\global-compliance.spec.ts:50:2 › FORM-PERSONAL-INFORMATION required calendar safe correction preserved names and server errors at 1440 (2.8s)
+  ok  5 tests\registration\global-compliance.spec.ts:18:2 › all five canonical screens: direct entry refresh guard and responsive reference at 768 (9.2s)
+  ok  6 tests\registration\global-compliance.spec.ts:31:2 › FORM-REGISTRATION empty invalid corrected and server-rejected states at 768 (3.6s)
+  ok  7 tests\registration\global-compliance.spec.ts:41:2 › FORM-VERIFY-EMAIL empty format correction server rejection and guarded transition at 768 (3.7s)
+  ok  8 tests\registration\global-compliance.spec.ts:50:2 › FORM-PERSONAL-INFORMATION required calendar safe correction preserved names and server errors at 768 (4.4s)
+  ok  9 tests\registration\global-compliance.spec.ts:18:2 › all five canonical screens: direct entry refresh guard and responsive reference at 320 (11.2s)
+  ok 10 tests\registration\global-compliance.spec.ts:31:2 › FORM-REGISTRATION empty invalid corrected and server-rejected states at 320 (4.0s)
+  ok 11 tests\registration\global-compliance.spec.ts:41:2 › FORM-VERIFY-EMAIL empty format correction server rejection and guarded transition at 320 (3.5s)
+  ok 12 tests\registration\global-compliance.spec.ts:50:2 › FORM-PERSONAL-INFORMATION required calendar safe correction preserved names and server errors at 320 (4.6s)
+  ok 13 tests\registration\global-compliance.spec.ts:60:1 › browser history reconstructs server stages including duplicate path entries and restart (2.7s)
+  ok 14 tests\registration\global-compliance.spec.ts:67:1 › unauthorized purged and forged history stages redirect safely; query/hash never grant a screen or redirect (3.6s)
+  ok 15 tests\registration\registration.spec.ts:5:1 › registration reference geometry, local assets/fonts and no DOB or stored sensitive state (2.8s)
+  ok 16 tests\registration\registration.spec.ts:23:1 › confirmation and notice acceptance precede direct registration without age fields (1.6s)
+  ok 17 tests\registration\registration.spec.ts:30:1 › proof errors/version/resend lead to normal Personal Information and under18 completion without Product/session action (4.8s)
+  ok 18 tests\registration\registration.spec.ts:47:1 › policy-required consent uses trusted status and cannot be asserted by a browser checkbox (3.0s)
+  ok 19 tests\registration\registration.spec.ts:53:1 › uncertain registration recovers same identity and clears credentials without automatically resubmitting (2.0s)
+  ok 20 tests\registration\registration.spec.ts:59:1 › 320px layout remains accessible across registration, verification, normal profile, consent and completion (8.1s)
+  ok 21 tests\registration\registration.spec.ts:65:1 › expired proof disables verification and unavailable policy does not render a registration form (1.7s)
+  ok 22 tests\registration\registration.spec.ts:69:1 › uncertain Personal Information submission clears DOB and recovers without another profile POST (1.5s)
+
+  22 passed (1.7m)
+[WebServer] (node:30060) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 16 tests using 1 worker
+
+(node:29312) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\authentication\authentication.spec.ts:21:2 › Login fidelity accessibility and usable fields at 1440 (2.7s)
+  ok  2 tests\authentication\authentication.spec.ts:28:2 › Signed-in confirmation fidelity and accessibility at 1440 (1.9s)
+  ok  3 tests\authentication\authentication.spec.ts:21:2 › Login fidelity accessibility and usable fields at 1024 (2.1s)
+  ok  4 tests\authentication\authentication.spec.ts:28:2 › Signed-in confirmation fidelity and accessibility at 1024 (1.8s)
+  ok  5 tests\authentication\authentication.spec.ts:21:2 › Login fidelity accessibility and usable fields at 768 (2.4s)
+  ok  6 tests\authentication\authentication.spec.ts:28:2 › Signed-in confirmation fidelity and accessibility at 768 (1.7s)
+  ok  7 tests\authentication\authentication.spec.ts:21:2 › Login fidelity accessibility and usable fields at 390 (2.0s)
+  ok  8 tests\authentication\authentication.spec.ts:28:2 › Signed-in confirmation fidelity and accessibility at 390 (1.8s)
+  ok  9 tests\authentication\authentication.spec.ts:21:2 › Login fidelity accessibility and usable fields at 320 (2.1s)
+  ok 10 tests\authentication\authentication.spec.ts:28:2 › Signed-in confirmation fidelity and accessibility at 320 (2.5s)
+  ok 11 tests\authentication\authentication.spec.ts:33:36 › Login empty blur correction first invalid focus and server error preserve only safe values at 1440 (2.1s)
+  ok 12 tests\authentication\authentication.spec.ts:33:36 › Login empty blur correction first invalid focus and server error preserve only safe values at 768 (2.0s)
+  ok 13 tests\authentication\authentication.spec.ts:33:36 › Login empty blur correction first invalid focus and server error preserve only safe values at 320 (2.2s)
+  ok 14 tests\authentication\authentication.spec.ts:43:1 › Canonical URL direct entry refresh browser history and sign-out guard (1.7s)
+  ok 15 tests\authentication\authentication.spec.ts:51:1 › Pending guard blocks accidental duplicates and password visibility is keyboard accessible (1.4s)
+  ok 16 tests\authentication\authentication.spec.ts:56:1 › Server unavailable logout retains truthful current state and retry; no secrets enter URL (879ms)
+
+  16 passed (35.3s)

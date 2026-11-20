@@ -11,9 +11,21 @@
     <ProjectReference Include="../../src/Modules/Identity/Tunner.Identity.Persistence.csproj" />
     <ProjectReference Include="../../src/Tunner.Database.Migrations/Tunner.Database.Migrations.csproj" />
     <ProjectReference Include="../../src/Tunner.Testing/Tunner.Testing.csproj" />
+    <ProjectReference Include="../../src/Tunner.Installer/Tunner.Installer.csproj" />
     <ProjectReference Include="../../src/Tunner.User.Bff/Tunner.User.Bff.csproj" />
+    <ProjectReference Include="../../src/Tunner.Admin.Bff/Tunner.Admin.Bff.csproj" />
+    <ProjectReference Include="../../src/Tunner.Worker/Tunner.Worker.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="../Shared/NativeTotpCodeFixture.cs" Link="Shared/NativeTotpCodeFixture.cs" />
+    <Compile Include="../Tunner.Worker.Tests/OutboxReceiveBrokerFixture.cs" Link="Shared/OutboxReceiveBrokerFixture.cs" />
+    <Compile Include="../Shared/RecoveryCodeOwnedDockerFixture.cs" Link="Shared/RecoveryCodeOwnedDockerFixture.cs" />
+    <Compile Include="../Shared/RecoveryCodeFixtureOwnershipChannel.cs" Link="Shared/RecoveryCodeFixtureOwnershipChannel.cs" />
+    <Compile Include="../../tools/browser-testing/FiniteTotpBuildBinding.cs" Link="Shared/FiniteTotpBuildBinding.cs" />
+    <Compile Include="../../src/Tunner.Governance/RepositoryRootResolver.cs" Link="Shared/RepositoryRootResolver.cs" />
+    <None Include="../../web/apps/user/passkeys.content.proposal.json" Link="passkeys-content.proposal.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../web/apps/user/step-up.content.proposal.json" Link="step-up-content.proposal.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../web/apps/user/authentication.content.proposal.json" Link="authentication-content.proposal.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../docs/contracts/registration-onboarding.openapi.json" Link="registration-onboarding.openapi.json" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../web/apps/user/content.proposal.json" Link="registration-content.proposal.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

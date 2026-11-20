@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "revision_id": "P0-RV006",
+  "revision_scope": "MILESTONE",
+  "original_scope_id": "P0",
+  "parent_revision_id": "P0-RV005",
+  "parent_milestone_revision_id": null,
+  "title": "Global UI fidelity routing and validation governance",
+  "revision_type": "HARDENING",
+  "status": "CLOSED",
+  "reason": "Implement AMD-0008/AMD-0009 controls and source synchronization under current authority index; preserve original closure and independently revalidate P0 enablement.",
+  "authority_refs": [
+    "docs/authority/current/development/37_Current_Authority_Index.md",
+    "docs/authority/current/development/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "SCOPED_BLOCKING",
+  "blocked_scope": [
+    "P2"
+  ],
+  "acceptance_criteria": [
+    "AMD-0008/AMD-0009 source readback and immutable baseline verify; original P0 and closed Revision records are byte-identical.",
+    "Governed instructions, activated roles, schema, inventory and CI require URL-001..006, VAL-001..008 and UX-FID-001..008 per applicable route/form.",
+    "Current milestone review proof can be supplied through a fully committed validated closed Revision without overwriting historical role receipts; stale or dirty proof is denied.",
+    "P0 enablement passes on current committed evidence before any P2 feature implementation."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "governance-engineer",
+    "solution-architect",
+    "full-stack-engineer",
+    "tester-qa-engineer",
+    "auditor",
+    "devops-engineer",
+    "project-manager",
+    "cyber-security-engineer",
+    "ui-ux-engineer",
+    "frontend-engineer",
+    "end-user-ux-reviewer",
+    "content-writer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P0-RV006-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P0-RV006-STARTUP-REVIEWS.json",
+    "governance/evidence/P0-RV006-VALIDATION.json",
+    "governance/evidence/P0-RV006-ROLE-REVIEWS.json",
+    "governance/evidence/P0-RV006-MILESTONE-ROLE-REVIEWS.json"
+  ],
+  "created_at": "2026-10-18T02:12:38.3412884+00:00",
+  "closed_at": "2026-10-18T02:49:49.487Z",
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "42908d44672b25abfa54a21b5fd1e7252deeb43e",
+    "tested_commit_sha": "42908d44672b25abfa54a21b5fd1e7252deeb43e",
+    "work_item_commit_shas": [
+      "5f78fb1130ce2b7b22be70c514624deb876f9da2",
+      "42908d44672b25abfa54a21b5fd1e7252deeb43e"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
+}

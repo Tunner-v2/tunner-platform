@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-007-UI-002",
+  "work_item_id": "TUN-P2-007",
+  "classification": "UI_ROUTING_DEFECT",
+  "severity": "SEV-2",
+  "status": "RESOLVED",
+  "environment": "Frozen primary frontend review before browser acceptance",
+  "description": "Hard reload after uncertain SIGN_IN loses original request/ceremony because bootstrap recovers terminal REVOKE only. Required correction: Purpose-protected original SIGN_IN pointer projected before context replacement; reconcile exact original result or proved safe next-auth state before new intent; no credential persistence/session restoration.",
+  "expected_behavior_ref": "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+  "evidence": [
+    "governance/evidence/TUN-P2-007-FRONTEND-REVIEW.json",
+    "governance/evidence/TUN-P2-007-DEFECT-VERIFICATION-20261110.json",
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json"
+  ],
+  "affected_versions": [],
+  "created_at": "2026-11-09T17:55:50.503Z",
+  "updated_at": "2026-11-10T12:48:20.365Z"
+}

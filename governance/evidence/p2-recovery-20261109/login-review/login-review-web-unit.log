@@ -1,0 +1,56 @@
+$ node --test tests/theme.test.mjs && vite build --config tests/vite.config.ts && node --test tests/dist/contracts.test.js
+✔ deterministic compiled profiles preserve exact Figma control roles (24.4392ms)
+✔ unknown alias fails with the responsible reference (4.2961ms)
+✔ component alias cycle fails (1.633ms)
+✔ missing approved surface and incomplete semantic profile fail (1.7325ms)
+✔ future mode requires a complete profile for both surfaces (5.7837ms)
+✔ noncanonical token names and CSS injection are rejected (1.519ms)
+✔ unsupported schema fails (0.7433ms)
+✔ checked-in generated views are current and root-independent (1090.298ms)
+✔ text, actions, errors and interactive boundaries meet governed contrast (2.2603ms)
+✔ duplicate source properties and stale generated output fail (2.7032ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2128.1439
+vite v8.2.4 building client environment for production...
+transforming...
+✓ 110 modules transformed.
+rendering chunks...
+computing gzip size...
+tests/dist/contracts.test.js  203.87 kB │ gzip: 41.65 kB
+
+✓ built in 493ms
+✔ SSR is browser-independent with plain brand and no icon (29.8525ms)
+✔ native button defaults to button, with explicit owner submit supported (10.4237ms)
+✔ owner disabled and busy state preserved (2.4128ms)
+✔ content text is escaped and provenance is preserved (1.7879ms)
+✔ missing required key fails without fallback (3.3778ms)
+✔ mismatched key or locale and unpublished snapshots fail (5.5495ms)
+✔ missing provenance and blank required copy fail (5.7039ms)
+✔ resolver receives bounded surface/locale/audience context (3.7544ms)
+✔ required theme/content boundaries fail explicitly (1.4408ms)
+✔ invalid modes/surfaces fail rather than silently applying defaults (1.3499ms)
+✔ empty locale/audience is rejected (3.0738ms)
+✔ field label/help/error IDs and noncolor text preserve associations (3.5846ms)
+✔ absent optional slots stay absent (1.8599ms)
+✔ generated label IDs are unique (2.7033ms)
+✔ nested surface providers preserve independent DOM boundaries (3.8822ms)
+✔ placeholder requires its own published copy and provenance while retaining the visible label (2.4581ms)
+✔ typed schemas enforce required, format, range and cross-field rules using domain keys (15.9821ms)
+✔ schema form-level errors and published summary remain separate from field rules (5.3304ms)
+✔ domain schemas use current policy and do not inherit historical Figma password or age restrictions (16.1073ms)
+✔ DOB schema is calendar-safe and rejects future dates without client age eligibility policy (0.4573ms)
+✔ every implemented screen route agrees with the central inventory and known BFF fallback contract (0.8976ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1068.0808

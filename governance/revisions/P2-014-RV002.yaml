@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-014-RV002",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-014",
+  "parent_revision_id": "P2-014-RV001",
+  "parent_milestone_revision_id": null,
+  "title": "Preserve Product bootstrap and proof during remaining publication integration",
+  "revision_type": "COMPATIBILITY",
+  "status": "CLOSED",
+  "reason": "Approved P2-019 introduces asynchronous optional Recovery availability in shared bootstrap and a Device-only prepared final witness in shared StepUp. Preserve original Product closure, all Product policy/proof/issuance behavior and explicit activation boundaries; qualify only affected shared source.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/baselines/1.6.0/19_Connected_Product_and_SDK_Lifecycle_FRD.md",
+    "docs/authority/baselines/1.6.0/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [
+    "governance/evidence/TUN-P2-019-VALIDATION.json"
+  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Optional unavailable Recovery remains isolated from primary authentication bootstrap; Product origin, fresh proof and native issuance semantics remain unchanged.",
+    "Qualified shared-source equivalence and focused regressions preserve original Product closure; no production policy, source activation or release is implied."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "full-stack-engineer",
+    "tester-qa-engineer",
+    "solution-architect",
+    "cyber-security-engineer",
+    "auditor"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P2-014-RV002-VALIDATION.json",
+    "governance/evidence/TUN-P2-019-VALIDATION.json"
+  ],
+  "created_at": "2026-11-17T07:29:23.8313537+00:00",
+  "closed_at": "2026-11-17T09:46:16Z",
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "1bf5971739f163d15777498b211ff0f48f677bc8",
+    "tested_commit_sha": "1bf5971739f163d15777498b211ff0f48f677bc8",
+    "work_item_commit_shas": [
+      "004603cf242c26c359b85103372016bb01fca3e1",
+      "35a121aa540778f9961a2d59ccc7d4783f44d3c9",
+      "04c86d0a29a16bd9837026e33faf7c514c2e767b",
+      "16468b07cdca0c98593b60ad4ba3f24def0bad35",
+      "1bf5971739f163d15777498b211ff0f48f677bc8"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/",
+      "docs/project/",
+      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/",
+      ".vscode/",
+      "%SystemDrive%/"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
+}

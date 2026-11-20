@@ -1,0 +1,48 @@
+{
+  "ExitCode": 1,
+  "Command": "gate check",
+  "Payload": {
+    "WorkItemId": "TUN-P2-008",
+    "Outcome": "NOT_READY",
+    "Failures": [
+      "owned behavior changed after validated SHA: docs/contracts/ui-inventory.json",
+      "owned behavior changed after validated SHA: src/Modules/Identity/AuthenticationEndpoints.cs",
+      "owned behavior changed after validated SHA: src/Modules/Identity/IdentityPersistenceDbContext.cs",
+      "owned behavior changed after validated SHA: src/Modules/Identity/IdentityWebAssets.cs",
+      "owned behavior changed after validated SHA: src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+      "owned behavior changed after validated SHA: src/Modules/Identity/StepUpApplication.cs",
+      "owned behavior changed after validated SHA: tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+      "owned behavior changed after validated SHA: tools/browser-testing/Program.cs",
+      "owned behavior changed after validated SHA: tools/browser-testing/Tunner.BrowserTesting.csproj",
+      "owned behavior changed after validated SHA: tools/browser-testing/BrowserTestHost.cs",
+      "UI inventory changed after evidence was collected",
+      "UI behavior changed after the tested commit; recommit and revalidate"
+    ],
+    "Satisfied": [
+      "evidence exists: governance/evidence/TUN-P2-008-VALIDATION.json",
+      "evidence exists: docs/development/P2_008_TOTP_SCOPE.md",
+      "evidence exists: governance/evidence/TUN-P2-008-AUTHORITY-RESOLUTION.json",
+      "evidence exists: governance/evidence/TUN-P2-008-RD-SOURCES.json",
+      "evidence exists: governance/evidence/TUN-P2-008-UI-AUTHORITY.json",
+      "evidence exists: governance/evidence/TUN-P2-008-STARTUP-REVIEWS.json",
+      "evidence exists: governance/evidence/TUN-P2-008-ROLE-REVIEWS.json",
+      "evidence exists: governance/evidence/TUN-P2-008-SENSITIVE-QA-PLAN.json",
+      "evidence exists: governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/execution-index.json",
+      "evidence exists: governance/evidence/p2-008-totp-20261110/final-carrier/337b196/execution-index.json",
+      "role review evidence exists",
+      "mandatory role review passed: auditor",
+      "mandatory role review passed: compliance-specialist",
+      "mandatory role review passed: content-writer",
+      "mandatory role review passed: cyber-security-engineer",
+      "mandatory role review passed: devops-engineer",
+      "mandatory role review passed: end-user-ux-reviewer",
+      "mandatory role review passed: frontend-engineer",
+      "mandatory role review passed: full-stack-engineer",
+      "mandatory role review passed: rd-engineer",
+      "mandatory role review passed: sdk-engineer",
+      "mandatory role review passed: solution-architect",
+      "mandatory role review passed: tester-qa-engineer",
+      "mandatory role review passed: ui-ux-engineer"
+    ]
+  }
+}

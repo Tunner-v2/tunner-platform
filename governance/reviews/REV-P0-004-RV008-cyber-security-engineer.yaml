@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "review_id": "REV-P0-004-RV008-cyber-security-engineer",
+  "work_item_id": "P0-004-RV008",
+  "role": "cyber-security-engineer",
+  "skill_id": "cyber-security-engineer",
+  "skill_version": "1.0.0",
+  "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+  "status": "PASS",
+  "result": "PASS",
+  "reviewed_at": "2026-11-20T01:24:49.380Z",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "context_artifacts": [
+    ".agent/skills/cyber-security-engineer/SKILL.md",
+    "governance/revisions/P0-004-RV008.yaml",
+    "src/Tunner.Governance/RevisionCommittedProofResolver.cs",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P0-004-RV008-VALIDATION.json"
+  ],
+  "findings": [
+    "Independent /root Cyber: committed child/owner, prefix/member and original validated binding required. Parent/older/foreign/ACTIVE/uncommitted/tampered/dirty coverage rejects; existing commit/live/cycle controls retained. Actual negative/full tests and scoped secret scan pass. Required CI remains separate.",
+    "Scoped technical assessment only; native closure, P2 source reconciliation, Product, production, main merge and release remain separate."
+  ],
+  "required_actions": [],
+  "blocking_findings": [],
+  "context_expansion_requested": false
+}

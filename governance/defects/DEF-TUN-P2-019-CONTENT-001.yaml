@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-019-CONTENT-001",
+  "work_item_id": "TUN-P2-019",
+  "classification": "FUNCTIONAL_GAP",
+  "severity": "SEV-3",
+  "status": "CLOSED",
+  "environment": "P2 audit at 16a06672058dbc4074647611f893481bbb87e6e2",
+  "description": "Production content provenance interfaces exist, but there is no Content/PresentationContent-owned persistent version/publication model or secure Admin workflow; current runnable providers/content are synthetic local fixtures. Required correction: Implement the existing governed global capability for P2 surfaces, reusing policy/authorization/audit/outbox primitives, through a bounded work item. Do not invent text/publication or domain/security-policy values. RESOLVED ENGINEERING GAP: PresentationContent now owns persistent immutable proposals/versions/publications, deterministic effective resolution and fail-closed governed interfaces. Secured Admin draft/preview/validate/approval/publish/history/forward rollback and the compatible published User consumers are implemented and actually qualified. Actual typed owner requirements, separate authority/capabilities/SoD and default-off runtime composition are retained; synthetic local fixtures do not become production values or workforce authentication. Native Work19 readiness and Product/preproduction acceptance remain separate.",
+  "expected_behavior_ref": "docs/authority/current/development/10_UI_UX_Components_Widgets_and_Plugins_Development_Rules.md",
+  "evidence": [
+    "governance/evidence/P2-001-007-AUDIT-20261109.json",
+    "governance/evidence/TUN-P2-019-VALIDATION.json",
+    "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
+    "governance/evidence/TUN-P2-019-ROLE-REVIEWS.json",
+    "governance/evidence/p2-019-content-20261116/admin-browser-d1147842/switch-repair-results.json",
+    "governance/evidence/p2-019-content-20261116/recovery-password-mapping-d81d4f9f/9e1ffadcba6a44209d5d27518ba52fae/summary.json"
+  ],
+  "affected_versions": [
+    "16a06672058dbc4074647611f893481bbb87e6e2"
+  ],
+  "created_at": "2026-11-09T10:46:27.012Z",
+  "updated_at": "2026-11-17T21:00:36Z"
+}

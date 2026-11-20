@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-009",
+  "recorded_at": "2026-11-11T09:12:50.171Z",
+  "result": "PASS_TECHNICAL_DESIGN_FOR_SCOPED_IMPLEMENTATION_ONLY",
+  "reviewer": "Root executing-agent engineering/architecture perspective",
+  "native_source_sha": "3c9d4c388b2acff1c61f9f01ed6fee55d39b2d70",
+  "native_work_start": "ELIGIBLE",
+  "isolated_context": {
+    "outcome": "CURRENT",
+    "output": "artifacts/p2-009-recovery-20261111/context-implementation-v1",
+    "raw_verify_sha256": "ddf5d3c1f0186ecb1b920ccbbf4a5445d30fc223226b62923170bc13f5f3c476"
+  },
+  "reviewed_seam": {
+    "path": "governance/evidence/p2-009-recovery-20261111/technical-design/seam-design.md",
+    "original_sha256": "fd3715f766c4c660961ad37c95c800af2778b8ad6e9312d7f1792bed8762fc58"
+  },
+  "independent_security": {
+    "path": "governance/evidence/p2-009-recovery-20261111/technical-design/security-cross-review.json",
+    "original_sha256": "75089ddecaae7ab8e89238f06538d5b733d16805d991767b2d287642d9201bb7"
+  },
+  "decisions": [
+    "One closed outcome-carried recovery-only first-delivery value on existing proof engine; no generic secret transport/cache or later retrieval.",
+    "Confirmed commit and transaction-dispose before winner transfer; dispose on every failure/UNKNOWN/hook/write/cancel path. Safe-only reads/duplicates/reconciliation remain non-disclosing.",
+    "Current actor/owner/request/set/profile/context bindings and direct final recovery policy/closed validity; existing proof checks unchanged and no new causal-source exemption.",
+    "Native RNG128/hex and strictly bounded native V3 verifier mechanism are supported implementation candidates. Production policy/count/work/profile/retirement values are explicit unselected inputs.",
+    "No RecoveryCase or fake production case workflow in009. Trusted same-Identity owner admission/apply/final evidence, clean single transaction, ordered locks and actual state;011 owns full recovery.",
+    "Approved Account Security card/modal integration; shared all-method first-response consumer before completion/unmount, with safe StepUpCompletion and neutral unavailable result after payload loss."
+  ],
+  "implementation_conditions": [
+    "All required source-bound tests and final reviews still pending.",
+    "Public recovery-only download fault qualification before actual private browser delivery; TOTP default prohibition unchanged.",
+    "Fixed exact-file positive ownership/cleanup, no raw error/report/URL/storage/telemetry exposure.",
+    "Preserve unrelated13 and unknown Windows-cache contents; no external authority writes, production activation or image changes."
+  ],
+  "product_consent_ref": "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+  "tests_executed": false,
+  "product_or_release_acceptance": false
+}

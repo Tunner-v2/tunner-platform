@@ -1,0 +1,222 @@
+{
+  "config": {
+    "argv": [
+      "<node-executable>",
+      "<repo-root>\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.step-up.config.ts",
+      "--grep",
+      "Completion recovery refuses"
+    ],
+    "configFile": "<repo-root>\\web\\playwright.step-up.config.ts",
+    "rootDir": "<repo-root>/web/tests/step-up",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo-root>/web/test-results/runs/step-up",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo-root>/web/tests/step-up",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/step-up/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config fixtures/step-up/vite.config.ts",
+      "url": "http://127.0.0.1:5192/browser-testing/step-up-assets/",
+      "reuseExistingServer": true,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "step-up.spec.ts",
+      "file": "step-up.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Completion recovery refuses an unrelated request binding 99999999-3434-4567-8989-121212121212",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 7263,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('alert')\nExpected: \u001b[32m\"Your session or this request changed. Return to the action and try again.\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('alert')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('alert')\nExpected: \u001b[32m\"Your session or this request changed. Return to the action and try again.\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('alert')\u001b[22m\n\n    at <repo-root>\\web\\tests\\step-up\\step-up.spec.ts:92:41",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\step-up\\step-up.spec.ts",
+                      "column": 41,
+                      "line": 92
+                    },
+                    "snippet": "  90 |   await page.route('**/authentication/step-up/password',route=>{state.posts++;state.completed=true;return route.abort();});\n  91 |   await open(page);await password(page);await page.getByLabel('Password',{exact:true}).fill('fixture existing password');await page.getByRole('button',{name:'Confirm',exact:true}).click();\n> 92 |   await expect(page.getByRole('alert')).toHaveText(proposal.content['stepUp.error.changed']);\n     |                                         ^\n  93 |   await expect(page.getByLabel('Password',{exact:true})).toHaveCount(0);await expect(page.getByRole('status')).toHaveText('Ready');expect(state.posts).toBe(1);\n  94 |  });\n  95 | }"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\step-up\\step-up.spec.ts",
+                        "column": 41,
+                        "line": 92
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('alert')\nExpected: \u001b[32m\"Your session or this request changed. Return to the action and try again.\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('alert')\u001b[22m\n\n\n  90 |   await page.route('**/authentication/step-up/password',route=>{state.posts++;state.completed=true;return route.abort();});\n  91 |   await open(page);await password(page);await page.getByLabel('Password',{exact:true}).fill('fixture existing password');await page.getByRole('button',{name:'Confirm',exact:true}).click();\n> 92 |   await expect(page.getByRole('alert')).toHaveText(proposal.content['stepUp.error.changed']);\n     |                                         ^\n  93 |   await expect(page.getByLabel('Password',{exact:true})).toHaveCount(0);await expect(page.getByRole('status')).toHaveText('Ready');expect(state.posts).toBe(1);\n  94 |  });\n  95 | }\n    at <repo-root>\\web\\tests\\step-up\\step-up.spec.ts:92:41"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:04:05.806Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\web\\test-results\\runs\\step-up\\step-up-Completion-recover-c6c60-3434-4567-8989-121212121212\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\step-up\\step-up.spec.ts",
+                    "column": 41,
+                    "line": 92
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a56506f00744adafa68b-7fb59a600648bca0384e",
+          "file": "step-up.spec.ts",
+          "line": 87,
+          "column": 2
+        },
+        {
+          "title": "Completion recovery refuses an unrelated request binding null",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 9741,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('alert')\nExpected: \u001b[32m\"Your session or this request changed. Return to the action and try again.\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('alert')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('alert')\nExpected: \u001b[32m\"Your session or this request changed. Return to the action and try again.\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('alert')\u001b[22m\n\n    at <repo-root>\\web\\tests\\step-up\\step-up.spec.ts:92:41",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\step-up\\step-up.spec.ts",
+                      "column": 41,
+                      "line": 92
+                    },
+                    "snippet": "  90 |   await page.route('**/authentication/step-up/password',route=>{state.posts++;state.completed=true;return route.abort();});\n  91 |   await open(page);await password(page);await page.getByLabel('Password',{exact:true}).fill('fixture existing password');await page.getByRole('button',{name:'Confirm',exact:true}).click();\n> 92 |   await expect(page.getByRole('alert')).toHaveText(proposal.content['stepUp.error.changed']);\n     |                                         ^\n  93 |   await expect(page.getByLabel('Password',{exact:true})).toHaveCount(0);await expect(page.getByRole('status')).toHaveText('Ready');expect(state.posts).toBe(1);\n  94 |  });\n  95 | }"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\step-up\\step-up.spec.ts",
+                        "column": 41,
+                        "line": 92
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('alert')\nExpected: \u001b[32m\"Your session or this request changed. Return to the action and try again.\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('alert')\u001b[22m\n\n\n  90 |   await page.route('**/authentication/step-up/password',route=>{state.posts++;state.completed=true;return route.abort();});\n  91 |   await open(page);await password(page);await page.getByLabel('Password',{exact:true}).fill('fixture existing password');await page.getByRole('button',{name:'Confirm',exact:true}).click();\n> 92 |   await expect(page.getByRole('alert')).toHaveText(proposal.content['stepUp.error.changed']);\n     |                                         ^\n  93 |   await expect(page.getByLabel('Password',{exact:true})).toHaveCount(0);await expect(page.getByRole('status')).toHaveText('Ready');expect(state.posts).toBe(1);\n  94 |  });\n  95 | }\n    at <repo-root>\\web\\tests\\step-up\\step-up.spec.ts:92:41"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T11:04:25.960Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\web\\test-results\\runs\\step-up\\step-up-Completion-recover-6bc14-elated-request-binding-null\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\step-up\\step-up.spec.ts",
+                    "column": 41,
+                    "line": 92
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "a56506f00744adafa68b-c36c13e8e61d18be00e0",
+          "file": "step-up.spec.ts",
+          "line": 87,
+          "column": 2
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-09T11:04:03.918Z",
+    "duration": 36667.996,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

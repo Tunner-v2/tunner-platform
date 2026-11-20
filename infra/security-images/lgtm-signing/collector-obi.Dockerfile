@@ -1,0 +1,67 @@
+# Private candidates preserve the complete generated BPF/Java source and collector manifest.
+FROM golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110 AS obi-source
+ENV CGO_ENABLED=0 GOTOOLCHAIN=local GOMAXPROCS=2
+ADD --checksum=sha256:d3cbec602e3ab7b357d2f4a57b29e502365f9098808418e8b4d96dec8fa9281f https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/releases/download/v0.15.2/obi-v0.15.2-source-generated.tar.gz /tmp/obi.tar.gz
+ADD --checksum=sha256:769e2467372c3333f646a1894be7c8cc80dfea3c49b0eaa9809fc7740a950d5d https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/releases/download/v0.15.2/obi-java-agent-v0.15.2.cyclonedx.json /reviewed/obi-java-agent.sbom.json
+WORKDIR /src/obi
+RUN tar -xzf /tmp/obi.tar.gz --strip-components=1 && echo "21d35cb644013fc164fce5d9ba537e394181f27e08236033a434f5c5e9da9cdf  pkg/internal/java/embedded/obi-java-agent.jar" | sha256sum -c - && test -s pkg/ebpf/common/bpf_x86_bpfel.o
+FROM obi-source AS obi-builder
+RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared \
+    --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared \
+    set -eu; mkdir -p /out/bin /out/provenance/obi; \
+    go get golang.org/x/net@v0.62.0; go mod verify; \
+    go test -mod=readonly -p=2 -count=1 -json ./cmd/obi/... ./pkg/buildinfo > /out/provenance/obi/upstream-tests.json; \
+    go build -mod=readonly -p=2 -trimpath -ldflags='-s -w -X go.opentelemetry.io/obi/pkg/buildinfo.Version=v0.15.2 -X go.opentelemetry.io/obi/pkg/buildinfo.Revision=b28e4e7' -o /out/bin/obi ./cmd/obi/main.go; \
+    go version -m /out/bin/obi > /out/provenance/obi/buildinfo.txt; \
+    cp go.mod go.sum LICENSE NOTICE /out/provenance/obi/; \
+    cp /reviewed/obi-java-agent.sbom.json /out/provenance/obi/java-agent.sbom.json; \
+    find pkg -type f '(' -name '*_bpfel.o' -o -name '*_bpfeb.o' -o -name '*.jar' ')' -exec sha256sum '{}' ';' > /out/provenance/obi/embedded-assets.sha256; \
+    go list -m -json all > /out/provenance/obi/modules.json
+FROM obi-source AS collector-source
+ADD --checksum=sha256:589a91e904cf78ea88c543c0ef2170529b89b74904386bfa87876ff07d60748e https://codeload.github.com/open-telemetry/opentelemetry-collector-releases/tar.gz/6c65793ec707f673304e52dfcb642684fda1a048 /tmp/collector.tar.gz
+WORKDIR /src/collector
+RUN tar -xzf /tmp/collector.tar.gz --strip-components=1 && mkdir -p internal/obi-src /out/bin /out/provenance/collector && cp -a /src/obi/. internal/obi-src/
+COPY collector-sermo-go127.patch /reviewed/collector-sermo-go127.patch
+COPY collector-sermo-compat_test.go.txt /reviewed/collector-sermo-compat_test.go
+RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared \
+    --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared \
+    set -eu; go install go.opentelemetry.io/collector/cmd/builder@v0.163.0; \
+    cd distributions/otelcol-contrib; \
+    timeout 45m /go/bin/builder --verbose --skip-compilation --config manifest.yaml; \
+    cp manifest.yaml /out/provenance/collector/manifest.yaml; \
+    cd _build; \
+    go get golang.org/x/net@v0.62.0 github.com/go-jose/go-jose/v4@v4.1.6; \
+    mkdir -p tunner-compat; cp /reviewed/collector-sermo-compat_test.go tunner-compat/compat_test.go; \
+    go mod tidy; go mod verify; \
+    test "$(go list -m -f '{{.Version}}' github.com/SermoDigital/jose)" = v0.9.2-0.20180104203859-803625baeddc; \
+    go list -m -json github.com/SermoDigital/jose > /out/provenance/collector/legacy-jose-module.json; \
+    test "$(go list -m -f '{{.Version}}' bitbucket.org/atlassian/go-asap/v2)" = v2.26.3; \
+    go list -m -json bitbucket.org/atlassian/go-asap/v2 > /out/provenance/collector/asap-module.json; \
+    go mod vendor; \
+    echo "1365f81ed151630f18a83c644898007017994c8a1a42fe812642decdc66df123  vendor/github.com/SermoDigital/jose/crypto/none.go" | sha256sum -c -; \
+    git apply --check --directory=vendor/github.com/SermoDigital/jose /reviewed/collector-sermo-go127.patch; \
+    git apply --directory=vendor/github.com/SermoDigital/jose /reviewed/collector-sermo-go127.patch; \
+    sha256sum vendor/github.com/SermoDigital/jose/crypto/none.go > /out/provenance/collector/patched-legacy-jose.sha256; \
+    go test -mod=vendor -p=2 -tags grpcnotrace -count=1 -json ./tunner-compat > /out/provenance/collector/legacy-jose-compat-tests.json || { cat /out/provenance/collector/legacy-jose-compat-tests.json; exit 1; }; \
+    cp /reviewed/collector-sermo-go127.patch /out/provenance/collector/; cp vendor/modules.txt /out/provenance/collector/vendor-modules.txt; \
+    cp tunner-compat/compat_test.go /out/provenance/collector/legacy-jose-compat_test.go.txt; \
+    cp vendor/github.com/SermoDigital/jose/crypto/none.go /out/provenance/collector/patched-legacy-none.go.txt
+FROM collector-source AS collector-builder
+WORKDIR /src/collector/distributions/otelcol-contrib/_build
+RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared \
+    --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared \
+    set -eu; go build -mod=vendor -p=2 -trimpath -tags grpcnotrace -ldflags='-s -w' -o /out/bin/otelcol-contrib .; \
+    cp go.mod go.sum components.go /out/provenance/collector/; \
+    go version -m /out/bin/otelcol-contrib > /out/provenance/collector/buildinfo.txt; \
+    go list -mod=readonly -m -json all > /out/provenance/collector/modules.json; \
+    /out/bin/otelcol-contrib --version > /out/provenance/collector/version.txt; \
+    /out/bin/otelcol-contrib components > /out/provenance/collector/components.txt
+FROM scratch AS obi-candidate
+COPY --from=obi-builder /out/ /
+LABEL io.tunner.scope="unsigned-dev-service-candidate-not-runtime-accepted"
+FROM scratch AS collector-candidate
+COPY --from=collector-builder /out/ /
+LABEL io.tunner.scope="unsigned-dev-service-candidate-not-runtime-accepted"
+
+FROM scratch AS collector-compat-proof
+COPY --from=collector-source /out/provenance/collector/ /

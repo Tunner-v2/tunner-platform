@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-004-RV006",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "immutable_history_increment": {
+    "source_commit": "5395961d92b8a87f492f13589d5ec4c7c41d9a2b",
+    "scope": "Propagate existing assessment into historical revision validation. Resolve HEAD freshly per validation and reuse only full-SHA history reads through the existing failure/UTF8 reader. No validation or closure-result caching; all live controls remain.",
+    "build": "PASS, isolated output, no restore, zero warnings/errors,15.79seconds",
+    "focused": "PASS40 closed-revision ownership checks via existing --revision-committed-proof-only, terminal tool session62102; includes six new freshness/tamper/reuse assertions",
+    "full_functional": "PASS via existing full functional entrypoint, terminal tool session82965; no rerun for log collection and no complete raw-stdout claim",
+    "context_qualification": {"result": "UNRESOLVED_TIME_BOUNDARY", "scope": "TUN-P2-019 TASK", "limit_seconds": 300, "duration_ms": 300311, "completed_within_bound": false, "process_exit_code": -1, "stderr_characters": 0, "raw_receipt_ref": "artifacts/p2-011-recovery-20261112/proof-assessment-qualification/execution.json", "boundary": "Wrapper stopped only its owned qualification process/tree at the required deadline. No successful context generation/currentness or end-to-end speedup is inferred."},
+    "next_action": "Escalate remaining real-repository traversal delay under existing retry policy. Do not repeat qualification or expand diagnostic work without user direction. RV006 stays ACTIVE/PENDING; no gate/P0/authority/Product/production/release change."
+  },
+  "utf8_git_read_increment": {
+    "phase": "REGRESSION_PASS_P016_ADMISSION_ELIGIBLE",
+    "cause": "Both actual closed-record comparison hash pairs are reproduced exactly by decoding their UTF-8 Git bytes as CP437. The HEAD blobs and worktree records are structurally identical; the literal U+2013 reason character was misdecoded, not edited. No historical record repair is justified.",
+    "patch_sha256": "c95b328e297ef8d7af341561b27ebfe4b2e30e7fa34f91d03be09e2461c1ab21",
+    "change": "Set explicit UTF-8 stdout decoding on the two existing Revision and committed-evidence Git readers. Preserve all equality, immutability, failure and acceptance rules. Add three assertions to the existing closed-proof fixture; restore console encoding and exact fixture bytes in finally.",
+    "review": "Independent AI p214_continuation_qa applied governance, QA and security contracts: PASS_SOURCE, no actionable findings. This is one disclosed reviewer, not separate human approvals.",
+    "build": "PASS, zero warnings/errors, 10.80 seconds.",
+    "source_sha": "4e39914ed73d59ba728a3f3cbd6dd92d7079ed39",
+    "focused": {"exit_code": 0, "checks": 34, "elapsed_ms": 90935, "receipt_ref": "governance/evidence/admission-performance-20261117/git-utf8-4e39914e/focused-execution.json"},
+    "functional": {"exit_code": 0, "elapsed_ms": 271189, "scope": "Full existing functional suite, including63 Revision,34 closed-proof and41 validation-source checks", "receipt_ref": "governance/evidence/admission-performance-20261117/git-utf8-4e39914e/functional-execution.json"},
+    "actual_admission": {"outcome": "ELIGIBLE", "exit_code": 0, "elapsed_ms": 138325, "receipt_ref": "governance/evidence/p2-016-notifications-20261115/native-gates/admission-4e39914e-execution.json"},
+    "boundary": "Encoding defect repaired and regression qualified; no closed records or immutability rules changed. Actual application test evidence retains its original execution SHAs. Overall RV006 context-performance qualification remains PENDING."
+  },
+  "admission_diagnostics_increment": {
+    "phase": "DIAGNOSTIC_REGRESSION_PASS_INTEGRATION_CAUSE_IDENTIFIED",
+    "nested_reason_qualification": "Existing validation-source selector passed41 checks atf4415d6146e5af58c459feb109290ae7b5dcea83, exit0/35632ms. Actual subsequent P016 refusal identifies closed RV005/RV006 immutability comparison failure; files and an independent parse comparison match HEAD, so no history rewrite or rule relaxation is justified.",
+    "failure_local_comparison": "Reviewed c29a2419de3e87f4fc7149eabc621624ceaf47ab63ab69cf601a1f53441684a8 adds bounded comparison hashes, semantic diagnostic and approved top-level path/kinds only at the actual rejection. One independent AI governance/QA/security assessment PASS_SOURCE. Serialized equality and original refusal remain unchanged. Full existing functional suite PASS at70207771b1b35219bc08a21cf0eb681ad0c62a3f, exit0/247865ms, including63 Revision,31 closed-ownership and41 validation-source checks. No values or extra Git/I/O emitted.",
+    "focused_receipt_ref": "governance/evidence/admission-performance-20261117/diagnostics-70207771/focused-execution.json",
+    "functional_receipt_ref": "governance/evidence/admission-performance-20261117/diagnostics-70207771/functional-execution.json",
+    "attribution": "At70207771, actual P016 admission was refused. One bounded read-only hash attribution identified P2-004-UI001-RV010 and P2-004-UI002-RV010 as the two closed records with reason comparison differences. P003 RV005/RV006 were propagation prefixes, not the actual differing records. The subsequent UTF-8 increment records the confirmed CP437 decoding cause and successful correction; no immutable record or acceptance rule changed. Overall performance qualification remains PENDING.",
+    "patch_sha256": "8ded01bc5bebd0b4f6f4152db6b41aeb494c3cd0e2e80e1e7dd97bdcdaf06574",
+    "compile_refinement": "Initial build identified CA1859 on the private optional collector. Use its actual List<string> type; no analyzer suppression or behavior change.",
+    "purpose": "Expose the existing nested committed-proof failure for the reproducible P016/P003 admission contradiction, before any further retry or speculative repair.",
+    "review": "One independent AI p214_continuation_qa applied governance/QA/security contracts: PASS_SOURCE. Same proof check, assessment, boolean cache and generic refusal; no new evaluation, acceptance rule or exception payload. Three existing-fixture assertions cover dirty/later-unvalidated source reasons and repaired readiness.",
+    "limits": "Details appear when a proof is computed; cached false or missing-state cases may retain only the generic refusal. No claim of universal diagnostics. Existing RV006 performance target and whole-revision qualification remain pending."
+  },
+  "schema_compilation_increment": {
+    "application_source_sha": "e663e533ce0370b45e80b0defda300e9a3ec2d5e",
+    "final_tested_sha": "519935b2efe4b02f890f49e190fd1727834194c6",
+    "reviewed_patch_sha256": "06e1ad940eb3bae8b070ca12a780bbc4c946fe7398fc2b8345a4449997af9a15",
+    "scope": "Compile gitState and Revision executable schemas once per individual Validate/AddDiagnostics invocation. Every record still evaluates; every fresh public invocation and standalone schema check reloads its source. No acceptance, YAML or cross-call schema cache.",
+    "build": "PASS zero warnings/errors at source freeze; test-only YAML/path repairs rebuilt successfully. No production source changed after e663e533.",
+    "initial_failure": {"source_sha":"e663e533ce0370b45e80b0defda300e9a3ec2d5e","exit_code":1,"elapsed_ms":122057,"classification":"TEST_FIXTURE_SERIALIZATION","cause":"New negative test parsed a YAML record as JSON; existing EditRevision helper reused instead.","ref":"governance/evidence/admission-performance-20261117/schema-hoist-e663e533/functional-summary.json"},
+    "focused_failure": {"source_sha":"8eacf2369b927af9e12eb4b5a4da02a2e07bfc12","exit_code":1,"elapsed_ms":86162,"classification":"TEST_FIXTURE_PATH_FORMAT","cause":"Two strict record-location assertions compared mixed-separator paths against native Windows paths. Two declarations now use the same native Path.Combine segments as the loader; strict equality and all seven new assertions retained.","ref":"governance/evidence/admission-performance-20261117/schema-hoist-8eacf236/focused-summary.json"},
+    "focused": {"source_sha":"519935b2efe4b02f890f49e190fd1727834194c6","exit_code":0,"assertions":31,"elapsed_ms":85768,"ref":"governance/evidence/admission-performance-20261117/schema-hoist-519935b2/focused-summary.json"},
+    "functional": {"source_sha":"519935b2efe4b02f890f49e190fd1727834194c6","exit_code":0,"elapsed_ms":241078,"scope":"Full existing suite including seven new later-record/schema-freshness assertions; not merely the focused group.","ref":"governance/evidence/admission-performance-20261117/schema-hoist-519935b2/functional-summary.json"},
+    "actual_context": {"scope":"TUN-P2-019","mode":"TASK","timed_out":true,"elapsed_ms":300167,"deadline_ms":300000,"owned_process_exited":true,"current_context_proved":false,"ref":"governance/evidence/admission-performance-20261117/schema-hoist-519935b2/context-summary.json"},
+    "review": "Independent AI p214_continuation_qa reviewed the two-file implementation, seven fixture assertions, both test-only repairs and all three actual run directories. Verified regression PASS and unsatisfied context-performance acceptance; no source finding, no all-scope role PASS or closure inference. Empty raw context stdout is retained as context-stdout.log, not a completed JSON result.",
+    "decision": "Regression qualification passes; required context-performance qualification remains unresolved. No performance speedup, CURRENT context, validation promotion or closure claim. Preserve all actual failures and passing runs; no equivalent context retry or cache/framework expansion. Pending RV007 authorization separately blocks P2-019 UI correction. Current P2-016 gate has only open prerequisite and shared test/project-source binding issues, not changed application code."
+  },
+  "initial_compile": {"source_sha":"b258e7d2361b5ff320c799ec7cae741c8267551f","result":"FAIL_CA1861","scope":"Two new fixture constant array arguments only; hoisted once to enclosing fixture scope. Corrected build passed at 785b0547."},
+  "qualification_checkpoint": {
+    "source_sha": "c86ca859736fd26c3150b53b9b6b78663de07bf9",
+    "functional": "PASS; full existing suite, 271421ms; closed ownership24 including actual nested refusal assertion; validation-source38; parallel read-only context recorded",
+    "actual_context": "TIMEOUT at300246ms; task-owned process closed; no CURRENT context or performance acceptance",
+    "receipt_ref": "governance/evidence/admission-performance-20261117/native-c86ca859/functional-summary.json",
+    "context_receipt_ref": "governance/evidence/admission-performance-20261117/native-c86ca859/context-summary.json",
+    "diagnostic": "Earlier P003 generic closed-proof refusal did not reproduce with error-only diagnostics. Current P003 gate has only P002 prerequisite refusal; exact P002 gate identifies Tunner.Platform.slnx source drift already tracked by TODO-TUN-P2-019-INTEGRATION001. Fresh Work19 admission reports ELIGIBLE. No historical repair or gate relaxation. After two bounded context timeouts, no equivalent retry: retain ACTIVE/PENDING and continue eligible solution integration; investigate repeated Git/proof work only with a targeted measured strategy."
+  },
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "src/Tunner.Governance/CommittedEvidenceApplication.cs",
+    "src/Tunner.Governance/CommitReadinessApplication.cs",
+    "src/Tunner.Governance/RevisionCommittedProofResolver.cs",
+    "src/Tunner.Governance/RevisionApplication.cs",
+    "src/Tunner.Governance/GovernanceApplication.cs",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs"
+  ],
+  "scope": "Bound repeated identical proof evaluation inside one assessment; retain exact source/authority/dependency/role checks, fresh commands, failure and cycle rejection.",
+  "observations": [
+    "Global next produced no result before its verified task-owned process was stopped; context generation likewise exceeded bounded delivery checks.",
+    "Source confirms nested CloseCheck constructs fresh resolvers and repeats Git proof work. Actual delay cause is not claimed conclusively; focused operation-count and bounded real-context qualification required."
+  ],
+  "boundaries": "Maintenance of existing enabled control plane through append-only PERFORMANCE lineage; no P0 gate, Product authority, acceptance, role or lifecycle semantics change. Unrelated dirty paths preserved; unknown %SystemDrive% folder never enumerated.",
+  "candidate": {
+    "state": "APPLIED_SOURCE_REVIEW_PASS_RUNTIME_PENDING",
+    "patch_ref": "artifacts/p2-019-content-20261116/governance-proof-assessment-v2.patch",
+    "sha256": "a209d3cc009bf60005e832759fcbee1c61927f719f11246f902268d87de5965a",
+    "scope": "Only successful nonempty explicit-object Git queries reused; closure and live source/evidence/role controls always reexecute; fresh public assessments and cycle refusal.",
+    "tests": "Eight new existing-fixture assertions including actual required-review evidence withdrawal within same assessment; existing tests retained.",
+    "reviewer": "Independent AI p214_continuation_qa applied four current contracts; no application/runtime/performance PASS implied."
+  },
+  "rejected_candidate": {
+    "sha256": "2fde0fc7eb009aa489740f2e2a3a679948d3692387dd915fe0af86d705a186d6",
+    "state": "NEVER_APPLIED",
+    "reason": "Full closure cache omitted live role/gate/child/transitive evidence inputs; same-assessment required-review evidence withdrawal could reuse PASS. Replaced with immutable data-read reuse; no acceptance-result cache."
+  },
+  "context": {
+    "ref": "artifacts/p2-019-content-20261116/context-governance-performance/manifest.json",
+    "verification": "CURRENT atAPPROVED before native-ALLOWED ACTIVE lifecycle metadata change; immutable authority/source pack reused; final refresh after qualification."
+  },
+  "required_qualification": [
+    "Compile existing governance and functional projects without restore",
+    "Full existing functional suite plus added safe reuse/tamper/cycle assertions",
+    "Bounded actual TUN-P2-019 TASK context build <=300s; CURRENT verification or explicit unresolved status"
+  ]
+}

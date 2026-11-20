@@ -1,0 +1,169 @@
+Scope: all 4 workspace projects
+✓ Lockfile passes supply-chain policies (verified 3m ago)
+Lockfile is up to date, resolution step is skipped
+Already up to date
+
+Done in 5.2s using pnpm v11.19.0
+$ pnpm -r run test
+Scope: 3 of 4 workspace projects
+module/lezer-promql test$ NODE_OPTIONS=--experimental-vm-modules jest
+module/lezer-promql test: (node:424) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+module/lezer-promql test: (Use `node --trace-warnings ...` to show where the warning was created)
+module/lezer-promql test: PASS test/promql.test.js
+module/lezer-promql test:   expression
+module/lezer-promql test:     ✓ Numeric literals (7 ms)
+module/lezer-promql test:     ✓ Double-quoted string literal (1 ms)
+module/lezer-promql test:     ✓ Single-quoted string literal (1 ms)
+module/lezer-promql test:     ✓ Backtick-quoted string literal (1 ms)
+module/lezer-promql test:     ✓ Backtick-quoted multi-line string literal (1 ms)
+module/lezer-promql test:     ✓ Addition (1 ms)
+module/lezer-promql test:     ✓ Complex expression (2 ms)
+module/lezer-promql test:     ✓ Quoted label name in grouping labels (1 ms)
+module/lezer-promql test:     ✓ Case insensitivity for aggregations and binop modifiers. (2 ms)
+module/lezer-promql test:     ✓ Case insensitivity for set operators (2 ms)
+module/lezer-promql test:     ✓ NumberDurationLiteralInDurationContext units
+module/lezer-promql test:     ✓ Duration expression step()
+module/lezer-promql test:     ✓ Duration expression with arithmetic (1 ms)
+module/lezer-promql test:     ✓ Duration expression with unary arithmetic
+module/lezer-promql test:     ✓ Duration expression power binds tighter than unary (1 ms)
+module/lezer-promql test:     ✓ Duration expression with min_of(...) and range() (1 ms)
+module/lezer-promql test:     ✓ Duration expression with max_of(...) and step()
+module/lezer-promql test:     ✓ Duration expression in subquery step (1 ms)
+module/lezer-promql test:     ✓ Range as a label name should not be treated as duration pseudo-function
+module/lezer-promql test:     ✓ Range in metric identifiers should parse as regular identifier content (1 ms)
+module/lezer-promql test:     ✓ step() in offset durations (1 ms)
+module/lezer-promql test:     ✓ range() in offset durations
+module/lezer-promql test:     ✓ Parenthesized duration expression in offset durations
+module/lezer-promql test:     ✓ Parenthesized nested duration expression in offset durations
+module/lezer-promql test:     ✓ Unparenthesized offset arithmetic remains a PromQL binary expression (1 ms)
+module/lezer-promql test:     ✓ Incorrectly ordered NumberDurationLiteralInDurationContext units (1 ms)
+module/lezer-promql test:     ✓ Using a function name as a metric name
+module/lezer-promql test:     ✓ Match operators (1 ms)
+module/lezer-promql test:     ✓ Binary expression with bool modifier
+module/lezer-promql test:     ✓ Binary expression with group_x() labels. (1 ms)
+module/lezer-promql test:     ✓ Function last_over_time (1 ms)
+module/lezer-promql test:     ✓ Function first_over_time
+module/lezer-promql test:     ✓ Function sgn (1 ms)
+module/lezer-promql test:     ✓ Function clamp
+module/lezer-promql test:     ✓ Metric start (1 ms)
+module/lezer-promql test:     ✓ Metric end
+module/lezer-promql test:     ✓ Lowercase start function. (1 ms)
+module/lezer-promql test:     ✓ Lowercase end function.
+module/lezer-promql test:     ✓ Lowercase range function.
+module/lezer-promql test:     ✓ Lowercase step function. (1 ms)
+module/lezer-promql test:     ✓ Simple At start
+module/lezer-promql test:     ✓ Simple At end
+module/lezer-promql test:     ✓ Simple At number (1 ms)
+module/lezer-promql test:     ✓ At Modifier with space between bracket
+module/lezer-promql test:     ✓ Complex test with At modifier (1 ms)
+module/lezer-promql test:     ✓ At modifier with negative number (1 ms)
+module/lezer-promql test:     ✓ At modifier with explicit positive number
+module/lezer-promql test:     ✓ Metric prefixed by Inf (1 ms)
+module/lezer-promql test:     ✓ Metric prefixed by Nan
+module/lezer-promql test:     ✓ Mixed-case NaN. (1 ms)
+module/lezer-promql test:     ✓ Lower-cased NaN.
+module/lezer-promql test:     ✓ Inf.
+module/lezer-promql test:     ✓ Negative Inf.
+module/lezer-promql test:     ✓ Positive Inf. (1 ms)
+module/lezer-promql test:     ✓ Lower-cased Inf.
+module/lezer-promql test:     ✓ Upper-cased Inf.
+module/lezer-promql test:     ✓ Negative number literal.
+module/lezer-promql test:     ✓ Explicitly positive number literal. (1 ms)
+module/lezer-promql test:     ✓ Trying to illegally use NaN as a metric name. (2 ms)
+module/lezer-promql test:     ✓ Trying to illegally use Inf as a metric name. (1 ms)
+module/lezer-promql test:     ✓ Negative offset (1 ms)
+module/lezer-promql test:     ✓ Negative offset with space
+module/lezer-promql test:     ✓ Positive offset (1 ms)
+module/lezer-promql test:     ✓ Parsing only metric names with alternative @top 
+module/lezer-promql test:     ✓ Testing Atan2 inherited precedence level
+module/lezer-promql test:     ✓ Testing quoted metric name
+module/lezer-promql test:     ✓ Testing quoted label name
+module/lezer-promql test:     ✓ Testing quoted metric name and label name
+module/lezer-promql test:     ✓ Testing anchored keyword
+module/lezer-promql test:     ✓ Testing smoothed keyword
+module/lezer-promql test:     ✓ TrimUpper binary operator (1 ms)
+module/lezer-promql test:     ✓ TrimLower binary operator
+module/lezer-promql test: Test Suites: 1 passed, 1 total
+module/lezer-promql test: Tests:       72 passed, 72 total
+module/lezer-promql test: Snapshots:   0 total
+module/lezer-promql test: Time:        1.596 s
+module/lezer-promql test: Ran all test suites.
+module/lezer-promql test: Done
+module/codemirror-promql test$ NODE_OPTIONS=--experimental-vm-modules jest --runInBand
+module/codemirror-promql test: ts-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
+module/codemirror-promql test: transform: {
+module/codemirror-promql test:     <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
+module/codemirror-promql test: },
+module/codemirror-promql test: See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
+module/codemirror-promql test: (node:492) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+module/codemirror-promql test: (Use `node --trace-warnings ...` to show where the warning was created)
+module/codemirror-promql test: PASS src/complete/hybrid.test.ts (7.284 s)
+module/codemirror-promql test: PASS src/parser/parser.test.ts
+module/codemirror-promql test: PASS src/parser/vector.test.ts
+module/codemirror-promql test: PASS src/parser/matcher.test.ts
+module/codemirror-promql test: PASS src/parser/path-finder.test.ts
+module/codemirror-promql test: PASS src/client/prometheus.test.ts
+module/codemirror-promql test: PASS src/promql.test.ts
+module/codemirror-promql test: PASS src/complete/index.test.ts
+module/codemirror-promql test: Test Suites: 8 passed, 8 total
+module/codemirror-promql test: Tests:       386 passed, 386 total
+module/codemirror-promql test: Snapshots:   0 total
+module/codemirror-promql test: Time:        12.948 s
+module/codemirror-promql test: Ran all test suites.
+module/codemirror-promql test: Done
+mantine-ui test$ vitest
+mantine-ui test: [1m[30m[46m RUN [49m[39m[22m [36mv5.0.0 [39m[90m/src/prometheus/web/ui/mantine-ui[39m
+mantine-ui test:  [32m✓[39m src/promql/binOp.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 86[2mms[22m[39m
+mantine-ui test:  [32m✓[39m src/pages/query/urlStateEncoding.test.ts [2m([22m[2m57 tests[22m[2m)[22m[32m 111[2mms[22m[39m
+mantine-ui test:  [32m✓[39m src/api/api.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 1457[2mms[22m[39m
+mantine-ui test:  [32m✓[39m src/promql/serializeAndFormat.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 1062[2mms[22m[39m
+mantine-ui test:    [32m✓[39m serializeNode and formatNode [2m(2)[22m
+mantine-ui test:      [33m[2m✓[22m[39m should serialize correctly[33m 1049[2mms[22m[39m
+mantine-ui test:  [32m✓[39m src/pages/query/UPlotChart.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 370[2mms[22m[39m
+mantine-ui test:  [32m✓[39m src/promql/utils.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+mantine-ui test:  [32m✓[39m src/pages/query/QueryLifecycle.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 2056[2mms[22m[39m
+mantine-ui test:    [32m✓[39m graph query executions [2m(2)[22m
+mantine-ui test:      [33m[2m✓[22m[39m refreshes an identical result with its new range and retains the previous pair while loading[33m 585[2mms[22m[39m
+mantine-ui test:    [32m✓[39m table query executions [2m(1)[22m
+mantine-ui test:      [33m[2m✓[22m[39m resets expanded results after repeated identical queries, including an offline execution[33m 1338[2mms[22m[39m
+mantine-ui test:  [32m✓[39m src/lib/formatTime.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 155[2mms[22m[39m
+mantine-ui test:  [32m✓[39m src/components/NotificationsProvider.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[33m 1605[2mms[22m[39m
+mantine-ui test:    [32m✓[39m notification transports [2m(2)[22m
+mantine-ui test:      [33m[2m✓[22m[39m deduplicates live messages, removes inactive notices, retries errors, and cleans up[33m 1432[2mms[22m[39m
+mantine-ui test:  [32m✓[39m src/pages/query/QueryInputs.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 7411[2mms[22m[39m
+mantine-ui test:    [32m✓[39m query input drafts [2m(9)[22m
+mantine-ui test:      [33m[2m✓[22m[39m preserves expression edits and focus until the initial expression changes[33m 1613[2mms[22m[39m
+mantine-ui test:      [33m[2m✓[22m[39m ignores formatting completion after edit (failure: false)[33m 1822[2mms[22m[39m
+mantine-ui test:      [33m[2m✓[22m[39m ignores formatting completion after prop change (failure: false)[33m 543[2mms[22m[39m
+mantine-ui test:      [33m[2m✓[22m[39m ignores formatting completion after unmount (failure: false)[33m 678[2mms[22m[39m
+mantine-ui test:      [33m[2m✓[22m[39m ignores formatting completion after edit (failure: true)[33m 850[2mms[22m[39m
+mantine-ui test:      [33m[2m✓[22m[39m ignores formatting completion after prop change (failure: true)[33m 384[2mms[22m[39m
+mantine-ui test:      [33m[2m✓[22m[39m ignores formatting completion after unmount (failure: true)[33m 416[2mms[22m[39m
+mantine-ui test:      [33m[2m✓[22m[39m applies a current formatting result once and reports a cached-result refetch error[33m 801[2mms[22m[39m
+mantine-ui test:  [32m✓[39m src/pages/query/HistogramHelpers.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+mantine-ui test:  [32m✓[39m src/pages/query/QueryDiagnostics.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 1668[2mms[22m[39m
+mantine-ui test:    [32m✓[39m query diagnostics [2m(8)[22m
+mantine-ui test:      [33m[2m✓[22m[39m shows skew only above 30 seconds (30)[33m 502[2mms[22m[39m
+mantine-ui test:      [33m[2m✓[22m[39m shows skew only above 30 seconds (31)[33m 652[2mms[22m[39m
+mantine-ui test:  [32m✓[39m src/components/ReadinessWrapper.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1198[2mms[22m[39m
+mantine-ui test:    [32m✓[39m readiness query errors [2m(3)[22m
+mantine-ui test:      [33m[2m✓[22m[39m preserves the cause of network error[33m 489[2mms[22m[39m
+mantine-ui test:      [33m[2m✓[22m[39m preserves the cause of non-Error rejection[33m 350[2mms[22m[39m
+mantine-ui test:      [33m[2m✓[22m[39m preserves the cause of unexpected HTTP status[33m 351[2mms[22m[39m
+mantine-ui test:  [32m✓[39m src/components/CustomInfiniteScroll.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 3846[2mms[22m[39m
+mantine-ui test:    [32m✓[39m infinite scroll dataset changes [2m(5)[22m
+mantine-ui test:      [33m[2m✓[22m[39m resets paging and the widget loading latch when a new source replaces a pending page[33m 1647[2mms[22m[39m
+mantine-ui test:      [33m[2m✓[22m[39m resets an expanded list to a 0-item source[33m 478[2mms[22m[39m
+mantine-ui test:      [33m[2m✓[22m[39m resets an expanded list to a 12-item source[33m 527[2mms[22m[39m
+mantine-ui test:      [33m[2m✓[22m[39m resets an expanded list to a 50-item source[33m 613[2mms[22m[39m
+mantine-ui test:      [33m[2m✓[22m[39m resets an expanded list to a 51-item source[33m 572[2mms[22m[39m
+mantine-ui test:  [32m✓[39m src/promql/durationExprNotes.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 70[2mms[22m[39m
+mantine-ui test:  [32m✓[39m src/components/ScrapePoolConfig.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 179[2mms[22m[39m
+mantine-ui test: [2m Test Files [22m [1m[32m16 passed[39m[22m[90m (16)[39m
+mantine-ui test: [2m      Tests [22m [1m[32m176 passed[39m[22m[90m (176)[39m
+mantine-ui test: [2m   Start at [22m 20:38:22
+mantine-ui test: [2m   Duration [22m 22.65s[2m (environment 45%, import 22%, tests 16%, setup 10%, transform 6%, worker 1%)[22m
+mantine-ui test: [2mEnvironment [22m [33mjsdom was created 16 times[39m[2m · 59.01s total, 45% of tracked time[22m
+mantine-ui test: [2m            [22m [2mcreate it once per worker with [22m[33mpool: 'vmThreads'[39m[2m (keeps per-file isolation) or [22m[33misolate: false[39m[2m (shares it across files)[22m
+mantine-ui test: [2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#test-environments[22m
+mantine-ui test: Done

@@ -1,0 +1,289 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-003",
+  "execution_scope": "FOUNDATION_CURRENT_SOURCE_COMPATIBILITY_ONLY",
+  "result": "PASS_BOUNDED_CURRENT_SOURCE_COMPATIBILITY",
+  "recorded_at": "2026-11-11T02:43:49.123Z",
+  "tested_source_commit_sha": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+  "actual_identity_invocation_sha": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+  "actual_architecture_invocation_sha": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+  "observed_head_at_preparation": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+  "architecture_source_equivalence": {
+    "identity_carrier": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+    "architecture_invocation": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+    "all272_witness_rows_equal": true,
+    "metadata_only_intervening_commit": true,
+    "no_architecture_run_relabelled": true
+  },
+  "ownership": {
+    "source_envelope_ref": "governance/evidence/TUN-P2-003-AUDIT-CORRECTION-SOURCE.json",
+    "count": 24,
+    "ordered_owned_behavior_paths": [
+      "Directory.Packages.props",
+      "Tunner.Platform.slnx",
+      "docs/development/P2_003_IDENTITY_PERSISTENCE.md",
+      "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+      "governance/evidence/TUN-P2-003-DATA-INVENTORY.json",
+      "governance/evidence/TUN-P2-003-RD-SOURCES.json",
+      "src/Modules/Accounts/AccountSnapshot.cs",
+      "src/Modules/Identity/AssemblyInfo.cs",
+      "src/Modules/Identity/IdentityMigrationSql.cs",
+      "src/Modules/Identity/IdentityModelConfiguration.cs",
+      "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+      "src/Modules/Identity/IdentityPersistenceDbContextFactory.cs",
+      "src/Modules/Identity/IdentityPersistenceRegistration.cs",
+      "src/Modules/Identity/IdentityRows.cs",
+      "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.Designer.cs",
+      "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.cs",
+      "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+      "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+      "tests/Tunner.Identity.Persistence.Tests/IdentityFoundationTests.cs",
+      "tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs",
+      "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+      "src/Modules/Identity/AccountPersonalInformationRows.cs",
+      "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.cs",
+      "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.Designer.cs"
+    ],
+    "ordered_array_precommitted_at_tested_candidate": true,
+    "all_owned_blobs_equal_actual_source_and_working_tree": true,
+    "changed_owned_paths_since_prior_validated_sha": [
+      "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj"
+    ],
+    "rows": [
+      {
+        "path": "Directory.Packages.props",
+        "prior_validated_blob": "59f3bfb360cc8c5b5074e2dcaf8ee646364580e7",
+        "tested_f1_blob": "59f3bfb360cc8c5b5074e2dcaf8ee646364580e7",
+        "architecture_a933_blob": "59f3bfb360cc8c5b5074e2dcaf8ee646364580e7",
+        "working_blob": "59f3bfb360cc8c5b5074e2dcaf8ee646364580e7"
+      },
+      {
+        "path": "Tunner.Platform.slnx",
+        "prior_validated_blob": "4639ea94294035daf121f82c73415beaaa1eafb0",
+        "tested_f1_blob": "4639ea94294035daf121f82c73415beaaa1eafb0",
+        "architecture_a933_blob": "4639ea94294035daf121f82c73415beaaa1eafb0",
+        "working_blob": "4639ea94294035daf121f82c73415beaaa1eafb0"
+      },
+      {
+        "path": "docs/development/P2_003_IDENTITY_PERSISTENCE.md",
+        "prior_validated_blob": "25bf58c6c637863bd8d5306c7950b2d1336e5d71",
+        "tested_f1_blob": "25bf58c6c637863bd8d5306c7950b2d1336e5d71",
+        "architecture_a933_blob": "25bf58c6c637863bd8d5306c7950b2d1336e5d71",
+        "working_blob": "25bf58c6c637863bd8d5306c7950b2d1336e5d71"
+      },
+      {
+        "path": "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+        "prior_validated_blob": "2151b65480dd4c102f7bf9bbc9ff93f7023fa7e9",
+        "tested_f1_blob": "2151b65480dd4c102f7bf9bbc9ff93f7023fa7e9",
+        "architecture_a933_blob": "2151b65480dd4c102f7bf9bbc9ff93f7023fa7e9",
+        "working_blob": "2151b65480dd4c102f7bf9bbc9ff93f7023fa7e9"
+      },
+      {
+        "path": "governance/evidence/TUN-P2-003-DATA-INVENTORY.json",
+        "prior_validated_blob": "618f49b41dd44568ea224afea17ddf8b28a0aa8d",
+        "tested_f1_blob": "618f49b41dd44568ea224afea17ddf8b28a0aa8d",
+        "architecture_a933_blob": "618f49b41dd44568ea224afea17ddf8b28a0aa8d",
+        "working_blob": "618f49b41dd44568ea224afea17ddf8b28a0aa8d"
+      },
+      {
+        "path": "governance/evidence/TUN-P2-003-RD-SOURCES.json",
+        "prior_validated_blob": "a7b9bbf247b1133050ed824116cd258d12d423b5",
+        "tested_f1_blob": "a7b9bbf247b1133050ed824116cd258d12d423b5",
+        "architecture_a933_blob": "a7b9bbf247b1133050ed824116cd258d12d423b5",
+        "working_blob": "a7b9bbf247b1133050ed824116cd258d12d423b5"
+      },
+      {
+        "path": "src/Modules/Accounts/AccountSnapshot.cs",
+        "prior_validated_blob": "7203863419fe4501ca57e9570f12c15205bfc200",
+        "tested_f1_blob": "7203863419fe4501ca57e9570f12c15205bfc200",
+        "architecture_a933_blob": "7203863419fe4501ca57e9570f12c15205bfc200",
+        "working_blob": "7203863419fe4501ca57e9570f12c15205bfc200"
+      },
+      {
+        "path": "src/Modules/Identity/AssemblyInfo.cs",
+        "prior_validated_blob": "763d20e370042cf8e1ffb41751ff0ceba59b43c4",
+        "tested_f1_blob": "763d20e370042cf8e1ffb41751ff0ceba59b43c4",
+        "architecture_a933_blob": "763d20e370042cf8e1ffb41751ff0ceba59b43c4",
+        "working_blob": "763d20e370042cf8e1ffb41751ff0ceba59b43c4"
+      },
+      {
+        "path": "src/Modules/Identity/IdentityMigrationSql.cs",
+        "prior_validated_blob": "6c2b6ffe0ff13f5beed1cfdb404dc4b76e2cd6c2",
+        "tested_f1_blob": "6c2b6ffe0ff13f5beed1cfdb404dc4b76e2cd6c2",
+        "architecture_a933_blob": "6c2b6ffe0ff13f5beed1cfdb404dc4b76e2cd6c2",
+        "working_blob": "6c2b6ffe0ff13f5beed1cfdb404dc4b76e2cd6c2"
+      },
+      {
+        "path": "src/Modules/Identity/IdentityModelConfiguration.cs",
+        "prior_validated_blob": "67a2ee1624d56f08693e6f37cf61eee5c69f2057",
+        "tested_f1_blob": "67a2ee1624d56f08693e6f37cf61eee5c69f2057",
+        "architecture_a933_blob": "67a2ee1624d56f08693e6f37cf61eee5c69f2057",
+        "working_blob": "67a2ee1624d56f08693e6f37cf61eee5c69f2057"
+      },
+      {
+        "path": "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+        "prior_validated_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+        "tested_f1_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+        "architecture_a933_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+        "working_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9"
+      },
+      {
+        "path": "src/Modules/Identity/IdentityPersistenceDbContextFactory.cs",
+        "prior_validated_blob": "8cbdbd2b03c8eb571cc3cf4cc8aebeb6e123faed",
+        "tested_f1_blob": "8cbdbd2b03c8eb571cc3cf4cc8aebeb6e123faed",
+        "architecture_a933_blob": "8cbdbd2b03c8eb571cc3cf4cc8aebeb6e123faed",
+        "working_blob": "8cbdbd2b03c8eb571cc3cf4cc8aebeb6e123faed"
+      },
+      {
+        "path": "src/Modules/Identity/IdentityPersistenceRegistration.cs",
+        "prior_validated_blob": "5c8699e94286a0dc86596065c4a2bebdcaed5203",
+        "tested_f1_blob": "5c8699e94286a0dc86596065c4a2bebdcaed5203",
+        "architecture_a933_blob": "5c8699e94286a0dc86596065c4a2bebdcaed5203",
+        "working_blob": "5c8699e94286a0dc86596065c4a2bebdcaed5203"
+      },
+      {
+        "path": "src/Modules/Identity/IdentityRows.cs",
+        "prior_validated_blob": "3bf1a9190694a83665c11dd937f5c43058df0325",
+        "tested_f1_blob": "3bf1a9190694a83665c11dd937f5c43058df0325",
+        "architecture_a933_blob": "3bf1a9190694a83665c11dd937f5c43058df0325",
+        "working_blob": "3bf1a9190694a83665c11dd937f5c43058df0325"
+      },
+      {
+        "path": "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.Designer.cs",
+        "prior_validated_blob": "815115986f5ba0bcef9a7f084aa7264a6e489dca",
+        "tested_f1_blob": "815115986f5ba0bcef9a7f084aa7264a6e489dca",
+        "architecture_a933_blob": "815115986f5ba0bcef9a7f084aa7264a6e489dca",
+        "working_blob": "815115986f5ba0bcef9a7f084aa7264a6e489dca"
+      },
+      {
+        "path": "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.cs",
+        "prior_validated_blob": "00afccea52471eb26f68600ee364b4f33ace37be",
+        "tested_f1_blob": "00afccea52471eb26f68600ee364b4f33ace37be",
+        "architecture_a933_blob": "00afccea52471eb26f68600ee364b4f33ace37be",
+        "working_blob": "00afccea52471eb26f68600ee364b4f33ace37be"
+      },
+      {
+        "path": "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+        "prior_validated_blob": "b79988b9d063b49d39d1e4396753f383c709688d",
+        "tested_f1_blob": "b79988b9d063b49d39d1e4396753f383c709688d",
+        "architecture_a933_blob": "b79988b9d063b49d39d1e4396753f383c709688d",
+        "working_blob": "b79988b9d063b49d39d1e4396753f383c709688d"
+      },
+      {
+        "path": "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+        "prior_validated_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c",
+        "tested_f1_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c",
+        "architecture_a933_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c",
+        "working_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c"
+      },
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/IdentityFoundationTests.cs",
+        "prior_validated_blob": "cad9e4401cfd49f801e688bad07d4897f47089e4",
+        "tested_f1_blob": "cad9e4401cfd49f801e688bad07d4897f47089e4",
+        "architecture_a933_blob": "cad9e4401cfd49f801e688bad07d4897f47089e4",
+        "working_blob": "cad9e4401cfd49f801e688bad07d4897f47089e4"
+      },
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs",
+        "prior_validated_blob": "c049ef03023875661ff887a528b5c1d97f22d96e",
+        "tested_f1_blob": "c049ef03023875661ff887a528b5c1d97f22d96e",
+        "architecture_a933_blob": "c049ef03023875661ff887a528b5c1d97f22d96e",
+        "working_blob": "c049ef03023875661ff887a528b5c1d97f22d96e"
+      },
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+        "prior_validated_blob": "941606104cf26bd75524e177ff4deee5defebd4d",
+        "tested_f1_blob": "3b87871dce43d847e61955afc965b57dc9f0364a",
+        "architecture_a933_blob": "3b87871dce43d847e61955afc965b57dc9f0364a",
+        "working_blob": "3b87871dce43d847e61955afc965b57dc9f0364a"
+      },
+      {
+        "path": "src/Modules/Identity/AccountPersonalInformationRows.cs",
+        "prior_validated_blob": "c6c1d3c9796f26202d41e2440f537ab3cc8b034d",
+        "tested_f1_blob": "c6c1d3c9796f26202d41e2440f537ab3cc8b034d",
+        "architecture_a933_blob": "c6c1d3c9796f26202d41e2440f537ab3cc8b034d",
+        "working_blob": "c6c1d3c9796f26202d41e2440f537ab3cc8b034d"
+      },
+      {
+        "path": "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.cs",
+        "prior_validated_blob": "c4db120eebb9b88506b1fceffa7bda860e824898",
+        "tested_f1_blob": "c4db120eebb9b88506b1fceffa7bda860e824898",
+        "architecture_a933_blob": "c4db120eebb9b88506b1fceffa7bda860e824898",
+        "working_blob": "c4db120eebb9b88506b1fceffa7bda860e824898"
+      },
+      {
+        "path": "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.Designer.cs",
+        "prior_validated_blob": "4b46874ac0b44515f0c3d332a91a213669c04fb9",
+        "tested_f1_blob": "4b46874ac0b44515f0c3d332a91a213669c04fb9",
+        "architecture_a933_blob": "4b46874ac0b44515f0c3d332a91a213669c04fb9",
+        "working_blob": "4b46874ac0b44515f0c3d332a91a213669c04fb9"
+      }
+    ]
+  },
+  "source_witness": {
+    "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/f1dd54a/source-inputs.json",
+    "sha256": "6f30aa5b0e25b3e481a11b1ef69638d4b7dd97ead41bdf1d9011c6624949ab5c",
+    "bytes": 104606
+  },
+  "actual_execution_index": {
+    "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/f1dd54a/execution-index.json",
+    "sha256": "27b77aeca97dd27bb46979d436ffaf885f3d38c1cca58bbc77ea8d6c6d296779",
+    "bytes": 9431
+  },
+  "actual_results": {
+    "identity": {
+      "passed": 260,
+      "failed": 0,
+      "skipped": 0,
+      "foundation_class": {
+        "total": 15,
+        "passed": 15,
+        "failed": 0
+      }
+    },
+    "architecture": {
+      "passed": 237,
+      "failed": 0,
+      "skipped": 0
+    },
+    "runtime_build": {
+      "exit_code": 0,
+      "warnings": 0,
+      "errors": 0,
+      "duration": "00:00:28.40"
+    }
+  },
+  "transitive_source_review": {
+    "new_shared_helper": "tests/Shared/NativeTotpCodeFixture.cs",
+    "test_project": "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+    "test_consumer": "tests/Tunner.Identity.Persistence.Tests/TotpTests.cs",
+    "conclusion": "The parent-owned test project adds a linked test-only framework-native code helper; TotpTests delegates its existing native fixture mechanics to that helper. Actual full260 includes the15 foundation cases. No parent003 production source, model, migration or domain policy changed.",
+    "extracted_host": "tools/browser-testing/BrowserTestHost.cs",
+    "host_boundary": "Independently source-bound among272 witnesses, without claiming its normal/finite composition was exercised by Identity tests. Parent003 foundation does not require that ordinary-host smoke; parent004/005/006 refresh remains separate."
+  },
+  "scoped_qa_assessment": {
+    "role": "tester-qa-engineer",
+    "skill_ref": ".agent/skills/tester-qa-engineer/SKILL.md",
+    "skill_version": "1.1.0",
+    "skill_sha256": "52aee18f251a614e339adba9f7c886a5da1ef4ab0482ae6b77044184128415c6",
+    "reviewed_at": "2026-11-11T02:43:49.123Z",
+    "result": "PASS_PARENT003_FOUNDATION_COMPATIBILITY_ONLY",
+    "basis": "Re-read exact owned/source deltas and actual root report counters/name-outcome pairs. Shared fixture/test-project linkage has a current full Identity run, including all15 foundation cases; actual architecture237 and source identity preserve parent foundation boundaries.",
+    "blocking_findings": [],
+    "not_asserted": "No other specialist/human review is fabricated. Historical parent role records and lifecycle remain unchanged."
+  },
+  "historical_proof_refs": {
+    "prior_source_envelope_git_ref": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1:governance/evidence/TUN-P2-003-AUDIT-CORRECTION-SOURCE.json",
+    "prior_source_binding_ref": "governance/evidence/TUN-P2-003-TOTP-COMPATIBILITY-20261110.json",
+    "historical_source_binding_ref": "governance/evidence/TUN-P2-003-PASSKEY-COMPATIBILITY-20261110.json",
+    "historical_validation_ref": "governance/evidence/TUN-P2-003-VALIDATION.json",
+    "historical_packet_commit": "802962111a2639fde73b6257cc398e5be24cc9cc"
+  },
+  "boundaries": [
+    "Only parent003 current-source foundation readiness evidence is refreshed.",
+    "Exact ordered24 ownership is unchanged; transitive source witnesses do not replace it.",
+    "No parent004/005/006 source or readiness envelope is modified.",
+    "Work item remains VALIDATION; historical roles, Product/release and final008 acceptance are untouched."
+  ],
+  "exact_next_action": "Root reviews/applies only this parent003 patch, commits it, then runs native validate and parent003 gate/next/context checks. Ordinary host receipt remains required for separate parent004/005/006 work."
+}

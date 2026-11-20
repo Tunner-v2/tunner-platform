@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "review_id": "REV-P0-004-RV004-cyber-security-engineer",
+  "work_item_id": "P0-004-RV004",
+  "role": "cyber-security-engineer",
+  "status": "PASS",
+  "result": "PASS",
+  "reviewed_at": "2026-11-09T16:50:06.039Z",
+  "skill_id": "cyber-security-engineer",
+  "skill_version": "1.0.0",
+  "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/current/development/04_Governance_and_Context_Tooling_Specification.md"
+  ],
+  "context_artifacts": [
+    "governance/revisions/P0-004-RV004.yaml",
+    "src/Tunner.Governance/GovernanceApplication.cs",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P0-004-RV004-SCOPE.json",
+    "governance/evidence/P0-004-RV004-VALIDATION.json",
+    "governance/evidence/p2-recovery-20261109/performance/test-index.json"
+  ],
+  "findings": [
+    "Final executing-agent assessment under the activated role contract; not independent human/Product/release approval.",
+    "Source-gate decisions remain scope/readiness keyed and fresh across commands; wrong/stale/dirty proofs still fail. Actual SAST and secret scans pass, with in-progress worktree coverage disclosed."
+  ],
+  "blocking_findings": [],
+  "required_actions": [],
+  "context_expansion_requested": false
+}

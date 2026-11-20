@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-013",
+  "result": "PASS_SCOPED_RENDER_REVIEW",
+  "reviewer": "Root executing AI, independent of delegated UI implementation, applied actual UI/UX, end-user, content and QA contracts. Not human or Product acceptance.",
+  "source_sha": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
+  "actual_profile_source_sha": "41501e3b006041ef2efaa2766a0a1fe1e73534af",
+  "reviewed_at": "2026-11-14T07:01:55Z",
+  "frames": [
+    {
+      "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+      "node_id": "16:2",
+      "design_viewport": "1440x1100"
+    },
+    {
+      "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+      "node_id": "36:159"
+    }
+  ],
+  "comparison": "Inspected source Figma captures and explicitly approved adaptation packet against actual listing/details desktop1440 and mobile390, plus narrow320 and tablet768 actual renders. Shared flat page background, indigo current summary/pills, white cards, typography/fonts, spacing, outlines and responsive stacking retained. Dynamic sample identities/times/row counts are replaced by actual server-backed facts; no device or trust values invented.",
+  "resolved_defect": "DEF-TUN-P2-013-UI-001: restored current badge, disabled Contact support, unavailable device/location/trust detail row, outlined security controls/back arrow and plain list Product-boundary paragraph. Before-correction screenshots retained with original0bd source, not relabelled as compliant.",
+  "tests": "28-profile actualPASS includes twelve axe scans and overflow checks over six widths; separate1keyboard/route-identity PASS at current source. Earlier JSON discovery and nested-alert failure retained; assertions not weakened.",
+  "limitations": "Only current listing/details presentation and ordinary current-session sign-out. Other-session revocation/confirmation/results, device trust, bulk, navigation from prior Account screens, production publications/configuration and live BFF browser E2E remain pending. Full P2-013 and release are not accepted."
+}

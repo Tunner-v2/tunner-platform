@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "validation_kind": "COMPONENT_CANDIDATE",
+  "result": "FROZEN_WITH_TEST_COMPATIBILITY_CORRECTION",
+  "recorded_at": "2026-11-09T17:44:51.169Z",
+  "owned_behavior_paths": [
+    "src/Modules/Identity/AuthenticationApplication.cs",
+    "src/Modules/Identity/AuthenticationContracts.cs",
+    "src/Modules/Identity/AuthenticationEndpoints.cs",
+    "src/Modules/Identity/AuthenticationRows.cs",
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+    "src/Modules/Identity/Migrations/20261109164622_P2PasskeyCeremonies.cs",
+    "src/Modules/Identity/Migrations/20261109164622_P2PasskeyCeremonies.Designer.cs",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+    "src/Modules/Identity/PasskeyApplication.cs",
+    "src/Modules/Identity/PasskeyContracts.cs",
+    "src/Modules/Identity/PasskeyEndpoints.cs",
+    "src/Modules/Identity/PasskeyMigrationSql.cs",
+    "src/Modules/Identity/PasskeyRows.cs",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+    "src/Modules/Identity/StepUpContracts.cs",
+    "src/Modules/Identity/StepUpOutcomes.cs",
+    "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+    "tests/Tunner.Identity.Persistence.Tests/AuthenticationOutcomeTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+    "tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs",
+    "tests/Tunner.Identity.Persistence.Tests/PasskeyAuthenticator.cs",
+    "tests/Tunner.Identity.Persistence.Tests/PasskeyMigrationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/PasskeyTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+    "tools/browser-testing/Program.cs",
+    "tools/browser-testing/BrowserTestStepUp.cs",
+    "tools/browser-testing/BrowserTestPasskeys.cs",
+    "tools/browser-testing/Tunner.BrowserTesting.csproj",
+    "web/apps/user/authentication.content.proposal.json",
+    "web/apps/user/passkeys.content.proposal.json",
+    "tests/Tunner.Identity.Persistence.Tests/StepUpBrowserTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/StepUpTests.cs"
+  ],
+  "frozen_content_inputs": [
+    {
+      "path": "web/apps/user/authentication.content.proposal.json",
+      "sha256": "311ce6f340fd126bf1ed513be72bf0c8be0f11c55ad4e1e4d249b371fe79f677"
+    },
+    {
+      "path": "web/apps/user/step-up.content.proposal.json",
+      "sha256": "4350423c2ad3d67d8edbb3b148d97bd14c0c95103df39fe132afb56fa2d8b85c"
+    },
+    {
+      "path": "web/apps/user/passkeys.content.proposal.json",
+      "sha256": "3e433b6db514cf3174d82217a88b46a5e6ca5906aaa134df93046cd892b8ad28"
+    }
+  ],
+  "source_fingerprints": [
+    {
+      "path": "src/Modules/Identity/AuthenticationApplication.cs",
+      "sha256": "729c641d704d9503942c7cd2bae8e98076dad894cea2a0ce7c7e04828a10a555"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationContracts.cs",
+      "sha256": "83f9f63dadea0e1dd84860c742db64da4459ac6ff8ab526abc84a0902098579e"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "sha256": "98dc7871c3ec23718f34fd6773bf68c6dbd6dcb56862f4a9378fc4f131fe28df"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationRows.cs",
+      "sha256": "f3a9915f19bb9317db2d2a030c6ce055f656b29318923b937edc1ec2b92defbd"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+      "sha256": "44e0f801299a824a08df7629270706b46d6b94f77f5f40158823b4db9059fab7"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261109164622_P2PasskeyCeremonies.cs",
+      "sha256": "dbb0acb15684b66800cec4eb77e53743732d22b06f78b778c2ea553b24134b3d"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261109164622_P2PasskeyCeremonies.Designer.cs",
+      "sha256": "707e0ac4930fa99bfe91946f831332c6287672bb6ed0fd8981437db9b6e3e69a"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+      "sha256": "e794323a339a769b9ff45b84612ca2970c57b7e7395a7d07c63b6e7ce6faeda6"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyApplication.cs",
+      "sha256": "6778f114337b55ed6ba32639b111aed71817b18b42c34f5654a2c63a47ff6ead"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyContracts.cs",
+      "sha256": "9a4ab05425af1f8ebb3fe1955938dba3f10d4c31cc45105731a3491332e58586"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyEndpoints.cs",
+      "sha256": "421c8b531c9b0de94aa8bd0b251fc0fd1c4c1788c6213a450a48c4f8ad7d2500"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyMigrationSql.cs",
+      "sha256": "0c0aca130eab08a1dd170964e287381fcb93e5f25fb22872ab73cb1a9becad1d"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyRows.cs",
+      "sha256": "d6ae73101f174e9e6529e1ed723d2090d931aeea9d568025c6bf9417eb322618"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpApplication.cs",
+      "sha256": "0e570e5d43275f99b8743866b20560c49eea2e4bcd5f8303014ffbcd7b6c850a"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+      "sha256": "797aeb43d75ccbc262fd2fcd09c13cfad2155adef915d0018a11f3c768212b44"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpContracts.cs",
+      "sha256": "a1a139b32ed70ac6ae7d88a237d07fd2fc72b8a83594c377cf92afed7f7988eb"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpOutcomes.cs",
+      "sha256": "e7f53618f98764759424f906bd6c6b6d316e0d3f64edec64b1a76f8c46fb496e"
+    },
+    {
+      "path": "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+      "sha256": "03b6a6ecb2f6abc9776935bec20e4ab7c6a3afba51850734c4af755d1b1e472f"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationOutcomeTests.cs",
+      "sha256": "741a639c516a8208eb0313b797f3fe89207e331ef88882206891bf238e532e9a"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+      "sha256": "fcc58a4d2d3be229be8d43ccf661e515754dd17f196ccbf076439be0fb0b84c9"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs",
+      "sha256": "dc4f0b0d55e3967528fd966942136ec2f8c48a738a72a3fb1eab4123a577821f"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyAuthenticator.cs",
+      "sha256": "c2a8553d605045f56b2630ebc01e13d04596490237acf134bc83b05eb0f6ae5e"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyMigrationTests.cs",
+      "sha256": "710f6cc7ec63109b3d06de7ef0dddd9feee961e48121806339f782454170f765"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyTests.cs",
+      "sha256": "12548537e48aceed58d1a4dd93c12950bcf9b2fe47f9db4287dfa05823277f61"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+      "sha256": "68283b2648efed56748fce86674f9eb7b411c7503070a1924024b5ac6c6125bd"
+    },
+    {
+      "path": "tools/browser-testing/Program.cs",
+      "sha256": "08fc9328cad541ba7f327a18c02204c387c965bba86ce55090796ec41f9ddbb8"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestStepUp.cs",
+      "sha256": "372f0f89713671cb09b95041fde728cfc44e351f5d791730a4dbe8c40a4fd1e1"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestPasskeys.cs",
+      "sha256": "e232c5d21dec0e06c17bbcc6d925e9df1e048beb58fb02b02ab96db9f3e22f44"
+    },
+    {
+      "path": "tools/browser-testing/Tunner.BrowserTesting.csproj",
+      "sha256": "878b8ae9d72ce9358c3de975b73d76b203fbbf07224a5da96b4b2b6f3919393a"
+    },
+    {
+      "path": "web/apps/user/authentication.content.proposal.json",
+      "sha256": "311ce6f340fd126bf1ed513be72bf0c8be0f11c55ad4e1e4d249b371fe79f677"
+    },
+    {
+      "path": "web/apps/user/passkeys.content.proposal.json",
+      "sha256": "3e433b6db514cf3174d82217a88b46a5e6ca5906aaa134df93046cd892b8ad28"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/StepUpBrowserTests.cs",
+      "sha256": "f96d0bcb9d33a3321eaa957ddd16b238b27c00803d7e05352e44e34e2d6c1702"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/StepUpTests.cs",
+      "sha256": "d553b172790d000dcc58a1d576b8fec86d22a8f53dd667c5603918878570ec20"
+    }
+  ],
+  "accepted_preliminary_receipt": null,
+  "preliminary_result": "41 native tests passed before final compatible continued-session refinement and extra timing cases; not committed final evidence.",
+  "remaining_feature_scope": "Frontend integration/rendered evidence, actual passkey operation-proof adapter, source refresh and required acceptance remain. TUN-P2-007 stays IN_PROGRESS.",
+  "validation_boundary": "Current primary backend/tool/content component only. No LOCAL_VALIDATED, full feature, Product or release acceptance.",
+  "prior_full_run": {
+    "source_commit_sha": "61058fd7312c0f17e48847825b3dd455e1afd3b9",
+    "total": 192,
+    "passed": 190,
+    "failed": 2,
+    "skipped": 0,
+    "qualification": "Actual fail. Two obsolete exact payload/latest-migration assumptions corrected without weakening proof material, immutable guard or constraints; rerun required.",
+    "receipt_ref": "artifacts/p2-007-passkeys-20261109/primary-61058fd/native/receipt.json"
+  }
+}

@@ -70,6 +70,7 @@ internal static class IdentityModelConfiguration
             {
                 t.HasCheckConstraint("ck_external_identity_key", "length(provider) > 0 AND length(subject) > 0");
                 t.HasCheckConstraint("ck_external_version", "version >= 1");
+                t.HasCheckConstraint("ck_external_qualification", FederationLinkLifecycle.QualificationConstraint);
             });
             b.HasKey(x => x.LinkId);
             b.Property(x => x.LinkId).HasColumnName("link_id").ValueGeneratedNever();
@@ -78,6 +79,12 @@ internal static class IdentityModelConfiguration
             b.Property(x => x.Subject).HasColumnName("subject").IsRequired();
             b.Property(x => x.Version).HasColumnName("version").IsConcurrencyToken();
             b.Property(x => x.EvidenceReference).HasColumnName("evidence_reference").IsRequired();
+            b.Property(x => x.LinkState).HasColumnName("link_state").HasDefaultValue("LEGACY_UNQUALIFIED").IsRequired();
+            b.Property(x => x.QualifiedClientId).HasColumnName("qualified_client_id");
+            b.Property(x => x.QualificationProfileVersion).HasColumnName("qualification_profile_version");
+            b.Property(x => x.IssuerMappingEvidenceReference).HasColumnName("issuer_mapping_evidence_reference");
+            b.Property(x => x.QualificationEvidenceReference).HasColumnName("qualification_evidence_reference");
+            b.HasAlternateKey(x => new { x.AccountId, x.LinkId });
             b.HasIndex(x => new { x.Provider, x.Subject }).IsUnique();
             b.HasOne<AccountRow>().WithMany().HasForeignKey(x => x.AccountId).OnDelete(DeleteBehavior.Restrict);
         });

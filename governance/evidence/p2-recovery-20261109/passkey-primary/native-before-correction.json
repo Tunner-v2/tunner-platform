@@ -1,0 +1,45 @@
+{
+  "validated_source_sha": "61058fd7312c0f17e48847825b3dd455e1afd3b9",
+  "command": "TUNNER_RUN_CONTAINER_TESTS=1 dotnet test tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj --no-restore -m:1 -p:UseSharedCompilation=false --logger trx;LogFileName=identity-primary-61058fd.trx --results-directory artifacts/p2-007-passkeys-20261109/primary-61058fd/native",
+  "exit_code": 1,
+  "counters": {
+    "total": "192",
+    "executed": "192",
+    "passed": "190",
+    "failed": "2",
+    "error": "0",
+    "timeout": "0",
+    "aborted": "0",
+    "inconclusive": "0",
+    "passedButRunAborted": "0",
+    "notRunnable": "0",
+    "notExecuted": "0",
+    "disconnected": "0",
+    "warning": "0",
+    "completed": "0",
+    "inProgress": "0",
+    "pending": "0"
+  },
+  "times": {
+    "creation": "2026-11-09T12:37:01.5546180-05:00",
+    "queuing": "2026-11-09T12:37:01.5546183-05:00",
+    "start": "2026-11-09T12:36:59.0573733-05:00",
+    "finish": "2026-11-09T12:40:38.1820100-05:00"
+  },
+  "failures": [
+    "Tunner.Identity.Persistence.Tests.StepUpBrowserTests.BoundBrowserActionCompletesOnceReconcilesRetryAndNeverReturnsProofMaterial",
+    "Tunner.Identity.Persistence.Tests.StepUpTests.MigrationRoundTripRestoresProofConstraintsAndHasNoPendingModelChanges"
+  ],
+  "file_sha256": {
+    "web/apps/user/authentication.content.proposal.json": "311ce6f340fd126bf1ed513be72bf0c8be0f11c55ad4e1e4d249b371fe79f677",
+    "web/apps/user/step-up.content.proposal.json": "4350423c2ad3d67d8edbb3b148d97bd14c0c95103df39fe132afb56fa2d8b85c",
+    "web/apps/user/passkeys.content.proposal.json": "3e433b6db514cf3174d82217a88b46a5e6ca5906aaa134df93046cd892b8ad28",
+    "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/authentication-content.proposal.json": "311ce6f340fd126bf1ed513be72bf0c8be0f11c55ad4e1e4d249b371fe79f677",
+    "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/step-up-content.proposal.json": "4350423c2ad3d67d8edbb3b148d97bd14c0c95103df39fe132afb56fa2d8b85c",
+    "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/passkeys-content.proposal.json": "3e433b6db514cf3174d82217a88b46a5e6ca5906aaa134df93046cd892b8ad28",
+    "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.Tests.dll": "2b87d5467ce318d88e665a713dfc4a1386dc39e517f86c8d86c4d8f9d2571289",
+    "src/Modules/Identity/bin/Debug/net10.0/Tunner.Identity.Persistence.dll": "e15def3fa239694f5ad70990ee228425b6e31d53b3b06a7b7b92b8583745f646",
+    "artifacts/p2-007-passkeys-20261109/primary-61058fd/native/identity-primary-61058fd.trx": "6c2e1281916050ef3570a7896f3fbc7fa10725f13fe93fab688bdae553787e47"
+  },
+  "scope": "Full Identity native regression; source and input hashes committed. No P2-007 completion claim. Synthetic authenticator + real native verifier/PostgreSQL/HTTPS, no physical authenticator or browser-UX proof."
+}

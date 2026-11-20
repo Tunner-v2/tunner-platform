@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "status": "PROPOSED_AWAITING_EXPLICIT_CONSENT_NOT_ACTIVE",
+  "tested_commit": "4b0e618",
+  "old_approval": "governance/evidence/P1-RV001-001-TEMPO-VEX-APPROVAL-20261028.json",
+  "reason": "Repairing the real x/net issue changes the ELF hash. The original consent excludes any other binary. No updated approval or active binding has been written.",
+  "binary_sha256": "36d85399e4d2fa0e38e8d33ea6f6171ee3fc494184b3275dcd322b1e268d91c7",
+  "image_id": "sha256:e30918341077b3e39807be34944f3d0c2160f561b34f47e6243dec65021441b0",
+  "upstream_source": "cdacb742bae90fbf62c48c5cca0eacdc08fd2acd",
+  "dependency_source": "9db7df79d2af105a90d96484e6403e1fda0d011e",
+  "dependency_sum": "h1:RWARH/pJYWYyhMan2XnvecRlYxnWf4Wa1AmY067hI4I=",
+  "findings": [
+    {
+      "target": "plugins/tempo/gpx_grafana-tempo-datasource_linux_amd64",
+      "id": "CVE-2026-21728",
+      "pkg": "github.com/grafana/tempo",
+      "version": "v1.5.1-0.20261021152436-9db7df79d2af"
+    },
+    {
+      "target": "plugins/tempo/gpx_grafana-tempo-datasource_linux_amd64",
+      "id": "CVE-2026-28377",
+      "pkg": "github.com/grafana/tempo",
+      "version": "v1.5.1-0.20261021152436-9db7df79d2af"
+    }
+  ],
+  "linked_tempo_packages": [
+    "github.com/grafana/tempo/pkg/tempopb/common/v1",
+    "github.com/grafana/tempo/pkg/tempopb/resource/v1",
+    "github.com/grafana/tempo/pkg/tempopb/trace/v1",
+    "github.com/grafana/tempo/pkg/tempopb"
+  ],
+  "tests": {
+    "plugin_upstream": 90,
+    "helper_rejections": 69,
+    "fail": 0,
+    "skip": 0
+  },
+  "old_approval_rejection": "PASS: rebuilt executable hash differs from reviewed binary",
+  "valid_until_utc": "2026-11-27T00:00:00Z",
+  "authority_resolution": {
+    "sources": [
+      "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+      "governance/evidence/P1-RV001-MAINTAINED-REBUILDS-APPROVAL-20261020.json",
+      "governance/evidence/P1-RV001-001-TEMPO-VEX-AUTHORITY-RESOLUTION-20261028.json",
+      "governance/evidence/P1-RV001-001-TEMPO-VEX-APPROVAL-20261028.json",
+      "docs/development/ADR-LGTM-TEMPO-VEX-20261028.md",
+      "infra/security-images/lgtm-signing/source-inventory.json",
+      "infra/security-images/lgtm-signing/vex.go"
+    ],
+    "outcome": "No business/workflow/visual decision is missing. Compatible x/net maintenance is authorized, but the exact prior VEX binary exclusion requires direct consent for this rebind. Reuse the existing typed primitive and same two findings/expiry; do not generalize the exception."
+  },
+  "executing_agent_assessment": {
+    "roles": [
+      "solution-architect",
+      "cyber-security-engineer",
+      "governance-engineer"
+    ],
+    "result": "PASS_PROPOSAL_ONLY_NOT_CONSENT",
+    "reason": "Same exact dependency source and four protobuf-only packages. The two historical pseudo-version range alerts remain; no vulnerable service/query/config handlers are linked. Raw report retained, original guard rejects changed ELF. New active binding, validator tests/reviews and full-image checks remain mandatory after consent."
+  },
+  "evidence_sha256": {
+    "linked-packages.txt": "971d7aa71931a23b1876edd0cd27fcad552f6fbbca146f2177ee8133bac22a44",
+    "upstream-tests.json": "384c1e4d59abf4ee6f59c1743c634fd33daaf00a14ae5265b719931d1a09b599",
+    "upstream-source.json": "520bdc62f3e71b1cecdb0dc4236011cf2ce0c45e59c23f80625792975012253b",
+    "buildinfo.txt": "9bb9e501a004af24a8294242f6c6fcadc053336ce1e6e860821f666e5a2db589",
+    "go.mod": "107ae55168698e96eb0e45d67708be49b2659ad78f7ceab1c284fa1789632b55",
+    "go.sum": "2d8068b4ff9b79e69dae4610738d0f2092202dfa3feff5897095b44ce9d18c0c",
+    "modules.json": "15a58a78f22a763c9e63b54f1795858c8d8813155602fc7e93c94cdf7fea2108",
+    "unfiltered.json": "a48ad4e2e1a964b02ef4afa2e837d870d4dda5a7933cad52657df9c0dce0fa90",
+    "old-approval-rejection.log": "b515ebe7f6c7fed095ee9ce45f5ee50a01bdbeefefda47681228fe8ba0d50d9d",
+    "helper-tests.jsonl": "8febcab715e0727a840d706223e2e2d5d27e130d5d6f55977a79ea4028a24f48",
+    "proposed-vex.json": "5f1bd51f92dd6d08d7e50f136dfadd1a606570ce0efda8edf583befaf61c3387"
+  }
+}

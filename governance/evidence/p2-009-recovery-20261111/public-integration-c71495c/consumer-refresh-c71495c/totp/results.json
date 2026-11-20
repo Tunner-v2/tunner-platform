@@ -1,0 +1,1589 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "<repo-root>\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "..\\artifacts\\p2-009-recovery-20261111\\ui-refinement\\integration-v2\\consumer-refresh-c71495c\\totp.config.mjs",
+      "--reporter=json",
+      "--output",
+      "..\\artifacts\\p2-009-recovery-20261111\\ui-refinement\\integration-v2\\consumer-refresh-c71495c\\totp\\test-results"
+    ],
+    "configFile": "<repo-root>\\artifacts\\p2-009-recovery-20261111\\ui-refinement\\integration-v2\\consumer-refresh-c71495c\\totp.config.mjs",
+    "rootDir": "<repo-root>/web/tests/totp/ui",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo-root>/artifacts/p2-009-recovery-20261111/ui-refinement/integration-v2/consumer-refresh-c71495c/totp/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo-root>/web/tests/totp/ui",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "totp.spec.ts",
+      "file": "totp.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "setup deep link cannot mint or disclose a new enrollment",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 938,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:37:46.686Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-c81d4af2d26f8f6d4cfd",
+          "file": "totp.spec.ts",
+          "line": 37,
+          "column": 1
+        },
+        {
+          "title": "one-time presentation disappears on reload and pagehide while original first-code entry remains",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1583,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:37:48.377Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-c58ac02491c5fb2984ff",
+          "file": "totp.spec.ts",
+          "line": 38,
+          "column": 1
+        },
+        {
+          "title": "lost Start result is read using original identity without replaying Start",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1042,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:37:49.997Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-a2aaf48a59c900b4b06b",
+          "file": "totp.spec.ts",
+          "line": 39,
+          "column": 1
+        },
+        {
+          "title": "an activation response lost after commit reconciles original result without another code POST",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1395,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:37:51.057Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-c4f93c363a62f6c0cb73",
+          "file": "totp.spec.ts",
+          "line": 40,
+          "column": 1
+        },
+        {
+          "title": "authoritative replay error is specific, clears code and never re-discloses",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1147,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:37:52.485Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-0c4e0cac400c9116d091",
+          "file": "totp.spec.ts",
+          "line": 41,
+          "column": 1
+        },
+        {
+          "title": "MFA factor choice is explicit, changing it clears code, and final session waits for exact completion",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1411,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:37:53.654Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-44b885de1845d4052327",
+          "file": "totp.spec.ts",
+          "line": 42,
+          "column": 1
+        },
+        {
+          "title": "shared proof recovers the same accepted proof without a second OTP acceptance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1288,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:37:55.088Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-5eecd3adc6319d30f533",
+          "file": "totp.spec.ts",
+          "line": 47,
+          "column": 1
+        },
+        {
+          "title": "methods owner with TOTP capability absent preserves disabled-host behavior",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 735,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:37:56.400Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-78556424499fa3a5af18",
+          "file": "totp.spec.ts",
+          "line": 52,
+          "column": 53
+        },
+        {
+          "title": "methods owner with TOTP capability false preserves disabled-host behavior",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 780,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:37:57.152Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-90100dbc1d40f042185c",
+          "file": "totp.spec.ts",
+          "line": 52,
+          "column": 53
+        },
+        {
+          "title": "management combines current row capabilities with account capability true",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 827,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:37:57.949Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-01f1f6a5ccd1283a67c2",
+          "file": "totp.spec.ts",
+          "line": 62,
+          "column": 37
+        },
+        {
+          "title": "management combines current row capabilities with account capability false",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 765,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:37:58.794Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-f58189b0a8d6e0c733de",
+          "file": "totp.spec.ts",
+          "line": 62,
+          "column": 37
+        },
+        {
+          "title": "setup expired uses truthful copy with no scan instruction or disclosure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1005,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:37:59.573Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-2c8d8b30ad0bbcf3a2ef",
+          "file": "totp.spec.ts",
+          "line": 77,
+          "column": 55
+        },
+        {
+          "title": "setup unknown uses truthful copy with no scan instruction or disclosure",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 893,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:00.599Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-00b6fde44a05fdcf8427",
+          "file": "totp.spec.ts",
+          "line": 77,
+          "column": 55
+        },
+        {
+          "title": "preparing and verifying setup replace scan instructions while the exact request is pending",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 907,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:01.515Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-df8a178c6acb9f7e055d",
+          "file": "totp.spec.ts",
+          "line": 85,
+          "column": 1
+        },
+        {
+          "title": "management danger title uses its published non-question heading",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 823,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:02.446Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-2af3bd2143756e0bf343",
+          "file": "totp.spec.ts",
+          "line": 93,
+          "column": 1
+        },
+        {
+          "title": "unknown proof without discovery cookie keeps exact original continuation; receipt true",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1025,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:03.284Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-e4c2f0af71b5086d694f",
+          "file": "totp.spec.ts",
+          "line": 97,
+          "column": 35
+        },
+        {
+          "title": "unknown proof without discovery cookie keeps exact original continuation; receipt false",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1385,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:04.329Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-24a08cbd459000ee2de7",
+          "file": "totp.spec.ts",
+          "line": 97,
+          "column": 35
+        },
+        {
+          "title": "@UI-002 proof opens without synthetic validation and preserves real blur and submit validation at 1440",
+          "ok": true,
+          "tags": [
+            "UI-002"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1019,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:05.730Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-4d8d6ed3638251d48280",
+          "file": "totp.spec.ts",
+          "line": 107,
+          "column": 39
+        },
+        {
+          "title": "@UI-002 proof opens without synthetic validation and preserves real blur and submit validation at 768",
+          "ok": true,
+          "tags": [
+            "UI-002"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 960,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:06.766Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-6185260fc8bd68afe12c",
+          "file": "totp.spec.ts",
+          "line": 107,
+          "column": 39
+        },
+        {
+          "title": "@UI-002 proof opens without synthetic validation and preserves real blur and submit validation at 390",
+          "ok": true,
+          "tags": [
+            "UI-002"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 968,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:07.744Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-f2a1a9c6986ba3c05d7b",
+          "file": "totp.spec.ts",
+          "line": 107,
+          "column": 39
+        },
+        {
+          "title": "@UI-002 proof opens without synthetic validation and preserves real blur and submit validation at 320",
+          "ok": true,
+          "tags": [
+            "UI-002"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 979,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:08.729Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-b30874f4582b71eaeaf7",
+          "file": "totp.spec.ts",
+          "line": 107,
+          "column": 39
+        },
+        {
+          "title": "approved proof and login picker remain explicit and clear code with keyboard at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1700,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:09.724Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-eddce47cfd75d5804713",
+          "file": "totp.spec.ts",
+          "line": 114,
+          "column": 39
+        },
+        {
+          "title": "approved proof and login picker remain explicit and clear code with keyboard at 768",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1631,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:11.444Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-25d3c8cfb3799c6b861e",
+          "file": "totp.spec.ts",
+          "line": 114,
+          "column": 39
+        },
+        {
+          "title": "approved proof and login picker remain explicit and clear code with keyboard at 390",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1615,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:13.095Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-a162089b38456873cf03",
+          "file": "totp.spec.ts",
+          "line": 114,
+          "column": 39
+        },
+        {
+          "title": "approved proof and login picker remain explicit and clear code with keyboard at 320",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1789,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:14.729Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-4a820269ec9dc039057b",
+          "file": "totp.spec.ts",
+          "line": 114,
+          "column": 39
+        },
+        {
+          "title": "@UI-003 DISABLE review Escape restores its original trigger at 1440",
+          "ok": true,
+          "tags": [
+            "UI-003"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1014,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:16.537Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-03dec8258c099bb9a9e8",
+          "file": "totp.spec.ts",
+          "line": 122,
+          "column": 86
+        },
+        {
+          "title": "@UI-003 RESET review Escape restores its original trigger at 1440",
+          "ok": true,
+          "tags": [
+            "UI-003"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 928,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:17.573Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-69d35a567fb330ca0a5f",
+          "file": "totp.spec.ts",
+          "line": 122,
+          "column": 86
+        },
+        {
+          "title": "@UI-003 DISABLE review Escape restores its original trigger at 768",
+          "ok": true,
+          "tags": [
+            "UI-003"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 940,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:18.518Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-5f0c4fbeb3d70de878e7",
+          "file": "totp.spec.ts",
+          "line": 122,
+          "column": 86
+        },
+        {
+          "title": "@UI-003 RESET review Escape restores its original trigger at 768",
+          "ok": true,
+          "tags": [
+            "UI-003"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1107,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:19.478Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-2efff602fad6c2d0856d",
+          "file": "totp.spec.ts",
+          "line": 122,
+          "column": 86
+        },
+        {
+          "title": "@UI-003 DISABLE review Escape restores its original trigger at 390",
+          "ok": true,
+          "tags": [
+            "UI-003"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 916,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:20.601Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-c3a09ced46bc6bb813e8",
+          "file": "totp.spec.ts",
+          "line": 122,
+          "column": 86
+        },
+        {
+          "title": "@UI-003 RESET review Escape restores its original trigger at 390",
+          "ok": true,
+          "tags": [
+            "UI-003"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 979,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:21.535Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-83f32958d38fcd23aac7",
+          "file": "totp.spec.ts",
+          "line": 122,
+          "column": 86
+        },
+        {
+          "title": "@UI-003 DISABLE review Escape restores its original trigger at 320",
+          "ok": true,
+          "tags": [
+            "UI-003"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 942,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:22.537Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-c554af358bf521c0c6c4",
+          "file": "totp.spec.ts",
+          "line": 122,
+          "column": 86
+        },
+        {
+          "title": "@UI-003 RESET review Escape restores its original trigger at 320",
+          "ok": true,
+          "tags": [
+            "UI-003"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 926,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:23.496Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-3ea491a8a6430861e012",
+          "file": "totp.spec.ts",
+          "line": 122,
+          "column": 86
+        },
+        {
+          "title": "@UI-004 trusted publication plus metadata outage retains branded unavailable state and read-only retry",
+          "ok": true,
+          "tags": [
+            "UI-004"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1276,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:24.438Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-43b717b0fcab967cd49c",
+          "file": "totp.spec.ts",
+          "line": 126,
+          "column": 1
+        },
+        {
+          "title": "@UI-004 absent mandatory publication retains the technical fallback and cannot fetch factor facts",
+          "ok": true,
+          "tags": [
+            "UI-004"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 671,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:25.730Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-5b653cd37fcaad85b204",
+          "file": "totp.spec.ts",
+          "line": 133,
+          "column": 1
+        },
+        {
+          "title": "@UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 1440",
+          "ok": true,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1034,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:26.422Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-c4aaed0f278dec43401b",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        },
+        {
+          "title": "@UI-005 RESET cancellation refreshes externally changed factors and guards actions at 1440",
+          "ok": true,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1017,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:27.475Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-a1460cb0c7eb710380f5",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        },
+        {
+          "title": "@UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 768",
+          "ok": true,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1040,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:28.512Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-c2f7d8e7e4efd0c98a0d",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        },
+        {
+          "title": "@UI-005 RESET cancellation refreshes externally changed factors and guards actions at 768",
+          "ok": true,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1197,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:29.569Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-d0b70910896f10792540",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        },
+        {
+          "title": "@UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 390",
+          "ok": true,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1057,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:30.788Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-020df56ec8cbf198f474",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        },
+        {
+          "title": "@UI-005 RESET cancellation refreshes externally changed factors and guards actions at 390",
+          "ok": true,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1121,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:31.867Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-07c4e6a1f2e9ca27891f",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        },
+        {
+          "title": "@UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 320",
+          "ok": true,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1048,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:33.007Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-9074c30b85dd496d609e",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        },
+        {
+          "title": "@UI-005 RESET cancellation refreshes externally changed factors and guards actions at 320",
+          "ok": true,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1170,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T11:38:34.075Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-f4add21f5114ce170342",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-11T11:37:45.866Z",
+    "duration": 49740.496999999996,
+    "expected": 43,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

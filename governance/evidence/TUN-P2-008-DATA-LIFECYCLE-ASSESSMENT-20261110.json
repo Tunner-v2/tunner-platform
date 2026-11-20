@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "execution_scope": "BOUNDED_DATA_HANDLING_AMD0005_AUTHORITY_RESOLUTION",
+  "status": "TECHNICAL_PRODUCTION_INACTIVE_LIMITS_RECORDED_NO_BLANKET_PASS",
+  "reviewed_at": "2026-11-10T19:07:26.812009Z",
+  "reviewed_backend_head": "fbbd53b9fdb70ed7cbeb7448cadc722478b43c1e",
+  "inventory_ref": "governance/evidence/TUN-P2-008-DATA-INVENTORY.json",
+  "resolution_method": "Read applicable Doc29/17/06/08, current008 scope/ARP, Doc32 policy catalog, current P2-017/019/016 work acceptance and existing003-005 inventory conventions. No source authority, policy or legal value was invented.",
+  "requirements": [
+    {
+      "source": "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+      "section": "4",
+      "requirement_excerpt": "Every authoritative resource/data class records owning domain, purpose, sensitivity, stores, recipients/processors, retention class, residency, privacy capabilities and protection.",
+      "applicability": "Applies to five new TOTP tables, linked session/proof fields, provider seed payload and transient disclosure/output. Inventory above records implemented fields and unselected production profiles."
+    },
+    {
+      "source": "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+      "section": "5-8",
+      "requirement_excerpt": "An approved policy reference precedes ACTIVE processing; retention is class/jurisdiction/purpose driven. Before production, policy defines trigger, periods/event rule, action, holds and evidence. Canonical data lifecycle is independent of business status; holds block destructive purge.",
+      "applicability": "ExpiresAt or DISABLED cannot be represented as physical erasure. Approved values are not required to be invented now; usable owner lifecycle mechanics and evidence remain a pre-production requirement."
+    },
+    {
+      "source": "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+      "section": "6; Admin/Support controls",
+      "requirement_excerpt": "TOTP uses compliant storage/lifecycle and becomes active only after first code; Admin/Support must never expose TOTP seeds.",
+      "applicability": "Seed is in immutable provider record; first activation is native+atomic, normal responses are metadata only, one-time authorized disclosure is User-only. No general privacy-export entitlement to seed follows."
+    },
+    {
+      "source": "docs/authority/current/development/06_Environment_Configuration_Secrets_and_Deployment.md",
+      "section": "5",
+      "requirement_excerpt": "All secrets are resolved via secret-store abstraction; secrets do not belong in source, logs or committed configuration.",
+      "applicability": "Real OpenBao adapter and finite scoped identity are reused; no database seed, custom permanent DP seed keyring or bootstrap credential file is selected."
+    },
+    {
+      "source": "docs/authority/current/development/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+      "section": "11; privacy/provider governance",
+      "requirement_excerpt": "Authentication secrets and sensitive security evidence are RESTRICTED; classification controls logging, export, retention, encryption, access and test use.",
+      "applicability": "Salted used-code verifiers and source digests remain restricted; fixture or provider acceptance is not production privacy/legal authorization."
+    },
+    {
+      "source": "docs/development/P2_008_TOTP_SCOPE.md",
+      "section": "Reuse and technical boundary",
+      "requirement_excerpt": "Lifecycle metadata denies disabled factors immediately; provider retirement/purge follows explicit retention policy.",
+      "applicability": "Immediate verification disable is implemented. Provider physical retirement is not; inactive/expired/abandoned references must not be described as deleted."
+    },
+    {
+      "source": "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+      "section": "Policy families",
+      "requirement_excerpt": "Retention/Privacy/Processor/Residency are versioned policy families with identity, effective interval, lineage and approval evidence.",
+      "applicability": "Nonempty processing/retention reference strings in a test profile do not prove a production Processing Governance Contract or residency approval."
+    }
+  ],
+  "actual_physical_retention_limits": [
+    {
+      "resource": "used-code verifiers",
+      "code_ref": "src/Modules/Identity/TotpNativeVerifier.cs:54",
+      "scenario": "After the last successful verification or after disabling the factor, no later successful acceptance occurs. Expired verifier rows persist.",
+      "implemented": "On-success same-generation deletion only; timestamp filters stop replay entries affecting future acceptance after their horizon.",
+      "not_implemented": "Periodic bounded expired-row sweep or owner retention action independent of successful authentication."
+    },
+    {
+      "resource": "pending/operation/proof-attempt metadata",
+      "code_refs": [
+        "src/Modules/Identity/TotpPrimaryMfa.cs:148",
+        "src/Modules/Identity/TotpEndpoints.cs:270",
+        "src/Modules/Identity/TotpRows.cs"
+      ],
+      "scenario": "User abandons or completes the flow and never returns. Validity/recovery ends, but metadata is not physically purged or necessarily transitioned to stored EXPIRED.",
+      "implemented": "Server rejects expired use/recovery and retains immutable original/result references.",
+      "not_implemented": "TOTP expiry/purge maintenance entry point with approved metadata lifecycle/hold policy."
+    },
+    {
+      "resource": "disabled/abandoned provider seed",
+      "code_refs": [
+        "src/Modules/Identity/OpenBaoTotpSeedStore.cs",
+        "src/Modules/Identity/TotpContracts.cs:79",
+        "src/Modules/Identity/TotpApplication.cs:101"
+      ],
+      "scenario": "Generation is disabled or an inactive PREPARING/AWAITING_FIRST_CODE enrollment is abandoned. Seed remains in its pinned provider version.",
+      "implemented": "Metadata denies verification or disclosure when source/operation is inactive, disabled, expired or already claimed.",
+      "not_implemented": "ITotpSeedStore retirement/delete API or explicit owner-policy reconciliation/purge worker."
+    }
+  ],
+  "ownership_and_timing": {
+    "data_owner": "Identity owns TOTP resources and owner-scoped provider retirement/reconciliation; Privacy coordinates and cannot bypass owner/hold authority.",
+    "p2_019": "Owns approved typed Identity runtime configuration and governed publication/production composition. Does not itself implement every TOTP purge worker.",
+    "p2_017": "Owns end-to-end FRD security/privacy conformance and depends on008/019; appropriate coordinating acceptance follow-up for proving retention/hold/deletion behavior before production.",
+    "p2_016": "Current authoritative acceptance covers notification/audit/post-commit integration only. Earlier004 inventory text mentioning general maintenance scheduling is insufficient authority to silently assign all TOTP cleanup here.",
+    "current_008": "Current local inactive slice supplies validity and immediate security lifecycle; exact production retention/profile/provider remains unselected. No selected maximum-deletion rule is shown violated, so no automatic current008/Product blocker is created.",
+    "governed_followup": {
+      "todo_id": "TODO-TUN-P2-017-TOTP001",
+      "record_ref": "governance/todos/TODO-TUN-P2-017-TOTP001.yaml",
+      "coordinating_work_item": "TUN-P2-017",
+      "implementation_owner": "Identity in existing008/shared-provider scope, or a governed later revision if that ownership has closed.",
+      "approved_inputs_owner": "TUN-P2-019 supplies approved trigger/action/hold configuration; no duration or default is selected here.",
+      "timing": "Must be implemented and actually verified before production activation. It does not block independent authorized local development."
+    }
+  },
+  "bounded_assessment": {
+    "controls_observed": [
+      "Native first-code activation and shared replay ownership",
+      "Immutable account/generation/provider-version identity",
+      "One-time persisted disclosure claim before response",
+      "Reference-only outbox and metadata projections",
+      "Logical expiry/final-source checks and opt-in profile/provider composition"
+    ],
+    "limits": [
+      "No global physical-retention completeness claim.",
+      "Managed secret strings are dereferenced/disposed, not proven zeroized.",
+      "No processor/residency/legal-basis/retention-duration approval, production provider activation or qualified legal conclusion.",
+      "No live TOTP browser journey or final008 privacy/security acceptance was executed."
+    ],
+    "provenance": "Executing-agent technical/compliance perspective under the repository Compliance Specialist and Cyber Security contracts; no independent human or final gate role is impersonated."
+  },
+  "next_action": "Track implementation and actual retention/hold/deletion verification under TODO-TUN-P2-017-TOTP001;019 supplies approved lifecycle inputs, Identity owns cleanup and017 proves conformance before production activation. No independent local-development stop or invented Product decision follows."
+}

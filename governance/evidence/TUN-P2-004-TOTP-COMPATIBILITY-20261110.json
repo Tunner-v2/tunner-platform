@@ -1,0 +1,650 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-004",
+  "execution_scope": "CURRENT_SOURCE_REGISTRATION_COMPATIBILITY_ONLY",
+  "result": "PASS_BOUNDED_CURRENT_SOURCE_COMPATIBILITY",
+  "recorded_at": "2026-11-10T20:00:28.167256+00:00",
+  "current_source_carrier_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+  "preparation_head_sha": "eb1c16fd55a82470c7b2c756f017c51b8a00a30a",
+  "actual_native_identity_tested_sha": "3603243ed68234af0d89b8c1c8f2dcf7807ea640",
+  "actual_architecture_invocation_head": "fbbd53b9fdb70ed7cbeb7448cadc722478b43c1e",
+  "actual_parent_ui_invocation_sha": "eb1c16fd55a82470c7b2c756f017c51b8a00a30a",
+  "native_execution_index_ref": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/native-execution-index.json",
+  "native_source_inputs_ref": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/native-source-inputs.json",
+  "parent_ui_execution_index_ref": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
+  "native_relevant_actual_classes": {
+    "Tunner.Identity.Persistence.Tests.IdentityFoundationTests": {
+      "total": 15,
+      "passed": 15,
+      "failed": 0
+    },
+    "Tunner.Identity.Persistence.Tests.RegistrationBffTests": {
+      "total": 8,
+      "passed": 8,
+      "failed": 0
+    },
+    "Tunner.Identity.Persistence.Tests.RegistrationTests": {
+      "total": 28,
+      "passed": 28,
+      "failed": 0
+    }
+  },
+  "ownership": {
+    "count": 78,
+    "ordered_precommitted_array_unchanged": true,
+    "all_owned_inputs_equal": true,
+    "paths": [
+      {
+        "path": "docs/contracts/.gitattributes",
+        "native_360_blob": "95b62e6e03ee65e1ca7ccf040a84a95416e07142",
+        "ui_carrier_blob": "95b62e6e03ee65e1ca7ccf040a84a95416e07142",
+        "current_head_blob": "95b62e6e03ee65e1ca7ccf040a84a95416e07142",
+        "working_blob": "95b62e6e03ee65e1ca7ccf040a84a95416e07142"
+      },
+      {
+        "path": "docs/contracts/registration-onboarding.openapi.json",
+        "native_360_blob": "cb36848905b843ce8fbfd0e279ef55bd25b0ea02",
+        "ui_carrier_blob": "cb36848905b843ce8fbfd0e279ef55bd25b0ea02",
+        "current_head_blob": "cb36848905b843ce8fbfd0e279ef55bd25b0ea02",
+        "working_blob": "cb36848905b843ce8fbfd0e279ef55bd25b0ea02"
+      },
+      {
+        "path": "docs/contracts/ui-inventory.json",
+        "native_360_blob": "e9d0050a8d946e3eb07454189641eb594015b513",
+        "ui_carrier_blob": "e9d0050a8d946e3eb07454189641eb594015b513",
+        "current_head_blob": "e9d0050a8d946e3eb07454189641eb594015b513",
+        "working_blob": "e9d0050a8d946e3eb07454189641eb594015b513"
+      },
+      {
+        "path": "docs/development/LOCAL_BROWSER_TESTING.md",
+        "native_360_blob": "18161c46b0d955e22fb48c058fc3e0d907a29b99",
+        "ui_carrier_blob": "18161c46b0d955e22fb48c058fc3e0d907a29b99",
+        "current_head_blob": "18161c46b0d955e22fb48c058fc3e0d907a29b99",
+        "working_blob": "18161c46b0d955e22fb48c058fc3e0d907a29b99"
+      },
+      {
+        "path": "docs/development/P2_004_REGISTRATION.md",
+        "native_360_blob": "1a24da7ddbc3b897644f805afaa0abde9e5dd70e",
+        "ui_carrier_blob": "1a24da7ddbc3b897644f805afaa0abde9e5dd70e",
+        "current_head_blob": "1a24da7ddbc3b897644f805afaa0abde9e5dd70e",
+        "working_blob": "1a24da7ddbc3b897644f805afaa0abde9e5dd70e"
+      },
+      {
+        "path": "docs/development/P2_004_REGISTRATION_SCOPE.md",
+        "native_360_blob": "c2acf1f4166c8737d634bb93abbc3739e3b6e1ee",
+        "ui_carrier_blob": "c2acf1f4166c8737d634bb93abbc3739e3b6e1ee",
+        "current_head_blob": "c2acf1f4166c8737d634bb93abbc3739e3b6e1ee",
+        "working_blob": "c2acf1f4166c8737d634bb93abbc3739e3b6e1ee"
+      },
+      {
+        "path": "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md",
+        "native_360_blob": "ffc65409476f6764063442a2d6e50518584e7577",
+        "ui_carrier_blob": "ffc65409476f6764063442a2d6e50518584e7577",
+        "current_head_blob": "ffc65409476f6764063442a2d6e50518584e7577",
+        "working_blob": "ffc65409476f6764063442a2d6e50518584e7577"
+      },
+      {
+        "path": "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json",
+        "native_360_blob": "da71dc7435fd9f9ad81a244e4940cf93371662ab",
+        "ui_carrier_blob": "da71dc7435fd9f9ad81a244e4940cf93371662ab",
+        "current_head_blob": "da71dc7435fd9f9ad81a244e4940cf93371662ab",
+        "working_blob": "da71dc7435fd9f9ad81a244e4940cf93371662ab"
+      },
+      {
+        "path": "governance/evidence/TUN-P2-004-BROWSER-STARTER-SCOPE.json",
+        "native_360_blob": "49428e970fed1f967f76262861870b8126ce5bcf",
+        "ui_carrier_blob": "49428e970fed1f967f76262861870b8126ce5bcf",
+        "current_head_blob": "49428e970fed1f967f76262861870b8126ce5bcf",
+        "working_blob": "49428e970fed1f967f76262861870b8126ce5bcf"
+      },
+      {
+        "path": "governance/evidence/TUN-P2-004-DATA-INVENTORY.json",
+        "native_360_blob": "509093d17f2d6249d99398bf99ad454bf4baf90e",
+        "ui_carrier_blob": "509093d17f2d6249d99398bf99ad454bf4baf90e",
+        "current_head_blob": "509093d17f2d6249d99398bf99ad454bf4baf90e",
+        "working_blob": "509093d17f2d6249d99398bf99ad454bf4baf90e"
+      },
+      {
+        "path": "governance/evidence/TUN-P2-004-RD-SOURCES.json",
+        "native_360_blob": "6040cd782e763b8b732116b06f8907a4a6e35c7b",
+        "ui_carrier_blob": "6040cd782e763b8b732116b06f8907a4a6e35c7b",
+        "current_head_blob": "6040cd782e763b8b732116b06f8907a4a6e35c7b",
+        "working_blob": "6040cd782e763b8b732116b06f8907a4a6e35c7b"
+      },
+      {
+        "path": "governance/evidence/TUN-P2-004-UI-ALIGNMENT.json",
+        "native_360_blob": "b0c2aa1dc8f750d64c9d104771356ca463f1ebea",
+        "ui_carrier_blob": "b0c2aa1dc8f750d64c9d104771356ca463f1ebea",
+        "current_head_blob": "b0c2aa1dc8f750d64c9d104771356ca463f1ebea",
+        "working_blob": "b0c2aa1dc8f750d64c9d104771356ca463f1ebea"
+      },
+      {
+        "path": "src/Modules/Identity/AccountPersonalInformationApplication.cs",
+        "native_360_blob": "fe72ff5cecebb539b0f82d6ad8b4fe80bb5c48c6",
+        "ui_carrier_blob": "fe72ff5cecebb539b0f82d6ad8b4fe80bb5c48c6",
+        "current_head_blob": "fe72ff5cecebb539b0f82d6ad8b4fe80bb5c48c6",
+        "working_blob": "fe72ff5cecebb539b0f82d6ad8b4fe80bb5c48c6"
+      },
+      {
+        "path": "src/Modules/Identity/AccountPersonalInformationContracts.cs",
+        "native_360_blob": "1906c3ac7c63cbf0a966c4500f200c521fb6c497",
+        "ui_carrier_blob": "1906c3ac7c63cbf0a966c4500f200c521fb6c497",
+        "current_head_blob": "1906c3ac7c63cbf0a966c4500f200c521fb6c497",
+        "working_blob": "1906c3ac7c63cbf0a966c4500f200c521fb6c497"
+      },
+      {
+        "path": "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+        "native_360_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+        "ui_carrier_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+        "current_head_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+        "working_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9"
+      },
+      {
+        "path": "src/Modules/Identity/Migrations/20261016211325_P2Registration.Designer.cs",
+        "native_360_blob": "8a00592fbab05ff82e78ee7246a6193c5693c4cd",
+        "ui_carrier_blob": "8a00592fbab05ff82e78ee7246a6193c5693c4cd",
+        "current_head_blob": "8a00592fbab05ff82e78ee7246a6193c5693c4cd",
+        "working_blob": "8a00592fbab05ff82e78ee7246a6193c5693c4cd"
+      },
+      {
+        "path": "src/Modules/Identity/Migrations/20261016211325_P2Registration.cs",
+        "native_360_blob": "ca51982e23496720ee776de2073e42d5350043ac",
+        "ui_carrier_blob": "ca51982e23496720ee776de2073e42d5350043ac",
+        "current_head_blob": "ca51982e23496720ee776de2073e42d5350043ac",
+        "working_blob": "ca51982e23496720ee776de2073e42d5350043ac"
+      },
+      {
+        "path": "src/Modules/Identity/Migrations/20261017195227_Pdr0011RegistrationOnboarding.Designer.cs",
+        "native_360_blob": "fb4e389a0f4e46967a453f37d2e7892262968a1f",
+        "ui_carrier_blob": "fb4e389a0f4e46967a453f37d2e7892262968a1f",
+        "current_head_blob": "fb4e389a0f4e46967a453f37d2e7892262968a1f",
+        "working_blob": "fb4e389a0f4e46967a453f37d2e7892262968a1f"
+      },
+      {
+        "path": "src/Modules/Identity/Migrations/20261017195227_Pdr0011RegistrationOnboarding.cs",
+        "native_360_blob": "c67d4295a8419e8224eaab93274edd96e5dfc33f",
+        "ui_carrier_blob": "c67d4295a8419e8224eaab93274edd96e5dfc33f",
+        "current_head_blob": "c67d4295a8419e8224eaab93274edd96e5dfc33f",
+        "working_blob": "c67d4295a8419e8224eaab93274edd96e5dfc33f"
+      },
+      {
+        "path": "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+        "native_360_blob": "b79988b9d063b49d39d1e4396753f383c709688d",
+        "ui_carrier_blob": "b79988b9d063b49d39d1e4396753f383c709688d",
+        "current_head_blob": "b79988b9d063b49d39d1e4396753f383c709688d",
+        "working_blob": "b79988b9d063b49d39d1e4396753f383c709688d"
+      },
+      {
+        "path": "src/Modules/Identity/RegistrationApplication.cs",
+        "native_360_blob": "abf71f970dca88d343f5f7b22ed40fc11cefea26",
+        "ui_carrier_blob": "abf71f970dca88d343f5f7b22ed40fc11cefea26",
+        "current_head_blob": "abf71f970dca88d343f5f7b22ed40fc11cefea26",
+        "working_blob": "abf71f970dca88d343f5f7b22ed40fc11cefea26"
+      },
+      {
+        "path": "src/Modules/Identity/RegistrationContracts.cs",
+        "native_360_blob": "bb7309120bb6ec3fe45885a66e5451e020ce64b6",
+        "ui_carrier_blob": "bb7309120bb6ec3fe45885a66e5451e020ce64b6",
+        "current_head_blob": "bb7309120bb6ec3fe45885a66e5451e020ce64b6",
+        "working_blob": "bb7309120bb6ec3fe45885a66e5451e020ce64b6"
+      },
+      {
+        "path": "src/Modules/Identity/RegistrationEndpoints.cs",
+        "native_360_blob": "2f64bd6a2b4c942887a5932c8500aa7ef303718c",
+        "ui_carrier_blob": "2f64bd6a2b4c942887a5932c8500aa7ef303718c",
+        "current_head_blob": "2f64bd6a2b4c942887a5932c8500aa7ef303718c",
+        "working_blob": "2f64bd6a2b4c942887a5932c8500aa7ef303718c"
+      },
+      {
+        "path": "src/Modules/Identity/RegistrationPersonalInformation.cs",
+        "native_360_blob": "903542a505d6d7fec99ec7c80f6deb44056d995a",
+        "ui_carrier_blob": "903542a505d6d7fec99ec7c80f6deb44056d995a",
+        "current_head_blob": "903542a505d6d7fec99ec7c80f6deb44056d995a",
+        "working_blob": "903542a505d6d7fec99ec7c80f6deb44056d995a"
+      },
+      {
+        "path": "src/Modules/Identity/RegistrationRows.cs",
+        "native_360_blob": "2ed53f1e4f40b2c5605a93ef381bc607a794d3e0",
+        "ui_carrier_blob": "2ed53f1e4f40b2c5605a93ef381bc607a794d3e0",
+        "current_head_blob": "2ed53f1e4f40b2c5605a93ef381bc607a794d3e0",
+        "working_blob": "2ed53f1e4f40b2c5605a93ef381bc607a794d3e0"
+      },
+      {
+        "path": "src/Modules/Identity/RegistrationWebContracts.cs",
+        "native_360_blob": "2d5abf765da9b51c735ff496140f9cd0c9c66ab0",
+        "ui_carrier_blob": "2d5abf765da9b51c735ff496140f9cd0c9c66ab0",
+        "current_head_blob": "2d5abf765da9b51c735ff496140f9cd0c9c66ab0",
+        "working_blob": "2d5abf765da9b51c735ff496140f9cd0c9c66ab0"
+      },
+      {
+        "path": "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+        "native_360_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c",
+        "ui_carrier_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c",
+        "current_head_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c",
+        "working_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c"
+      },
+      {
+        "path": "src/Tunner.User.Bff/Program.cs",
+        "native_360_blob": "80740e9ca49eb40618aa6069ea2626bec8f7bcbd",
+        "ui_carrier_blob": "80740e9ca49eb40618aa6069ea2626bec8f7bcbd",
+        "current_head_blob": "80740e9ca49eb40618aa6069ea2626bec8f7bcbd",
+        "working_blob": "80740e9ca49eb40618aa6069ea2626bec8f7bcbd"
+      },
+      {
+        "path": "src/Tunner.User.Bff/Tunner.User.Bff.csproj",
+        "native_360_blob": "3dfc3d84fa1e9c9516817fa5e52263b60c4c8963",
+        "ui_carrier_blob": "3dfc3d84fa1e9c9516817fa5e52263b60c4c8963",
+        "current_head_blob": "3dfc3d84fa1e9c9516817fa5e52263b60c4c8963",
+        "working_blob": "3dfc3d84fa1e9c9516817fa5e52263b60c4c8963"
+      },
+      {
+        "path": "start-browser.cmd",
+        "native_360_blob": "365a684220cf2d6c8ee19740b57c1200099937cd",
+        "ui_carrier_blob": "365a684220cf2d6c8ee19740b57c1200099937cd",
+        "current_head_blob": "365a684220cf2d6c8ee19740b57c1200099937cd",
+        "working_blob": "365a684220cf2d6c8ee19740b57c1200099937cd"
+      },
+      {
+        "path": "stop-browser.cmd",
+        "native_360_blob": "e82f5bdc10e96ece01fae6e17e182054a4d54663",
+        "ui_carrier_blob": "e82f5bdc10e96ece01fae6e17e182054a4d54663",
+        "current_head_blob": "e82f5bdc10e96ece01fae6e17e182054a4d54663",
+        "working_blob": "e82f5bdc10e96ece01fae6e17e182054a4d54663"
+      },
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/FixtureAccountAgePolicies.cs",
+        "native_360_blob": "c6b083354a2a1ac241bc2913ca7c9052f70b6559",
+        "ui_carrier_blob": "c6b083354a2a1ac241bc2913ca7c9052f70b6559",
+        "current_head_blob": "c6b083354a2a1ac241bc2913ca7c9052f70b6559",
+        "working_blob": "c6b083354a2a1ac241bc2913ca7c9052f70b6559"
+      },
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/RegistrationBffTests.cs",
+        "native_360_blob": "8022ca726e12f0488c933ee01bc8f492edd5cb0e",
+        "ui_carrier_blob": "8022ca726e12f0488c933ee01bc8f492edd5cb0e",
+        "current_head_blob": "8022ca726e12f0488c933ee01bc8f492edd5cb0e",
+        "working_blob": "8022ca726e12f0488c933ee01bc8f492edd5cb0e"
+      },
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/RegistrationTests.cs",
+        "native_360_blob": "6a025fc18da3145e237cdd3263efb8ea084cba73",
+        "ui_carrier_blob": "6a025fc18da3145e237cdd3263efb8ea084cba73",
+        "current_head_blob": "6a025fc18da3145e237cdd3263efb8ea084cba73",
+        "working_blob": "6a025fc18da3145e237cdd3263efb8ea084cba73"
+      },
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+        "native_360_blob": "941606104cf26bd75524e177ff4deee5defebd4d",
+        "ui_carrier_blob": "941606104cf26bd75524e177ff4deee5defebd4d",
+        "current_head_blob": "941606104cf26bd75524e177ff4deee5defebd4d",
+        "working_blob": "941606104cf26bd75524e177ff4deee5defebd4d"
+      },
+      {
+        "path": "tools/browser-testing/Program.cs",
+        "native_360_blob": "a2c639b2eab3ceb89ace00a4bff165e3df59c3b1",
+        "ui_carrier_blob": "a2c639b2eab3ceb89ace00a4bff165e3df59c3b1",
+        "current_head_blob": "a2c639b2eab3ceb89ace00a4bff165e3df59c3b1",
+        "working_blob": "a2c639b2eab3ceb89ace00a4bff165e3df59c3b1"
+      },
+      {
+        "path": "tools/browser-testing/Tunner.BrowserTesting.csproj",
+        "native_360_blob": "36f2a47cac0f7f071650ce9f11ba2a11e8b128ba",
+        "ui_carrier_blob": "36f2a47cac0f7f071650ce9f11ba2a11e8b128ba",
+        "current_head_blob": "36f2a47cac0f7f071650ce9f11ba2a11e8b128ba",
+        "working_blob": "36f2a47cac0f7f071650ce9f11ba2a11e8b128ba"
+      },
+      {
+        "path": "tools/dev/tunner-browser.ps1",
+        "native_360_blob": "473ae923b3958d52854f0ead5163b25cc44a2617",
+        "ui_carrier_blob": "473ae923b3958d52854f0ead5163b25cc44a2617",
+        "current_head_blob": "473ae923b3958d52854f0ead5163b25cc44a2617",
+        "working_blob": "473ae923b3958d52854f0ead5163b25cc44a2617"
+      },
+      {
+        "path": "tools/validation/Test-TunnerBrowserStarter.ps1",
+        "native_360_blob": "56e29cd8eb055a74b3d15a0d8c270b79c54cab37",
+        "ui_carrier_blob": "56e29cd8eb055a74b3d15a0d8c270b79c54cab37",
+        "current_head_blob": "56e29cd8eb055a74b3d15a0d8c270b79c54cab37",
+        "working_blob": "56e29cd8eb055a74b3d15a0d8c270b79c54cab37"
+      },
+      {
+        "path": "web/apps/user/content.proposal.json",
+        "native_360_blob": "774b13aba26360d6a07ebf955348c121a414657b",
+        "ui_carrier_blob": "774b13aba26360d6a07ebf955348c121a414657b",
+        "current_head_blob": "774b13aba26360d6a07ebf955348c121a414657b",
+        "working_blob": "774b13aba26360d6a07ebf955348c121a414657b"
+      },
+      {
+        "path": "web/apps/user/index.html",
+        "native_360_blob": "ade197bb8f59d56dc8205811f66c03680a368f57",
+        "ui_carrier_blob": "ade197bb8f59d56dc8205811f66c03680a368f57",
+        "current_head_blob": "ade197bb8f59d56dc8205811f66c03680a368f57",
+        "working_blob": "ade197bb8f59d56dc8205811f66c03680a368f57"
+      },
+      {
+        "path": "web/apps/user/main.tsx",
+        "native_360_blob": "ddc9d200f77b543ffe19f9f642f4d722dff27637",
+        "ui_carrier_blob": "ddc9d200f77b543ffe19f9f642f4d722dff27637",
+        "current_head_blob": "ddc9d200f77b543ffe19f9f642f4d722dff27637",
+        "working_blob": "ddc9d200f77b543ffe19f9f642f4d722dff27637"
+      },
+      {
+        "path": "web/apps/user/package.json",
+        "native_360_blob": "068e2b0d3b0cdb17d1c48c340de21031bbb14085",
+        "ui_carrier_blob": "068e2b0d3b0cdb17d1c48c340de21031bbb14085",
+        "current_head_blob": "068e2b0d3b0cdb17d1c48c340de21031bbb14085",
+        "working_blob": "068e2b0d3b0cdb17d1c48c340de21031bbb14085"
+      },
+      {
+        "path": "web/apps/user/public/assets/ready-approved-check.svg",
+        "native_360_blob": "f2a574212a36476e41ece6813428f33acfa7fab4",
+        "ui_carrier_blob": "f2a574212a36476e41ece6813428f33acfa7fab4",
+        "current_head_blob": "f2a574212a36476e41ece6813428f33acfa7fab4",
+        "working_blob": "f2a574212a36476e41ece6813428f33acfa7fab4"
+      },
+      {
+        "path": "web/apps/user/public/assets/ready-imgBgGlowIndigo.svg",
+        "native_360_blob": "50ce088d7a324ad9a8766f8c8ce5f04d98e85087",
+        "ui_carrier_blob": "50ce088d7a324ad9a8766f8c8ce5f04d98e85087",
+        "current_head_blob": "50ce088d7a324ad9a8766f8c8ce5f04d98e85087",
+        "working_blob": "50ce088d7a324ad9a8766f8c8ce5f04d98e85087"
+      },
+      {
+        "path": "web/apps/user/public/assets/ready-imgBgGlowViolet.svg",
+        "native_360_blob": "52a654265eecfc71022dee729077676c2465a9e4",
+        "ui_carrier_blob": "52a654265eecfc71022dee729077676c2465a9e4",
+        "current_head_blob": "52a654265eecfc71022dee729077676c2465a9e4",
+        "working_blob": "52a654265eecfc71022dee729077676c2465a9e4"
+      },
+      {
+        "path": "web/apps/user/public/assets/ready-imgEllipse.svg",
+        "native_360_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2",
+        "ui_carrier_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2",
+        "current_head_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2",
+        "working_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2"
+      },
+      {
+        "path": "web/apps/user/public/assets/ready-imgEllipse1.svg",
+        "native_360_blob": "43fc01cd2c19a6e1e6980780111a6d67d0124293",
+        "ui_carrier_blob": "43fc01cd2c19a6e1e6980780111a6d67d0124293",
+        "current_head_blob": "43fc01cd2c19a6e1e6980780111a6d67d0124293",
+        "working_blob": "43fc01cd2c19a6e1e6980780111a6d67d0124293"
+      },
+      {
+        "path": "web/apps/user/public/assets/register-imgBgGlowIndigo.svg",
+        "native_360_blob": "316636215995f2622e135defc03374bb077cb287",
+        "ui_carrier_blob": "316636215995f2622e135defc03374bb077cb287",
+        "current_head_blob": "316636215995f2622e135defc03374bb077cb287",
+        "working_blob": "316636215995f2622e135defc03374bb077cb287"
+      },
+      {
+        "path": "web/apps/user/public/assets/register-imgBgGlowViolet.svg",
+        "native_360_blob": "c37619a12e95724d86983d90c34e5e00cf471b7e",
+        "ui_carrier_blob": "c37619a12e95724d86983d90c34e5e00cf471b7e",
+        "current_head_blob": "c37619a12e95724d86983d90c34e5e00cf471b7e",
+        "working_blob": "c37619a12e95724d86983d90c34e5e00cf471b7e"
+      },
+      {
+        "path": "web/apps/user/public/assets/register-imgEllipse.svg",
+        "native_360_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2",
+        "ui_carrier_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2",
+        "current_head_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2",
+        "working_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2"
+      },
+      {
+        "path": "web/apps/user/public/assets/verify-imgBgGlowIndigo.svg",
+        "native_360_blob": "d36a00fe57b0af52fabfc3065b841a080aa9771f",
+        "ui_carrier_blob": "d36a00fe57b0af52fabfc3065b841a080aa9771f",
+        "current_head_blob": "d36a00fe57b0af52fabfc3065b841a080aa9771f",
+        "working_blob": "d36a00fe57b0af52fabfc3065b841a080aa9771f"
+      },
+      {
+        "path": "web/apps/user/public/assets/verify-imgBgGlowViolet.svg",
+        "native_360_blob": "52a654265eecfc71022dee729077676c2465a9e4",
+        "ui_carrier_blob": "52a654265eecfc71022dee729077676c2465a9e4",
+        "current_head_blob": "52a654265eecfc71022dee729077676c2465a9e4",
+        "working_blob": "52a654265eecfc71022dee729077676c2465a9e4"
+      },
+      {
+        "path": "web/apps/user/public/assets/verify-imgEllipse.svg",
+        "native_360_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2",
+        "ui_carrier_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2",
+        "current_head_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2",
+        "working_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2"
+      },
+      {
+        "path": "web/apps/user/registration.css",
+        "native_360_blob": "c2df25c9a04bad9a0fca9fe2b21a7be224d55414",
+        "ui_carrier_blob": "c2df25c9a04bad9a0fca9fe2b21a7be224d55414",
+        "current_head_blob": "c2df25c9a04bad9a0fca9fe2b21a7be224d55414",
+        "working_blob": "c2df25c9a04bad9a0fca9fe2b21a7be224d55414"
+      },
+      {
+        "path": "web/apps/user/routes.ts",
+        "native_360_blob": "60b19ccbe5f2b4d28cc6e15040a4c81363ba7147",
+        "ui_carrier_blob": "60b19ccbe5f2b4d28cc6e15040a4c81363ba7147",
+        "current_head_blob": "60b19ccbe5f2b4d28cc6e15040a4c81363ba7147",
+        "working_blob": "60b19ccbe5f2b4d28cc6e15040a4c81363ba7147"
+      },
+      {
+        "path": "web/apps/user/validation.ts",
+        "native_360_blob": "81cf69f2cfcde7cf2a829992bb00b191a8f99cbe",
+        "ui_carrier_blob": "81cf69f2cfcde7cf2a829992bb00b191a8f99cbe",
+        "current_head_blob": "81cf69f2cfcde7cf2a829992bb00b191a8f99cbe",
+        "working_blob": "81cf69f2cfcde7cf2a829992bb00b191a8f99cbe"
+      },
+      {
+        "path": "web/apps/user/vite.config.ts",
+        "native_360_blob": "e5d6a24ebe118af182e3041e0c823d704fdb6709",
+        "ui_carrier_blob": "e5d6a24ebe118af182e3041e0c823d704fdb6709",
+        "current_head_blob": "e5d6a24ebe118af182e3041e0c823d704fdb6709",
+        "working_blob": "e5d6a24ebe118af182e3041e0c823d704fdb6709"
+      },
+      {
+        "path": "web/package.json",
+        "native_360_blob": "17528ac713eb830c4202905944fbaaad0aa521a2",
+        "ui_carrier_blob": "17528ac713eb830c4202905944fbaaad0aa521a2",
+        "current_head_blob": "17528ac713eb830c4202905944fbaaad0aa521a2",
+        "working_blob": "17528ac713eb830c4202905944fbaaad0aa521a2"
+      },
+      {
+        "path": "web/packages/ui/package.json",
+        "native_360_blob": "c967243d08c62fbfc4259611ec9adc0a9b0a5df2",
+        "ui_carrier_blob": "c967243d08c62fbfc4259611ec9adc0a9b0a5df2",
+        "current_head_blob": "c967243d08c62fbfc4259611ec9adc0a9b0a5df2",
+        "working_blob": "c967243d08c62fbfc4259611ec9adc0a9b0a5df2"
+      },
+      {
+        "path": "web/packages/ui/src/content.tsx",
+        "native_360_blob": "e9b10d155b9bf06bc80454e4714e33c75b08029f",
+        "ui_carrier_blob": "e9b10d155b9bf06bc80454e4714e33c75b08029f",
+        "current_head_blob": "e9b10d155b9bf06bc80454e4714e33c75b08029f",
+        "working_blob": "e9b10d155b9bf06bc80454e4714e33c75b08029f"
+      },
+      {
+        "path": "web/packages/ui/src/controls.tsx",
+        "native_360_blob": "ae1d997a7b76eae8a76b74af3328ac1573329c7e",
+        "ui_carrier_blob": "ae1d997a7b76eae8a76b74af3328ac1573329c7e",
+        "current_head_blob": "ae1d997a7b76eae8a76b74af3328ac1573329c7e",
+        "working_blob": "ae1d997a7b76eae8a76b74af3328ac1573329c7e"
+      },
+      {
+        "path": "web/packages/ui/src/forms.tsx",
+        "native_360_blob": "a60383e7bbe73eaefc55c250be209fd2eff85b2c",
+        "ui_carrier_blob": "a60383e7bbe73eaefc55c250be209fd2eff85b2c",
+        "current_head_blob": "a60383e7bbe73eaefc55c250be209fd2eff85b2c",
+        "working_blob": "a60383e7bbe73eaefc55c250be209fd2eff85b2c"
+      },
+      {
+        "path": "web/packages/ui/src/index.ts",
+        "native_360_blob": "650dfdc4736db157004ebde577e29f003a334cd6",
+        "ui_carrier_blob": "650dfdc4736db157004ebde577e29f003a334cd6",
+        "current_head_blob": "650dfdc4736db157004ebde577e29f003a334cd6",
+        "working_blob": "650dfdc4736db157004ebde577e29f003a334cd6"
+      },
+      {
+        "path": "web/packages/ui/src/navigation.ts",
+        "native_360_blob": "b6f5541dc8daf14c5ce43f73e99039dd1f86066b",
+        "ui_carrier_blob": "b6f5541dc8daf14c5ce43f73e99039dd1f86066b",
+        "current_head_blob": "b6f5541dc8daf14c5ce43f73e99039dd1f86066b",
+        "working_blob": "b6f5541dc8daf14c5ce43f73e99039dd1f86066b"
+      },
+      {
+        "path": "web/packages/ui/styles/components.css",
+        "native_360_blob": "092761c08561df062720631a1977195851ab4273",
+        "ui_carrier_blob": "092761c08561df062720631a1977195851ab4273",
+        "current_head_blob": "092761c08561df062720631a1977195851ab4273",
+        "working_blob": "092761c08561df062720631a1977195851ab4273"
+      },
+      {
+        "path": "web/packages/ui/styles/tokens.generated.css",
+        "native_360_blob": "8a0ca6dacc0a7d8589716558ee6dd2ea141efbb0",
+        "ui_carrier_blob": "8a0ca6dacc0a7d8589716558ee6dd2ea141efbb0",
+        "current_head_blob": "8a0ca6dacc0a7d8589716558ee6dd2ea141efbb0",
+        "working_blob": "8a0ca6dacc0a7d8589716558ee6dd2ea141efbb0"
+      },
+      {
+        "path": "web/packages/ui/theme.tokens.json",
+        "native_360_blob": "b2119a6503fc2abc8d3acd5b7f6f7c76b819cc9e",
+        "ui_carrier_blob": "b2119a6503fc2abc8d3acd5b7f6f7c76b819cc9e",
+        "current_head_blob": "b2119a6503fc2abc8d3acd5b7f6f7c76b819cc9e",
+        "working_blob": "b2119a6503fc2abc8d3acd5b7f6f7c76b819cc9e"
+      },
+      {
+        "path": "web/playwright.browser-testing.config.ts",
+        "native_360_blob": "011da8722f71a854734f79e7e358fa37a872c28d",
+        "ui_carrier_blob": "011da8722f71a854734f79e7e358fa37a872c28d",
+        "current_head_blob": "011da8722f71a854734f79e7e358fa37a872c28d",
+        "working_blob": "011da8722f71a854734f79e7e358fa37a872c28d"
+      },
+      {
+        "path": "web/playwright.registration.config.ts",
+        "native_360_blob": "a94acb15abe55cb9b74d57e73dea35b91a0bd3c3",
+        "ui_carrier_blob": "a94acb15abe55cb9b74d57e73dea35b91a0bd3c3",
+        "current_head_blob": "a94acb15abe55cb9b74d57e73dea35b91a0bd3c3",
+        "working_blob": "a94acb15abe55cb9b74d57e73dea35b91a0bd3c3"
+      },
+      {
+        "path": "web/pnpm-lock.yaml",
+        "native_360_blob": "39990993c01c11e4228031b5dc1f53de15f53e75",
+        "ui_carrier_blob": "39990993c01c11e4228031b5dc1f53de15f53e75",
+        "current_head_blob": "39990993c01c11e4228031b5dc1f53de15f53e75",
+        "working_blob": "39990993c01c11e4228031b5dc1f53de15f53e75"
+      },
+      {
+        "path": "web/pnpm-workspace.yaml",
+        "native_360_blob": "779b553344c988738b9c3bc6e5d1a28af3996c4a",
+        "ui_carrier_blob": "779b553344c988738b9c3bc6e5d1a28af3996c4a",
+        "current_head_blob": "779b553344c988738b9c3bc6e5d1a28af3996c4a",
+        "working_blob": "779b553344c988738b9c3bc6e5d1a28af3996c4a"
+      },
+      {
+        "path": "web/tests/browser-testing/manual-flow.spec.ts",
+        "native_360_blob": "38cd33da0a48d6f43d6502523e92b6579783e00a",
+        "ui_carrier_blob": "38cd33da0a48d6f43d6502523e92b6579783e00a",
+        "current_head_blob": "38cd33da0a48d6f43d6502523e92b6579783e00a",
+        "working_blob": "38cd33da0a48d6f43d6502523e92b6579783e00a"
+      },
+      {
+        "path": "web/tests/contracts.test.tsx",
+        "native_360_blob": "6021b66f32e758e622bee26c3cf15e7e205a145b",
+        "ui_carrier_blob": "6021b66f32e758e622bee26c3cf15e7e205a145b",
+        "current_head_blob": "6021b66f32e758e622bee26c3cf15e7e205a145b",
+        "working_blob": "6021b66f32e758e622bee26c3cf15e7e205a145b"
+      },
+      {
+        "path": "web/tests/registration/global-compliance.spec.ts",
+        "native_360_blob": "75e733c11069359c1ab55ffe0a3928d5b3e6aaa2",
+        "ui_carrier_blob": "75e733c11069359c1ab55ffe0a3928d5b3e6aaa2",
+        "current_head_blob": "75e733c11069359c1ab55ffe0a3928d5b3e6aaa2",
+        "working_blob": "75e733c11069359c1ab55ffe0a3928d5b3e6aaa2"
+      },
+      {
+        "path": "web/tests/registration/registration.spec.ts",
+        "native_360_blob": "12b0339438362425ef5eec9e3676bb1d2d56ac4b",
+        "ui_carrier_blob": "12b0339438362425ef5eec9e3676bb1d2d56ac4b",
+        "current_head_blob": "12b0339438362425ef5eec9e3676bb1d2d56ac4b",
+        "working_blob": "12b0339438362425ef5eec9e3676bb1d2d56ac4b"
+      },
+      {
+        "path": "web/tests/registration/support.ts",
+        "native_360_blob": "18ef89d918331ff5d260d0cd4e9cf1f04acb5d49",
+        "ui_carrier_blob": "18ef89d918331ff5d260d0cd4e9cf1f04acb5d49",
+        "current_head_blob": "18ef89d918331ff5d260d0cd4e9cf1f04acb5d49",
+        "working_blob": "18ef89d918331ff5d260d0cd4e9cf1f04acb5d49"
+      },
+      {
+        "path": "web/tsconfig.json",
+        "native_360_blob": "b6b8a3fed78b450451d6a22285902610dbe6ad9a",
+        "ui_carrier_blob": "b6b8a3fed78b450451d6a22285902610dbe6ad9a",
+        "current_head_blob": "b6b8a3fed78b450451d6a22285902610dbe6ad9a",
+        "working_blob": "b6b8a3fed78b450451d6a22285902610dbe6ad9a"
+      }
+    ]
+  },
+  "prior_current_source_binding": {
+    "tested_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+    "validated_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+    "source_binding_ref": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json",
+    "source_envelope_git_ref": "eb1c16fd55a82470c7b2c756f017c51b8a00a30a:governance/evidence/TUN-P2-004-AUDIT-CORRECTION-SOURCE.json"
+  },
+  "preserved_unrelated_dirty_paths": [
+    {
+      "path": "docs/context/current/HANDOFF.md",
+      "sha256": "c46f5353d147f45785a125f8d2625d93d83a7a80d063f551abf173a93f0a3b37"
+    },
+    {
+      "path": "docs/context/current/adaptive-selection.json",
+      "sha256": "f489691fcdc57f15a027e2d94968295338be4b0b5661c078fe76ef0fd371617d"
+    },
+    {
+      "path": "docs/context/current/authority.md",
+      "sha256": "9cdc3391258e7e92b6cd4b21fbbda6f15c34eb5452ad9b365f061b107823a251"
+    },
+    {
+      "path": "docs/context/current/contracts.md",
+      "sha256": "6180fe5264689c4eac16b2439c9a7e4ffa9486ece7ecb73c22f068e97f4fd144"
+    },
+    {
+      "path": "docs/context/current/git-changes.md",
+      "sha256": "5bd8bff5492066357d85d7c3d936d2a9214ea8b6ff30f18019d1e325fcc83dbc"
+    },
+    {
+      "path": "docs/context/current/manifest.json",
+      "sha256": "9a4115bffd76d546bff35215f0f802d7807e989dab50b99c672a656359cd40fe"
+    },
+    {
+      "path": "docs/context/current/relevant-flows.md",
+      "sha256": "763aa1a531f6ef35e23134166e8e3d5c6939d7da7bcbd40f655cbb9f389f58c7"
+    },
+    {
+      "path": "docs/context/current/summary.md",
+      "sha256": "3fa196014cb259124e8665fee519c0c558ab946df502b7fc78add8e6ff717d24"
+    },
+    {
+      "path": "docs/context/current/tests.md",
+      "sha256": "d056ed373c4564c4455cd1d250082ad3c146933c6a003340c1c94e264cad249d"
+    },
+    {
+      "path": "docs/project/CURRENT_STATE.md",
+      "sha256": "12443d9bccea62637793942c405decb0cab72fe3f2879088b14dc54895225c8b"
+    },
+    {
+      "path": "docs/project/HANDOFF.md",
+      "sha256": "12443d9bccea62637793942c405decb0cab72fe3f2879088b14dc54895225c8b"
+    },
+    {
+      "path": "docs/project/PROJECT_CONTEXT.md",
+      "sha256": "12443d9bccea62637793942c405decb0cab72fe3f2879088b14dc54895225c8b"
+    },
+    {
+      "path": ".vscode/settings.json",
+      "sha256": "cdb95c429817abf556fd2acd6c7c43c3f518ca0ec24e69c5e5981d7d8addea88"
+    }
+  ],
+  "limits": [
+    "Reuses actual committed Identity 260 and architecture 237 indices without duplicating or relabelling native executions.",
+    "Fresh registration 24 and shared foundation 16 are executed at their actual invocation SHA and explicitly source-equivalent to the UI carrier.",
+    "Historical receipts, 78-path core ownership and VALIDATION lifecycle remain unchanged. Current per-item UI compliance is separate and remains governed by the UI role; no Product or release acceptance."
+  ]
+}

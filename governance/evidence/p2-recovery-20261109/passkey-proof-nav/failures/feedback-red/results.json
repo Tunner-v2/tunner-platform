@@ -1,0 +1,602 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "<repo-root>\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.passkeys.config.ts",
+      "--grep",
+      "@feedback-regression",
+      "--output",
+      "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\20261110-feedback-red-312af88\\run-details"
+    ],
+    "configFile": "<repo-root>\\web\\playwright.passkeys.config.ts",
+    "rootDir": "<repo-root>/web/tests/passkeys",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo-root>/artifacts/p2-007-passkeys-20261109/ui-review/20261110-feedback-red-312af88/run-details",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo-root>/web/tests/passkeys",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/passkeys/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config apps/user/vite.config.ts --port 5193",
+      "url": "http://127.0.0.1:5193/registration/",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "passkeys.spec.ts",
+      "file": "passkeys.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "@feedback-regression Remove error keeps every action within the desktop dialog without scrolling",
+          "ok": false,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1705,
+                  "error": {
+                    "message": "Error: Close bottom is inside the visible dialog\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m714\u001b[39m\nReceived:    \u001b[31m729\u001b[39m",
+                    "stack": "Error: Close bottom is inside the visible dialog\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m714\u001b[39m\nReceived:    \u001b[31m729\u001b[39m\n    at <repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts:112:76",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                      "column": 76,
+                      "line": 112
+                    },
+                    "snippet": "  110 |     const box=await dialog.getByRole('button',{name,exact:true}).boundingBox();\n  111 |     expect(box).not.toBeNull();\n> 112 |     expect(box!.y+box!.height,name+' bottom is inside the visible dialog').toBeLessThanOrEqual(container!.y+container!.height-1);\n      |                                                                            ^\n  113 |     expect(box!.y,name+' top is inside the visible dialog').toBeGreaterThanOrEqual(container!.y+1);\n  114 |   }\n  115 |   expect(await dialog.evaluate(element=>element.scrollHeight<=element.clientHeight+1)).toBe(true);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                        "column": 76,
+                        "line": 112
+                      },
+                      "message": "Error: Close bottom is inside the visible dialog\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeLessThanOrEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: <= \u001b[32m714\u001b[39m\nReceived:    \u001b[31m729\u001b[39m\n\n  110 |     const box=await dialog.getByRole('button',{name,exact:true}).boundingBox();\n  111 |     expect(box).not.toBeNull();\n> 112 |     expect(box!.y+box!.height,name+' bottom is inside the visible dialog').toBeLessThanOrEqual(container!.y+container!.height-1);\n      |                                                                            ^\n  113 |     expect(box!.y,name+' top is inside the visible dialog').toBeGreaterThanOrEqual(container!.y+1);\n  114 |   }\n  115 |   expect(await dialog.evaluate(element=>element.scrollHeight<=element.clientHeight+1)).toBe(true);\n    at <repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts:112:76"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:04:42.620Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\20261110-feedback-red-312af88\\run-details\\passkeys--feedback-regress-edc5f-op-dialog-without-scrolling\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                    "column": 76,
+                    "line": 112
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-432b8decd71a42b58998",
+          "file": "passkeys.spec.ts",
+          "line": 97,
+          "column": 1
+        },
+        {
+          "title": "@feedback-regression ENROLL unknown Close focuses existing recovery without replacing the request",
+          "ok": false,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6244,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Check status', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Check status', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Check status', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Check status', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at <repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts:139:26",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                      "column": 26,
+                      "line": 139
+                    },
+                    "snippet": "  137 |   await page.screenshot({path:testInfo.outputPath(kind.toLowerCase()+'-unknown-closed.png'),fullPage:true});\n  138 |   const recovery=page.getByRole('button',{name:'Check status',exact:true});\n> 139 |   await expect(recovery).toBeFocused();\n      |                          ^\n  140 |   await expect(recovery).toBeEnabled();\n  141 |   await expect(trigger).toBeDisabled();\n  142 |   expect(state.starts).toHaveLength(1);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                        "column": 26,
+                        "line": 139
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Check status', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Check status', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  137 |   await page.screenshot({path:testInfo.outputPath(kind.toLowerCase()+'-unknown-closed.png'),fullPage:true});\n  138 |   const recovery=page.getByRole('button',{name:'Check status',exact:true});\n> 139 |   await expect(recovery).toBeFocused();\n      |                          ^\n  140 |   await expect(recovery).toBeEnabled();\n  141 |   await expect(trigger).toBeDisabled();\n  142 |   expect(state.starts).toHaveLength(1);\n    at <repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts:139:26"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:04:47.288Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\20261110-feedback-red-312af88\\run-details\\passkeys--feedback-regress-f63ef-thout-replacing-the-request\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                    "column": 26,
+                    "line": 139
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-0109fbd4114acdddd223",
+          "file": "passkeys.spec.ts",
+          "line": 121,
+          "column": 48
+        },
+        {
+          "title": "@feedback-regression REVOKE unknown Close focuses existing recovery without replacing the request",
+          "ok": false,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6297,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Check status', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Check status', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Check status', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Check status', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at <repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts:139:26",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                      "column": 26,
+                      "line": 139
+                    },
+                    "snippet": "  137 |   await page.screenshot({path:testInfo.outputPath(kind.toLowerCase()+'-unknown-closed.png'),fullPage:true});\n  138 |   const recovery=page.getByRole('button',{name:'Check status',exact:true});\n> 139 |   await expect(recovery).toBeFocused();\n      |                          ^\n  140 |   await expect(recovery).toBeEnabled();\n  141 |   await expect(trigger).toBeDisabled();\n  142 |   expect(state.starts).toHaveLength(1);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                        "column": 26,
+                        "line": 139
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Check status', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Check status', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  137 |   await page.screenshot({path:testInfo.outputPath(kind.toLowerCase()+'-unknown-closed.png'),fullPage:true});\n  138 |   const recovery=page.getByRole('button',{name:'Check status',exact:true});\n> 139 |   await expect(recovery).toBeFocused();\n      |                          ^\n  140 |   await expect(recovery).toBeEnabled();\n  141 |   await expect(trigger).toBeDisabled();\n  142 |   expect(state.starts).toHaveLength(1);\n    at <repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts:139:26"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:04:55.001Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\20261110-feedback-red-312af88\\run-details\\passkeys--feedback-regress-528bd-thout-replacing-the-request\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                    "column": 26,
+                    "line": 139
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-391a88c955138797b780",
+          "file": "passkeys.spec.ts",
+          "line": 121,
+          "column": 48
+        },
+        {
+          "title": "@feedback-regression Login native-cancel restores its available action without another attempt",
+          "ok": false,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6266,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Sign in with passkey', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign in with passkey', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" aria-busy=\"false\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Sign in with passkey', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign in with passkey', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" aria-busy=\"false\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at <repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts:168:24",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                      "column": 24,
+                      "line": 168
+                    },
+                    "snippet": "  166 |   await expect(action).toBeEnabled();\n  167 |   await page.screenshot({path:testInfo.outputPath('login-'+feedback+'-focus.png'),fullPage:true});\n> 168 |   await expect(action).toBeFocused();\n      |                        ^\n  169 |   await expect(page.getByRole('button',{name:'Sign in',exact:true})).toBeEnabled();\n  170 |   expect(optionsBodies).toHaveLength(1);\n  171 |   expect(state.assertions).toBe(0);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                        "column": 24,
+                        "line": 168
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Sign in with passkey', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign in with passkey', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" aria-busy=\"false\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  166 |   await expect(action).toBeEnabled();\n  167 |   await page.screenshot({path:testInfo.outputPath('login-'+feedback+'-focus.png'),fullPage:true});\n> 168 |   await expect(action).toBeFocused();\n      |                        ^\n  169 |   await expect(page.getByRole('button',{name:'Sign in',exact:true})).toBeEnabled();\n  170 |   expect(optionsBodies).toHaveLength(1);\n  171 |   expect(state.assertions).toBe(0);\n    at <repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts:168:24"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:05:02.806Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\20261110-feedback-red-312af88\\run-details\\passkeys--feedback-regress-738d8-ion-without-another-attempt\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                    "column": 24,
+                    "line": 168
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-22e9b62c60def1c0ae6c",
+          "file": "passkeys.spec.ts",
+          "line": 155,
+          "column": 61
+        },
+        {
+          "title": "@feedback-regression Login http-429 restores its available action without another attempt",
+          "ok": false,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6218,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Sign in with passkey', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign in with passkey', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" aria-busy=\"false\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Sign in with passkey', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign in with passkey', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" aria-busy=\"false\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at <repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts:168:24",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                      "column": 24,
+                      "line": 168
+                    },
+                    "snippet": "  166 |   await expect(action).toBeEnabled();\n  167 |   await page.screenshot({path:testInfo.outputPath('login-'+feedback+'-focus.png'),fullPage:true});\n> 168 |   await expect(action).toBeFocused();\n      |                        ^\n  169 |   await expect(page.getByRole('button',{name:'Sign in',exact:true})).toBeEnabled();\n  170 |   expect(optionsBodies).toHaveLength(1);\n  171 |   expect(state.assertions).toBe(0);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                        "column": 24,
+                        "line": 168
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Sign in with passkey', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Sign in with passkey', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" aria-busy=\"false\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  166 |   await expect(action).toBeEnabled();\n  167 |   await page.screenshot({path:testInfo.outputPath('login-'+feedback+'-focus.png'),fullPage:true});\n> 168 |   await expect(action).toBeFocused();\n      |                        ^\n  169 |   await expect(page.getByRole('button',{name:'Sign in',exact:true})).toBeEnabled();\n  170 |   expect(optionsBodies).toHaveLength(1);\n  171 |   expect(state.assertions).toBe(0);\n    at <repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts:168:24"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:05:10.620Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\20261110-feedback-red-312af88\\run-details\\passkeys--feedback-regress-5f307-ion-without-another-attempt\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                    "column": 24,
+                    "line": 168
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-879be12ac5fe2a28abce",
+          "file": "passkeys.spec.ts",
+          "line": 155,
+          "column": 61
+        },
+        {
+          "title": "@feedback-regression Uncertain Login focuses only exact read-only recovery and never resubmits on focus",
+          "ok": false,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6432,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Check sign-in status', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Check sign-in status', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Check sign-in status', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Check sign-in status', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at <repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts:187:26",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                      "column": 26,
+                      "line": 187
+                    },
+                    "snippet": "  185 |   await expect(recovery).toBeEnabled();\n  186 |   await page.screenshot({path:testInfo.outputPath('login-uncertain-recovery-focus.png'),fullPage:true});\n> 187 |   await expect(recovery).toBeFocused();\n      |                          ^\n  188 |   await expect(page.getByRole('button',{name:'Sign in',exact:true})).toBeDisabled();\n  189 |   expect(state.assertions).toBe(1);\n  190 |   expect((await nativeCounts(page)).gets).toBe(1);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                        "column": 26,
+                        "line": 187
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Check sign-in status', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Check sign-in status', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  185 |   await expect(recovery).toBeEnabled();\n  186 |   await page.screenshot({path:testInfo.outputPath('login-uncertain-recovery-focus.png'),fullPage:true});\n> 187 |   await expect(recovery).toBeFocused();\n      |                          ^\n  188 |   await expect(page.getByRole('button',{name:'Sign in',exact:true})).toBeDisabled();\n  189 |   expect(state.assertions).toBe(1);\n  190 |   expect((await nativeCounts(page)).gets).toBe(1);\n    at <repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts:187:26"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:05:18.521Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\20261110-feedback-red-312af88\\run-details\\passkeys--feedback-regress-22335-nd-never-resubmits-on-focus\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\passkeys\\passkeys.spec.ts",
+                    "column": 26,
+                    "line": 187
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-9bec91c52b49b14fe657",
+          "file": "passkeys.spec.ts",
+          "line": 176,
+          "column": 1
+        },
+        {
+          "title": "@feedback-regression Aborted Login ceremony cannot steal new-route focus or submit credentials",
+          "ok": true,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1385,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:05:26.446Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "74b2887b23599a1b6d52-2d738d0cc6a05d7e3161",
+          "file": "passkeys.spec.ts",
+          "line": 203,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "step-up-passkey.spec.ts",
+      "file": "step-up-passkey.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "@feedback-regression Unresolved native-proof Close focuses owner recovery without cancelling or replacing its binding",
+          "ok": false,
+          "tags": [
+            "feedback-regression"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6238,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Check status', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Check status', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Check status', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Check status', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at <repo-root>\\web\\tests\\passkeys\\step-up-passkey.spec.ts:78:75",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\passkeys\\step-up-passkey.spec.ts",
+                      "column": 75,
+                      "line": 78
+                    },
+                    "snippet": "  76 |   await expect(dialog).toHaveCount(0);\n  77 |   await page.screenshot({path:testInfo.outputPath('unresolved-proof-owner-recovery-focus.png'),fullPage:true});\n> 78 |   await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeFocused();\n     |                                                                           ^\n  79 |   await expect(page.getByRole('button',{name:'Add passkey',exact:true})).toBeDisabled();\n  80 |   expect(cancellations).toBe(0);\n  81 |   expect(owner.operation).toEqual(originalOwner);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\passkeys\\step-up-passkey.spec.ts",
+                        "column": 75,
+                        "line": 78
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Check status', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Check status', exact: true })\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"button\" class=\"tn-primary-button\" data-appearance=\"outline\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  76 |   await expect(dialog).toHaveCount(0);\n  77 |   await page.screenshot({path:testInfo.outputPath('unresolved-proof-owner-recovery-focus.png'),fullPage:true});\n> 78 |   await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeFocused();\n     |                                                                           ^\n  79 |   await expect(page.getByRole('button',{name:'Add passkey',exact:true})).toBeDisabled();\n  80 |   expect(cancellations).toBe(0);\n  81 |   expect(owner.operation).toEqual(originalOwner);\n    at <repo-root>\\web\\tests\\passkeys\\step-up-passkey.spec.ts:78:75"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T12:05:28.298Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\artifacts\\p2-007-passkeys-20261109\\ui-review\\20261110-feedback-red-312af88\\run-details\\step-up-passkey--feedback--110b3-ng-or-replacing-its-binding\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\passkeys\\step-up-passkey.spec.ts",
+                    "column": 75,
+                    "line": 78
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3257a4c9219e0434f46b-36a004b9f064a0a6643a",
+          "file": "step-up-passkey.spec.ts",
+          "line": 61,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-10T12:04:40.197Z",
+    "duration": 54852.674,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 7,
+    "flaky": 0
+  }
+}

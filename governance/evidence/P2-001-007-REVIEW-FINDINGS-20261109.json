@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-001-007-REVIEW-20261109",
+  "reviewed_head": "204797f9e147f5f3d942baf9074d05cdb2a1f6d7",
+  "merge_base": "27e21bf3a1e02fa013d4899d79d59023845d3936",
+  "review_provenance": "Single fresh child p2_006_branch_readonly_review, fork none; static read-only review including unstaged/untracked; no builds/tests/edits/external actions.",
+  "result": "THREE_ACTIONABLE_FINDINGS",
+  "recorded_at": "2026-11-09T16:51:56.477Z",
+  "findings": [
+    {
+      "defect_id": "DEF-TUN-P2-007-DATA-001",
+      "path": "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+      "line": 25,
+      "title": "Passkey model activated without additive migration/snapshot in reviewed in-progress snapshot",
+      "owner": "TUN-P2-007"
+    },
+    {
+      "defect_id": "DEF-TUN-P2-005-UI-002",
+      "path": "web/apps/user/authentication.tsx",
+      "line": 48,
+      "title": "Generic session probe can misattribute prior Account session to uncertain attempted login",
+      "owner": "TUN-P2-005"
+    },
+    {
+      "defect_id": "DEF-TUN-P2-005-UI-003",
+      "path": "web/apps/user/authentication.tsx",
+      "line": 30,
+      "title": "Login history entry reuses bootstrap bound to previous cookie",
+      "owner": "TUN-P2-005"
+    }
+  ],
+  "authority_resolution": {
+    "result": "RESOLVED_EXISTING_AUTHORITY",
+    "refs": [
+      "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+      "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+      "docs/contracts/authentication-session-contract.md",
+      "governance/evidence/P2-001-007-AUTHORITY-READBACK-20261109.json"
+    ],
+    "assessment": "Technical defects, not new Product choices. Existing stable-operation identity, authoritative session and safe history/reconstruction requirements apply. BA/architect read-only assessment confirms exact command/result matching and Login rebootstrap. No source authority change."
+  },
+  "next_action": "Add meaningful red regressions; finish additive migration and exact authenticated outcome resolver, then refresh Login before enabling form and resolve uncertain attempts only with exact original operation evidence. Commit source before final validation."
+}

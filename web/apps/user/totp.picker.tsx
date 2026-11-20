@@ -1,0 +1,11 @@
+import {ContentText,PrimaryButton} from '@tunner/ui';
+import type {TotpChoice} from './totp.api';
+
+export function sameTotpChoice(left:TotpChoice,right:TotpChoice){return left.authenticatorReference===right.authenticatorReference&&left.version===right.version&&left.state===right.state&&left.activatedAt===right.activatedAt&&left.displayPosition===right.displayPosition;}
+function Label({factor,locale}:{factor:TotpChoice;locale:string}){return <ContentText contentKey="totp.selection.optionLabel" values={{position:new Intl.NumberFormat(locale,{useGrouping:false}).format(factor.displayPosition)}}/>;}
+function Added({factor,locale}:{factor:TotpChoice;locale:string}){return <><ContentText contentKey="totp.selection.added"/> <time dateTime={factor.activatedAt}>{new Intl.DateTimeFormat(locale,{year:'numeric',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:'UTC',timeZoneName:'short'}).format(new Date(factor.activatedAt))}</time></>;}
+/** Display positions are transient presentation, never aliases or authorization. Selection binds opaque source/version. */
+export function TotpFactorPicker({factors,locale,onSelect,disabled=false,labelledBy}:{factors:TotpChoice[];locale:string;onSelect:(factor:TotpChoice)=>void;disabled?:boolean;labelledBy:string}){
+ return <><div className="step-up-choices totp-factor-choices" role="group" aria-labelledby={labelledBy} data-tunner-component="COMP-TOTP-FACTOR-PICKER">{factors.map(factor=><button className="step-up-choice" type="button" key={factor.authenticatorReference} disabled={disabled} onClick={()=>onSelect(factor)}><strong><Label factor={factor} locale={locale}/></strong><small><Added factor={factor} locale={locale}/></small><span aria-hidden="true">›</span></button>)}</div><p className="totp-number-help"><ContentText contentKey="totp.selection.numberExplanation"/></p></>;
+}
+export function TotpSelectedFactor({factor,locale,onChange,disabled=false}:{factor:TotpChoice;locale:string;onChange:()=>void;disabled?:boolean}){return <div className="totp-selected-factor" role="status"><strong><Label factor={factor} locale={locale}/></strong><span><Added factor={factor} locale={locale}/></span><PrimaryButton labelKey="totp.selection.change" appearance="outline" disabled={disabled} onClick={onChange}/></div>;}

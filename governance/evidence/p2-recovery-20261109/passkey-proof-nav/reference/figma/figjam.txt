@@ -1,0 +1,66 @@
+<section id="88:6720" name="38 — Identity — Authentication Assurance, Passkeys, MFA &amp; Step-Up" x="39500" y="10249.599609375" width="2105.134033203125" height="4864.39990234375">
+  <shape-with-text id="79:5509" x="263.333984375" y="250" width="224" height="128" name="SQUARE">Authentication or sensitive-action challenge begins</shape-with-text>
+  <shape-with-text id="79:5512" x="252.1328125" y="512.4000244140625" width="246.39999389648438" height="140.8000030517578" name="SQUARE">Resolve Account, client/origin, requested action, device context and current session assurance</shape-with-text>
+  <shape-with-text id="79:5515" x="263.333984375" y="823.5999755859375" width="224" height="128" name="SQUARE">Resolve eligible authentication methods
+password · passkey · federated · authenticator · approved recovery</shape-with-text>
+  <shape-with-text id="79:5518" x="263.333984375" y="1115.5999755859375" width="224" height="128" name="SQUARE">Perform primary authentication challenge</shape-with-text>
+  <shape-with-text id="79:5521" x="275.333984375" y="1371.5999755859375" width="200" height="200" name="DIAMOND">Primary proof valid?</shape-with-text>
+  <shape-with-text id="79:5524" x="120" y="3635.60009765625" width="224" height="128" name="SQUARE">Reject / rate-limit / security signal according to policy</shape-with-text>
+  <shape-with-text id="79:5527" x="352.5" y="1955.5999755859375" width="224" height="128" name="SQUARE">Compute resulting assurance level from method + policy + context</shape-with-text>
+  <shape-with-text id="79:5530" x="364.5" y="2211.60009765625" width="200" height="200" name="DIAMOND">Required assurance satisfied?</shape-with-text>
+  <shape-with-text id="79:5533" x="440" y="3635.60009765625" width="224" height="128" name="SQUARE">Create/upgrade current authentication context as permitted</shape-with-text>
+  <shape-with-text id="79:5536" x="248.5" y="2667.60009765625" width="224" height="128" name="SQUARE">Require MFA / stronger proof</shape-with-text>
+  <shape-with-text id="79:5539" x="248.5" y="2923.60009765625" width="224" height="128" name="SQUARE">Use approved second factor or passkey</shape-with-text>
+  <shape-with-text id="79:5542" x="260.5" y="3179.60009765625" width="200" height="200" name="DIAMOND">Factor proof valid?</shape-with-text>
+  <shape-with-text id="79:5545" x="452" y="3891.60009765625" width="200" height="200" name="DIAMOND">Purpose?</shape-with-text>
+  <shape-with-text id="79:5548" x="263.19921875" y="4347.60009765625" width="246.39999389648438" height="140.8000030517578" name="SQUARE">Create/resume Tunner session with assurance, auth time, device/session refs and expiry</shape-with-text>
+  <shape-with-text id="79:5551" x="605.599609375" y="4354" width="224" height="128" name="SQUARE">Create operation-bound Step-Up Evidence
+required assurance · method · expiry · operation ID</shape-with-text>
+  <shape-with-text id="79:5554" x="605.599609375" y="4616.39990234375" width="224" height="128" name="SQUARE">Owning domain revalidates authorization, expected versions and step-up before execution</shape-with-text>
+  <shape-with-text id="79:5557" x="756.333984375" y="250" width="224" height="128" name="SQUARE">Enroll new authenticator/passkey/recovery method</shape-with-text>
+  <shape-with-text id="79:5560" x="756.333984375" y="518.7999877929688" width="224" height="128" name="SQUARE">Require current-session reauthentication / step-up as policy requires</shape-with-text>
+  <shape-with-text id="79:5563" x="768.333984375" y="787.5999755859375" width="200" height="200" name="DIAMOND">Method type</shape-with-text>
+  <shape-with-text id="79:5566" x="1211.333984375" y="1407.5999755859375" width="224" height="128" name="SQUARE">WebAuthn registration ceremony
+private key never reaches Tunner</shape-with-text>
+  <shape-with-text id="79:5569" x="891.333984375" y="1407.5999755859375" width="224" height="128" name="SQUARE">Generate one-time enrollment secret/QR
+verify first TOTP before activation</shape-with-text>
+  <shape-with-text id="79:5572" x="571.333984375" y="1407.5999755859375" width="224" height="128" name="SQUARE">Generate server-side one-time recovery code set
+reveal/download once only</shape-with-text>
+  <shape-with-text id="79:5575" x="941.833984375" y="1699.5999755859375" width="224" height="128" name="SQUARE">Persist opaque credential/public-key metadata + method version</shape-with-text>
+  <shape-with-text id="79:5578" x="941.833984375" y="1955.5999755859375" width="224" height="128" name="SQUARE">Security notification + audit/activity evidence</shape-with-text>
+  <shape-with-text id="79:5581" x="1539.533203125" y="250" width="224" height="128" name="SQUARE">Security rules</shape-with-text>
+  <shape-with-text id="79:5584" x="1396.333984375" y="506" width="224" height="128" name="SQUARE">Step-up evidence expires and is bound to one operation context</shape-with-text>
+  <shape-with-text id="79:5587" x="1716.333984375" y="506" width="268.79998779296875" height="153.60000610351562" name="SQUARE">No Admin or frontend receives passkey private keys, authenticator secrets or recovery-code values after one-time handling</shape-with-text>
+  <shape-with-text id="79:5590" x="1076.333984375" y="506" width="224" height="128" name="SQUARE">Method revocation/reset is a separate governed operation; side effects follow explicit policy</shape-with-text>
+  <connector id="79:5593" x="375.33203125" y="386" connectorStart="79:5509" connectorStartCap="NONE" connectorEnd="79:5512" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5597" x="375.333984375" y="661.2000122070312" connectorStart="79:5512" connectorStartCap="NONE" connectorEnd="79:5515" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5601" x="375.333984375" y="959.5999755859375" connectorStart="79:5515" connectorStartCap="NONE" connectorEnd="79:5518" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5605" x="375.333984375" y="1251.5999755859375" connectorStart="79:5518" connectorStartCap="NONE" connectorEnd="79:5521" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5609" x="212.5" y="1579.5999755859375" connectorStart="79:5521" connectorStartCap="NONE" connectorEnd="79:5524" connectorEndCap="ARROW_LINES">No</connector>
+  <connector id="79:5613" x="375.333984375" y="1579.5999755859375" connectorStart="79:5521" connectorStartCap="NONE" connectorEnd="79:5527" connectorEndCap="ARROW_LINES">Yes</connector>
+  <connector id="79:5617" x="464.5" y="2091.60009765625" connectorStart="79:5527" connectorStartCap="NONE" connectorEnd="79:5530" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5621" x="464.5" y="2419.60009765625" connectorStart="79:5530" connectorStartCap="NONE" connectorEnd="79:5533" connectorEndCap="ARROW_LINES">Yes</connector>
+  <connector id="79:5625" x="341" y="2419.60009765625" connectorStart="79:5530" connectorStartCap="NONE" connectorEnd="79:5536" connectorEndCap="ARROW_LINES">No</connector>
+  <connector id="79:5629" x="360.5" y="2803.60009765625" connectorStart="79:5536" connectorStartCap="NONE" connectorEnd="79:5539" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5633" x="360.5" y="3059.60009765625" connectorStart="79:5539" connectorStartCap="NONE" connectorEnd="79:5542" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5637" x="232" y="3387.60009765625" connectorStart="79:5542" connectorStartCap="NONE" connectorEnd="79:5524" connectorEndCap="ARROW_LINES">No</connector>
+  <connector id="79:5641" x="360.5" y="3387.60009765625" connectorStart="79:5542" connectorStartCap="NONE" connectorEnd="79:5533" connectorEndCap="ARROW_LINES">Yes</connector>
+  <connector id="79:5645" x="552" y="3771.60009765625" connectorStart="79:5533" connectorStartCap="NONE" connectorEnd="79:5545" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5649" x="386.3984375" y="4099.60009765625" connectorStart="79:5545" connectorStartCap="NONE" connectorEnd="79:5548" connectorEndCap="ARROW_LINES">Sign-in</connector>
+  <connector id="79:5653" x="552" y="4099.60009765625" connectorStart="79:5545" connectorStartCap="NONE" connectorEnd="79:5551" connectorEndCap="ARROW_LINES">Sensitive operation</connector>
+  <connector id="79:5657" x="717.599609375" y="4490" connectorStart="79:5551" connectorStartCap="NONE" connectorEnd="79:5554" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5661" x="868.333984375" y="386" connectorStart="79:5557" connectorStartCap="NONE" connectorEnd="79:5560" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5665" x="868.333984375" y="654.7999877929688" connectorStart="79:5560" connectorStartCap="NONE" connectorEnd="79:5563" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5669" x="868.333984375" y="995.5999755859375" connectorStart="79:5563" connectorStartCap="NONE" connectorEnd="79:5566" connectorEndCap="ARROW_LINES">Passkey</connector>
+  <connector id="79:5673" x="868.333984375" y="995.5999755859375" connectorStart="79:5563" connectorStartCap="NONE" connectorEnd="79:5569" connectorEndCap="ARROW_LINES">Authenticator app</connector>
+  <connector id="79:5677" x="614.333984375" y="995.5999755859375" connectorStart="79:5563" connectorStartCap="NONE" connectorEnd="79:5572" connectorEndCap="ARROW_LINES">Recovery codes</connector>
+  <connector id="79:5681" x="1053.833984375" y="1543.5999755859375" connectorStart="79:5566" connectorStartCap="NONE" connectorEnd="79:5575" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5685" x="1003.333984375" y="1543.5999755859375" connectorStart="79:5569" connectorStartCap="NONE" connectorEnd="79:5575" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5689" x="683.333984375" y="1543.5999755859375" connectorStart="79:5572" connectorStartCap="NONE" connectorEnd="79:5575" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5693" x="1053.833984375" y="1835.5999755859375" connectorStart="79:5575" connectorStartCap="NONE" connectorEnd="79:5578" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5697" x="1508.333984375" y="386" connectorStart="79:5581" connectorStartCap="NONE" connectorEnd="79:5584" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5701" x="1651.533203125" y="386" connectorStart="79:5581" connectorStartCap="NONE" connectorEnd="79:5587" connectorEndCap="ARROW_LINES"></connector>
+  <connector id="79:5705" x="1188.333984375" y="386" connectorStart="79:5581" connectorStartCap="NONE" connectorEnd="79:5590" connectorEndCap="ARROW_LINES"></connector>
+  <text id="88:6721" name="FLOW TITLE / 38 — Identity — Authentication Assurance, Passkeys, MFA &amp; Step-Up" x="120" y="55" width="1865.134033203125" height="64" />
+  <text id="88:6722" name="FLOW TRACEABILITY / TUN-FLOW-ID-03" x="120" y="126" width="1865.134033203125" height="64" />
+</section>

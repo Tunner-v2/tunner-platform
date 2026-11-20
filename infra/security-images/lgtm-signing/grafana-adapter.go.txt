@@ -1,0 +1,14 @@
+// Included only in the approved dev/test Grafana source rebuild.
+package signature
+
+import (
+ "github.com/grafana/grafana/pkg/plugins"
+ tunnerdev "github.com/grafana/grafana/pkg/plugins/manager/signature/tunnerdev"
+)
+
+func calculateTunnerDevelopmentSignature(plugin plugins.FoundPlugin, policy tunnerdev.Policy)(plugins.Signature,bool){
+ handled,err:=tunnerdev.Verify(plugin.FS,plugin.JSONData.ID,plugin.JSONData.Info.Version,policy)
+ if !handled{return plugins.Signature{},false}
+ if err!=nil {return plugins.Signature{Status:plugins.SignatureStatusInvalid},true}
+ return plugins.Signature{Status:plugins.SignatureStatusValid,Type:plugins.SignatureType("private"),SigningOrg:"Tunner development/test rebuild"},true
+}

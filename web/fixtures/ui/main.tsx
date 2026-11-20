@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ContentProvider, ThemeProvider, TextField, PrimaryButton, TunnerBrand } from '@tunner/ui';
+import { ContentProvider, ThemeProvider, TextField, PrimaryButton, TunnerBrand, z, useTunnerForm, FormErrorSummary } from '@tunner/ui';
 import type { ThemeSurface, PublishedContentResolver } from '@tunner/ui';
 import './fixture.css';
 
@@ -16,6 +16,7 @@ const labels: Record<string, Record<ThemeSurface, string>> = {
 };
 function Panel({ surface }: { surface: ThemeSurface }) {
   const [value, setValue] = useState(surface === 'user' ? 'misha@example.test' : 'acct_••••91');
+  const validation = useTunnerForm(z.object({ value: z.string().min(1, 'error').max(200, 'error') }), { value });
   const [count, setCount] = useState(0); const [version, setVersion] = useState(1);
   const resolver: PublishedContentResolver = (key, context) => {
     const text = labels[key]?.[context.surface];
@@ -26,12 +27,13 @@ function Panel({ surface }: { surface: ThemeSurface }) {
     <section aria-labelledby={`${surface}-title`} className="verification-panel" data-testid={`${surface}-panel`}>
       <h2 id={`${surface}-title`}>{surface === 'user' ? 'User light reference' : 'Admin light reference'}</h2>
       <div className="verification-stack"><TunnerBrand contentKey="brand" />
-        <form onSubmit={event => { event.preventDefault(); setCount(current => current + 10); }}>
-          <div className="reference-width"><TextField id={`${surface}-field`} labelKey="field" value={value} onChange={event => setValue(event.target.value)} /></div>
-          <div className={surface === 'user' ? 'reference-width' : 'admin-reference-action'}><PrimaryButton labelKey="action" onClick={() => setCount(current => current + 1)} /></div>
+        <form noValidate onSubmit={event => void validation.handleSubmit(event, async () => { await new Promise(resolve => setTimeout(resolve, 400)); setCount(current => current + 10); })}>
+          <div className="reference-width"><TextField id={`${surface}-field`} labelKey="field" name="value" value={value} errorKey={validation.errors.value} disabled={validation.submitPending} onBlur={() => validation.onBlur('value')} onChange={event => setValue(event.target.value)} /></div>
+          <div className={surface === 'user' ? 'reference-width' : 'admin-reference-action'}><PrimaryButton labelKey="action" disabled={validation.submitPending} onClick={() => setCount(current => current + 1)} /></div>
           <TextField id={`${surface}-error`} labelKey="field" helpKey="help" errorKey="error" value="" readOnly />
           <PrimaryButton labelKey="disabled" disabled onClick={() => setCount(current => current + 100)} />
           <PrimaryButton labelKey="long" />
+          {validation.hasErrors && <FormErrorSummary contentKey="error" />}
         </form>
         <button className="verification-utility bg-tunner-surface text-tunner-text" type="button" onClick={() => setVersion(current => current + 1)}>Refresh fixture publication</button>
         <output className="verification-output" data-testid={`${surface}-count`} aria-label="Fixture action count">{count}</output>

@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-006",
+  "result": "PASS",
+  "tested_commit_sha": "a2df3359f8092e1e816125fe384e7a8a86785c68",
+  "validated_commit_sha": "a2df3359f8092e1e816125fe384e7a8a86785c68",
+  "validation_boundary": "ENGINEERING_LOCAL_VALIDATED_CANDIDATE",
+  "committed_source_ref": "governance/evidence/TUN-P2-006-COMMITTED-SOURCE.json",
+  "test_index_ref": "governance/evidence/ui/step-up-20261109/test-index.json",
+  "ui_evidence_ref": "governance/evidence/TUN-P2-006-UI-COMPLIANCE.json",
+  "role_reviews_ref": "governance/evidence/TUN-P2-006-ROLE-REVIEWS.json",
+  "counts": {
+    "backend": {
+      "passed": 147,
+      "failed": 0,
+      "skipped": 0
+    },
+    "unit": {
+      "passed": 31,
+      "failed": 0
+    },
+    "browser": {
+      "step_up": 20,
+      "shared": 16,
+      "registration": 22,
+      "authentication": 16,
+      "real_https_postgres": 3,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0
+    },
+    "starter": {
+      "passed": 7,
+      "failed": 0
+    }
+  },
+  "implemented": [
+    "Versioned context-specific assurance selection with explicit mappings/lifetimes",
+    "Persistent exact-operation one-use password proof with current session/restriction checks and atomic owner/outbox mutation",
+    "Explicit guarded User BFF bridge; protected operation context; no proof to browser",
+    "Shared approved chooser/password modal and reusable validation/focus infrastructure",
+    "Development-only real HTTPS/PostgreSQL test carrier packaged by starter"
+  ],
+  "production_requirements": [
+    "Supply approved effective assurance policies and explicit method mappings/lifetimes",
+    "Supply published governed content with provenance",
+    "Integrate a trusted sensitive-operation owner and transactional completion ledger for each future action"
+  ],
+  "approval_boundary": "Exact three visual scopes explicitly approved. Production enablement, whole-P2 Product acceptance, protected-main merge and release are separate.",
+  "external_access": "Figma/Drive read-only",
+  "recorded_at": "2026-11-09T05:52:09.293Z"
+}

@@ -1,0 +1,2112 @@
+{
+  "ExitCode": 0,
+  "Command": "status",
+  "Payload": {
+    "Milestones": [
+      {
+        "Id": "P0",
+        "Status": "CLOSED"
+      },
+      {
+        "Id": "P1",
+        "Status": "CLOSED"
+      },
+      {
+        "Id": "P2",
+        "Status": "ACTIVE"
+      }
+    ],
+    "WorkItems": [
+      {
+        "Id": "P1-RV001-001",
+        "Status": "IN_PROGRESS",
+        "Prerequisites": [],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/P1-RV001-SECURITY-FINDINGS.json",
+          "governance/evidence/P1-RV001-AUTHORITY-RESOLUTION.json",
+          "governance/evidence/P1-RV001-001-AUTHORITY-RESOLUTION-20261028.json",
+          "governance/evidence/P1-RV001-001-RD-SOURCES-20261028.json",
+          "governance/evidence/P1-RV001-001-LGTM-SIGNING-APPROVAL-20261028.json",
+          "docs/development/ADR-LGTM-DEV-SIGNING-20261028.md",
+          "docs/development/ADR-LGTM-TEMPO-VEX-20261028.md",
+          "governance/evidence/P1-RV001-001-TEMPO-VEX-APPROVAL-20261028.json",
+          "governance/evidence/P1-RV001-001-TEMPO-VEX-VALIDATION-20261028.json",
+          "governance/evidence/P1-RV001-001-FINAL-VALIDATION.json",
+          "docs/development/P1_RV001_SECURITY_HANDOFF_20261028.md",
+          "governance/evidence/P1-RV001-001-RUNTIME-R2-REVALIDATION-20261028.json",
+          "governance/evidence/P1-RV001-001-OBI-COMPONENT-VALIDATION-20261028.json",
+          "governance/evidence/P1-RV001-001-TEMPO-COMPONENT-VALIDATION-20261028.json",
+          "governance/evidence/P1-RV001-001-BUILD-RELIABILITY-VALIDATION-20261028.json",
+          "governance/evidence/P1-RV001-001-INTEGRATION-ENFORCEMENT-20261028.json",
+          "governance/evidence/P1-RV001-001-GO-HELPERS-VALIDATION-20261028.json",
+          "governance/evidence/P1-RV001-001-COLLECTOR-COMPAT-VALIDATION-20261108.json",
+          "governance/evidence/P1-RV001-001-RD-SOURCES-20261108.json",
+          "governance/evidence/P1-RV001-001-RUNTIME-REVALIDATION-20261108.json",
+          "governance/evidence/P1-RV001-001-CI-BUILD-OBSERVATION-20261108.json",
+          "governance/evidence/P1-RV001-001-PROMETHEUS-UI-VALIDATION-20261108.json",
+          "governance/evidence/P1-RV001-001-TEMPO-VEX-REBIND-APPROVAL-20261108.json",
+          "governance/evidence/P1-RV001-001-TEMPO-VEX-REBIND-VALIDATION-20261108.json"
+        ]
+      },
+      {
+        "Id": "P1-RV001-002",
+        "Status": "DRAFT",
+        "Prerequisites": [
+          "P1-RV001-001"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/P1-RV001-SECURITY-FINDINGS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-001",
+        "Status": "DONE",
+        "Prerequisites": [],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/BOOT-P0-001-integrity.json",
+          "governance/gates/P0-B0-B1.yaml",
+          "governance/evidence/TUN-P0-001-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-002",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-001"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "CONTRIBUTING.md",
+          ".github/pull_request_template.md",
+          "governance/policies/git-contribution-policy.yaml",
+          "governance/evidence/TUN-P0-002-STATIC-VALIDATION.json",
+          "tools/validation/Validate-GitContributionPolicy.ps1",
+          "governance/decisions/DEC-0001-p0-local-integration.yaml",
+          "governance/evidence/DEC-0001-P0-LOCAL-INTEGRATION.json",
+          "governance/decisions/DEC-0002.yaml",
+          "governance/evidence/DEC-0002-GOVERNED-INCREMENTAL-P0-PR.json",
+          "governance/evidence/TUN-P0-002-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-003",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-001"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/schemas/v1/README.md",
+          "governance/evidence/TUN-P0-003-SCHEMA-VALIDATION.json",
+          "governance/evidence/TUN-P0-003-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-004",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-003"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-004-001.yaml",
+          "governance/evidence/TUN-P0-004-RD-PACKAGES.json",
+          "governance/evidence/TUN-P0-004-VALIDATION.json",
+          "governance/evidence/TUN-P0-004-ROLE-REVIEWS.json",
+          "governance/policies/pr-integration-policy.yaml",
+          "governance/dependencies/DEP-TUN-P0-004-TUN-P0-003.yaml",
+          "src/Tunner.Governance/GovernanceApplication.cs",
+          "src/Tunner.Governance/AuthorityApplication.cs",
+          "governance/evidence/DEF-TUN-P0-004-001-REMEDIATION.json",
+          "governance/evidence/TUN-P0-004-DEF-TUN-P0-004-001-ROLE-REVIEWS.json",
+          "tests/Tunner.Governance.FunctionalTests/Program.cs",
+          "governance/schemas/v1/governance-record.schema.json",
+          "tools/validation/Validate-TunnerGovernanceSource.ps1",
+          "src/Tunner.Governance/README.md"
+        ]
+      },
+      {
+        "Id": "TUN-P0-005",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-003"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-005-001.yaml",
+          "governance/evidence/TUN-P0-005-VALIDATION.json",
+          "governance/evidence/TUN-P0-005-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-006",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-001"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-006-001.yaml",
+          "governance/evidence/TUN-P0-006-RD-SERVICES.json",
+          "governance/evidence/TUN-P0-006-VALIDATION.json",
+          "governance/evidence/TUN-P0-006-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P0-006-DEF-TUN-P0-006-003-REMEDIATION.json",
+          "governance/evidence/TUN-P0-006-DEF-TUN-P0-006-003-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-007",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-006"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-007-001.yaml",
+          "governance/evidence/TUN-P0-007-RD-SOURCES.json",
+          "governance/evidence/TUN-P0-007-VALIDATION.json",
+          "governance/evidence/TUN-P0-007-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-008",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-006"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-008-001.yaml",
+          "governance/evidence/TUN-P0-008-RD-SOURCES.json",
+          "governance/evidence/TUN-P0-008-VALIDATION.json",
+          "governance/evidence/TUN-P0-008-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-009",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-006"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-009-001.yaml",
+          "governance/dependencies/DEP-TUN-P0-009-TUN-P0-006.yaml",
+          "governance/evidence/TUN-P0-009-RD-SOURCES.json",
+          "governance/evidence/TUN-P0-009-VALIDATION.json",
+          "governance/evidence/TUN-P0-009-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-010",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-001"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-010-001.yaml",
+          "governance/dependencies/DEP-TUN-P0-010-TUN-P0-001.yaml",
+          "governance/evidence/TUN-P0-010-RD-SOURCES.json",
+          "governance/evidence/TUN-P0-010-VALIDATION.json",
+          "governance/evidence/TUN-P0-010-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-011",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-003",
+          "TUN-P0-010"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-011-001.yaml",
+          "governance/dependencies/DEP-TUN-P0-011-TUN-P0-003.yaml",
+          "governance/dependencies/DEP-TUN-P0-011-TUN-P0-010.yaml",
+          "governance/evidence/TUN-P0-011-VALIDATION.json",
+          "governance/evidence/TUN-P0-011-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-012",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-011"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-012-001.yaml",
+          "governance/dependencies/DEP-TUN-P0-012-TUN-P0-011.yaml",
+          "governance/defects/DEF-TUN-P0-012-001.yaml",
+          "governance/evidence/DEF-TUN-P0-012-001-REMEDIATION.json",
+          "governance/evidence/TUN-P0-012-VALIDATION.json",
+          "governance/evidence/TUN-P0-012-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-013",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-012"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-013-001.yaml",
+          "governance/dependencies/DEP-TUN-P0-013-TUN-P0-012.yaml",
+          "governance/evidence/TUN-P0-013-RD-SOURCES.json",
+          "governance/evidence/TUN-P0-013-VALIDATION.json",
+          "governance/evidence/TUN-P0-013-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-014",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-006",
+          "TUN-P0-010"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-014-001.yaml",
+          "governance/dependencies/DEP-TUN-P0-014-TUN-P0-006.yaml",
+          "governance/dependencies/DEP-TUN-P0-014-TUN-P0-010.yaml",
+          "governance/evidence/TUN-P0-014-VALIDATION.json",
+          "governance/evidence/TUN-P0-014-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-015",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-003"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-015-001.yaml",
+          "governance/dependencies/DEP-TUN-P0-015-TUN-P0-003.yaml",
+          "governance/evidence/TUN-P0-015-VALIDATION.json",
+          "governance/evidence/TUN-P0-015-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-019",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-001"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/GITHUB-REMOTE-URL.json",
+          "governance/bootstrap/github-main-ruleset.json",
+          "governance/evidence/GITHUB-RULESET-24217332.json",
+          "governance/evidence/GITHUB-PR-0001.json",
+          "governance/evidence/GITHUB-AUTOMERGE-WORKFLOW.json",
+          "governance/evidence/GITHUB-AUTOMERGE-PR-0002.json",
+          "governance/evidence/GITHUB-PR-CREATION-WORKFLOW.json",
+          "governance/evidence/TUN-P0-019-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-026",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-001"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-026-001.yaml",
+          "governance/dependencies/DEP-TUN-P0-026-TUN-P0-001.yaml",
+          "governance/evidence/TUN-P0-026-VALIDATION.json",
+          "governance/evidence/TUN-P0-026-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-027",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-003",
+          "TUN-P0-026"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-027-001.yaml",
+          "governance/dependencies/DEP-TUN-P0-027-TUN-P0-003.yaml",
+          "governance/dependencies/DEP-TUN-P0-027-TUN-P0-026.yaml",
+          "governance/evidence/TUN-P0-027-VALIDATION.json",
+          "governance/evidence/TUN-P0-027-ROLE-REVIEWS.json",
+          "governance/reviews/REV-TUN-P0-027-full-stack-engineer.yaml",
+          "governance/reviews/REV-TUN-P0-027-governance-engineer.yaml",
+          "governance/reviews/REV-TUN-P0-027-tester-qa-engineer.yaml",
+          "governance/reviews/REV-TUN-P0-027-auditor.yaml"
+        ]
+      },
+      {
+        "Id": "TUN-P0-028",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-027"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-028-001.yaml",
+          "governance/dependencies/DEP-TUN-P0-028-TUN-P0-027.yaml",
+          "governance/evidence/TUN-P0-028-VALIDATION.json",
+          "governance/evidence/TUN-P0-028-ROLE-REVIEWS.json",
+          "governance/reviews/REV-TUN-P0-028-full-stack-engineer.yaml",
+          "governance/reviews/REV-TUN-P0-028-governance-engineer.yaml",
+          "governance/reviews/REV-TUN-P0-028-tester-qa-engineer.yaml",
+          "governance/reviews/REV-TUN-P0-028-auditor.yaml"
+        ]
+      },
+      {
+        "Id": "TUN-P0-029",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-028"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/dependencies/DEP-TUN-P0-029-TUN-P0-028.yaml",
+          "governance/evidence/TUN-P0-029-VALIDATION.json",
+          "governance/evidence/TUN-P0-029-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-030",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-003",
+          "TUN-P0-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-030-001.yaml",
+          "governance/dependencies/DEP-TUN-P0-030-TUN-P0-003.yaml",
+          "governance/dependencies/DEP-TUN-P0-030-TUN-P0-005.yaml",
+          "governance/evidence/TUN-P0-030-VALIDATION.json",
+          "governance/evidence/TUN-P0-030-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-031",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-004",
+          "TUN-P0-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P0-031-001.yaml",
+          "governance/dependencies/DEP-TUN-P0-031-TUN-P0-004.yaml",
+          "governance/dependencies/DEP-TUN-P0-031-TUN-P0-005.yaml",
+          "governance/evidence/TUN-P0-031-VALIDATION.json",
+          "governance/evidence/TUN-P0-031-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-032",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-026",
+          "TUN-P0-027",
+          "TUN-P0-029",
+          "TUN-P0-030"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P0-032-VALIDATION.json",
+          "governance/evidence/TUN-P0-032-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-033",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-001"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P0-033-VALIDATION.json",
+          "governance/evidence/TUN-P0-033-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-034",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P0-004",
+          "TUN-P0-011",
+          "TUN-P0-026",
+          "TUN-P0-027",
+          "TUN-P0-033"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P0-034-VALIDATION.json",
+          "governance/evidence/TUN-P0-034-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P0-035",
+        "Status": "DONE",
+        "Prerequisites": [],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P0-035-VALIDATION.json",
+          "governance/evidence/TUN-P0-035-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-001",
+        "Status": "DONE",
+        "Prerequisites": [],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P1-001-VALIDATION.json",
+          "governance/evidence/TUN-P1-001-ROLE-REVIEWS.json",
+          "docs/development/P1_PLATFORM_FOUNDATION_RECOVERY.md",
+          "governance/evidence/TUN-P1-001-COMMITTED-RECONCILIATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-002",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-001"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-002-001.yaml",
+          "governance/evidence/TUN-P1-002-VALIDATION.json",
+          "governance/evidence/TUN-P1-002-ROLE-REVIEWS.json",
+          "docs/development/P1_PLATFORM_HOST_COMPOSITION_RECOVERY.md",
+          "governance/evidence/TUN-P1-002-COMMITTED-RECONCILIATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-003",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-002"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-003-001.yaml",
+          "governance/evidence/TUN-P1-003-VALIDATION.json",
+          "governance/evidence/TUN-P1-003-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-003-RETROSPECTIVE-COMMITTED.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-004",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-002"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P1-004-RD-SOURCES.json",
+          "governance/context/CTX-TUN-P1-004-001.yaml",
+          "governance/evidence/TUN-P1-004-VALIDATION.json",
+          "governance/evidence/TUN-P1-004-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-004-RETROSPECTIVE-COMMITTED.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-005",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-001"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-005-001.yaml",
+          "governance/evidence/TUN-P1-005-VALIDATION.json",
+          "governance/evidence/TUN-P1-005-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-005-COMMITTED-RECONCILIATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-006",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-003",
+          "TUN-P1-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P1-006-RD-SOURCES.json",
+          "governance/context/CTX-TUN-P1-006-001.yaml",
+          "governance/evidence/TUN-P1-006-VALIDATION.json",
+          "governance/evidence/TUN-P1-006-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-006-COMMITTED-RECONCILIATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-007",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-003",
+          "TUN-P1-005",
+          "TUN-P1-006"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-007-001.yaml",
+          "governance/evidence/TUN-P1-007-RD-SOURCES.json",
+          "governance/evidence/TUN-P1-007-VALIDATION.json",
+          "governance/evidence/TUN-P1-007-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-007-COMMITTED-RECONCILIATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-008",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-002",
+          "TUN-P1-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-008-001.yaml",
+          "governance/evidence/TUN-P1-008-RD-SOURCES.json",
+          "governance/evidence/TUN-P1-008-VALIDATION.json",
+          "governance/evidence/TUN-P1-008-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-008-COMMITTED-RECONCILIATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-009",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-002",
+          "TUN-P1-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-009-001.yaml",
+          "governance/evidence/TUN-P1-009-RD-SOURCES.json",
+          "governance/evidence/TUN-P1-009-VALIDATION.json",
+          "governance/evidence/TUN-P1-009-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-009-COMMITTED-RECONCILIATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-010",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-005",
+          "TUN-P1-008"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-010-001.yaml",
+          "governance/evidence/TUN-P1-010-RD-SOURCES.json",
+          "governance/evidence/TUN-P1-010-VALIDATION.json",
+          "governance/evidence/TUN-P1-010-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-010-COMMITTED-RECONCILIATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-011",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-011-001.yaml",
+          "governance/evidence/DEF-TUN-P1-011-001-REMEDIATION.json",
+          "governance/evidence/TUN-P1-011-VALIDATION.json",
+          "governance/evidence/TUN-P1-011-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-011-COMMITTED-RECONCILIATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-012",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-002",
+          "TUN-P1-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-012-001.yaml",
+          "governance/evidence/TUN-P1-012-VALIDATION.json",
+          "governance/evidence/TUN-P1-012-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-012-COMMITTED-RECONCILIATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-013",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-002",
+          "TUN-P1-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-013-001.yaml",
+          "governance/evidence/TUN-P1-013-VALIDATION.json",
+          "governance/evidence/TUN-P1-013-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-013-AUTHORITY-RESOLUTION.json",
+          "docs/development/P1_EFFECTIVE_POLICY_VERSION_RESOLUTION.md",
+          "governance/evidence/TUN-P1-013-TEST-RESULTS.json",
+          "governance/evidence/TUN-P1-013-CLOSURE.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-014",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-003",
+          "TUN-P1-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-014-001.yaml",
+          "governance/evidence/TUN-P1-014-VALIDATION.json",
+          "governance/evidence/TUN-P1-014-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-014-AUTHORITY-RESOLUTION.json",
+          "docs/development/P1_AUDIT_APPEND_AND_CORRELATION.md",
+          "governance/evidence/TUN-P1-014-TEST-RESULTS.json",
+          "governance/evidence/TUN-P1-014-CLOSURE.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-015",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-004",
+          "TUN-P1-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-015-001.yaml",
+          "governance/evidence/TUN-P1-015-VALIDATION.json",
+          "governance/evidence/TUN-P1-015-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-015-AUTHORITY-RESOLUTION.json",
+          "governance/evidence/TUN-P1-015-RD-SOURCES.json",
+          "docs/development/P1_PROVIDER_CORRELATION_BOUNDARY.md",
+          "governance/evidence/TUN-P1-015-TEST-RESULTS.json",
+          "governance/evidence/TUN-P1-015-CLOSURE.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-016",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-002",
+          "TUN-P1-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-016-001.yaml",
+          "governance/evidence/TUN-P1-016-VALIDATION.json",
+          "governance/evidence/TUN-P1-016-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-016-TEST-RESULTS.json",
+          "governance/evidence/TUN-P1-016-CLOSURE.json",
+          "governance/evidence/TUN-P1-016-AUTHORITY-RESOLUTION.json",
+          "governance/evidence/TUN-P1-016-RD-SOURCES.json",
+          "docs/development/P1_ENGINEERING_ENVIRONMENT_CONFIGURATION.md"
+        ]
+      },
+      {
+        "Id": "TUN-P1-017",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-004",
+          "TUN-P1-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-017-001.yaml",
+          "governance/evidence/TUN-P1-017-VALIDATION.json",
+          "governance/evidence/TUN-P1-017-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-017-TEST-RESULTS.json",
+          "governance/evidence/TUN-P1-017-CLOSURE.json",
+          "governance/evidence/TUN-P1-017-AUTHORITY-RESOLUTION.json",
+          "governance/evidence/TUN-P1-017-RD-SOURCES.json",
+          "docs/development/P1_PROBLEM_DETAILS_STANDARD.md"
+        ]
+      },
+      {
+        "Id": "TUN-P1-018",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-002",
+          "TUN-P1-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-018-001.yaml",
+          "governance/evidence/TUN-P1-018-VALIDATION.json",
+          "governance/evidence/TUN-P1-018-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-018-AUTHORITY-RESOLUTION.json",
+          "governance/evidence/TUN-P1-018-DESIGN-SOURCES.json",
+          "governance/evidence/TUN-P1-018-RD-SOURCES.json",
+          "docs/development/P1_STRUCTURAL_UI_THEMING.md",
+          "governance/evidence/TUN-P1-018-TEST-RESULTS.json",
+          "governance/evidence/TUN-P1-018-CLOSURE.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-019",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-002",
+          "TUN-P1-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-019-001.yaml",
+          "governance/evidence/TUN-P1-019-VALIDATION.json",
+          "governance/evidence/TUN-P1-019-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-019-AUTHORITY-RESOLUTION.json",
+          "governance/evidence/TUN-P1-019-CANONICAL-SOURCES.json",
+          "governance/evidence/TUN-P1-019-RD-SOURCES.json",
+          "docs/development/P1_BFF_TECHNICAL_FOUNDATION.md",
+          "governance/evidence/TUN-P1-019-TEST-RESULTS.json",
+          "governance/evidence/TUN-P1-019-SECURITY-ASSESSMENT.json",
+          "governance/evidence/TUN-P1-019-CLOSURE.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-020",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-020-001.yaml",
+          "governance/evidence/TUN-P1-020-VALIDATION.json",
+          "governance/evidence/TUN-P1-020-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-020-COMMITTED-RECONCILIATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-021",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-005"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/context/CTX-TUN-P1-021-001.yaml",
+          "governance/evidence/TUN-P1-021-AUTHORITY-SYNC.json",
+          "governance/evidence/TUN-P1-021-CONFORMANCE-AUDIT.json",
+          "governance/evidence/TUN-P1-021-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P1-021-RV-COORDINATION.json",
+          "governance/evidence/P0-RV001-P1-EVIDENCE-AUDIT.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-022",
+        "Status": "DONE",
+        "Prerequisites": [],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/RV-SYNC-INITIAL-STATE.json",
+          "governance/evidence/RV-SYNC-AUTHORITY.json",
+          "governance/evidence/TUN-P1-022-VALIDATION.json",
+          "governance/evidence/TUN-P1-022-ROLE-REVIEWS.json",
+          "docs/development/RV_GOVERNANCE_SYNCHRONIZATION.md",
+          "governance/evidence/TUN-P1-022-COMMITTED-RECONCILIATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-023",
+        "Status": "DONE",
+        "Prerequisites": [],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P1-023-GAP-REGISTER.json",
+          "governance/evidence/TUN-P1-023-VALIDATION.json",
+          "governance/evidence/TUN-P1-023-ROLE-REVIEWS.json",
+          "docs/development/P1_READINESS_REMEDIATION.md",
+          "governance/evidence/TUN-P1-023-EXECUTION-RESULTS.json",
+          "docs/development/P1_R2_INSTALLER_HANDOFF.md",
+          "governance/evidence/TUN-P1-023-LIVE-R2-20261016.json"
+        ]
+      },
+      {
+        "Id": "TUN-P1-024",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-009",
+          "TUN-P1-016"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P1-024-AUTHORITY-RESOLUTION.json",
+          "governance/evidence/TUN-P1-024-VALIDATION.json",
+          "governance/evidence/TUN-P1-024-ROLE-REVIEWS.json",
+          "docs/development/R2_INSTALLER.md",
+          "governance/evidence/TUN-P1-024-EXECUTION-RESULTS.json",
+          "docs/development/P1_R2_INSTALLER_HANDOFF.md"
+        ]
+      },
+      {
+        "Id": "TUN-P2-001",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P1-001"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-001-AUTHORITY-RESOLUTION.json",
+          "governance/evidence/TUN-P2-001-VALIDATION.json",
+          "governance/evidence/TUN-P2-001-BACKLOG-SNAPSHOT.json",
+          "docs/development/P2_ACCOUNT_IDENTITY_REFINEMENT.md",
+          "governance/evidence/TUN-P2-001-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-002",
+        "Status": "VALIDATION",
+        "Prerequisites": [
+          "TUN-P2-001"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-002-AUTHORITY-RESOLUTION.json",
+          "governance/evidence/TUN-P2-002-ROLE-REVIEWS.json",
+          "docs/development/P2_002_ADULT_ELIGIBILITY.md",
+          "governance/evidence/TUN-P2-002-AUDIT-CORRECTION-SOURCE.json",
+          "governance/evidence/p2-recovery-20261109/active-source-refresh.json",
+          "governance/evidence/TUN-P2-002-AUDIT-CORRECTION-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-003",
+        "Status": "VALIDATION",
+        "Prerequisites": [
+          "TUN-P2-001",
+          "TUN-P2-002",
+          "TUN-P1-002",
+          "TUN-P1-003",
+          "TUN-P1-013"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+          "governance/evidence/TUN-P2-003-RD-SOURCES.json",
+          "governance/evidence/TUN-P2-003-ROLE-REVIEWS.json",
+          "docs/development/P2_003_IDENTITY_PERSISTENCE.md",
+          "governance/evidence/TUN-P2-003-DATA-INVENTORY.json",
+          "governance/evidence/TUN-P2-003-AUDIT-CORRECTION-SOURCE.json",
+          "governance/evidence/p2-recovery-20261109/active-source-refresh.json",
+          "governance/evidence/TUN-P2-003-AUDIT-CORRECTION-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-004",
+        "Status": "VALIDATION",
+        "Prerequisites": [
+          "TUN-P2-002",
+          "TUN-P2-003",
+          "TUN-P1-017",
+          "TUN-P1-018",
+          "TUN-P1-019"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-004-AUTHORITY-RESOLUTION.json",
+          "docs/development/P2_004_REGISTRATION_SCOPE.md",
+          "docs/development/P2_004_REGISTRATION.md",
+          "governance/evidence/TUN-P2-004-RD-SOURCES.json",
+          "governance/evidence/TUN-P2-004-DATA-INVENTORY.json",
+          "governance/evidence/TUN-P2-004-UI-ALIGNMENT.json",
+          "governance/evidence/TUN-P2-004-ROLE-REVIEWS.json",
+          "governance/evidence/PDR0011-AMD0007-IMPACT-AUDIT.json",
+          "docs/development/PDR0011_AMD0007_IMPLEMENTATION.md",
+          "governance/evidence/AMD0008-UI-AUDIT.json",
+          "docs/development/AMD0008_UI_REVIEW.md",
+          "governance/evidence/AMD0008-UI-VISUAL-VALIDATION.json",
+          "docs/development/AMD0008_HANDOFF.md",
+          "governance/gates/UI_VISUAL_APPROVAL.yaml",
+          "governance/work-items/TUN-P2-004-UI001.yaml",
+          "governance/todos/TODO-AMD0008-GOV001.yaml",
+          "governance/evidence/TUN-P2-004-SECURITY-REVALIDATION-20261021.json",
+          "docs/development/LOCAL_BROWSER_TESTING.md",
+          "governance/evidence/TUN-P2-004-BROWSER-STARTER-SCOPE.json",
+          "docs/development/BROWSER_STARTER_HANDOFF.md",
+          "governance/evidence/TUN-P2-004-UI-COMPLIANCE.json",
+          "docs/development/GLOBAL_UI_COMPLIANCE_REPORT.md",
+          "docs/development/GLOBAL_UI_HANDOFF_20261018.md",
+          "governance/evidence/AMD0009-FINAL-GATES-20261018.json",
+          "governance/evidence/P2-001-007-AUDIT-20261109.json",
+          "governance/evidence/TUN-P2-004-AUDIT-CORRECTION-SOURCE.json",
+          "governance/evidence/TUN-P2-004-AUDIT-CORRECTION-VALIDATION.json",
+          "governance/evidence/TUN-P2-004-AUDIT-CORRECTION-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-004-UI001",
+        "Status": "DONE",
+        "Prerequisites": [],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/AMD0008-UI-AUDIT.json",
+          "docs/development/AMD0008_UI_REVIEW.md",
+          "governance/gates/UI_VISUAL_APPROVAL.yaml",
+          "governance/evidence/AMD0008-PRODUCT-OWNER-VISUAL-CONSENT.json",
+          "governance/evidence/AMD0008-FIGMA-SYNC.json",
+          "governance/evidence/AMD0008-UI-VISUAL-VALIDATION.json",
+          "governance/evidence/TUN-P2-004-UI001-VALIDATION.json",
+          "governance/evidence/TUN-P2-004-UI001-UI-COMPLIANCE.json",
+          "governance/evidence/TUN-P2-004-UI001-ROLE-REVIEWS.json",
+          "governance/evidence/AMD0009-CURRENT-UI-PRODUCT-ACCEPTANCE.json",
+          "governance/evidence/AMD0009-CURRENT-UI-CLOSURE.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-004-UI002",
+        "Status": "DONE",
+        "Prerequisites": [
+          "TUN-P2-002",
+          "TUN-P2-003",
+          "TUN-P1-017",
+          "TUN-P1-018",
+          "TUN-P1-019"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/AMD0009-INITIAL-AUDIT.json",
+          "docs/contracts/ui-inventory.json",
+          "governance/evidence/TUN-P2-004-UI002-VALIDATION.json",
+          "governance/evidence/TUN-P2-004-UI002-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P2-004-UI002-UI-COMPLIANCE.json",
+          "docs/development/GLOBAL_UI_COMPLIANCE_REPORT.md",
+          "governance/evidence/TUN-P2-004-UI002-STARTUP-REVIEWS.json",
+          "governance/evidence/AMD0009-CURRENT-UI-PRODUCT-ACCEPTANCE.json",
+          "governance/evidence/AMD0009-CURRENT-UI-CLOSURE.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-005",
+        "Status": "VALIDATION",
+        "Prerequisites": [
+          "TUN-P2-003",
+          "TUN-P2-004",
+          "TUN-P1-012",
+          "TUN-P1-019"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-005-AUDIT-CORRECTION-SOURCE.json",
+          "governance/evidence/p2-recovery-20261109/active-source-refresh.json",
+          "governance/evidence/TUN-P2-005-AUDIT-CORRECTION-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-006",
+        "Status": "VALIDATION",
+        "Prerequisites": [
+          "TUN-P2-003",
+          "TUN-P2-005",
+          "TUN-P1-012",
+          "TUN-P1-013"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-006-VALIDATION.json",
+          "governance/evidence/TUN-P2-006-STARTUP-REVIEWS.json",
+          "governance/evidence/p2-006-policy-20261108/receipt.json",
+          "docs/development/P2_006_HANDOFF.md",
+          "governance/evidence/p2-006-proof-20261108/receipt.json",
+          "governance/evidence/P2-001-007-AUDIT-20261109.json",
+          "governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json",
+          "governance/evidence/TUN-P2-006-AUDIT-CORRECTION-VALIDATION.json",
+          "governance/evidence/TUN-P2-006-AUDIT-CORRECTION-ROLE-REVIEWS.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-007",
+        "Status": "VALIDATION",
+        "Prerequisites": [
+          "TUN-P2-003",
+          "TUN-P2-005",
+          "TUN-P2-006"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-007-VALIDATION.json",
+          "governance/evidence/TUN-P2-007-AUTHORITY-RESOLUTION.json",
+          "governance/evidence/TUN-P2-007-RD-SOURCES.json",
+          "docs/development/P2_007_PASSKEY_SCOPE.md",
+          "governance/evidence/TUN-P2-007-STARTUP-REVIEWS.json",
+          "governance/evidence/TUN-P2-007-ROLE-REVIEWS.json",
+          "governance/evidence/TUN-P2-007-UI-PROPOSAL.json",
+          "governance/evidence/TUN-P2-007-SECURITY-REVIEW.json",
+          "governance/evidence/TUN-P2-007-METHOD-MATRIX.json",
+          "governance/evidence/TUN-P2-007-FRONTEND-REVIEW.json",
+          "governance/evidence/TUN-P2-007-EXECUTION-HISTORY.json",
+          "governance/evidence/TUN-P2-007-RESUME-AUTHORITY-20261110.json",
+          "governance/evidence/TUN-P2-007-NAVIGATION-CONSENT-20261110.json",
+          "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json",
+          "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+          "governance/evidence/TUN-P2-007-DEFECT-VERIFICATION-20261110.json",
+          "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/case-catalog.json",
+          "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-007-ui-check.json",
+          "governance/evidence/TUN-P2-007-SECURITY-SCANS-20261110.json",
+          "governance/evidence/TUN-P2-007-FINAL-REVIEW-PROVENANCE-20261110.json",
+          "governance/evidence/P2-007-UI-REVISION-CLOSURE-20261110.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-008",
+        "Status": "BACKLOG",
+        "Prerequisites": [
+          "TUN-P2-003",
+          "TUN-P2-005",
+          "TUN-P2-006"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-008-VALIDATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-009",
+        "Status": "BACKLOG",
+        "Prerequisites": [
+          "TUN-P2-003",
+          "TUN-P2-005",
+          "TUN-P2-006"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-009-VALIDATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-010",
+        "Status": "BACKLOG",
+        "Prerequisites": [
+          "TUN-P2-003",
+          "TUN-P2-004",
+          "TUN-P2-005",
+          "TUN-P2-006"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-010-VALIDATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-011",
+        "Status": "BACKLOG",
+        "Prerequisites": [
+          "TUN-P2-003",
+          "TUN-P2-005",
+          "TUN-P2-006",
+          "TUN-P2-007",
+          "TUN-P2-008",
+          "TUN-P2-009",
+          "TUN-P2-010"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-011-VALIDATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-012",
+        "Status": "BACKLOG",
+        "Prerequisites": [
+          "TUN-P2-003",
+          "TUN-P2-005",
+          "TUN-P2-006",
+          "TUN-P2-011"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-012-VALIDATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-013",
+        "Status": "BACKLOG",
+        "Prerequisites": [
+          "TUN-P2-003",
+          "TUN-P2-005",
+          "TUN-P2-006"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-013-VALIDATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-014",
+        "Status": "BACKLOG",
+        "Prerequisites": [
+          "TUN-P2-003",
+          "TUN-P2-005",
+          "TUN-P2-006",
+          "TUN-P2-013"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-014-VALIDATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-015",
+        "Status": "BACKLOG",
+        "Prerequisites": [
+          "TUN-P2-003",
+          "TUN-P2-005",
+          "TUN-P2-006",
+          "TUN-P2-011",
+          "TUN-P2-012",
+          "TUN-P2-013",
+          "TUN-P2-014"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-015-VALIDATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-016",
+        "Status": "BACKLOG",
+        "Prerequisites": [
+          "TUN-P2-003",
+          "TUN-P2-004",
+          "TUN-P2-005",
+          "TUN-P1-003",
+          "TUN-P1-006",
+          "TUN-P1-007",
+          "TUN-P1-014"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-016-VALIDATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-017",
+        "Status": "BACKLOG",
+        "Prerequisites": [
+          "TUN-P2-002",
+          "TUN-P2-003",
+          "TUN-P2-004",
+          "TUN-P2-005",
+          "TUN-P2-006",
+          "TUN-P2-007",
+          "TUN-P2-008",
+          "TUN-P2-009",
+          "TUN-P2-010",
+          "TUN-P2-011",
+          "TUN-P2-012",
+          "TUN-P2-013",
+          "TUN-P2-014",
+          "TUN-P2-015",
+          "TUN-P2-016",
+          "TUN-P2-019"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-017-VALIDATION.json",
+          "governance/evidence/P2-001-007-AUDIT-20261109.json",
+          "governance/evidence/P2-001-007-AUDIT-SUPPLEMENT-GOV-20261109.json",
+          "governance/evidence/P2-001-007-POST-CORRECTION-20261109.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-018",
+        "Status": "BACKLOG",
+        "Prerequisites": [
+          "TUN-P2-017"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-018-VALIDATION.json"
+        ]
+      },
+      {
+        "Id": "TUN-P2-019",
+        "Status": "BACKLOG",
+        "Prerequisites": [
+          "TUN-P2-003",
+          "TUN-P2-005",
+          "TUN-P2-006",
+          "TUN-P1-013",
+          "TUN-P1-019"
+        ],
+        "Blockers": [],
+        "RequiredEvidence": [
+          "governance/evidence/TUN-P2-019-VALIDATION.json",
+          "governance/evidence/P2-001-007-AUDIT-20261109.json"
+        ]
+      }
+    ],
+    "Validation": {
+      "IsValid": true,
+      "RecordCount": 1048,
+      "Diagnostics": []
+    },
+    "Revisions": [
+      {
+        "Id": "P0-RV001",
+        "OriginalScopeId": "P0",
+        "Scope": "MILESTONE",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Post-closure remediation of governance/control-plane, evidence integrity, project-state consistency, fresh-agent recovery, authority integrity and portability deficiencies discovered after legitimate historical P0 closure.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-RV002",
+        "OriginalScopeId": "P0",
+        "Scope": "MILESTONE",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "P1 reconciliation exposed fail-open committed-state gates, incomplete ownership validation, unbound milestone reviews and an empty recovery action; preserve historical P0 closure.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P0-RV001",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-RV003",
+        "OriginalScopeId": "P0",
+        "Scope": "MILESTONE",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Final P1 recovery verification exposed a validator that incorrectly requires all historical closed revisions in a bounded summary; preserve closed records and reject missing active or contradictory displayed states.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P0-RV002",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-RV004",
+        "OriginalScopeId": "P0",
+        "Scope": "MILESTONE",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "User authorized repair of AUD-01 through AUD-03 from the 2026-10-16 deep audit before next milestone; preserve original closure.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P0-RV003",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-RV005",
+        "OriginalScopeId": "P0",
+        "Scope": "MILESTONE",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "P2 registration CI and local reproduction exposed a stale hard-coded no-eligible-work fixture; preserve closed P0-RV004 history and repair only test isolation.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P0-RV004",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-RV006",
+        "OriginalScopeId": "P0",
+        "Scope": "MILESTONE",
+        "Status": "CLOSED",
+        "Type": "HARDENING",
+        "Reason": "Implement AMD-0008/AMD-0009 controls and source synchronization under current authority index; preserve original closure and independently revalidate P0 enablement.",
+        "Impact": "SCOPED_BLOCKING",
+        "BlockedScope": [
+          "P2"
+        ],
+        "PreviousRevision": "P0-RV005",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-RV007",
+        "OriginalScopeId": "P0",
+        "Scope": "MILESTONE",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Current UI proof and scoped Product acceptance pass, but native transition returns INSUFFICIENT_CONTEXT for the resolved UI_REQUIRED side state. Implement approved Doc10 design-approval unblock behavior with strict evidence and ordinary lifecycle checks, preserving closed history.",
+        "Impact": "SCOPED_BLOCKING",
+        "BlockedScope": [
+          "TUN-P2-004-UI001"
+        ],
+        "PreviousRevision": "P0-RV006",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-RV008",
+        "OriginalScopeId": "P0",
+        "Scope": "MILESTONE",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "User reported Windows CLR application-error dialogs for Governance and AuditRemediation functional executables. Existing main-body catches leave initialization and cleanup exceptions able to escape; correct test-process diagnostics without suppressing failures or changing product behavior.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P0-RV007",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-RV009",
+        "OriginalScopeId": "P0",
+        "Scope": "MILESTONE",
+        "Status": "CLOSED",
+        "Type": "SECURITY",
+        "Reason": "P1-RV001 remediation affects CI and dependency defaults owned by closed P0. Preserve original closure through independent Revision lineage; introduce stable fail-closed status contexts and validate supported image patch references, retaining all unresolved findings and human integration gates.",
+        "Impact": "SCOPED_BLOCKING",
+        "BlockedScope": [
+          "P1-RV001-001"
+        ],
+        "PreviousRevision": "P0-RV008",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-RV010",
+        "OriginalScopeId": "P0",
+        "Scope": "MILESTONE",
+        "Status": "ACTIVE",
+        "Type": "SECURITY",
+        "Reason": "The user requests fixes for actual GitHub scan failures. Preserve closed P0 and P0-RV009 while repairing maintained OpenBao and aligning CI/development image references only after full-image scans and compatibility checks. LGTM signed-plugin failures remain enforced; no merge, publication, deployment, removal or trust override is authorized. The subsequent explicit dev/test signing approval permits only the additional Tunner verifier described in ADR-LGTM-DEV-SIGNING-20261028; production trust remains excluded. Subsequent explicit consent permits only the reviewed source-bound dev/test Tempo VEX corrections, with expiry/rejection reviews and every other finding still blocking.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P0-RV009",
+        "ParentMilestoneRevision": null,
+        "NextAction": "select eligible Revision children, implement, and validate the committed scope"
+      },
+      {
+        "Id": "P1-RV001",
+        "OriginalScopeId": "P1",
+        "Scope": "MILESTONE",
+        "Status": "ACTIVE",
+        "Type": "SECURITY",
+        "Reason": "After local P1 closure and protected PR integration, GitHub scans identified high/critical Go dependency findings in four development images and effective main rules expose no required status-check rule. Preserve original closure and track release-blocking remediation separately.",
+        "Impact": "RELEASE_BLOCKING",
+        "BlockedScope": [
+          "P1-RV001-002"
+        ],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": null,
+        "NextAction": "select eligible Revision children, implement, and validate the committed scope"
+      },
+      {
+        "Id": "P0-003-RV001",
+        "OriginalScopeId": "TUN-P0-003",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Remediate the post-closure gap recorded by REOPEN-TUN-P0-003-001; retain original DONE evidence.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": "P0-RV001",
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-004-RV001",
+        "OriginalScopeId": "TUN-P0-004",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Remediate the post-closure gap recorded by REOPEN-TUN-P0-004-001; retain original DONE evidence.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": "P0-RV001",
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-004-RV002",
+        "OriginalScopeId": "TUN-P0-004",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "P1 audit incorrectly reports three original installer paths stale after a tested closed P1-024-RV001; current proof must follow validated closed revision ownership while preserving historical closure.",
+        "Impact": "SCOPED_BLOCKING",
+        "BlockedScope": [
+          "TUN-P1-023"
+        ],
+        "PreviousRevision": "P0-004-RV001",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-004-RV003",
+        "OriginalScopeId": "TUN-P0-004",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "DEF-TUN-P2-017-GOV-001: effective LOCAL_VALIDATED dependencies consume VALIDATION without enforcing current committed source; preserve closed history through later work-item revision.",
+        "Impact": "SCOPED_BLOCKING",
+        "BlockedScope": [
+          "TUN-P2-007",
+          "TUN-P2-019"
+        ],
+        "PreviousRevision": "P0-004-RV002",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-004-RV004",
+        "OriginalScopeId": "TUN-P0-004",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "PERFORMANCE",
+        "Reason": "Verified live P2-007 work/context entry repeatedly validates identical prerequisite records across queued consumers, causing multi-minute command latency. Reuse only within one command; every new call must re-read and reject changed source.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P0-004-RV003",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-007-RV001",
+        "OriginalScopeId": "TUN-P0-007",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "User first-run apply-policies failed because absent tunner mount property access throws under StrictMode before the approved mount can be created.",
+        "Impact": "SCOPED_BLOCKING",
+        "BlockedScope": [
+          "TUN-P1-023"
+        ],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-010-RV001",
+        "OriginalScopeId": "TUN-P0-010",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "P2-002 committed regression at d742737 found PostgreSQL 57P03 during migration after TCP-only container readiness. Correct the closed test-harness scope through Revision lineage and preserve original closure.",
+        "Impact": "SCOPED_BLOCKING",
+        "BlockedScope": [
+          "TUN-P2-002"
+        ],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-011-RV001",
+        "OriginalScopeId": "TUN-P0-011",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Remediate the post-closure gap recorded by REOPEN-TUN-P0-011-001; retain original DONE evidence.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": "P0-RV001",
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-019-RV001",
+        "OriginalScopeId": "TUN-P0-019",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Explicit human approval authorizes removing only the PR lookup base filter so draft authentication PR19 on its parent branch is reused. Preserve historical P0 closure, draft guard, main protections and merge authority.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-026-RV001",
+        "OriginalScopeId": "TUN-P0-026",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Remediate the post-closure gap recorded by REOPEN-TUN-P0-026-001; retain original DONE evidence.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": "P0-RV001",
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-030-RV001",
+        "OriginalScopeId": "TUN-P0-030",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Remediate the post-closure gap recorded by REOPEN-TUN-P0-030-001; retain original DONE evidence.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": "P0-RV001",
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-030-RV002",
+        "OriginalScopeId": "TUN-P0-030",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Authorized deep-audit correction affects behavior owned by this closed scope; preserve original validation and closure.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P0-030-RV001",
+        "ParentMilestoneRevision": "P0-RV004",
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-032-RV001",
+        "OriginalScopeId": "TUN-P0-032",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Remediate the post-closure gap recorded by REOPEN-TUN-P0-032-001; retain original DONE evidence.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": "P0-RV001",
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-032-RV002",
+        "OriginalScopeId": "TUN-P0-032",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Authorized deep-audit correction affects behavior owned by this closed scope; preserve original validation and closure.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P0-032-RV001",
+        "ParentMilestoneRevision": "P0-RV004",
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-033-RV001",
+        "OriginalScopeId": "TUN-P0-033",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Remediate the post-closure gap recorded by REOPEN-TUN-P0-033-001; retain original DONE evidence.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": "P0-RV001",
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-033-RV002",
+        "OriginalScopeId": "TUN-P0-033",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Deep-audit synchronization adds current authority verification owned by the closed mirror-import scope; preserve earlier closure.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P0-033-RV001",
+        "ParentMilestoneRevision": "P0-RV004",
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P0-035-RV001",
+        "OriginalScopeId": "TUN-P0-035",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Remediate the post-closure gap recorded by REOPEN-TUN-P0-035-001; retain original DONE evidence.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": "P0-RV001",
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P1-016-RV001",
+        "OriginalScopeId": "TUN-P1-016",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "The local engineering example still uses conventional dependency ports while the established Tunner Docker stack publishes dedicated loopback host ports; port 5432 is occupied by another local project. User authorized fixing the mismatch.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P1-018-RV001",
+        "OriginalScopeId": "TUN-P1-018",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "HARDENING",
+        "Reason": "AMD-0009 requires global reusable schema validation and approved per-field error patterns, retaining User/Admin component variants and original closed foundation history.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P1-018-RV002",
+        "OriginalScopeId": "TUN-P1-018",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "SECURITY",
+        "Reason": "P0-RV009 security remediation patched Vite8.2.2 to8.2.4; shared UI ownership from closed P1-018-RV001 requires a new append-only work-item Revision and current UI source evidence. Revalidate current committed unchanged layouts, forms and routes without reopening original closure or claiming new Product acceptance.",
+        "Impact": "SCOPED_BLOCKING",
+        "BlockedScope": [
+          "P1-RV001-001"
+        ],
+        "PreviousRevision": "P1-018-RV001",
+        "ParentMilestoneRevision": "P1-RV001",
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P1-018-RV003",
+        "OriginalScopeId": "TUN-P1-018",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "IMPROVEMENT",
+        "Reason": "P2-005 adds two approved scoped screens and one form. Preserve closed foundation evidence through append-only lineage while extending central inventory and revalidating shared routes/forms. Current authority and Product consent are resolved in TUN-P2-005-AUTHORITY-RESOLUTION.json; Figma and Drive remain read-only by explicit user instruction. Latest explicit Product Owner approval accepts the implemented screens and defers Figma backfill to a nonblocking owner TODO; preserve original P1 closure and all future/release gates. P2-006 now adds the approved same-screen verification dialog, one form and an isolated guarded test carrier. The explicit three-scope visual approval remains limited to this composition; broader Product/release gates are unchanged.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P1-018-RV002",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P1-018-RV004",
+        "OriginalScopeId": "TUN-P1-018",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "COMPATIBILITY",
+        "Reason": "P2 audit confirmed step-up completion and registration restart gaps; later changed UI ownership needs current regression proof while original closure stays immutable.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P1-018-RV003",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P1-018-RV005",
+        "OriginalScopeId": "TUN-P1-018",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "COMPATIBILITY",
+        "Reason": "Current P2-007 adds real passkey proof to the existing shared dialog and approved NAV01/NAV02 navigation; preserve closed shared UI foundation history through a new compatibility revision.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P1-018-RV004",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P1-020-RV001",
+        "OriginalScopeId": "TUN-P1-020",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "COMPATIBILITY",
+        "Reason": "Closed P1-020 owns the shared governance functional test program; added closed-revision proof cases require explicit same-scope committed validation without changing its original completion.",
+        "Impact": "SCOPED_BLOCKING",
+        "BlockedScope": [
+          "TUN-P1-023"
+        ],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P1-022-RV001",
+        "OriginalScopeId": "TUN-P1-022",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "COMPATIBILITY",
+        "Reason": "Closed P1-022 also owns the shared governance functional test program; added closed-revision proof cases require explicit same-scope committed validation without changing its original completion.",
+        "Impact": "SCOPED_BLOCKING",
+        "BlockedScope": [
+          "TUN-P1-023"
+        ],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P1-022-RV002",
+        "OriginalScopeId": "TUN-P1-022",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Authorized deep-audit correction affects behavior owned by this closed scope; preserve original validation and closure.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P1-022-RV001",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P1-024-RV001",
+        "OriginalScopeId": "TUN-P1-024",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "OPERABILITY",
+        "Reason": "Operator requests one-command local setup and validation without repeatedly entering configuration or manually obtaining and copying scoped tokens.",
+        "Impact": "SCOPED_BLOCKING",
+        "BlockedScope": [
+          "TUN-P1-023"
+        ],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P1-024-RV002",
+        "OriginalScopeId": "TUN-P1-024",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Authorized deep-audit correction affects behavior owned by this closed scope; preserve original validation and closure.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P1-024-RV001",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P2-004-UI001-RV001",
+        "OriginalScopeId": "TUN-P2-004-UI001",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "COMPATIBILITY",
+        "Reason": "Current integration changes shared owned paths; preserve historical DONE and validate present behavior through new source-bound evidence.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P2-004-UI001-RV002",
+        "OriginalScopeId": "TUN-P2-004-UI001",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "Confirmed retained expired operation key prevents registration retry; use existing restart and current regression evidence, preserving original DONE and prior revisions.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P2-004-UI001-RV001",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P2-004-UI001-RV003",
+        "OriginalScopeId": "TUN-P2-004-UI001",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "COMPATIBILITY",
+        "Reason": "Source audit identified later registration support and navigation regression changes outside the closed RV002 ownership; preserve closure through a later exact test-only revision.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P2-004-UI001-RV002",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P2-004-UI001-RV004",
+        "OriginalScopeId": "TUN-P2-004-UI001",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "IMPROVEMENT",
+        "Reason": "Product Owner approved NAV01 on 2026-11-10; preserve closed UI history while revealing the approved existing Sign in control and validating its guarded route. Functional and visual authority remain linked in the scoped consent and startup evidence.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P2-004-UI001-RV003",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P2-004-UI002-RV001",
+        "OriginalScopeId": "TUN-P2-004-UI002",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "COMPATIBILITY",
+        "Reason": "Native audit identifies later integration changes; preserve historical DONE and validate current source rather than rewrite old evidence.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": null,
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P2-004-UI002-RV002",
+        "OriginalScopeId": "TUN-P2-004-UI002",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "CORRECTIVE",
+        "Reason": "P2 audit confirmed missing/purged progress exposes a form with an unusable key; correct workflow restoration through existing protected restart and preserve historical routing/validation acceptance.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P2-004-UI002-RV001",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P2-004-UI002-RV003",
+        "OriginalScopeId": "TUN-P2-004-UI002",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "COMPATIBILITY",
+        "Reason": "Source audit identified later registration support and navigation regression changes outside the closed RV002 ownership; preserve closure through a later exact test-only revision.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P2-004-UI002-RV002",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      },
+      {
+        "Id": "P2-004-UI002-RV004",
+        "OriginalScopeId": "TUN-P2-004-UI002",
+        "Scope": "WORK_ITEM",
+        "Status": "CLOSED",
+        "Type": "COMPATIBILITY",
+        "Reason": "Approved NAV01/NAV02 and active P2-007 shared proof UI require current cross-screen routing, validation and visual evidence while preserving closed global UI acceptance history.",
+        "Impact": "NON_BLOCKING",
+        "BlockedScope": [],
+        "PreviousRevision": "P2-004-UI002-RV003",
+        "ParentMilestoneRevision": null,
+        "NextAction": "preserve closure and run governance next"
+      }
+    ],
+    "HistoricalScopes": [
+      {
+        "Id": "P0",
+        "HistoricalStatus": "CLOSED",
+        "WorkingRecordStatus": "CLOSED",
+        "ActiveRevisionRefs": [
+          "P0-RV010"
+        ],
+        "ClosedRevisionRefs": [
+          "P0-RV001",
+          "P0-RV002",
+          "P0-RV003",
+          "P0-RV004",
+          "P0-RV005",
+          "P0-RV006",
+          "P0-RV007",
+          "P0-RV008",
+          "P0-RV009"
+        ]
+      },
+      {
+        "Id": "P1",
+        "HistoricalStatus": "CLOSED",
+        "WorkingRecordStatus": "CLOSED",
+        "ActiveRevisionRefs": [
+          "P1-RV001"
+        ],
+        "ClosedRevisionRefs": []
+      },
+      {
+        "Id": "P2",
+        "HistoricalStatus": "ACTIVE",
+        "WorkingRecordStatus": "ACTIVE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": []
+      },
+      {
+        "Id": "TUN-P0-003",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P0-003-RV001"
+        ]
+      },
+      {
+        "Id": "TUN-P0-004",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P0-004-RV001",
+          "P0-004-RV002",
+          "P0-004-RV003",
+          "P0-004-RV004"
+        ]
+      },
+      {
+        "Id": "TUN-P0-007",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P0-007-RV001"
+        ]
+      },
+      {
+        "Id": "TUN-P0-010",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P0-010-RV001"
+        ]
+      },
+      {
+        "Id": "TUN-P0-011",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P0-011-RV001"
+        ]
+      },
+      {
+        "Id": "TUN-P0-019",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P0-019-RV001"
+        ]
+      },
+      {
+        "Id": "TUN-P0-026",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P0-026-RV001"
+        ]
+      },
+      {
+        "Id": "TUN-P0-030",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P0-030-RV001",
+          "P0-030-RV002"
+        ]
+      },
+      {
+        "Id": "TUN-P0-032",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P0-032-RV001",
+          "P0-032-RV002"
+        ]
+      },
+      {
+        "Id": "TUN-P0-033",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P0-033-RV001",
+          "P0-033-RV002"
+        ]
+      },
+      {
+        "Id": "TUN-P0-035",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P0-035-RV001"
+        ]
+      },
+      {
+        "Id": "TUN-P1-016",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P1-016-RV001"
+        ]
+      },
+      {
+        "Id": "TUN-P1-018",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P1-018-RV001",
+          "P1-018-RV002",
+          "P1-018-RV003",
+          "P1-018-RV004",
+          "P1-018-RV005"
+        ]
+      },
+      {
+        "Id": "TUN-P1-020",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P1-020-RV001"
+        ]
+      },
+      {
+        "Id": "TUN-P1-022",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P1-022-RV001",
+          "P1-022-RV002"
+        ]
+      },
+      {
+        "Id": "TUN-P1-024",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P1-024-RV001",
+          "P1-024-RV002"
+        ]
+      },
+      {
+        "Id": "TUN-P2-004-UI001",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P2-004-UI001-RV001",
+          "P2-004-UI001-RV002",
+          "P2-004-UI001-RV003",
+          "P2-004-UI001-RV004"
+        ]
+      },
+      {
+        "Id": "TUN-P2-004-UI002",
+        "HistoricalStatus": "DONE",
+        "WorkingRecordStatus": "DONE",
+        "ActiveRevisionRefs": [],
+        "ClosedRevisionRefs": [
+          "P2-004-UI002-RV001",
+          "P2-004-UI002-RV002",
+          "P2-004-UI002-RV003",
+          "P2-004-UI002-RV004"
+        ]
+      }
+    ]
+  }
+}

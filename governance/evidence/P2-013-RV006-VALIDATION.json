@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-013-RV006",
+  "owner_work_item": "TUN-P2-013",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "4065e5a12c10cf3b5d6b437f9f4d38225238cdbb",
+  "validated_commit_sha": "4065e5a12c10cf3b5d6b437f9f4d38225238cdbb",
+  "owned_behavior_paths": [
+    "tools/browser-testing/BrowserTestHost.cs",
+    "tools/browser-testing/Tunner.BrowserTesting.csproj",
+    "src/Modules/Identity/AuthenticationEndpoints.cs",
+    "docs/contracts/ui-inventory.json"
+  ],
+  "phase": "SOURCE_COMPATIBILITY_CLOSED_NATIVE_PASS",
+  "source_binding_meaning": "The tested/validated SHA is the committed classification carrier; actual historical executions retain their original group A-F sources. All owned code is unchanged from the qualified anchors; no new aggregate or current private runtime execution is claimed.",
+  "source_equivalence": {
+    "checked_commit_sha": "e8fb57db30399dc92faeb579363ac923419a11ba",
+    "common_unchanged_source_carrier": "96685959ef4e87b319e214e615407517c1c3a64b",
+    "all16_union_paths_equal": true,
+    "this_scope_owned_count": 4,
+    "footprint_basis": "Original work-item ownership plus every CLOSED revision, including earlier superseded owner paths; ACTIVE diagnostic scopes are not counted as closed proof.",
+    "complete_declared_scope_union": 96,
+    "closed_revision_count_at_9849017d": 5
+  },
+  "qualification_groups": {
+    "C": {
+      "source_carrier": "d114784293ac0ab21b360073cc7c799ea340b2f5",
+      "paths": [
+        "tools/browser-testing/Tunner.BrowserTesting.csproj",
+        "tools/browser-testing/BrowserTestHost.cs"
+      ],
+      "evidence_refs": [
+        "governance/evidence/p2-019-content-20261116/admin-browser-d1147842/initial-results.json",
+        "governance/evidence/p2-019-content-20261116/admin-browser-d1147842/switch-repair-results.json",
+        "governance/evidence/p2-019-content-20261116/admin-browser-d1147842/query-repair-results.json",
+        "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode-bounded-b1d5becc.json",
+        "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/production-guard-b1d5becc.json"
+      ],
+      "qualification": "Four distinct passing isolated Admin/default/refusal identities across retained runs, plus separately attributed default-mode and Production-refusal checks. Earlier failures remain retained; not a single four-case invocation or private-host qualification.",
+      "source_equal_through_checked_head": true
+    },
+    "E": {
+      "source_carrier": "96685959ef4e87b319e214e615407517c1c3a64b",
+      "paths": [
+        "docs/contracts/ui-inventory.json"
+      ],
+      "evidence_refs": [
+        "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json",
+        "governance/evidence/p2-019-content-20261116/final-qualification-63fb7514/ui-native-06b20de2.json"
+      ],
+      "qualification": "UTF-8 JSON byte comparison retains94/94 original58023 inventory objects and154/154 at1bf; current167 equals94 originals plus73 P019 scoped items. Current scoped73 proof is not GLOBAL UI/CI acceptance.",
+      "source_equal_through_checked_head": true
+    },
+    "F": {
+      "source_carrier": "1bf5971739f163d15777498b211ff0f48f677bc8",
+      "paths": [
+        "src/Modules/Identity/AuthenticationEndpoints.cs"
+      ],
+      "evidence_refs": [
+        "governance/evidence/p2-019-content-20261116/native-recovery-1bf59717/private-receipt.json",
+        "governance/evidence/p2-019-content-20261116/native/321ca8d2c3134d6d8791d2b8b82d2c17/summary.json",
+        "governance/evidence/p2-019-content-20261116/native/7eb7099a2aca4b959228669100676c32/summary.json"
+      ],
+      "qualification": "Optional async Recovery bootstrap availability/isolation preserves ordinary authentication. Retain initial3PASS/1FAIL at004603cf and corrected bootstrap1PASS at35a121aa; source-equivalent, not one all-passing four-case invocation.",
+      "source_equal_through_checked_head": true
+    }
+  },
+  "unresolved_runtime_boundary": {
+    "defect_ref": "governance/defects/DEF-TUN-P2-009-HTTPS-HOST-001.yaml",
+    "status": "OPEN_RUNTIME_UNFULFILLED",
+    "diagnostic_revisions": [
+      "P2-009-RV011",
+      "P2-010-RV012"
+    ],
+    "preservation": "Both diagnostic scopes retain their ACTIVE/PENDING state, original full-runtime criteria and defect links. This source bridge does not repair or close them."
+  },
+  "context_ref": "artifacts/p2-019-content-20261116/context-complete-shared-source/manifest.json",
+  "context_status": "ACTUALLY_VERIFIED_CURRENT_AT_ACTIVE_BEFORE_METADATA_ONLY_CLOSURE",
+  "context_verification": {"selected_scope":"P2-009-RV014","source_commit_sha":"665033ae","outcome":"CURRENT","findings":[],"included":123,"scope_bound_reviews":15,"owner_revisions":3,"manifest_sha256":"974c3b9540b2e851d1795acd9ff1138c86ff527a047e1e3af33006958bde8e78","receipt_ref":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/complete-context-verify.json","boundary":"Actual shared context verification at ACTIVE before metadata-only validation/closure; source compatibility only, not new private runtime or full feature acceptance."},
+  "native_close_check": {"outcome":"PASS","source_commit_sha":"4efeae6c","receipt_ref":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/P2-013-RV006-close-check.json","boundary":"Technical source compatibility only; original private-runtime diagnostic criteria and defect remain open."},
+  "acceptance_boundary": "Committed source compatibility qualified at4065e5a1; actual native closure PASS at4efeae6c, with old execution sources/counts retained. No fresh123, current private HOST PASS, Product acceptance, GLOBAL UI/CI, activation or release is claimed."
+}

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "recorded_at": "2026-11-11T06:56:55.872023+00:00",
+  "requested_review_head": "667afadc21541acb1c70fd7cc1e21a2b40c33007",
+  "observed_head": "ebfd9af892a7c771a7b5b76a860a5883cedc6cf7",
+  "work_item_state": "REFINEMENT",
+  "phase": "ARTIFACT_ONLY_REFINEMENT_AND_STARTUP_REVIEW",
+  "implementation_authorized": false,
+  "tests_executed": false,
+  "product_or_human_approval": false,
+  "typed_sketch": {
+    "path": "artifacts/p2-009-recovery-20261111/contract-refinement/typed-contract-proposal.cs.txt",
+    "sha256": "971dea48798d1d853543fb931a892a013c89b31e52ae97a56848c5e6e0c9b845"
+  },
+  "profile_source": "One recovery-owned IRecoveryCodePolicySource using existing version metadata/effective resolver; no generic policy/credential framework.",
+  "required_inputs": [
+    {
+      "input": "Version/origin/native implementation binding",
+      "owner": "Identity runtime/security owner",
+      "constraint": "Explicit approved effective interval/provenance, exact supported implementation; HTTPS User BFF only. No browser policy/clock input or unsupported fallback."
+    },
+    {
+      "input": "Generation profile and CodesPerSet",
+      "owner": "Identity/security policy owner",
+      "constraint": "Closed reviewed native RNG/encoding/canonicalization profile, distinct complete canonical output and bounded collision handling. Saved-code entropy accounting addresses current64-bit guidance. Figma's six examples and native default are not a production count/format."
+    },
+    {
+      "input": "Verifier profile and abuse/work profile",
+      "owner": "Identity/security owner",
+      "constraint": "Native Identity hasher/version/cost, bounded code length/set scan/hash work/concurrency and admission/rate policy; reject unsupported/malformed stored formats before expensive work. No inherited TOTP6digit/window/replay-retention or password-policy defaults."
+    },
+    {
+      "input": "Generate/Replace assurance and PendingOperationLifetime",
+      "owner": "Existing assurance/Identity owner",
+      "constraint": "Resolve the existing IAssurancePolicySource per operation/current execution; exact source/expected policy binding; lifetime clipped to current authorization/session/policy. No opaque-assurance ordering or new global session upgrade."
+    },
+    {
+      "input": "Replacement profile",
+      "owner": "Identity policy owner",
+      "constraint": "Explicit admission/current-set cardinality, exact old-set invalidation/linearization and any supported effects. No single-active-set, automatic preserve/revoke, first-use activation or replacement-order default."
+    },
+    {
+      "input": "One-time delivery profile",
+      "owner": "Identity/security plus scoped UX/content owners",
+      "constraint": "Define display/download admission, payload format/fixed safe filename and lost-response status. No escrow, GET generation/redisclosure, browser delivery confirmation or silent retry."
+    },
+    {
+      "input": "Recovery consumption policy and trusted operation context",
+      "owner": "Identity/P2-011 recovery owner",
+      "constraint": "Exact Account/recovery operation/correlation/set-lifecycle/context/current-policy/expiry admission; recovery precedence and eventual effects remain011. No arbitrary Account/code boolean oracle or existing-strong-session assumption."
+    },
+    {
+      "input": "Processing/retention/notification references",
+      "owner": "Identity with Privacy/Notifications policy owners",
+      "constraint": "Classified minimum verifier/operation/audit metadata, hold/purge duties and explicit post-commit notification contract. No raw code in payload or invented legal duration/channel/finality."
+    },
+    {
+      "input": "Published presentation source",
+      "owner": "Existing content/Identity owner",
+      "constraint": "Published provenance for required labels/errors/impact; absent required publication or unselected impact leaves the capability unavailable, not fabricated business copy."
+    }
+  ],
+  "finite_profile_rule": "Tests may later supply complete labelled synthetic values explicitly. A minimal individual-consume fixture needs two distinct codes to prove one claim does not consume the other; this is a proposed finite scenario, not an approved production set count. No runtime profile is registered or activated here.",
+  "runtime_defaults_selected": [],
+  "external_vault_requirement": "No plaintext escrow or new pepper/key requirement is inferred. Reuse existing scoped vault transport only if an actual approved secret requirement is subsequently identified."
+}

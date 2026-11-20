@@ -1,0 +1,60 @@
+
+Running 2 tests using 1 worker
+
+  x  1 tests\step-up\step-up.spec.ts:87:2 › Completion recovery refuses an unrelated request binding 99999999-3434-4567-8989-121212121212 (7.3s)
+  x  2 tests\step-up\step-up.spec.ts:87:2 › Completion recovery refuses an unrelated request binding null (9.7s)
+
+
+  1) tests\step-up\step-up.spec.ts:87:2 › Completion recovery refuses an unrelated request binding 99999999-3434-4567-8989-121212121212
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected: "Your session or this request changed. Return to the action and try again."
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveText" with timeout 5000ms
+      - waiting for getByRole('alert')
+
+
+      90 |   await page.route('**/authentication/step-up/password',route=>{state.posts++;state.completed=true;return route.abort();});
+      91 |   await open(page);await password(page);await page.getByLabel('Password',{exact:true}).fill('fixture existing password');await page.getByRole('button',{name:'Confirm',exact:true}).click();
+    > 92 |   await expect(page.getByRole('alert')).toHaveText(proposal.content['stepUp.error.changed']);
+         |                                         ^
+      93 |   await expect(page.getByLabel('Password',{exact:true})).toHaveCount(0);await expect(page.getByRole('status')).toHaveText('Ready');expect(state.posts).toBe(1);
+      94 |  });
+      95 | }
+        at <repo-root>\web\tests\step-up\step-up.spec.ts:92:41
+
+    Error Context: test-results\runs\step-up\step-up-Completion-recover-c6c60-3434-4567-8989-121212121212\error-context.md
+
+  2) tests\step-up\step-up.spec.ts:87:2 › Completion recovery refuses an unrelated request binding null
+
+    Error: expect(locator).toHaveText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected: "Your session or this request changed. Return to the action and try again."
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toHaveText" with timeout 5000ms
+      - waiting for getByRole('alert')
+
+
+      90 |   await page.route('**/authentication/step-up/password',route=>{state.posts++;state.completed=true;return route.abort();});
+      91 |   await open(page);await password(page);await page.getByLabel('Password',{exact:true}).fill('fixture existing password');await page.getByRole('button',{name:'Confirm',exact:true}).click();
+    > 92 |   await expect(page.getByRole('alert')).toHaveText(proposal.content['stepUp.error.changed']);
+         |                                         ^
+      93 |   await expect(page.getByLabel('Password',{exact:true})).toHaveCount(0);await expect(page.getByRole('status')).toHaveText('Ready');expect(state.posts).toBe(1);
+      94 |  });
+      95 | }
+        at <repo-root>\web\tests\step-up\step-up.spec.ts:92:41
+
+    Error Context: test-results\runs\step-up\step-up-Completion-recover-6bc14-elated-request-binding-null\error-context.md
+
+  2 failed
+    tests\step-up\step-up.spec.ts:87:2 › Completion recovery refuses an unrelated request binding 99999999-3434-4567-8989-121212121212
+    tests\step-up\step-up.spec.ts:87:2 › Completion recovery refuses an unrelated request binding null

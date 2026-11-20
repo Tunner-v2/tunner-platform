@@ -1,0 +1,617 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.totp.config.ts",
+      "--grep",
+      "@UI-005"
+    ],
+    "configFile": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\playwright.totp.config.ts",
+    "rootDir": "<repo-root>/web/tests/totp/ui",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo-root>/web/test-results/runs/totp-public-ui",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo-root>/web/tests/totp/ui",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/totp-public-ui/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "totp.spec.ts",
+      "file": "totp.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "@UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 1440",
+          "ok": false,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6307,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                      "column": 39,
+                      "line": 151
+                    },
+                    "snippet": "  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                        "column": 39,
+                        "line": 151
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T04:49:02.380Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\totp-public-ui\\totp--UI-005-DISABLE-cance-59e3d--and-guards-actions-at-1440\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                    "column": 39,
+                    "line": 151
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-c4aaed0f278dec43401b",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        },
+        {
+          "title": "@UI-005 RESET cancellation refreshes externally changed factors and guards actions at 1440",
+          "ok": false,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6145,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                      "column": 39,
+                      "line": 151
+                    },
+                    "snippet": "  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                        "column": 39,
+                        "line": 151
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T04:49:10.709Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\totp-public-ui\\totp--UI-005-RESET-cancell-c6408--and-guards-actions-at-1440\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                    "column": 39,
+                    "line": 151
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-a1460cb0c7eb710380f5",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        },
+        {
+          "title": "@UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 768",
+          "ok": false,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6074,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                      "column": 39,
+                      "line": 151
+                    },
+                    "snippet": "  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                        "column": 39,
+                        "line": 151
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T04:49:18.221Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\totp-public-ui\\totp--UI-005-DISABLE-cance-21878-s-and-guards-actions-at-768\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                    "column": 39,
+                    "line": 151
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-c2f7d8e7e4efd0c98a0d",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        },
+        {
+          "title": "@UI-005 RESET cancellation refreshes externally changed factors and guards actions at 768",
+          "ok": false,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6014,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                      "column": 39,
+                      "line": 151
+                    },
+                    "snippet": "  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                        "column": 39,
+                        "line": 151
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T04:49:25.808Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\totp-public-ui\\totp--UI-005-RESET-cancell-77dd6-s-and-guards-actions-at-768\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                    "column": 39,
+                    "line": 151
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-d0b70910896f10792540",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        },
+        {
+          "title": "@UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 390",
+          "ok": false,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6046,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                      "column": 39,
+                      "line": 151
+                    },
+                    "snippet": "  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                        "column": 39,
+                        "line": 151
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T04:49:33.288Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\totp-public-ui\\totp--UI-005-DISABLE-cance-e90b4-s-and-guards-actions-at-390\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                    "column": 39,
+                    "line": 151
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-020df56ec8cbf198f474",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        },
+        {
+          "title": "@UI-005 RESET cancellation refreshes externally changed factors and guards actions at 390",
+          "ok": false,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6007,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                      "column": 39,
+                      "line": 151
+                    },
+                    "snippet": "  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                        "column": 39,
+                        "line": 151
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T04:49:40.867Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\totp-public-ui\\totp--UI-005-RESET-cancell-b8e3e-s-and-guards-actions-at-390\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                    "column": 39,
+                    "line": 151
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-07c4e6a1f2e9ca27891f",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        },
+        {
+          "title": "@UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 320",
+          "ok": false,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5926,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                      "column": 39,
+                      "line": 151
+                    },
+                    "snippet": "  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                        "column": 39,
+                        "line": 151
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T04:49:48.318Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\totp-public-ui\\totp--UI-005-DISABLE-cance-86c46-s-and-guards-actions-at-320\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                    "column": 39,
+                    "line": 151
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-9074c30b85dd496d609e",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        },
+        {
+          "title": "@UI-005 RESET cancellation refreshes externally changed factors and guards actions at 320",
+          "ok": false,
+          "tags": [
+            "UI-005"
+          ],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 5908,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                      "column": 39,
+                      "line": 151
+                    },
+                    "snippet": "  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                        "column": 39,
+                        "line": 151
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.\n  150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');\n> 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);\n      |                                       ^\n  152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);\n  153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);\n  154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts:151:39"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T04:49:55.794Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\totp-public-ui\\totp--UI-005-RESET-cancell-6d55c-s-and-guards-actions-at-320\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\totp\\ui\\totp.spec.ts",
+                    "column": 39,
+                    "line": 151
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9243859b1da68328d69a-f4add21f5114ce170342",
+          "file": "totp.spec.ts",
+          "line": 137,
+          "column": 86
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-11T04:48:58.311Z",
+    "duration": 64716.45799999999,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 8,
+    "flaky": 0
+  }
+}

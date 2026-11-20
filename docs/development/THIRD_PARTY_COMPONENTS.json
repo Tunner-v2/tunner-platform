@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "components": [
+    {
+      "id": "nayuki-qr-code-generator",
+      "version": "1.8.0",
+      "upstream": "https://github.com/nayuki/QR-Code-generator",
+      "tag_object": "7ad95cedd8464a87f82221283612732ae4f3f305",
+      "commit": "720f62bddb7226106071d4728c292cb1df519ceb",
+      "source_url": "https://raw.githubusercontent.com/nayuki/QR-Code-generator/720f62bddb7226106071d4728c292cb1df519ceb/typescript-javascript/qrcodegen.ts",
+      "source_path": "web/vendor/nayuki/upstream/qrcodegen.ts",
+      "source_bytes": 41025,
+      "source_sha256": "c4749095a91bf9696e3a303998b9905e467094f53041e64393e65e6d887737fd",
+      "generated_path": "web/vendor/nayuki/qrcodegen.mjs",
+      "generated_sha256": "4beab5d288a523ccf61dc0582a29f91be9d4dd6f74b93aa9faef9ae2261b1bee",
+      "declaration_path": "web/vendor/nayuki/qrcodegen.d.mts",
+      "build_command": "node web/tools/build-qr-vendor.mjs --check",
+      "compiler": "existing TypeScript5.9.3 ES2022/ESNext; preserve comments; append only ESM export before type erasure; trim generated/notice trailing whitespace only (upstream unchanged)",
+      "license": "MIT",
+      "license_notice_path": "web/apps/user/public/third-party-notices.txt",
+      "transitive_runtime_dependencies": [],
+      "selection_authority": "docs/authority/current/development/01_Engineering_Technology_Foundation.md#16-official-first-dependency-policy",
+      "selection_reason": "Required approved QR setup view; no compatible native/official or existing approved renderer. Bounded established community encoder, no runtime network, OTP mathematics or framework wrapper.",
+      "reviewed_at": "2026-11-10T16:35:14.085Z",
+      "review_result": "SELECTED_PENDING_INTEGRATION_VALIDATION",
+      "review_provenance": "Read-only QA/security/R&D specialist source/license/maintenance review plus root exact41025byte acquisition/hash and existing TypeScript compilation. No Product or release approval.",
+      "maintainer_role": "frontend-engineer",
+      "security_review_role": "cyber-security-engineer",
+      "review_triggers": [
+        "before release",
+        "relevant upstream/security advisory or source/compiler change",
+        "supported runtime/build-tool update"
+      ],
+      "maintenance_limits": "Established community project, no contractual support/SLA/EOL or vulnerability-free claim; no SECURITY.md/published repository advisory is not a CVE clearance. Vendored updates are reviewed manually; Dependabot does not update arbitrary source copies.",
+      "validation_required": [
+        "source/generated/license integrity",
+        "public known-vector and independent QR decoding at rendered size",
+        "UTF8/percent-encoded provisioning labels",
+        "overflow/error/quiet-zone/numeric-only rendering",
+        "zero renderer network calls",
+        "no seed/URI in title, ARIA, logs, URLs or screenshots"
+      ],
+      "work_item_ref": "governance/work-items/TUN-P2-008.yaml"
+    }
+  ]
+}

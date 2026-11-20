@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-016-RV001",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "0049906bcba6bf06bb96184218c318c15e8bff33",
+  "validated_commit_sha": "0049906bcba6bf06bb96184218c318c15e8bff33",
+  "owned_behavior_paths": [
+    "tests/Tunner.Worker.Tests/OutboxReceiveBrokerFixture.cs"
+  ],
+  "context_ref": "artifacts/p2-016-notifications-20261115/receiver-readiness-context/manifest.json",
+  "candidate_patch_ref": "artifacts/p2-016-notifications-20261115/receiver-readiness.patch",
+  "candidate_patch_sha256": "c688c7ed69e6868768c863e8fff1435c090bf77bf628ebc95269d9937c80eea7",
+  "source_review": {
+    "result": "PASS_SOURCE_ONLY",
+    "reviewer": "/root/totp_replay_diagnosis; one independent AI applying Cyber Security1.0, Solution Architecture1.0 and QA1.1 contracts",
+    "assessment": "Fixed bounded application-startup check reuses publisher pattern. Ownership, images, loopback, no-log, failure cleanup, test assertions and production delivery behavior remain. Compilation and runtime unexecuted."
+  },
+  "ci_finding": {
+    "run_id": 44759011999,
+    "source_head_sha": "18cba6c486d89f7d3b1d52e20a7b0fee862ff7e8",
+    "receiver_failed": 6,
+    "other_worker_passed": 21,
+    "identity_passed": 1421,
+    "classification": "Confirmed fixture TCP-only readiness gap; startup race fits initial AMQP connection failures, but exact CI root cause remains unproven."
+  },
+  "qualification": "PASS for the bounded fixture correction through expressly permitted required-CI coverage: exact6receiver and1linkedIdentity TRX entriesPassed, broader27Worker/1421Identity allPassed. Independent three-role review PASS with no findings. Local native remains NOT_RUN_ENGINE_ADMISSION_UNAVAILABLE. Original Product acceptance, Recovery hold, LGTM, main merge and release remain separate.",
+  "build_source_sha": "b6f38be38f9ebb5aa5c06062ae702590aac099c8",
+  "builds": {
+    "worker": {
+      "result": "PASS",
+      "warnings": 0,
+      "errors": 0,
+      "elapsed_seconds": 48.35
+    },
+    "identity_compile_link": {
+      "result": "PASS",
+      "warnings": 0,
+      "errors": 0,
+      "elapsed_seconds": 67.11
+    }
+  },
+  "local_receiver_qualification": {
+    "state": "NOT_RUN_ENGINE_ADMISSION_UNAVAILABLE",
+    "expected_cases": 6,
+    "tests_started": false,
+    "launcher": "artifacts/p2-014-authorization-20261115/Invoke-QualifiedProtocolTests.ps1",
+    "launcher_sha256": "e266e68e58e7fda48b945afa060033b4f317a631db4b447d4812eea9215ab361",
+    "tool_receipt": "578096",
+    "bounds": "Existing launcher failed before test-process creation; no cached-image identity replacement, pulls, engine restart or Recovery run."
+  },
+  "git_state": {
+    "repository_changed": true,
+    "tested_commit_sha": "0049906bcba6bf06bb96184218c318c15e8bff33",
+    "validated_commit_sha": "0049906bcba6bf06bb96184218c318c15e8bff33",
+    "work_item_commit_shas": [
+      "b6f38be38f9ebb5aa5c06062ae702590aac099c8",
+      "0049906bcba6bf06bb96184218c318c15e8bff33"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/",
+      "docs/project/",
+      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/",
+      "%SystemDrive%/",
+      ".vscode/",
+      "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode/"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  },
+  "source_binding_meaning": "tested/validated SHA0049906b denotes actual committed-source equality qualification, not execution at that carrier. Actual runtime execution is CI merge checkoutee90a328; local project builds remain b6f38be3. Root probe0092ec verified identical relevant sources/build inputs and clean owned fixture blob07a2707c2380255af809c92b6855af1cfb8da07e.",
+  "ci_qualification": {
+    "run_id": 44774195543,
+    "head_sha": "0049906bcba6bf06bb96184218c318c15e8bff33",
+    "actual_checkout_sha": "ee90a32801e7fe90621cde8729b1c2fd9312d648",
+    "baseline": "SUCCESS",
+    "web_build_tests_dependency_audit": "SUCCESS",
+    "overall": "FAIL_KNOWN_LGTM_IMAGE_GATE",
+    "artifact_id": 14649152487,
+    "artifact_sha256": "a6c2cc8d978e321177e9a83a039fcace9d76a63a75619a01fc0fbfb639d207df",
+    "artifact_digest_verified": true,
+    "worker": {
+      "passed": 27,
+      "failed": 0,
+      "skipped": 0
+    },
+    "identity": {
+      "passed": 1421,
+      "failed": 0,
+      "skipped": 0
+    },
+    "receiver_cases": [
+      {
+        "name": "Tunner.Worker.Tests.RabbitMqOutboxReceiverIntegrationTests.RealBrokerChannelLossAfterCallbackCommitRedeliversTheSameDownstreamIdentityOnARequalifiedChannel",
+        "outcome": "Passed"
+      },
+      {
+        "name": "Tunner.Worker.Tests.RabbitMqOutboxReceiverIntegrationTests.RealBrokerTopologyFailureAndUncertainCallbackCannotAcknowledgeOrExposeRawErrors",
+        "outcome": "Passed"
+      },
+      {
+        "name": "Tunner.Worker.Tests.RabbitMqOutboxReceiverIntegrationTests.RealHostedReceiverLogsRetryCountsAndUnavailableEventWithoutRawCallbackOrTransportMaterial",
+        "outcome": "Passed"
+      },
+      {
+        "name": "Tunner.Worker.Tests.RabbitMqOutboxReceiverIntegrationTests.RealBrokerRejectedAndMalformedMessagesReachOnlyTheQualifiedDeadLetterQueueWithoutNewIds",
+        "outcome": "Passed"
+      },
+      {
+        "name": "Tunner.Worker.Tests.RabbitMqOutboxReceiverIntegrationTests.RealBrokerRetryKeepsOriginalIdsStopsTheBatchAndUsesOneFreshDisposedScopePerDelivery",
+        "outcome": "Passed"
+      },
+      {
+        "name": "Tunner.Worker.Tests.RabbitMqOutboxReceiverIntegrationTests.RealBrokerCancellationBeforeDurableCompletionReturnsTheUnacknowledgedOriginalDelivery",
+        "outcome": "Passed"
+      }
+    ],
+    "linked_identity": {
+      "name": "Tunner.Identity.Persistence.Tests.IdentityPostCommitTests.RealHostedWorkerProcessesCommittedIdentityOutboxRetriesHandoffAndAcknowledgesExactDuplicates",
+      "outcome": "Passed"
+    },
+    "profile": "CI portable RabbitMQ; no native execution claim"
+  },
+  "owned_git_blobs": {
+    "tests/Tunner.Worker.Tests/OutboxReceiveBrokerFixture.cs": "07a2707c2380255af809c92b6855af1cfb8da07e"
+  },
+  "review_refs": [
+    "governance/reviews/REV-P2-016-RV001-tester-qa-engineer.yaml",
+    "governance/reviews/REV-P2-016-RV001-cyber-security-engineer.yaml",
+    "governance/reviews/REV-P2-016-RV001-solution-architect.yaml"
+  ]
+}

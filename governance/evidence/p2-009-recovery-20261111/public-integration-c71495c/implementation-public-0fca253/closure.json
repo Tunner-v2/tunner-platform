@@ -1,0 +1,37 @@
+{
+  "invocation_sha": "0fca253b9a3786f4a3fbdb274ec0071d32a72853",
+  "recorded_at": "2026-11-11T11:03:31.860Z",
+  "servers": [
+    {
+      "name": "component",
+      "port": 5239,
+      "url": "http://127.0.0.1:5239/browser-testing/recovery-codes-assets/",
+      "args": [
+        "node_modules/vite/bin/vite.js",
+        "--config",
+        "fixtures/recovery-codes/vite.config.ts"
+      ],
+      "pid": 23112,
+      "started_at": "2026-11-11T11:00:33.969Z",
+      "closed": true
+    },
+    {
+      "name": "account",
+      "port": 5241,
+      "url": "http://127.0.0.1:5241/registration/",
+      "args": [
+        "node_modules/vite/bin/vite.js",
+        "--config",
+        "apps/user/vite.config.ts",
+        "--port",
+        "5241"
+      ],
+      "pid": 19572,
+      "started_at": "2026-11-11T11:00:33.988Z",
+      "closed": true
+    }
+  ],
+  "playwright_terminal": true,
+  "unknown_process_stopped": false,
+  "private_values": false
+}

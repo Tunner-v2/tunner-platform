@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "scope_type": "MILESTONE",
+  "scope_id": "P0",
+  "revision_ref": "P0-RV009",
+  "status": "PASS",
+  "reviewed_commit_sha": "fd58093d839aec7d55e7578b24a35a804e984eaf",
+  "reviewed_scope_sha256": "555e4ee909c7566759e9fea9c3ceb7066984d2ee21369612d407c776ec04d6e8",
+  "reviewed_at": "2026-10-21T16:51:47.715Z",
+  "provenance": "Fresh executing-agent technical review of current unchanged P0 scope via new Revision; original historical milestone receipts retained.",
+  "reviews": [
+    {
+      "role": "governance-engineer",
+      "conclusion": "PASS",
+      "evidence_ref": "governance/evidence/P0-RV009-VALIDATION.json",
+      "checks": [
+        "Append-only P0-RV009 and same-original-scope P1-018-RV002 retain closed history and exact owned behavior classifications.",
+        "Candidate source records are committed, tested SHAs are ancestors, and final metadata is distinct from behavior changes."
+      ]
+    },
+    {
+      "role": "tester-qa-engineer",
+      "conclusion": "PASS",
+      "evidence_ref": "governance/evidence/P0-RV009-VALIDATION.json",
+      "checks": [
+        "Actual source-bound checks pass: full governance suite,13 audit checks,27 CI checks,21 disposable image compatibility checks,31 frontend unit and38 browser checks.",
+        "Fresh29-image comparison is recorded;28 pixel-identical and one320px capture differs only by46 one-level pixels with visual inspection showing no material change."
+      ]
+    },
+    {
+      "role": "auditor",
+      "conclusion": "PASS",
+      "evidence_ref": "governance/evidence/P0-RV009-VALIDATION.json",
+      "checks": [
+        "Source, image IDs, recipe hashes, current scans, failed/superseded attempts and precise acceptance boundaries are preserved.",
+        "Thirteen unrelated dirty paths are retained; final preservation hashes are checked rather than asserting an unavailable earlier byte snapshot."
+      ]
+    }
+  ]
+}

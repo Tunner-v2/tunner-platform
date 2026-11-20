@@ -1,0 +1,50 @@
+{
+  "receipt_kind": "OBSERVED_EXTRACT_NOT_FULL_PLAYWRIGHT_REPORT",
+  "source_sha": "42dfecf308d029f530237d84c4c42145a8df9040",
+  "raw_local_report": "artifacts/p2-019-content-20261116/passkey-completed-reload-green-42dfecf3/results.json",
+  "raw_report_sha256": "3152b68cfabc5d9e38eccf8ffc7cffdd92440f6b2094f8c6506e44fedfaa7924",
+  "stats": {
+    "startTime": "2026-11-17T23:17:54.15Z",
+    "duration": 10612.259,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "test_file": "web/tests/passkeys/passkeys.spec.ts",
+      "title": "Lost enrollment response checks the exact original result without another mutation or native create",
+      "id": "74b2887b23599a1b6d52-16d60f10c3f6001dd5c4",
+      "status": "passed",
+      "retry": 0,
+      "duration_ms": 2143
+    },
+    {
+      "test_file": "web/tests/passkeys/passkeys.spec.ts",
+      "title": "@regression Completed revocation reload verifies the exact result without false pending or another mutation",
+      "id": "74b2887b23599a1b6d52-52bafa570eaf0c9fe92d",
+      "status": "passed",
+      "retry": 0,
+      "duration_ms": 2311
+    },
+    {
+      "test_file": "web/tests/passkeys/passkeys.spec.ts",
+      "title": "Reload recovers original authorized metadata from server context without browser storage or new request",
+      "id": "74b2887b23599a1b6d52-ac107e5d49775e132455",
+      "status": "passed",
+      "retry": 0,
+      "duration_ms": 1629
+    },
+    {
+      "test_file": "web/tests/passkeys/passkeys.spec.ts",
+      "title": "@regression Unresolved startA cannot adopt another tab completedB during canonical SPA navigation",
+      "id": "74b2887b23599a1b6d52-a610f779d5c35c6065b3",
+      "status": "passed",
+      "retry": 0,
+      "duration_ms": 1165
+    }
+  ],
+  "execution_ref": "governance\\evidence\\p2-019-content-20261116\\open-foundation-currentness-5b8f13b1\\fix-462e269a\\fixture-green/execution.json",
+  "boundary": "Four focused fixture regressions at committed production fix42df; no live-host or whole-feature claim."
+}

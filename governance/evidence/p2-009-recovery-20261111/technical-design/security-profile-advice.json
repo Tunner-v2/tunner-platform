@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "scope": "READ_ONLY_TECHNICAL_PROFILE_ADVICE_NOT_SELECTED_RUNTIME_CONFIGURATION",
+  "generator_candidate": {
+    "candidate": "Framework RandomNumberGenerator.GetBytes(16) plus Convert.ToHexString; exactly32 uppercase ASCII hexadecimal characters",
+    "random_bits": 128,
+    "why": "One bounded framework RNG call and built-in bijective encoding; no copied random algorithm, rejection sampler or truncated native recovery generator.",
+    "input_candidate": "Accept exactly32 ASCII uppercase hex characters for this candidate. Any case/separator-friendly alternative must be explicit, versioned and entropy-preserving; do not inherit TOTP canonicalization or permissive Unicode normalization.",
+    "status": "Recommendation for technical review only. User consent to the view/download is not selection of this format, production set count or generator deployment compliance.",
+    "primary_sources": [
+      "https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.randomnumbergenerator.getbytes?view=net-10.0",
+      "https://learn.microsoft.com/en-us/dotnet/api/system.convert.tohexstring?view=net-10.0"
+    ]
+  },
+  "verifier_candidate": {
+    "mechanics": "Pinned native Identity PasswordHasher in explicit IdentityV3 mode; no custom PBKDF2/crypto or default raw RecoveryCodes store.",
+    "binding": "Hash an unambiguous bounded recovery-purpose/profile/owner/set-generation context plus canonical code, or another reviewed equally explicit binding. The generic user parameter is not owner binding. Keep operation/code plaintext out of logs, context receipts and stable status projections.",
+    "new_profile_header_constraints": "For a supported new recovery V3 profile, require the exact framework-generated marker/PRF/salt/subkey lengths and an allowlisted encoded iteration value before verification. A16-byte salt and32-byte subkey produce61 binary bytes/84 base64 characters; this is a technical format constraint, not a selected production work factor.",
+    "cost_hazard": "Native VerifyHashedPasswordV3 uses the cost and sizes embedded in a stored verifier. Constructor IterationCount is not a maximum verify cost. Validate the bounded supported header before native invocation; reject excessive/malformed/legacy/unsupported values without KDF work.",
+    "no_downgrade": "No IdentityV2, weaker PRF, lower-cost retry or alternate store on malformed/profile mismatch. Migration/rehash policy, if ever needed, must be explicit; no existing recovery-code migration is inferred.",
+    "primary_source": "https://raw.githubusercontent.com/dotnet/aspnetcore/v10.0.13/src/Identity/Extensions.Core/src/PasswordHasher.cs"
+  },
+  "required_finite_bounds": [
+    "CodesPerSet is an owner input constrained to1..MaximumCodesPerSet from a concrete closed supported profile; the browser cannot select either count.",
+    "Creation has at most the supported count of hashes plus a bounded collision allowance; verification has at most the supported candidate count. No unbounded Distinct/regenerate loop or unrestricted per-account/history scan.",
+    "Trusted supported costs constrain worst-case creation/verification work to bounded hashCalls times iterationCost; bound concurrent hash requests and queued work. Count, cost and concurrency cannot be independent unbounded settings.",
+    "Input bytes, framed context fields, verifier encoding length, set candidates, response bytes and download bytes have explicit checked maxima; no allocation based on unchecked stored or browser-provided lengths.",
+    "Check cancellation/deadline before and after native synchronous hash calls, but do not claim cancellation interrupts one PBKDF2 call. Actual per-call cost must already be bounded; elapsed checks alone are insufficient.",
+    "Profile id/native version, required immutable policy references and origin/scope/current operation must resolve to implemented allowlisted combinations. Missing or unsupported inputs fail closed without production defaults.",
+    "Public nonfunctional fixture measurements must justify the selected count/cost/concurrency/time limits before implementation qualification. This review does not invent production rate, latency, proof lifetime or retention values."
+  ],
+  "source_validity": [
+    "Generate/Replace carries current recovery policy/profile and exact set/lifecycle/operation validity into the existing shared last decision point after all awaited owner/proof/source work; proof-assurance currentness alone cannot stand in for recovery-owner currentness.",
+    "Consume requires the actual same active owner transaction and trusted recovery-case authorization; recheck case/policy/set validity at its final owner commit frontier after verification. No existing strong-factor session requirement is added by assumption.",
+    "Clarify lifecycle changes versus individual usage changes so replacement invalidation and distinct-code concurrency have the selected semantics, not accidental whole-set version conflicts."
+  ],
+  "consent_delta": {
+    "reference": "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+    "canonical_lf_sha256": "772d59bd6bbce193be87b7d03f8527ed10c5f707fa2c1051b5af1dafc7878d1e",
+    "verified": "Actual current bytes decoded as UTF-8 and LF-normalized hash independently matched. Root recorded authorized L01-L03 plus same-view optional single local download. This supersedes only the old pending visible/admission condition, not technical profiles or production/session/replacement inputs."
+  },
+  "tests_or_values_generated": false,
+  "source_or_governed_mutations": false
+}

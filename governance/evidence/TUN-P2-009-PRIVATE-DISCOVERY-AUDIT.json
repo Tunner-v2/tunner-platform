@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "status": "CONFIRMED_PRIVATE_COHORT_DISCOVERY_DEFECT",
+  "observed_source_commit": "fd412b20be51383ce4bf2d0b776f92529afeb60a",
+  "recorded_at": "2026-11-11T13:41:14.959Z",
+  "finding": {
+    "status": "CONFIRMED_DEFECT_PROPOSED_OPEN_NOT_GOVERNED_APPLIED",
+    "proposed_id": "DEF-TUN-P2-009-PRIVATE-001",
+    "severity": "HIGH",
+    "source_commit": "fd412b20be51383ce4bf2d0b776f92529afeb60a",
+    "title": "Private recovery cohort is discoverable by the ordinary xUnit container pipeline",
+    "finding": "Fact/Theory/InlineData plus IClassFixture opt the private methods into ordinary discovery. Trait is metadata, not an execution gate. The CI workflow sets TUNNER_RUN_CONTAINER_TESTS=1 and invokes the full solution with TRX without excluding this trait. Default IdentityPostgresFixture can create baseline Testcontainers and unqualified databases; the class previously called CreateDatabaseAsync without positive finite ownership.",
+    "references": [
+      {
+        "path": ".github/workflows/security-supply-chain.yml",
+        "line": 52
+      },
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs",
+        "line": 19
+      },
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryCodePrivateIntegrationTests.cs",
+        "line": 17
+      }
+    ],
+    "risk": "Private code/account values could execute through the unqualified container/log/reporting path instead of the closed finite native runner.",
+    "observed_incident": false,
+    "private_execution_observed": false,
+    "raw_private_values_accessed": false,
+    "fix": "Remove only xUnit discovery attributes and IClassFixture; preserve every method/assertion/constructor and literal native43 coverage. Replace all private database entry calls with existing CreateFiniteDatabaseAsync(None), which rejects missing finiteOwner before allocation. Add passive known-type metadata plus empty-default-fixture guard regression in the public response suite.",
+    "verification_required": [
+      "Root committed compile",
+      "Actual public14 with0fail/skip",
+      "Private cohort absent from ordinary discovery (exact metadata/discovery check)",
+      "Native43 literal registry/body parity retained; actual qualified native43 remains mandatory for whole acceptance"
+    ],
+    "no_product_decision_or_policy_change": true,
+    "source_applied": false,
+    "tests_or_resources_executed": false
+  },
+  "authority_resolution": {
+    "references": [
+      "docs/development/P2_009_RECOVERY_CODES_SCOPE.md",
+      "governance/evidence/p2-009-recovery-20261111/refinement/security/test-matrix.json",
+      "web/tests/recovery/private/README.md"
+    ],
+    "conclusion": "Existing required private-output/source-binding/owned-resource controls govern test execution. General xUnit discovery must not create functional recovery values through an unqualified fixture or TRX path. No Product policy or workflow change is needed.",
+    "new_product_decision_required": false,
+    "missing_authority_blocker_created": false
+  },
+  "input_bindings": [
+    {
+      "path": ".github/workflows/security-supply-chain.yml",
+      "utf8_lf_sha256": "62638ccbbcb2f4be3936bbc5b2a05e14549f3ec7d89992d3265dafcb3b259065"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs",
+      "utf8_lf_sha256": "5cae0e16043db6f034fb40266508f6851962b4141e9ae9800d0028fafdac2dc9"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryCodePrivateIntegrationTests.cs",
+      "utf8_lf_sha256": "0e8f847f31de2c0abeedd5f59004459f12ead8a4b076dc014e85ea8d4cfda724"
+    },
+    {
+      "path": "docs/development/P2_009_RECOVERY_CODES_SCOPE.md",
+      "utf8_lf_sha256": "3bc2cd78381d3a2b85a0aa14155309c4ea9845663e663da1f1ba302be3e4804f"
+    },
+    {
+      "path": "governance/evidence/p2-009-recovery-20261111/refinement/security/test-matrix.json",
+      "utf8_lf_sha256": "2967619858a5961a5fccf8a5d1a436a36343f5cbce7dfee04a6efd8bdb351672"
+    },
+    {
+      "path": "web/tests/recovery/private/README.md",
+      "utf8_lf_sha256": "c86d96c93700ba7f5bc99066cd1707ebd20744e29550c8445ee5f65291a57a2d"
+    }
+  ],
+  "original_artifact": "artifacts/p2-009-recovery-20261111/private-discovery-boundary-v1/defect-proposal.json",
+  "original_artifact_sha256": "c08d2b89acfd6da52d144e8c64fc7576aeaa25f0acf7b98ab6f344c40fef18f5",
+  "claims": {
+    "private_execution_observed": false,
+    "observed_incident": false,
+    "raw_private_values_accessed": false,
+    "tests_executed": false,
+    "resources_run": false,
+    "implementation_accepted": false
+  },
+  "scope_note": "The observed committed dispatcher still has10 original cases.43 private invocations are authored/compiled; full fixed-catalog registration and qualified execution remain pending. No native43 execution is inferred from annotations or metadata."
+}

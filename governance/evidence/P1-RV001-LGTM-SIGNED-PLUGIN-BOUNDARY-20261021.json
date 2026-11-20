@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001",
+  "recorded_on": "2026-10-21",
+  "outcome": "RETAIN_EXISTING_SECURITY_BLOCKER",
+  "authority_resolution": {
+    "method": "AMD-0005 Authority Resolution Pass",
+    "verified_artifacts": 196,
+    "reviewed": [
+      "docs/authority/baselines/1.6.0/01_Engineering_Technology_Foundation.md",
+      "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+      "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+      "docs/authority/baselines/1.6.0/28_Support_Risk_Audit_and_Internal_Operations_FRD.md",
+      "docs/authority/baselines/1.6.0/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+      "docs/authority/baselines/1.6.0/33_Production_Readiness_Compliance_and_Release_Gates.md",
+      "docs/authority/baselines/1.6.0/decisions/ADR-0009_Local_Observability_OTEL_LGTM.md",
+      "docs/development/LOCAL_OBSERVABILITY.md",
+      "governance/context/relevant-flows.md",
+      "governance/evidence/P1-RV001-AUTHORITY-RESOLUTION.json",
+      "governance/evidence/P1-RV001-MAINTAINED-REBUILDS-APPROVAL-20261020.json"
+    ],
+    "resolution": "Existing authority permits dependency remediation and retains mandatory supply-chain controls. ADR0009 keeps the complete LGTM development/test stack; it does not authorize changed plugin trust. No applicable flow or domain FRD grants a signing-root override. Maintained rebuild consent explicitly excludes disabled integrity verification."
+  },
+  "observation": {
+    "plugin": "grafana-postgresql-datasource",
+    "latest_official_version": "13.0.4",
+    "package_sha256": "d34f44bd13213502de4394955fcc170d70fb822531c181bff0179f216c35a0e0",
+    "signature": "Vendor PGP MANIFEST includes executable file hashes; changing the binary invalidates the signed contents.",
+    "fixable_high_critical": 5,
+    "scan_ref": "artifacts/security-remediation-20261020/latest-signed-postgres-plugin-image-scan.json",
+    "scan_sha256": "91d83ac0b785973ed0cf9c612bb6a6f32d0904c3439296d0174611891cce9f8c",
+    "coverage": "Go-binary target present in a disposable scratch inspection image. Initial filesystem scan discovered no targets and is excluded from clean-scan evidence."
+  },
+  "decision_boundary": "Do not remove plugins, permit unsigned plugins, suppress findings, misclassify catalog plugins as core, alter the signing trust root, or lower scan severity. A compatible clean signed vendor package or a separately approved trust/signing ADR is required.",
+  "next_action": "Finish independent CI and clean-image work; prepare a scoped signing design for human review if vendor-signed remediation remains unavailable.",
+  "primary_sources": [
+    "https://grafana.com/api/plugins/grafana-postgresql-datasource",
+    "https://raw.githubusercontent.com/grafana/grafana/v13.2.3/pkg/plugins/manager/signature/manifest.go",
+    "https://raw.githubusercontent.com/grafana/grafana/v13.2.3/pkg/plugins/manager/signature/signature.go",
+    "https://raw.githubusercontent.com/grafana/grafana/v13.2.3/Makefile"
+  ]
+}

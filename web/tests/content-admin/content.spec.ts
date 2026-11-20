@@ -1,0 +1,173 @@
+import {test,expect,type Page} from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+import {contentKeys,type ContentLabel} from '../../apps/admin/content.api';
+import {readFileSync} from 'node:fs';
+const userCopy=(JSON.parse(readFileSync(new URL('../../apps/user/authentication.content.proposal.json',import.meta.url),'utf8')) as {content:Record<string,string>}).content;
+// Controlled BFF responses qualify browser behavior, not live Admin sign-in or authorization.
+const labels:Record<ContentLabel,string>={brand:'Tunner',operations:'Operations workspace',title:'Content management',subtitle:'Review and publish approved wording for each context.',content:'Content',workspace:'Content workspace',review:'Review & publish',history:'Version history',menu:'Menu',skip:'Skip to content',boundary:'Admin workspace · User sign-in remains separate',scope:'Surface',selectScope:'Choose a surface',selectVariant:'Choose a context',search:'Search',searchHelp:'Find a purpose or semantic key.',noMatches:'No matching definitions.',noSelection:'Choose a content definition to begin.',wording:'Wording',reason:'Change reason',wordingHelp:'Keep required variables intact. Changes remain drafts until published.',reasonHelp:'Explain why this wording needs to change.',save:'Save draft',compare:'Preview & compare',validate:'Validate',approve:'Approve',publish:'Publish',restore:'Restore this version',cancel:'Cancel',confirm:'Confirm',loading:'Loading…',unavailable:'This content is unavailable. Try again.',noAccess:'This action is unavailable for the current Admin session.',conflict:'This proposal has changed. Review the current version before continuing.',unknown:'The response was interrupted. Check the result by retrying the same request.',retry:'Retry same request',refresh:'Refresh',empty:'No published version.',current:'Published wording',candidate:'Candidate',approval:'Approval',pending:'Pending',preview:'User context preview',previewUnavailable:'The approved User preview is not available in this workspace.',historyHelp:'Published wording is immutable. Restore creates a new prospective publication.',version:'Version',publication:'Publication reference',effective:'Effective (UTC)',needsApproval:'Approval required',sod:'Configured separation of duties applies. Each action is checked by the server.',scheduledFrom:'Effective from',scheduledUntil:'Effective until',validationSummary:'Check the highlighted fields.',required:'Enter a value.',maxLength:'The value exceeds the allowed length.',invalidTime:'Choose an end after the start.',prospectiveOnly:'Choose a future effective time. Published history is preserved.',saved:'Draft saved.',replayed:'The earlier request was already applied. Current state has been reloaded.',success:'The request was applied. Current state has been reloaded.',needsContext:'Choose a definition, context and saved candidate in the workspace first.',more:'Next page',definition:'Content library',semanticKey:'Semantic key',slots:'Variables',context:'Context',edit:'Edit',startBoundary:'Start boundary',endBoundary:'End boundary',inclusive:'Inclusive',exclusive:'Exclusive',choose:'Choose',endMode:'End condition',endNone:'No scheduled end',endAt:'At a specified time',utc:'Enter UTC time.',changed:'Changed',unchanged:'Unchanged',newDraft:'New draft',selectCandidate:'Choose a saved candidate',draftState:'Draft',validatedState:'Validated',approvedState:'Approved',publishedState:'Published',baseline:'Compare with published version',unsaved:'Unsaved wording',useReviewedVersion:'Continue with reviewed version'};
+const proposalId='10000000-0000-0000-0000-000000000001',versionId='20000000-0000-0000-0000-000000000001',publicationId='30000000-0000-0000-0000-000000000001';
+async function fixture(page:Page,options:{missingPresentation?:boolean;publishAllowed?:boolean;unknownOnce?:boolean;contextualPreview?:boolean}={}){
+ const scope='fixture.identity.login',variant='fixture-login-en';let revision=1,state='APPROVED',wording='Welcome to Tunner',reason='Clarify the sign-in introduction';let guards=0;const writes:{path:string;body:Record<string,unknown>}[]=[];const receipts=new Map<string,unknown>();let lost=false;
+ const proposal=()=>({proposalReference:proposalId,revision,state,scope,key:'login.heading',variantReference:variant,versionReference:versionId,textDigest:'fixture-digest-'+revision,modelOrigin:false});
+ const publication=()=>({publicationReference:publicationId,versionReference:versionId,key:'login.heading',variantReference:variant,locale:'en',text:'Sign in to Tunner',textDigest:'fixture-published-digest',effectiveInterval:{from:'2026-01-01T00:00:00Z',includesFrom:true,until:null,includesUntil:false},supersedesPublicationReference:null,publisherReference:'fixture-publisher',approverReference:'fixture-approver',profileVersion:'fixture-profile-v1',modelOrigin:false,changeReason:'Original approved introduction'});
+ await page.route('**/content/**',async route=>{
+  const path=new URL(route.request().url()).pathname;if(!path.startsWith('/content/'))return route.fallback();const body=route.request().postDataJSON() as Record<string,unknown>|null;
+  const reply=(value:unknown,status=200)=>route.fulfill({status,contentType:'application/json',body:JSON.stringify(value)});
+  if(path==='/content/workspace'){guards++;return reply({csrfToken:'fixture-csrf',workspaces:[{scope,surface:'User sign-in',profileVersion:'fixture-profile-v1',maximumTextLength:4096,maximumPageSize:5,maximumOffset:20,maximumSearchLength:64,separateAuthorApprover:true,separateAuthorPublisher:true,separateApproverPublisher:true,variants:[{reference:variant,locale:'en',safeDimensions:{page:'Sign in'}}]}],presentation:options.missingPresentation?null:{scope:'fixture.admin.chrome',requestedVariantReference:'fixture-admin-en',effectiveVariantReference:'fixture-admin-en',locale:'en',content:Object.fromEntries(contentKeys.map(key=>['admin.content.'+key,{key:'admin.content.'+key,variantReference:'fixture-admin-en',locale:'en',versionReference:'fixture-chrome-v1',publicationReference:'fixture-chrome-p1',text:labels[key]}]))}});}
+  expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-csrf');
+  if(path==='/content/capabilities'){const actions=body!.target==='Workspace'?['Browse']:body!.target==='Definition'?['CreateDraft','History']:body!.target==='History'?['Rollback']:['UpdateDraft','Preview','Validate','Approve',...(options.publishAllowed===false?[]:['Publish'])];return reply({...body,profileVersion:'fixture-profile-v1',availableActions:actions});}
+  if(path==='/content/definitions')return reply({items:[{key:'login.heading',purpose:'Sign-in introduction',contentClass:'fixture-public-copy',mandatory:true,allowFallback:true,requiresApproval:true,variables:[],requiredVariables:[]}],nextOffset:null});
+  if(path==='/content/proposals/search')return reply({items:[proposal()],nextOffset:null});
+  if(path==='/content/history')return reply({items:[publication()],nextOffset:null});
+  if(path==='/content/proposals/preview')return reply({proposal:proposal(),text:wording,changeReason:reason,contentClass:'fixture-public-copy',variables:[]});
+  if(path==='/content/proposals/context-preview')return options.contextualPreview?reply({screen:'LOGIN',draft:{proposal:proposal(),text:wording,changeReason:reason,contentClass:'fixture-public-copy',variables:[]},published:{locale:'en',termsUri:'https://fixture.example.test/terms',privacyUri:'https://fixture.example.test/privacy',supportUri:null,content:Object.fromEntries(Object.entries(userCopy).map(([key,text])=>[key,{key,locale:'en',variantRef:variant,versionRef:'fixture-published-login-v1',publicationRef:'fixture-published-login-p1',state:'PUBLISHED',text}]))}}):reply({error_code:'DEPENDENCY_UNAVAILABLE'},503);
+  if(path==='/content/proposals/diff')return reply({proposal:proposal(),comparedVersionReference:versionId,beforeText:'Sign in to Tunner',afterText:wording,beforeDigest:'fixture-before',afterDigest:'fixture-after',changed:true});
+  writes.push({path,body:body!});const key=String(body!.idempotencyKey);const previous=receipts.get(key);if(previous)return reply({...previous as object,replayed:true});
+  if(path==='/content/proposals/update'||path==='/content/proposals'){wording=String(body!.text);reason=String(body!.changeReason);revision++;state='DRAFT';}else if(path.endsWith('/validate')){revision++;state='VALIDATED';}else if(path.endsWith('/approve')){revision++;state='APPROVED';}else state='PUBLISHED';
+  const response={result:path.endsWith('/publish')||path==='/content/rollback'?publication():proposal(),operationId:'fixture-stable-operation',replayed:false};receipts.set(key,response);
+  if(options.unknownOnce&&!lost){lost=true;return route.abort('failed');}return reply(response);
+ });
+ return {writes,get guards(){return guards;},get revision(){return revision;}};
+}
+async function select(page:Page,candidate=true){await page.goto('/admin/content');await page.getByLabel('Surface',{exact:true}).selectOption('fixture.identity.login');await page.getByRole('button',{name:'Sign-in introduction login.heading'}).click();await page.getByLabel('Context',{exact:true}).selectOption('fixture-login-en');await expect(page.getByLabel('Candidate',{exact:true})).toBeEnabled();if(candidate){await page.getByLabel('Candidate',{exact:true}).selectOption(proposalId);await expect(page.getByLabel('Wording',{exact:true})).toHaveValue('Welcome to Tunner');}}
+async function review(page:Page){await page.getByRole('button',{name:'Preview & compare',exact:true}).click();await expect(page.getByRole('heading',{level:1,name:'Review & publish'})).toBeVisible();await expect(page.getByRole('button',{name:'Publish',exact:true})).toBeEnabled();}
+for(const viewport of [{width:1440,height:1024},{width:390,height:844}])test(`guided workspace, review and confirmation at ${viewport.width}`,async({page},info)=>{
+ await page.setViewportSize(viewport);const server=await fixture(page);await select(page);await page.screenshot({path:info.outputPath(`workspace-${viewport.width}.png`),fullPage:true});
+ await review(page);await page.getByLabel('Compare with published version').selectOption(versionId);await expect(page.getByText('Sign in to Tunner',{exact:true})).toBeVisible();await page.screenshot({path:info.outputPath(`review-${viewport.width}.png`),fullPage:true});
+ await page.getByRole('button',{name:'Publish',exact:true}).click();const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();await dialog.getByRole('button',{name:'Confirm',exact:true}).click();await expect(page.getByLabel('Effective from',{exact:true})).toBeFocused();await expect(page.locator(':invalid')).toHaveCount(0);
+ await page.getByLabel('Effective from',{exact:true}).fill('2099-01-01T00:00');await page.getByLabel('Start boundary').selectOption('inclusive');await page.getByLabel('End condition').selectOption('none');await page.screenshot({path:info.outputPath(`confirmation-${viewport.width}.png`),fullPage:true});
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
+ await dialog.getByRole('button',{name:'Cancel',exact:true}).click();await expect(page.getByRole('button',{name:'Publish',exact:true})).toBeFocused();expect(server.writes).toHaveLength(0);
+ await page.getByRole('button',{name:'Publish',exact:true}).click();await page.getByLabel('Effective from',{exact:true}).fill('2099-01-01T00:00');await page.getByLabel('Start boundary').selectOption('exclusive');await page.getByLabel('End condition').selectOption('none');await page.getByRole('dialog').getByRole('button',{name:'Confirm',exact:true}).click();await expect.poll(()=>server.writes.length).toBe(1);expect(server.writes[0]!.body).toMatchObject({proposalReference:proposalId,expectedRevision:1,supersedesPublicationReference:publicationId,effectiveInterval:{from:'2099-01-01T00:00:00.000Z',includesFrom:false,until:null,includesUntil:false}});
+ await expect(page.getByRole('dialog')).toHaveCount(0);await page.getByRole('link',{name:'Version history',exact:true}).click();await expect(page.getByRole('heading',{level:1,name:'Version history'})).toBeVisible();await expect(page.locator('main[aria-busy="false"] tbody tr')).toHaveCount(1);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:info.outputPath(`history-${viewport.width}.png`),fullPage:true});expect(server.writes).toHaveLength(1);
+});
+test('draft validation focuses the shared invalid field and sends persisted reason',async({page})=>{const server=await fixture(page);await select(page,false);await page.getByRole('button',{name:'Save draft',exact:true}).click();await expect(page.getByLabel('Wording',{exact:true})).toBeFocused();expect(server.writes).toHaveLength(0);await page.getByLabel('Wording',{exact:true}).fill('A clearer introduction');await page.getByLabel('Change reason',{exact:true}).fill('Explain the entry point');await page.getByRole('button',{name:'Save draft',exact:true}).click();await expect.poll(()=>server.writes.length).toBe(1);expect(server.writes[0]!.body).toMatchObject({text:'A clearer introduction',changeReason:'Explain the entry point'});});
+test('Content backend validation preserves wording and uses shared form feedback',async({page},info)=>{
+ for(const width of [1440,390]){
+  await page.setViewportSize({width,height:width===1440?1024:844});await page.unrouteAll();const server=await fixture(page);const submitted:Record<string,unknown>[]=[];
+  await page.route('**/content/proposals/update',async route=>{submitted.push(route.request().postDataJSON() as Record<string,unknown>);await route.fulfill({status:400,contentType:'application/json',body:JSON.stringify({error_code:'VALIDATION_ERROR',detail:'fixture-private-content-validation'})});});
+  await select(page);const wording=page.getByLabel('Wording',{exact:true}),reason=page.getByLabel('Change reason',{exact:true}),save=page.getByRole('button',{name:'Save draft',exact:true});
+  await wording.fill('Preserved owner wording '+width);await reason.fill('Preserved owner reason '+width);await save.click();await expect(page.getByRole('alert')).toContainText(labels.validationSummary);await expect(save).toBeEnabled();
+  expect(submitted).toHaveLength(1);expect(submitted[0]).toMatchObject({text:'Preserved owner wording '+width,changeReason:'Preserved owner reason '+width});await expect(wording).toHaveValue('Preserved owner wording '+width);await expect(reason).toHaveValue('Preserved owner reason '+width);expect(server.writes).toHaveLength(0);
+  await expect(page.getByRole('button',{name:'Retry same request',exact:true})).toHaveCount(0);await expect(page.getByText('fixture-private-content-validation',{exact:true})).toHaveCount(0);await expect(page.locator('[aria-invalid="true"]')).toHaveCount(0);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);await page.screenshot({path:info.outputPath(`content-backend-validation-${width}.png`),fullPage:true});
+ }
+});
+test('unknown response retries the identical caller key and reloads original receipt',async({page})=>{const server=await fixture(page,{unknownOnce:true});await select(page);await page.getByLabel('Wording',{exact:true}).fill('Revised introduction');await page.getByRole('button',{name:'Save draft',exact:true}).dblclick();await expect(page.getByRole('button',{name:'Retry same request'})).toBeVisible();expect(server.writes).toHaveLength(1);await page.getByRole('button',{name:'Retry same request'}).click();await expect(page.getByText(labels.replayed,{exact:true})).toBeVisible();expect(server.writes).toHaveLength(2);expect(server.writes[1]!.body).toEqual(server.writes[0]!.body);expect(server.revision).toBe(2);});
+test('deep links re-guard without URL or storage disclosure and history restores exact source',async({page})=>{
+ const server=await fixture(page);await page.goto('/admin/content/review?proposal=discard#discard');await expect(page).toHaveURL(/\/admin\/content\/review$/);await expect(page.getByText(labels.needsContext,{exact:true})).toHaveCount(2);
+ await select(page);await review(page);const before=server.guards;await page.getByRole('link',{name:'Version history',exact:true}).click();await expect.poll(()=>server.guards).toBeGreaterThan(before);await page.goBack();await expect(page).toHaveURL(/\/admin\/content\/review$/);await expect(page.getByRole('heading',{level:1,name:'Review & publish'})).toBeVisible();await page.goForward();await expect(page).toHaveURL(/\/admin\/content\/history$/);await expect(page.getByRole('heading',{level:1,name:'Version history'})).toBeVisible();await page.getByRole('button',{name:'Restore this version'}).click();await expect(page.getByRole('dialog')).toBeVisible();await page.getByLabel('Effective from',{exact:true}).fill('2099-01-01T00:00');await page.getByLabel('Start boundary').selectOption('inclusive');await page.getByLabel('End condition').selectOption('none');await page.getByRole('dialog').getByRole('button',{name:'Confirm',exact:true}).click();await expect.poll(()=>server.writes.length).toBe(1);expect(server.writes[0]).toMatchObject({path:'/content/rollback',body:{approvedVersionReference:versionId,supersedesPublicationReference:publicationId}});expect(page.url()).not.toContain(proposalId);expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);await page.reload();await expect(page.getByText(labels.needsContext,{exact:true})).toBeVisible();
+});
+test('published proposal state never fabricates a missing server capability',async({page})=>{const server=await fixture(page,{publishAllowed:false});await select(page);await page.getByRole('button',{name:'Preview & compare',exact:true}).click();await expect(page.getByRole('button',{name:'Publish',exact:true})).toBeDisabled();expect(server.writes).toHaveLength(0);});
+test('missing whole published chrome fails closed without User cookie APIs',async({page})=>{const requests:string[]=[];page.on('request',request=>requests.push(new URL(request.url()).pathname));await fixture(page,{missingPresentation:true});await page.goto('/admin/content');await expect(page.getByRole('alert')).toContainText('The request could not be completed.');await expect(page.getByRole('heading')).toHaveCount(0);expect(requests.filter(path=>path.startsWith('/authentication'))).toEqual([]);});
+test('current route and exact preview qualification gate keyboard writes while reads are delayed',async({page})=>{
+ const server=await fixture(page);await select(page);await page.getByLabel('Wording',{exact:true}).fill('Preserved wording during qualification');await page.getByRole('link',{name:'Version history',exact:true}).click();await expect(page.locator('main[aria-busy="false"] tbody tr')).toHaveCount(1);
+ let releaseWorkspace!:()=>void,releasePreview!:()=>void,sawWorkspace!:()=>void,sawPreview!:()=>void;
+ const workspaceGate=new Promise<void>(resolve=>{releaseWorkspace=resolve;}),previewGate=new Promise<void>(resolve=>{releasePreview=resolve;}),workspaceRequested=new Promise<void>(resolve=>{sawWorkspace=resolve;}),previewRequested=new Promise<void>(resolve=>{sawPreview=resolve;});
+ await page.route('**/content/workspace',async route=>{sawWorkspace();await workspaceGate;await route.fallback();});
+ await page.route('**/content/proposals/preview',async route=>{sawPreview();await previewGate;await route.fallback();});
+ try{
+  await page.getByRole('link',{name:'Content workspace',exact:true}).click();await workspaceRequested;await expect(page.locator('main')).toHaveAttribute('aria-busy','true');await expect(page.getByRole('button',{name:'Save draft',exact:true})).toHaveCount(0);expect(server.writes).toHaveLength(0);
+  releaseWorkspace();await previewRequested;const save=page.getByRole('button',{name:'Save draft',exact:true});await expect(save).toBeDisabled();await expect(page.getByLabel('Wording',{exact:true})).toHaveValue('Preserved wording during qualification');await expect(page.locator('main')).toHaveAttribute('aria-busy','true');
+  await save.evaluate(button=>(button as HTMLButtonElement).form!.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true})));expect(server.writes).toHaveLength(0);
+  releasePreview();await expect(save).toBeEnabled();await save.focus();await expect(save).toBeFocused();await page.keyboard.press('Enter');await expect.poll(()=>server.writes.length).toBe(1);expect(server.writes[0]).toMatchObject({path:'/content/proposals/update',body:{proposalReference:proposalId,expectedRevision:1,text:'Preserved wording during qualification'}});
+ }finally{releaseWorkspace();releasePreview();}
+});
+
+for(const viewport of [{width:1440,height:1024},{width:390,height:844}])test(`readonly User context preview preserves draft and published provenance at ${viewport.width}`,async({page},info)=>{
+ await page.setViewportSize(viewport);
+ const requests:string[]=[];page.on('request',request=>requests.push(new URL(request.url()).pathname));
+ const server=await fixture(page,{contextualPreview:true});await select(page);
+ const preview=page.locator('.content-user-preview');await expect(preview).toBeVisible();
+ await expect(preview).toHaveAttribute('data-preview-screen','LOGIN');
+ await expect(preview.getByRole('heading',{level:1})).toHaveText('Welcome to Tunner');
+ const draft=preview.locator('h1 [data-content-state="DRAFT"]');
+ await expect(draft).toHaveAttribute('data-content-key','login.heading');
+ await expect(draft).toHaveAttribute('data-proposal-reference',proposalId);
+ await expect(draft).toHaveAttribute('data-proposal-revision','1');
+ await expect(draft).not.toHaveAttribute('data-content-publication');
+ await expect(draft).not.toHaveAttribute('data-content-version');
+ await expect(preview.locator('[data-content-state="DRAFT"][data-content-publication]')).toHaveCount(0);
+ const published=preview.locator('[data-content-key="login.description"]');
+ await expect(published).toHaveText(userCopy['login.description']!);
+ await expect(published).toHaveAttribute('data-content-publication','fixture-published-login-p1');
+ await expect(published).toHaveAttribute('data-content-version','fixture-published-login-v1');
+ await expect(preview.locator('[data-tunner-surface="user"][data-tunner-theme="light"]')).toBeVisible();
+ await expect(preview.locator('.authentication-card')).toHaveCSS('border-radius','16px');
+ await expect(preview.getByRole('button',{name:'Sign in',exact:true})).toHaveCSS('background-color','rgb(79, 70, 229)');
+ await expect(preview.locator('.authentication-glow.indigo')).toHaveAttribute('src',/login-bg-indigo\.svg(?:\?|$)/);
+ await expect(preview.locator('.authentication-glow.violet')).toHaveAttribute('src',/login-bg-violet\.svg(?:\?|$)/);
+ await expect(preview.locator('.authentication-providers img')).toHaveAttribute('src',/login-google\.svg(?:\?|$)/);
+ await expect(preview.locator('.authentication-reveal img')).toHaveAttribute('src',/login-eye-off\.svg(?:\?|$)/);
+ await expect.poll(()=>preview.locator('img').evaluateAll(images=>images.every(image=>image instanceof HTMLImageElement&&image.complete&&image.naturalWidth>0))).toBe(true);
+ await expect(preview.locator('button:not(:disabled),input:not(:disabled),a[href],input[name],input[type="password"],input[autocomplete="username"],input[autocomplete="current-password"],style')).toHaveCount(0);
+ expect(await preview.locator('input').evaluateAll(inputs=>inputs.every(input=>input instanceof HTMLInputElement&&input.readOnly&&input.autocomplete==='off'))).toBe(true);
+ await page.getByRole('button',{name:'Preview & compare',exact:true}).focus();await page.keyboard.press('Tab');
+ expect(await preview.evaluate(element=>element.contains(document.activeElement))).toBe(false);
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ const bounds=await preview.locator('.authentication-card').boundingBox();expect(bounds).not.toBeNull();expect(bounds!.width).toBeLessThanOrEqual(Math.min(440,viewport.width));
+ await preview.screenshot({path:info.outputPath(`user-preview-${viewport.width}.png`)});
+ expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
+ expect(server.writes).toHaveLength(0);
+ expect(requests.filter(path=>/^\/(authentication|registration|federation|passkeys|totp|step-up)(?:\/|$)/.test(path))).toEqual([]);
+ expect(await page.evaluate(()=>[localStorage.length,sessionStorage.length])).toEqual([0,0]);
+});
+
+test('responsive Content workspace and dialog support tablet laptop and narrow reflow without writes',async({page},info)=>{
+ for(const viewport of [{width:1024,height:768},{width:768,height:1024},{width:320,height:800}]){
+  await test.step(`${viewport.width}x${viewport.height}`,async()=>{
+   try{
+    await page.goto('about:blank');await page.unroute('**/content/**');await page.setViewportSize(viewport);
+    const server=await fixture(page,{contextualPreview:true});await select(page);
+    const preview=page.locator('.content-user-preview');await expect(preview).toBeVisible();
+    await expect(preview.getByRole('heading',{level:1})).toHaveText('Welcome to Tunner');
+    await expect.poll(()=>preview.locator('img').evaluateAll(images=>images.every(image=>image instanceof HTMLImageElement&&image.complete&&image.naturalWidth>0))).toBe(true);
+    if(viewport.width===768)await page.screenshot({path:info.outputPath('tablet-workspace-768.png'),fullPage:true});
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    const containment=await preview.locator('.authentication-card').evaluate(card=>{
+     const bounds=card.getBoundingClientRect();return [...card.querySelectorAll('input,button,a')].map(control=>{
+      const box=control.getBoundingClientRect();return {tag:control.tagName,className:control.className,left:box.left,right:box.right,cardLeft:bounds.left,cardRight:bounds.right};
+     }).filter(box=>box.left<box.cardLeft-1||box.right>box.cardRight+1);
+    });
+    expect(containment).toEqual([]);
+    await expect(preview.locator('button:not(:disabled),input:not(:disabled),a[href]')).toHaveCount(0);
+    const wording=page.getByLabel('Wording',{exact:true});await wording.fill('');
+    await page.getByRole('button',{name:'Save draft',exact:true}).focus();await page.keyboard.press('Enter');
+    await expect(wording).toBeFocused();await expect(wording).toHaveAttribute('aria-invalid','true');
+    await wording.fill('Welcome to Tunner');await wording.press('Tab');await expect(wording).not.toHaveAttribute('aria-invalid','true');
+    expect(server.writes).toHaveLength(0);
+    // Restore the exact saved candidate; correcting a local draft never authorizes publication.
+    await select(page);await expect(page.locator('.content-user-preview')).toBeVisible();
+    expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
+    await review(page);const publish=page.getByRole('button',{name:'Publish',exact:true});await publish.focus();await page.keyboard.press('Enter');
+    const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();
+    await dialog.getByRole('button',{name:'Confirm',exact:true}).focus();await page.keyboard.press('Enter');
+    const from=dialog.getByLabel('Effective from',{exact:true});await expect(from).toBeFocused();await expect(from).toHaveAttribute('aria-invalid','true');
+    await from.fill('2099-01-01T00:00');await from.press('Tab');await dialog.getByLabel('Start boundary').selectOption('inclusive');await dialog.getByLabel('End condition').selectOption('none');
+    await expect(dialog.locator('[aria-invalid="true"]')).toHaveCount(0);await expect(page.locator(':invalid')).toHaveCount(0);
+    const bounds=await dialog.boundingBox();expect(bounds).not.toBeNull();
+    expect(bounds!.x).toBeGreaterThanOrEqual(0);expect(bounds!.y).toBeGreaterThanOrEqual(0);
+    expect(bounds!.x+bounds!.width).toBeLessThanOrEqual(viewport.width+1);expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(viewport.height+1);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    if(viewport.width===768)await page.screenshot({path:info.outputPath('tablet-dialog-768.png'),fullPage:true});
+    expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);
+    await dialog.getByRole('button',{name:'Cancel',exact:true}).focus();await page.keyboard.press('Enter');
+    await expect(dialog).not.toBeVisible();await expect(publish).toBeFocused();expect(server.writes).toHaveLength(0);
+   }catch(error){
+    if(viewport.width!==768)await page.screenshot({path:info.outputPath(`responsive-failure-${viewport.width}.png`),fullPage:true});
+    throw error;
+   }
+  });
+ }
+});
+test('content Search independently validates its qualified budget and preserves input after server rejection',async({page},info)=>{
+ test.setTimeout(60_000);const server=await fixture(page),queries:Record<string,unknown>[]=[],requests:string[]=[];
+ page.on('request',request=>{if(new URL(request.url()).pathname.startsWith('/content/'))requests.push(request.url());});
+ await page.route('**/content/definitions',async route=>{const body=route.request().postDataJSON() as Record<string,unknown>;queries.push(body);if(String(body.search).startsWith('fixture-unavailable-')){expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-csrf');return route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({error_code:'DEPENDENCY_UNAVAILABLE',detail:'fixture-private-server-detail'})});}return route.fallback();});
+ for(const width of [1440,768,390])await test.step('Search at '+width,async()=>{
+  await page.setViewportSize({width,height:width===390?844:1024});await page.goto('/admin/content');await page.getByLabel('Surface',{exact:true}).selectOption('fixture.identity.login');const search=page.getByLabel('Search',{exact:true}),submit=page.getByRole('button',{name:'Search',exact:true}),error=page.locator('#content-search-error');await expect(search).toBeEnabled();await expect(search).toHaveAttribute('maxlength','64');await search.evaluate(input=>input.removeAttribute('maxlength'));
+  const beforeQueries=queries.length,beforeRequests=requests.length;await search.fill('x'.repeat(65));await expect(search).toHaveValue('x'.repeat(65));await search.press('Tab');await expect(search).toHaveAttribute('aria-invalid','true');await expect(search).toHaveAttribute('aria-describedby',/(?:^| )content-search-error(?: |$)/);await expect(error).toBeVisible();await expect(error).toHaveText(labels.maxLength);await submit.focus();await expect(submit).toBeFocused();await page.keyboard.press('Enter');await expect(search).toBeFocused();expect(queries).toHaveLength(beforeQueries);expect(requests).toHaveLength(beforeRequests);expect(server.writes).toHaveLength(0);await expect(page.locator(':invalid')).toHaveCount(0);
+  expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:info.outputPath(`content-search-error-${width}.png`),fullPage:true});
+  const bounded='s'.repeat(64);await search.fill(bounded);await search.press('Tab');await expect(search).not.toHaveAttribute('aria-invalid','true');await expect(error).toHaveCount(0);await submit.focus();await page.keyboard.press('Enter');await expect.poll(()=>queries.length).toBe(beforeQueries+1);expect(queries.at(-1)).toEqual({scope:'fixture.identity.login',search:bounded,pageSize:5,offset:0});await expect(search).toBeEnabled();await expect(search).toHaveValue(bounded);
+  const unavailable='fixture-unavailable-'+width;await search.fill(unavailable);await submit.focus();await page.keyboard.press('Enter');await expect.poll(()=>queries.length).toBe(beforeQueries+2);expect(queries.at(-1)).toEqual({scope:'fixture.identity.login',search:unavailable,pageSize:5,offset:0});await expect(page.getByText(labels.unavailable,{exact:true})).toBeVisible();await expect(search).toHaveValue(unavailable);await expect(page.getByText('fixture-private-server-detail',{exact:true})).toHaveCount(0);expect(server.writes).toHaveLength(0);expect(new URL(page.url()).search).toBe('');expect(new URL(page.url()).hash).toBe('');expect(page.url()).not.toContain(unavailable);
+ });
+});

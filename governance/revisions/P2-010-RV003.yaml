@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-010-RV003",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-010",
+  "parent_revision_id": "P2-010-RV002",
+  "parent_milestone_revision_id": null,
+  "title": "Reconcile historical native fixture ownership",
+  "revision_type": "COMPATIBILITY",
+  "status": "CLOSED",
+  "reason": "Actual gate after closed RV002 identifies tests/Shared/RecoveryCodeOwnedDockerFixture.cs as historical owned behavior not classified by the four-path RV002 proof. Preserve that legitimate closure and original Product acceptance. Register this one-file corrective proof with exact current/actual579 source equivalence and existing109/SQL13 validation; no code or production behavior change.",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Prove the exact shared test helper unchanged from actual579 native109/SQL13 execution, retain seven genuine scoped reviews and native committed closure, without relabeling execution or changing original closure."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["full-stack-engineer", "solution-architect", "tester-qa-engineer", "cyber-security-engineer", "auditor", "compliance-specialist", "governance-engineer"],
+  "evidence_refs": ["governance/evidence/P2-010-RV003-VALIDATION.json"],
+  "product_acceptance_required": false,
+  "created_at": "2026-11-13T20:24:32.6798072\u002B00:00",
+  "closed_at": "2026-11-13T20:34:35Z",
+  "git_state": {
+  "repository_changed": true,
+  "validated_commit_sha": "3c71603606c3e76efc82ad273a6646a3a7985137",
+  "tested_commit_sha": "3c71603606c3e76efc82ad273a6646a3a7985137",
+  "work_item_commit_shas": [
+    "3c71603606c3e76efc82ad273a6646a3a7985137"
+  ],
+  "closure_commit_sha": null,
+  "remaining_uncommitted_paths": [
+    "docs/context/current/HANDOFF.md",
+    "docs/context/current/adaptive-selection.json",
+    "docs/context/current/authority.md",
+    "docs/context/current/contracts.md",
+    "docs/context/current/git-changes.md",
+    "docs/context/current/manifest.json",
+    "docs/context/current/relevant-flows.md",
+    "docs/context/current/summary.md",
+    "docs/context/current/tests.md",
+    "docs/project/CURRENT_STATE.md",
+    "docs/project/HANDOFF.md",
+    "docs/project/PROJECT_CONTEXT.md",
+    ".vscode/settings.json",
+    "%SystemDrive%/",
+    "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/"
+  ],
+  "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+}
+}

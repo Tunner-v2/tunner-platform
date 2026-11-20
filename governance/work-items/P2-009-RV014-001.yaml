@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "work_item_id": "P2-009-RV014-001",
+  "milestone_id": "P2",
+  "revision_ref": "P2-009-RV014",
+  "sprint_id": null,
+  "title": "Qualify existing Recovery UI keyboard accessibility with isolated browser fixtures",
+  "status": "DONE",
+  "type": "FEATURE",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "flow_refs": [],
+  "contract_refs": [],
+  "decision_refs": [],
+  "acceptance_criteria": [
+    "Add only two focused keyboard regression cases in the existing authentication/recovery and recovery-case/presentation suites, using their established Vite and browser fixtures at768/320 widths.",
+    "Verify real Tab/Enter/Space traversal and activation, error focus, safe correction and accessible containment for the six existing Recovery UI items; preserve all original assertions and domain-policy boundaries.",
+    "This test-only scope changes no application, authentication, provider, backend or business implementation. It qualifies UI evidence only and never declares P011 feature eligibility/completion, private HTTPS restoration or a new native123 pass.",
+    "Bind actual frontend, fixture, configuration and test inputs to executed results, retain applicable older visual/URL/validation evidence, and require the scoped native UI check before technical completion."
+  ],
+  "prerequisites": [],
+  "blockers": [],
+  "impact": {
+    "architecture": false,
+    "ui": false,
+    "sdk": false,
+    "financial": false,
+    "compliance": false,
+    "security": false,
+    "devops": false,
+    "support": false
+  },
+  "activated_roles": ["full-stack-engineer","tester-qa-engineer","frontend-engineer","ui-ux-engineer","end-user-ux-reviewer"],
+  "required_tests": ["Recovery approved routes support keyboard activation and accessible tablet narrow reflow","Recovery conditional presentation supports keyboard activation and accessible tablet narrow reflow"],
+  "required_evidence": ["governance/evidence/P2-009-RV014-001-VALIDATION.json","governance/evidence/TUN-P2-011-UI-COMPLIANCE.json"],
+  "product_acceptance_required": false,
+  "context_policy": "TASK",
+  "todos": [],
+  "defects": [],
+  "created_at": "2026-11-18T03:14:39.3073347\u002B00:00",
+  "updated_at": "2026-11-18T03:14:39.3073776\u002B00:00",
+  "git_state": {"repository_changed":true,"validated_commit_sha":"0f268b06e619ceab21de9e541d6dfe5a7fcc797f","tested_commit_sha":"0f268b06e619ceab21de9e541d6dfe5a7fcc797f","work_item_commit_shas":["0f268b06e619ceab21de9e541d6dfe5a7fcc797f"],"closure_commit_sha":null,"remaining_uncommitted_paths":["docs/context/current/","docs/project/","governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/",".vscode/","%SystemDrive%/","governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode/","governance/revisions/P2-009-RV014.yaml","governance/revisions/P2-010-RV015.yaml","governance/revisions/P2-013-RV006.yaml","governance/evidence/P2-009-RV014-VALIDATION.json","governance/evidence/P2-010-RV015-VALIDATION.json","governance/evidence/P2-013-RV006-VALIDATION.json"],"remaining_uncommitted_classification":"UNRELATED_ACTIVE_WORK"}
+}

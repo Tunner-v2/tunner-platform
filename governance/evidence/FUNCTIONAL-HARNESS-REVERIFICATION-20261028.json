@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "result": "PASS_REVERIFIED_EXISTING_FIX",
+  "scope_id": "P1-RV001-001",
+  "original_fix_ref": "governance/evidence/FUNCTIONAL-HARNESS-ERROR-REVIEW-20261018.json",
+  "original_fix_commit": "623d3db08ee73182904a12dd08351260a715449c",
+  "tested_commit": "d12e446b33831b123b9f71ca94e67a20a2cdfff5",
+  "source_equivalence": "Both harness Programs and project files remain byte-identical from623d3db to the current validation source; no duplicate source change or historical RV reopening is required.",
+  "builds": {
+    "projects": 2,
+    "warnings": 0,
+    "errors": 0
+  },
+  "controlled_failures": {
+    "passed": 6,
+    "expected_child_exit": 1,
+    "unhandled_exception_output": false,
+    "false_pass_output": false
+  },
+  "ordinary_runs": {
+    "governance": "PASS",
+    "audit_remediation": "PASS_13_AUTHORITY_CONTEXT_CHECKS"
+  },
+  "event_review": {
+    "matched_tunner_events": 0,
+    "window_days": 14,
+    "unrelated_events_recorded": false
+  },
+  "historical_attribution": "The screenshot code is generic; no original stack is available. Current covered managed failures are handled and nonzero, without WER/OS settings changes. Native/fatal unrelated failures are not claimed.",
+  "evidence_root": "governance/evidence/security-20261028/windows-harness",
+  "evidence_sha256": {
+    "harness-controlled-failures.log": "8de00e1b99cdc786e68ecdd68dd549d4253984353776fa4c849fa56cc39ba25a",
+    "governance-functional.log": "dd5db41654cb4e5f25b3cfe54e8f28bb38dd9110c035a7114ce9081929530cf5",
+    "audit-functional.log": "f43ed28553043a8abcd9b0109aee7072405f7ac5d61606db7db19856ccf27d74",
+    "governance-harness-build.log": "f9a61cd4b39538c2bee1157adfc54d7859af40855580f4aac5ce3a7538d9eeae",
+    "audit-harness-build.log": "696b447cba37c82a7e89c898d2ab460df0f4d09585fe97dbb4fb1d3e188148d4"
+  }
+}

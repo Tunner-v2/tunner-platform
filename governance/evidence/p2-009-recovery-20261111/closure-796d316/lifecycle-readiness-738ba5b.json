@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-009",
+  "source_commit": "738ba5b1638eb454e89169d8ac4d906a8e448ee6",
+  "tested_and_validated_candidate": "1e99d846e7aa9ea560d338ee1c98b925b458f6d8",
+  "engineering_readiness": {
+    "process_exit_code": 0,
+    "tool_chunk_id": "163d86",
+    "native_result": {
+      "ExitCode": 0,
+      "Command": "gate check",
+      "Payload": {
+        "WorkItemId": "TUN-P2-009",
+        "Outcome": "READY",
+        "Failures": [],
+        "Satisfied": [
+          "evidence exists: governance/evidence/TUN-P2-009-VALIDATION.json",
+          "evidence exists: docs/development/P2_009_RECOVERY_CODES_SCOPE.md",
+          "evidence exists: governance/evidence/TUN-P2-009-STARTUP-REVIEWS.json",
+          "evidence exists: governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+          "evidence exists: governance/evidence/p2-009-recovery-20261111/refinement/authority-resolution.json",
+          "evidence exists: governance/evidence/p2-009-recovery-20261111/refinement/contract/execution-boundaries.json",
+          "evidence exists: governance/evidence/p2-009-recovery-20261111/refinement/security/test-matrix.json",
+          "evidence exists: governance/evidence/p2-009-recovery-20261111/refinement/portable-lineage.json",
+          "evidence exists: governance/evidence/TUN-P2-009-SHARED-INTEGRATION-AUTHORIZATION.json",
+          "evidence exists: governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
+          "evidence exists: governance/evidence/p2-009-recovery-20261111/preliminary-slices/index.json",
+          "evidence exists: governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/copy-index.json",
+          "evidence exists: governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/root-review.json",
+          "evidence exists: governance/evidence/TUN-P2-009-ADMISSION-CURRENTNESS-AUDIT.json",
+          "evidence exists: governance/evidence/TUN-P2-009-PRIVATE-DISCOVERY-AUDIT.json",
+          "evidence exists: governance/evidence/TUN-P2-009-DATA-INVENTORY.json",
+          "evidence exists: governance/evidence/TUN-P2-009-DATA-LIFECYCLE-ASSESSMENT.json",
+          "evidence exists: governance/evidence/TUN-P2-009-ROLE-REVIEWS.json",
+          "evidence exists: governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+          "evidence exists: governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+          "evidence exists: governance/evidence/p2-009-recovery-20261111/closure-796d316/native-acceptance-a095f5f.json",
+          "evidence exists: governance/evidence/p2-009-recovery-20261111/closure-796d316/secret-scan-final-source.json",
+          "evidence exists: governance/evidence/TUN-P2-009-UI-COMPLIANCE.json",
+          "evidence exists: governance/evidence/p2-009-recovery-20261111/closure-796d316/candidate-validation-3e875f6.json",
+          "evidence exists: governance/evidence/p2-009-recovery-20261111/closure-796d316/secret-scan-metadata-3e875f6.json",
+          "evidence exists: governance/evidence/p2-009-recovery-20261111/closure-796d316/carrier-1e99d84-focused10.json",
+          "role review evidence exists",
+          "AMD-0008/0009 per-route/form UI compliance passed",
+          "mandatory role review passed: auditor",
+          "mandatory role review passed: content-writer",
+          "mandatory role review passed: cyber-security-engineer",
+          "mandatory role review passed: end-user-ux-reviewer",
+          "mandatory role review passed: frontend-engineer",
+          "mandatory role review passed: full-stack-engineer",
+          "mandatory role review passed: sdk-engineer",
+          "mandatory role review passed: solution-architect",
+          "mandatory role review passed: tester-qa-engineer",
+          "mandatory role review passed: ui-ux-engineer"
+        ]
+      }
+    }
+  },
+  "legal_lifecycle_events": [
+    {
+      "command": "governance transition check TUN-P2-009 CODE_REVIEW",
+      "tool_chunk_id": "2629dc",
+      "process_exit_code": 0,
+      "native_result": {
+        "ExitCode": 0,
+        "Command": "transition check",
+        "Payload": {
+          "WorkItemId": "TUN-P2-009",
+          "From": "IN_PROGRESS",
+          "Destination": "CODE_REVIEW",
+          "Outcome": "ALLOWED",
+          "Reason": "The destination is the next declared normal lifecycle state."
+        }
+      }
+    },
+    {
+      "command": "governance transition check TUN-P2-009 VALIDATION",
+      "tool_chunk_id": "48603d",
+      "process_exit_code": 0,
+      "native_result": {
+        "ExitCode": 0,
+        "Command": "transition check",
+        "Payload": {
+          "WorkItemId": "TUN-P2-009",
+          "From": "CODE_REVIEW",
+          "Destination": "VALIDATION",
+          "Outcome": "ALLOWED",
+          "Reason": "The destination is the next declared normal lifecycle state."
+        }
+      }
+    },
+    {
+      "command": "governance revision transition check P1-018-RV007 VALIDATION",
+      "tool_chunk_id": "4c8496",
+      "process_exit_code": 0,
+      "native_result": {
+        "ExitCode": 0,
+        "Command": "revision transition check",
+        "Payload": {
+          "RevisionId": "P1-018-RV007",
+          "Outcome": "ALLOWED",
+          "Findings": [],
+          "Satisfied": []
+        }
+      }
+    },
+    {
+      "command": "governance revision transition check P1-018-RV007 CLOSED",
+      "tool_chunk_id": "d46adb",
+      "process_exit_code": 0,
+      "native_result": {
+        "ExitCode": 0,
+        "Command": "revision transition check",
+        "Payload": {
+          "RevisionId": "P1-018-RV007",
+          "Outcome": "ALLOWED",
+          "Findings": [],
+          "Satisfied": []
+        }
+      }
+    }
+  ],
+  "sequence_provenance": "Read-only native checks ran in the recorded logical order against each actual working-tree lifecycle state. Intermediate metadata states are retained by these observations; final VALIDATION/CLOSED values are committed together. No completed handoff or DONE claim preceded commit.",
+  "prior_gate_failure": {
+    "source_commit": "1e99d846e7aa9ea560d338ee1c98b925b458f6d8",
+    "process_exit_code": 1,
+    "tool_chunk_id": "ca6bb5",
+    "failures": [
+      "tested_commit_sha must equal validated_commit_sha for behavior-affecting validation"
+    ],
+    "resolution": "Actual focused public10 tests ran at1e99; both official candidate fields now bind that actual commit. Original full cohort SHAs remain unchanged."
+  },
+  "pending_product_acceptance": true,
+  "product_owner_or_release_approval_claimed": false,
+  "post_commit_revision_close_check": "PENDING"
+}

@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "recorded_at": "2026-11-11T06:56:55.872023+00:00",
+  "requested_review_head": "667afadc21541acb1c70fd7cc1e21a2b40c33007",
+  "observed_head": "ebfd9af892a7c771a7b5b76a860a5883cedc6cf7",
+  "work_item_state": "REFINEMENT",
+  "phase": "ARTIFACT_ONLY_REFINEMENT_AND_STARTUP_REVIEW",
+  "implementation_authorized": false,
+  "tests_executed": false,
+  "product_or_human_approval": false,
+  "resolution_pass": "AMD0005 bounded refinement resolution; no new decision/missing-authority blocker is created.",
+  "existing_authority": [
+    {
+      "refs": [
+        "FRD17 §§6,7,13",
+        "catalog32 §§2,10",
+        "ADR0006"
+      ],
+      "resolution": "Identity owns one-time generation/display-download, verifier-safe storage, individual consumption and operation/idempotency/version/audit lineage using the selected Identity/.NET stack."
+    },
+    {
+      "refs": [
+        "FRD17 §7",
+        "operation-step-up-contract.md"
+      ],
+      "resolution": "Generate/Replace require fresh current exact-operation shared step-up; no browser-selected Account/policy/assurance authority or general session upgrade."
+    },
+    {
+      "refs": [
+        "FRD17 §10",
+        "TUN-P2-011"
+      ],
+      "resolution": "Consumption is evidence in the authorized recovery hierarchy. Do not invent an existing strong-factor session requirement, automatic final session, factor reset or full recovery completion."
+    },
+    {
+      "refs": [
+        "FigJam38 88:6720 nodes79:5554/5560/5572/5587",
+        "FigJam42 88:6732 nodes83:6159/6165",
+        "UI lean-v2",
+        "AMD0009 §§1/3A"
+      ],
+      "resolution": "Server generation and once-only handling/owner revalidation are already required. Existing /account/security plus transient card/dialog is a smaller route proposal; an independent page is not mandated."
+    },
+    {
+      "refs": [
+        "FRD29 §§3-6",
+        "FRD27 §§3-5",
+        "PDR0011"
+      ],
+      "resolution": "Explicit processing/retention and security-notification owner contracts apply. No invented legal periods, universal adult-only gate, free-text mail or alternate Account lifecycle."
+    }
+  ],
+  "search_terms": [
+    "recovery code",
+    "saved recovery",
+    "look-up secret",
+    "replacement",
+    "replenishment",
+    "one-time",
+    "proof",
+    "notification",
+    "verifier-safe",
+    "NIST"
+  ],
+  "primary_sources_checked_at": "2026-11-11T06:56:55.872023+00:00",
+  "primary_sources": [
+    {
+      "id": "nist_saved",
+      "url": "https://pages.nist.gov/800-63-4/sp800-63b/events/#saved-recovery-codes",
+      "section": "4.2.1.1 Saved Recovery Codes",
+      "kind": "Current final standards primary text",
+      "observed": "Saved recovery codes include at least64 random bits; stored values are hashed and verification is throttled. Used codes are invalidated. The section also specifies subsequent saved-code issuance and replacement notification.",
+      "impact": "Account for entropy after canonicalization when approving a supported saved-code profile. Do not silently implement auto-replenishment or notification effects: resolve009/011/016 owner contracts and active policy. No NIST/FIPS/deployment certification is claimed."
+    },
+    {
+      "id": "nist_final",
+      "url": "https://csrc.nist.gov/pubs/sp/800/63/B/4/final",
+      "section": "Publication metadata",
+      "kind": "NIST publication record",
+      "observed": "SP800-63B-4 final was published July31,2025; it supersedes the prior revision.",
+      "impact": "Use final Rev4 text, not earlier drafts."
+    },
+    {
+      "id": "native_manager",
+      "url": "https://github.com/dotnet/aspnetcore/blob/v10.0.13/src/Identity/Extensions.Core/src/UserManager.cs",
+      "section": "GenerateNewTwoFactorRecoveryCodesAsync/CreateTwoFactorRecoveryCode, approximately2262-2359",
+      "kind": "Exact repository-pinned framework source",
+      "observed": "The default generator uses ten random positions from26 symbols plus a fixed separator. Its maximum entropy is10*log2(26)=47.0044bits. Generation stores a distinct sequence but returns the original list after the user update.",
+      "impact": "Withdraw default-generator-as-preferred direction from frozen-v1; retain it as investigated history. Do not inherit its format/count or claim it satisfies the saved-code64-bit profile. The protected extension seam exists, but constructing a synthetic UserManager/store solely to access it is unnecessary if native .NET RNG directly meets the selected profile."
+    },
+    {
+      "id": "native_store",
+      "url": "https://github.com/dotnet/aspnetcore/blob/v10.0.13/src/Identity/Extensions.Stores/src/UserStoreBase.cs",
+      "section": "ReplaceCodesAsync/RedeemCodeAsync, approximately882-909",
+      "kind": "Exact framework source",
+      "observed": "The default store persists redeemable semicolon-delimited RecoveryCodes token strings and rewrites that token on redemption.",
+      "impact": "No unchanged native recovery token store or fallback. Use recovery-owned individual verifier rows and owner transaction semantics; framework conventions are not Tunner lifecycle authority."
+    },
+    {
+      "id": "native_hasher",
+      "url": "https://github.com/dotnet/aspnetcore/blob/v10.0.13/src/Identity/Extensions.Core/src/PasswordHasher.cs",
+      "section": "HashPassword/VerifyHashedPassword",
+      "kind": "Exact framework source",
+      "observed": "The versioned salted native hasher operates on the supplied string; the generic user parameter does not supply owner or purpose binding.",
+      "impact": "Reuse the native hasher with a recovery-specific supported work profile and an unambiguous purpose/Account/set/verifier-format input binding. Validate admitted format/cost/count before synchronous native hashing; a stopwatch alone cannot preempt expensive PBKDF2. No copied cryptography."
+    },
+    {
+      "id": "native_rng",
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.randomnumbergenerator?view=net-10.0",
+      "section": "GetBytes/GetString/GetHexString",
+      "kind": "Official stable .NET10 API reference",
+      "observed": "Built-in cryptographic random-byte/string/hex generation APIs are available.",
+      "impact": "Prefer an existing .NET RNG plus built-in encoding under one reviewed closed profile. Count distinct canonical code outputs, bound collision retries and measure entropy after formatting/canonicalization; no custom RNG or deployment-approval inference."
+    },
+    {
+      "id": "runtime_support",
+      "url": "https://dotnet.microsoft.com/en-us/platform/support/policy",
+      "section": "Supported versions; updated November10,2026",
+      "kind": "Current Microsoft support policy",
+      "observed": ".NET10 is active LTS through November14,2028; the table lists10.0.15 as latest patch. Repository Identity pin remains10.0.13.",
+      "impact": "Keep historical pin/execution identity truthful; arrange governed dependency-freshness disposition before current-patch/release claims. Do not change packages, switch to .NET11 or turn production defaults into a Product blocker in this refinement."
+    }
+  ],
+  "narrow_open_refinements": [
+    "Exact delivery admission: shared first response for display+one local download or an exclusive channel; no second server disclosure.",
+    "Approved replacement admission/linearization, old-set effect and any related session/security effects.",
+    "Supported generation/canonicalization and bounded verification profiles, native dependency binding and patch-freshness disposition.",
+    "NIST after-use replenishment and replacement/security notifications mapped to009/011/016 owner policy, without turning a valid-code primitive into an implicit full recovery workflow.",
+    "One narrow first-delivery response projection at the existing shared proof completion boundary; current completion has fixed JSON and no typed disclosure payload."
+  ],
+  "authority_gap_claimed": false,
+  "new_adr_or_pdr_proposed": false,
+  "implementation_authority": "Not granted. Refine explicit supported inputs and labelled finite test profiles first; production values are not required to invent defaults for local work."
+}

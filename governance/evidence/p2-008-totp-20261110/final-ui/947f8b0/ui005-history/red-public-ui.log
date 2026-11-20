@@ -1,0 +1,213 @@
+[WebServer] (node:34488) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./totp.routes" without a file extension (apps/user/vite.config.ts:3:26). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer] (node:14168) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:996) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 tests\totp\ui\totp.spec.ts:137:86 › @UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 1440 (6.3s)
+(node:32704) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 tests\totp\ui\totp.spec.ts:137:86 › @UI-005 RESET cancellation refreshes externally changed factors and guards actions at 1440 (6.1s)
+(node:14448) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 tests\totp\ui\totp.spec.ts:137:86 › @UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 768 (6.1s)
+(node:13804) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 tests\totp\ui\totp.spec.ts:137:86 › @UI-005 RESET cancellation refreshes externally changed factors and guards actions at 768 (6.0s)
+(node:15836) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  5 tests\totp\ui\totp.spec.ts:137:86 › @UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 390 (6.0s)
+(node:12448) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  6 tests\totp\ui\totp.spec.ts:137:86 › @UI-005 RESET cancellation refreshes externally changed factors and guards actions at 390 (6.0s)
+(node:19116) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  7 tests\totp\ui\totp.spec.ts:137:86 › @UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 320 (5.9s)
+(node:6280) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  8 tests\totp\ui\totp.spec.ts:137:86 › @UI-005 RESET cancellation refreshes externally changed factors and guards actions at 320 (5.9s)
+
+
+  1) tests\totp\ui\totp.spec.ts:137:86 › @UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 1440 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 1
+    Received:   1
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.
+      150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');
+    > 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);
+          |                                       ^
+      152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);
+      153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);
+      154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);
+        at C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\web\tests\totp\ui\totp.spec.ts:151:39
+
+    Error Context: test-results\runs\totp-public-ui\totp--UI-005-DISABLE-cance-59e3d--and-guards-actions-at-1440\error-context.md
+
+  2) tests\totp\ui\totp.spec.ts:137:86 › @UI-005 RESET cancellation refreshes externally changed factors and guards actions at 1440 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 1
+    Received:   1
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.
+      150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');
+    > 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);
+          |                                       ^
+      152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);
+      153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);
+      154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);
+        at C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\web\tests\totp\ui\totp.spec.ts:151:39
+
+    Error Context: test-results\runs\totp-public-ui\totp--UI-005-RESET-cancell-c6408--and-guards-actions-at-1440\error-context.md
+
+  3) tests\totp\ui\totp.spec.ts:137:86 › @UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 768 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 1
+    Received:   1
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.
+      150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');
+    > 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);
+          |                                       ^
+      152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);
+      153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);
+      154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);
+        at C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\web\tests\totp\ui\totp.spec.ts:151:39
+
+    Error Context: test-results\runs\totp-public-ui\totp--UI-005-DISABLE-cance-21878-s-and-guards-actions-at-768\error-context.md
+
+  4) tests\totp\ui\totp.spec.ts:137:86 › @UI-005 RESET cancellation refreshes externally changed factors and guards actions at 768 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 1
+    Received:   1
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.
+      150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');
+    > 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);
+          |                                       ^
+      152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);
+      153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);
+      154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);
+        at C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\web\tests\totp\ui\totp.spec.ts:151:39
+
+    Error Context: test-results\runs\totp-public-ui\totp--UI-005-RESET-cancell-77dd6-s-and-guards-actions-at-768\error-context.md
+
+  5) tests\totp\ui\totp.spec.ts:137:86 › @UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 390 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 1
+    Received:   1
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.
+      150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');
+    > 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);
+          |                                       ^
+      152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);
+      153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);
+      154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);
+        at C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\web\tests\totp\ui\totp.spec.ts:151:39
+
+    Error Context: test-results\runs\totp-public-ui\totp--UI-005-DISABLE-cance-e90b4-s-and-guards-actions-at-390\error-context.md
+
+  6) tests\totp\ui\totp.spec.ts:137:86 › @UI-005 RESET cancellation refreshes externally changed factors and guards actions at 390 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 1
+    Received:   1
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.
+      150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');
+    > 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);
+          |                                       ^
+      152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);
+      153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);
+      154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);
+        at C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\web\tests\totp\ui\totp.spec.ts:151:39
+
+    Error Context: test-results\runs\totp-public-ui\totp--UI-005-RESET-cancell-b8e3e-s-and-guards-actions-at-390\error-context.md
+
+  7) tests\totp\ui\totp.spec.ts:137:86 › @UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 320 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 1
+    Received:   1
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.
+      150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');
+    > 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);
+          |                                       ^
+      152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);
+      153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);
+      154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);
+        at C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\web\tests\totp\ui\totp.spec.ts:151:39
+
+    Error Context: test-results\runs\totp-public-ui\totp--UI-005-DISABLE-cance-86c46-s-and-guards-actions-at-320\error-context.md
+
+  8) tests\totp\ui\totp.spec.ts:137:86 › @UI-005 RESET cancellation refreshes externally changed factors and guards actions at 320 
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 1
+    Received:   1
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      149 |  // Only the authoritative public fixture changes: no reload, route change or component replacement.
+      150 |  removedElsewhere=true;const before=metadataReads;await page.keyboard.press('Escape');
+    > 151 |  await expect.poll(()=>metadataReads).toBeGreaterThan(before);await expect.poll(()=>Boolean(refreshRoute)).toBe(true);
+          |                                       ^
+      152 |  await expect(page.locator('.totp-factor button:enabled,.totp-panel.danger button:enabled')).toHaveCount(0);
+      153 |  await json(refreshRoute!,metadata());await expect(dialog).toHaveCount(0);await expect(page.locator('.totp-factor')).toHaveCount(1);
+      154 |  expect(cancels).toEqual([{requestId:starts[0].requestId,enrollmentId:enrollment}]);
+        at C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\web\tests\totp\ui\totp.spec.ts:151:39
+
+    Error Context: test-results\runs\totp-public-ui\totp--UI-005-RESET-cancell-6d55c-s-and-guards-actions-at-320\error-context.md
+
+  8 failed
+    tests\totp\ui\totp.spec.ts:137:86 › @UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 1440 
+    tests\totp\ui\totp.spec.ts:137:86 › @UI-005 RESET cancellation refreshes externally changed factors and guards actions at 1440 
+    tests\totp\ui\totp.spec.ts:137:86 › @UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 768 
+    tests\totp\ui\totp.spec.ts:137:86 › @UI-005 RESET cancellation refreshes externally changed factors and guards actions at 768 
+    tests\totp\ui\totp.spec.ts:137:86 › @UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 390 
+    tests\totp\ui\totp.spec.ts:137:86 › @UI-005 RESET cancellation refreshes externally changed factors and guards actions at 390 
+    tests\totp\ui\totp.spec.ts:137:86 › @UI-005 DISABLE cancellation refreshes externally changed factors and guards actions at 320 
+    tests\totp\ui\totp.spec.ts:137:86 › @UI-005 RESET cancellation refreshes externally changed factors and guards actions at 320 

@@ -4,7 +4,7 @@
   "milestone_id": "P2",
   "sprint_id": null,
   "title": "Proof-hierarchy Account recovery workflow",
-  "status": "BACKLOG",
+  "status": "IN_PROGRESS",
   "type": "FEATURE",
   "authority_refs": [
     "docs/authority/current-authority.json",
@@ -13,6 +13,11 @@
     "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md",
     "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+    "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+    "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
     "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
     "docs/authority/current/development/02_Repository_Solution_and_Module_Architecture.md",
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
@@ -24,7 +29,8 @@
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
   ],
   "contract_refs": [
-    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/development/P2_011_RECOVERY_REFINEMENT.md"
   ],
   "decision_refs": [
     "ADR-0006",
@@ -75,11 +81,13 @@
     "safe recovery UI and restricted evidence"
   ],
   "required_evidence": [
-    "governance/evidence/TUN-P2-011-VALIDATION.json"
+    "governance/evidence/TUN-P2-011-VALIDATION.json",
+    "governance/evidence/TUN-P2-011-ROLE-REVIEWS.json",
+    "governance/evidence/P2-011-COMPATIBILITY-SCOPE.json"
   ],
   "context_policy": "TASK",
-  "todos": [],
-  "defects": [],
+  "todos": ["TODO-TUN-P2-011-DESIGN001", "TODO-TUN-P2-011-GOVERNED001"],
+  "defects": ["DEF-TUN-P2-011-UI001", "DEF-TUN-P2-011-UI002", "DEF-TUN-P2-011-001", "DEF-TUN-P2-011-002", "DEF-TUN-P2-011-003", "DEF-TUN-P2-011-004", "DEF-TUN-P2-011-005", "DEF-TUN-P2-011-006", "DEF-TUN-P2-011-007", "DEF-TUN-P2-011-008", "DEF-TUN-P2-011-009", "DEF-TUN-P2-011-010"],
   "created_at": "2026-10-16T17:48:49.296Z",
   "updated_at": "2026-10-16T17:48:49.296Z"
 }

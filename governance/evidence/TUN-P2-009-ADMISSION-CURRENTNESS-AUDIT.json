@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "recorded_at_utc": "2026-11-11 12:23:20 UTC",
+  "observed_source_commit": "29b8d113612a85f5053e25f2845293a486d1af4a",
+  "phase": "READ_ONLY_TARGETED_SECURITY_QA_AUTHORITY_RESOLUTION",
+  "status": "CONFIRMED_FINAL_OWNER_ADMISSION_CURRENTNESS_GAP",
+  "input_bindings": [
+    {
+      "path": "src/Modules/Identity/RecoveryCodeAdmission.cs",
+      "sha256": "342916c0aa72f71e4c403cb9cb2993bc6515eabad6d2a0938f031dd364bc4555"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeApplication.cs",
+      "sha256": "607ceb8d41d650b9bc01872c20b47ea80fc9fdce1cd1a7fe45ca6afa28649a61"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeExecution.cs",
+      "sha256": "57a6c1288ea0518c80f8d4c313a30c6bd0273afd9390da171f04292973b165aa"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpApplication.cs",
+      "sha256": "6605a09dde0ca3359b5ea07265d63314063e292bb223cae8db56168bca375b30"
+    },
+    {
+      "path": "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+      "sha256": "e21bc59400b9db52a0dd7d94dde861bb952ce4688111dc9b4d97446f0488de74"
+    },
+    {
+      "path": "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+      "sha256": "2030e8eb6b3c80ba8d26e1aaf849eef9e57db78c1ac3cf400f9b18ffb99f3ab7"
+    },
+    {
+      "path": "docs/contracts/operation-step-up-contract.md",
+      "sha256": "96d512b6a14ad52e8625a3fac130284832c3d4b21c649a88169327aa8b22ff7c"
+    },
+    {
+      "path": "docs/development/P2_009_RECOVERY_CODES_SCOPE.md",
+      "sha256": "d3e295ef5c86152bca284d053dcf2625cc11e2c0955f63849d3f87e2ad1989b7"
+    },
+    {
+      "path": "docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md",
+      "sha256": "51b259a3757c1f881846d3c17666723d0dc72628ad5d25bcd58360c6f41c0d64"
+    },
+    {
+      "path": "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+      "sha256": "9bdf9b66aa5de34aa90077b5296794d3e29bb3ba02e5b8f28c8f7b0204285c0a"
+    },
+    {
+      "path": "docs/authority/current/decisions/PDR-0011_Universal_Account_Eligibility_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+      "sha256": "d02ef51917536c7a81d428ce269902bd748287b2d98c617701cc0ddd5b3ae390"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/seam-v2/bff-wire-v3.json",
+      "sha256": "ef6c350b0c748434135aaa35856d4776c5bc1e1222f4fd26d241f480a0fc2d75"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/seam-v2/ownership-and-currentness.json",
+      "sha256": "0b9f263923641e06da55904f4dab573d17df4317f21dd4da18a096462ed0db63"
+    }
+  ],
+  "authority_resolution": {
+    "question": "Does the current owner mutation-admission decision remain irrevocable through its effective interval after owner apply while the global RecoveryCodePolicy version is unchanged?",
+    "searches": [
+      "recovery/current execution policy",
+      "admission/owner locks/irrevocable",
+      "final currentness/withdraw/supersede",
+      "exact target plan/evidence/version/interval"
+    ],
+    "existing_authority": [
+      {
+        "reference": "FRD17 section7",
+        "finding": "Sensitive operations resolve required assurance at execution time; exact operation-bound evidence is constrained by authorized context."
+      },
+      {
+        "reference": "Catalog32 sections17-18",
+        "finding": "Policy versions carry status/effective interval/lineage/evidence; runtime resolves required policy at effective time and scope, failing missing/ambiguous controls."
+      },
+      {
+        "reference": "docs/contracts/operation-step-up-contract.md lines11,25,43",
+        "finding": "Current owner authority and expected version/policy are revalidated; independent current authority remains after mutation."
+      },
+      {
+        "reference": "docs/development/P2_009_RECOVERY_CODES_SCOPE.md line14",
+        "finding": "Revalidate current source, expected resource/policy/version, replacement plan and intervals at final execution time."
+      },
+      {
+        "reference": "Frozen seam-v2 bff-wire-v3 owner_admission and ownership-and-currentness final_validity",
+        "finding": "Original owner admission is bound and compared at apply; final exact source/plan/policy/interval checks remain required."
+      },
+      {
+        "reference": "ADR-0006 and PDR-0011",
+        "finding": "Identity remains owner authority; no contrary irrevocability or policy-lock guarantee."
+      }
+    ],
+    "scope_limits": "Relevant-flow file currently declares no flow references. Existing frozen009 authority/preparation names FigJam38/42; no external board operation or new external claim was made for this source issue.",
+    "guarantee_found": false,
+    "conclusion": "Existing authority resolves this as an implementation currentness defect. An effective interval is a validity bound, not a guarantee that a separate owner policy cannot be withdrawn/superseded. The interface's common-row locks do not promise to serialize every owner admission policy source.",
+    "new_product_decision_required": false,
+    "missing_authority_blocker_created": false
+  },
+  "finding": {
+    "id": "P2-009-SEC-ADMISSION-FINAL-001",
+    "priority": "P2",
+    "source_locations": [
+      {
+        "path": "src/Modules/Identity/RecoveryCodeAdmission.cs",
+        "line": 51,
+        "detail": "Local/no provider I/O/no mutation and common owner locks; no immutable-decision-through-commit contract."
+      },
+      {
+        "path": "src/Modules/Identity/RecoveryCodeApplication.cs",
+        "line": 99,
+        "detail": "Apply resolves and compares Allowed/plan/policy/evidence/interval once before returning the applied outcome."
+      },
+      {
+        "path": "src/Modules/Identity/StepUpApplication.cs",
+        "line": 149,
+        "detail": "Current method/operation/proof checks await after owner apply and before final decisionAt."
+      },
+      {
+        "path": "src/Modules/Identity/RecoveryCodeExecution.cs",
+        "line": 130,
+        "detail": "Final guard re-resolves global recovery policy and publication, but owner admission is reduced to captured admissionInterval.Contains(at)."
+      }
+    ],
+    "trigger": "An owner admission source changes Allowed, admission policy/evidence or exact target decision after apply and during a later awaited shared authority check; global recovery policy/publication and pinned Account/set rows remain unchanged and the old interval still contains decisionAt.",
+    "effect": "The final guard can commit issuance/retirement/proof/outbox and release first delivery using the no-longer-current owner grant.",
+    "not_claimed": [
+      "Actual exploit or private execution",
+      "A production owner policy was chosen",
+      "Every in-memory source change is necessarily legitimate business authority",
+      "Current row locks are ineffective for the rows they actually cover"
+    ]
+  },
+  "narrow_remedy_proposal": {
+    "status": "TECHNICAL_PROPOSAL_NOT_APPLIED",
+    "shape": "Add a required synchronous typed pure current-resolution method on the same recovery mutation-admission source, or an equivalent closed typed final-currentness method returning current admission. No arbitrary callback, default captured-decision implementation, network I/O or new policy values.",
+    "witness": "Capture the actual typed source, immutable original request/prior facts and original admission at recovery-owned construction. At existing final decisionAt re-resolve for that same Account/version/kind/global-policy/original facts with EffectiveAt=decisionAt.",
+    "required_comparison": [
+      "Allowed true",
+      "exact Account/version/kind/facts binding",
+      "admission PolicyVersion and EvidenceReference",
+      "canonical exact retirement targets and lifecycle versions",
+      "original interval identity with existing persistence precision normalization and actual decisionAt membership",
+      "all existing global policy/publication/row/proof/session/currentness checks unchanged"
+    ],
+    "finality": "False, missing, ambiguous or throwing source resolution rejects within the existing transaction and carrier disposal path. Original pre-mutation facts remain the request basis; do not ask the owner to approve the already-mutated tracking graph as a new operation.",
+    "boundaries": "The final pure decision has the same existing final-decision/commit semantics as other authority checks; no claim of global distributed irrevocability or new long-held policy lock."
+  },
+  "proposed_regressions": {
+    "status": "NOT_AUTHORED_OR_EXECUTED_BY_THIS_REVIEW",
+    "timing": "Flip the typed owner admission only after actual owner apply and within a later awaited authentication/continuation check, keeping global policy, publication, original row facts and old interval otherwise stable.",
+    "cases": [
+      "Allowed withdrawn",
+      "Admission policy version superseded",
+      "Evidence reference changed",
+      "Different exact retirement target of same cardinality",
+      "Interval shortened/expired",
+      "Current resolution missing/ambiguous/throws",
+      "Unchanged decision positive control"
+    ],
+    "assertions": [
+      "All password/passkey/TOTP completion wrappers reach the same final guard",
+      "No first-delivery carrier reaches response",
+      "Original operation remains pending and proof unconsumed after rollback",
+      "No issued rows/retirement/security outbox commit",
+      "Owned mutable payload disposed on rejection",
+      "Original safe reconciliation remains non-disclosing"
+    ]
+  },
+  "claims": {
+    "source_mutated": false,
+    "governed_mutated": false,
+    "tests_executed": false,
+    "resources_run": false,
+    "private_values_accessed": false,
+    "implementation_accepted": false
+  },
+  "original_artifact": "artifacts/p2-009-recovery-20261111/security-refinement/admission-final-currentness-review-29b8d11.json",
+  "original_artifact_sha256": "c36142d7febe4911528ab8369066d97134abf2ffb8564413791df09864ad0d2b",
+  "provenance_note": "Copy of the frozen read-only authority/source audit; no private execution or exploit is asserted."
+}

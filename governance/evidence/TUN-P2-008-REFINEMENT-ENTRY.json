@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "result": "REFINEMENT_ALLOWED_NOT_IMPLEMENTATION_ELIGIBILITY",
+  "recorded_at": "2026-11-10T14:14:10.053Z",
+  "base_branch": "codex/p2-006-assurance-20261108",
+  "base_commit_sha": "ea85e3c1c4bd3430214f99bd2c9cd7fc250e6f99",
+  "work_branch": "codex/p2-008-totp-20261110",
+  "native_transition": {
+    "command": "tunner governance transition check TUN-P2-008 REFINEMENT",
+    "from": "BACKLOG",
+    "to": "REFINEMENT",
+    "outcome": "ALLOWED",
+    "exit_code": 0
+  },
+  "current_prerequisites": "003/005/006 currentnativeREADY andP2committedauditPASS; full007technicalvalidationandclosedUIrevisionsretained.",
+  "next_action": "Commit planning and actual references, finish startup role reviews, generate/verify isolated008context, reachREADYandnativeworkstartELIGIBLE before implementation.",
+  "preserved_dirty_paths": [
+    "docs/context/current/HANDOFF.md",
+    "docs/context/current/adaptive-selection.json",
+    "docs/context/current/authority.md",
+    "docs/context/current/contracts.md",
+    "docs/context/current/git-changes.md",
+    "docs/context/current/manifest.json",
+    "docs/context/current/relevant-flows.md",
+    "docs/context/current/summary.md",
+    "docs/context/current/tests.md",
+    "docs/project/CURRENT_STATE.md",
+    "docs/project/HANDOFF.md",
+    "docs/project/PROJECT_CONTEXT.md",
+    ".vscode/settings.json"
+  ],
+  "boundaries": [
+    "No implementation or test acceptance",
+    "No production profiles or visual consent",
+    "No source-authority or external writes"
+  ]
+}

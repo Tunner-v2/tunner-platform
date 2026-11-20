@@ -4,7 +4,7 @@
   "milestone_id": "P2",
   "sprint_id": null,
   "title": "Versioned assurance and operation-bound step-up",
-  "status": "BACKLOG",
+  "status": "DONE",
   "type": "FEATURE",
   "authority_refs": [
     "docs/authority/current-authority.json",
@@ -23,7 +23,10 @@
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
   ],
   "contract_refs": [
-    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/development/P2_006_IMPLEMENTATION_SCOPE.md",
+    "docs/contracts/operation-step-up-contract.md",
+    "docs/development/P2_006_UI_AUTHORITY_REVIEW.md"
   ],
   "decision_refs": [
     "ADR-0006",
@@ -48,7 +51,7 @@
     "financial": false,
     "compliance": false,
     "security": true,
-    "devops": false,
+    "devops": true,
     "support": false,
     "api": true
   },
@@ -62,7 +65,8 @@
     "ui-ux-engineer",
     "frontend-engineer",
     "end-user-ux-reviewer",
-    "content-writer"
+    "content-writer",
+    "devops-engineer"
   ],
   "required_tests": [
     "wrong operation/context, expiry and replay rejection",
@@ -70,11 +74,90 @@
     "sensitive action UX and safe error outcomes"
   ],
   "required_evidence": [
-    "governance/evidence/TUN-P2-006-VALIDATION.json"
+    "governance/evidence/TUN-P2-004-008-PRODUCT-ACCEPTANCE.json",
+    "governance/evidence/TUN-P2-006-VALIDATION.json",
+    "governance/evidence/TUN-P2-006-STARTUP-REVIEWS.json",
+    "governance/evidence/p2-006-policy-20261108/receipt.json",
+    "docs/development/P2_006_HANDOFF.md",
+    "governance/evidence/p2-006-proof-20261108/receipt.json",
+    "governance/evidence/P2-001-007-AUDIT-20261109.json",
+    "governance/evidence/TUN-P2-006-AUDIT-CORRECTION-SOURCE.json",
+    "governance/evidence/TUN-P2-006-AUDIT-CORRECTION-VALIDATION.json",
+    "governance/evidence/TUN-P2-006-AUDIT-CORRECTION-ROLE-REVIEWS.json"
   ],
   "context_policy": "TASK",
-  "todos": [],
-  "defects": [],
+  "todos": [
+    "TODO-TUN-P2-006-EVIDENCE001"
+  ],
+  "defects": [
+    "DEF-TUN-P2-006-UI-001",
+    "DEF-TUN-P2-006-UI-002",
+    "DEF-TUN-P2-006-UI-003",
+    "DEF-TUN-P2-006-UI-004"
+  ],
   "created_at": "2026-10-16T17:48:49.296Z",
-  "updated_at": "2026-10-16T17:48:49.296Z"
+  "updated_at": "2026-11-11T04:22:44.698Z",
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "90380ffed48aeb9da8a78579049c2378b535ceb4",
+    "tested_commit_sha": "90380ffed48aeb9da8a78579049c2378b535ceb4",
+    "work_item_commit_shas": [
+      "ee316aadea3ddac4cb7543cb0d7e99e2f5f2fc19",
+      "dfd58466d0001a1c564106512aaca7d5b0de4be8",
+      "09efb5c3ea5254c5ec42e3d7350a39f58f9e0e15",
+      "d141823d792ecbd11eedc0632d562c3a4f58431f",
+      "a2df3359f8092e1e816125fe384e7a8a86785c68",
+      "74a998585c5f51303c3031ac488003a5dccab58d",
+      "c208fdd589ac5bcac9055eb39f8cbe184ccdd123",
+      "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+      "80a32abb3c215a212bfa34bb7678c742d3cf765d",
+      "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+      "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "4467fd42112bcff579ca28eaa024245da77b799b",
+      "95331c7a3de34a70129bafc79d14f9b4b5b94124",
+      "70d19f41f5ef0780c80e3e1378c97fee3e2312e6",
+      "b58384205e407f037567aa514ea70696d0bbaabd",
+      "72d2f53295ab9c87c857e20440e0dbb740f7d780",
+      "3603243ed68234af0d89b8c1c8f2dcf7807ea640",
+      "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+      "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+      "eb9228cc3ed832980deb92407d80ab92e7b8a00e",
+      "acd474e6d028b7abe5a48b2361a984f960384674",
+      "ad744fde52aa03404f3944c47ebb79070185e9f2",
+      "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+      "51a80e5f4104292966eef5601747b86ed666c6d9",
+      "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+      "ea731ea0a62d5fbc673d84f17864c3c283b582e7",
+      "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
+      "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+      "1e8cc76bd5b22aceb169b44d446c0df049410b73",
+      "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
+      "98807ebe4bb7cb4e74b1aecf938a9edb8c243475",
+      "196d522b52830bae0e57c908883cba3431fd5a81",
+      "e1c1208664327563ed4d3f25fe8d7c3633d0e325",
+      "b72ebef841e4623721413c012420a2be811a1814",
+      "2ec18d92a3b0a42628e1f27584a621f4ad7d7ddf",
+      "1bf5971739f163d15777498b211ff0f48f677bc8",
+      "90380ffed48aeb9da8a78579049c2378b535ceb4"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  },
+  "ui_evidence_ref": "governance/evidence/TUN-P2-006-UI-COMPLIANCE-RECOVERY-20261111.json"
 }

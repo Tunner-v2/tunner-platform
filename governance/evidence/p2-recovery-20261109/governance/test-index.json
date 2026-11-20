@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-004-RV003",
+  "result": "PASS_EXECUTED_ENGINEERING_SCOPE",
+  "tested_commit_sha": "0c53340f6ad81be1578624c7b622f9b2855655b8",
+  "validated_commit_sha": "0c53340f6ad81be1578624c7b622f9b2855655b8",
+  "recorded_at": "2026-11-09T12:05:59.759Z",
+  "actual_checks": {
+    "full_functional": "PASS",
+    "new_effective_source_checks": 25,
+    "targeted": "PASS",
+    "build": "PASS zero warnings/errors",
+    "static_source": "PASS",
+    "secret_scan": "PASS",
+    "sast": "PASS"
+  },
+  "negative_before_fix": "Focused replay failed exactly15 required assertions across25 cases before source changes. First full red also exposed a generated fixture prefix cleanup issue, corrected without weakening the guard.",
+  "first_full_after_fix": "New25 checks passed; one legacy role-review-only fixture lacked explicit no-change source state and was corrected. Final full suite passes unchanged role expectations.",
+  "build_history": "First concurrent build failed only because an active native apphost executable was locked on Windows. After the known audit completed, clean build passed; DLL-hosted checks avoid that lock.",
+  "metadata_source_equivalence": {
+    "executed_at_sha": "0c53340f6ad81be1578624c7b622f9b2855655b8",
+    "current_candidate_sha": "b23753e07bc8be08a766e27201fe76c3517c0dd3",
+    "result": "GIT_OBJECT_IDENTICAL",
+    "scope": "Entire governance/tool functional source, shared build configuration and solution unchanged."
+  },
+  "repository_source_audit_before_refresh_ref": "artifacts/p2-audit-20261109/p2-source-enforced-before-refresh.json",
+  "receipts": [
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/governance-targeted-red.log",
+      "raw_sha256": "0e1fd837b8f1b325913318c84c3341725e0bee2446cd9d76f6c1b7e85cded5ef",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/targeted-red.log",
+      "portable_sha256": "4f8df92035e69a7873cfab30ab2ceaecafad06e0db099cd51f794b49c02e31c1"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/governance-red.log",
+      "raw_sha256": "1f73d6ae193c4516deb47f7c39d1396830d864eb15b4e191c1af336e5a0b9f16",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/first-red-full.log",
+      "portable_sha256": "7fd89f32ee9f795016bce27b56a4566d5af38d4149211a7d4958bfa0544f71e5"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/governance-green.log",
+      "raw_sha256": "3fd5c198ab09e909779400fda3811b8c17f22dc0ce3a9b6027cce63803607d31",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/first-green-full.log",
+      "portable_sha256": "b6a7976a350d7a76b03b9e18cba499d8d7678da21612050759c9079945a1a75a"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/governance-green-final.log",
+      "raw_sha256": "d0646b7f9aa5df00ebcffbecb3947b9a39a5f57ac4717106689ed2ae0cc36f97",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/full-pass.log",
+      "portable_sha256": "e04af4c62a395544915fa8d09feda97144a4ce3bdd3e65be034a03a1a670a029"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/governance-targeted-green.log",
+      "raw_sha256": "4ef1e96a8bf125855d12afa67d5487fce5968e3cebf444e4a6b6d09b34849c26",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/targeted-pass.log",
+      "portable_sha256": "d44d290fba34da45caeac00a45bcbde8d44366187153e310f1a8a1d59cd48aed"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/governance-final-build.log",
+      "raw_sha256": "74d1f6a18f3e58845b633232dfc3ad01f65b2cf5f3ade36dc0dc64df0c977cbb",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/build-first-locked.log",
+      "portable_sha256": "54ad4335f04209b23d4f52d5dd3c31e0824d7958d5531e9988158ea10eb21d33"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/governance-final-build-clean.log",
+      "raw_sha256": "140eafcfc8be552b86347c3ad81aeadc5af33fbc72452281d9d0ce95580cd7cc",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/build-pass.log",
+      "portable_sha256": "517ba349aefdc88cbf1814250146a742df801adeff0036fa3272a415cf499b42"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/governance-final-static.log",
+      "raw_sha256": "c7c360fe549d4094b91e8a39aa39c2cde36dc731dc81144c39392d7a06a98bca",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/static-pass.log",
+      "portable_sha256": "9caa3b0ee5e8b868c4ee073ff5c45cb9a80b9dbfd5922b5da406727b51107829"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/governance-secret-scan-final.log",
+      "raw_sha256": "f0b24e318625d5130e4857c23325da6e45c66b37002d681194b36d3cc2579e77",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/secret-scan.log",
+      "portable_sha256": "d6df41e9fd34ad30b7404e731566c199ea78fb1e1964aa9f645bd88576b50aea"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/governance-sast-final.log",
+      "raw_sha256": "d40937eaf423c378f638cd0f93437b9a6da8c00a99cee8498e00c0b65dbbe529",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/sast.log",
+      "portable_sha256": "a896ea374c61557fd347162d4f4b729e8484ccbd9150148502a13cbd6b8c1b37"
+    }
+  ],
+  "boundary": "Native enforcement is corrected; final current P2 source audit follows separate test-only compatibility closure. No Product or milestone release acceptance."
+}

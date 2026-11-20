@@ -1,0 +1,1047 @@
+{
+  "GeneratorVersion": "tunner-context-0.1.0",
+  "GeneratedAt": "2026-11-18T00:54:43.5766199+00:00",
+  "WorkItem": {
+    "Id": "P2-009-RV012",
+    "Title": "Qualify exact completed passkey recovery after reload",
+    "Status": "ACTIVE",
+    "ContextPolicy": "TASK"
+  },
+  "Included": [
+    {
+      "Path": ".agent/skills/auditor/SKILL.md",
+      "Reason": "activated role skill",
+      "Sha256": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
+      "Version": "1.0.0"
+    },
+    {
+      "Path": ".agent/skills/cyber-security-engineer/SKILL.md",
+      "Reason": "activated role skill",
+      "Sha256": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+      "Version": "1.0.0"
+    },
+    {
+      "Path": ".agent/skills/end-user-ux-reviewer/SKILL.md",
+      "Reason": "activated role skill",
+      "Sha256": "cfaa2eeffd945eef70a6ff1023b1af42fc0413add7b357b2fcd914473e976665",
+      "Version": "1.1.0"
+    },
+    {
+      "Path": ".agent/skills/frontend-engineer/SKILL.md",
+      "Reason": "activated role skill",
+      "Sha256": "3472e745aa478457939b1aeeba319f72989bb9e97791e458f0b9979ec1b538d7",
+      "Version": "1.1.0"
+    },
+    {
+      "Path": ".agent/skills/tester-qa-engineer/SKILL.md",
+      "Reason": "activated role skill",
+      "Sha256": "52aee18f251a614e339adba9f7c886a5da1ef4ab0482ae6b77044184128415c6",
+      "Version": "1.1.0"
+    },
+    {
+      "Path": ".agent/skills/ui-ux-engineer/SKILL.md",
+      "Reason": "activated role skill",
+      "Sha256": "498ff7e4b46012b1e90773cd29ebac903d7ac83767d739cc327d9b69a3b4c5c2",
+      "Version": "1.1.0"
+    },
+    {
+      "Path": "AGENTS.md",
+      "Reason": "repository entry contract",
+      "Sha256": "2432cee49b89f8183c944e4d07568cc0826fdba57ea3a71b2feae876b558cb59",
+      "Version": null
+    },
+    {
+      "Path": "artifacts/p2-019-content-20261116/context-passkey-result-462e269a/project/CURRENT_STATE.md",
+      "Reason": "current project state",
+      "Sha256": "f9c213aea2a9f90bf42f2329375ab33592a1f66c9660f3e9cd67fcbaba83faa5",
+      "Version": null
+    },
+    {
+      "Path": "artifacts/p2-019-content-20261116/context-passkey-result-462e269a/project/HANDOFF.md",
+      "Reason": "handoff state",
+      "Sha256": "f9c213aea2a9f90bf42f2329375ab33592a1f66c9660f3e9cd67fcbaba83faa5",
+      "Version": null
+    },
+    {
+      "Path": "artifacts/p2-019-content-20261116/context-passkey-result-462e269a/project/PROJECT_CONTEXT.md",
+      "Reason": "durable project context",
+      "Sha256": "f9c213aea2a9f90bf42f2329375ab33592a1f66c9660f3e9cd67fcbaba83faa5",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/amendments/AMD-0001/AMD-0001_Pre-P0_Governance_Agent_Skills_Context_and_Bootstrap_Completion.md",
+      "Reason": "active authority amendment",
+      "Sha256": "6e99ecc0bd63bb5eef0cecba8ce20404a0b3777592b7feb96db5f604a473c7aa",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/amendments/AMD-0003/AMD-0003_Location-Independent_Repository_and_Path_Resolution.md",
+      "Reason": "active authority amendment",
+      "Sha256": "6d53c8def8fd562a8939ea9e3615984bbfbf9e3f5313c5e3bdd781d36e1d096c",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/amendments/AMD-0004/AMD-0004_Shared_Technical_Primitives_Formatting_and_Canonicalization.md",
+      "Reason": "active authority amendment",
+      "Sha256": "9577b29946c772fad06aa1a79d7866d16da3677e944a6bd46fafb13f296a2384",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/amendments/AMD-0005/AMD-0005_Authority-First_Decision_Resolution_and_Duplicate-Decision_Prevention.md",
+      "Reason": "active authority amendment",
+      "Sha256": "51b259a3757c1f881846d3c17666723d0dc72628ad5d25bcd58360c6f41c0d64",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+      "Reason": "explicit authority reference",
+      "Sha256": "f833efd00f7a9972a92eaab1f5dad2e4b290432e134b2ab984de26ece0d93e85",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/current-authority.json",
+      "Reason": "current authority summary",
+      "Sha256": "16b89d4cbd7b632f356f1b0e182fc19a354fac90d003621315641d7055331356",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/current/decisions/AMD-0007_Universal_Registration_Age-Aware_Consent_and_Delegated_Commercial_Authority.md",
+      "Reason": "active authority amendment",
+      "Sha256": "61f31f40a72167ab7760140c6be143f4ea87d3f9ca64f93735efe49b8e7273b3",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+      "Reason": "active authority amendment",
+      "Sha256": "f534e3eeebb7723ba5bd34c348338981b7cd745ea5d81c18fa2e214c098d630b",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+      "Reason": "active authority amendment",
+      "Sha256": "052deaa9a0592602dd5510994bf36e3354c41a7e1324308fff61f41207a3d153",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/current/decisions/README.md",
+      "Reason": "current decision authority index",
+      "Sha256": "0c748520c85df22d958682e256be98409f70b4f12b22b448cb3218aaf8e52892",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/current/development/04_Governance_and_Context_Tooling_Specification.md",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "60b001e3d596adc359c6f8d9e211511fae286ea107c72791276b594b6c63fde4",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+      "Reason": "explicit authority reference",
+      "Sha256": "52a732494a5278a30077f72b6a8cb57b0a2d075ed2d7102e87f2a04d089ad8fb",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/current/development/12_AI_Development_Protocol_Context_and_Project_Memory.md",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "4f302d1c0f7b6895b525eaeb62863d66f95fcc79e5967e4dbffb8f03a5cb4f88",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+      "Reason": "current approved authority for selected scope",
+      "Sha256": "e21bc59400b9db52a0dd7d94dde861bb952ce4688111dc9b4d97446f0488de74",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/current/development/AMD-0002_Non-Blocking_PR_Approval_and_Continuous_Local_Execution.md",
+      "Reason": "active authority amendment",
+      "Sha256": "d9b9fd9006b0829e0e75da0877abf2a754ef3b6df77237aab50aa1806f654e1a",
+      "Version": null
+    },
+    {
+      "Path": "docs/authority/current/development/decisions/README.md",
+      "Reason": "current decision authority index",
+      "Sha256": "55644920d22f6f6154423865ef8b722e9dcd589f0c3ded064e9024514f29662e",
+      "Version": null
+    },
+    {
+      "Path": "docs/development/P2_009_RECOVERY_CODES_SCOPE.md",
+      "Reason": "original scope evidence",
+      "Sha256": "ad1c6b475d094d15c640642c285ed23384af8f8f1eab951091875fbfce2535e3",
+      "Version": null
+    },
+    {
+      "Path": "governance/defects/DEF-TUN-P2-007-UI-009.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "9534ecc3ae9a95e2a254dd255a1aa0f4d50111d9379a5ac28434959fa676cf0c",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/P2-009-RV012-VALIDATION.json",
+      "Reason": "Revision evidence",
+      "Sha256": "9f5232dc20f55c9524ed243ed272fba4922741ae328c7ef17a68259b11f10a87",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/P2-010-RV013-VALIDATION.json",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "c14d62ff7613b3815b261639caf35b280430c3f612d9aab721c53e7ff03f94a6",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/P2-013-RV005-VALIDATION.json",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "de2083c422a0bf0b28720942fe08e0ab30202a7c1fdffde7d862d89e674d5a79",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P2-007-UI-COMPLIANCE-TOTP-20261111.json",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "1a86a6b71a1c376c39659bd7343d195e642d19f4394a5b79c6b350a6e13ecfe7",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P2-009-ADMISSION-CURRENTNESS-AUDIT.json",
+      "Reason": "original scope evidence",
+      "Sha256": "479bcb2364f6e84f95a6267c34010537bd056e37a754a9618bad454fc31d8635",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P2-009-DATA-INVENTORY.json",
+      "Reason": "original scope evidence",
+      "Sha256": "c4ca9f1f4929e5d8c30d8342080bd17593773c290750540a0f2ab299ac3ab877",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P2-009-DATA-LIFECYCLE-ASSESSMENT.json",
+      "Reason": "original scope evidence",
+      "Sha256": "ed280b326a6c9706931e737f1aab49e558c5732b5b9d363b9dbbcc9fceda5380",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P2-009-PRIVATE-DISCOVERY-AUDIT.json",
+      "Reason": "original scope evidence",
+      "Sha256": "40880f91091610c4b29d3964a67d062f4e818bb8eb856e95bf769ef213312de4",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P2-009-PRODUCT-ACCEPTANCE.json",
+      "Reason": "original scope evidence",
+      "Sha256": "6f1108070b4166501b1e56bc6271aab0059e51c6b925f2bb1abba88d6327c5ef",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P2-009-ROLE-REVIEWS.json",
+      "Reason": "original scope evidence",
+      "Sha256": "028f36d1814f7283a0ba3900ca264c99522368b2d87eaeeb6791281a888dea4c",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P2-009-SHARED-INTEGRATION-AUTHORIZATION.json",
+      "Reason": "original scope evidence",
+      "Sha256": "2f1b840f236947581b1c7b8c6f8abf4e01ce3f3bf1fca9f19b94769f42d4b46b",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P2-009-STARTUP-REVIEWS.json",
+      "Reason": "original scope evidence",
+      "Sha256": "8bd6770a3a03e3b5c8ae842acd3a8f0bf4afbc422632cf0091a12ef42b302f83",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P2-009-UI-COMPLIANCE.json",
+      "Reason": "original scope evidence",
+      "Sha256": "53add92fcb8a69a2b59cf8b95179e6c99fb5bf4c60a7d51e3d12a29ba09c7f89",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P2-009-VALIDATION.json",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "da0884f07d6e55ff9bdfb9a47143d6627d42e259977a3b41e45e3fc620732ec4",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
+      "Reason": "original scope evidence",
+      "Sha256": "69bb0a75f7a71e69b7c3dabc6cd7ecde428f3d5fae6649a87606c99124fe7eaf",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+      "Reason": "original scope evidence",
+      "Sha256": "4b24a9a648ef659bc8d430f10e6474fb11d70e1945712b41a0ea687567f0d698",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P2-010-VALIDATION.json",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "1b6bcacbfb443892c2a82f058bd79e0aecb4dc7ec6a02b42d8de341bc0b4b617",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/TUN-P2-013-VALIDATION.json",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "0c710e3a7538f6e63bf751d348177c4fdac6e8474eab41a5a3be23cc80770ebe",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/candidate-validation-3e875f6.json",
+      "Reason": "original scope evidence",
+      "Sha256": "d1a8521ac51cce4ad879c5e2a635a0c2044dd39393bd2b4e61389063faf213b3",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/carrier-1e99d84-focused10.json",
+      "Reason": "original scope evidence",
+      "Sha256": "ae36ffd0eb202f2e84eb37ff8c7d4815b31bd9e70789b972fd7c5602f9bcd6ad",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+      "Reason": "original scope evidence",
+      "Sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/native-acceptance-a095f5f.json",
+      "Reason": "original scope evidence",
+      "Sha256": "3b2da14b429e247fd40d474403e874b86d6a86d179cb55b2e34f4ad2ecdc3222",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/secret-scan-final-source.json",
+      "Reason": "original scope evidence",
+      "Sha256": "3e6b54fe1de84d3de2e775a3b986fee4a451ec4521b7135dce843fc90ad2187d",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/secret-scan-metadata-3e875f6.json",
+      "Reason": "original scope evidence",
+      "Sha256": "c289a956dc0dc8ee14210b97d0f6b32ed1a285b9b7b6f2bee2a38488c8d1a413",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+      "Reason": "original scope evidence",
+      "Sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-009-recovery-20261111/preliminary-slices/index.json",
+      "Reason": "original scope evidence",
+      "Sha256": "8ca4e8eb2c655909ff2eb11fd9d630f4edee27f0543f5cac67bdd48e3b695a20",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/copy-index.json",
+      "Reason": "original scope evidence",
+      "Sha256": "5dee82fe07b9aa6af668557a689c28aac3de958853df11dd84e7545319a5f5ce",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/root-review.json",
+      "Reason": "original scope evidence",
+      "Sha256": "38154d7ce744b8c1d473897237852bbc2e370eea668589d256cf2178bda4c140",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-009-recovery-20261111/refinement/authority-resolution.json",
+      "Reason": "original scope evidence",
+      "Sha256": "7c69dbdb3f21b5564e3f56ca66d4b532d51eade73324b71f1152804b472afefc",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-009-recovery-20261111/refinement/contract/execution-boundaries.json",
+      "Reason": "original scope evidence",
+      "Sha256": "bdb7a3e2c08eb21b7333b6a2292f46c875daea9ab23cdcb30c498c66d5d0a2d4",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-009-recovery-20261111/refinement/portable-lineage.json",
+      "Reason": "original scope evidence",
+      "Sha256": "46cb31dc37adc6aa8d0eb05e876e0db1c13c9582089c8432187330c7020dbba8",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-009-recovery-20261111/refinement/security/test-matrix.json",
+      "Reason": "original scope evidence",
+      "Sha256": "2554bd9a62d043717df813ebc6b90b39c7438ddd51bbf6d0dbcafb5b0753bb8d",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/browser-real/execution.json",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "6a7cd021bd82eb8fb596c5ee1ed533f9c5c95cf1f8480864fbc7a05444dddbd9",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/browser-real/observed-extract.json",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "e0a7f96064647ac7aab3a284c163c1414fc08c0b5cb5749d39d71f95d0bf701c",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/fixture-green/execution.json",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "9a1236f7e616b26c11de3bb38262711c19a4b2527e6066c12262a35c6820bf7f",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/fixture-green/observed-extract.json",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "f439983aad9bec94ab809897c862e212868f09c707f8c1c7a2fffec20678a565",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/scoped-ui/TUN-P2-007.json",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "a19a960382e5732d8c3f006caa4c85878c8deb64a49c951afec8543393616ccd",
+      "Version": null
+    },
+    {
+      "Path": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/shared-qualification.json",
+      "Reason": "Revision evidence",
+      "Sha256": "959b2ec880f81d445599253ac7e4b911ecc0977bd7bcc2ca76bc2566d966dee2",
+      "Version": null
+    },
+    {
+      "Path": "governance/milestones/P0.yaml",
+      "Reason": "historical milestone state",
+      "Sha256": "58eb21e6d8de0d71b9f43146c2646209c30c67d2a1ed0dea06533b60061b7cec",
+      "Version": null
+    },
+    {
+      "Path": "governance/milestones/P1.yaml",
+      "Reason": "historical milestone state",
+      "Sha256": "d55a2f686b15b43f40553dbaf5fc49b1a7ff0fa042532c5793c7389117acca7c",
+      "Version": null
+    },
+    {
+      "Path": "governance/milestones/P2.yaml",
+      "Reason": "historical milestone state",
+      "Sha256": "bb986e31066b4ecd9429e07347fa2f8797cf2fdd4e5a060b6732750650ebed78",
+      "Version": null
+    },
+    {
+      "Path": "governance/policies/lifecycle-policy.yaml",
+      "Reason": "lifecycle policy",
+      "Sha256": "9fde97fb1f1abfdf96ed929ecc9b255a1bb504ec78b414732706c5cf0b63888d",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-009-RV012-auditor.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "b9f00085b7abd21f232b4c535db1fb5fa26efd57a5b1ad2d81a7fcc359a24801",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-009-RV012-cyber-security-engineer.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "13aa7432d2b658212fb43282464a23c2f0920a77a7bb061e54bf5a446e9eca4a",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-009-RV012-end-user-ux-reviewer.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "e06167750b6644282db0bd015cac8aa5fdd9774fec0093917c5652805131fa76",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-009-RV012-frontend-engineer.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "e1a8a1542e7d14cd8ee57c239ac5e5fd197268f70e6fbe4aa51ec3d0e8546f11",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-009-RV012-tester-qa-engineer.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "39f991d189a869d27528e2e145f301df9583002540a387ac452e1e3da05433de",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-009-RV012-ui-ux-engineer.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "64a8d6fe4f2bb42037234abb41ba6f28d8d7b5edae3ccd39a0892cd18d8cc2d3",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-010-RV013-auditor.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "6abbb90817778e3cd22b465f10c32f4cf04cff577e5ea33b6879470ddbd4cc60",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-010-RV013-cyber-security-engineer.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "bc02b351376b536a5d4a4d0c531428777a716cdb270fe81944cd6ed0db6e3b2d",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-010-RV013-end-user-ux-reviewer.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "667497defb5f8fc9f2b8e0b819fe324e1103a5506b1c18e23adae316d7635601",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-010-RV013-frontend-engineer.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "c66886b65ff485e10e849caf1965abace2dab13449133640c0b27e6ad512b8e3",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-010-RV013-tester-qa-engineer.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "6b8e71c75818cc9aefea046afdccdd1142f650227bb838e9a673baab7b1c8a8e",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-010-RV013-ui-ux-engineer.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "86df9c849223dc8638d8e06bcdcfba06cdf9c43d71db213bba52e04ae29633f5",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-013-RV005-auditor.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "3703e6dbb8d37bacadb557801086d0ee62b2cabba6d13d717018c37491964771",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-013-RV005-cyber-security-engineer.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "faae4db1d67c510c8b0bee6b61ea6ffd55883520b0a760f76c82d3ea10292de3",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-013-RV005-end-user-ux-reviewer.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "2665833ed237d62094e12931a59633e11ed6cca3aaa87af0cef5fcdce17b27cc",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-013-RV005-frontend-engineer.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "187d41f24caa7d46306c16c645ceaef6908fa630a39306e499277b5e417cbf0f",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-013-RV005-tester-qa-engineer.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "9cd5bfbfc26e4c00e310972a9a2e40843526ea63bf77a215273105bc6b69ead8",
+      "Version": null
+    },
+    {
+      "Path": "governance/reviews/REV-P2-013-RV005-ui-ux-engineer.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "c840b50e7267f16cb6b9b04e7ff0e825dcfede90ad964ba8b8488cac2c3259c7",
+      "Version": null
+    },
+    {
+      "Path": "governance/revisions/P2-009-RV011.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "caa51e8d22e11438b306c14355791e1e78c0b1bc035a48fea8eade62cc606afa",
+      "Version": null
+    },
+    {
+      "Path": "governance/revisions/P2-009-RV012.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "9f20e314da101280a8b1e0965bb6fa9520f31fe6a46148037c25785f36c76ac2",
+      "Version": null
+    },
+    {
+      "Path": "governance/revisions/P2-010-RV012.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "1938e4c397a79ad1f830a86c79c46aaa60b5982daf5104df68cd7f1a54072b76",
+      "Version": null
+    },
+    {
+      "Path": "governance/revisions/P2-010-RV013.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "1a6f0c7d86377ae7ee1ee20ad46f4a78452842cc6c53d9a20a8f8cb98d6a933b",
+      "Version": null
+    },
+    {
+      "Path": "governance/revisions/P2-013-RV004.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "d30380626c04bec1a296aa0af398098abf8a74d59bbe00535a81a9bc9e593eb0",
+      "Version": null
+    },
+    {
+      "Path": "governance/revisions/P2-013-RV005.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "b080ec8d1f37794990cd9a480955df24a397412303b52f76cf838c9b87ee2775",
+      "Version": null
+    },
+    {
+      "Path": "governance/work-items/TUN-P2-009.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "59101bc83953d4e1518977a3c848503ff4131c77a0e8dd0c800fd6b24d83e4b0",
+      "Version": null
+    },
+    {
+      "Path": "governance/work-items/TUN-P2-010.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "294bf40376ff5245ca528a0975e53d106f2cadda86f6c0a9627e8ad03b985a18",
+      "Version": null
+    },
+    {
+      "Path": "governance/work-items/TUN-P2-013.yaml",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "b353f7ef2a558b62e09a0b4d1ff04cf62e6a5c74be77278979e3ddb44a15d52c",
+      "Version": null
+    },
+    {
+      "Path": "web/apps/user/passkeys.tsx",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "0286214ddaddeca2674d0201e2d4165b4902f23a29671e7bb8eb82d3c5cc257f",
+      "Version": null
+    },
+    {
+      "Path": "web/tests/browser-testing/passkeys-flow.spec.ts",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "8f1360a8c495878443ce4adf8d8c431a5924102ccafb2ba9a13269e915f8eb80",
+      "Version": null
+    },
+    {
+      "Path": "web/tests/passkeys/passkeys.spec.ts",
+      "Reason": "Revision dependency or linked finding",
+      "Sha256": "52fc2b6c7c48f1a3f85671ef938675afb4467e2318129b1600b51e44498c0952",
+      "Version": null
+    }
+  ],
+  "Excluded": [],
+  "GitHistory": [
+    "ba82f555 chore(identity): activate scoped passkey compatibility qualification",
+    "3f11e76f test(identity): qualify completed passkey recovery across shared owners",
+    "0262ebc6 test(ui): record current registration passkey and TOTP evidence gates",
+    "bb8314d5 fix(evidence): preserve source-bound receipt bytes across checkouts",
+    "41ac5b92 test(identity): bind passkey reload qualification and track owner compatibility",
+    "462e269a test(passkeys): await sign-out before protected-entry assertion",
+    "42dfecf3 fix(passkeys): reconcile completed operations after reload",
+    "96685959 test(recovery): classify safe startup failures and isolate runner repair",
+    "4caf98bc test(p2-019): approve reviewed diagnostic-only compatibility scope",
+    "9c0f514a test(p2-019): retain current qualification failure and scope safe host diagnostics"
+  ],
+  "Revision": {
+    "Id": "P2-009-RV012",
+    "OriginalScopeId": "TUN-P2-009",
+    "Scope": "WORK_ITEM",
+    "Status": "ACTIVE",
+    "Type": "CORRECTIVE",
+    "Reason": "Qualify the shared completed-only exact-result UI correction and focused regression while preserving closed owner history, domain behavior, policies and native security boundaries. Active approved amendments retain precedence; no domain value or visual deviation is selected.",
+    "Impact": "NON_BLOCKING",
+    "BlockedScope": [],
+    "PreviousRevision": "P2-009-RV011",
+    "ParentMilestoneRevision": null,
+    "NextAction": "select eligible Revision children, implement, and validate the committed scope"
+  },
+  "HistoricalScopes": [
+    {
+      "Id": "P0",
+      "HistoricalStatus": "CLOSED",
+      "WorkingRecordStatus": "CLOSED",
+      "ActiveRevisionRefs": [
+        "P0-RV010"
+      ],
+      "ClosedRevisionRefs": [
+        "P0-RV001",
+        "P0-RV002",
+        "P0-RV003",
+        "P0-RV004",
+        "P0-RV005",
+        "P0-RV006",
+        "P0-RV007",
+        "P0-RV008",
+        "P0-RV009"
+      ]
+    },
+    {
+      "Id": "P1",
+      "HistoricalStatus": "CLOSED",
+      "WorkingRecordStatus": "CLOSED",
+      "ActiveRevisionRefs": [
+        "P1-RV001"
+      ],
+      "ClosedRevisionRefs": []
+    },
+    {
+      "Id": "P2",
+      "HistoricalStatus": "ACTIVE",
+      "WorkingRecordStatus": "ACTIVE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": []
+    },
+    {
+      "Id": "TUN-P0-003",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P0-003-RV001",
+        "P0-003-RV002"
+      ]
+    },
+    {
+      "Id": "TUN-P0-004",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [
+        "P0-004-RV006"
+      ],
+      "ClosedRevisionRefs": [
+        "P0-004-RV001",
+        "P0-004-RV002",
+        "P0-004-RV003",
+        "P0-004-RV004",
+        "P0-004-RV005",
+        "P0-004-RV007"
+      ]
+    },
+    {
+      "Id": "TUN-P0-005",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P0-005-RV001"
+      ]
+    },
+    {
+      "Id": "TUN-P0-007",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P0-007-RV001"
+      ]
+    },
+    {
+      "Id": "TUN-P0-010",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P0-010-RV001"
+      ]
+    },
+    {
+      "Id": "TUN-P0-011",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P0-011-RV001"
+      ]
+    },
+    {
+      "Id": "TUN-P0-019",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P0-019-RV001"
+      ]
+    },
+    {
+      "Id": "TUN-P0-026",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P0-026-RV001"
+      ]
+    },
+    {
+      "Id": "TUN-P0-028",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P0-028-RV001"
+      ]
+    },
+    {
+      "Id": "TUN-P0-030",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P0-030-RV001",
+        "P0-030-RV002"
+      ]
+    },
+    {
+      "Id": "TUN-P0-032",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P0-032-RV001",
+        "P0-032-RV002"
+      ]
+    },
+    {
+      "Id": "TUN-P0-033",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P0-033-RV001",
+        "P0-033-RV002"
+      ]
+    },
+    {
+      "Id": "TUN-P0-035",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P0-035-RV001"
+      ]
+    },
+    {
+      "Id": "TUN-P1-002",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P1-002-RV001",
+        "P1-002-RV002",
+        "P1-002-RV003"
+      ]
+    },
+    {
+      "Id": "TUN-P1-016",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P1-016-RV001"
+      ]
+    },
+    {
+      "Id": "TUN-P1-018",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [
+        "P1-018-RV009"
+      ],
+      "ClosedRevisionRefs": [
+        "P1-018-RV001",
+        "P1-018-RV002",
+        "P1-018-RV003",
+        "P1-018-RV004",
+        "P1-018-RV005",
+        "P1-018-RV006",
+        "P1-018-RV007",
+        "P1-018-RV008",
+        "P1-018-RV010",
+        "P1-018-RV011",
+        "P1-018-RV012",
+        "P1-018-RV013"
+      ]
+    },
+    {
+      "Id": "TUN-P1-019",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P1-019-RV001",
+        "P1-019-RV002"
+      ]
+    },
+    {
+      "Id": "TUN-P1-020",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P1-020-RV001"
+      ]
+    },
+    {
+      "Id": "TUN-P1-022",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P1-022-RV001",
+        "P1-022-RV002",
+        "P1-022-RV003"
+      ]
+    },
+    {
+      "Id": "TUN-P1-023",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P1-023-RV001"
+      ]
+    },
+    {
+      "Id": "TUN-P1-024",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P1-024-RV001",
+        "P1-024-RV002",
+        "P1-024-RV003"
+      ]
+    },
+    {
+      "Id": "TUN-P2-002",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P2-002-RV001"
+      ]
+    },
+    {
+      "Id": "TUN-P2-003",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P2-003-RV001",
+        "P2-003-RV002",
+        "P2-003-RV003",
+        "P2-003-RV004",
+        "P2-003-RV005",
+        "P2-003-RV006"
+      ]
+    },
+    {
+      "Id": "TUN-P2-004-UI001",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [
+        "P2-004-UI001-RV006"
+      ],
+      "ClosedRevisionRefs": [
+        "P2-004-UI001-RV001",
+        "P2-004-UI001-RV002",
+        "P2-004-UI001-RV003",
+        "P2-004-UI001-RV004",
+        "P2-004-UI001-RV005",
+        "P2-004-UI001-RV007",
+        "P2-004-UI001-RV008",
+        "P2-004-UI001-RV009",
+        "P2-004-UI001-RV010",
+        "P2-004-UI001-RV011"
+      ]
+    },
+    {
+      "Id": "TUN-P2-004-UI002",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [
+        "P2-004-UI002-RV006"
+      ],
+      "ClosedRevisionRefs": [
+        "P2-004-UI002-RV001",
+        "P2-004-UI002-RV002",
+        "P2-004-UI002-RV003",
+        "P2-004-UI002-RV004",
+        "P2-004-UI002-RV005",
+        "P2-004-UI002-RV007",
+        "P2-004-UI002-RV008",
+        "P2-004-UI002-RV009",
+        "P2-004-UI002-RV010",
+        "P2-004-UI002-RV011"
+      ]
+    },
+    {
+      "Id": "TUN-P2-009",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [
+        "P2-009-RV011",
+        "P2-009-RV012"
+      ],
+      "ClosedRevisionRefs": [
+        "P2-009-RV001",
+        "P2-009-RV002",
+        "P2-009-RV003",
+        "P2-009-RV004",
+        "P2-009-RV005",
+        "P2-009-RV006",
+        "P2-009-RV007",
+        "P2-009-RV008",
+        "P2-009-RV009",
+        "P2-009-RV010"
+      ]
+    },
+    {
+      "Id": "TUN-P2-010",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [
+        "P2-010-RV012",
+        "P2-010-RV013"
+      ],
+      "ClosedRevisionRefs": [
+        "P2-010-RV001",
+        "P2-010-RV002",
+        "P2-010-RV003",
+        "P2-010-RV004",
+        "P2-010-RV005",
+        "P2-010-RV006",
+        "P2-010-RV007",
+        "P2-010-RV008",
+        "P2-010-RV009",
+        "P2-010-RV010",
+        "P2-010-RV011"
+      ]
+    },
+    {
+      "Id": "TUN-P2-013",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [
+        "P2-013-RV005"
+      ],
+      "ClosedRevisionRefs": [
+        "P2-013-RV001",
+        "P2-013-RV002",
+        "P2-013-RV003",
+        "P2-013-RV004"
+      ]
+    },
+    {
+      "Id": "TUN-P2-014",
+      "HistoricalStatus": "DONE",
+      "WorkingRecordStatus": "DONE",
+      "ActiveRevisionRefs": [],
+      "ClosedRevisionRefs": [
+        "P2-014-RV001",
+        "P2-014-RV002"
+      ]
+    }
+  ],
+  "RevisionSetSha256": "191f6096dcc4d6b4029a26b420405c06091cc000399d4e25c237d72d708cdd25",
+  "CommitState": {
+    "ValidatedSha": "0262ebc6dd3c1abf6ce40114b909ccd4aef7cbdd",
+    "TestedSha": "0262ebc6dd3c1abf6ce40114b909ccd4aef7cbdd",
+    "ClosureSha": null
+  },
+  "LatestRevisions": [
+    {
+      "Id": "P2-009-RV012",
+      "OriginalScopeId": "TUN-P2-009",
+      "Scope": "WORK_ITEM",
+      "Status": "ACTIVE",
+      "Type": "CORRECTIVE",
+      "Reason": "Qualify the shared completed-only exact-result UI correction and focused regression while preserving closed owner history, domain behavior, policies and native security boundaries. Active approved amendments retain precedence; no domain value or visual deviation is selected.",
+      "Impact": "NON_BLOCKING",
+      "BlockedScope": [],
+      "PreviousRevision": "P2-009-RV011",
+      "ParentMilestoneRevision": null,
+      "NextAction": "select eligible Revision children, implement, and validate the committed scope"
+    }
+  ],
+  "GovernanceStateSha256": "4f91b11465053eb9ef248663ff3150317170162d81d6634d60e0a15968237550"
+}

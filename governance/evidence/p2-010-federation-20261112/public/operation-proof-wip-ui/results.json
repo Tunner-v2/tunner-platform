@@ -1,0 +1,791 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.step-up.config.ts",
+      "tests/step-up/federation.spec.ts",
+      "--output",
+      "../artifacts/p2-010-federation-20261112/operation-proof-wip-ui/runs",
+      "--reporter",
+      "line,json"
+    ],
+    "configFile": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\playwright.step-up.config.ts",
+    "rootDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/step-up",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/artifacts/p2-010-federation-20261112/operation-proof-wip-ui/runs",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/step-up",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "line"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config fixtures/step-up/vite.config.ts",
+      "url": "http://127.0.0.1:5192/browser-testing/step-up-assets/",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "federation.spec.ts",
+      "file": "federation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Absent federation capability keeps the old chooser independent of every new publication",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1488,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:17.572Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-bef197deb729b9d6a523",
+          "file": "federation.spec.ts",
+          "line": 45,
+          "column": 1
+        },
+        {
+          "title": "Only an actually offered provider requires its conditional label publication",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1019,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:20.013Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-721767c211c148cae5d0",
+          "file": "federation.spec.ts",
+          "line": 48,
+          "column": 1
+        },
+        {
+          "title": "Offered federation without its published method content fails closed",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1099,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:21.065Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-a19e0803ae04f71aa44a",
+          "file": "federation.spec.ts",
+          "line": 51,
+          "column": 1
+        },
+        {
+          "title": "Google fresh selection uses the offered link, existing request and only a fixed clean challenge",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1018,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:22.188Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-e0c847971ccf78ce65fd",
+          "file": "federation.spec.ts",
+          "line": 54,
+          "column": 55
+        },
+        {
+          "title": "Microsoft fresh selection uses the offered link, existing request and only a fixed clean challenge",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 999,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:23.227Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-e6aea22c364ac06291f5",
+          "file": "federation.spec.ts",
+          "line": 54,
+          "column": 55
+        },
+        {
+          "title": "PROOF_ISSUED is not owner completion and result remains read-only until explicit continuation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1183,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:24.246Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-2e54fd2b0817e62cc386",
+          "file": "federation.spec.ts",
+          "line": 60,
+          "column": 1
+        },
+        {
+          "title": "Lost continuation requires a safe owner-result read instead of automatic mutation retry",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 942,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status')\nExpected: \u001b[32m\"Verification completed\"\u001b[39m\nError: strict mode violation: getByRole('status') resolved to 2 elements:\n    1) <p role=\"status\">Ready</p> aka getByText('Ready')\n    2) <p role=\"status\" class=\"step-up-status\">…</p> aka getByRole('dialog', { name: 'Confirm it’s you' }).getByRole('status')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status')\nExpected: \u001b[32m\"Verification completed\"\u001b[39m\nError: strict mode violation: getByRole('status') resolved to 2 elements:\n    1) <p role=\"status\">Ready</p> aka getByText('Ready')\n    2) <p role=\"status\" class=\"step-up-status\">…</p> aka getByRole('dialog', { name: 'Confirm it’s you' }).getByRole('status')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status')\u001b[22m\n\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\step-up\\federation.spec.ts:67:126",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\step-up\\federation.spec.ts",
+                      "column": 126,
+                      "line": 67
+                    },
+                    "snippet": "  65 | test('Lost continuation requires a safe owner-result read instead of automatic mutation retry',async({page})=>{\n  66 |  const state=await setup(page,restored());state.loseContinue=true;await open(page);await page.getByRole('button',{name:'Continue this verification',exact:true}).click();await expect(page.getByRole('button',{name:'Check verification status',exact:true})).toBeEnabled();expect(state.continues).toBe(1);\n> 67 |  await page.getByRole('button',{name:'Check verification status',exact:true}).click();await expect(page.getByRole('status')).toHaveText('Verification completed');expect(state.continues).toBe(1);expect(state.start).toBe(0);\n     |                                                                                                                              ^\n  68 | });\n  69 | for(const wrong of ['requestId','attemptId','operationReference','linkReference'] as const)test('Result cannot replace the retained '+wrong,async({page})=>{\n  70 |  const state=await setup(page,restored());state.wrong=wrong;await open(page);await page.getByRole('button',{name:'Check verification status',exact:true}).click();await expect(page.getByRole('alert')).toHaveText(proposal.content['stepUp.error.changed']);await expect(page.getByRole('dialog')).toBeVisible();await expect(page.getByRole('button',{name:'Continue this verification',exact:true})).toHaveCount(0);expect(state.continues).toBe(0);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\step-up\\federation.spec.ts",
+                        "column": 126,
+                        "line": 67
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('status')\nExpected: \u001b[32m\"Verification completed\"\u001b[39m\nError: strict mode violation: getByRole('status') resolved to 2 elements:\n    1) <p role=\"status\">Ready</p> aka getByText('Ready')\n    2) <p role=\"status\" class=\"step-up-status\">…</p> aka getByRole('dialog', { name: 'Confirm it’s you' }).getByRole('status')\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('status')\u001b[22m\n\n\n  65 | test('Lost continuation requires a safe owner-result read instead of automatic mutation retry',async({page})=>{\n  66 |  const state=await setup(page,restored());state.loseContinue=true;await open(page);await page.getByRole('button',{name:'Continue this verification',exact:true}).click();await expect(page.getByRole('button',{name:'Check verification status',exact:true})).toBeEnabled();expect(state.continues).toBe(1);\n> 67 |  await page.getByRole('button',{name:'Check verification status',exact:true}).click();await expect(page.getByRole('status')).toHaveText('Verification completed');expect(state.continues).toBe(1);expect(state.start).toBe(0);\n     |                                                                                                                              ^\n  68 | });\n  69 | for(const wrong of ['requestId','attemptId','operationReference','linkReference'] as const)test('Result cannot replace the retained '+wrong,async({page})=>{\n  70 |  const state=await setup(page,restored());state.wrong=wrong;await open(page);await page.getByRole('button',{name:'Check verification status',exact:true}).click();await expect(page.getByRole('alert')).toHaveText(proposal.content['stepUp.error.changed']);await expect(page.getByRole('dialog')).toBeVisible();await expect(page.getByRole('button',{name:'Continue this verification',exact:true})).toHaveCount(0);expect(state.continues).toBe(0);\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\step-up\\federation.spec.ts:67:126"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:25.462Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\operation-proof-wip-ui\\runs\\federation-Lost-continuati-d75bc-of-automatic-mutation-retry\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\step-up\\federation.spec.ts",
+                    "column": 126,
+                    "line": 67
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-131bb1b9e542baf1e00a",
+          "file": "federation.spec.ts",
+          "line": 65,
+          "column": 1
+        },
+        {
+          "title": "Result cannot replace the retained requestId",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1398,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:27.613Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-ef98af667cd575afaca2",
+          "file": "federation.spec.ts",
+          "line": 69,
+          "column": 92
+        },
+        {
+          "title": "Result cannot replace the retained attemptId",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 997,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:29.479Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-88ae5572b2f0e69e7452",
+          "file": "federation.spec.ts",
+          "line": 69,
+          "column": 92
+        },
+        {
+          "title": "Result cannot replace the retained operationReference",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 875,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:30.518Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-6e3df67538eed33199c2",
+          "file": "federation.spec.ts",
+          "line": 69,
+          "column": 92
+        },
+        {
+          "title": "Result cannot replace the retained linkReference",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 905,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:31.410Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-0c3d397ff52600b6006f",
+          "file": "federation.spec.ts",
+          "line": 69,
+          "column": 92
+        },
+        {
+          "title": "Source withdrawal during explicit continuation preflight never invokes the owner",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 845,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:32.333Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-8c52f7a4d3323aa6364f",
+          "file": "federation.spec.ts",
+          "line": 72,
+          "column": 1
+        },
+        {
+          "title": "Exact method cancellation closes the old dialog; only explicit reopen fetches a new request",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 910,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:33.197Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-0758406cd147f988f56c",
+          "file": "federation.spec.ts",
+          "line": 75,
+          "column": 1
+        },
+        {
+          "title": "An unrelated cancellation acknowledgement cannot dismiss the held proof",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 996,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:34.127Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-0099c916a16d330a677d",
+          "file": "federation.spec.ts",
+          "line": 79,
+          "column": 1
+        },
+        {
+          "title": "Read-only recovery cannot carry first-delivery data into the UI",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 860,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:35.142Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-a7ab060914730a6fdeee",
+          "file": "federation.spec.ts",
+          "line": 82,
+          "column": 1
+        },
+        {
+          "title": "Continue delegates unexpected first delivery to the existing parser and cannot accept it without a receiver",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 861,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:36.018Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-a5f090d423c9b1e32d14",
+          "file": "federation.spec.ts",
+          "line": 85,
+          "column": 1
+        },
+        {
+          "title": "Pending provider selection fences duplicate and sibling method actions until the original result can be checked",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1043,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:36.895Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-c7ea63c05baa235e0fa0",
+          "file": "federation.spec.ts",
+          "line": 88,
+          "column": 1
+        },
+        {
+          "title": "Federated collection chooser and explicit continuation retain keyboard and accessible geometry at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2058,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:37.955Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "federation-chooser-1440",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\operation-proof-wip-ui\\runs\\federation-Federated-colle-18f8f-accessible-geometry-at-1440\\attachments\\federation-chooser-1440-e0e5245edc662fa10e7f3fdfadfc555743081b77.png"
+                    },
+                    {
+                      "name": "federation-issued-1440",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\operation-proof-wip-ui\\runs\\federation-Federated-colle-18f8f-accessible-geometry-at-1440\\attachments\\federation-issued-1440-9e8b74f423ee501b744dc634cddb7e800e2635aa.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-cf02e8e082c30ddfdb75",
+          "file": "federation.spec.ts",
+          "line": 95,
+          "column": 31
+        },
+        {
+          "title": "Federated collection chooser and explicit continuation retain keyboard and accessible geometry at 320",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1844,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T16:50:40.031Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "federation-chooser-320",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\operation-proof-wip-ui\\runs\\federation-Federated-colle-527c3--accessible-geometry-at-320\\attachments\\federation-chooser-320-3ad12d683b82de529999dc865747c47121af6b5f.png"
+                    },
+                    {
+                      "name": "federation-issued-320",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\operation-proof-wip-ui\\runs\\federation-Federated-colle-527c3--accessible-geometry-at-320\\attachments\\federation-issued-320-2656129e66226e880910a0d4cfbaeb363c4eb668.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-b4836d05fb32527fe554",
+          "file": "federation.spec.ts",
+          "line": 95,
+          "column": 31
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-12T16:50:13.879Z",
+    "duration": 28603.871,
+    "expected": 18,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

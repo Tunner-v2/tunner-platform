@@ -2,11 +2,29 @@
   <PropertyGroup><OutputType>Exe</OutputType><UseAppHost>false</UseAppHost></PropertyGroup>
   <ItemGroup><FrameworkReference Include="Microsoft.AspNetCore.App" /></ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Testcontainers" />
     <ProjectReference Include="../../src/Tunner.User.Bff/Tunner.User.Bff.csproj" />
+    <ProjectReference Include="../../src/Tunner.Admin.Bff/Tunner.Admin.Bff.csproj" />
+    <ProjectReference Include="../../src/Modules/PresentationContent/Tunner.PresentationContent.csproj" />
     <ProjectReference Include="../../src/Tunner.Database.Migrations/Tunner.Database.Migrations.csproj" />
+    <ProjectReference Include="../../src/Tunner.Installer/Tunner.Installer.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="../../tests/Shared/OpenBao/DisposableOpenBaoFixture.cs" Link="Shared/DisposableOpenBaoFixture.cs" />
+    <Compile Include="../../tests/Shared/NativeTotpCodeFixture.cs" Link="Shared/NativeTotpCodeFixture.cs" />
+    <Compile Include="../../tests/Shared/RecoveryCodeOwnedDockerFixture.cs" Link="Shared/RecoveryCodeOwnedDockerFixture.cs" />
+    <Compile Include="../../tests/Shared/RecoveryCodeFixtureOwnershipChannel.cs" Link="Shared/RecoveryCodeFixtureOwnershipChannel.cs" />
+    <Compile Include="../../src/Tunner.Governance/RepositoryRootResolver.cs" Link="Shared/RepositoryRootResolver.cs" />
+    <Content Include="browser-test-identity-configuration-content.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../web/apps/user/sessions.content.proposal.json" Link="browser-test-sessions-content.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../web/apps/user/recovery-codes.content.proposal.json" Link="browser-test-recovery-content.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../web/apps/user/totp.content.proposal.json" Link="browser-test-totp-content.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../web/apps/user/passkeys.content.proposal.json" Link="browser-test-passkey-content.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../web/apps/user/step-up.content.proposal.json" Link="browser-test-step-up-content.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../web/fixtures/step-up/dist/**/*" Link="wwwroot/step-up/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../web/apps/user/authentication.content.proposal.json" Link="browser-test-authentication-content.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../web/apps/user/content.proposal.json" Link="browser-test-content.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../web/apps/user/dist/**/*" Link="wwwroot/registration/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../web/apps/admin/dist/**/*" Link="wwwroot/admin/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

@@ -28,7 +28,7 @@ public static class OrchestratorApplication
             return Blocked(workItemId, "LIFECYCLE_REFUSED", [$"work item state '{state}' is not eligible for orchestrated execution"]);
         }
 
-        var next = GovernanceApplication.Next(repository);
+        var next = GovernanceApplication.Next(repository, workItemId);
         var item = ((NextPayload)next.Payload).Items.SingleOrDefault(candidate => StringComparer.Ordinal.Equals(candidate.WorkItemId, workItemId));
         var hardBlock = item is not null && (item.Reason.Contains("prerequisite '", StringComparison.Ordinal) || item.Reason.Contains("blocker:", StringComparison.Ordinal) || item.Reason.Contains("authority verification failed", StringComparison.Ordinal) || item.Reason.Contains("unmerged", StringComparison.Ordinal));
         if (next.ExitCode != 0 || item is null || (!item.Actionable && !StringComparer.Ordinal.Equals(item.Reason, "all recorded prerequisites and blockers permit work")) || hardBlock)

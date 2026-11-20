@@ -1,0 +1,475 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-014",
+  "qualification_kind": "UNCHANGED_APPLICATION_SOURCE_AT_INVENTORY_CANDIDATE",
+  "candidate_commit_sha": "d2783c34a65b28964256dc6f106252773feaf324",
+  "actual_execution_commits": [
+    "ba6acb91f04eff925b58417f89b742e201744d2b",
+    "a4bd89fd46588c20eed7bfc25d13c0aa536859a4",
+    "4557422eab5bd235af497eeace6101666e36d511",
+    "ac80a710cc5183a0973fc3c6a01d91f68fabffef"
+  ],
+  "source_binding": {
+    "browser": "All web application source is unchanged from actual ba6acb9 Product54/shared41 executions through a4bd89f and inventory candidate d2783c3; git diff ba6acb9 a4bd89f -- web returned no paths. Current Login21 and TOTP11 ran from the same frozen web inputs. The candidate is an inventory-only commit, not a claimed new runtime invocation.",
+    "native": "Actual a4bd89f Product81 is the disjoint67+12+2 union, each accepted run attributed separately. Ordinary invocation9ae198... at4557422 executed60:59 ordinary cases passed, and a new positive HTML assertion used an invalid pre-resume expectation. Whole invocation failed and remains accepted=false. Corrected guarded-HTML case passed1/1 in7137eaf... at ac80a710 with unchanged application source; no59-case rerun or single60-case passing invocation is claimed. All application source remains unchanged from inventory candidate d2783c3.",
+    "acceptance": "This record qualifies current behavior and unchanged visual components only. UI compliance JSON/evidence must be committed unchanged before the native gate can accept it; no lifecycle, whole-feature, Product, deployment or release approval."
+  },
+  "browser_runs": [
+    {
+      "kind": "product_review_continuation_and_proof",
+      "actual_source_commit_sha": "ba6acb91f04eff925b58417f89b742e201744d2b",
+      "executed": 54,
+      "passed": 54,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "duration_milliseconds": 69284.039,
+      "raw_receipt": {
+        "path": "governance/evidence/p2-014-authorization-20261115/ui/raw/product-browser-ba6acb9.json",
+        "sha256": "6f60a713cc0f1805461db85181293741eaf3f65577b849bd41295ae8f11520ad"
+      },
+      "boundary": "Actual Edge production application/approved shared dialog with controlled server responses. Native HTTPS/PostgreSQL receipts remain separate."
+    },
+    {
+      "kind": "ordinary_shared_password_and_federation",
+      "actual_source_commit_sha": "ba6acb91f04eff925b58417f89b742e201744d2b",
+      "executed": 41,
+      "passed": 41,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "duration_milliseconds": 59608.327,
+      "raw_receipt": {
+        "path": "governance/evidence/p2-014-authorization-20261115/ui/raw/shared-browser-ba6acb9.json",
+        "sha256": "afee7a68f0428956a208d9cf123e34c2db7eb2658839eb80e6f4cfd2d54dfa97"
+      },
+      "boundary": "Actual Edge production application/approved shared dialog with controlled server responses. Native HTTPS/PostgreSQL receipts remain separate."
+    },
+    {
+      "kind": "login_and_signed_in",
+      "actual_source_commit_sha": "a4bd89fd46588c20eed7bfc25d13c0aa536859a4",
+      "executed": 21,
+      "passed": 21,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "duration_milliseconds": 59345.143000000004,
+      "raw_receipt": {
+        "path": "governance/evidence/p2-014-authorization-20261115/ui/raw/authentication-a4bd89f.json",
+        "sha256": "f825e8f0884a852571783e58877fa9ef9088773a49cd255ad609c62d18305836"
+      },
+      "boundary": "Actual Edge production application/approved shared dialog with controlled server responses. Native HTTPS/PostgreSQL receipts remain separate."
+    },
+    {
+      "kind": "shared_totp_validation_picker_and_recovery",
+      "actual_source_commit_sha": "a4bd89fd46588c20eed7bfc25d13c0aa536859a4",
+      "executed": 11,
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0,
+      "flaky": 0,
+      "duration_milliseconds": 38230.490999999995,
+      "raw_receipt": {
+        "path": "governance/evidence/p2-014-authorization-20261115/ui/raw/totp-focused-a4bd89f.json",
+        "sha256": "26839dbd9c1bf587d7fe6f4483b7551389ba9256d2ec9faf09715f4a042b9220"
+      },
+      "boundary": "Actual shared TOTP form at existing isolated caller: validation and picker at1440/768/390/320 plus exact accepted-proof recovery. Separate Product caller tests cover actual integration. Not a live browser-to-native authentication claim."
+    }
+  ],
+  "native_product_runs": [
+    {
+      "run_id": "ea41289b281a414ba89135be867149fe",
+      "executed": 67,
+      "passed": 67,
+      "actual_source_commit_sha": "a4bd89fd46588c20eed7bfc25d13c0aa536859a4",
+      "accepted": true,
+      "summary": {
+        "path": "governance/evidence/p2-014-authorization-20261115/native/ea41289b281a414ba89135be867149fe/summary.json",
+        "sha256": "f2611ba3124c7fe25657f44e70bfef0b21fce1a4b17cccf393c380192a21e108"
+      },
+      "raw_trx": {
+        "path": "governance/evidence/p2-014-authorization-20261115/native/ea41289b281a414ba89135be867149fe/product-authorization.trx",
+        "sha256": "0cf1119d9a12f0352ea4192c522ff540d83bc840c440a9bf948f9804a124da14"
+      }
+    },
+    {
+      "run_id": "df91c48ea6094af487e952678626cbc1",
+      "executed": 12,
+      "passed": 12,
+      "actual_source_commit_sha": "a4bd89fd46588c20eed7bfc25d13c0aa536859a4",
+      "accepted": true,
+      "summary": {
+        "path": "governance/evidence/p2-014-authorization-20261115/native/df91c48ea6094af487e952678626cbc1/summary.json",
+        "sha256": "b817a2e912fac0f9ef8c9c7260bd092d813ec0b58c971b6f363da30f2a5a2bc7"
+      },
+      "raw_trx": {
+        "path": "governance/evidence/p2-014-authorization-20261115/native/df91c48ea6094af487e952678626cbc1/product-authorization.trx",
+        "sha256": "f464f2c772f86904722de98da678ebb910991d7e73542a15eaa4f08584f2920f"
+      }
+    },
+    {
+      "run_id": "f6839713138a4a45846a3483f789898b",
+      "executed": 2,
+      "passed": 2,
+      "actual_source_commit_sha": "a4bd89fd46588c20eed7bfc25d13c0aa536859a4",
+      "accepted": true,
+      "summary": {
+        "path": "governance/evidence/p2-014-authorization-20261115/native/f6839713138a4a45846a3483f789898b/summary.json",
+        "sha256": "a9441bf5be9a77303b044990ebd7f5b66072e23e7470bd7eb9818068838e722c"
+      },
+      "raw_trx": {
+        "path": "governance/evidence/p2-014-authorization-20261115/native/f6839713138a4a45846a3483f789898b/product-authorization.trx",
+        "sha256": "d00232457195bb5d0f2e860b06c4f54738bf62c25296ee97dee4d06be6e93f04"
+      }
+    }
+  ],
+  "retained_visual_source": {
+    "prior_scope": "TUN-P2-008",
+    "qualification_commit_sha": "1e8cc76bd5b22aceb169b44d446c0df049410b73",
+    "original_render_commit": "6e562db",
+    "prior_record": "governance/evidence/TUN-P2-008-UI-COMPLIANCE.json",
+    "verified_unchanged_files": [
+      "web/apps/user/totp.css",
+      "web/apps/user/step-up.css",
+      "web/apps/user/totp.code.tsx",
+      "web/apps/user/totp.picker.tsx",
+      "web/apps/user/totp.validation.ts"
+    ],
+    "verified_component_delta": "step-up.totp.tsx changes only typed PROOF_READY opt-in/outcome/recovery dispatch above its unchanged rendered JSX. Field labels, form structure, error mapping, focus, styles and approved picker markup remain unchanged. The retained screenshots are historical actual form/code-error renders, not relabeled as new Product source renders; current eleven-case execution supplies new validation/recovery evidence."
+  },
+  "evidence_files": [
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/raw/product-browser-ba6acb9.json",
+      "sha256": "6f60a713cc0f1805461db85181293741eaf3f65577b849bd41295ae8f11520ad",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/proof-browser-ba6acb9-integrated-results.json",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RAW_EXECUTION_RECEIPT"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/raw/shared-browser-ba6acb9.json",
+      "sha256": "afee7a68f0428956a208d9cf123e34c2db7eb2658839eb80e6f4cfd2d54dfa97",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/proof-ordinary-browser-ba6acb9-results.json",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RAW_EXECUTION_RECEIPT"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/raw/authentication-a4bd89f.json",
+      "sha256": "f825e8f0884a852571783e58877fa9ef9088773a49cd255ad609c62d18305836",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/authentication-a4bd89f-results.json",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RAW_EXECUTION_RECEIPT"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/raw/totp-focused-a4bd89f.json",
+      "sha256": "26839dbd9c1bf587d7fe6f4483b7551389ba9256d2ec9faf09715f4a042b9220",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/totp-focused-a4bd89f-results.json",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RAW_EXECUTION_RECEIPT"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/reference/figma-99-411.png",
+      "sha256": "9ebe2b5ab2a505d34cb2091485ca58cc719aa2089f1499c51c11f88109a4f888",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/product-ui-review/figma-99-411.png",
+      "byte_preserving_copy": true,
+      "role": "APPROVED_REFERENCE"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/reference/approved-product-login-1440.png",
+      "sha256": "42e4dbd4fc9a97fbf7e8260f509ee15bcbc8ef3870e0587cef0a2cb382c00b86",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/product-ui-review/login-1440.png",
+      "byte_preserving_copy": true,
+      "role": "APPROVED_REFERENCE"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/reference/approved-product-login-390.png",
+      "sha256": "f1892045a11006d9325a7efbe90d3f6d255a5b0afb2753dcc655d2e26bf8f294",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/product-ui-review/login-390.png",
+      "byte_preserving_copy": true,
+      "role": "APPROVED_REFERENCE"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/reference/approved-authorization-1440.png",
+      "sha256": "8e669b7d3ee463da27efb0b35c6f507607d9fe633e5c0c97e118c6a3a79d63b6",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/product-ui-review/authorization-1440.png",
+      "byte_preserving_copy": true,
+      "role": "APPROVED_REFERENCE"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/reference/approved-authorization-390.png",
+      "sha256": "b9dc6fcd4f6aa73ee7659c54c82872c2b3cc18ac7374f275cfdc00a54bdcba16",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/product-ui-review/authorization-390.png",
+      "byte_preserving_copy": true,
+      "role": "APPROVED_REFERENCE"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/reference/approved-signed-in-1440.png",
+      "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c",
+      "original_relative_path": "governance/evidence/ui/authentication-20261028/reference/signed-in-proposal-1440.png",
+      "byte_preserving_copy": true,
+      "role": "APPROVED_REFERENCE"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/reference/figma-login-2-4.png",
+      "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73",
+      "original_relative_path": "artifacts/p2-005-auth-20261021/login-figma-1440.png",
+      "byte_preserving_copy": true,
+      "role": "APPROVED_REFERENCE"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/reference/figma-step-up-98-27.png",
+      "sha256": "fd7e613982e3f8f2ca2e9abe1fe725a86f86b177f3cbef0be3c9ffa50db03616",
+      "original_relative_path": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png",
+      "byte_preserving_copy": true,
+      "role": "APPROVED_REFERENCE"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/reference/figma-validation-70-1257.png",
+      "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa",
+      "original_relative_path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+      "byte_preserving_copy": true,
+      "role": "APPROVED_REFERENCE"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/product-login-production-1440.png",
+      "sha256": "fc907da9fd1aa2aaf67dbd8747907b262fb5caf334c888c70bb353ac1ebc66b6",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/product-login-production-1440.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/authorization-production-1440.png",
+      "sha256": "20fb6f4a504643c0650f7fc97a1c2b6d0f0f2085ed4ff65d81436609ca77ad9d",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/authorization-production-1440.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/current-login-1440.png",
+      "sha256": "b97005afb4f70e0ff947d0b48542bf578c9c31ca53090e1e3895f79553b93e32",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/current-login-1440.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/current-signed-in-1440.png",
+      "sha256": "a1b0bcc886eb5440a76bd7ebb008259502db983c7a02e0e5cfa8aa85add2e00f",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/current-signed-in-1440.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/existing-shared-proof-1440.png",
+      "sha256": "0da55147ac782a7c8c9a39ec2b025f16058905f5a177707efee8d41c8dc1a189",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/existing-shared-proof-1440.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/product-login-production-390.png",
+      "sha256": "750eb923198fab7ea2dffba608a979952e561e84c32dad031f869ef314d70e4b",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/product-login-production-390.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/authorization-production-390.png",
+      "sha256": "2ba64e3f83fbd3b972d9af648f0d3049c28c9710b9dd4372d1f8c81f9ae974b6",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/authorization-production-390.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/current-login-390.png",
+      "sha256": "2784c48acc47212959caa2ce783fb272a85b708f4e7d4e4519c86f6998b78b53",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/current-login-390.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/current-signed-in-390.png",
+      "sha256": "21fad68ecd6ea985b8e1cb849f77dd1650ebe3fdb23af4bc5950eca1058a5669",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/current-signed-in-390.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/existing-shared-proof-390.png",
+      "sha256": "4cc4e5a0bf8ebe152272814e50d705b3b0d7dbb4d2f485568589c393df52d536",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/existing-shared-proof-390.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/product-login-production-320.png",
+      "sha256": "5a91066b07cc8de69e81854e351643b2520fd92e5a23ba70d4b9dc7086e701f8",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/product-login-production-320.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/authorization-production-320.png",
+      "sha256": "71ffd31cceda94fb70b1f774ed29c4d54d7065cdd49575be6c67e379410eb888",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/authorization-production-320.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/current-login-320.png",
+      "sha256": "f3041699fb8ec7fb804fc56c87db7f357eb340d284e1b2ee63e2e5539b9389db",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/current-login-320.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/current-signed-in-320.png",
+      "sha256": "53deab375fe1c33747848bfba60e722f4dfb3852254d3eeb26fe4250879523e0",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/current-signed-in-320.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/existing-shared-proof-320.png",
+      "sha256": "b1008a619397694a55af38fc7e1445a27eb5e84a9c4f8ef1f937a6b9f438f807",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/existing-shared-proof-320.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/login-server-error-1440.png",
+      "sha256": "e5c784f92dd0ab829d2ef2f044a20ed1e3726fe8283d0e93bf47842f19ac1dc4",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/current-login-server-error-1440.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/login-server-error-320.png",
+      "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/current-login-server-error-320.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/federation-chooser-1440.png",
+      "sha256": "270581cf459a92a0b09da9a33f66e0ee66df7187e3193f49e50474c15346134e",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/federation-chooser-1440.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/federation-issued-1440.png",
+      "sha256": "62c4cd93b63d4cdfaa8836fa6e31a7d0257e3afd2e8d78bc1b254103792aa75e",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/federation-issued-1440.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/federation-chooser-320.png",
+      "sha256": "e9470ddd15012bd1b8f6a7c5072d049d42907f8a07f5898262e4f16ec2be1dee",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/federation-chooser-320.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/federation-issued-320.png",
+      "sha256": "7b3b4c974a9c81cb5764d973ceae6ee83e24fe2cbe3873bcd2e6d1c5a44e810e",
+      "original_relative_path": "artifacts/p2-014-authorization-20261115/ui-evidence/federation-issued-320.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/retained-visual/totp-proof-code-1440.png",
+      "sha256": "6133ee38b89d9ac66171b0fa135c49f449e27e9f2cb77d502a9cdb7d8144d540",
+      "original_relative_path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-1440.png",
+      "byte_preserving_copy": true,
+      "role": "HISTORICAL_ACTUAL_UNCHANGED_VISUAL_COMPONENT"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/retained-visual/totp-proof-error-1440.png",
+      "sha256": "50e698b72098d9b932a4eeeadc3d635194d8ef1508bc499a350a3253dad120cb",
+      "original_relative_path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-error-1440.png",
+      "byte_preserving_copy": true,
+      "role": "HISTORICAL_ACTUAL_UNCHANGED_VISUAL_COMPONENT"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/retained-visual/totp-proof-code-390.png",
+      "sha256": "ff1e1588a7a3c571d45a600c4a377baf168920941c7d18aad37f9f816cb5f4d9",
+      "original_relative_path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-390.png",
+      "byte_preserving_copy": true,
+      "role": "HISTORICAL_ACTUAL_UNCHANGED_VISUAL_COMPONENT"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/retained-visual/totp-proof-error-390.png",
+      "sha256": "a5d05be38457bbc2557efd58a97abc6b7e5f2fbb8604cbf008a68eef6facfb76",
+      "original_relative_path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-error-390.png",
+      "byte_preserving_copy": true,
+      "role": "HISTORICAL_ACTUAL_UNCHANGED_VISUAL_COMPONENT"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/shared-password-1440.png",
+      "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+      "original_relative_path": "web/test-results/step-up/password-1440.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/shared-server-error-1440.png",
+      "sha256": "29f5e41d44a69ad1c6075bce15155b13afd7207cc37c4ee876da26b48457aff9",
+      "original_relative_path": "web/test-results/step-up/server-error-1440.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/shared-password-390.png",
+      "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0",
+      "original_relative_path": "web/test-results/step-up/password-390.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    },
+    {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/rendered/shared-server-error-390.png",
+      "sha256": "f96cbb908b9b1afaf4f3ecf39714fef629eb8341be1303b60d1d5c0f831487a9",
+      "original_relative_path": "web/test-results/step-up/server-error-390.png",
+      "byte_preserving_copy": true,
+      "role": "ACTUAL_RENDERED_UI"
+    }
+  ],
+  "ordinary_native_qualification": {
+    "actual_ordinary_execution_commit_sha": "4557422eab5bd235af497eeace6101666e36d511",
+    "run_id": "9ae1983204634da79c400be31657489d",
+    "whole_invocation": {
+      "executed": 60,
+      "passed": 59,
+      "failed": 1,
+      "accepted": false
+    },
+    "ordinary_cases": {
+      "distinct": 59,
+      "passed": 59
+    },
+    "summary": {
+      "path": "governance/evidence/p2-014-authorization-20261115/native/9ae1983204634da79c400be31657489d/summary.json",
+      "sha256": "d9131bc6827fe60e2126351f22cb3acdea3e9ce223adf4c56658d6db192c673c"
+    },
+    "raw_trx": {
+      "path": "governance/evidence/p2-014-authorization-20261115/native/9ae1983204634da79c400be31657489d/product-authorization.trx",
+      "sha256": "0b32119a1e50381fbc6068bd83ac8b9ca10874524e980f0e9d76d96f3d6d72f7"
+    },
+    "harness_failure": "New ReviewAnonymousProductLoginPublishesSafeContextAndActualSignInStillRequiresReview expected HTML200 before protected continuation resume; production correctly denied. Test-only correction moved positive HTML checks after resume.",
+    "corrected_one_case": {
+      "actual_execution_commit_sha": "ac80a710cc5183a0973fc3c6a01d91f68fabffef",
+      "run_id": "7137eaf5b86b4ad9b422e44e73b47ad5",
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "accepted": true,
+      "summary": {
+        "path": "governance/evidence/p2-014-authorization-20261115/native/7137eaf5b86b4ad9b422e44e73b47ad5/summary.json",
+        "sha256": "1d2b2387236df67dded4c1a1d5b0800e0d761b56462e6c38b7efb74d3f3322ef"
+      },
+      "raw_trx": {
+        "path": "governance/evidence/p2-014-authorization-20261115/native/7137eaf5b86b4ad9b422e44e73b47ad5/product-authorization.trx",
+        "sha256": "7d191eec8e2f807196d958b16efa87d9239357ee48450dc9d92fc4c627931f9c"
+      }
+    }
+  }
+}

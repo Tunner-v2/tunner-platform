@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-004-RV003",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "0c53340f6ad81be1578624c7b622f9b2855655b8",
+  "validated_commit_sha": "0c53340f6ad81be1578624c7b622f9b2855655b8",
+  "owned_behavior_paths": [
+    "src/Tunner.Governance/CommitReadinessApplication.cs",
+    "src/Tunner.Governance/GovernanceApplication.cs",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs"
+  ],
+  "note": "Freeze source classification in committed candidate before tests; final current-source proof and all required reviews follow execution.",
+  "execution_evidence_ref": "governance/evidence/p2-recovery-20261109/governance/test-index.json",
+  "execution_binding": {
+    "method": "Full functional run at identified source commit, later clean build/static/security checks with entire governance source unchanged."
+  }
+}

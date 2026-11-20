@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "status": "PASS_CURRENT_WINDOWS_HARNESS_REVERIFICATION",
+  "original_fix_commit": "623d3db08ee73182904a12dd08351260a715449c",
+  "tested_commit": "b3d07ff93a4955701f7d1835a84a5bd685748787",
+  "source_equivalence": "Both Program.cs and both project files are unchanged from the original623d3db fix, verified by git diff exit0. No duplicate code fix or historical reopening was performed.",
+  "builds": {
+    "projects": 2,
+    "warnings": 0,
+    "errors": 0
+  },
+  "ordinary_suites": {
+    "governance": "PASS",
+    "audit_remediation": "PASS_13_AUTHORITY_CONTEXT_CHECKS"
+  },
+  "controlled_failures": {
+    "passed": 6,
+    "expected_child_exit": 1,
+    "startup_body_cleanup": true,
+    "unhandled_exception_output": false,
+    "false_pass_output": false
+  },
+  "event_review": {
+    "matched_tunner_events": 0,
+    "window_minutes": 40,
+    "event_ids": [
+      1000,
+      1026
+    ],
+    "only_matching_tunner_executables": true,
+    "unrelated_events_recorded": false
+  },
+  "historical_attribution": "The screenshots show a generic managed exception code; the original stack is unavailable. The covered current managed failures produce exit1 with diagnostics and both ordinary suites pass. Native/fatal unrelated failures are not diagnosed or claimed.",
+  "windows_settings_changed": false,
+  "production_authorized": false,
+  "evidence_sha256": {
+    "governance/evidence/security-20261108/windows-harness/governance-build.log": "8d1aef0a2bfd2e5a3eb21e09955d676c83918f6a198b41309fa93ddd81f4bda7",
+    "governance/evidence/security-20261108/windows-harness/audit-build.log": "cbbd7cacb7773b6883cdb31bbe8d8830a83c38269995e3a312b097fefe2be8e7",
+    "governance/evidence/security-20261108/windows-harness/six-controlled-failures.log": "8de00e1b99cdc786e68ecdd68dd549d4253984353776fa4c849fa56cc39ba25a",
+    "governance/evidence/security-20261108/windows-harness/governance-functional.log": "dd5db41654cb4e5f25b3cfe54e8f28bb38dd9110c035a7114ce9081929530cf5",
+    "governance/evidence/security-20261108/windows-harness/audit-functional.log": "f43ed28553043a8abcd9b0109aee7072405f7ac5d61606db7db19856ccf27d74"
+  }
+}

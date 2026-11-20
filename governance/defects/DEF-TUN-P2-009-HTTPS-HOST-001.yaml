@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-009-HTTPS-HOST-001",
+  "work_item_id": "TUN-P2-009",
+  "classification": "TEST_INFRASTRUCTURE",
+  "severity": "SEV-3",
+  "status": "RESOLVED",
+  "environment": "Isolated Windows fixed native Recovery runner, source06b20de2/build0448f9ed, binding389d2e14",
+  "description": "Historical fixed123 qualification at06b20de2/build389d aborted its first Federation MFA HOST before seeding. The recorded pinned restore corrected the missing Content/Admin/Worker dependency graph. Actual frozen46041e95 qualification now passes protocol17, resource6 and all123 private cases including FEDERATION_PRIMARY_MFA and RECOVERY_PASSWORD_HTTPS_WIRE, with source/no-log/ownership/cleanup/borrowed controls true. The original failed receipt remains unchanged; prior defect record is preserved at Git46041e95. This resolves test-infrastructure runtime verification only; Product/production/merge/release acceptance is separate.",
+  "expected_behavior_ref": "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+  "evidence": [
+    "governance/evidence/p2-019-content-20261116/final-qualification-63fb7514/private-initial-host-failure.json",
+    "governance/evidence/p2-019-content-20261116/final-qualification-63fb7514/public-auth-host-diagnostic.trx",
+    "governance/evidence/P2-009-RV011-VALIDATION.json",
+    "governance/evidence/P2-010-RV012-VALIDATION.json",
+    "governance/evidence/p2-019-content-20261116/native-recovery-46041e95/qualification.json",
+    "governance/evidence/p2-019-content-20261116/native-recovery-46041e95/private123.json"
+  ],
+  "affected_versions": [
+    "06b20de2b2b0303a1213259c877b990169b9e380"
+  ],
+  "created_at": "2026-11-17T20:38:16Z",
+  "updated_at": "2026-11-19T21:43:25.830Z"
+}

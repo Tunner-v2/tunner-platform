@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-010-RV004",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-010",
+  "parent_revision_id": "P2-010-RV003",
+  "parent_milestone_revision_id": null,
+  "title": "Preserve shared BFF referrer protection during recovery validation",
+  "revision_type": "COMPATIBILITY",
+  "status": "CLOSED",
+  "reason": "Actual eb7f640 live recovery reaches cancellation then privacy-header assertion fails: shared BFF success and early Origin-CSRF/query/JSON error responses omit Referrer-Policy. Preserve original010 and prior legitimate closures. Register only extending existing Tunner HTML no-referrer protection to shared BFF normal and problem responses; no origin/CSRF/cookie/session/provider policy or visual change.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": ["DEF-TUN-P2-011-010"],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Shared User/Admin BFF HTTPS success and early/auth/CSRF/Origin/exception errors retain no-store/nosniff plus no-referrer; existing callback and session controls regress; current qualified recovery privacy journey passes with unchanged assertions."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["full-stack-engineer", "solution-architect", "tester-qa-engineer", "cyber-security-engineer", "auditor", "compliance-specialist", "governance-engineer"],
+  "evidence_refs": ["governance/evidence/P2-010-RV004-VALIDATION.json"],
+  "product_acceptance_required": false,
+  "created_at": "2026-11-13T23:01:20.0331561\u002B00:00",
+  "closed_at": "2026-11-14T03:28:17Z",
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "aba6daf62fd0afef46878741062aad98a4e4fe6f",
+    "tested_commit_sha": "aba6daf62fd0afef46878741062aad98a4e4fe6f",
+    "work_item_commit_shas": [
+      "aba6daf62fd0afef46878741062aad98a4e4fe6f"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json",
+      "%SystemDrive%/",
+      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/",
+      "docs/development/P2_013_SESSION_SCOPE.md",
+      "governance/work-items/TUN-P2-013.yaml",
+      "governance/reviews/REV-TUN-P2-013-full-stack-engineer.yaml",
+      "governance/reviews/REV-TUN-P2-013-tester-qa-engineer.yaml",
+      "governance/reviews/REV-TUN-P2-013-solution-architect.yaml",
+      "governance/reviews/REV-TUN-P2-013-cyber-security-engineer.yaml",
+      "governance/reviews/REV-TUN-P2-013-auditor.yaml",
+      "governance/reviews/REV-TUN-P2-013-compliance-specialist.yaml",
+      "governance/reviews/REV-TUN-P2-013-sdk-engineer.yaml",
+      "governance/reviews/REV-TUN-P2-013-ui-ux-engineer.yaml",
+      "governance/reviews/REV-TUN-P2-013-frontend-engineer.yaml",
+      "governance/reviews/REV-TUN-P2-013-end-user-ux-reviewer.yaml",
+      "governance/reviews/REV-TUN-P2-013-content-writer.yaml"
+    ],
+    "remaining_uncommitted_classification": "UNRELATED_ACTIVE_WORK"
+  }
+}

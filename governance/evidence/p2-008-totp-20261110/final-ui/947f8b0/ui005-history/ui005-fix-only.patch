@@ -1,0 +1,43 @@
+diff --git a/web/apps/user/totp.tsx b/web/apps/user/totp.tsx
+--- a/web/apps/user/totp.tsx
++++ b/web/apps/user/totp.tsx
+@@ -23,7 +23,7 @@
+ function Account(){
+  const route=useRouteLocation(),revision=useRef(route.revision);revision.current=route.revision;
+  const control=useRef(new AbortController()),flight=useRef(false),original=useRef<TotpOperation|undefined>(undefined),starting=useRef<TotpStartSnapshot|undefined>(undefined);
+- const attempt=useRef<{enrollmentId:string;attemptId:string}|undefined>(undefined),trigger=useRef<HTMLElement|null>(null),restoreTrigger=useRef(false);
++ const attempt=useRef<{enrollmentId:string;attemptId:string}|undefined>(undefined),trigger=useRef<HTMLElement|null>(null),restoreTrigger=useRef(false),refreshAfterCancel=useRef(false);
+  const [boot,setBoot]=useState<TotpBootstrap>(),[methods,setMethods]=useState<TotpMethods>(),[operation,setOperation]=useState<TotpOperation>();
+  const [ready,setReady]=useState(-1),[refresh,setRefresh]=useState(0),[unavailable,setUnavailable]=useState(false),[methodsUnavailable,setMethodsUnavailable]=useState(false),[busy,setBusy]=useState(false);
+  const [mode,setMode]=useState<TotpSetupMode>('unknown'),[disclosure,setDisclosure]=useState<TotpDisclosure>(),[code,setCode]=useState('');
+@@ -39,8 +39,9 @@
+  function removeSensitive(){setDisclosure(undefined);setCode('');}
+ 
+  useEffect(()=>{
++  const refreshingCancel=refreshAfterCancel.current&&route.pathname===totpRoutes.manage.pathname;refreshAfterCancel.current=false;
+   control.current.abort();control.current=new AbortController();const scope={signal:control.current.signal,revision:route.revision};
+-  running(false);setReady(-1);removeSensitive();form.reset();setServerField(undefined);setError(undefined);setProof(undefined);setReview(false);setUnavailable(false);setMethodsUnavailable(false);
++  running(refreshingCancel);if(!refreshingCancel)setReady(-1);removeSensitive();form.reset();setServerField(undefined);setError(undefined);setProof(undefined);setReview(false);setUnavailable(false);setMethodsUnavailable(false);
+   if(!isTotpAccountRoute(route.pathname)){window.location.replace('/login');return()=>control.current.abort();}
+   if(window.location.search||window.location.hash){navigatePath(route.pathname,true);return()=>control.current.abort();}
+   void loadTotpOptions(scope.signal).then(async options=>{
+@@ -60,7 +61,7 @@
+    }else if(route.pathname===totpRoutes.ready.pathname){
+     if(!recovered||recovered.kind!=='ENROLL'||recovered.status!=='COMPLETED'||!recovered.activationCompleted||!list.authenticators.some(f=>f.authenticatorReference===recovered!.authenticatorReference&&f.state==='ACTIVE'))navigatePath(totpRoutes.manage.pathname,true);
+    }
+-  }).catch(async reason=>{if(!current(scope))return;if(reason instanceof TotpHttpError&&reason.status===401){try{const options=await loadTotpTerminalOptions(scope.signal);const result=parseTotpTerminal(await requestTotpJson('/account/totp/terminal-result',{csrfToken:options.csrfToken,body:body(options.recovery),signal:scope.signal}),options.recovery);if(current(scope)){own(result.operation);setTerminalPresentation(options);setTerminal(result.operation);setEnded(true);setReady(scope.revision);}return;}catch{if(current(scope))window.location.replace('/login');return;}}setUnavailable(true);setReady(scope.revision);});
++  }).catch(async reason=>{if(!current(scope))return;if(reason instanceof TotpHttpError&&reason.status===401){try{const options=await loadTotpTerminalOptions(scope.signal);const result=parseTotpTerminal(await requestTotpJson('/account/totp/terminal-result',{csrfToken:options.csrfToken,body:body(options.recovery),signal:scope.signal}),options.recovery);if(current(scope)){own(result.operation);setTerminalPresentation(options);setTerminal(result.operation);setEnded(true);setReady(scope.revision);}return;}catch{if(current(scope))window.location.replace('/login');return;}}setUnavailable(true);setReady(scope.revision);}).finally(()=>{if(refreshingCancel&&current(scope))running(false);});
+   return()=>control.current.abort();
+  },[route.revision,refresh]);
+  useEffect(()=>{
+@@ -133,8 +134,8 @@
+   if(flight.current)return;const value=original.current;removeSensitive();setProof(undefined);
+   if(!value||unresolved){setReview(false);navigatePath(totpRoutes.manage.pathname);return;}
+   if(value.status==='COMPLETED'){done();return;}if(!boot)return;const scope=work();running(true);setError(undefined);
+-  try{const result=parseTotpOperation(await requestTotpJson('/account/totp/cancel',{csrfToken:boot.csrfToken,body:body(value),signal:scope.signal}),value);if(!current(scope))return;if(result.status==='COMPLETED'){await accept(result,scope);return;}if(result.status!=='REJECTED'&&result.status!=='EXPIRED')throw new TotpHttpError(409,'VERSION_CONFLICT');acknowledged.add(result.enrollmentId);restoreTrigger.current=route.pathname===totpRoutes.manage.pathname;own(undefined);starting.current=undefined;setReview(false);setUnresolved(false);navigatePath(totpRoutes.manage.pathname);}
+-  catch(reason){if(current(scope)){setUnresolved(true);setError(totpErrorKey(reason));}}finally{if(current(scope))running(false);}
++  try{const result=parseTotpOperation(await requestTotpJson('/account/totp/cancel',{csrfToken:boot.csrfToken,body:body(value),signal:scope.signal}),value);if(!current(scope))return;if(result.status==='COMPLETED'){await accept(result,scope);return;}if(result.status!=='REJECTED'&&result.status!=='EXPIRED')throw new TotpHttpError(409,'VERSION_CONFLICT');acknowledged.add(result.enrollmentId);restoreTrigger.current=route.pathname===totpRoutes.manage.pathname;own(undefined);starting.current=undefined;setReview(false);setUnresolved(false);navigatePath(totpRoutes.manage.pathname);if(route.pathname===totpRoutes.manage.pathname){refreshAfterCancel.current=true;setRefresh(value=>value+1);}}
++  catch(reason){if(current(scope)){setUnresolved(true);setError(totpErrorKey(reason));}}finally{if(current(scope)&&!refreshAfterCancel.current)running(false);}
+  }
+  async function submitCode(data:{code:string}){
+   const value=original.current;if(!boot||!value||value.kind!=='ENROLL'||flight.current)return;const scope=work();running(true);removeSensitive();setMode('verifying');setError(undefined);setServerField(undefined);

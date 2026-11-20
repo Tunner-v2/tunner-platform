@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="9332486b-eae4-4e39-8c7f-8902838efadb" name="@FARHANWAZIR 2026-11-15 21:18:46" runUser="FARHANWAZIR\Chacha Tech" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-15T21:18:46.4704794-05:00" queuing="2026-11-15T21:18:46.4704798-05:00" start="2026-11-15T21:18:28.2856915-05:00" finish="2026-11-15T21:19:18.1836528-05:00" />
+  <TestSettings name="default" id="23772e8f-123c-476b-931a-dc3f58c324be">
+    <Deployment runDeploymentRoot="_FARHANWAZIR_2026-11-15_21_18_46" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="e068c3a0-fb01-4601-81c9-54f8cd483c26" testId="3923eb5e-5a98-262d-7bac-51ec8a7c4946" testName="Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor(kind: &quot;enrollment&quot;)" computerName="FARHANWAZIR" duration="00:00:11.0525546" startTime="2026-11-15T21:18:35.3718110-05:00" endTime="2026-11-15T21:18:46.4228182-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e068c3a0-fb01-4601-81c9-54f8cd483c26">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.Http.HttpRequestException : Response status code does not indicate success: 503 (Service Unavailable).</Message>
+          <StackTrace>   at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()&#xD;
+   at Tunner.Identity.Persistence.Tests.PasskeyTests.Begin(AuthenticationTestHost host, String cookies, Nullable`1 credential, Int64 expectedVersion) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\PasskeyTests.cs:line 91&#xD;
+   at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 60&#xD;
+   at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 128&#xD;
+   at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor(String kind) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 32&#xD;
+   at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor(String kind) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 32&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="573ba2d5-525b-4e83-aa37-ee675cff975e" testId="3343a1ba-1875-4c2e-b4af-0030ee615412" testName="Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.FailedSharedPasswordProofRetainsActualSessionActorAfterSessionTermination" computerName="FARHANWAZIR" duration="00:00:05.1233861" startTime="2026-11-15T21:19:09.2280028-05:00" endTime="2026-11-15T21:19:14.3496684-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="573ba2d5-525b-4e83-aa37-ee675cff975e">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.Http.HttpRequestException : Response status code does not indicate success: 503 (Service Unavailable).</Message>
+          <StackTrace>   at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()&#xD;
+   at Tunner.Identity.Persistence.Tests.PasskeyTests.Begin(AuthenticationTestHost host, String cookies, Nullable`1 credential, Int64 expectedVersion) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\PasskeyTests.cs:line 91&#xD;
+   at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 51&#xD;
+   at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 128&#xD;
+   at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.FailedSharedPasswordProofRetainsActualSessionActorAfterSessionTermination() in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 20&#xD;
+   at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.FailedSharedPasswordProofRetainsActualSessionActorAfterSessionTermination() in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 20&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1768e6c1-78ac-4362-9e43-f10e12d7af13" testId="8bf6856c-aa66-ff9c-6357-e5e49c940494" testName="Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.VerifiedPasskeyAuditDistinguishesOriginalSessionFromPendingMfa(outcome: &quot;session&quot;)" computerName="FARHANWAZIR" duration="00:00:05.3898396" startTime="2026-11-15T21:19:03.8451432-05:00" endTime="2026-11-15T21:19:09.2249157-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1768e6c1-78ac-4362-9e43-f10e12d7af13">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.Http.HttpRequestException : Response status code does not indicate success: 503 (Service Unavailable).</Message>
+          <StackTrace>   at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()&#xD;
+   at Tunner.Identity.Persistence.Tests.PasskeyTests.Begin(AuthenticationTestHost host, String cookies, Nullable`1 credential, Int64 expectedVersion) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\PasskeyTests.cs:line 91&#xD;
+   at Tunner.Identity.Persistence.Tests.PasskeyTests.Enroll(AuthenticationTestHost host, String cookies, PasskeyAuthenticator authenticator, RecoveryCodeFirstCaseCheckpoint checkpoint) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\PasskeyTests.cs:line 124&#xD;
+   at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 67&#xD;
+   at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 128&#xD;
+   at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.VerifiedPasskeyAuditDistinguishesOriginalSessionFromPendingMfa(String outcome) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 26&#xD;
+   at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.VerifiedPasskeyAuditDistinguishesOriginalSessionFromPendingMfa(String outcome) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 26&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="05b7cb85-6818-425d-95c6-2adec2cd219e" testId="37556a3c-62e3-729b-2799-75bb82ac3d8a" testName="Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor(kind: &quot;sign-in&quot;)" computerName="FARHANWAZIR" duration="00:00:05.4582471" startTime="2026-11-15T21:18:46.4550885-05:00" endTime="2026-11-15T21:18:51.8845284-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="05b7cb85-6818-425d-95c6-2adec2cd219e">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.Http.HttpRequestException : Response status code does not indicate success: 503 (Service Unavailable).</Message>
+          <StackTrace>   at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()&#xD;
+   at Tunner.Identity.Persistence.Tests.PasskeyTests.Begin(AuthenticationTestHost host, String cookies, Nullable`1 credential, Int64 expectedVersion) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\PasskeyTests.cs:line 91&#xD;
+   at Tunner.Identity.Persistence.Tests.PasskeyTests.Enroll(AuthenticationTestHost host, String cookies, PasskeyAuthenticator authenticator, RecoveryCodeFirstCaseCheckpoint checkpoint) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\PasskeyTests.cs:line 124&#xD;
+   at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 67&#xD;
+   at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 128&#xD;
+   at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor(String kind) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 32&#xD;
+   at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor(String kind) in C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs:line 32&#xD;
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ae864ab7-1dce-42cb-9460-671838959349" testId="a69e86fd-b7ee-7061-6f4b-6597e9026ca8" testName="Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.VerifiedPasskeyAuditDistinguishesOriginalSessionFromPendingMfa(outcome: &quot;mfa&quot;)" computerName="FARHANWAZIR" duration="00:00:11.9453780" startTime="2026-11-15T21:18:51.8934068-05:00" endTime="2026-11-15T21:19:03.8352503-05:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ae864ab7-1dce-42cb-9460-671838959349" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.VerifiedPasskeyAuditDistinguishesOriginalSessionFromPendingMfa(outcome: &quot;mfa&quot;)" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="a69e86fd-b7ee-7061-6f4b-6597e9026ca8">
+      <Execution id="ae864ab7-1dce-42cb-9460-671838959349" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests" name="VerifiedPasskeyAuditDistinguishesOriginalSessionFromPendingMfa" />
+    </UnitTest>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor(kind: &quot;sign-in&quot;)" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="37556a3c-62e3-729b-2799-75bb82ac3d8a">
+      <Execution id="05b7cb85-6818-425d-95c6-2adec2cd219e" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests" name="RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor" />
+    </UnitTest>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.FailedSharedPasswordProofRetainsActualSessionActorAfterSessionTermination" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="3343a1ba-1875-4c2e-b4af-0030ee615412">
+      <Execution id="573ba2d5-525b-4e83-aa37-ee675cff975e" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests" name="FailedSharedPasswordProofRetainsActualSessionActorAfterSessionTermination" />
+    </UnitTest>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.VerifiedPasskeyAuditDistinguishesOriginalSessionFromPendingMfa(outcome: &quot;session&quot;)" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="8bf6856c-aa66-ff9c-6357-e5e49c940494">
+      <Execution id="1768e6c1-78ac-4362-9e43-f10e12d7af13" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests" name="VerifiedPasskeyAuditDistinguishesOriginalSessionFromPendingMfa" />
+    </UnitTest>
+    <UnitTest name="Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor(kind: &quot;enrollment&quot;)" storage="c:\workspace\ai mcp\enterprise solution\tunnerplatform.v2.0\tests\tunner.identity.persistence.tests\bin\debug\net10.0\tunner.identity.persistence.tests.dll" id="3923eb5e-5a98-262d-7bac-51ec8a7c4946">
+      <Execution id="e068c3a0-fb01-4601-81c9-54f8cd483c26" />
+      <TestMethod codeBase="C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\bin\Debug\net10.0\Tunner.Identity.Persistence.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests" name="RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="3923eb5e-5a98-262d-7bac-51ec8a7c4946" executionId="e068c3a0-fb01-4601-81c9-54f8cd483c26" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3343a1ba-1875-4c2e-b4af-0030ee615412" executionId="573ba2d5-525b-4e83-aa37-ee675cff975e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8bf6856c-aa66-ff9c-6357-e5e49c940494" executionId="1768e6c1-78ac-4362-9e43-f10e12d7af13" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="37556a3c-62e3-729b-2799-75bb82ac3d8a" executionId="05b7cb85-6818-425d-95c6-2adec2cd219e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a69e86fd-b7ee-7061-6f4b-6597e9026ca8" executionId="ae864ab7-1dce-42cb-9460-671838959349" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="5" executed="5" passed="1" failed="4" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.1.4+50e68bbb8b (64-bit .NET 10.0.13)&#xD;
+[xUnit.net 00:00:00.84]   Discovering: Tunner.Identity.Persistence.Tests&#xD;
+[xUnit.net 00:00:01.07]   Discovered:  Tunner.Identity.Persistence.Tests&#xD;
+[xUnit.net 00:00:01.11]   Starting:    Tunner.Identity.Persistence.Tests&#xD;
+[xUnit.net 00:00:17.32]       System.Net.Http.HttpRequestException : Response status code does not indicate success: 503 (Service Unavailable).&#xD;
+[xUnit.net 00:00:17.32]       Stack Trace:&#xD;
+[xUnit.net 00:00:17.32]            at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()&#xD;
+[xUnit.net 00:00:17.32]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\PasskeyTests.cs(91,0): at Tunner.Identity.Persistence.Tests.PasskeyTests.Begin(AuthenticationTestHost host, String cookies, Nullable`1 credential, Int64 expectedVersion)&#xD;
+[xUnit.net 00:00:17.32]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(60,0): at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario)&#xD;
+[xUnit.net 00:00:17.32]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(128,0): at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario)&#xD;
+[xUnit.net 00:00:17.32]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(32,0): at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor(String kind)&#xD;
+[xUnit.net 00:00:17.32]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(32,0): at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor(String kind)&#xD;
+[xUnit.net 00:00:17.32]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:22.78]       System.Net.Http.HttpRequestException : Response status code does not indicate success: 503 (Service Unavailable).&#xD;
+[xUnit.net 00:00:22.78]       Stack Trace:&#xD;
+[xUnit.net 00:00:22.78]            at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()&#xD;
+[xUnit.net 00:00:22.78]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\PasskeyTests.cs(91,0): at Tunner.Identity.Persistence.Tests.PasskeyTests.Begin(AuthenticationTestHost host, String cookies, Nullable`1 credential, Int64 expectedVersion)&#xD;
+[xUnit.net 00:00:22.78]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\PasskeyTests.cs(124,0): at Tunner.Identity.Persistence.Tests.PasskeyTests.Enroll(AuthenticationTestHost host, String cookies, PasskeyAuthenticator authenticator, RecoveryCodeFirstCaseCheckpoint checkpoint)&#xD;
+[xUnit.net 00:00:22.78]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(67,0): at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario)&#xD;
+[xUnit.net 00:00:22.78]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(128,0): at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario)&#xD;
+[xUnit.net 00:00:22.78]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(32,0): at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor(String kind)&#xD;
+[xUnit.net 00:00:22.78]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(32,0): at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor(String kind)&#xD;
+[xUnit.net 00:00:22.78]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:40.12]       System.Net.Http.HttpRequestException : Response status code does not indicate success: 503 (Service Unavailable).&#xD;
+[xUnit.net 00:00:40.12]       Stack Trace:&#xD;
+[xUnit.net 00:00:40.12]            at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()&#xD;
+[xUnit.net 00:00:40.12]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\PasskeyTests.cs(91,0): at Tunner.Identity.Persistence.Tests.PasskeyTests.Begin(AuthenticationTestHost host, String cookies, Nullable`1 credential, Int64 expectedVersion)&#xD;
+[xUnit.net 00:00:40.12]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\PasskeyTests.cs(124,0): at Tunner.Identity.Persistence.Tests.PasskeyTests.Enroll(AuthenticationTestHost host, String cookies, PasskeyAuthenticator authenticator, RecoveryCodeFirstCaseCheckpoint checkpoint)&#xD;
+[xUnit.net 00:00:40.12]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(67,0): at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario)&#xD;
+[xUnit.net 00:00:40.12]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(128,0): at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario)&#xD;
+[xUnit.net 00:00:40.12]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(26,0): at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.VerifiedPasskeyAuditDistinguishesOriginalSessionFromPendingMfa(String outcome)&#xD;
+[xUnit.net 00:00:40.12]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(26,0): at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.VerifiedPasskeyAuditDistinguishesOriginalSessionFromPendingMfa(String outcome)&#xD;
+[xUnit.net 00:00:40.12]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:45.24]       System.Net.Http.HttpRequestException : Response status code does not indicate success: 503 (Service Unavailable).&#xD;
+[xUnit.net 00:00:45.24]       Stack Trace:&#xD;
+[xUnit.net 00:00:45.24]            at System.Net.Http.HttpResponseMessage.EnsureSuccessStatusCode()&#xD;
+[xUnit.net 00:00:45.24]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\PasskeyTests.cs(91,0): at Tunner.Identity.Persistence.Tests.PasskeyTests.Begin(AuthenticationTestHost host, String cookies, Nullable`1 credential, Int64 expectedVersion)&#xD;
+[xUnit.net 00:00:45.24]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(51,0): at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario)&#xD;
+[xUnit.net 00:00:45.24]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(128,0): at Tunner.Identity.Persistence.Tests.PasskeyTests.VerifyAuthenticationPostCommit(IdentityTestDatabase db, String scenario)&#xD;
+[xUnit.net 00:00:45.24]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(20,0): at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.FailedSharedPasswordProofRetainsActualSessionActorAfterSessionTermination()&#xD;
+[xUnit.net 00:00:45.24]         C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\tests\Tunner.Identity.Persistence.Tests\AuthenticationAuditCompletionTests.cs(20,0): at Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.FailedSharedPasswordProofRetainsActualSessionActorAfterSessionTermination()&#xD;
+[xUnit.net 00:00:45.24]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:48.92]   Finished:    Tunner.Identity.Persistence.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="FARHANWAZIR" outcome="Error" timestamp="2026-11-15T21:18:46.4280457-05:00">
+        <Text>[xUnit.net 00:00:17.32]     Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor(kind: "enrollment") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="FARHANWAZIR" outcome="Error" timestamp="2026-11-15T21:18:51.8854808-05:00">
+        <Text>[xUnit.net 00:00:22.78]     Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.RejectedNativeCeremonyRetainsOnlyItsActualAuthenticatedActor(kind: "sign-in") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="FARHANWAZIR" outcome="Error" timestamp="2026-11-15T21:19:09.2254202-05:00">
+        <Text>[xUnit.net 00:00:40.12]     Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.VerifiedPasskeyAuditDistinguishesOriginalSessionFromPendingMfa(outcome: "session") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="FARHANWAZIR" outcome="Error" timestamp="2026-11-15T21:19:14.3502692-05:00">
+        <Text>[xUnit.net 00:00:45.24]     Tunner.Identity.Persistence.Tests.AuthenticationAuditCompletionTests.FailedSharedPasswordProofRetainsActualSessionActorAfterSessionTermination [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

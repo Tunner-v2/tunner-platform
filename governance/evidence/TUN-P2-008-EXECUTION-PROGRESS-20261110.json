@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "execution_scope": "FOCUSED_SUBSETS_ONLY_NOT_FINAL_VALIDATION",
+  "recorded_at": "2026-11-10T17:13:53.807Z",
+  "result": "IN_PROGRESS_WITH_EXECUTED_SUBSETS",
+  "executions": [
+    {
+      "source_commit_sha": "771834330bf2ddb764aa6b81fcf974185e37a0b2",
+      "scope": "CredentialSecretVersionTests",
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "governance/evidence/p2-008-totp-20261110/execution-progress/backend-tests/7718343/credential-7718343.trx"
+    },
+    {
+      "source_commit_sha": "771834330bf2ddb764aa6b81fcf974185e37a0b2",
+      "scope": "Initial native TOTP/replay diagnostic before full ownership expansion",
+      "passed": 16,
+      "failed": 6,
+      "skipped": 0,
+      "receipt": "governance/evidence/p2-008-totp-20261110/execution-progress/backend-tests/7718343/totp-7718343.trx",
+      "interpretation": "All six failures were MFA selection404/missingcsrf. PostgreSQL timestamp precision correction was committed28e20dc and rerun."
+    },
+    {
+      "source_commit_sha": "28e20dc733dde257c4f731b9e90803710be7a9e2",
+      "scope": "Targeted MFA selector/original-browser/result recovery rerun (subset of22)",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "governance/evidence/p2-008-totp-20261110/execution-progress/backend-tests/28e20dc/mfa-28e20dc.trx"
+    },
+    {
+      "source_commit_sha": "28e20dc733dde257c4f731b9e90803710be7a9e2",
+      "scope": "All focused native TOTP/replay",
+      "passed": 22,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "governance/evidence/p2-008-totp-20261110/execution-progress/backend-tests/28e20dc/totp-28e20dc.trx",
+      "limits": "Does not certify subsequent uncommitted projection/freshness changes or all old authentication/passkey consumers."
+    },
+    {
+      "source_commit_sha": "01dd89174c0202d29610826408c4e69d4427ffb9",
+      "scope": "LocalQR integrity/license + six public tests including independent220px decoding + TypeScript",
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "command": "node web/tools/build-qr-vendor.mjs --check; node --test web/tests/totp/qr.test.mjs; node web/node_modules/typescript/bin/tsc --noEmit -p web/tsconfig.json",
+      "oracle": {
+        "project": "jsQR1.4.0 Apache-2.0 public-only disposable test oracle",
+        "commit": "49a9633931fb8030ac2fc9cecc121d6e5a19f9a3",
+        "sha256": "bc40c8a15196236b2314db0856f72ca0b49980cd5413b8c852a7349f5fee0859"
+      },
+      "limits": "No physical camera/live setup/actual SVG rasterization or all max-density claims."
+    },
+    {
+      "source_commit_sha": "764aee057d6503e9488cddc6d90a8ddabe8a2839",
+      "scope": "Committed Edgepublicprivacy boundary",
+      "status": "FAIL",
+      "receipt": "governance/evidence/p2-008-totp-20261110/execution-progress/public-canaries-committed.json",
+      "interpretation": "Strict unexpected automaticcv_debug.log detection; all owned surfaces removed. No livekeys used; no capture exception added."
+    },
+    {
+      "source_commit_sha": "4849b2329e1f681eec11c081633dade15ec28656",
+      "scope": "Committed explicitChromiumpublicprivacy boundary",
+      "status": "PASS",
+      "public_canaries": 11,
+      "predicate_probes": 8,
+      "receipt": "governance/evidence/p2-008-totp-20261110/execution-progress/public-canaries-chromium-committed.json",
+      "limits": "PUBLIC_CANARIES_ONLY; realjourneyNOT_EXECUTED; Edgegate remainsOPEN."
+    },
+    {
+      "source_commit_sha": "95331c7a3de34a70129bafc79d14f9b4b5b94124",
+      "scope": "Sharedcontractcohort (five new TOTP,21existing)",
+      "passed": 26,
+      "failed": 0,
+      "skipped": 0,
+      "command": "Fromrepo-root: node web/node_modules/vite/bin/vite.js build --config web/tests/vite.config.ts; node --test web/tests/dist/contracts.test.mjs",
+      "limits": "Pure clientcontracts only; no route,render,realbrowser or finalUI acceptance.",
+      "additional_execution": {
+        "observed_head": "4849b2329e1f681eec11c081633dade15ec28656",
+        "command": "Fromweb: node node_modules/vite/bin/vite.js build --config tests/vite.config.ts; node --test tests/dist/contracts.test.js",
+        "passed": 26,
+        "failed": 0,
+        "skipped": 0,
+        "input_equivalence": "Fivefrontendslicefilesunchanged95331c7→4849b23; thelatercommitonlychangesQApublicboundary."
+      }
+    }
+  ],
+  "source_manifest": [
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/backend-tests/28e20dc/mfa-28e20dc.trx",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-progress/backend-tests/28e20dc/mfa-28e20dc.trx",
+      "source_sha256": "cdbfdb3a59c03f1ab5462333ba3e9e470460b835adfeb22861f017b6dc92def1",
+      "sha256": "15115762b0d70d66253eabe09e1805152b740d56addeca085b3ba9f7187f9092",
+      "bytes": 6770,
+      "normalization": "LF text; checkout paths become portable repo-root marker; trailing whitespace removed; outcomes unchanged"
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/backend-tests/28e20dc/totp-28e20dc.trx",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-progress/backend-tests/28e20dc/totp-28e20dc.trx",
+      "source_sha256": "129baed96fa7f2dbd844aff0005230802076b8a5d6abbe3e2b526db45e352da2",
+      "sha256": "af19811a0d02b7fe08bff1afbbbdafcf52cc316c05bd628b79ce2b5ac8bffdd4",
+      "bytes": 38782,
+      "normalization": "LF text; checkout paths become portable repo-root marker; trailing whitespace removed; outcomes unchanged"
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/backend-tests/7718343/credential-7718343.trx",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-progress/backend-tests/7718343/credential-7718343.trx",
+      "source_sha256": "a60872e77508275c38ca4e037fa362e3a276101015bd66df6c856cfa81201726",
+      "sha256": "1909b41d4ddf6e83684e58fd4bf9109169040a7151518ae02e2d357f39aecb8a",
+      "bytes": 24003,
+      "normalization": "LF text; checkout paths become portable repo-root marker; trailing whitespace removed; outcomes unchanged"
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/backend-tests/7718343/totp-7718343.trx",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-progress/backend-tests/7718343/totp-7718343.trx",
+      "source_sha256": "a4d8d52448e2edc3bfe801518086ab9dc1e57dc8b7e517570ed6ec24a93cfce8",
+      "sha256": "321872e565785b3fcda3173c107890c0f0f5e4baf4d9a07058071a1c2aca2855",
+      "bytes": 54404,
+      "normalization": "LF text; checkout paths become portable repo-root marker; trailing whitespace removed; outcomes unchanged"
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/public-canaries-committed.json",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-progress/public-canaries-committed.json",
+      "source_sha256": "adac23b6a76fe1cddbe59c519b3e794db3094ce40b127593c5ac1f5bc7824cad",
+      "sha256": "adac23b6a76fe1cddbe59c519b3e794db3094ce40b127593c5ac1f5bc7824cad",
+      "bytes": 4756,
+      "normalization": "LF text; checkout paths become portable repo-root marker; trailing whitespace removed; outcomes unchanged"
+    },
+    {
+      "source_path": "artifacts/p2-008-totp-20261110/public-canaries-chromium-committed.json",
+      "path": "governance/evidence/p2-008-totp-20261110/execution-progress/public-canaries-chromium-committed.json",
+      "source_sha256": "11dca261d4f09e58bcefd703daeff61231bb421b54901506c6ee375df5a219eb",
+      "sha256": "11dca261d4f09e58bcefd703daeff61231bb421b54901506c6ee375df5a219eb",
+      "bytes": 5405,
+      "normalization": "LF text; checkout paths become portable repo-root marker; trailing whitespace removed; outcomes unchanged"
+    }
+  ],
+  "known_open": [
+    "Frontend implementation and full URL/VAL/UX-FID evidence pending.",
+    "Independent review found post-await activation session/proof freshness gap; current author fix/regressions remain uncommitted/unvalidated at this record.",
+    "RealOpenBao immutable-version integration and fulloldconsumerregressions pending.",
+    "RealTOTPbrowserjourney notexecuted.",
+    "Factorpickervisualscope approved; implementation and actualrender/route/validation acceptance pending."
+  ],
+  "boundary": "No final validation, Product milestone acceptance, P2 completion, productionpolicy/provideractivation, merge or release claimed."
+}

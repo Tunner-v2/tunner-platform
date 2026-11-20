@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-P2-008-REPLAY-CLOCK-001",
+  "work_item_id": "TUN-P2-008",
+  "classification": "TEST_DEFECT",
+  "severity": "SEV-3",
+  "status": "RESOLVED",
+  "environment": "LINUX_REQUIRED_CI",
+  "description": "NativeFullWindowBoundedHistory samples UTC independently for activation, replay and plus/minus2 edges. Across a30-second boundary the supposed new minus2 code can equal an already accepted minus1 token; activation replay can also recompute a different token. CI44521433656 failed CODE_REPLAYED at the edge assertion. Original case start/end straddle12:26; individual token sample instants were not logged. No production replay defect demonstrated.",
+  "expected_behavior_ref": "governance/revisions/P2-008-RV002.yaml",
+  "evidence": [
+    "governance/evidence/P2-008-RV002-CI-FAILURE.json",
+    "governance/evidence/P2-008-RV002-VALIDATION.json"
+  ],
+  "affected_versions": [
+    "36a165502b81cceba8e65ada0dc50484f5869607"
+  ],
+  "created_at": "2026-11-19T12:57:56.415Z",
+  "updated_at": "2026-11-19T12:57:56.431Z"
+}

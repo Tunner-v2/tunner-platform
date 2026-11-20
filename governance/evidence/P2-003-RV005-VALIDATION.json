@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-003-RV005",
+  "owner_work_item": "TUN-P2-016",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "58023be5299d024cf2ae0bf05bbcbda2f1384e26",
+  "validated_commit_sha": "58023be5299d024cf2ae0bf05bbcbda2f1384e26",
+  "corrective_qualification": {"source_sha":"58023be5299d024cf2ae0bf05bbcbda2f1384e26","owned_source_comparison":"All declared owned paths are Git-object identical to the retained actual78-case integrated source98807eb. No application change is introduced by this corrective carrier.","fresh_smoke_ref":"governance/evidence/p2-016-notifications-20261115/native/b92e9d9cf80c4c2489ece971970ff218/summary.json","fresh_execution":"Real hosted Worker/RabbitMQ/PostgreSQL journey passed1/1 with zero failed/skipped, owned containers0 and borrowed container preserved. Prior78/Worker20/nativeProduct8 executions remain at their actual recorded SHAs; no full rerun is claimed.","classification":"Exact scope, COMMITTED kind and complete ordered ownership were committed in58023be before this execution. Native closure remains required."},
+  "scope": "Correct only the committed-evidence classification for TUN-P2-003 and P2-003-RV004. The complete original scope-matching required-evidence ownership union plus preceding revision ownership is declared before candidate validation. No behavior, policy, UI or Product acceptance is changed.",
+  "owned_behavior_paths": [
+    "Directory.Packages.props",
+    "Tunner.Platform.slnx",
+    "docs/development/P2_003_IDENTITY_PERSISTENCE.md",
+    "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/TUN-P2-003-DATA-INVENTORY.json",
+    "governance/evidence/TUN-P2-003-RD-SOURCES.json",
+    "src/Modules/Accounts/AccountSnapshot.cs",
+    "src/Modules/Identity/AccountPersonalInformationRows.cs",
+    "src/Modules/Identity/AssemblyInfo.cs",
+    "src/Modules/Identity/IdentityMigrationSql.cs",
+    "src/Modules/Identity/IdentityModelConfiguration.cs",
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+    "src/Modules/Identity/IdentityPersistenceDbContextFactory.cs",
+    "src/Modules/Identity/IdentityPersistenceRegistration.cs",
+    "src/Modules/Identity/IdentityRows.cs",
+    "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.Designer.cs",
+    "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.cs",
+    "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.Designer.cs",
+    "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.cs",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+    "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+    "tests/Tunner.Identity.Persistence.Tests/IdentityFoundationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs",
+    "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj"
+  ],
+  "ownership_source_refs": [
+    "governance/evidence/TUN-P2-003-AUDIT-CORRECTION-SOURCE.json",
+    "governance/evidence/P2-003-RV004-VALIDATION.json"
+  ],
+  "reused_evidence_refs": [
+    "governance/evidence/TUN-P2-016-VALIDATION.json",
+    "governance/evidence/TUN-P2-016-ROLE-REVIEWS.json",
+    "governance/evidence/p2-016-notifications-20261115/native/16fd07b9314e459aa34d3eae560d2d6f/summary.json",
+    "governance/evidence/p2-016-notifications-20261115/native/d00239e732a54d8e9507e6faa21a31b1/summary.json",
+    "governance/evidence/p2-016-notifications-20261115/native/03e2747b0b394162a15dcf2d3a7455f1/summary.json",
+    "governance/reviews/REV-P2-003-RV004-full-stack-engineer.yaml",
+    "governance/reviews/REV-P2-003-RV004-tester-qa-engineer.yaml",
+    "governance/reviews/REV-P2-003-RV004-solution-architect.yaml"
+  ],
+  "qualification_boundary": "The referenced P2-016 integrated 78-case, Worker 20-case and native Product 8-case receipts and prior technical reviews are retained evidence at their recorded sources, not newly executed validation of this corrective revision. Candidate commit binding, owned-source equivalence, carrier smoke, current committed-proof guards and new QA/auditor assessments remain pending. No previous review PASS is promoted to this revision, and original closed records remain unchanged.",
+  "retained_integrated_source_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475"
+}

@@ -1,0 +1,531 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-010",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "recorded_at": "2026-11-12T21:03:41Z",
+  "tested_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+  "historical_groundwork_tested_commit_sha": "00ba7c4c7dc763736883149d7100921b3a80063a",
+  "validated_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+  "owned_behavior_paths": [
+    "Directory.Packages.props",
+    "docs/contracts/ui-inventory.json",
+    "src/Modules/Identity/AuthenticationApplication.cs",
+    "src/Modules/Identity/AuthenticationEndpoints.cs",
+    "src/Modules/Identity/AuthenticationRows.cs",
+    "src/Modules/Identity/FederationAttemptApplication.cs",
+    "src/Modules/Identity/FederationAttemptBinding.cs",
+    "src/Modules/Identity/FederationAttemptMigrationSql.cs",
+    "src/Modules/Identity/FederationAttemptOperationProof.cs",
+    "src/Modules/Identity/FederationAttemptRegistrationIntake.cs",
+    "src/Modules/Identity/FederationAttemptRows.cs",
+    "src/Modules/Identity/FederationAuthentication.cs",
+    "src/Modules/Identity/FederationBrowserService.cs",
+    "src/Modules/Identity/FederationContracts.cs",
+    "src/Modules/Identity/FederationFreshAuthentication.cs",
+    "src/Modules/Identity/FederationIdentityBinding.cs",
+    "src/Modules/Identity/FederationLinkApplication.cs",
+    "src/Modules/Identity/FederationLinkBrowserService.cs",
+    "src/Modules/Identity/FederationLinkLifecycle.cs",
+    "src/Modules/Identity/FederationLinkManagementContracts.cs",
+    "src/Modules/Identity/FederationLinkManagementMigrationSql.cs",
+    "src/Modules/Identity/FederationLinkOperationRows.cs",
+    "src/Modules/Identity/FederationOperationProofAuthentication.cs",
+    "src/Modules/Identity/FederationOperationProofBrowserService.cs",
+    "src/Modules/Identity/FederationRegistration.cs",
+    "src/Modules/Identity/FederationSessionEffects.cs",
+    "src/Modules/Identity/FederationSessionEffectsMigrationSql.cs",
+    "src/Modules/Identity/FederationSessionMigrationSql.cs",
+    "src/Modules/Identity/FederationStepUpOwner.cs",
+    "src/Modules/Identity/IdentityModelConfiguration.cs",
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+    "src/Modules/Identity/IdentityRows.cs",
+    "src/Modules/Identity/Migrations/20261112145042_P2FederationSignIn.Designer.cs",
+    "src/Modules/Identity/Migrations/20261112145042_P2FederationSignIn.cs",
+    "src/Modules/Identity/Migrations/20261112162142_P2FederationManagementAndProofs.Designer.cs",
+    "src/Modules/Identity/Migrations/20261112162142_P2FederationManagementAndProofs.cs",
+    "src/Modules/Identity/Migrations/20261112175254_P2FederatedRegistration.Designer.cs",
+    "src/Modules/Identity/Migrations/20261112175254_P2FederatedRegistration.cs",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+    "src/Modules/Identity/PasskeyEndpoints.cs",
+    "src/Modules/Identity/RecoveryCodeEndpoints.cs",
+    "src/Modules/Identity/RegistrationApplication.cs",
+    "src/Modules/Identity/RegistrationEndpoints.cs",
+    "src/Modules/Identity/RegistrationFederationIntake.cs",
+    "src/Modules/Identity/RegistrationFederationMigrationSql.cs",
+    "src/Modules/Identity/RegistrationPersonalInformation.cs",
+    "src/Modules/Identity/RegistrationRows.cs",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+    "src/Modules/Identity/StepUpFederationBrowserEndpoints.cs",
+    "src/Modules/Identity/StepUpOutcomes.cs",
+    "src/Modules/Identity/StepUpRows.cs",
+    "src/Modules/Identity/TotpAuthenticationAuthority.cs",
+    "src/Modules/Identity/TotpContracts.cs",
+    "src/Modules/Identity/TotpEndpoints.cs",
+    "src/Modules/Identity/TotpPrimaryMfa.cs",
+    "src/Modules/Identity/TotpRows.cs",
+    "src/Tunner.Platform/Bff/BffProtocolCallback.cs",
+    "src/Tunner.Platform/Bff/TunnerBffFoundation.cs",
+    "src/Tunner.User.Bff/AssemblyInfo.cs",
+    "src/Tunner.User.Bff/FederationManagementBffEndpoints.cs",
+    "src/Tunner.User.Bff/FederationOidcEndpoints.cs",
+    "src/Tunner.User.Bff/FederationOidcRegistration.cs",
+    "src/Tunner.User.Bff/FederationOidcTransport.cs",
+    "src/Tunner.User.Bff/Tunner.User.Bff.csproj",
+    "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+    "tests/Shared/RecoveryCodeOwnedDockerFixture.cs",
+    "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+    "tests/Tunner.Identity.Persistence.Tests/FederationAttemptBindingTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/FederationBffPrivateIntegrationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/FederationFreshAuthenticationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/FederationIdentityBindingTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/FederationIdentityPersistenceTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/FederationManagementPrivateIntegrationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/FederationOidcNativeProtocolTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/FederationOidcTransportTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/FederationPrivateIntegrationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/FederationSessionModelTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/FederationSqlIntegrityTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeExecution.cs",
+    "tests/Tunner.Identity.Persistence.Tests/RegistrationBffTests.cs",
+    "tests/Tunner.Platform.ArchitectureTests/BffProtocolCallbackTests.cs",
+    "tools/recovery-native-testing/cases.json",
+    "web/apps/user/authentication.content.proposal.json",
+    "web/apps/user/authentication.css",
+    "web/apps/user/authentication.tsx",
+    "web/apps/user/content.proposal.json",
+    "web/apps/user/federation.api.ts",
+    "web/apps/user/federation.management.api.ts",
+    "web/apps/user/federation.management.tsx",
+    "web/apps/user/federation.sign-in.tsx",
+    "web/apps/user/main.tsx",
+    "web/apps/user/passkeys.api.ts",
+    "web/apps/user/passkeys.content.proposal.json",
+    "web/apps/user/passkeys.css",
+    "web/apps/user/passkeys.tsx",
+    "web/apps/user/registration.css",
+    "web/apps/user/registration.federation.ts",
+    "web/apps/user/step-up.content.proposal.json",
+    "web/apps/user/step-up.css",
+    "web/apps/user/step-up.federation.tsx",
+    "web/apps/user/step-up.tsx",
+    "web/tests/authentication/federation.spec.ts",
+    "web/tests/passkeys/federation-management.spec.ts",
+    "web/tests/registration/federation.spec.ts",
+    "web/tests/step-up/federation.spec.ts"
+  ],
+  "scope": "Bounded Google/Microsoft federation foundation: qualified linked sign-in, session/MFA, explicit link/unlink and server-selected effects, operation-bound fresh proof, and qualified Google verified-contact registration through existing consent/Personal Information/age-aware activation. V01-V04 are explicitly Product Owner approved. Full PRIVATE_RECOVERY76 passes at734828a; final security/UI/specialist/committed-state gates and Product feature acceptance remain separate. Microsoft new registration stays unavailable without qualified verified-contact semantics. No live provider profile, production policy, external-authority edit, merge or release is selected.",
+  "current_foundation_checkpoint": "governance/evidence/P2-010-CALLBACK-FOUNDATION-CHECKPOINT.json",
+  "source_witness": [
+    {
+      "sha256": "801b8cf5b02f3f869766dde8ca06096c6c7516aa416238fb531011afa214e30f",
+      "path": "src/Modules/Identity/FederationIdentityBinding.cs"
+    },
+    {
+      "sha256": "895b40eb849f48582f3654f856326df8a21b26711485560c2200aec7597a412d",
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationIdentityBindingTests.cs"
+    },
+    {
+      "sha256": "4861af7978aa0deeb58d6d1af079047267984f76ab90fde05e7d96c4eaf049de",
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationIdentityPersistenceTests.cs"
+    }
+  ],
+  "eligibility": {
+    "source_metadata_sha": "85fa5ae2227bbb593576723be6900258d050b04a",
+    "context_outcome": "CURRENT",
+    "included_inputs": 47,
+    "work_start": "ELIGIBLE",
+    "findings": [],
+    "boundary": "Observed before source edits. Later source/metadata requires a coordinated context refresh; no post-edit current claim."
+  },
+  "restore": {
+    "command": "dotnet restore tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj --locked-mode --verbosity minimal",
+    "exit_code": 0,
+    "warnings_or_network_errors_reported": 0,
+    "checks_disabled": false,
+    "committed_lock_graph_exists": false,
+    "qualification": "Fresh worktree assets were absent. Existing centrally pinned dependency restore only; no packages/versions added. --locked-mode without a preexisting committed lock graph is not independently claimed as lock-graph proof. No independent live-feed/advisory freshness claim."
+  },
+  "build": {
+    "command": "dotnet build tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj --no-restore --verbosity minimal",
+    "exit_code": 0,
+    "elapsed_seconds": 36.75,
+    "warnings": 0,
+    "errors": 0,
+    "source_sha": "00ba7c4c7dc763736883149d7100921b3a80063a"
+  },
+  "pure_unit_execution": {
+    "command": "dotnet test tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj --no-build --no-restore --filter 'FullyQualifiedName~Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests' --logger 'trx;LogFileName=federation-binding.trx' --results-directory artifacts/p2-010-federation-20261112/unit-00ba7c4 --verbosity minimal",
+    "exit_code": 0,
+    "passed": 13,
+    "failed": 0,
+    "skipped": 0,
+    "total": 13,
+    "test_duration_ms": 219,
+    "original_trx_ref": "artifacts/p2-010-federation-20261112/unit-00ba7c4/federation-binding.trx",
+    "original_trx_sha256": "30aa18a0b31b7fa94d182380624d216fbdd5c10d7eb3ec076aaf6c2b168ca0e4",
+    "test_results": [
+      {
+        "duration": "00:00:00.0000192",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.UnmappedSpellingOrChangedClientRequiresQualifiedProfileOrMigration(issuer: \"https://issuer.example.test\", client: \"synthetic-client-b\")",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.1653167",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.SubjectRemainsAnExactOpaqueIdentity(first: \"é\", second: \"é\")",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0000206",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.UnmappedSpellingOrChangedClientRequiresQualifiedProfileOrMigration(issuer: \"https://wrong.example.test\", client: \"synthetic-client-a\")",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0019030",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.InvalidEncodingNulEmptyAndOversizedSubjectFailWithoutReturningInput",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0382655",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.PreparedRowRetainsOwnedIdentityAndContainsNoEmailOrAuthenticationGrant",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0003121",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.UnmappedSpellingOrChangedClientRequiresQualifiedProfileOrMigration(issuer: \"https://issuer.example.test/\", client: \"synthetic-client-a\")",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0000181",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.SubjectRemainsAnExactOpaqueIdentity(first: \"Subject\", second: \"subject\")",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0002161",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.UnmappedSpellingOrChangedClientRequiresQualifiedProfileOrMigration(issuer: \"https://ISSUER.example.test\", client: \"synthetic-client-a\")",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0002928",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.SubjectRemainsAnExactOpaqueIdentity(first: \"subject\", second: \" subject \")",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0005808",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.ExplicitlyAdmittedIssuerAliasCannotSplitStableIdentity",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0020751",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.RegistrationRequiresExplicitSupportedShapeBoundsAndMappingProvenance",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0033603",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.ExactGoogleLegacyClaimIssuerNeedsExplicitGoogleProfileAdmission",
+        "outcome": "Passed"
+      },
+      {
+        "duration": "00:00:00.0003255",
+        "testName": "Tunner.Identity.Persistence.Tests.FederationIdentityBindingTests.StableRegisteredNamespaceIsNotDerivedFromIssuerClientOrPolicyVersion",
+        "outcome": "Passed"
+      }
+    ]
+  },
+  "package_comparison": {
+    "mode": "Read-only package-type entries only: exact name/version and SHA512; project/reference/check-out metadata excluded.",
+    "approved_main_head": "26270f830bb214a5df8ba143b62ecc21be0a286a",
+    "projects": [
+      {
+        "project": "src/Modules/Identity/obj/project.assets.json",
+        "isolated_package_count": 40,
+        "approved_package_count": 40,
+        "exact_name_version_sha512_equal": true,
+        "mismatches": 0,
+        "missing_sha512": 0,
+        "isolated_assets_sha256": "ee088c386682d88c0084b067905920a2a3acb0d28cb2910965014ecf3d170826",
+        "approved_assets_sha256": "d6c45fefeffaa3cfecc7241de02f90d9e6c998947c414dca33c076eac4416e02"
+      },
+      {
+        "project": "tests/Tunner.Identity.Persistence.Tests/obj/project.assets.json",
+        "isolated_package_count": 53,
+        "approved_package_count": 53,
+        "exact_name_version_sha512_equal": true,
+        "mismatches": 0,
+        "missing_sha512": 0,
+        "isolated_assets_sha256": "459bd79c6ecc24cf41e2f3717aea789221c4cd671949f28970250a031dfbf837",
+        "approved_assets_sha256": "c3c8cf8f9a012b1e34d429c196f73992bedb3ba9714b7e354530ad833b632cb3"
+      }
+    ],
+    "package_drift": false,
+    "oidc_package_selected_or_installed": false
+  },
+  "historical_groundwork_unexecuted": {
+    "finite_sql_methods": 4,
+    "registration": "UNREGISTERED",
+    "sql": false,
+    "providers": false,
+    "docker": false,
+    "other_test_suites": false,
+    "context_refresh_after_source": false,
+    "final_role_reviews": false,
+    "full_work_item_acceptance": false
+  },
+  "next_action": "Scoped Product acceptance recorded; native DONE transition allowed and work item DONE. Next reconciles the007/008 prerequisite source proofs identified by native next, then prepares P2-011 recovery scope/roles/current context before implementation eligibility. Preserve actual734828a full76/protocol17/resource6 and candidate5bd82bf focused11/source-equivalence evidence. Targeted010 context generated/verified CURRENT at5e9bd27; acceptance/closure metadata follow, and011 generates fresh project state. Production/provider-live/processing/lifecycle, protected-main and release remain separate.",
+  "historical_groundwork_product_or_release_acceptance": false,
+  "product_acceptance": "ACCEPTED_SCOPED_FOUNDATION",
+  "product_acceptance_ref": "governance/evidence/TUN-P2-010-PRODUCT-ACCEPTANCE.json",
+  "production_merge_release_acceptance": false,
+  "committed_management_checkpoint": {
+    "source_commit_sha": "350c8d47cd9ff95351bd9c680685fe82a551c984",
+    "result": "PENDING_INTEGRATED_ACCEPTANCE",
+    "native_host_build": "PASS; zero warnings and errors",
+    "focused_dotnet": {
+      "passed": 141,
+      "environment_prerequisite_failures": 8,
+      "whole_invocation": "FAIL; the eight AuthenticationOutcomeTests were mistakenly selected for the ordinary runner and stopped at the disposable-database opt-in prerequisite. They did not execute product assertions. No container opt-in or borrowed database was enabled.",
+      "receipt": "artifacts/p2-010-federation-20261112/management-350c8d4-focused/federation-focused.trx"
+    },
+    "protocol_admission": "17 of 17 PASS; build binding7e09da07a586c2930942b4e23143ffc73be9d8b4e2c464af603a6da63996b0c3; actual original-source identity retained",
+    "resource_admission": {
+      "passed": 5,
+      "failed": 1,
+      "failure": "CAPACITY_PROVISION_DEADLINE",
+      "history": "artifacts/p2-009-recovery-20261111/native-resource-qualification/f93872c7184f41968a9efe19b7ac2d15/details.json",
+      "isolated_reproduction": "CAPACITY_PROVISION_DISK_FULL",
+      "isolated_receipt": "artifacts/p2-010-federation-20261112/management-350c8d4-native/capacity-focused-receipt.json",
+      "containment": "All six runs source-current, process-closed, reconciled, borrowed-preserved and surface-removed. Aggregate admission correctly remains FAIL.",
+      "defect_id": "DEF-TUN-P2-010-002"
+    },
+    "sql_private_execution": "BLOCKED_BY_CAPACITY_ADMISSION; neither current PUBLIC_SQL13 nor PRIVATE_RECOVERY72 ran. The earlier350-parent SQL failure remains separately recorded.",
+    "registration_visual_consent": "010-V04 approved by the Product Owner and recorded in TUN-P2-010-VISUAL-CONSENT.json; preparation patches remain unapplied until connected source integration."
+  },
+  "capacity_remedy_checkpoint": {
+    "source_commit_sha": "bb95498f743c397dce593e21dc2897662493599b",
+    "change": "Only exact-owned transient PostgreSQL capacity constant1GiB to2GiB;150-second capacity and90-second normal deadlines, full fixed workload and assertions retained.",
+    "build": "PASS; zero warnings/errors",
+    "governance_records": "1163 valid; zero diagnostics",
+    "direct_focused_invocation": "NOT_EXECUTED_PRECONDITION; protocol qualification is bound to the previous build and RequireQualified correctly rejects the new binding before fixture owners. Capacity behavior under2GiB is not yet tested.",
+    "receipt": "artifacts/p2-010-federation-20261112/capacity-bb95498/capacity-focused-receipt.json",
+    "containment": "process closed, no owners, reconciled, borrowed preserved, surface removed",
+    "defect_status": "DEF-TUN-P2-010-002 remains OPEN pending proper ordered current-build qualification"
+  },
+  "registration_integration_execution": {
+    "source_base_sha": "bb95498f743c397dce593e21dc2897662493599b",
+    "source_kind": "OWNED_WORKING_TREE; commit and integrated admission still pending",
+    "scope": "Same-SignIn qualified Google verified-contact intake, explicit paired-browser notice/CAS completion, shared registration/contact/Personal Information/age activation, approved010-V04 frontend and exact-original recovery. No authentication grant or automatic email linking.",
+    "provider_boundary": "Google intake requires explicit qualified registration profile and exact native Boolean email_verified=true. Microsoft new-account registration remains unavailable without qualified verified-contact semantics; its existing linked-account flows remain supported. No live provider or production profile qualification claimed.",
+    "build": "Full User BFF and finite native host PASS; zero warnings/errors. Missing Data Protection extension import and cancellation-last overload analyzer errors were corrected before this passing build, preserving the existing two-argument completion overload.",
+    "migration": "Official forward20261112175254_P2FederatedRegistration generated; immutable registration source and attempt guards installed. Existing migrations untouched; empty-foundation downgrade guard retained. Official EF check reports no pending model changes.",
+    "native_protocol_and_events": {"passed": 62, "failed": 0, "skipped": 0, "receipt": "artifacts/p2-010-federation-20261112/registration-wip-native/registration-native.trx"},
+    "models_bindings_freshness_policy": {"passed": 92, "failed": 0, "skipped": 0, "receipt": "artifacts/p2-010-federation-20261112/registration-wip-models/registration-models.trx"},
+    "public_ui": {
+      "new_v04": {"passed": 16, "failed": 0, "exit_code": 0, "receipt": "artifacts/p2-010-federation-20261112/registration-wip-ui/results.json", "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"},
+      "ordinary_registration": {"passed": 24, "failed": 0, "exit_code": 0, "receipt": "artifacts/p2-010-federation-20261112/registration-wip-ui/ordinary-regression/results.json", "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"},
+      "existing_federation_sign_in": {"passed": 31, "failed": 0, "exit_code": 0, "receipt": "artifacts/p2-010-federation-20261112/registration-wip-ui/v01-regression/results.json", "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"},
+      "source_binding": "The seven tested UI file byte hashes were reverified unchanged after every invocation and retained in FORM-REGISTRATION inventory evidence.",
+      "teardown": "Each invocation completed all cases before a Vite shutdown stall. Only the exact verified owned Vite identity was stopped; actual CLI JSON/exit0 and manual-cleanup receipts retained. No test, assertion or configuration change/retry. All processes closed.",
+      "visual_review": "Six1440/390/320 normal/error PNGs reviewed by UI specialist; root also inspected actual1440normal and320error against the approved variant. No per-cell or whole-platform acceptance inferred."
+    },
+    "source_review": "Independent focused registration source review found no discrete introduced correctness/security issue; no runtime acceptance inferred.",
+    "finite_registration_methods": "Three real owner/PI/collision/finality methods authored and compiled, registered in existing PRIVATE_RECOVERY75; execution pending current-build admission. Existing PASSWORD methods retained.",
+    "acceptance": "PENDING protocol/resources/PUBLIC_SQL13/PRIVATE_RECOVERY75, committed source binding, applicable UI and specialist gates, and feature Product acceptance."
+  },
+  "integrated_admission_0eacff8": {
+    "source_commit_sha": "0eacff82dc9780708b7272abb23aef53afadcc39",
+    "build_binding_sha256": "aabf24bd67ea0f442fe7bd3676927f1bab3eb992a921d9c43a0cbd0eee8baa86",
+    "protocol": {"passed": 17, "total": 17},
+    "resources": {"passed": 6, "total": 6, "history": "artifacts/p2-009-recovery-20261111/native-resource-qualification/6560499bb54b4623ad9adbb785970452/details.json"},
+    "capacity": {"databases": 76, "database_bytes": 785774084, "wal_bytes": 520093696, "limit_bytes": 2147483648, "original_deadline_preserved": true, "result": "PASS"},
+    "sql": {"passed": 13, "failed": 0, "receipt": "artifacts/p2-010-federation-20261112/registration-0eacff8-native/sql-receipt.json"},
+    "private": {
+      "passed": 66,
+      "first_failure": "FEDERATION_CONFIRMED_OWNERSHIP",
+      "failure_code": "CASE_FAILED",
+      "later_not_executed": 8,
+      "receipt": "artifacts/p2-010-federation-20261112/registration-0eacff8-native/private-receipt.json",
+      "diagnosis": "Source-supported deterministic management test host startup mismatch: individual HTTP capability registrations trigger production activation without its facade while the domain owner is already registered. DEF-TUN-P2-010-003 test-only factory repair authored; no owner/uniqueness product failure established.",
+      "passed_scope": "All original62 private cases plus four federation sign-in/MFA/finality/browser-binding cases. Not a whole-cohort or whole-feature PASS."
+    },
+    "containment": "Protocol/resource/SQL/private receipts source-current and process-closed. SQL/private reconciled, borrowed services preserved and surfaces removed; no raw private exception exported.",
+    "coverage_gap": "DEF-TUN-P2-010-004 requires one real public HTTPS BFF composition/paired-cookie/native callback/registration completion integration case. Existing domain and standalone-native tests remain valid but do not substitute for this joined path.",
+    "remaining": "Both test gaps, remaining federation owner cases, UI/native/specialist and Product acceptance gates. Defect002 remedy runtime verified; closure record pending committed final evidence."
+  },
+  "bounded_private_test_increment": {
+    "source_base_sha": "0eacff82dc9780708b7272abb23aef53afadcc39",
+    "production_source_changed": false,
+    "fixture_repair": "Management domain fixture supplies the same policy explicitly through existing owner/Auth factories; no false HTTP activation and no production guard/assertion changes. Nine additions/two removals in its test setup.",
+    "https_wire_case": "One fixed finite case reuses actual authenticated HTTPS composition, its automatic registration source activation, actual Google native handler and in-memory synthetic provider. Covers paired contexts, CSRF/CAS/notices, no callback Account/session, shared registration recovery/PI and subsequent linked sign-in. No extra host, hook, runner, protocol or relaxed issuer.",
+    "fixed_registry": "PRIVATE_RECOVERY76; previously failing and eight unexecuted federation cases run first, then the new HTTPS case, then all prior cases. No case/assertion removed; JSON and native literal order match.",
+    "build": "PASS; zero warnings/errors. One test-only per-call JSON options allocation was replaced with JsonSerializerOptions.Web to satisfy the analyzer.",
+    "native_regression": {"passed": 62, "failed": 0, "receipt": "artifacts/p2-010-federation-20261112/wire-wip-native/wire-native-regression.trx"},
+    "user_production_bundle": "PASS via existing Vite configuration; existing future-loader and runtime font-reference warnings remain. No dependency/configuration change.",
+    "runtime": "PENDING current committed test binding and actual private execution; neither new defect is closed on compile/source review alone. Previous92 model,71 registration/sign-in UI and all0eac passing cohorts retain original provenance."
+  },
+  "private_6f50493_execution": {
+    "source_commit_sha": "6f50493360041c1e824cc523425429f51989140a",
+    "build_binding_sha256": "37f79505719c22a8b6038b6c955fd36f7725c9d2d78e4cfba2502e6c7293809f",
+    "protocol": "17 of17 PASS",
+    "resources": "6 of6 PASS, current build and unchanged deadlines",
+    "private_receipt": "artifacts/p2-010-federation-20261112/wire-6f50493-native/private-receipt.json",
+    "passed": ["FEDERATION_CONFIRMED_OWNERSHIP", "FEDERATION_REQUIRED_POSTURE"],
+    "first_failure": "FEDERATION_UNLINK_EFFECTS_HISTORY",
+    "failure_code": "CASE_FAILED",
+    "later_not_executed": 73,
+    "containment": "Source current, process closed, reconciled, borrowed services preserved, surface removed",
+    "fixture_disposition": "DEF-TUN-P2-010-003 test-only composition repair is runtime proven by both previously blocked management cases. No production activation guard was changed.",
+    "source_diagnosis": "Shared PasskeyOutcomeCurrentAt lacks FederationValidity dispatch and deterministically rejects federation actor-revocation receipts before the existing later typed check. DEF-TUN-P2-010-005 adds only the explicit existing typed CurrentAt dispatch; no earlier Preserve substage fault has been established. Runtime revalidation remains required.",
+    "remaining": "History/frontier correction and all later cases including joined HTTPS wire, final UI/native/specialist/Product gates. No full-cohort PASS claimed."
+  },
+  "private_a3d8e85_execution": {
+    "source_commit_sha": "a3d8e856083ec085f76ce08f106169de7a582c94",
+    "build_binding_sha256": "5455462c46d374af227b4cd04df2b071d956c812609eee20f030c46009253ead",
+    "protocol": "17 of17 PASS",
+    "resources": "6 of6 PASS; current build and unchanged deadlines",
+    "receipt": "artifacts/p2-010-federation-20261112/frontier-a3d8e85-native/private-receipt.json",
+    "passed": ["FEDERATION_UNLINK_EFFECTS_HISTORY", "FEDERATION_MANAGEMENT_FINAL_AUTHORITY", "FEDERATION_OPERATION_PROOF", "FEDERATION_OPERATION_PROOF_REJECTION"],
+    "verified_defects": ["DEF-TUN-P2-010-001", "DEF-TUN-P2-010-005"],
+    "first_failure": "FEDERATION_REGISTRATION",
+    "failure_code": "CASE_FAILED",
+    "later_not_executed": 71,
+    "containment": "Source current, process closed, reconciled, borrowed services preserved, surface removed",
+    "source_diagnosis": "Contact starts at version1 but the shared installer increments it to2 before the first save, violating the canonical INSERT-version1 guard. DEF-TUN-P2-010-006 repairs sequencing within the same transaction; no raw exception or SQL details were exported.",
+    "authored_remedy": "Save pending Account/contact-v1/unconfirmed User before tracking the FEDERATED operation. Re-read authority/clock/policy/notices/source/pair/expiry after the await and throw on drift. Then unchanged shared installer performs the contact-v2 UPDATE; final save/Describe/pure witness/commit remain. Exceptions propagate through existing transaction disposal and safe facade handling, preventing partial pending-row commit.",
+    "build_after_remedy": "PASS; zero warnings/errors",
+    "remaining": "Actual registration and later cases, joined HTTPS wire, full76 integrated result and final UI/specialist/Product gates."
+  },
+  "private_a7f8762_execution": {
+    "source_commit_sha": "a7f8762c173cfe55316ac32b747d27d8f02f2fcc",
+    "build_binding_sha256": "8f8ed98fb4767214908800d45f5d2aa4f3b5bb080a7f9e6ca5a1b87cc299375a",
+    "protocol": "17 of17 PASS",
+    "resources": "6 of6 PASS; current build and unchanged deadlines",
+    "receipt": "artifacts/p2-010-federation-20261112/contact-a7f8762-native/private-receipt.json",
+    "passed": ["FEDERATION_REGISTRATION", "FEDERATION_REGISTRATION_REJECTION", "FEDERATION_REGISTRATION_FINALITY"],
+    "verified_defect": "DEF-TUN-P2-010-006; canonical contact-version sequencing and atomic late-authority rollback verified",
+    "first_failure": "FEDERATION_HTTPS_WIRE",
+    "failure_code": "CASE_FAILED",
+    "later_not_executed": 72,
+    "containment": "Source current, process closed, reconciled, borrowed services preserved, surface removed",
+    "fixture_source_diagnosis": "Wire fixture expects200 from registration/progress while status is REQUIRES_ACTION and next action PERSONAL_INFORMATION. The existing authoritative endpoint deliberately returns202. Fixture now expects202 and additionally requires exact original operation/status/next-action; NoSessionCookie retained. This unavoidable source mismatch is not claimed to be an observed runtime frontier.",
+    "transport_source_check": "Named Configure-stage synthetic Backchannel is installed before native postconfiguration captures discovery/JWKS/token clients; no real provider fallback. Explicit existing synthetic MFA requirement source is registered. No production transport, issuer, policy or guard change.",
+    "remaining": "Actual HTTPS wire, one full76 passing invocation and final UI/native/specialist/Product gates. Earlier75 distinct passing cases remain separate actual-source evidence."
+  },
+  "note": "This metadata receipt is committed after the tested00ba source without relabelling test execution. Source is unchanged after its build/pure run; scoped13 PASS is not LOCAL_VALIDATED or full010 PASS.",
+  "current_integration_execution": {
+    "recorded_at": "2026-11-12T16:59:20.390Z",
+    "source_base_sha": "5fc094e3743ef9702b1dbcc0b2b11707233b8aab",
+    "source_kind": "OWNED_WORKING_TREE_NOT_FINAL_COMMITTED_VALIDATION",
+    "build": {
+      "project": "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+      "exit_code": 0,
+      "warnings": 0,
+      "errors": 0
+    },
+    "focused_dotnet": {
+      "passed": 72,
+      "failed": 0,
+      "skipped": 0,
+      "breakdown": {
+        "freshness": 11,
+        "session_model": 19,
+        "native_protocol": 20,
+        "native_events": 22
+      },
+      "new_native_seven_vectors": "PASS_IN_SEPARATE_FOCUSED_RUN_AFTER_FIXTURE_CORRECTION"
+    },
+    "frontend": {
+      "canonical_typecheck": "PASS",
+      "existing_theme_unit_tests": "10 PASS; deterministic Figma profiles, contrast and generated-source integrity; no frontend changes after the earlier current UI checks.",
+      "management": {
+        "passed": 20,
+        "failed": 0
+      },
+      "operation_proof": {
+        "initial_passed": 18,
+        "initial_failed": 1,
+        "isolated_corrected_passed": 1,
+        "qualification": "Split-source invocations. Original fixture completion status lives after dialog closure; locator waits for closure then checks completion. No product change or no-retry assertion removal."
+      },
+      "shared_step_up_regression": {
+        "passed": 22,
+        "failed": 0,
+        "receipt": "artifacts/p2-010-federation-20261112/management-proof-shared-stepup-regression/results.json"
+      },
+      "shared_account_security_passkey_regression": {
+        "passed": 60,
+        "failed": 0,
+        "receipt": "artifacts/p2-010-federation-20261112/management-shared-passkeys-regression/results.json"
+      }
+    },
+    "model_snapshot": "No pending model changes; official EF check exit0 after forward management/proof migration generation.",
+    "new_native_claim_vectors": {
+      "result": "PASS_AFTER_FIXTURE_CORRECTION",
+      "passed": 7,
+      "failed": 0,
+      "source_kind": "OWNED_WORKING_TREE_NOT_FINAL_COMMITTED_VALIDATION",
+      "receipt": "artifacts/p2-010-federation-20261112/management-proof-fresh-native-corrected/fresh-native-vectors.trx",
+      "initial_result": "One Microsoft case passed; six Google cases failed before provider exchange because the test indexed an intentionally absent prompt parameter. Only the fixture now uses TryGetValue; production behavior is unchanged. Initial failure receipt is retained."
+    },
+    "last_sql": {
+      "source_sha": "5fc094e3743ef9702b1dbcc0b2b11707233b8aab",
+      "passed": 6,
+      "first_failure": "FEDERATION_SINGLE_OWNER",
+      "unexecuted": 6,
+      "cleanup": "PASS",
+      "qualification": "Source-supported EF alternate-key test incompatibility corrected by parameterized SQL tamper test; corrected SQL case not rerun yet."
+    },
+    "security_guard_disposition": "Automatic review rejected relaxation of provider_authenticated_at<=verified_at. Rejected patch was not applied. All four existing literals remain intact; new binder instead rejects every future authentication timestamp. Draft freshness-skew parameter removed; existing native transport clock-skew unchanged.",
+    "evidence": [
+      {
+        "path": "artifacts/p2-010-federation-20261112/management-proof-wip-focused/management-proof-focused.trx",
+        "sha256": "01238ebccabd916c74d1898c6627881d81a227737f85f31e1ed08bfba2620837"
+      },
+      {
+        "path": "artifacts/p2-010-federation-20261112/management-wip-ui/results.json",
+        "sha256": "c5ffabd84b30525ba9ac3eb554c0f2ec2b96975837e1bdb94c44e748cfef6592"
+      },
+      {
+        "path": "artifacts/p2-010-federation-20261112/operation-proof-wip-ui/results.json",
+        "sha256": "c4edc7d1bc743c03a58168c675dd415eb1ee6cab26d19340da398ae6382f9139"
+      },
+      {
+        "path": "artifacts/p2-010-federation-20261112/operation-proof-focused-completion/results.json",
+        "sha256": "0f24609c49fdd4a72b63df186f9028bdb4425f939fec4035aa7a837b696e5590"
+      },
+      {
+        "path": "artifacts/p2-010-federation-20261112/sign-in-5fc094e-sql/sql-receipt.json",
+        "sha256": "f1580484abb6a53667039e5aa73a9cb8941e3a59538d4ae34d9804f0b13ce396"
+      }
+    ],
+    "retirement_generation_defect": {
+      "defect_id": "DEF-TUN-P2-010-001",
+      "remedy": "Authored current-session and maintenance checks retain completed RevokeLinkedSessions decisions against the original source generation after later ACTIVE relinking; the existing private history test now covers an unvisited old session and a new-generation positive case under both explicit effects.",
+      "runtime_verification": "PENDING_FINITE_PRIVATE_EXECUTION"
+    },
+    "limits": "Historical WIP checkpoint only. Superseded by final_native_734828a below; original source identities and failed/partial runs are retained."
+  },
+  "metadata_delta_scan": { "result": "PASS", "initial_owned_files": 126, "initial_result": "PASS", "final_changed_or_new_files": 16, "method": "Existing Invoke-TunnerSecretScan.ps1 on explicit task-owned metadata only; exclude unknown/pre-existing unrelated files. Final changed/new metadata checked before commit; subsequent result-only recording does not claim a self-hash or repository-wide scan." },
+  "engineering_gate_checkpoint": { "source_validation_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641", "compatibility_candidate_sha": "5bd82bfee7494513e9c9cd20deb7456f2cdda29d", "candidate_carrier_passed": 11, "ui_native_gate": "PASS_ALL10_ITEMS", "role_reviews": "12_PASS", "revision_native_close_checks": "4_PASS_NO_FINDINGS", "revision_transition_basis": "VALIDATION to CLOSED with product_acceptance_required:false under existing lifecycle policy after native close-check PASS; no human acceptance inferred.", "schema_validation": "1207_RECORDS_ZERO_DIAGNOSTICS", "feature_gate": "READY_NO_FAILURES_AT_A50937C", "prior_feature_gate": "NOT_READY only for005/006 stale prerequisite source proofs; fixed at a50937c using actual current regressions, original history retained.", "attribute_metadata_secret_scan": "4_PASS", "captured_git_objects": "52_RAW_BYTE_EXACT", "handoff_ref": "docs/development/P2_010_FEDERATION_HANDOFF.md" },
+  "final_security_ref": "governance/evidence/p2-010-federation-20261112/final-security-734828a.json",
+  "final_security_state": "Scoped SAST81 PASS. Source-secret183 raw FAIL has one independently reviewed public synthetic test-fixture false positive; no scanner suppression or live credential finding. Original advisory failure/automatic approval rejection remain historical. User explicitly authorized a check below10minutes; the existing read-only advisory/SBOM/provenance utility actually passed in52.821seconds with119 packages, no reported vulnerable package and all9 provenance inputs matching734828a. Two portable outputs and exact hashes are in the security receipt. Final native closure and Product feature acceptance remain separate.",
+  "data_governance_refs": [
+    "governance/evidence/TUN-P2-010-DATA-INVENTORY.json",
+    "governance/evidence/TUN-P2-010-DATA-LIFECYCLE-ASSESSMENT.json"
+  ],
+  "final_native_734828a": {
+    "result": "PASS",
+    "source_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+    "build_binding_ref": "governance/evidence/p2-010-federation-20261112/native-734828a/build-binding.json",
+    "build_binding_sha256": "9ba2f980e0201af68872d07a77e535bcbbe3b1f391238d0bc5c6d814904f7497",
+    "source_inputs": 497,
+    "build_outputs": 331,
+    "protocol": { "passed": 17, "total": 17, "receipt_ref": "governance/evidence/p2-010-federation-20261112/native-734828a/protocol-qualification.json", "sha256": "73af2ad9b127845113bced808b9ce0e51c77008c901f7a51c6e1e2c1e3a387c4" },
+    "resources": { "passed": 6, "total": 6, "receipt_ref": "governance/evidence/p2-010-federation-20261112/native-734828a/resource-qualification.json", "sha256": "c15aadecc3e9512b4758a49bb4ecfbc6f0309d715b301df12a8f1ba30eaf29af", "details_ref": "governance/evidence/p2-010-federation-20261112/native-734828a/resource-details.json", "fully_migrated_databases": 77, "database_bytes": 795780435, "wal_bytes": 536870912, "tmpfs_bytes": 2147483648, "original_deadlines_preserved": true },
+    "private_integration": { "cohort": "PRIVATE_RECOVERY76", "invocations": 1, "passed": 76, "failed": 0, "receipt_ref": "governance/evidence/p2-010-federation-20261112/native-734828a/private76.json", "sha256": "1681a04d5c7038ed0311137804fb1c0d2c7edff53fe2b9f54758e5eaa4e32367", "accepted": true, "source_current": true, "process_closed": true, "reconciled": true, "borrowed_preserved": true, "surface_removed": true },
+    "joined_https_coverage": "Actual native Google code/PKCE callback and protected provider facts; exact paired registration cookies, CSRF, operation/version/notices; no callback Account/session grant; same-owner contact and Personal Information activation; replay, rejected contexts and later explicit linked sign-in. DEF-TUN-P2-010-004 coverage gap resolved by the actual full invocation.",
+    "sql_reuse": { "source_commit_sha": "0eacff82dc9780708b7272abb23aef53afadcc39", "passed": 13, "failed": 0, "receipt_ref": "artifacts/p2-010-federation-20261112/registration-0eacff8-native/sql-receipt.json", "source_equivalence": "No migration, SQL guard, model or SQL-case implementation changed after this successful invocation. Later changes fix test-host startup, existing authentication outcome dispatch, and transaction ordering through the unchanged SQL guards; all joined and owner effects are exercised by the current PRIVATE76. No SQL execution relabelled as734828a." },
+    "other_evidence": "Prior model/freshness/policy92, native protocol/events62 and public UI cohorts retain their exact original execution sources, separate initial/isolated runs and manual owned-Vite cleanup provenance. Final UI envelope supplies per-scope bindings; no summed unique-case or new full-suite claim.",
+    "remaining_gates": "Source security/SBOM, final UI and specialist/native committed-state gates, then genuine Product feature acceptance. This record is not production/provider-live qualification, protected-main, release or whole-P2 acceptance."
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-010-RV014",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-010",
+  "parent_revision_id": "P2-010-RV013",
+  "parent_milestone_revision_id": null,
+  "title": "Qualify retained Federation sources and safe diagnostic integration",
+  "revision_type": "COMPATIBILITY",
+  "status": "CLOSED",
+  "reason": "Qualify only exact shared-source compatibility using retained actual executions and focused independent source/privacy reviews. Preserve original closure and leave separate ACTIVE diagnostic revisions, their full-runtime criteria and the private HTTPS HOST defect unfulfilled. No private runtime restoration, new full-suite PASS, Product or global UI acceptance is claimed.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": ["governance/revisions/P2-009-RV013.yaml","governance/revisions/P2-010-RV014.yaml","governance/work-items/TUN-P2-009.yaml","governance/work-items/TUN-P2-010.yaml","governance/revisions/P2-009-RV012.yaml","governance/revisions/P2-010-RV013.yaml","governance/revisions/P2-010-RV011.yaml","governance/revisions/P2-009-RV011.yaml","governance/revisions/P2-010-RV012.yaml","governance/defects/DEF-TUN-P2-009-HTTPS-HOST-001.yaml","tests/Tunner.Identity.Persistence.Tests/RecoveryCodePrivateIntegrationTests.cs","tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs","docs/contracts/ui-inventory.json","src/Modules/Identity/AuthenticationEndpoints.cs","src/Modules/Identity/IdentityPersistenceDbContext.cs","src/Modules/Identity/IdentityWebAssets.cs","src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs","src/Modules/Identity/RecoveryCodeAccountView.cs","src/Modules/Identity/RecoveryCodeExecution.cs","src/Modules/Identity/StepUpApplication.cs","tests/Shared/RecoveryCodeOwnedDockerFixture.cs","tests/Tunner.Identity.Persistence.Tests/FederationPrivateIntegrationTests.cs","tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeExecution.cs","tools/recovery-native-testing/cases.json","governance/reviews/REV-P2-009-RV013-full-stack-engineer.yaml","governance/reviews/REV-P2-009-RV013-tester-qa-engineer.yaml","governance/reviews/REV-P2-009-RV013-solution-architect.yaml","governance/reviews/REV-P2-009-RV013-cyber-security-engineer.yaml","governance/reviews/REV-P2-009-RV013-auditor.yaml","governance/reviews/REV-P2-010-RV014-full-stack-engineer.yaml","governance/reviews/REV-P2-010-RV014-tester-qa-engineer.yaml","governance/reviews/REV-P2-010-RV014-solution-architect.yaml","governance/reviews/REV-P2-010-RV014-cyber-security-engineer.yaml","governance/reviews/REV-P2-010-RV014-auditor.yaml","governance/evidence/P2-009-RV013-VALIDATION.json","governance/evidence/P2-010-RV014-VALIDATION.json","governance/evidence/p2-019-content-20261116/host-classifier-96685959/execution.json","governance/evidence/p2-019-content-20261116/host-classifier-96685959/tests.trx","governance/evidence/p2-019-content-20261116/native-recovery-1bf59717/private-receipt.json","governance/evidence/p2-019-content-20261116/native-recovery-1bf59717/build-binding.json","governance/evidence/TUN-P2-019-UI-COMPLIANCE.json","governance/evidence/TUN-P2-010-UI-COMPLIANCE.json","governance/evidence/TUN-P2-019-VALIDATION.json","governance/evidence/P2-009-RV011-VALIDATION.json","governance/evidence/P2-010-RV012-VALIDATION.json","governance/evidence/P2-010-RV011-VALIDATION.json","docs/authority/current/development/04_Governance_and_Context_Tooling_Specification.md","docs/authority/current/development/12_AI_Development_Protocol_Context_and_Project_Memory.md"],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Bind precisely owned current sources to actual retained executions and reviewed diagnostic-only changes; preserve all original domain assertions, policies and runtime boundaries.",
+    "Require independent technical and privacy review, exact source equality, scoped context and native committed-state closure checks; no invented aggregate run.",
+    "Preserve the separate unresolved HOST runtime defect and diagnostic revisions with their required runtime qualification; source compatibility does not restore or qualify private HTTPS startup."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["full-stack-engineer","tester-qa-engineer","solution-architect","cyber-security-engineer","auditor"],
+  "evidence_refs": ["governance/evidence/P2-010-RV014-VALIDATION.json"],
+  "product_acceptance_required": false,
+  "created_at": "2026-11-18T01:15:20.1118466\u002B00:00",
+  "closed_at": "2026-11-18T02:31:31.0254350Z",
+  "git_state": {"repository_changed":true,"tested_commit_sha":"11f80d705120855c9766424d2c91711f8646990f","validated_commit_sha":"11f80d705120855c9766424d2c91711f8646990f","work_item_commit_shas":["1bf5971739f163d15777498b211ff0f48f677bc8","96685959ef4e87b319e214e615407517c1c3a64b","11f80d705120855c9766424d2c91711f8646990f"],"closure_commit_sha":null,"remaining_uncommitted_paths":["docs/context/current/","docs/project/","governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/",".vscode/","%SystemDrive%/","governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode/"],"remaining_uncommitted_classification":"PREEXISTING_UNRELATED"}
+}

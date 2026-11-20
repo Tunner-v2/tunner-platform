@@ -1,0 +1,152 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "<repo-root>\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.browser-testing.config.ts",
+      "passkeys-flow.spec.ts"
+    ],
+    "configFile": "<repo-root>\\web\\playwright.browser-testing.config.ts",
+    "rootDir": "<repo-root>/web/tests/browser-testing",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo-root>/artifacts/browser-testing/browser-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo-root>/web/tests/browser-testing",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../artifacts/browser-testing/browser-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "passkeys-flow.spec.ts",
+      "file": "passkeys-flow.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "real native passkeys complete approved onboarding, sign-in, proof, enrollment and self-removal",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 27316,
+                  "error": {
+                    "message": "Error: cdpSession.send: Protocol error (WebAuthn.addVirtualAuthenticator): Chrome only supports one internal authenticator per environment",
+                    "stack": "Error: cdpSession.send: Protocol error (WebAuthn.addVirtualAuthenticator): Chrome only supports one internal authenticator per environment\n    at authenticator (<repo-root>\\web\\tests\\browser-testing\\passkeys-flow.spec.ts:6:21)\n    at <repo-root>\\web\\tests\\browser-testing\\passkeys-flow.spec.ts:70:118",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\browser-testing\\passkeys-flow.spec.ts",
+                      "column": 21,
+                      "line": 6
+                    },
+                    "snippet": "  4 |\n  5 | async function authenticator(cdp:CDPSession){\n> 6 |   return (await cdp.send('WebAuthn.addVirtualAuthenticator',{options:{protocol:'ctap2',ctap2Version:'ctap2_1',transport:'internal',\n    |                     ^\n  7 |     hasResidentKey:true,hasUserVerification:true,isUserVerified:true,automaticPresenceSimulation:true,\n  8 |     defaultBackupEligibility:false,defaultBackupState:false}})).authenticatorId;\n  9 | }"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\browser-testing\\passkeys-flow.spec.ts",
+                        "column": 21,
+                        "line": 6
+                      },
+                      "message": "Error: cdpSession.send: Protocol error (WebAuthn.addVirtualAuthenticator): Chrome only supports one internal authenticator per environment\n\n  4 |\n  5 | async function authenticator(cdp:CDPSession){\n> 6 |   return (await cdp.send('WebAuthn.addVirtualAuthenticator',{options:{protocol:'ctap2',ctap2Version:'ctap2_1',transport:'internal',\n    |                     ^\n  7 |     hasResidentKey:true,hasUserVerification:true,isUserVerified:true,automaticPresenceSimulation:true,\n  8 |     defaultBackupEligibility:false,defaultBackupState:false}})).authenticatorId;\n  9 | }\n    at authenticator (<repo-root>\\web\\tests\\browser-testing\\passkeys-flow.spec.ts:6:21)\n    at <repo-root>\\web\\tests\\browser-testing\\passkeys-flow.spec.ts:70:118"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T10:22:07.462Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\artifacts\\browser-testing\\browser-results\\passkeys-flow-real-native--9c306-enrollment-and-self-removal\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\browser-testing\\passkeys-flow.spec.ts",
+                    "column": 21,
+                    "line": 6
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "b320c679f71e7df82560-428ec5012a180d2e0b39",
+          "file": "passkeys-flow.spec.ts",
+          "line": 35,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-10T10:22:06.168Z",
+    "duration": 36376.917,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

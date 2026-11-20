@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-013-RV003",
+  "owner_work_item": "TUN-P2-019",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "2b1bb960434aa49824c4899fc46f3e2533aff4ac",
+  "validated_commit_sha": "2b1bb960434aa49824c4899fc46f3e2533aff4ac",
+  "owned_behavior_paths": [
+    "src/Modules/Identity/PublishedPresentationProjection.cs",
+    "src/Modules/Identity/SessionRevocationBrowser.cs",
+    "src/Modules/Identity/SessionBulkRevocationBrowser.cs",
+    "src/Modules/Identity/PublishedSessionRevocationPresentationSource.cs",
+    "tests/Tunner.Identity.Persistence.Tests/PublishedSessionRevocationPresentationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/PublishedSessionRevocationPresentationIntegrationTests.cs",
+    "docs/contracts/ui-inventory.json",
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+    "src/Modules/Identity/StepUpApplication.cs"
+  ],
+  "scope": "Optional governed single-session and bulk browser publication, preserving original Session/Device closure, synchronous providers, listing keys, native guards/transactions and activation defaults. Reconcile only four confirmed newer shared paths using retained UI, persistence and Recovery qualification; unchanged closedRV001/RV002 source carriers remain valid.",
+  "candidate": {
+    "state": "QUALIFIED_TECHNICAL_COMPATIBILITY_CLOSED",
+    "patch_ref": "artifacts/p2-019-content-20261116/session-revocation-presentation.patch",
+    "sha256": "b3ea4a41c67b244658a6b1f81145ed1591b6d1703e9dd886f2a36662583d72ac",
+    "authored_cases": 21,
+    "scope": "11pure+10actualPG/HTTPS, including fresh original password-proof native single/exact-set effects and preserved actor/other/later sessions. Async browser preparation only; no new native I/O."
+  },
+  "retained_qualification_refs": [
+    "governance/evidence/P2-003-RV006-VALIDATION.json",
+    "governance/evidence/P2-009-RV009-VALIDATION.json",
+    "governance/evidence/P2-014-RV001-VALIDATION.json",
+    "governance/evidence/TUN-P2-019-UI-COMPLIANCE.json"
+  ],
+  "boundaries": "No production policy, budgets, discovery, assurance, route or provider activation. WholeWork19/Product/production/merge/release approvals remain separate.",
+  "current_qualification": {"source_sha":"7cb7af39804e396ac05d231afe2f8b7d941cced3","compile":"PASS zero warnings/errors after privateCA1859 correction","pure":{"executed":46,"passed":46,"failed":0,"new_cases":11,"authentication_regressions":9,"stepup_regressions":26,"receipt_ref":"governance/evidence/p2-019-content-20261116/native/session-actions-7cb7af39/presentation.trx"},"initial_native":{"executed":11,"passed":7,"failed":4,"not_executed":0,"timed_out":false,"accepted":false,"owned_containers_remaining":0,"borrowed_preserved":true,"receipt_ref":"governance/evidence/p2-019-content-20261116/native/7cab121563294b94a49200a478235587/summary.json"},"fixture_repair":{"classification":"TEST_FIXTURE_EXPIRED_QUALIFICATION","cause":"System-synchronized new factory retained default2026-10-20..23 discovery/transport/assurance interval; bulk options/single preparation reject it before intended workflows.","patch_ref":"artifacts/p2-019-content-20261116/session-revocation-native-interval.patch","sha256":"151dcc4315951f59c7e6eb32500ea97e49b71faa4a4ddc9f5da53dec1a73d8b5","change":"Only new helper selects existingNativeInterval, as existingCreateNative already does. Independent delta reviewPASS; production/guards/assertions unchanged.","rerun":"All10new PublishedContent facts because common invalid qualification could mask intended negative cases. Keep initial11=7PASS4FAIL; reuse unaffectedpure46 andlegacy1 atoriginalSHA."},"corrected_native":{"source_sha":"2b1bb960434aa49824c4899fc46f3e2533aff4ac","executed":10,"passed":10,"failed":0,"not_executed":0,"timed_out":false,"accepted":true,"owned_containers_remaining":0,"borrowed_preserved":true,"receipt_ref":"governance/evidence/p2-019-content-20261116/native/47e5fb7acd26408f8a1a2835e790b662/summary.json"},"retained_legacy":{"source_sha":"7cb7af39804e396ac05d231afe2f8b7d941cced3","executed":1,"passed":1,"test_name":"SessionBulkRevocationHttpTests.OptionalRegistrationAndPublicationPreserveLegacyContentAndFailClosed","receipt_ref":"governance/evidence/p2-019-content-20261116/native/7cab121563294b94a49200a478235587/product-authorization.trx","limit":"Only this unaffected legacy case retained from initial11; prior new-negative passes not credited after shared fixture correction."},"distinct_passing_identities":57,"source_equivalence":"No application source changed7cb7af39→2b1bb960; only new integration private factory selects the existing qualified native interval. Pure46 and legacy1 retainactual7cb; all10new native cases executed at2b1. Original11 remains7PASS4FAIL; no single57run claimed."},
+  "validation_phase": "NATIVE_CLOSURE_CHECK_PASSED",
+  "older_path_qualification": "Independent reviewer confirmed DbContext/snapshot identical196d; StepUp identical2ec; all existing inventoryitems unchanged with60Admin-only additions. AuthApp/AuthEndpoints retainclosedRV001 carrier and StepUpBrowser/vite closedRV002 carrier; original013 DONE/closure untouched."
+}

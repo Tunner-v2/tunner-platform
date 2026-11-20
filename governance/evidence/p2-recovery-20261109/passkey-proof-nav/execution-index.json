@@ -1,0 +1,350 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "result": "PASS_ENGINEERING_AND_NATIVE_UI_CURRENT_SOURCE_LIFECYCLE_GATES_NEXT",
+  "recorded_at": "2026-11-10T12:36:44.196Z",
+  "validated_source_carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+  "source_binding": {
+    "tested_carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+    "actual_execution_shas_retained": true,
+    "cohort_equivalence": [
+      {
+        "cohort": "Current authentication21 and shared verification22",
+        "sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+        "paths": [
+          "web/apps/user",
+          "web/packages/ui",
+          "web/fixtures/authentication",
+          "web/tests/authentication",
+          "web/fixtures/step-up",
+          "web/tests/step-up",
+          "web/playwright.authentication.config.ts",
+          "web/playwright.step-up.config.ts",
+          "web/package.json",
+          "web/pnpm-lock.yaml",
+          "web/tsconfig.json"
+        ],
+        "carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_INPUTS",
+        "changed_paths": []
+      },
+      {
+        "cohort": "Foundation16",
+        "sha": "35ef6c3b64881cf50833209b739f0e47a43f5679",
+        "paths": [
+          "web/packages/ui",
+          "web/fixtures/ui",
+          "web/tests/browser",
+          "web/playwright.config.ts",
+          "web/package.json",
+          "web/pnpm-lock.yaml"
+        ],
+        "carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_INPUTS",
+        "changed_paths": []
+      },
+      {
+        "cohort": "Current native14 recovery and runtime server",
+        "sha": "80a32abb3c215a212bfa34bb7678c742d3cf765d",
+        "paths": [
+          "src",
+          "tests",
+          "tools/browser-testing",
+          "Directory.Build.props",
+          "Directory.Build.targets",
+          "Directory.Packages.props",
+          "global.json",
+          "NuGet.Config"
+        ],
+        "carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_INPUTS",
+        "changed_paths": []
+      }
+    ],
+    "native_full_predecessor": {
+      "source_sha": "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+      "passed": 224,
+      "limitation": "Full224 remains actual executionat0ef; onlylaterC#delta is two-use localname clarification in PasskeySignInRecovery.cs, followedby actual14 recoveryat80a. No fullrun relabeling."
+    }
+  },
+  "ui_item_evidence": {
+    "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+    "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+  },
+  "executions": {
+    "native_full": {
+      "source_sha": "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+      "passed": 224,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "receipt": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json"
+    },
+    "native_current_recovery": {
+      "source_sha": "80a32abb3c215a212bfa34bb7678c742d3cf765d",
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "receipt": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/current-native/receipt.json"
+    },
+    "architecture": {
+      "source_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+      "passed": 237,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "trx": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/architecture-current/architecture-b0c0442.trx"
+    },
+    "edge": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+      "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6",
+      "stats": {
+        "startTime": "2026-11-10T12:22:24.139Z",
+        "duration": 118198.001,
+        "expected": 60,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "source_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "exit_code": 0
+    },
+    "firefox": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/results.json",
+      "sha256": "d8c77bc6651c01817ba92a6d332b989caffd484c227ae91bd2fcb98abdb3da20",
+      "stats": {
+        "startTime": "2026-11-10T12:24:58.837Z",
+        "duration": 118904.827,
+        "expected": 60,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "source_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "exit_code": 0
+    },
+    "registration": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-registration/results.json",
+      "sha256": "dbc5e33b99d38f353c177058621d43b7e009348c47a8498c505d39fb8b69d194",
+      "stats": {
+        "startTime": "2026-11-10T12:22:26.964Z",
+        "duration": 104303.53700000001,
+        "expected": 24,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "source_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "exit_code": 0
+    },
+    "authentication": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/results.json",
+      "sha256": "4db227f6975b42a1770f904bbd9845bd51ee82cb3f9ab59d1a467bc9c0ec3688",
+      "stats": {
+        "startTime": "2026-11-10T12:15:32.619Z",
+        "duration": 35077.455,
+        "expected": 21,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "source_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+      "exit_code": 0
+    },
+    "stepup": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+      "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146",
+      "stats": {
+        "startTime": "2026-11-10T12:14:07.673Z",
+        "duration": 46300.145,
+        "expected": 22,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "source_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+      "exit_code": 0
+    },
+    "focused": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-focused/results.json",
+      "sha256": "9ad49ee1280ad985e50fff96b69eae0e7302882f493bf3ac277a6263985783fc",
+      "stats": {
+        "startTime": "2026-11-10T12:12:17.343Z",
+        "duration": 14089.562,
+        "expected": 8,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "source_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+      "exit_code": 0
+    },
+    "real": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+      "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5",
+      "stats": {
+        "startTime": "2026-11-10T12:24:25.723Z",
+        "duration": 25755.38,
+        "expected": 4,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "source_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "exit_code": 0
+    },
+    "foundation": {
+      "source_sha": "35ef6c3b64881cf50833209b739f0e47a43f5679",
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "report": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/foundation/results.json"
+    },
+    "unit": {
+      "source_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "theme": 10,
+      "contracts": 21,
+      "failed": 0,
+      "skipped": 0,
+      "exit_code": 0,
+      "log": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/unit/current-final/unit.log"
+    },
+    "typescript": {
+      "source_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+      "exit_code": 0,
+      "folder": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-checks"
+    }
+  },
+  "counting": "187current component cases=Edge60+Firefox60+shared22+authentication21+registration24. Focused8 is a repeated subset. Real4 includes nativejourney; native14 overlapsfull224. Counts are executions, not a unique summedcoverage figure.",
+  "feedback_verification": {
+    "production_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+    "test_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+    "states": 8,
+    "axe_violations": 0,
+    "confirmed_findings": 0,
+    "addon": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/item-review/FEEDBACK-GREEN-ITEM-ADDON-20261110.json",
+    "root_inspected": [
+      "remove-error-1440.png",
+      "login-error-320.png"
+    ],
+    "scope": "Desktop/mobile actualcurrent render+keyboard; all8manuallyinspectedbyUI specialist. No blanketWCAGcertification."
+  },
+  "retained_failures": [
+    {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/feedback-red/results.json",
+      "source_sha": "312af8855526c8e557f5156957f5386237738b15",
+      "passed": 1,
+      "failed": 7,
+      "resolution": "Narrowthree-path productioncorrection b0 andactual8/60/60GREEN atrecordedSHAs."
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/background-completion-wait/results.json",
+      "source_sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+      "passed": 59,
+      "failed": 1,
+      "resolution": "Three exactwaitsscopedtoactivedialog at745; originalcounter/bindingassertionspreserved. New60Edge/60FirefoxPASS."
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/webkit-real/results.json",
+      "passed": 2,
+      "failed": 1,
+      "resolution": "WindowsCurlportdoesnotenforceSameSiteStrict; canonicalassertionkept. NoTunnersecuritypolicychange; TODO-TUN-P2-017-WEBKIT001 remains."
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/real-cli-reporter-launch/playwright.log",
+      "tests_executed": 0,
+      "resolution": "PowerShellcommaargumentcorrectlyquoted; distinctactual4PASSreportretained. ThreePNGsincopiedfailedlauncherfolderarepreexisting/unbound,notfreshcaptures."
+    }
+  ],
+  "limits": [
+    "CurrentEdge60/Firefox60 andregistration24 execute at745; authentication21/shared22 atb0 have exact unchanged declared inputs. Foundation16 staysat35ef with unchanged sharedfixture inputs. Native224 remainsat0ef and recovery14at80a; currentC#unchanged80a→745.",
+    "Realreport has4PASS at745; native virtualauthenticator case is included in4 and is not counted twice. Physical hardware, nativeFirefox/Safari and production session policy are not certified.",
+    "Original historical map andRED7of8/b0backgroundwait59of60 reports remain retained. Current8feedbackcaptures and8regressions resolveclipping/focus; all17narrowperitemNAs convertedtoapplicablechecks.",
+    "WindowsPlaywrightWebKit actualStrictfailure retained withunchangedassertion andgoverned017followup; localtechnicalscope doesnotclaimproductionbrowsermatrixacceptance.",
+    "Axe0 isboundedautomation; recordedcontrastincompletes retain manualcontrastfacts. No blanketWCAGcertification, futureOAuth014 or allP2acceptance.",
+    "ScopedProductvisualconsent isactualuserapproval; manualFigma/Driveupdates remain owner-held andread-onlyforAI."
+  ],
+  "provenance": "Executing-agent scope-by-scope technical review, with actual UI specialist187checks/all8currentrenders and independent read-only native/source reviews. Root inspected corrected Remove1440/Login320, owning Figma/reference evidence and actual current reports. No new Product consent or independent human role is claimed.",
+  "security": {
+    "result": "PASS",
+    "files_inspected": 3859,
+    "sast_exit": 0,
+    "secrets_exit": 0,
+    "controls_changed": false,
+    "receipt_ref": "governance/evidence/TUN-P2-007-SECURITY-SCANS-20261110.json"
+  },
+  "native_ui_gates": [
+    {
+      "scope": "GLOBAL_UI",
+      "outcome": "PASS",
+      "covered_items": 21,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/global-ui-check.json",
+      "sha256": "c037014aa5c32980e7c644485dcb707ff535c516a423c5e8e8301afdb226b39f"
+    },
+    {
+      "scope": "TUN-P2-004",
+      "outcome": "PASS",
+      "covered_items": 8,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-004-ui-check.json",
+      "sha256": "f12c9896fbd4a016ed4afaea75e457f4fca01c9f531c8e6065c1a1accfc3212e"
+    },
+    {
+      "scope": "TUN-P2-005",
+      "outcome": "PASS",
+      "covered_items": 3,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-005-ui-check.json",
+      "sha256": "440030758b7313aba9bd9c55b989ef3fc21368ba026909bbf848142ddf7d0702"
+    },
+    {
+      "scope": "TUN-P2-006",
+      "outcome": "PASS",
+      "covered_items": 3,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-006-ui-check.json",
+      "sha256": "c7588f0683bf796c78ddf36ddac0680fcd08e907e32923e2537c322522e0f0de"
+    },
+    {
+      "scope": "TUN-P2-007",
+      "outcome": "PASS",
+      "covered_items": 9,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-007-ui-check.json",
+      "sha256": "cb8b97b0b7106d9fcb507cd4294b4ebcbd344e833731181d74f765227d86be92"
+    },
+    {
+      "scope": "TUN-P2-004-UI001",
+      "outcome": "PASS",
+      "covered_items": 8,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/ui001-rv004-ui-check.json",
+      "sha256": "86c2a402d7abb41ba9b8c9ee6bf58a510da8c8a8b763675aa4dba417944c53d1"
+    },
+    {
+      "scope": "TUN-P2-004-UI002",
+      "outcome": "PASS",
+      "covered_items": 8,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/ui002-rv004-ui-check.json",
+      "sha256": "1eb3e8b357c27dc7006b983a54c73358d70e6bd32987bae1635088d6caac11b1"
+    },
+    {
+      "scope": "TUN-P1-018",
+      "outcome": "PASS",
+      "covered_items": 2,
+      "evidence_commit_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p1-018-rv005-ui-check.json",
+      "sha256": "d920f998c68550d994917b028001862bdc84600fc7a111176b52e7b3f7f45596"
+    }
+  ],
+  "parent_foundation_gate": {
+    "scope": "TUN-P2-003",
+    "outcome": "READY",
+    "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-003-current-gate.json"
+  },
+  "final_engineering_review_ref": "governance/evidence/TUN-P2-007-FINAL-REVIEW-PROVENANCE-20261110.json"
+}

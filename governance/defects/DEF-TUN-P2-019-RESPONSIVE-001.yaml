@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-019-RESPONSIVE-001",
+  "work_item_id": "TUN-P2-019",
+  "classification": "UI_FIDELITY_DEFECT",
+  "severity": "SEV-3",
+  "status": "CLOSED",
+  "environment": "Responsive Admin qualification at56e7971c,768x1024",
+  "description": "The intermediate Content layout leaves the embedded User card160px wide; five controls extend43–46px beyond the card and are concealed by overflow. Configuration nested sidebars also compress editable fields to about106px despite passing viewport/axe checks. Reuse the approved stacked layout earlier and constrain/wrap narrow preview controls; preserve1440/390 reference layouts and all containment assertions. Engineering correction is verified by the committed per-item UI assessment and the28-item native PASS at3e5f0725; current UI source is503edd02 with inventory-only carrier37d06662. This closes the confirmed defect, not the full feature or production/release acceptance.",
+  "expected_behavior_ref": "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+  "evidence": [
+    "governance/evidence/TUN-P2-019-VALIDATION.json"
+  ],
+  "affected_versions": [
+    "56e7971c725499d403a308b427fe65cba6ab4c7d"
+  ],
+  "created_at": "2026-11-16T09:55:17Z",
+  "updated_at": "2026-11-16T19:09:11Z"
+}

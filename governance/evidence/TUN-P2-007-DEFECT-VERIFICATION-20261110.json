@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "result": "PASS_VERIFIED_REPAIRS",
+  "recorded_at": "2026-11-10T12:48:20.365Z",
+  "validated_source_carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+  "evidence_refs": [
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json",
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/case-catalog.json",
+    "governance/evidence/TUN-P2-007-UI-COMPLIANCE.json",
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/gates/p2-007-ui-check.json"
+  ],
+  "provenance": "Actual tests/nativegates and current source review; initial defects remain recorded with original descriptions. No waiver, humanrole impersonation or productionrelease approval.",
+  "defects": [
+    {
+      "id": "DEF-TUN-P2-007-DATA-001",
+      "result": "VERIFIED",
+      "remedy": "Additive primarypasskey and shared-operation migrations/model/immutable guards pass fresh/upgrade/rollback/compatibility tests; lifecycle and usage concurrency stay separate.",
+      "native_execution_sha": "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+      "actual_native_cases": [
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyMigrationTests.FreshMigrationMatchesCurrentModelAndInstallsAllImmutableGuards",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.NativeProofFinalAuthorityBoundaryRollsBackCounterUsageProofAndCeremony(expired: \"access\")",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.StepUpTests.MigrationRoundTripRestoresProofConstraintsAndHasNoPendingModelChanges",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.NativeProofFinalAuthorityBoundaryRollsBackCounterUsageProofAndCeremony(expired: \"policy\")",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.NativeProofFinalAuthorityBoundaryRollsBackCounterUsageProofAndCeremony(expired: \"session\")",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.OperationProofSourceAndCeremonyBindingAreImmutableAndUsageCannotAlterLifecycle",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.OperationProofMigrationRoundTripRestoresPriorGuardsAndAllRegisteredMigrations",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.IdentityFoundationTests.MigrationRoundTripOwnsAccountStateAndExcludesRawDob",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.AnotherKeysNativeUsageDoesNotInvalidateReviewedTargetLifecycle",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyMigrationTests.AdditiveUpgradePreservesExistingPasswordSessionAndNewOrdinarySignInWorks",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.NativeProofFinalAuthorityBoundaryRollsBackCounterUsageProofAndCeremony(expired: \"proof\")",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.ConcurrentSignedUsageSerializesCounterAndUsageWithoutAdvancingLifecycle",
+          "outcome": "Passed"
+        }
+      ],
+      "ui_evidence_ref": null
+    },
+    {
+      "id": "DEF-TUN-P2-007-UI-001",
+      "result": "VERIFIED",
+      "remedy": "Actual scopedV01–V06 consent, current21itemtechnicalreview and8nativeUI checks supply implementation/design evidence. Owner-held manual Figma backfill remains OPEN in DESIGN001 and is not falsely marked synchronized.",
+      "native_execution_sha": null,
+      "actual_native_cases": [],
+      "ui_evidence_ref": "governance/evidence/TUN-P2-007-UI-COMPLIANCE.json"
+    },
+    {
+      "id": "DEF-TUN-P2-007-SEC-001",
+      "result": "VERIFIED",
+      "remedy": "Typed actual owner eligibility/access bounds plus one final synchronous fresh decision after awaitedauthority checks prevent expiry/policy/session/proof rollover; rollback tests pass under both explicit session effects.",
+      "native_execution_sha": "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+      "actual_native_cases": [
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.EligibilityExpiryDuringTerminalPersistenceRollsBackCredentialSessionProofAndOutbox",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.FinalOperationAuthorizationChecksActualIntervalsAfterAllAuthorityAwaits(expired: \"eligibility\", effect: RevokeCredentialSessions)",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.NativeProofFinalAuthorityBoundaryRollsBackCounterUsageProofAndCeremony(expired: \"access\")",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.NativeProofFinalAuthorityBoundaryRollsBackCounterUsageProofAndCeremony(expired: \"policy\")",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.NativeProofFinalAuthorityBoundaryRollsBackCounterUsageProofAndCeremony(expired: \"session\")",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.FinalOperationAuthorizationChecksActualIntervalsAfterAllAuthorityAwaits(expired: \"eligibility\", effect: PreserveExistingSessions)",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.FinalOperationAuthorizationChecksActualIntervalsAfterAllAuthorityAwaits(expired: \"proof\", effect: PreserveExistingSessions)",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.FinalOperationAuthorizationChecksActualIntervalsAfterAllAuthorityAwaits(expired: \"access\", effect: RevokeCredentialSessions)",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.FinalOperationAuthorizationChecksActualIntervalsAfterAllAuthorityAwaits(expired: \"access\", effect: PreserveExistingSessions)",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.NativeProofFinalAuthorityBoundaryRollsBackCounterUsageProofAndCeremony(expired: \"proof\")",
+          "outcome": "Passed"
+        },
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.FinalOperationAuthorizationChecksActualIntervalsAfterAllAuthorityAwaits(expired: \"proof\", effect: RevokeCredentialSessions)",
+          "outcome": "Passed"
+        }
+      ],
+      "ui_evidence_ref": null
+    },
+    {
+      "id": "DEF-TUN-P2-007-UI-002",
+      "result": "VERIFIED",
+      "remedy": "Protected original SIGN_IN context recovers exact original request/ceremony/remember choice or safely requires new sign-in; no credential/session restoration. Native14andcurrentbrowser/reload cases pass.",
+      "native_execution_sha": null,
+      "actual_native_cases": [],
+      "ui_evidence_ref": "governance/evidence/TUN-P2-007-UI-COMPLIANCE.json"
+    },
+    {
+      "id": "DEF-TUN-P2-007-UI-003",
+      "result": "VERIFIED",
+      "remedy": "Immutable original start identity survives uncertainty and rate limit; current60case browser suite rejects replacement and blindreplay.",
+      "native_execution_sha": null,
+      "actual_native_cases": [],
+      "ui_evidence_ref": "governance/evidence/TUN-P2-007-UI-COMPLIANCE.json"
+    },
+    {
+      "id": "DEF-TUN-P2-007-UI-004",
+      "result": "VERIFIED",
+      "remedy": "Bootstrap and recovery share exact starting snapshot predicate; mismatched recovery cannot replace unresolved original ownership.",
+      "native_execution_sha": null,
+      "actual_native_cases": [],
+      "ui_evidence_ref": "governance/evidence/TUN-P2-007-UI-COMPLIANCE.json"
+    },
+    {
+      "id": "DEF-TUN-P2-007-UI-005",
+      "result": "VERIFIED",
+      "remedy": "Authoritative current passwordAvailable fact is projected independently of registration/copy; approved row renders onlywhenactuallyavailable. No synthetic password requirement.",
+      "native_execution_sha": null,
+      "actual_native_cases": [],
+      "ui_evidence_ref": "governance/evidence/TUN-P2-007-UI-COMPLIANCE.json"
+    },
+    {
+      "id": "DEF-TUN-P2-007-SEC-002",
+      "result": "VERIFIED",
+      "remedy": "Persisted credential refresh after accountlock prevents stale EF trackedsource between issuer/executor transactions; exact causal in-transaction self-removal remains valid. Deterministic source-race and rollback tests pass.",
+      "native_execution_sha": "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+      "actual_native_cases": [
+        {
+          "title": "Tunner.Identity.Persistence.Tests.PasskeyTests.SourceRevokedAfterNativeProofCommitCannotAuthorizeOwnerThroughTrackedCredentialCache",
+          "outcome": "Passed"
+        }
+      ],
+      "ui_evidence_ref": null
+    },
+    {
+      "id": "DEF-TUN-P2-007-UI-006",
+      "result": "VERIFIED",
+      "remedy": "Bodymargin0 restores fullbleed approved shell. Current1440/768/390/320 directentry andnavigation geometry assertions pass.",
+      "native_execution_sha": null,
+      "actual_native_cases": [],
+      "ui_evidence_ref": "governance/evidence/TUN-P2-007-UI-COMPLIANCE.json"
+    },
+    {
+      "id": "DEF-TUN-P2-007-UI-007",
+      "result": "VERIFIED",
+      "remedy": "Only Remove.feedback gains intrinsicheight. Normal500x330 retained; currentdesktopfeedback500x376 hasactions inside frame, mobilefits. RED1FAILthenGREENEdge/Firefoxregression andfreshcapturespass.",
+      "native_execution_sha": null,
+      "actual_native_cases": [],
+      "ui_evidence_ref": "governance/evidence/TUN-P2-007-UI-COMPLIANCE.json"
+    },
+    {
+      "id": "DEF-TUN-P2-007-UI-008",
+      "result": "VERIFIED",
+      "remedy": "Explicit caller-owned focus intent restores enabled logical recovery/signin action and resets onroute/abort. Current8regressions+60Edge/60Firefox and8freshcaptures preserve IDs/counters/disabled/unknown guards.",
+      "native_execution_sha": null,
+      "actual_native_cases": [],
+      "ui_evidence_ref": "governance/evidence/TUN-P2-007-UI-COMPLIANCE.json"
+    }
+  ]
+}

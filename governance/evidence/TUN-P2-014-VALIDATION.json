@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-014",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475",
+  "validated_commit_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475",
+  "post_commit_currentness_20261116": {"candidate_commit_sha": "98807ebe4bb7cb4e74b1aecf938a9edb8c243475", "prior_qualified_candidate_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c", "qualification_ref": "governance/evidence/TUN-P2-016-VALIDATION.json", "scope": "Additive internal lifecycle schema2 retains actual client actor and observed result in the same native transaction. Eight affected native lifecycle cases passed at7925bd1; their behavior paths are unchanged through98807eb. Current78 includes25 Product owner/native-store cases. Original Product81/shared59/UI127 executions retain their actual recorded SHAs; no full rerun or new Product consent is inferred."},
+  "phase": "SCOPED_PRODUCT_ACCEPTED_DONE",
+  "scoped_completion": {"recorded_at_utc":"2026-11-16T04:23:28Z","current_ready_source_sha":"ed5bd53e6c7103a80a8b9336823c27c6710ba2d9","current_ready_ref":"governance/evidence/p2-014-authorization-20261115/native-gates/ready-accepted-ed5bd53.json","ready_result":"READY, no failures; current UI gate and all required technical role reviews pass","lifecycle":"VALIDATION to PRODUCT_ACCEPTANCE and PRODUCT_ACCEPTANCE to DONE both allowed by native transition checks; explicit user acceptance retained in TUN-P2-014-PRODUCT-ACCEPTANCE.json","boundary":"P2-014 scoped foundation only. Tested/validated source98807eb and all original execution identities are retained. No whole-P2, production activation, protected-main merge or release approval is inferred."},
+  "product_acceptance": {"result": "ACCEPTED_BY_AUTHORIZED_PRODUCT_OWNER", "evidence_ref": "governance/evidence/TUN-P2-014-PRODUCT-ACCEPTANCE.json", "accepted_ready_gate_source_sha": "697378bc9dcb015b5d7fe403cc64f5230cda077e", "closure": "Current native and lifecycle checks remain required; no protected-main, production or release approval is inferred."},
+  "engineering_readiness": {
+    "outcome": "READY",
+    "actual_gate_source_sha": "697378bc9dcb015b5d7fe403cc64f5230cda077e",
+    "exit_code": 0,
+    "failures": [],
+    "evidence_ref": "governance/evidence/p2-014-authorization-20261115/native-gates/TUN-P2-014-ready-final.json",
+    "evidence_sha256": "2706abc664432a4b1de559963a410a415ffd0dedfa4c0d9bee5bf375c2480052",
+    "role_review_index_ref": "governance/evidence/TUN-P2-014-ROLE-REVIEWS.json",
+    "current_ui_gates": "004:8 items;005:3;006:3;007:9;008:17;014:10. Each actual scoped gate PASS with no failures; overlapping item counts are not distinct screens.",
+    "scope_boundary": "Engineering readiness only. Original failed invocation/initial readiness receipts remain preserved. Current source is qualified by the separately attributed actual runs; no new full legacy rerun, Product acceptance, protected-main merge or release is inferred."
+  },
+  "shared_stepup_qualification": {
+    "source_commit_sha": "a4bd89fd46588c20eed7bfc25d13c0aa536859a4",
+    "result": "PASS_81_DISTINCT_NATIVE_CASES_OVER_THREE_RUNS",
+    "runs": [
+      {"run_id":"ea41289b281a414ba89135be867149fe","executed":67,"passed":67,"failed":0,"not_executed":0,"exit_code":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true},
+      {"run_id":"df91c48ea6094af487e952678626cbc1","executed":12,"passed":12,"failed":0,"not_executed":0,"exit_code":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true},
+      {"run_id":"f6839713138a4a45846a3483f789898b","executed":2,"passed":2,"failed":0,"not_executed":0,"exit_code":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true}
+    ],
+    "verification": "Actual raw TRX union:81 results,81 distinct test names,81 Passed,0 other outcomes. Final receipts copied byte-for-byte to governance/evidence/p2-014-authorization-20261115/native/<run_id>/{launch.json,summary.json,product-authorization.trx}; original local artifacts retained. Not a single81-case invocation. Borrowed browser PostgreSQL state preserved; no image changes.",
+    "coverage": "All prior67 Product cases plus14 operation-proof cases: real password readiness, lost response, explicit Allow, native redemption, same-transaction single consumption and rollback, exact binding and current-factor/authority rejection, conflicting owner, denial after proof, passive requests, late assurance drift, proof-bounded code and separately qualified refresh preserving authentication claims.",
+    "browser_source_commit_sha": "ba6acb91f04eff925b58417f89b742e201744d2b",
+    "browser": [
+      {"executed":54,"passed":54,"failed":0,"skipped":0,"flaky":0,"raw_ref":"artifacts/p2-014-authorization-20261115/proof-browser-ba6acb9-integrated-results.json"},
+      {"executed":41,"passed":41,"failed":0,"skipped":0,"flaky":0,"raw_ref":"artifacts/p2-014-authorization-20261115/proof-ordinary-browser-ba6acb9-results.json"}
+    ],
+    "browser_boundary": "Actual Edge production UI with controlled BFF responses; native HTTPS/PostgreSQL runs are separate. Browser-owned application/test source unchanged since ba6acb9, verified against a4bd89f. Includes approved shared proof methods, exact-owner readiness, cancellation/focus, response loss, keyboard/axe and1440/390/320 layouts; ordinary COMPLETED/recovery delivery contracts remain covered.",
+    "confirmed_corrections": "ed844c7 validates against the actual decision clock while normalizing persisted consumption time only, fixing tracked LastSeenAt submicrosecond rejection; same-transaction proof tests remain intact. a4bd89f converts the specific stale assurance-policy version exception into controlled denial instead of500. Synthetic fixture fixes publish the required verification key and use globally unique unrelated-owner policy versions. All temporary diagnostics removed. Original failed receipts retained.",
+    "builds": "Current81-case C# assembly compiles with0 warnings/errors; installed TypeScript check and User Vite production build PASS. Existing Vite native-config and optional font warnings retained. No dependency changes; qualified advisory inputs reused.",
+    "affected_native_regression": {
+      "source_commit_sha":"4557422eab5bd235af497eeace6101666e36d511",
+      "run_id":"9ae1983204634da79c400be31657489d",
+      "ordinary_distinct_cases":59,"ordinary_passed":59,
+      "whole_invocation":{"executed":60,"passed":59,"failed":1,"accepted":false,"exit_code":1,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true},
+      "coverage":"StepUpTests38 plus StepUpBrowserTests21: ordinary native validation, consumption, expiry, replay, concurrent use, rollback, registration, exact owner dispatch, CSRF and COMPLETED recovery. Raw TRX subset independently inspected:59 distinct names and59 Passed. The invocation itself did not pass.",
+      "failed_case":"Added HTML guard test attempted200 before protected Resume made its pointer ready. Production correctly returned302. Test sequence corrected without changing application or relaxing guards.",
+      "corrected_guard":{"source_commit_sha":"ac80a710cc5183a0973fc3c6a01d91f68fabffef","run_id":"7137eaf5b86b4ad9b422e44e73b47ad5","executed":1,"passed":1,"failed":0,"not_executed":0,"exit_code":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true},
+      "fixture_boundary":"Existing finite-owner fixture/constructors preserved. Explicit qualified local profile delegates to the existing exact cached-image, engine, loopback, label and cleanup guards; no pull or new test runner. Initial incompatible two-class fixture edit failed compilation, was corrected and recompiled with0 warnings/errors. Premature old-assembly runbfa6800297e54148a6529b41ed6fc675 was stopped by exact PID tree, executed0 and is not passing evidence."
+    },
+    "source_currentness":"Application src and web/apps/user unchanged from a4bd89f through ac80a71. Later changes are qualified test-fixture/HTML assertions and explicit UI inventory ownership; actual execution sources remain recorded separately. Prior factor-specific native validation is reused only for unchanged branches, not claimed as a new execution.",
+    "limits": "Per-item UI/source-binding gates, compatibility readiness and Product acceptance remain pending. No production policy, protected-main merge or release. Signed Product delivery is conditional on an enabled integration contract; none is enabled in this scope, and no delivery/acknowledgement claim is made."
+  },
+  "pre_stepup_integrated_regression": {
+    "source_commit_sha":"dd35eace69b99bfe443a296f876d466aace84856",
+    "run_id":"659739ebf2b747d5a67365a53a9e582e","executed":67,"passed":67,"failed":0,"not_executed":0,"exit_code":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true,
+    "diagnostic":"The prior51-case runfba7b66e9b0c4b7ea68fd7d080fe77fc at e9443b3 executed51/passed50/failed1 during database provisioning with PostgreSQL53300 too many clients; the isolated case passed1/1 in run3ede52ea3edb47cfabe6694eb3d023bf. Disposing EF providers retained per-scenario implicit pools. dd35eac clears only each owned scenario connection-string pool after disposal, preserving shared fixtures/images and assertions. This full67-case run qualifies that correction; subsequent Shared StepUp changes require separate execution."
+  },
+  "stepup_authorization_ref":"governance/evidence/TUN-P2-014-STEPUP-INTEGRATION-AUTHORIZATION.json",
+  "product_review_increment": {
+    "result": "PASS_FOCUSED_INCREMENT_ONLY",
+    "source_commit_sha": "8ee80f542245e31e56d003bf34d02e136219d74d",
+    "native": {"run_id":"a70a881b290f45f9aeaecfbdd5b9b9f5","executed":16,"passed":16,"failed":0,"not_executed":0,"exit_code":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true},
+    "coverage": "Explicit Allow before grant/code redemption; Deny with original protocol state/private effect; switching without implicit sign-out; old pointer and old reference/new-generation replay rejection; exact current session/client/policy/publication/expiry; CSRF/tamper rejection; anonymous Product context and actual sign-in; concurrent identical Allow/opposite-decision/replay; changed/unavailable publication at final native output; exact denial publication attribution.",
+    "confirmed_defect_reproduction": {"source_commit_sha":"010764e3e4928e7b012e773a5f91a18dd2c8da11","run_id":"3fdf8126849149838c0ab5e2c5153b49","executed":4,"passed":0,"failed":4,"not_executed":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true,"fix":"8ee80f5 adds generation to decision binding, persists/validates exact denial digest and rechecks consumed approval before native output. Original assertions preserved."},
+    "initial_native_runs": [{"source_commit_sha":"ac5f4d078db33c9ebd517caf99b34df194501dc7","run_id":"08fa457af9424b7fb637567d7cd770f6","passed":2},{"source_commit_sha":"ac5f4d078db33c9ebd517caf99b34df194501dc7","run_id":"2503474fdd5a44f7bc14fadd6583e1b2","passed":10}],
+    "filter_diagnostic": {"run_id":"2a38d88144cb4be6ae172d48956c77ce","executed":0,"accepted":false,"reason":"Incorrect initial method-name filter selected no cases; count guard rejected it. Not a passing test run."},
+    "browser": {"source_commit_sha":"25412c084e0c386934610ad88f7be93b5f29b152","executed":31,"passed":31,"failed":0,"skipped":0,"flaky":0,"duration_milliseconds":37171.243,"raw_ref":"artifacts/p2-014-authorization-20261115/review-browser-25412c0-integrated-results.json","boundary":"Actual Edge production UI with controlled BFF responses:23 review cases plus8 continuation regressions. Native HTTPS/PostgreSQL evidence is separate."},
+    "affected_login_viewports": {"source_commit_sha":"010764e3e4928e7b012e773a5f91a18dd2c8da11","executed":3,"passed":3,"duration_milliseconds":11999.004,"raw_ref":"artifacts/p2-014-authorization-20261115/review-browser-010764e-login-results.json","reason":"Only affected Login1440/390/320 viewport cases rerun after matching approved stage padding; application UI source unchanged at8ee80f5."},
+    "browser_diagnostics": "First23-case attempt printed21 PASS/2 FAIL, then hung in restricted Vite teardown and was interrupted; no complete JSON receipt claimed. Fixed initial query-cleanup effect and an incorrect visible-box expectation for the existing empty aria-busy landmark; test gates now release in finally. Focused2 passed with verified owned-Vite manual teardown, then normal-privilege integrated31 exited cleanly. No test-runner redesign or security assertion removal.",
+    "rendered_evidence_directory": "artifacts/p2-014-authorization-20261115/ui-evidence",
+    "visual_comparison": "Actual authorization1440/390 and Product Login1440/390 inspected against consented014-V01–V03 pictures at matching viewports;320 uses approved shared responsive patterns. Removed extra Product detail row and matched stage padding. Existing approved provider variants and truthful availability states retained. Six production renders, keyboard order, no overflow/overlap, loaded assets and WCAG2.2 AA axe checks pass in browser cases. Final per-item native UI acceptance remains pending.",
+    "builds": "Identity module/test project compile with0 warnings/errors; installed TypeScript check and User Vite production build pass. Existing Vite native-config migration and optional GeistMono asset warnings retained, not suppressed.",
+    "independent_review": "Disclosed QA agent independently identified the three defects; reviewed010764e..8ee80f5 and confirmed their bounded remedies with no further confirmed defect. This is not final all-role or full-feature acceptance.",
+    "limits": "Shared operation-bound proof is excluded by current OIDC grant and separately requested. Broader integrated regression/conformance, propagation, per-item UI/native/compatibility acceptance and Product acceptance remain pending. No production configuration, protected-main merge or release."
+  },
+  "interaction_increment": {
+    "source_commit_sha": "dc8d0897807eae49f9dd65d37f94c8d3a43d74ae",
+    "result": "PASS_13_DISTINCT_INTERACTION_CASES_OVER_TWO_FOCUSED_RUNS",
+    "runs": [
+      {"run_id":"23bf5d86b98d4ddeae0b4909537725c3","executed":5,"passed":5,"failed":0,"not_executed":0,"exit_code":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true},
+      {"run_id":"e90b029f2e1749b397c0fe3e1961a6e0","executed":8,"passed":8,"failed":0,"not_executed":0,"exit_code":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true}
+    ],
+    "coverage": "Forced login and max_age, precise actual authentication time, one-microsecond older sibling rejection, policy-qualified ACR/AMR, passive errors, original request context and ID-token/refresh claim lineage. Subsequent Product review integration has not yet been runtime qualified."
+  },
+  "interaction_initial_diagnostic": {
+    "source_commit_sha": "c53b8880fe1f64c9c115122cdaf1a1c92e9b6cc5",
+    "run_id": "d6844a4fcf4a4bb697140b2f11e6ed69",
+    "executed": 12, "passed": 9, "failed": 3, "not_executed": 0, "timed_out": false,
+    "owned_containers_remaining": 0, "borrowed_preserved": true,
+    "diagnosis": "Two forced-fresh cases compared microsecond request receipt against framework IssuedUtc rounded to seconds. A precise local authentication instant is now retained in the existing protected ticket; public cookie timestamps stay unchanged and pure federation verification is not promoted to fresh upstream authentication. The code/refresh case exposed TestAccess generating a different effective interval on every clock change; the interaction-only fixture now forwards actual decisions but uses its explicit stable interval. Guards/assertions are preserved. Focused re-execution remains required."
+  },
+  "continuation_increment": {
+    "source_commit_sha": "25d060b06559b3c7e305bb664fc8043fa5c02382",
+    "result": "PASS_13_DISTINCT_CONTINUATION_CASES_OVER_TWO_RUNS",
+    "runs": [
+      {"run_id":"a2dd8098538f472796e7e503e3ffb23b","executed":12,"passed":12,"failed":0,"not_executed":0,"test_exit_code":0,"wrapper_accepted":false,"reason":"Filter unintentionally excluded RestoredRequestRerunsCurrentNativeClientPermissions; expected13 count guard correctly failed. Retained unchanged, not claimed as a13-case successful invocation."},
+      {"run_id":"61d3b9299bdd4e8bbf56ebc5c4fc7d23","executed":1,"passed":1,"failed":0,"not_executed":0,"test_exit_code":0,"wrapper_accepted":true,"reason":"Only the missing native-client revalidation case executed."}
+    ],
+    "verification": "Actual raw TRX union inspected:13 distinct names,13 Passed, no duplicates/skips/failures. Both runs no timeout, owned containers0 and borrowed browser DB preserved. Initial real roundtrip also passed1/1 at23432fc in run0d46b6bc9364445a90fc3e2f241360a5; it is not added to the distinct count.",
+    "browser": {"source_commit_sha":"25d060b06559b3c7e305bb664fc8043fa5c02382","result":"PASS","executed":8,"passed":8,"failed":0,"skipped":0,"flaky":0,"duration_milliseconds":14355.293,"raw_ref":"web/test-results/authentication/results.json","boundary":"Real Edge browser with mocked BFF responses; native HTTPS/PG journey is separate evidence, not one combined live browser-to-native claim."},
+    "limits": "Functional continuation increment only. Requested-control changes applied later require their own execution; explicit Product authorization UI and all-factor/common-proof integration remain incomplete."
+  },
+  "integrated_protocol_cohort": {
+    "result": "PASS_CODE_AND_LIFECYCLE_INCREMENT_ONLY",
+    "source_commit_sha": "d4adb167b10337d460225f4d50d75242b3b1f9c3",
+    "run_id": "46225b2e1ba84c9f9c418f8b747218d6",
+    "execution": { "executed": 25, "passed": 25, "failed": 0, "not_executed": 0, "exit_code": 0, "timed_out": false, "owned_containers_remaining": 0, "borrowed_preserved": true },
+    "summary_ref": "artifacts/p2-014-authorization-20261115/native-runtime-46225b2e1ba84c9f9c418f8b747218d6/summary.json",
+    "raw_trx_ref": "artifacts/p2-014-authorization-20261115/native-runtime-46225b2e1ba84c9f9c418f8b747218d6/product-authorization.trx",
+    "launch_ref": "artifacts/p2-014-authorization-20261115/native-runtime-46225b2e1ba84c9f9c418f8b747218d6/launch.json",
+    "coverage": "Original 14 code cases plus 11 lifecycle cases: refresh beyond code expiry, exact expiry and non-sliding rotation, replay, scope narrowing without ID token, client/scope denial, minimal introspection/current-owner denial, presented-token versus chain revocation, unknown-token RFC response, cleanup after ended browser eligibility/expired issuance policy, explicit denial-and-revocation effects and unchanged browser activity.",
+    "diagnostic_history": "First lifecycle run 75654ed8aeb74610950e6179d1414b91 at c374c8b executed11/passed3/failed8, with no timeout or remaining owned containers. Native URN token types were incorrectly compared with protocol hint names in production and two helpers. Two-file fix d4adb16; isolated refresh run 5242647ca55443e1b9f64bfdb0fec6de passed1/1 before this integrated25/25 run. No assertion weakening or disabled native check.",
+    "limits": "Actual committed-source runtime receipt. Full continuation/requested assurance, propagation, broader conformance/regression, compatibility closure and Product acceptance remain outstanding; no full-feature, production or release acceptance."
+  },
+  "dependency_advisory": {
+    "result": "PASS",
+    "source_commit_sha": "d4adb167b10337d460225f4d50d75242b3b1f9c3",
+    "elapsed_seconds": 84.1269545,
+    "unique_resolved_packages": 121,
+    "vulnerable_packages_reported": 0,
+    "sbom_ref": "artifacts/p2-014-authorization-20261115/supply-chain-d4adb16/tunner.spdx.json",
+    "provenance_ref": "artifacts/p2-014-authorization-20261115/supply-chain-d4adb16/tunner.provenance.json",
+    "boundary": "Existing utility; configured advisory services; nine-minute cutoff; no restore, dependency changes or publication. Nine input hashes retained. Preexisting unrelated dirty tree preserved and truthfully reported; unsigned local receipt, not release attestation."
+  },
+  "focused_code_cohort": {
+    "result": "PASS_FOCUSED_CODE_COHORT_ONLY",
+    "source_commit_sha": "44c861c75c08068542290e651006178569b10445",
+    "run_id": "cb3a6767efce470a83623edc6a22f506",
+    "execution": { "executed": 14, "passed": 14, "failed": 0, "not_executed": 0, "exit_code": 0, "timed_out": false, "owned_containers_remaining": 0, "borrowed_preserved": true },
+    "summary_ref": "artifacts/p2-014-authorization-20261115/native-runtime-cb3a6767efce470a83623edc6a22f506/summary.json",
+    "coverage": "Real HTTPS code exchange, nonce, replay, PKCE/client/redirect/permission rejection, Product/environment/scope/resource qualification, expiry/session denial, changed/unavailable owners and denial after artifact generation without token disclosure.",
+    "limits": "Focused committed-source receipt, not full-feature acceptance. Later behavior changes require focused revalidation; continuation, lifecycle, propagation and compatibility gates remain outstanding."
+  },
+  "first_increment": {
+    "result": "PASS_FIRST_NATIVE_EXCHANGE_ONLY",
+    "source_commit_sha": "b78719dd661bbc6a1419dae7532ef33b8f26fa19",
+    "run_id": "e6e1e883e89c47b9bb3218d4abdf76b2",
+    "execution": {
+      "executed": 1,
+      "passed": 1,
+      "failed": 0,
+      "not_executed": 0,
+      "exit_code": 0,
+      "timed_out": false,
+      "owned_containers_remaining": 0,
+      "borrowed_preserved": true
+    },
+    "summary_ref": "artifacts/p2-014-authorization-20261115/native-runtime-e6e1e883e89c47b9bb3218d4abdf76b2/summary.json",
+    "raw_trx_ref": "artifacts/p2-014-authorization-20261115/native-runtime-e6e1e883e89c47b9bb3218d4abdf76b2/product-authorization.trx",
+    "launch_ref": "artifacts/p2-014-authorization-20261115/native-runtime-e6e1e883e89c47b9bb3218d4abdf76b2/launch.json",
+    "coverage": [
+      "Actual User-cookie authenticated native form_post/S256 authorization and real HTTPS code redemption.",
+      "Native encrypted/signed access and identity artifacts validated for issuer, audience, signature and lifetime; private claims excluded.",
+      "Independently committed synthetic Relationship acknowledgement and canonical granted/private redeemed causal outbox evidence.",
+      "Code reuse rejected; test-owned Docker resources removed and borrowed browser database unchanged."
+    ],
+    "limits": "One actual integration fact only. No nonce-specific assertion yet, broad negative/concurrency/output-failure qualification, full continuation/assurance/refresh/introspection/revocation/propagation, shared compatibility closure, production qualification or Product acceptance. Artifacts remain implementation receipts until final committed evidence packaging."
+  },
+  "owned_behavior_paths": [
+    "Directory.Packages.props",
+    "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+    "docs/contracts/product-authorization-contract.md",
+    "src/Modules/Identity/ProductAuthorizationContracts.cs",
+    "src/Modules/Identity/ProductAuthorizationApplication.cs",
+    "src/Modules/Identity/AuthenticationProductAuthorization.cs",
+    "src/Modules/Identity/ProductAuthorizationServer.cs",
+    "src/Modules/Identity/ProductAuthorizationProtocol.cs",
+    "src/Modules/Identity/ProductAuthorizationLifecycleContracts.cs",
+    "src/Modules/Identity/ProductAuthorizationLifecycleApplication.cs",
+    "src/Modules/Identity/AuthenticationProductLifecycle.cs",
+    "src/Modules/Identity/ProductAuthorizationLifecycleProtocol.cs",
+    "src/Modules/Identity/ProductAuthorizationContinuation.cs",
+    "src/Modules/Identity/ProductAuthorizationContinuationContracts.cs",
+    "src/Modules/Identity/ProductAuthorizationContinuationProtocol.cs",
+    "src/Modules/Identity/ProductAuthorizationInteractionContracts.cs",
+    "src/Modules/Identity/ProductAuthorizationInteractionApplication.cs",
+    "src/Modules/Identity/AuthenticationEndpoints.cs",
+    "src/Modules/Identity/AuthenticationApplication.cs",
+    "web/apps/user/authentication.tsx",
+    "web/apps/user/product-authorization.continuation.ts",
+    "src/Modules/Identity/ProductAuthorizationReviewContracts.cs",
+    "src/Modules/Identity/ProductAuthorizationReview.cs",
+    "src/Modules/Identity/ProductAuthorizationStepUp.cs",
+    "src/Modules/Identity/ProductAuthorizationStepUpContracts.cs",
+    "src/Modules/Identity/ProductAuthorizationStepUpOwnerRouter.cs",
+    "src/Modules/Identity/StepUpProductAuthorization.cs",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+    "src/Modules/Identity/StepUpContracts.cs",
+    "web/apps/user/step-up.tsx",
+    "web/apps/user/step-up.completion.ts",
+    "web/apps/user/step-up.passkey.ts",
+    "web/apps/user/step-up.totp.tsx",
+    "web/apps/user/step-up.federation.tsx",
+    "web/tests/authentication/product-authorization-proof.spec.ts",
+    "web/apps/user/product-authorization.api.ts",
+    "web/apps/user/product-authorization.tsx",
+    "web/apps/user/product-authorization.login.tsx",
+    "web/apps/user/product-authorization.css",
+    "web/apps/user/product-authorization.html",
+    "web/apps/user/vite.config.ts",
+    "web/apps/user/public/assets/product-origin-indigo.svg",
+    "web/apps/user/public/assets/product-origin-violet.svg",
+    "web/apps/user/public/assets/product-origin-footer-dot.svg",
+    "web/tests/authentication/product-authorization-review.spec.ts",
+    "docs/contracts/ui-inventory.json",
+    "tests/Tunner.Identity.Persistence.Tests/ProductAuthorizationProtocolTests.cs"
+    ,"tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs"
+  ],
+  "admission": {
+    "command": "tunner work context TUN-P2-014 --output artifacts/p2-014-authorization-20261115/context-in-progress",
+    "exit_code": 0,
+    "outcome": "CONTEXT_READY",
+    "context_verify": {
+      "exit_code": 0,
+      "outcome": "CURRENT",
+      "observed_at_utc": "2026-11-15T13:35:37Z"
+    },
+    "source_commit": "c0927e4",
+    "context_ref": "artifacts/p2-014-authorization-20261115/context-in-progress/manifest.json"
+  },
+  "compatibility_revisions": [
+    "P2-003-RV002",
+    "P2-010-RV009", "P2-013-RV001", "P2-004-UI001-RV010", "P2-004-UI002-RV010", "P1-018-RV013", "P2-003-RV003", "P2-013-RV002"
+  ],
+  "rd_ref": "governance/evidence/TUN-P2-014-RD-SOURCES.json",
+  "contract_ref": "docs/contracts/product-authorization-contract.md",
+  "scope": "Complete Product authorization and revocation contract integration. First vertical increment is real active-session native authorization-code/PKCE issuance/redemption. Login/registration continuation, assurance, refresh/introspection/revocation, current owner checks and enabled propagation remain required; first happy path cannot close the feature.",
+  "boundary": "Explicit qualified issuer/keys/client/registry/Relationship/policy inputs; missing providers deny activation. No production default or Product membership/entitlement/local-session authority. Existing Figma/Drive/FigJam remain read-only.",
+  "actual_feature_tests": ["first_increment", "focused_code_cohort", "integrated_protocol_cohort", "continuation_increment", "interaction_increment", "product_review_increment", "shared_stepup_qualification"],
+  "product_acceptance": "PENDING_PRODUCT_OWNER_ACCEPTANCE",
+  "exact_next_action": "Obtain genuine scoped Product acceptance for014, then run the normal lifecycle closure checks and refresh scoped context. Continue016 startup, native eligibility and notification/audit implementation while acceptance is pending. All eight compatibility revisions are CLOSED through actual allowed native checks; all six current UI gates and the final014 engineering gate pass. Preserve historical closures; whole-P2, production, protected-main merge and release remain separate.",
+  "technical_binding": {"candidate_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c", "qualification": "Qualified application and owned behavior at committed candidate; actual execution SHAs remain distinct in main validation. No behavior changes after the candidate. Metadata-only engineering validation; native readiness/closure and genuine Product acceptance remain separate.", "evidence_ref": "governance/evidence/TUN-P2-014-VALIDATION.json", "ui_gate_ref": "governance/evidence/p2-014-authorization-20261115/ui/native-ui-e45e31f.json"},
+  "native_ui_gate": {"result": "PASS", "covered_items": 10, "failure_count": 0, "exit_code": 0, "actual_source_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c", "evidence_ref": "governance/evidence/p2-014-authorization-20261115/ui/native-ui-e45e31f.json"}
+}

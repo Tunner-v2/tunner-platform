@@ -1,0 +1,57 @@
+$ playwright test && playwright test --config playwright.registration.config.ts
+[WebServer] (node:25680) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 16 tests using 1 worker
+
+(node:22504) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\browser\admin-contrast-review.spec.ts:2:1 › Admin shared field idle border at approved reference dimensions (1.4s)
+  ok  2 tests\browser\foundation.spec.ts:5:3 › user: source metrics, structural roles and font load (846ms)
+  ok  3 tests\browser\foundation.spec.ts:19:3 › user: keyboard focus, controlled typing and no implicit submit (838ms)
+  ok  4 tests\browser\foundation.spec.ts:27:3 › user: error descriptions and source-aligned focus (687ms)
+  ok  5 tests\browser\foundation.spec.ts:33:3 › user: publication refresh updates copy and provenance (717ms)
+  ok  6 tests\browser\foundation.spec.ts:5:3 › admin: source metrics, structural roles and font load (847ms)
+  ok  7 tests\browser\foundation.spec.ts:19:3 › admin: keyboard focus, controlled typing and no implicit submit (1.0s)
+  ok  8 tests\browser\foundation.spec.ts:27:3 › admin: error descriptions and source-aligned focus (785ms)
+  ok  9 tests\browser\foundation.spec.ts:33:3 › admin: publication refresh updates copy and provenance (790ms)
+  ok 10 tests\browser\foundation.spec.ts:38:1 › axe WCAG 2.2 AA reports no violations (1.7s)
+  ok 11 tests\browser\foundation.spec.ts:39:1 › narrow width reflows long content without clipping (806ms)
+  ok 12 tests\browser\foundation.spec.ts:45:1 › isolated surface roles and TailAdmin bridge survive side-by-side use (648ms)
+  ok 13 tests\browser\foundation.spec.ts:49:1 › fonts and rendering use only local assets and no persisted state (673ms)
+  ok 14 tests\browser\foundation.spec.ts:54:1 › nested Admin mode does not leak into either surrounding User control (664ms)
+  ok 15 tests\browser\foundation.spec.ts:60:2 › user: shared validation handles submit, blur, correction, focus and duplicate submission (2.8s)
+  ok 16 tests\browser\foundation.spec.ts:60:2 › admin: shared validation handles submit, blur, correction, focus and duplicate submission (2.6s)
+
+  16 passed (21.6s)
+[WebServer] (node:26820) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 22 tests using 1 worker
+
+(node:27240) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\registration\global-compliance.spec.ts:18:2 › all five canonical screens: direct entry refresh guard and responsive reference at 1440 (8.0s)
+  ok  2 tests\registration\global-compliance.spec.ts:31:2 › FORM-REGISTRATION empty invalid corrected and server-rejected states at 1440 (2.4s)
+  ok  3 tests\registration\global-compliance.spec.ts:41:2 › FORM-VERIFY-EMAIL empty format correction server rejection and guarded transition at 1440 (2.3s)
+  ok  4 tests\registration\global-compliance.spec.ts:50:2 › FORM-PERSONAL-INFORMATION required calendar safe correction preserved names and server errors at 1440 (2.6s)
+  ok  5 tests\registration\global-compliance.spec.ts:18:2 › all five canonical screens: direct entry refresh guard and responsive reference at 768 (7.3s)
+  ok  6 tests\registration\global-compliance.spec.ts:31:2 › FORM-REGISTRATION empty invalid corrected and server-rejected states at 768 (2.7s)
+  ok  7 tests\registration\global-compliance.spec.ts:41:2 › FORM-VERIFY-EMAIL empty format correction server rejection and guarded transition at 768 (2.5s)
+  ok  8 tests\registration\global-compliance.spec.ts:50:2 › FORM-PERSONAL-INFORMATION required calendar safe correction preserved names and server errors at 768 (2.6s)
+  ok  9 tests\registration\global-compliance.spec.ts:18:2 › all five canonical screens: direct entry refresh guard and responsive reference at 320 (7.3s)
+  ok 10 tests\registration\global-compliance.spec.ts:31:2 › FORM-REGISTRATION empty invalid corrected and server-rejected states at 320 (2.5s)
+  ok 11 tests\registration\global-compliance.spec.ts:41:2 › FORM-VERIFY-EMAIL empty format correction server rejection and guarded transition at 320 (2.3s)
+  ok 12 tests\registration\global-compliance.spec.ts:50:2 › FORM-PERSONAL-INFORMATION required calendar safe correction preserved names and server errors at 320 (2.8s)
+  ok 13 tests\registration\global-compliance.spec.ts:60:1 › browser history reconstructs server stages including duplicate path entries and restart (1.5s)
+  ok 14 tests\registration\global-compliance.spec.ts:67:1 › unauthorized purged and forged history stages redirect safely; query/hash never grant a screen or redirect (2.3s)
+  ok 15 tests\registration\registration.spec.ts:5:1 › registration reference geometry, local assets/fonts and no DOB or stored sensitive state (1.6s)
+  ok 16 tests\registration\registration.spec.ts:23:1 › confirmation and notice acceptance precede direct registration without age fields (1.0s)
+  ok 17 tests\registration\registration.spec.ts:30:1 › proof errors/version/resend lead to normal Personal Information and under18 completion without Product/session action (3.7s)
+  ok 18 tests\registration\registration.spec.ts:47:1 › policy-required consent uses trusted status and cannot be asserted by a browser checkbox (2.0s)
+  ok 19 tests\registration\registration.spec.ts:53:1 › uncertain registration recovers same identity and clears credentials without automatically resubmitting (1.0s)
+  ok 20 tests\registration\registration.spec.ts:59:1 › 320px layout remains accessible across registration, verification, normal profile, consent and completion (5.7s)
+  ok 21 tests\registration\registration.spec.ts:65:1 › expired proof disables verification and unavailable policy does not render a registration form (1.2s)
+  ok 22 tests\registration\registration.spec.ts:69:1 › uncertain Personal Information submission clears DOB and recovers without another profile POST (1.2s)
+
+  22 passed (1.2m)

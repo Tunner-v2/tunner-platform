@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-004-UI001-RV005",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "5bd82bfee7494513e9c9cd20deb7456f2cdda29d",
+  "validated_commit_sha": "5bd82bfee7494513e9c9cd20deb7456f2cdda29d",
+  "owned_behavior_paths": [
+    "docs/contracts/ui-inventory.json",
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+    "src/Modules/Identity/RegistrationApplication.cs",
+    "src/Modules/Identity/RegistrationEndpoints.cs",
+    "src/Modules/Identity/RegistrationPersonalInformation.cs",
+    "src/Modules/Identity/RegistrationRows.cs",
+    "src/Tunner.User.Bff/Tunner.User.Bff.csproj",
+    "tests/Tunner.Identity.Persistence.Tests/RegistrationBffTests.cs",
+    "web/apps/user/authentication.content.proposal.json",
+    "web/apps/user/authentication.css",
+    "web/apps/user/authentication.tsx",
+    "web/apps/user/content.proposal.json",
+    "web/apps/user/main.tsx",
+    "web/apps/user/passkeys.api.ts",
+    "web/apps/user/passkeys.content.proposal.json",
+    "web/apps/user/passkeys.css",
+    "web/apps/user/passkeys.tsx",
+    "web/apps/user/registration.css",
+    "web/apps/user/step-up.content.proposal.json",
+    "web/apps/user/step-up.css",
+    "web/apps/user/step-up.tsx"
+  ],
+  "actual_runtime_tested_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+  "evidence_refs": [
+    "governance/evidence/TUN-P2-010-VALIDATION.json",
+    "governance/evidence/TUN-P2-010-UI-COMPLIANCE.json",
+    "governance/evidence/p2-010-federation-20261112/native-734828a/private76.json"
+  ],
+  "scope": "Bounded compatibility for existing owners affected by P2-010. Preserve original closure and business rules. Actual native76/protocol17/resource6 execution remains734828a; UI and SQL cohorts retain original execution identities. Metadata candidate5bd82bf has11 actual focused carrier passes against unchanged734 build/source; native revision closure remains separately checked. No Product, live-provider, production, merge, release or whole-P2 acceptance.",
+  "candidate_carrier_ref": "governance/evidence/p2-010-federation-20261112/carrier-5bd82bf.json"
+}

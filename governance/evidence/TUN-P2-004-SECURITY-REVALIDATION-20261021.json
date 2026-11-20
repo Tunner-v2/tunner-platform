@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-004",
+  "result": "PASS_DELTA_VALIDATION",
+  "checked_at": "2026-10-21T17:03:53.620Z",
+  "tested_frontend_commit_sha": "fd58093d839aec7d55e7578b24a35a804e984eaf",
+  "previous_main_validated_sha": "bea01cfcd813bf8000a7e1c64b8c74492c4b4e31",
+  "method": "Git diff across all78 classified paths identifies only web/package.json and web/pnpm-lock.yaml. Fresh committed-source frontend build,31 unit,38 browser,zero-advisory audit and29 screenshot comparisons cover this nonvisual patch. The other76 owned paths retain accepted source bytes and prior runtime evidence.",
+  "changed_paths": [
+    "web/package.json",
+    "web/pnpm-lock.yaml"
+  ],
+  "preserved_owned_path_count": 78,
+  "prior_validation_ref": "governance/evidence/history/TUN-P2-004-before-Vite824-VALIDATION.json",
+  "historical_starter_ref": "governance/evidence/TUN-P2-004-BROWSER-STARTER-VALIDATION.json",
+  "historical_starter_disposition": "Retained unchanged as historical ccb82f6 evidence. Its10 owned paths are all in the78-path current main envelope. The already accepted bea01cf main proof includes later starter changes; none of those10 paths changed betweenbea01cf andfd58093. Do not present the old standalone receipt as a current second envelope with a contradictory SHA.",
+  "current_receipts": [
+    {
+      "path": "governance/evidence/ui/security-20261021/test-index.json",
+      "sha256": "bcfbeda5635111b2b6229ea340019c573c81636642999de8afcd195978c3dc46"
+    },
+    {
+      "path": "governance/evidence/ui/security-20261021/visual-comparison.json",
+      "sha256": "7a6787110594cbb58cdefc1a1a197310cc6bc1f995146a7a9746c6bc8513f594"
+    }
+  ],
+  "technical_review_ref": "governance/evidence/P1-018-RV002-ROLE-REVIEWS.json",
+  "authority_resolution": "Existing AMD0008/0009 source-binding and committed-evidence rules require current affected-scope proof. Consolidate current proof without removing any owned path, altering native gates, revising domain semantics, or inferring Product acceptance. Prior financial/compliance/content reviews remain unchanged because no domain or content source changed.",
+  "source_delta_receipt": "artifacts/security-remediation-20261020/p2-004-owned-delta.txt",
+  "boundary": "Work remains VALIDATION. No new backend/starter execution, whole-P2 completion, release, merge or deployment is claimed."
+}

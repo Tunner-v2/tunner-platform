@@ -1,0 +1,23 @@
+{
+  "source_head_sha": "5b8f13b18611a16fab13d6c635d216606dd9e4ba",
+  "application_state": "Unchanged committed passkeys.tsx; new regression test was uncommitted when RED executed.",
+  "test_file": "web/tests/passkeys/passkeys.spec.ts",
+  "test_title": "@regression Completed revocation reload verifies the exact result without false pending or another mutation",
+  "command": "node node_modules/@playwright/test/cli.js test --config playwright.passkeys.config.ts passkeys.spec.ts --grep 'Completed revocation reload verifies the exact result without false pending or another mutation' --reporter=list,json --output ../artifacts/p2-019-content-20261116/passkey-completed-reload-red-5b8f13b1/screenshots",
+  "working_directory": "web",
+  "report_output_environment": {
+    "PLAYWRIGHT_JSON_OUTPUT_NAME": "../artifacts/p2-019-content-20261116/passkey-completed-reload-red-5b8f13b1/results.json"
+  },
+  "exit_code": 1,
+  "passed": 0,
+  "failed": 1,
+  "skipped": 0,
+  "flaky": 0,
+  "suite_duration_ms": 12399.067,
+  "failure": "Completed revocation hard reload retained the pending message: expected zero matching elements, actual one.",
+  "owned_port_5193_listener_after_exit": 0,
+  "terminal_tool_chunks": [
+    "0bcbb6",
+    "41a908"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "review_id": "REV-P2-010-RV002-cyber-security-engineer",
+  "work_item_id": "P2-010-RV002",
+  "role": "cyber-security-engineer",
+  "skill_id": "cyber-security-engineer",
+  "skill_version": "1.0.0",
+  "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+  "result": "PASS",
+  "status": "PASS",
+  "reviewed_at": "2026-11-13T18:31:54Z",
+  "authority_refs": [
+    "docs/authority/current-authority.json",
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+    "docs/authority/current/development/08_Security_Privacy_Compliance_and_Global_Market_Governance.md",
+    "docs/authority/current/development/29_Privacy_Data_Lifecycle_and_Processing_Governance_FRD.md",
+    "docs/authority/current/development/33_Production_Readiness_Compliance_and_Release_Gates.md"
+  ],
+  "context_artifacts": [
+    "governance/revisions/P2-010-RV002.yaml",
+    "governance/evidence/P2-011-COMPATIBILITY-SCOPE.json",
+    "docs/development/P2_011_RECOVERY_REFINEMENT.md",
+    ".agent/skills/cyber-security-engineer/SKILL.md"
+  ],
+  "evidence_refs": [
+    "governance/evidence/p2-011-recovery-20261112/native-579c274/build-binding.json",
+    "governance/evidence/p2-011-recovery-20261112/native-579c274/private109.json",
+    "governance/evidence/p2-011-recovery-20261112/native-579c274/private109-summary.json",
+    "governance/evidence/p2-011-recovery-20261112/native-579c274/protocol-qualification.json",
+    "governance/evidence/p2-011-recovery-20261112/native-579c274/protocol-summary.json",
+    "governance/evidence/p2-011-recovery-20261112/native-579c274/resource-qualification.json",
+    "governance/evidence/p2-011-recovery-20261112/native-579c274/resource-details.json",
+    "governance/evidence/p2-011-recovery-20261112/native-579c274/resource-summary.json",
+    "governance/evidence/p2-011-recovery-20261112/native-579c274/sql13.json",
+    "governance/evidence/p2-011-recovery-20261112/native-579c274/sql13-summary.json",
+    "governance/evidence/P2-010-RV002-VALIDATION.json",
+    "governance/evidence/TUN-P2-011-VALIDATION.json",
+    "governance/defects/DEF-TUN-P2-011-008.yaml",
+    "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json",
+    "governance/evidence/p2-010-federation-20261112/final-security-734828a.json",
+    "governance/evidence/p2-010-federation-20261112/native-734828a/tunner.spdx.json",
+    "governance/evidence/p2-010-federation-20261112/native-734828a/tunner.provenance.json"
+  ],
+  "findings": [
+    "Bounded cyber-security-engineer AI review by Codex agent /root/p2_011_governed_qa. This agent authored focused P2-011 tests and fixture corrections; the review independently inspects root-executed receipts and source/hash lineage. It does not represent independent human segregation of duties, Product acceptance or an execution by this reviewer. No source, test, authority or audited evidence was changed for this review.",
+    "SCOPED CURRENTNESS VERIFIED: tested native source remains 579c2742c5c4c59a5bcf7e92610d7de32078714a, build binding 8d9f64e1a963add4806a99ef1168bda458192bd19bf77775543874ffc6f931b3. Independently matched the revision's exact four ordered owned paths to the binding input Git blobs, tested-commit blobs, current Git blobs and current raw SHA256 values. All match. The two scopes cover seven unique paths; no full 556-input or new metadata-SHA execution equivalence is claimed.",
+    "Federation compatibility covers the Identity model snapshot, the existing FederationPrivateIntegrationTests MFA method, finite dispatcher and cases.json. The MFA method retains its public signature and all eight original assertions; additions are fixed checkpoints and bounded error classification. The registry preserves 109 unique cases and the relative order of all cases except the explicitly moved existing MFA case. No federation domain policy, verifier window or production owner behavior changed.",
+    "ROOT-EXECUTED RAW EVIDENCE VERIFIED: private109 and public SQL13 are accepted, exact current registry IDs are all true and failureCode is NONE. Protocol17 and resource6 summaries/qualification receipts pass on the same binding; private duration is 502.083 seconds and SQL duration is 67.054 seconds. Source-currentness, process closure, surface removal, reconciliation, no-log containment, exact-owned cleanup and borrowed PostgreSQL preservation pass. Capacity retains 110 fully migrated databases, 1200741794 database bytes plus 872415232 WAL bytes, below the unchanged 2GiB limit; this is finite-test capacity evidence.",
+    "Private release is limited to the explicitly selected PrivateRecovery fixture. Exact successful-provisioner leases, parsed owner connection serialization, generated identifier shape, current Docker owner identity, quoted target and post-drop absence are required. Pooling remains false, no FORCE or global pool cleanup is used, services dispose first and repeated disposal is idempotent. The once-only unregistered-name/postgres rejection preconditions and empty-lease requirement before each case PASS are exercised by the actual accepted 109-case receipt. PublicCapacity retains its 110 databases through measurement; default/canary/regular and borrowed/operator paths do not receive private release leases.",
+    "Historical failures remain separate: the late direct SQL53100 result confirmed database exhaustion; the later fixed lease-invalid result and synthetic no-database Npgsql representation probe isolated the cleanup representation defect. Neither case reordering nor an unexplained retry is treated as a causal fix. Current full109/SQL13 proof follows the bounded private lifecycle and canonicalization corrections; DEF-TUN-P2-011-008 is CLOSED from that proof. Prior failed, deadline and NOT_RUN receipts retain their original identities.",
+    "UI evidence remains the separate root-executed 2cd195a presentation32 plus synthetic route48 runs across 1440/768/390/320 viewports. Independently checked git diff for web/apps/user between 2cd195a and tested579c274: no changes. These 80 checks do not establish native+BFF browser integration, V04, live provider behavior, per-item UI acceptance, authoritative review producer or contact-independent admission qualification. P2-011 remains IN_PROGRESS; whole-feature, Product, production-policy and release acceptance are excluded.",
+    "Security source review found no actionable bounded finding: browser commands cannot supply an authoritative disposition or Support override; pure current owner projections bind exact case and full selected effects, controls and execution interval. Revalidation before and after SaveChanges, one-use result indexing and immutable SQL witnesses protect the owner transaction. Password/stamp effects create no login or unrelated factor/age/consent change, and reference-only restricted outbox records minimize disclosure. Populated downgrade protection precedes destructive schema steps.",
+    "DEPENDENCY REUSE VERIFIED, NOT FRESH ADVISORY: the retained November12 SPDX inventory contains119 packages; its SHA256 is f0aa3eccdfe316780633e4532de2440e28eda764a8e6c40b2ad7498f9ed75f4f and provenance SHA256 is 69755f68baad63e46abc47877f739825f0c79823b51d666c7f932a00899e991d. Independently checked all nine recorded checksum inputs against current bytes: zero mismatches. The 52.821-second advisory execution remains November12 evidence at734828a, not a new call, signed release attestation or permanent vulnerability clearance.",
+    "ROOT_TOOL_REPORTED scan provenance only: scoped secret/SAST results recorded in TUN-P2-011-VALIDATION and root handoffs are retained as root tool output. This reviewer did not rerun scanners, inspect operator credentials or claim persisted raw current scan logs, whole-repository security clearance, live-provider/DAST/container qualification or production activation."
+  ],
+  "blocking_findings": [],
+  "required_actions": [
+    "Root commits the six role records with the remaining required revision reviews and exact scoped validation, then runs native revision eligibility/transition/close-check gates. Preserve tested579c274 and UI2cd195a identities and all failed history; continue only eligible scopes without declaring P2-011, Product or release acceptance."
+  ],
+  "context_expansion_requested": false
+}

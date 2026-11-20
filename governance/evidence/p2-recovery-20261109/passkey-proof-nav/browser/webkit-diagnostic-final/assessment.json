@@ -1,0 +1,137 @@
+{
+  "status": "BOUNDED_DIAGNOSTIC_ASSESSMENT_NO_SECURITY_WAIVER",
+  "browser": "26.5",
+  "platform": "win32",
+  "actorOrigin": "https://localhost:24443",
+  "attackerOrigin": "http://127.0.0.1:60861",
+  "scenarios": [
+    {
+      "scenario": "ordinary-proof",
+      "actualHeaderAttributes": [
+        {
+          "label": "browser-response",
+          "pathname": "/authentication/sign-in",
+          "name": "__Host-Tunner.User.Session",
+          "httpOnly": true,
+          "secure": true,
+          "sameSiteStrict": false,
+          "sameSiteLax": true,
+          "sameSiteNone": false,
+          "deletion": false
+        },
+        {
+          "label": "browser-response",
+          "pathname": "/authentication/step-up/options",
+          "name": "__Host-Tunner.StepUp",
+          "httpOnly": true,
+          "secure": true,
+          "sameSiteStrict": true,
+          "sameSiteLax": false,
+          "sameSiteNone": false,
+          "deletion": false
+        }
+      ],
+      "preInterceptionProjection": {
+        "label": "immediately-after-ordinary-options-before-proof-or-route-fetch",
+        "cookies": [
+          {
+            "name": "__Host-Tunner.User.Session",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "None"
+          },
+          {
+            "name": "__Host-Tunner.StepUp",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "None"
+          }
+        ]
+      },
+      "strictCookieNamesFromActualHeaders": [
+        "__Host-Tunner.StepUp"
+      ],
+      "sameOriginPresence": {
+        "tunnerSession": true,
+        "stepUp": true,
+        "publicSyntheticLax": true
+      },
+      "crossSitePresence": {
+        "tunnerSession": true,
+        "stepUp": true,
+        "publicSyntheticLax": true
+      },
+      "positiveControlsValid": true,
+      "strictCookieOmission": "FAIL_STRICT_COOKIE_SENT_CROSS_SITE",
+      "scope": "Only cookies whose actual response header says Strict must be omitted. UserSession actually says Lax, so its top-level cross-site GET presence is permitted; synthetic public Lax is the independent positive control."
+    },
+    {
+      "scenario": "route-fetch-abort-proof",
+      "actualHeaderAttributes": [
+        {
+          "label": "browser-response",
+          "pathname": "/authentication/sign-in",
+          "name": "__Host-Tunner.User.Session",
+          "httpOnly": true,
+          "secure": true,
+          "sameSiteStrict": false,
+          "sameSiteLax": true,
+          "sameSiteNone": false,
+          "deletion": false
+        },
+        {
+          "label": "browser-response",
+          "pathname": "/authentication/step-up/options",
+          "name": "__Host-Tunner.StepUp",
+          "httpOnly": true,
+          "secure": true,
+          "sameSiteStrict": true,
+          "sameSiteLax": false,
+          "sameSiteNone": false,
+          "deletion": false
+        }
+      ],
+      "preInterceptionProjection": {
+        "label": "immediately-after-ordinary-options-before-proof-or-route-fetch",
+        "cookies": [
+          {
+            "name": "__Host-Tunner.User.Session",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "None"
+          },
+          {
+            "name": "__Host-Tunner.StepUp",
+            "httpOnly": true,
+            "secure": true,
+            "sameSite": "None"
+          }
+        ]
+      },
+      "strictCookieNamesFromActualHeaders": [
+        "__Host-Tunner.StepUp"
+      ],
+      "sameOriginPresence": {
+        "tunnerSession": false,
+        "stepUp": false,
+        "publicSyntheticLax": false
+      },
+      "crossSitePresence": {
+        "tunnerSession": false,
+        "stepUp": false,
+        "publicSyntheticLax": false
+      },
+      "positiveControlsValid": false,
+      "strictCookieOmission": "INCONCLUSIVE_POSITIVE_CONTROL_FAILED",
+      "scope": "Only cookies whose actual response header says Strict must be omitted. UserSession actually says Lax, so its top-level cross-site GET presence is permitted; synthetic public Lax is the independent positive control."
+    }
+  ],
+  "findings": [
+    "Ordinary un-intercepted StepUp options response actually has Secure/HttpOnly/SameSite=Strict. UserSession actually has Secure/HttpOnly/SameSite=Lax.",
+    "StepUp projects None before any route.fetch, in both independent actor contexts; interception is not the sole cause of that projection.",
+    "Ordinary context has valid same-origin and cross-site Lax controls and sends actual Strict StepUp cookie on the cross-site top-level click. It does not satisfy Strict omission in this Windows WebKit port.",
+    "Recovery context reports no outbound cookie headers even for a successful200 same-origin control; that observer is inconclusive, not evidence of omission.",
+    "This assessment derives required omission from actual header flags. The raw helper conformance boolean also tested Session absence and must not be used as a declaration that the actual Lax Session is required to omit. Raw observations are retained unchanged."
+  ],
+  "boundary": "No cookie values/passwords/codes persisted; no policy or header changes, assertion weakening, Safari/physical-device or WebKit security PASS."
+}

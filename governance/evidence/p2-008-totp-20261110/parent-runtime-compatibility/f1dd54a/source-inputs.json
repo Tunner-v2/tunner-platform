@@ -1,0 +1,1927 @@
+{
+  "schema_version": 1,
+  "status": "VERIFIED_SOURCE_IDENTITY_WITNESS",
+  "recorded_at": "2026-11-11T02:43:49.123Z",
+  "identity_actual_invocation_sha": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+  "architecture_actual_invocation_sha": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+  "observed_head": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+  "rows_count": 272,
+  "all_rows_git_object_equal_across_actual_invocations_and_working_tree": true,
+  "prior_265_input_manifest_ref": "governance/evidence/p2-008-totp-20261110/parent005006-compatibility/native-source-inputs.json",
+  "new_source_paths": [
+    "tests/Shared/NativeTotpCodeFixture.cs",
+    "tools/browser-testing/BrowserTestHost.cs",
+    "tools/browser-testing/BrowserTestTotp.cs",
+    "tools/browser-testing/BrowserTestTotpOracle.cs",
+    "tools/browser-testing/FiniteTotpBuildBinding.cs",
+    "tools/browser-testing/FiniteTotpCoordinator.cs",
+    "tools/browser-testing/FiniteTotpResources.cs"
+  ],
+  "boundary": "These272 rows witness source identity, not272 independently executed paths. Identity tests execute their own host and shared native fixture. The browser host is separately source-bound here without claiming an executed ordinary-host smoke or parent004/005/006 readiness.",
+  "rows": [
+    {
+      "path": "Directory.Build.props",
+      "identity_f1_blob": "ccc1679ea4a5b14c8219599c4ad5a4d047b89aa0",
+      "architecture_a933_blob": "ccc1679ea4a5b14c8219599c4ad5a4d047b89aa0",
+      "working_blob": "ccc1679ea4a5b14c8219599c4ad5a4d047b89aa0",
+      "sha256": "d2c60e4dc287b5c9095093d601dfe5790dfebc128044825e05e4126e7d580c4c"
+    },
+    {
+      "path": "Directory.Packages.props",
+      "identity_f1_blob": "59f3bfb360cc8c5b5074e2dcaf8ee646364580e7",
+      "architecture_a933_blob": "59f3bfb360cc8c5b5074e2dcaf8ee646364580e7",
+      "working_blob": "59f3bfb360cc8c5b5074e2dcaf8ee646364580e7",
+      "sha256": "f5a382659daa556590eed5adc1ddf69b818fb25abb48ec9f2fbad1daff1d3e7b"
+    },
+    {
+      "path": "Tunner.Platform.slnx",
+      "identity_f1_blob": "4639ea94294035daf121f82c73415beaaa1eafb0",
+      "architecture_a933_blob": "4639ea94294035daf121f82c73415beaaa1eafb0",
+      "working_blob": "4639ea94294035daf121f82c73415beaaa1eafb0",
+      "sha256": "31650e363a1a887547b7c06bde6341afc05dc8dc83c2f2ad3a2402caeb886251"
+    },
+    {
+      "path": "global.json",
+      "identity_f1_blob": "6916a33774630d06b6925a2350f0dcd11f276f9b",
+      "architecture_a933_blob": "6916a33774630d06b6925a2350f0dcd11f276f9b",
+      "working_blob": "6916a33774630d06b6925a2350f0dcd11f276f9b",
+      "sha256": "d303cb1266b0a3a0fadab5cc73ade7c75e3cbcbb09b336a6de9418ece4448090"
+    },
+    {
+      "path": "src/Modules/Accounts/AccountAgeCapabilities.cs",
+      "identity_f1_blob": "825194aff7d865e8555b2978eb293ec7e61580c8",
+      "architecture_a933_blob": "825194aff7d865e8555b2978eb293ec7e61580c8",
+      "working_blob": "825194aff7d865e8555b2978eb293ec7e61580c8",
+      "sha256": "588f59dd3e671fe9287e808d5af6d60dbbfe1016ad4539450087091c64f5f67b"
+    },
+    {
+      "path": "src/Modules/Accounts/AccountSnapshot.cs",
+      "identity_f1_blob": "7203863419fe4501ca57e9570f12c15205bfc200",
+      "architecture_a933_blob": "7203863419fe4501ca57e9570f12c15205bfc200",
+      "working_blob": "7203863419fe4501ca57e9570f12c15205bfc200",
+      "sha256": "ae2332ae9bf7a4a176a0da85c4a68247bf382013992e0ee8949798f6f91dfb66"
+    },
+    {
+      "path": "src/Modules/Accounts/AgeEligibilityEvaluator.cs",
+      "identity_f1_blob": "8934aa549cb523993c3d12ce293454c067231a46",
+      "architecture_a933_blob": "8934aa549cb523993c3d12ce293454c067231a46",
+      "working_blob": "8934aa549cb523993c3d12ce293454c067231a46",
+      "sha256": "16634bc2d602406b49d26294b232e459e681597dc9b16945fb72f6c7a995e316"
+    },
+    {
+      "path": "src/Modules/Accounts/Tunner.Accounts.csproj",
+      "identity_f1_blob": "6b512ec9245ec39fc1b7b533a704aa5d6434ca52",
+      "architecture_a933_blob": "6b512ec9245ec39fc1b7b533a704aa5d6434ca52",
+      "working_blob": "6b512ec9245ec39fc1b7b533a704aa5d6434ca52",
+      "sha256": "e6fcb8e1e93a724d47a829cffd19d47840a5eb088e9ace43f3a34bbaf1524b07"
+    },
+    {
+      "path": "src/Modules/Identity/AccountPersonalInformationApplication.cs",
+      "identity_f1_blob": "fe72ff5cecebb539b0f82d6ad8b4fe80bb5c48c6",
+      "architecture_a933_blob": "fe72ff5cecebb539b0f82d6ad8b4fe80bb5c48c6",
+      "working_blob": "fe72ff5cecebb539b0f82d6ad8b4fe80bb5c48c6",
+      "sha256": "568c9e0c58462de7b004b40965b36c8e0aefa2f4023b1c88342bb548c8dd883b"
+    },
+    {
+      "path": "src/Modules/Identity/AccountPersonalInformationContracts.cs",
+      "identity_f1_blob": "1906c3ac7c63cbf0a966c4500f200c521fb6c497",
+      "architecture_a933_blob": "1906c3ac7c63cbf0a966c4500f200c521fb6c497",
+      "working_blob": "1906c3ac7c63cbf0a966c4500f200c521fb6c497",
+      "sha256": "bd6345a4cb584289f1b2eb1660d5d9367355118b089ae8fdac322da2b549a16e"
+    },
+    {
+      "path": "src/Modules/Identity/AccountPersonalInformationRows.cs",
+      "identity_f1_blob": "c6c1d3c9796f26202d41e2440f537ab3cc8b034d",
+      "architecture_a933_blob": "c6c1d3c9796f26202d41e2440f537ab3cc8b034d",
+      "working_blob": "c6c1d3c9796f26202d41e2440f537ab3cc8b034d",
+      "sha256": "cb0e74cbff0bd05550f1e19dfd2aa06805c567e18fb40efdfa1339d5ff455295"
+    },
+    {
+      "path": "src/Modules/Identity/AssemblyInfo.cs",
+      "identity_f1_blob": "763d20e370042cf8e1ffb41751ff0ceba59b43c4",
+      "architecture_a933_blob": "763d20e370042cf8e1ffb41751ff0ceba59b43c4",
+      "working_blob": "763d20e370042cf8e1ffb41751ff0ceba59b43c4",
+      "sha256": "5000be29372650e883a39aeeec1a1e4809608dd2e2fa528486fb329ece23b4c0"
+    },
+    {
+      "path": "src/Modules/Identity/AssurancePolicy.cs",
+      "identity_f1_blob": "8d3a48477e8b09afe213c2d4e6def24e8e568e68",
+      "architecture_a933_blob": "8d3a48477e8b09afe213c2d4e6def24e8e568e68",
+      "working_blob": "8d3a48477e8b09afe213c2d4e6def24e8e568e68",
+      "sha256": "ee14ebf75195298efc0045b38706a351e8b0e3411d9779fc527e4eae4a051d8d"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationApplication.cs",
+      "identity_f1_blob": "b33f36a98f898143ee8a33f296db2639f611ca8b",
+      "architecture_a933_blob": "b33f36a98f898143ee8a33f296db2639f611ca8b",
+      "working_blob": "b33f36a98f898143ee8a33f296db2639f611ca8b",
+      "sha256": "c22887267d3eaf7a9ccf5391a32219602ca25504cda9a27829acf631b0332cb8"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationContracts.cs",
+      "identity_f1_blob": "c85c1e2597b0b3bdfe89d65e621753415b8d45b4",
+      "architecture_a933_blob": "c85c1e2597b0b3bdfe89d65e621753415b8d45b4",
+      "working_blob": "c85c1e2597b0b3bdfe89d65e621753415b8d45b4",
+      "sha256": "57773b68f8b41c2dcef18ff3ab0f74ff5b9d91c93da5c1dbcbfbdd8347729bf3"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "identity_f1_blob": "e2bb76e34c2741413fdc21c906ff9800c17f2bcd",
+      "architecture_a933_blob": "e2bb76e34c2741413fdc21c906ff9800c17f2bcd",
+      "working_blob": "e2bb76e34c2741413fdc21c906ff9800c17f2bcd",
+      "sha256": "d6e513b1e5964dc14e364084bfcbaee1e51e910fd2f90821e8808e300e40fac2"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationMigrationSql.cs",
+      "identity_f1_blob": "f10b32dca51c6936d428c05851d7641b30a6edea",
+      "architecture_a933_blob": "f10b32dca51c6936d428c05851d7641b30a6edea",
+      "working_blob": "f10b32dca51c6936d428c05851d7641b30a6edea",
+      "sha256": "7eb75270edf3f77ab65666b1615f2e32fe6f06d72cb9e738fb717c2e79ffd530"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationPresentation.cs",
+      "identity_f1_blob": "c4528022bc07c204e328c3ff9c3da37620773ffb",
+      "architecture_a933_blob": "c4528022bc07c204e328c3ff9c3da37620773ffb",
+      "working_blob": "c4528022bc07c204e328c3ff9c3da37620773ffb",
+      "sha256": "9c04b451b64d4ed350036350e7802daf1ef0d386e170a0cab1c65645c67eb765"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationRows.cs",
+      "identity_f1_blob": "a4fd6c99fe9632a5c76533876a844db668104fa4",
+      "architecture_a933_blob": "a4fd6c99fe9632a5c76533876a844db668104fa4",
+      "working_blob": "a4fd6c99fe9632a5c76533876a844db668104fa4",
+      "sha256": "9858a31a91797de47205e9c7116d06029874f8403c178c07d6edb310bd18a7c6"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityEmail.cs",
+      "identity_f1_blob": "987737059106ea417b876e745f617cb5f585ea97",
+      "architecture_a933_blob": "987737059106ea417b876e745f617cb5f585ea97",
+      "working_blob": "987737059106ea417b876e745f617cb5f585ea97",
+      "sha256": "5a68a661d78ddbc0b37216eaf9ab21afe1ca4229016c93d9dc6f716f7b59c118"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityJsonCommand.cs",
+      "identity_f1_blob": "76cb994ecd8b995baef569978f5d0e8c95efcc81",
+      "architecture_a933_blob": "76cb994ecd8b995baef569978f5d0e8c95efcc81",
+      "working_blob": "76cb994ecd8b995baef569978f5d0e8c95efcc81",
+      "sha256": "f836a2046c1c264061919b20560f96c19276c7c27b71219eddb041f31726dbe9"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityMigrationSql.cs",
+      "identity_f1_blob": "6c2b6ffe0ff13f5beed1cfdb404dc4b76e2cd6c2",
+      "architecture_a933_blob": "6c2b6ffe0ff13f5beed1cfdb404dc4b76e2cd6c2",
+      "working_blob": "6c2b6ffe0ff13f5beed1cfdb404dc4b76e2cd6c2",
+      "sha256": "e11911449e22c38a41b2e02caaca0574223e59c5204fb629c95d54ea1906ff65"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityModelConfiguration.cs",
+      "identity_f1_blob": "67a2ee1624d56f08693e6f37cf61eee5c69f2057",
+      "architecture_a933_blob": "67a2ee1624d56f08693e6f37cf61eee5c69f2057",
+      "working_blob": "67a2ee1624d56f08693e6f37cf61eee5c69f2057",
+      "sha256": "a31e1d937723b142e12849d1bb9fac757c177f36a7cc14e5fc67d83cb6995efe"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+      "identity_f1_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+      "architecture_a933_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+      "working_blob": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+      "sha256": "99fddd1135de5e9bee8a0c898979e0e13050e6120d8600434f72c00f64f8ef1e"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityPersistenceDbContextFactory.cs",
+      "identity_f1_blob": "8cbdbd2b03c8eb571cc3cf4cc8aebeb6e123faed",
+      "architecture_a933_blob": "8cbdbd2b03c8eb571cc3cf4cc8aebeb6e123faed",
+      "working_blob": "8cbdbd2b03c8eb571cc3cf4cc8aebeb6e123faed",
+      "sha256": "29983cdca9f75670503ee87a42b11434ee67523fe587bed4e5f12085eb17e60c"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityPersistenceRegistration.cs",
+      "identity_f1_blob": "5c8699e94286a0dc86596065c4a2bebdcaed5203",
+      "architecture_a933_blob": "5c8699e94286a0dc86596065c4a2bebdcaed5203",
+      "working_blob": "5c8699e94286a0dc86596065c4a2bebdcaed5203",
+      "sha256": "e9be038a7de7c8a72531c238aacd696d51e197fd042890d4781bb578516de8d6"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityPersistenceTime.cs",
+      "identity_f1_blob": "20a280b63bfbc3d6c7afa70054908daed3e55c6a",
+      "architecture_a933_blob": "20a280b63bfbc3d6c7afa70054908daed3e55c6a",
+      "working_blob": "20a280b63bfbc3d6c7afa70054908daed3e55c6a",
+      "sha256": "c70e137c261cfe043bee5d66f114b86484c576c2f3a6e35185cffc43ee4422df"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityRows.cs",
+      "identity_f1_blob": "3bf1a9190694a83665c11dd937f5c43058df0325",
+      "architecture_a933_blob": "3bf1a9190694a83665c11dd937f5c43058df0325",
+      "working_blob": "3bf1a9190694a83665c11dd937f5c43058df0325",
+      "sha256": "5d61cff35f21c62bbd579e48f4d898c2045d6bff12f57db0087b990ce6e65ff1"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityWebAssets.cs",
+      "identity_f1_blob": "399e054f1b7d9f2373e4c4fb35b3ac2187c5619c",
+      "architecture_a933_blob": "399e054f1b7d9f2373e4c4fb35b3ac2187c5619c",
+      "working_blob": "399e054f1b7d9f2373e4c4fb35b3ac2187c5619c",
+      "sha256": "5e2ffcb4f61fe5a3afa875a8858b77d56470bd943efe2858c0e5e1235d172446"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.Designer.cs",
+      "identity_f1_blob": "815115986f5ba0bcef9a7f084aa7264a6e489dca",
+      "architecture_a933_blob": "815115986f5ba0bcef9a7f084aa7264a6e489dca",
+      "working_blob": "815115986f5ba0bcef9a7f084aa7264a6e489dca",
+      "sha256": "5decafcdbe27fe59496f81db17283de4f1c76720bfe6661a67e8826f73135a7c"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.cs",
+      "identity_f1_blob": "00afccea52471eb26f68600ee364b4f33ace37be",
+      "architecture_a933_blob": "00afccea52471eb26f68600ee364b4f33ace37be",
+      "working_blob": "00afccea52471eb26f68600ee364b4f33ace37be",
+      "sha256": "55337209f1849217ce0991656c0a84d398414a43e4cdfb070a484fab626aecea"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261016211325_P2Registration.Designer.cs",
+      "identity_f1_blob": "8a00592fbab05ff82e78ee7246a6193c5693c4cd",
+      "architecture_a933_blob": "8a00592fbab05ff82e78ee7246a6193c5693c4cd",
+      "working_blob": "8a00592fbab05ff82e78ee7246a6193c5693c4cd",
+      "sha256": "382f305309c64e69959b1ceed09300259c66ad79a44046ff13cba9537ad7be44"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261016211325_P2Registration.cs",
+      "identity_f1_blob": "ca51982e23496720ee776de2073e42d5350043ac",
+      "architecture_a933_blob": "ca51982e23496720ee776de2073e42d5350043ac",
+      "working_blob": "ca51982e23496720ee776de2073e42d5350043ac",
+      "sha256": "f47527cb9e389ef8d903bd4be63859bb6b0267c9318a4518496f10a531357715"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.Designer.cs",
+      "identity_f1_blob": "4b46874ac0b44515f0c3d332a91a213669c04fb9",
+      "architecture_a933_blob": "4b46874ac0b44515f0c3d332a91a213669c04fb9",
+      "working_blob": "4b46874ac0b44515f0c3d332a91a213669c04fb9",
+      "sha256": "24cff7ed74b7f56cb36c2df4fb7494b4f1e5dd518319c089cdc89847bbe6c5be"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.cs",
+      "identity_f1_blob": "c4db120eebb9b88506b1fceffa7bda860e824898",
+      "architecture_a933_blob": "c4db120eebb9b88506b1fceffa7bda860e824898",
+      "working_blob": "c4db120eebb9b88506b1fceffa7bda860e824898",
+      "sha256": "9109eaf89024aafffb07fb16f9f3c3fee2b0a506440f062505cc46def92d4f24"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261017195227_Pdr0011RegistrationOnboarding.Designer.cs",
+      "identity_f1_blob": "fb4e389a0f4e46967a453f37d2e7892262968a1f",
+      "architecture_a933_blob": "fb4e389a0f4e46967a453f37d2e7892262968a1f",
+      "working_blob": "fb4e389a0f4e46967a453f37d2e7892262968a1f",
+      "sha256": "fd3ae1ea1fa6f9f2d91ba766eda3f42a7f076e3088572ad95f2a21dd98320acb"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261017195227_Pdr0011RegistrationOnboarding.cs",
+      "identity_f1_blob": "c67d4295a8419e8224eaab93274edd96e5dfc33f",
+      "architecture_a933_blob": "c67d4295a8419e8224eaab93274edd96e5dfc33f",
+      "working_blob": "c67d4295a8419e8224eaab93274edd96e5dfc33f",
+      "sha256": "9681019ab9a019b9014533e9637dfcc112bf8e082a31ac189495436f70afa452"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261021174404_P2PasswordSessions.Designer.cs",
+      "identity_f1_blob": "80075b64adc2408cd97c8c34f914bc95cc5dd302",
+      "architecture_a933_blob": "80075b64adc2408cd97c8c34f914bc95cc5dd302",
+      "working_blob": "80075b64adc2408cd97c8c34f914bc95cc5dd302",
+      "sha256": "e75449dc139f6b0672610644b9f23edb603288ce0cb10053a06aaffd010883b5"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261021174404_P2PasswordSessions.cs",
+      "identity_f1_blob": "ddd668443fd463666624f9cf9c211da8ffafbc87",
+      "architecture_a933_blob": "ddd668443fd463666624f9cf9c211da8ffafbc87",
+      "working_blob": "ddd668443fd463666624f9cf9c211da8ffafbc87",
+      "sha256": "c5dbf95fe682c2f7f5133cd6fa46c5f6f4c8d95d9fb763fc5a2966a1e712e387"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261109033631_P2OperationStepUpProofs.Designer.cs",
+      "identity_f1_blob": "ef28bb63969cc7c8e24ff2c30815b5667f109c4c",
+      "architecture_a933_blob": "ef28bb63969cc7c8e24ff2c30815b5667f109c4c",
+      "working_blob": "ef28bb63969cc7c8e24ff2c30815b5667f109c4c",
+      "sha256": "5acec5f14958647b002f0a894aa67bb260820232ce096611b53cd3c58b37d398"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261109033631_P2OperationStepUpProofs.cs",
+      "identity_f1_blob": "45ad8ec9b8f0302c65ff31f2d2ed4785ec158c06",
+      "architecture_a933_blob": "45ad8ec9b8f0302c65ff31f2d2ed4785ec158c06",
+      "working_blob": "45ad8ec9b8f0302c65ff31f2d2ed4785ec158c06",
+      "sha256": "3b558b2ee829dab335545923a1eb598bbb722ef8d4e04ab9bc5cf85b90a472a2"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261109164622_P2PasskeyCeremonies.Designer.cs",
+      "identity_f1_blob": "6a395c4fa48a583cb310e5644da16ca4cd68ca3b",
+      "architecture_a933_blob": "6a395c4fa48a583cb310e5644da16ca4cd68ca3b",
+      "working_blob": "6a395c4fa48a583cb310e5644da16ca4cd68ca3b",
+      "sha256": "707e0ac4930fa99bfe91946f831332c6287672bb6ed0fd8981437db9b6e3e69a"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261109164622_P2PasskeyCeremonies.cs",
+      "identity_f1_blob": "d7e750e282a34129cebe11bf2834f752f424d185",
+      "architecture_a933_blob": "d7e750e282a34129cebe11bf2834f752f424d185",
+      "working_blob": "d7e750e282a34129cebe11bf2834f752f424d185",
+      "sha256": "dbb0acb15684b66800cec4eb77e53743732d22b06f78b778c2ea553b24134b3d"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261110092326_P2PasskeyOperationProofs.Designer.cs",
+      "identity_f1_blob": "fc6e018208cbc977d5301f76e202dc7773b7ab5c",
+      "architecture_a933_blob": "fc6e018208cbc977d5301f76e202dc7773b7ab5c",
+      "working_blob": "fc6e018208cbc977d5301f76e202dc7773b7ab5c",
+      "sha256": "460ddc2be1f4b976e0ffee7ba069f5f2ac18f094ea2fd94520985019983f22c3"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261110092326_P2PasskeyOperationProofs.cs",
+      "identity_f1_blob": "d3df2383c0eb612b106a1a74f45a44444faedb23",
+      "architecture_a933_blob": "d3df2383c0eb612b106a1a74f45a44444faedb23",
+      "working_blob": "d3df2383c0eb612b106a1a74f45a44444faedb23",
+      "sha256": "ec39f0b007f19834510600e7da6b483093e804e3ae5bfb5fbb9af451120fc103"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261110164421_P2TotpLifecycle.Designer.cs",
+      "identity_f1_blob": "e20362a6997ac47a30b4c434907437e7277630f7",
+      "architecture_a933_blob": "e20362a6997ac47a30b4c434907437e7277630f7",
+      "working_blob": "e20362a6997ac47a30b4c434907437e7277630f7",
+      "sha256": "ee45c1fdf2a0c1135e3df491a3848d9a354cfed8d8e1f9ede14496a723c09399"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261110164421_P2TotpLifecycle.cs",
+      "identity_f1_blob": "4d37cb15ff963c78c6b9f820352ce0610ce00992",
+      "architecture_a933_blob": "4d37cb15ff963c78c6b9f820352ce0610ce00992",
+      "working_blob": "4d37cb15ff963c78c6b9f820352ce0610ce00992",
+      "sha256": "fef2c040491e69026669b0e81f05805a54818137a54c0cb48311019ab93429bd"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+      "identity_f1_blob": "b79988b9d063b49d39d1e4396753f383c709688d",
+      "architecture_a933_blob": "b79988b9d063b49d39d1e4396753f383c709688d",
+      "working_blob": "b79988b9d063b49d39d1e4396753f383c709688d",
+      "sha256": "b76f1dd978d47d3e05488a13c4e7e0aa2a09d7ccf29bec683b5f4ce66bb0686d"
+    },
+    {
+      "path": "src/Modules/Identity/OpenBaoTotpSeedStore.cs",
+      "identity_f1_blob": "787c39683a7b4fe426a4a0148c8e4a09db19a6cc",
+      "architecture_a933_blob": "787c39683a7b4fe426a4a0148c8e4a09db19a6cc",
+      "working_blob": "787c39683a7b4fe426a4a0148c8e4a09db19a6cc",
+      "sha256": "7480a7e660e581c8010ba40c00a7ba747ce64cf45ddc37431ca39eb476f54e86"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyApplication.cs",
+      "identity_f1_blob": "dbcbfcf31fb5c9c45455a2e549e5f42e6b6d25c0",
+      "architecture_a933_blob": "dbcbfcf31fb5c9c45455a2e549e5f42e6b6d25c0",
+      "working_blob": "dbcbfcf31fb5c9c45455a2e549e5f42e6b6d25c0",
+      "sha256": "44fa23b30991386ce470ed31718da57189a8c9418f50d95bfc0a8a79d79542a4"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyContracts.cs",
+      "identity_f1_blob": "84d34da9071fedf238760904748704468e6b5f7f",
+      "architecture_a933_blob": "84d34da9071fedf238760904748704468e6b5f7f",
+      "working_blob": "84d34da9071fedf238760904748704468e6b5f7f",
+      "sha256": "8fc296902cb4d627547c4224351726c013836c76acaf82dc2dc485b3e6c0d9b1"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyEndpoints.cs",
+      "identity_f1_blob": "dd41f50b49e3d04af67e766852b49036868607f6",
+      "architecture_a933_blob": "dd41f50b49e3d04af67e766852b49036868607f6",
+      "working_blob": "dd41f50b49e3d04af67e766852b49036868607f6",
+      "sha256": "1b1ebf8169d1c1c806f51559c267a666171f7bc687de79cc3c831224227751af"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyMigrationSql.cs",
+      "identity_f1_blob": "2b4696d13a9a5eff2382a3d74357426b89ea1d5c",
+      "architecture_a933_blob": "2b4696d13a9a5eff2382a3d74357426b89ea1d5c",
+      "working_blob": "2b4696d13a9a5eff2382a3d74357426b89ea1d5c",
+      "sha256": "0c0aca130eab08a1dd170964e287381fcb93e5f25fb22872ab73cb1a9becad1d"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyOperationProofApplication.cs",
+      "identity_f1_blob": "e88da439bb9ede58996e65d5cbe65066b0a99f6b",
+      "architecture_a933_blob": "e88da439bb9ede58996e65d5cbe65066b0a99f6b",
+      "working_blob": "e88da439bb9ede58996e65d5cbe65066b0a99f6b",
+      "sha256": "8eb158758c2fd42126ba8e7ff7f50782bc2db6e07c434f8426021e0f2aa070c5"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyOperationProofMigrationSql.cs",
+      "identity_f1_blob": "4ed0aa92d32e3fe9696053a436e1a270189cde9a",
+      "architecture_a933_blob": "4ed0aa92d32e3fe9696053a436e1a270189cde9a",
+      "working_blob": "4ed0aa92d32e3fe9696053a436e1a270189cde9a",
+      "sha256": "4d109c899523686a8053c069504b1f18d0315eda33eae51df7a777a59056eb97"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyRows.cs",
+      "identity_f1_blob": "ecd01aa4c7aa790a8a173a0677845f2e67590722",
+      "architecture_a933_blob": "ecd01aa4c7aa790a8a173a0677845f2e67590722",
+      "working_blob": "ecd01aa4c7aa790a8a173a0677845f2e67590722",
+      "sha256": "874b816117404b52cfe98e37db219e6666e2453d8e082600246a5d90d867c160"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeySignInRecovery.cs",
+      "identity_f1_blob": "65ac0dbaf17bac8c60c57729a72ea883c83ed397",
+      "architecture_a933_blob": "65ac0dbaf17bac8c60c57729a72ea883c83ed397",
+      "working_blob": "65ac0dbaf17bac8c60c57729a72ea883c83ed397",
+      "sha256": "d696450803652a8a12fb3992cca81b23d24ad72a0b3867f79802f2910c5f0d6b"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationApplication.cs",
+      "identity_f1_blob": "abf71f970dca88d343f5f7b22ed40fc11cefea26",
+      "architecture_a933_blob": "abf71f970dca88d343f5f7b22ed40fc11cefea26",
+      "working_blob": "abf71f970dca88d343f5f7b22ed40fc11cefea26",
+      "sha256": "9b3478e60d31d55c25fe542ed8d3e622cc6cc7e73c1d08f02dc61deda1da44a7"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationContracts.cs",
+      "identity_f1_blob": "bb7309120bb6ec3fe45885a66e5451e020ce64b6",
+      "architecture_a933_blob": "bb7309120bb6ec3fe45885a66e5451e020ce64b6",
+      "working_blob": "bb7309120bb6ec3fe45885a66e5451e020ce64b6",
+      "sha256": "74178674eeb10b05be6201fed14ff92fb05c69b2b955f44f586c4cd4f74afac9"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationEndpoints.cs",
+      "identity_f1_blob": "2f64bd6a2b4c942887a5932c8500aa7ef303718c",
+      "architecture_a933_blob": "2f64bd6a2b4c942887a5932c8500aa7ef303718c",
+      "working_blob": "2f64bd6a2b4c942887a5932c8500aa7ef303718c",
+      "sha256": "6d74b388478d1314481b4420622cd583f1d66e809c5c71ef6e39c0ed71e1e7ba"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationPersonalInformation.cs",
+      "identity_f1_blob": "903542a505d6d7fec99ec7c80f6deb44056d995a",
+      "architecture_a933_blob": "903542a505d6d7fec99ec7c80f6deb44056d995a",
+      "working_blob": "903542a505d6d7fec99ec7c80f6deb44056d995a",
+      "sha256": "c59b02a7eb77620b57e5304b8bd17205601a7949d75bd1edfba121af2fb9e6b0"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationRows.cs",
+      "identity_f1_blob": "2ed53f1e4f40b2c5605a93ef381bc607a794d3e0",
+      "architecture_a933_blob": "2ed53f1e4f40b2c5605a93ef381bc607a794d3e0",
+      "working_blob": "2ed53f1e4f40b2c5605a93ef381bc607a794d3e0",
+      "sha256": "f5ba8b885d90bb0fd33b38eacf1e8521c2b95611ba950a69b00a404f320e6c59"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationWebContracts.cs",
+      "identity_f1_blob": "2d5abf765da9b51c735ff496140f9cd0c9c66ab0",
+      "architecture_a933_blob": "2d5abf765da9b51c735ff496140f9cd0c9c66ab0",
+      "working_blob": "2d5abf765da9b51c735ff496140f9cd0c9c66ab0",
+      "sha256": "1c385b8fcac72eb86a8a8ce09e4da11808fbc1de777a81b32992a7e0888c3f52"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpApplication.cs",
+      "identity_f1_blob": "6dcfd096c603ec5318d3c7f9a59f72c5212a0e7b",
+      "architecture_a933_blob": "6dcfd096c603ec5318d3c7f9a59f72c5212a0e7b",
+      "working_blob": "6dcfd096c603ec5318d3c7f9a59f72c5212a0e7b",
+      "sha256": "e80e497052b44deb2f9b3fef8181b1089060480f89cfa80ba98a72d30d58f119"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpBrowserContracts.cs",
+      "identity_f1_blob": "48030967eace07ffe281900766864ad0bd627cf8",
+      "architecture_a933_blob": "48030967eace07ffe281900766864ad0bd627cf8",
+      "working_blob": "48030967eace07ffe281900766864ad0bd627cf8",
+      "sha256": "9d9f14bb7fcb573f769dca1949eda222c947b3c3f510a146ae44ad7a5e344933"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+      "identity_f1_blob": "8f7bf101045edef2f4ff88fa6cc62dcbacffb3d1",
+      "architecture_a933_blob": "8f7bf101045edef2f4ff88fa6cc62dcbacffb3d1",
+      "working_blob": "8f7bf101045edef2f4ff88fa6cc62dcbacffb3d1",
+      "sha256": "491a34b2e740cf4940dbafabb6da62deb6e39375b82cdf8afe50d43ec17040ed"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpContracts.cs",
+      "identity_f1_blob": "0b3d478a21bcad375924c95aaa151d137d61b9f7",
+      "architecture_a933_blob": "0b3d478a21bcad375924c95aaa151d137d61b9f7",
+      "working_blob": "0b3d478a21bcad375924c95aaa151d137d61b9f7",
+      "sha256": "a1a139b32ed70ac6ae7d88a237d07fd2fc72b8a83594c377cf92afed7f7988eb"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpOutcomes.cs",
+      "identity_f1_blob": "23c81408f3998b3bd8f93e90a5029eebcc530087",
+      "architecture_a933_blob": "23c81408f3998b3bd8f93e90a5029eebcc530087",
+      "working_blob": "23c81408f3998b3bd8f93e90a5029eebcc530087",
+      "sha256": "8508200be4f34b781f94a1db5c8273e8558ba2775aba03f8ab88b2e908c1af2f"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpPasskeyBrowserEndpoints.cs",
+      "identity_f1_blob": "0fd852523b30f59337ed5aafc685aaa23f1e3881",
+      "architecture_a933_blob": "0fd852523b30f59337ed5aafc685aaa23f1e3881",
+      "working_blob": "0fd852523b30f59337ed5aafc685aaa23f1e3881",
+      "sha256": "b4f78f3d90801418ef5d2245696a9902a97654f83950e5e3bd4dfa70f6c801f0"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpRows.cs",
+      "identity_f1_blob": "f0c88429d086fada2c6c579a4e1b539c57fac4d2",
+      "architecture_a933_blob": "f0c88429d086fada2c6c579a4e1b539c57fac4d2",
+      "working_blob": "f0c88429d086fada2c6c579a4e1b539c57fac4d2",
+      "sha256": "274b05fb6b64eba582b8134fc12baefbbc9d3aedf011dd848fe3d086da0083bb"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs",
+      "identity_f1_blob": "39d6cd455e2cca0ede757098d723d1c534a2f2c1",
+      "architecture_a933_blob": "39d6cd455e2cca0ede757098d723d1c534a2f2c1",
+      "working_blob": "39d6cd455e2cca0ede757098d723d1c534a2f2c1",
+      "sha256": "7e33cae39f2b0bac7dc4a63de5471275a97b57eb55e2b8589f22a788690b0175"
+    },
+    {
+      "path": "src/Modules/Identity/TotpApplication.cs",
+      "identity_f1_blob": "2ad4928ff62a33f614969a57df9c5217eb5163fc",
+      "architecture_a933_blob": "2ad4928ff62a33f614969a57df9c5217eb5163fc",
+      "working_blob": "2ad4928ff62a33f614969a57df9c5217eb5163fc",
+      "sha256": "d212dfa6ce4c9050fb857b72343b89073911bc88c9ff218e63215f441a5100cb"
+    },
+    {
+      "path": "src/Modules/Identity/TotpAuthenticationAuthority.cs",
+      "identity_f1_blob": "f852f5b1996b2ca93c7128f2d7f4aa1657efa425",
+      "architecture_a933_blob": "f852f5b1996b2ca93c7128f2d7f4aa1657efa425",
+      "working_blob": "f852f5b1996b2ca93c7128f2d7f4aa1657efa425",
+      "sha256": "8474f7a96f8cb99567d59d104c3a6d35a71a1e12edc2c440a99c139cbda99328"
+    },
+    {
+      "path": "src/Modules/Identity/TotpContracts.cs",
+      "identity_f1_blob": "704bdca320a3693365afd872628a21e65d4a0b9d",
+      "architecture_a933_blob": "704bdca320a3693365afd872628a21e65d4a0b9d",
+      "working_blob": "704bdca320a3693365afd872628a21e65d4a0b9d",
+      "sha256": "c2274e9dcadec8394c52b52b2d6af88b4b4dff4e92a4678229762ad771b73dd3"
+    },
+    {
+      "path": "src/Modules/Identity/TotpEndpoints.cs",
+      "identity_f1_blob": "e3e5d257ac52f5514d7b50b3bce6b494f8d4e73d",
+      "architecture_a933_blob": "e3e5d257ac52f5514d7b50b3bce6b494f8d4e73d",
+      "working_blob": "e3e5d257ac52f5514d7b50b3bce6b494f8d4e73d",
+      "sha256": "de2f4ede87c8b2127e83a451b2018ff7186c07ce53275a4aa3ea691221e781a4"
+    },
+    {
+      "path": "src/Modules/Identity/TotpMigrationSql.cs",
+      "identity_f1_blob": "3ba8c8ed32531e9c86c8b76394b32b077a7c1341",
+      "architecture_a933_blob": "3ba8c8ed32531e9c86c8b76394b32b077a7c1341",
+      "working_blob": "3ba8c8ed32531e9c86c8b76394b32b077a7c1341",
+      "sha256": "da4b8a4f891037ec864614acf3548aa10f5f52568af6626ce19c8c7387958edc"
+    },
+    {
+      "path": "src/Modules/Identity/TotpNativeVerifier.cs",
+      "identity_f1_blob": "19683f384c698453db529f96a9e1081e42fd946a",
+      "architecture_a933_blob": "19683f384c698453db529f96a9e1081e42fd946a",
+      "working_blob": "19683f384c698453db529f96a9e1081e42fd946a",
+      "sha256": "a55332e5bc5b2b43305215bbaf4ea4565ac67f4f1eaf6c6087afc43429b96fe6"
+    },
+    {
+      "path": "src/Modules/Identity/TotpOperationProof.cs",
+      "identity_f1_blob": "c1af44bf55777e21c6f97118bf5fdea5a9eb631c",
+      "architecture_a933_blob": "c1af44bf55777e21c6f97118bf5fdea5a9eb631c",
+      "working_blob": "c1af44bf55777e21c6f97118bf5fdea5a9eb631c",
+      "sha256": "809680ff5410f3b944d8d73016c5cecf21996dd1e16bfd0e33d33a1c7e73d1c6"
+    },
+    {
+      "path": "src/Modules/Identity/TotpPrimaryMfa.cs",
+      "identity_f1_blob": "a5aedb27862dd4ecb16cf23d4ce65b281f6b8307",
+      "architecture_a933_blob": "a5aedb27862dd4ecb16cf23d4ce65b281f6b8307",
+      "working_blob": "a5aedb27862dd4ecb16cf23d4ce65b281f6b8307",
+      "sha256": "c5a3353c0e87b814847afbfe7842e7ec494d117b1f7e6eebad55efeb17fec2de"
+    },
+    {
+      "path": "src/Modules/Identity/TotpRows.cs",
+      "identity_f1_blob": "b21525aac7d6f7dc401563d7181559a5ae5f7646",
+      "architecture_a933_blob": "b21525aac7d6f7dc401563d7181559a5ae5f7646",
+      "working_blob": "b21525aac7d6f7dc401563d7181559a5ae5f7646",
+      "sha256": "f197596ec89f0ec6d6394dfe408da8d88ce58015587c839fb3553948a3bfb35a"
+    },
+    {
+      "path": "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+      "identity_f1_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c",
+      "architecture_a933_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c",
+      "working_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c",
+      "sha256": "52a7934a2605814df946518253469e9f44a344e9e1bb2b6a60b4d669ba41aa07"
+    },
+    {
+      "path": "src/Tunner.Admin.Bff/Program.cs",
+      "identity_f1_blob": "d639087ee55d11b436bb3db70c5b9cfb9f3eb20a",
+      "architecture_a933_blob": "d639087ee55d11b436bb3db70c5b9cfb9f3eb20a",
+      "working_blob": "d639087ee55d11b436bb3db70c5b9cfb9f3eb20a",
+      "sha256": "c7a753043fe5c37fe8863af58fa504d98258cbe919ba5270b7805b32cbfea047"
+    },
+    {
+      "path": "src/Tunner.Admin.Bff/Tunner.Admin.Bff.csproj",
+      "identity_f1_blob": "3678ee99b5bafa60e1205997814748f786e8d342",
+      "architecture_a933_blob": "3678ee99b5bafa60e1205997814748f786e8d342",
+      "working_blob": "3678ee99b5bafa60e1205997814748f786e8d342",
+      "sha256": "4e667989aa832276b86be3889cd9fee00eca20a3596332f46abdc9181e80a11c"
+    },
+    {
+      "path": "src/Tunner.Api/Program.cs",
+      "identity_f1_blob": "f29cb3b52e8083f2640527b6a0e59e3bf663ce06",
+      "architecture_a933_blob": "f29cb3b52e8083f2640527b6a0e59e3bf663ce06",
+      "working_blob": "f29cb3b52e8083f2640527b6a0e59e3bf663ce06",
+      "sha256": "39acff02f1b13c1c9d04948157f2f6f3e07a31228a42c9e999a4f4fca5dbc3f9"
+    },
+    {
+      "path": "src/Tunner.Api/Tunner.Api.csproj",
+      "identity_f1_blob": "4c071c2b0076302272dbc8e56899a4dd0bb35c5c",
+      "architecture_a933_blob": "4c071c2b0076302272dbc8e56899a4dd0bb35c5c",
+      "working_blob": "4c071c2b0076302272dbc8e56899a4dd0bb35c5c",
+      "sha256": "2db75995cd1f9f0be586332fcdd4032490322174fd131800d81421a073a7251f"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Migrations/20260930173000_P0MigrationFoundation.cs",
+      "identity_f1_blob": "808e605f2c8a5c048569bbee44f85565db87d128",
+      "architecture_a933_blob": "808e605f2c8a5c048569bbee44f85565db87d128",
+      "working_blob": "808e605f2c8a5c048569bbee44f85565db87d128",
+      "sha256": "c676e628e7df31a38a7aa14c30228dc2047d61cbfb2cc51670c40c057b3f66c3"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Migrations/20261001230000_P1TransactionalOutbox.cs",
+      "identity_f1_blob": "63c550c09a6b2216969b243ac9711b75a141c6ba",
+      "architecture_a933_blob": "63c550c09a6b2216969b243ac9711b75a141c6ba",
+      "working_blob": "63c550c09a6b2216969b243ac9711b75a141c6ba",
+      "sha256": "a7875b9ea2d9b2e93086aaefedb26319d0303892eec65c220b55a1018b70ff7a"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Migrations/20261002190000_P1DurableWorkInbox.cs",
+      "identity_f1_blob": "985dbf01a3ab74217b51ec6b9bfb0cf56b5199b1",
+      "architecture_a933_blob": "985dbf01a3ab74217b51ec6b9bfb0cf56b5199b1",
+      "working_blob": "985dbf01a3ab74217b51ec6b9bfb0cf56b5199b1",
+      "sha256": "a9edcc535051b1b049a53669016429cb0c9ef6276cc6699de28b5e331abcddb7"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Migrations/20261005220000_P1AuditAppend.cs",
+      "identity_f1_blob": "011037288fbb5d60878a01cddbdbf9d0c920d944",
+      "architecture_a933_blob": "011037288fbb5d60878a01cddbdbf9d0c920d944",
+      "working_blob": "011037288fbb5d60878a01cddbdbf9d0c920d944",
+      "sha256": "b424691a2eeda64c17029af1c7015ebc9e613831bf4e31d120cb0a4f7c11f20a"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Migrations/TunnerMigrationsDbContextModelSnapshot.cs",
+      "identity_f1_blob": "1fe5f626310250dcbfa81c86dec136693ce18699",
+      "architecture_a933_blob": "1fe5f626310250dcbfa81c86dec136693ce18699",
+      "working_blob": "1fe5f626310250dcbfa81c86dec136693ce18699",
+      "sha256": "23954f6e5e6fb63e75fc6cbe2d02153330c4fd4c00d34c1a7645755fb80ffeaa"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Tunner.Database.Migrations.csproj",
+      "identity_f1_blob": "153b699c4c165b72dd3a412cdffa766817429722",
+      "architecture_a933_blob": "153b699c4c165b72dd3a412cdffa766817429722",
+      "working_blob": "153b699c4c165b72dd3a412cdffa766817429722",
+      "sha256": "fa92b2a8c7e00220a45e6fe0245c0d9ece0c5a9da71ef4154ea20953d5899c0b"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/TunnerMigrationsDbContextFactory.cs",
+      "identity_f1_blob": "618c888ce49ed573da209b474a6d046befda59c4",
+      "architecture_a933_blob": "618c888ce49ed573da209b474a6d046befda59c4",
+      "working_blob": "618c888ce49ed573da209b474a6d046befda59c4",
+      "sha256": "a01e6903b55bbf60af33946cac4952221653166c7e2260c182cfb46b410972ff"
+    },
+    {
+      "path": "src/Tunner.Database/Audit/AuditEvent.cs",
+      "identity_f1_blob": "98519c74b180b7c3a85866edec317df36cb31164",
+      "architecture_a933_blob": "98519c74b180b7c3a85866edec317df36cb31164",
+      "working_blob": "98519c74b180b7c3a85866edec317df36cb31164",
+      "sha256": "b812cf9217fddb833df4795ffafc2e967c24735a41abfcf81b14dfdaaad61458"
+    },
+    {
+      "path": "src/Tunner.Database/Audit/AuditEventRecord.cs",
+      "identity_f1_blob": "8ecdf6d319d91107cf7c23116fc637a3c0ad6d75",
+      "architecture_a933_blob": "8ecdf6d319d91107cf7c23116fc637a3c0ad6d75",
+      "working_blob": "8ecdf6d319d91107cf7c23116fc637a3c0ad6d75",
+      "sha256": "234aabe0039a8d1872ac8bb8deafc17c838e5c1aa09c375cce234668fda790db"
+    },
+    {
+      "path": "src/Tunner.Database/Audit/AuditModelConfiguration.cs",
+      "identity_f1_blob": "2cc6e7f8753b7ee994283e3c78025e6388d52cd2",
+      "architecture_a933_blob": "2cc6e7f8753b7ee994283e3c78025e6388d52cd2",
+      "working_blob": "2cc6e7f8753b7ee994283e3c78025e6388d52cd2",
+      "sha256": "c83521d9981e4ce8787621c31539efa2c9f524e1f118fdb64e407fe3b225905b"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/ClaimedDurableWork.cs",
+      "identity_f1_blob": "ab367890d8097411c8d69fdfa96b7f524f2cc2e9",
+      "architecture_a933_blob": "ab367890d8097411c8d69fdfa96b7f524f2cc2e9",
+      "working_blob": "ab367890d8097411c8d69fdfa96b7f524f2cc2e9",
+      "sha256": "c596c1346f02b6628599336ef4655f3e26b5a6a4848f04d66fe204072bae18b5"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/ConsumerInboxEntry.cs",
+      "identity_f1_blob": "79b8e6f4cfa24c8ff4d66a95ffafe6de8fa4486c",
+      "architecture_a933_blob": "79b8e6f4cfa24c8ff4d66a95ffafe6de8fa4486c",
+      "working_blob": "79b8e6f4cfa24c8ff4d66a95ffafe6de8fa4486c",
+      "sha256": "7d8a346a8ebe74730731cd09107bbb9092f9fa426b619c99610e8c252ae1b498"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/DurableWorkItem.cs",
+      "identity_f1_blob": "d7dce94609a19d09f92964fc3b8af66996a2f8af",
+      "architecture_a933_blob": "d7dce94609a19d09f92964fc3b8af66996a2f8af",
+      "working_blob": "d7dce94609a19d09f92964fc3b8af66996a2f8af",
+      "sha256": "34a53f4bbbc101089deeff184bbc6ca8c81f858e9b5358e1fcda7c5009c47ec4"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/DurableWorkModelConfiguration.cs",
+      "identity_f1_blob": "f3673fbf3ba0eaaea86f0db23106f363fe1fc84d",
+      "architecture_a933_blob": "f3673fbf3ba0eaaea86f0db23106f363fe1fc84d",
+      "working_blob": "f3673fbf3ba0eaaea86f0db23106f363fe1fc84d",
+      "sha256": "640e047f84977cd3eff9cebcf5bf524b422948ff6ee5062193efa6c77e477bda"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/EfConsumerInboxStore.cs",
+      "identity_f1_blob": "2dd7df22941e51834739fc9ed2778d08b305125e",
+      "architecture_a933_blob": "2dd7df22941e51834739fc9ed2778d08b305125e",
+      "working_blob": "2dd7df22941e51834739fc9ed2778d08b305125e",
+      "sha256": "a7ba815055f9ea3fbf0da5f06ed845c0b21159440afdaa76532e45ff0d0be066"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/EfDurableWorkStore.cs",
+      "identity_f1_blob": "c6bedf1be964d982cdd543d28d1be1ea45798771",
+      "architecture_a933_blob": "c6bedf1be964d982cdd543d28d1be1ea45798771",
+      "working_blob": "c6bedf1be964d982cdd543d28d1be1ea45798771",
+      "sha256": "bcf40c574d74c4af5451d0efafded12bb1c281ca8fe549be88d4d642c64cb14c"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/IConsumerInboxStore.cs",
+      "identity_f1_blob": "03284f10f3aef3c41b8ff7b8f9eb01a6af6b5c63",
+      "architecture_a933_blob": "03284f10f3aef3c41b8ff7b8f9eb01a6af6b5c63",
+      "working_blob": "03284f10f3aef3c41b8ff7b8f9eb01a6af6b5c63",
+      "sha256": "5af44af81b01eca6a95bbb5f3c83295d055faeaca6066afbd3d8c8f2b3aed613"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/IDurableWorkStore.cs",
+      "identity_f1_blob": "c5aece51775ca95750b572254df497dee6583dc5",
+      "architecture_a933_blob": "c5aece51775ca95750b572254df497dee6583dc5",
+      "working_blob": "c5aece51775ca95750b572254df497dee6583dc5",
+      "sha256": "6e43aff193d40f090ae20ee154916e9b37f401685abf5ec05e03aa9239106914"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/EfOutboxDispatchStore.cs",
+      "identity_f1_blob": "b6832d2926dc8a7fa56e384f33e2517590d37c32",
+      "architecture_a933_blob": "b6832d2926dc8a7fa56e384f33e2517590d37c32",
+      "working_blob": "b6832d2926dc8a7fa56e384f33e2517590d37c32",
+      "sha256": "e6183e09375210c8f8d87d1f0fa8b0c3c565d48d5407efa1395df624349ccfa7"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/EfTransactionalOutbox.cs",
+      "identity_f1_blob": "7acd36ace35f5b64ef7e492e17926ac2f2bc9c29",
+      "architecture_a933_blob": "7acd36ace35f5b64ef7e492e17926ac2f2bc9c29",
+      "working_blob": "7acd36ace35f5b64ef7e492e17926ac2f2bc9c29",
+      "sha256": "9c3eb2c1e148229f86957a3376b43eea9f3a566c51259c129905a48e451a3c27"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/IOutboxDispatchStore.cs",
+      "identity_f1_blob": "ab0948fa8c07fd5b42646a4289d4911203808549",
+      "architecture_a933_blob": "ab0948fa8c07fd5b42646a4289d4911203808549",
+      "working_blob": "ab0948fa8c07fd5b42646a4289d4911203808549",
+      "sha256": "7ec2bc96e7637ca0791e36dc0d1ac9d155d6f5e6750a4e6839b6236cc1d1c7dd"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/ITransactionalOutbox.cs",
+      "identity_f1_blob": "8d1473fe194b3fec35283b03eebd653b9567fb74",
+      "architecture_a933_blob": "8d1473fe194b3fec35283b03eebd653b9567fb74",
+      "working_blob": "8d1473fe194b3fec35283b03eebd653b9567fb74",
+      "sha256": "5d21d7b890792d1b1acaaa8e7dbd10d74710dfa44288515bc5383add7aaaa372"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/ITransactionalOutboxContext.cs",
+      "identity_f1_blob": "7cf1ddd669855d692852c7331299b6ac4bf5c0a4",
+      "architecture_a933_blob": "7cf1ddd669855d692852c7331299b6ac4bf5c0a4",
+      "working_blob": "7cf1ddd669855d692852c7331299b6ac4bf5c0a4",
+      "sha256": "fdd1df604a65d89a947ad3201afa60e978bd5019766a99782cb268bcc7228a6f"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/OutboxMessage.cs",
+      "identity_f1_blob": "89669144909a5cdc865c8c3f273d617cf7dc9b5e",
+      "architecture_a933_blob": "89669144909a5cdc865c8c3f273d617cf7dc9b5e",
+      "working_blob": "89669144909a5cdc865c8c3f273d617cf7dc9b5e",
+      "sha256": "276a30245a1579a3cd407f7fd4469a8533db9fe0cc520de177267a0bd6212f0e"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/OutboxModelConfiguration.cs",
+      "identity_f1_blob": "b3dd98e6aaffb3d129649a056ea282bea8d30879",
+      "architecture_a933_blob": "b3dd98e6aaffb3d129649a056ea282bea8d30879",
+      "working_blob": "b3dd98e6aaffb3d129649a056ea282bea8d30879",
+      "sha256": "1da1d634da44a2c31d232785b71a9bb3e3179003cf86493f4a5680865c2f68d8"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/PendingOutboxMessage.cs",
+      "identity_f1_blob": "a3cb63a07fcfbe9e2931583c35bfd3f2af2cc024",
+      "architecture_a933_blob": "a3cb63a07fcfbe9e2931583c35bfd3f2af2cc024",
+      "working_blob": "a3cb63a07fcfbe9e2931583c35bfd3f2af2cc024",
+      "sha256": "d3f7d9dfa777e17390ff101eb814fd94b0fabbd26a532a3fca31043f9449e1d0"
+    },
+    {
+      "path": "src/Tunner.Database/Tunner.Database.csproj",
+      "identity_f1_blob": "d396f2c9e75eb9c6e7d3b37e0048e6a65d7c0fa0",
+      "architecture_a933_blob": "d396f2c9e75eb9c6e7d3b37e0048e6a65d7c0fa0",
+      "working_blob": "d396f2c9e75eb9c6e7d3b37e0048e6a65d7c0fa0",
+      "sha256": "4ffb2375e571a611d8f54f7da69c55f019890d1fe5e3eeb4eb03bc593b196221"
+    },
+    {
+      "path": "src/Tunner.Database/TunnerMigrationsDbContext.cs",
+      "identity_f1_blob": "c8bf369e08c82a9e15403e3457168615f48447d2",
+      "architecture_a933_blob": "c8bf369e08c82a9e15403e3457168615f48447d2",
+      "working_blob": "c8bf369e08c82a9e15403e3457168615f48447d2",
+      "sha256": "c8a0efe7993e63799606d200c9e547f16614208aa3252dc1a2b420766c70b8f6"
+    },
+    {
+      "path": "src/Tunner.Governance/AdaptiveContextApplication.cs",
+      "identity_f1_blob": "41c4e43ec142e5d5dd6d2f0307b85cf01fe38dc4",
+      "architecture_a933_blob": "41c4e43ec142e5d5dd6d2f0307b85cf01fe38dc4",
+      "working_blob": "41c4e43ec142e5d5dd6d2f0307b85cf01fe38dc4",
+      "sha256": "01c870311e3431f6cc3aec773a70d437f5e266edd3458693ca292b684d0b6ef7"
+    },
+    {
+      "path": "src/Tunner.Governance/AuthorityApplication.cs",
+      "identity_f1_blob": "4afb75da2ed81f1aa2d9ba7afc51f5ab1b1156be",
+      "architecture_a933_blob": "4afb75da2ed81f1aa2d9ba7afc51f5ab1b1156be",
+      "working_blob": "4afb75da2ed81f1aa2d9ba7afc51f5ab1b1156be",
+      "sha256": "a1805a7b2a47a3b14db247afc46adacd181dc3e08a7d258518f2dcfb8e1ecff0"
+    },
+    {
+      "path": "src/Tunner.Governance/BootstrapApplication.cs",
+      "identity_f1_blob": "b59f7b29dd22d5184a7f95a38fe76313a4295942",
+      "architecture_a933_blob": "b59f7b29dd22d5184a7f95a38fe76313a4295942",
+      "working_blob": "b59f7b29dd22d5184a7f95a38fe76313a4295942",
+      "sha256": "1e1d8e4bc039cbb4e2d33c818183955d1c47e7648889958761f981e03ca0079a"
+    },
+    {
+      "path": "src/Tunner.Governance/CommitReadinessApplication.cs",
+      "identity_f1_blob": "1fba68255f8b17f450fcc9e3a826f5205eb7f65d",
+      "architecture_a933_blob": "1fba68255f8b17f450fcc9e3a826f5205eb7f65d",
+      "working_blob": "1fba68255f8b17f450fcc9e3a826f5205eb7f65d",
+      "sha256": "13610cb7bdc24f2a94f9956f2edf3ed3348b59e547a64d65b65502ac8e8e3d26"
+    },
+    {
+      "path": "src/Tunner.Governance/CommittedEvidenceApplication.cs",
+      "identity_f1_blob": "1cd53b9dfe4362be972595bacd628b52d0c4f991",
+      "architecture_a933_blob": "1cd53b9dfe4362be972595bacd628b52d0c4f991",
+      "working_blob": "1cd53b9dfe4362be972595bacd628b52d0c4f991",
+      "sha256": "0b707f767c707f6082753fe5e13621f9a29170d32d1aead7aa8a04511ee0a7b1"
+    },
+    {
+      "path": "src/Tunner.Governance/ContextApplication.cs",
+      "identity_f1_blob": "954ceeeab455c4deac7077e2a2c737759ec5d912",
+      "architecture_a933_blob": "954ceeeab455c4deac7077e2a2c737759ec5d912",
+      "working_blob": "954ceeeab455c4deac7077e2a2c737759ec5d912",
+      "sha256": "206e43eeb019b0ce786a2f5edbdad0beb7d5680f8f0aa392844e1862972d8e6c"
+    },
+    {
+      "path": "src/Tunner.Governance/ContextTelemetryApplication.cs",
+      "identity_f1_blob": "9d4bbc6285ec03566ded8dfa2357555ff2d10266",
+      "architecture_a933_blob": "9d4bbc6285ec03566ded8dfa2357555ff2d10266",
+      "working_blob": "9d4bbc6285ec03566ded8dfa2357555ff2d10266",
+      "sha256": "eda77279e464c0724e80bb7e031f1b1a042cbec7bbeffe9d7fd1a44cc6a8a309"
+    },
+    {
+      "path": "src/Tunner.Governance/EvidenceApplication.cs",
+      "identity_f1_blob": "913f2f16f7ada8b106a3dfdf1d3c01b2e4720eb8",
+      "architecture_a933_blob": "913f2f16f7ada8b106a3dfdf1d3c01b2e4720eb8",
+      "working_blob": "913f2f16f7ada8b106a3dfdf1d3c01b2e4720eb8",
+      "sha256": "042047c346480a86a29f7e094c8e0218851dfeb412b0aaa736df31674e0e20bf"
+    },
+    {
+      "path": "src/Tunner.Governance/GovernanceApplication.cs",
+      "identity_f1_blob": "c177b31527683c373878dac106a0fe0533821dfe",
+      "architecture_a933_blob": "c177b31527683c373878dac106a0fe0533821dfe",
+      "working_blob": "c177b31527683c373878dac106a0fe0533821dfe",
+      "sha256": "cc6a8336a8744f0127a23d22b9c356c72a270d20ffe895938b9d6aa093aaf509"
+    },
+    {
+      "path": "src/Tunner.Governance/MilestoneReviewRevalidation.cs",
+      "identity_f1_blob": "5a4139c3ccca08abc53e9d6a13e8a912dbb88aa0",
+      "architecture_a933_blob": "5a4139c3ccca08abc53e9d6a13e8a912dbb88aa0",
+      "working_blob": "5a4139c3ccca08abc53e9d6a13e8a912dbb88aa0",
+      "sha256": "f4859d063b7f9c8eaf68448d7bc124d6cc47226375bf68f851d4183927dad6e5"
+    },
+    {
+      "path": "src/Tunner.Governance/OrchestratorApplication.cs",
+      "identity_f1_blob": "593318e7d479d5ffe2004b78851fc7128a654d63",
+      "architecture_a933_blob": "593318e7d479d5ffe2004b78851fc7128a654d63",
+      "working_blob": "593318e7d479d5ffe2004b78851fc7128a654d63",
+      "sha256": "52464683922b4880db91144f8fd678c69ec49ad4dc79e8a03e3dc764a190505c"
+    },
+    {
+      "path": "src/Tunner.Governance/Program.cs",
+      "identity_f1_blob": "08a414b917bb3e5d580c08b1dcaacd2741a33770",
+      "architecture_a933_blob": "08a414b917bb3e5d580c08b1dcaacd2741a33770",
+      "working_blob": "08a414b917bb3e5d580c08b1dcaacd2741a33770",
+      "sha256": "d76e277b5dc7b20800d171cdf32c55058b4e5c32cc676aa82c12d63f8c8dba6b"
+    },
+    {
+      "path": "src/Tunner.Governance/RepositoryRootResolver.cs",
+      "identity_f1_blob": "576c371c136dd90b88d35c14ac3b24696c20368f",
+      "architecture_a933_blob": "576c371c136dd90b88d35c14ac3b24696c20368f",
+      "working_blob": "576c371c136dd90b88d35c14ac3b24696c20368f",
+      "sha256": "2891022250a499cd23ba906be91fd6495fbcf8e8d08cd5565a37fa9d76e1262d"
+    },
+    {
+      "path": "src/Tunner.Governance/RevisionApplication.cs",
+      "identity_f1_blob": "c487afc0bd0dae71b75dd7908b369915e3d8593a",
+      "architecture_a933_blob": "c487afc0bd0dae71b75dd7908b369915e3d8593a",
+      "working_blob": "c487afc0bd0dae71b75dd7908b369915e3d8593a",
+      "sha256": "c42a213c27937eee9f8920692d80f34f8fffcdad4025ec26153467e0fd725bf7"
+    },
+    {
+      "path": "src/Tunner.Governance/RevisionCommittedProofResolver.cs",
+      "identity_f1_blob": "81127550704a019fddff5e2741db1a1b88cf6657",
+      "architecture_a933_blob": "81127550704a019fddff5e2741db1a1b88cf6657",
+      "working_blob": "81127550704a019fddff5e2741db1a1b88cf6657",
+      "sha256": "5ff3f9908a49e8c57ebc3310a52e2b3a4ff8d1fb0d0868a603dcf8aaa33970f1"
+    },
+    {
+      "path": "src/Tunner.Governance/RoleActivationApplication.cs",
+      "identity_f1_blob": "012a1d7de8ebdb840ea78323b928bfa79a4aef41",
+      "architecture_a933_blob": "012a1d7de8ebdb840ea78323b928bfa79a4aef41",
+      "working_blob": "012a1d7de8ebdb840ea78323b928bfa79a4aef41",
+      "sha256": "e264ed3f373a3a98775b40c67344a2918559062c19d44f569eb85f239161daf2"
+    },
+    {
+      "path": "src/Tunner.Governance/SourceRegistryApplication.cs",
+      "identity_f1_blob": "8488761c27b6c42e5ad2c42d46b6d580a868fff3",
+      "architecture_a933_blob": "8488761c27b6c42e5ad2c42d46b6d580a868fff3",
+      "working_blob": "8488761c27b6c42e5ad2c42d46b6d580a868fff3",
+      "sha256": "d2439d830691f04cee48ab83b7b6ff60ac40d99ffacd9ee8d5be6b3d8f70762d"
+    },
+    {
+      "path": "src/Tunner.Governance/SupplementalAuthorityMirrors.cs",
+      "identity_f1_blob": "cd418ef4becd202624a2ac43a6f5a2bbc2ac3f80",
+      "architecture_a933_blob": "cd418ef4becd202624a2ac43a6f5a2bbc2ac3f80",
+      "working_blob": "cd418ef4becd202624a2ac43a6f5a2bbc2ac3f80",
+      "sha256": "188a2f995a542c1d2877bdadb0860e44aa4a183a1876c7bc50c0bc9677d0c076"
+    },
+    {
+      "path": "src/Tunner.Governance/Tunner.Governance.csproj",
+      "identity_f1_blob": "03bcce0daefb74a99a5f290311e1faf173c240ec",
+      "architecture_a933_blob": "03bcce0daefb74a99a5f290311e1faf173c240ec",
+      "working_blob": "03bcce0daefb74a99a5f290311e1faf173c240ec",
+      "sha256": "00b2483929f3cedaa0287bab38dfea4500ef8d3f535ab6e467c9d01d4eb56b38"
+    },
+    {
+      "path": "src/Tunner.Governance/UiComplianceApplication.cs",
+      "identity_f1_blob": "0ed1436dcbc89760b37a2ec396bdd0e7208914f5",
+      "architecture_a933_blob": "0ed1436dcbc89760b37a2ec396bdd0e7208914f5",
+      "working_blob": "0ed1436dcbc89760b37a2ec396bdd0e7208914f5",
+      "sha256": "73f79e829484d906726efee1cd5763c94b3b61de8910acb699f04845a3b143c6"
+    },
+    {
+      "path": "src/Tunner.Installer/ConfiguredR2Storage.cs",
+      "identity_f1_blob": "40f22fedde86465981301b5004730c24482093c0",
+      "architecture_a933_blob": "40f22fedde86465981301b5004730c24482093c0",
+      "working_blob": "40f22fedde86465981301b5004730c24482093c0",
+      "sha256": "beafd4520939e33c45b3a2aba7315ce58d03d486b0075764ff3a0e79daf4355d"
+    },
+    {
+      "path": "src/Tunner.Installer/LocalOpenBaoCredentialScope.cs",
+      "identity_f1_blob": "565600c714eda3e94db3835ea266581cc241eb07",
+      "architecture_a933_blob": "565600c714eda3e94db3835ea266581cc241eb07",
+      "working_blob": "565600c714eda3e94db3835ea266581cc241eb07",
+      "sha256": "df7f87a548143ba0a9e19f686b415ea9942a14df08613e34dcc2c7e9009fe60d"
+    },
+    {
+      "path": "src/Tunner.Installer/LocalOpenBaoSession.cs",
+      "identity_f1_blob": "5c217515ed18657e43840f54ffc6c3ca6172f41c",
+      "architecture_a933_blob": "5c217515ed18657e43840f54ffc6c3ca6172f41c",
+      "working_blob": "5c217515ed18657e43840f54ffc6c3ca6172f41c",
+      "sha256": "416cbf0324e7f6c7f0c3f745ccc5726e25ff92d34b25d80bc5f24803e47083bd"
+    },
+    {
+      "path": "src/Tunner.Installer/LocalR2Setup.cs",
+      "identity_f1_blob": "79c964df0e170863528f7d04b1aca8df632bab75",
+      "architecture_a933_blob": "79c964df0e170863528f7d04b1aca8df632bab75",
+      "working_blob": "79c964df0e170863528f7d04b1aca8df632bab75",
+      "sha256": "21c3efea4ee6d0ac235eafe991e734f5d2a88416f65d2135967ade1ff91c413e"
+    },
+    {
+      "path": "src/Tunner.Installer/Program.cs",
+      "identity_f1_blob": "2d776afc813d9762800670ea9783b166f090ce56",
+      "architecture_a933_blob": "2d776afc813d9762800670ea9783b166f090ce56",
+      "working_blob": "2d776afc813d9762800670ea9783b166f090ce56",
+      "sha256": "4563b2df69fc54fbd6a6d623d758847fff43b084147c79353aebe6c19dc4b0e9"
+    },
+    {
+      "path": "src/Tunner.Installer/R2ContractProbe.cs",
+      "identity_f1_blob": "3c29362a46e4e19f87559c3cc0c5cbb318d884f8",
+      "architecture_a933_blob": "3c29362a46e4e19f87559c3cc0c5cbb318d884f8",
+      "working_blob": "3c29362a46e4e19f87559c3cc0c5cbb318d884f8",
+      "sha256": "2cff3caf57fccaf0723348a7dd706baee5b2364630d6d5d16981fe34c836dc02"
+    },
+    {
+      "path": "src/Tunner.Installer/R2ExecutionReceipt.cs",
+      "identity_f1_blob": "345c29daa43169d04146640d60ea42eccf7e6d07",
+      "architecture_a933_blob": "345c29daa43169d04146640d60ea42eccf7e6d07",
+      "working_blob": "345c29daa43169d04146640d60ea42eccf7e6d07",
+      "sha256": "aa5f8e24a3fd190d4cf4a11344eaa785e81022ce5e6529ce6370e170935415aa"
+    },
+    {
+      "path": "src/Tunner.Installer/R2InstallationProfile.cs",
+      "identity_f1_blob": "07af5567a779083ca859f072fc38907b68af43c6",
+      "architecture_a933_blob": "07af5567a779083ca859f072fc38907b68af43c6",
+      "working_blob": "07af5567a779083ca859f072fc38907b68af43c6",
+      "sha256": "0386ccbf451301039e0caf4a9ef54302aea5014ca8621d0507a5ec7b6ffda3d5"
+    },
+    {
+      "path": "src/Tunner.Installer/Tunner.Installer.csproj",
+      "identity_f1_blob": "59909eaf1cfabe5bf9e073b0f6b25741298c2196",
+      "architecture_a933_blob": "59909eaf1cfabe5bf9e073b0f6b25741298c2196",
+      "working_blob": "59909eaf1cfabe5bf9e073b0f6b25741298c2196",
+      "sha256": "70a8fa894988662296299b71a12abf1c454cecdbe6cbb2b4ee25567646593e21"
+    },
+    {
+      "path": "src/Tunner.Observability/TelemetryAttributePolicy.cs",
+      "identity_f1_blob": "d7be4e4948c66b288f62bca23107c1434ca342de",
+      "architecture_a933_blob": "d7be4e4948c66b288f62bca23107c1434ca342de",
+      "working_blob": "d7be4e4948c66b288f62bca23107c1434ca342de",
+      "sha256": "7c83becc9ae15164b7c54d7ae6878511716e48c078dbdabdf699ec5a03ca1910"
+    },
+    {
+      "path": "src/Tunner.Observability/Tunner.Observability.csproj",
+      "identity_f1_blob": "d5f149975a0f50656fa36b0a465c6456077234eb",
+      "architecture_a933_blob": "d5f149975a0f50656fa36b0a465c6456077234eb",
+      "working_blob": "d5f149975a0f50656fa36b0a465c6456077234eb",
+      "sha256": "50c0a3ee5821f317b35935fcc3cb2adfed61878fd62b4691c1f4660e34dcc80e"
+    },
+    {
+      "path": "src/Tunner.Observability/TunnerObservabilityOptions.cs",
+      "identity_f1_blob": "d681af89c0a8838f344fa4d0a254f4806960d34b",
+      "architecture_a933_blob": "d681af89c0a8838f344fa4d0a254f4806960d34b",
+      "working_blob": "d681af89c0a8838f344fa4d0a254f4806960d34b",
+      "sha256": "da59987cdb6bfc17cd8441f4648cc18d3a28f32459c8793e262ef24bf2a06242"
+    },
+    {
+      "path": "src/Tunner.Observability/TunnerObservabilityServiceCollectionExtensions.cs",
+      "identity_f1_blob": "0742e4e44ec359e11b44c69aff2ff77dad9fa038",
+      "architecture_a933_blob": "0742e4e44ec359e11b44c69aff2ff77dad9fa038",
+      "working_blob": "0742e4e44ec359e11b44c69aff2ff77dad9fa038",
+      "sha256": "d63e8fa8faaf95b22df3cb5ffbe9cc67aca8db07363de7e764fbc9e4cd940ccd"
+    },
+    {
+      "path": "src/Tunner.Observability/TunnerTelemetry.cs",
+      "identity_f1_blob": "eb726c80b74c491a47c20051c9dae3d29f2e8300",
+      "architecture_a933_blob": "eb726c80b74c491a47c20051c9dae3d29f2e8300",
+      "working_blob": "eb726c80b74c491a47c20051c9dae3d29f2e8300",
+      "sha256": "f42e407fe38f1fedef894c2f5c4fdbd18c645f6cf6547fa5378d3152a09bf79c"
+    },
+    {
+      "path": "src/Tunner.Observability/TunnerTelemetryProcessors.cs",
+      "identity_f1_blob": "9dfe34ee345d62a0887ec40fc2e9a8d4ff434977",
+      "architecture_a933_blob": "9dfe34ee345d62a0887ec40fc2e9a8d4ff434977",
+      "working_blob": "9dfe34ee345d62a0887ec40fc2e9a8d4ff434977",
+      "sha256": "eb7362dd95da6947bc818d27fb37cd77b199181f76fb9f2fdce5bb0e1c3f119c"
+    },
+    {
+      "path": "src/Tunner.Observability/TunnerTelemetryScope.cs",
+      "identity_f1_blob": "1f9c2d74ad3e8bd969f958a879e0b623e522925d",
+      "architecture_a933_blob": "1f9c2d74ad3e8bd969f958a879e0b623e522925d",
+      "working_blob": "1f9c2d74ad3e8bd969f958a879e0b623e522925d",
+      "sha256": "9f793b0be7ad458832df87072efefb48248e1cbfa68495cdaba06ec78a8762da"
+    },
+    {
+      "path": "src/Tunner.Platform/Bff/BffBoundaryProfile.cs",
+      "identity_f1_blob": "2ab64e44736568c6ea9befef930930a05cb6bbf0",
+      "architecture_a933_blob": "2ab64e44736568c6ea9befef930930a05cb6bbf0",
+      "working_blob": "2ab64e44736568c6ea9befef930930a05cb6bbf0",
+      "sha256": "ca6b14c3f16e8c990b47377e7f86938d5ee974a8dc23f4dc6ace64031923fdb7"
+    },
+    {
+      "path": "src/Tunner.Platform/Bff/TunnerBffFoundation.cs",
+      "identity_f1_blob": "4f63cbf5d8d629bbb95d39230cd636ab7d14fda7",
+      "architecture_a933_blob": "4f63cbf5d8d629bbb95d39230cd636ab7d14fda7",
+      "working_blob": "4f63cbf5d8d629bbb95d39230cd636ab7d14fda7",
+      "sha256": "c72af29baeabca6bfd142723ac8ad32b5e6bc419b078b4a6aca80ee9e8230817"
+    },
+    {
+      "path": "src/Tunner.Platform/Bff/UnavailableBffTicketStore.cs",
+      "identity_f1_blob": "95e6590dbd13229b595d4a872b07795a2749666d",
+      "architecture_a933_blob": "95e6590dbd13229b595d4a872b07795a2749666d",
+      "working_blob": "95e6590dbd13229b595d4a872b07795a2749666d",
+      "sha256": "4ed7f94ae34db23d3327e9dc4800012c3e91e9c2208bef54f9ad3165ce83805d"
+    },
+    {
+      "path": "src/Tunner.Platform/Configuration/EngineeringEnvironmentConfiguration.cs",
+      "identity_f1_blob": "2095223127769804078b76eb704ec31094fccfe2",
+      "architecture_a933_blob": "2095223127769804078b76eb704ec31094fccfe2",
+      "working_blob": "2095223127769804078b76eb704ec31094fccfe2",
+      "sha256": "7c95475a9ad84d865b52f8fc627fedcc1726368103240bdc7c9d49be6821fcbc"
+    },
+    {
+      "path": "src/Tunner.Platform/Configuration/EngineeringEnvironmentModule.cs",
+      "identity_f1_blob": "3d6fca1fc7b62bdbfe42dfff9e6707726a87a6dc",
+      "architecture_a933_blob": "3d6fca1fc7b62bdbfe42dfff9e6707726a87a6dc",
+      "working_blob": "3d6fca1fc7b62bdbfe42dfff9e6707726a87a6dc",
+      "sha256": "3be3ba591393502aae3515efc6e3db24ac55c18430e949ee31ea8df5f0b60f20"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/IObjectStorage.cs",
+      "identity_f1_blob": "75178b8bc29ec65363c0e4319967f807cc30cee1",
+      "architecture_a933_blob": "75178b8bc29ec65363c0e4319967f807cc30cee1",
+      "working_blob": "75178b8bc29ec65363c0e4319967f807cc30cee1",
+      "sha256": "a49ea8ea8bf9a58c8a0c9e3ba6f4d4f5450e183c431b1914aa6befb69058f1a5"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/ObjectStorageAddress.cs",
+      "identity_f1_blob": "d64c94a9c39a0842a8ca88023c1d9f2f5f359c2c",
+      "architecture_a933_blob": "d64c94a9c39a0842a8ca88023c1d9f2f5f359c2c",
+      "working_blob": "d64c94a9c39a0842a8ca88023c1d9f2f5f359c2c",
+      "sha256": "ce787cc9609e7f2883f93a80250cfa0b5f96edd91fb6bfbea67b71797d9d641f"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/ObjectStorageReadResult.cs",
+      "identity_f1_blob": "b8213f3d9f4c2d9146f03b2819b41a3f824aa3f2",
+      "architecture_a933_blob": "b8213f3d9f4c2d9146f03b2819b41a3f824aa3f2",
+      "working_blob": "b8213f3d9f4c2d9146f03b2819b41a3f824aa3f2",
+      "sha256": "7684189a569ede5abc3b3cf810fc09f8679df87d6f824a72e56f67fa879a10c2"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/ObjectStorageWriteRequest.cs",
+      "identity_f1_blob": "7c664ae04c6e075f89f49f0a18fff3734736ddc1",
+      "architecture_a933_blob": "7c664ae04c6e075f89f49f0a18fff3734736ddc1",
+      "working_blob": "7c664ae04c6e075f89f49f0a18fff3734736ddc1",
+      "sha256": "1c679fbd62e6eb231397d9ebbdeb16020250a4302db781bc28edcf4ee70b4bde"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/R2/AwsR2S3Client.cs",
+      "identity_f1_blob": "9f45d8a8311ad345e2f3aba60c53213f633821f8",
+      "architecture_a933_blob": "9f45d8a8311ad345e2f3aba60c53213f633821f8",
+      "working_blob": "9f45d8a8311ad345e2f3aba60c53213f633821f8",
+      "sha256": "2837fa8e954d0473cadc50a616b1a799454b859dd03f67229e287f6d8fcd03b1"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/R2/IR2S3Client.cs",
+      "identity_f1_blob": "ef3ca8e502b5b0cf62b628c561c54c66b9176316",
+      "architecture_a933_blob": "ef3ca8e502b5b0cf62b628c561c54c66b9176316",
+      "working_blob": "ef3ca8e502b5b0cf62b628c561c54c66b9176316",
+      "sha256": "9f2b312feb3e7d368a9e0f684dbf487355a78e59fab5f0849d8d7183c20f8e13"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/R2/R2ObjectStorage.cs",
+      "identity_f1_blob": "c27d9b0e639dd11b72aad2eaa71fbf807aa92db6",
+      "architecture_a933_blob": "c27d9b0e639dd11b72aad2eaa71fbf807aa92db6",
+      "working_blob": "c27d9b0e639dd11b72aad2eaa71fbf807aa92db6",
+      "sha256": "4f26ee1a14c33a662967a97d782bf083dd234623ec4e6773d13ef8a6b573de59"
+    },
+    {
+      "path": "src/Tunner.Platform/Operations/TechnicalCommandPrimitives.cs",
+      "identity_f1_blob": "aa0a60124d445126099a19a37724d7ac43fcd888",
+      "architecture_a933_blob": "aa0a60124d445126099a19a37724d7ac43fcd888",
+      "working_blob": "aa0a60124d445126099a19a37724d7ac43fcd888",
+      "sha256": "1f1b820d216e22dd12e2d268051ab962afc1b5533742463e6d47c6f9dbdfe3ba"
+    },
+    {
+      "path": "src/Tunner.Platform/Operations/TechnicalProblemDetails.cs",
+      "identity_f1_blob": "1cd7ef6f972234c74748f1532dde476291cfa9b9",
+      "architecture_a933_blob": "1cd7ef6f972234c74748f1532dde476291cfa9b9",
+      "working_blob": "1cd7ef6f972234c74748f1532dde476291cfa9b9",
+      "sha256": "aae4edaf953ebb3626c4a51ea6fc76204eb4d14ca26eb6f59db274258d0f9129"
+    },
+    {
+      "path": "src/Tunner.Platform/Policies/EffectivePolicyVersionResolver.cs",
+      "identity_f1_blob": "1e64f27f88ccfd9ab411667be3bef25434fbc02d",
+      "architecture_a933_blob": "1e64f27f88ccfd9ab411667be3bef25434fbc02d",
+      "working_blob": "1e64f27f88ccfd9ab411667be3bef25434fbc02d",
+      "sha256": "ad46a28d058e8d18c718d8529eaef006e72d570bd0e84f0c619b4ac8d947f6d0"
+    },
+    {
+      "path": "src/Tunner.Platform/Providers/ProviderCorrelationBoundary.cs",
+      "identity_f1_blob": "9f4a422b95153bf2244c6b2606dbdef022f02430",
+      "architecture_a933_blob": "9f4a422b95153bf2244c6b2606dbdef022f02430",
+      "working_blob": "9f4a422b95153bf2244c6b2606dbdef022f02430",
+      "sha256": "5c2ec1b9108e1e00a059f1c62445c262cf496cb396ccd55aa513bec091ad4ed6"
+    },
+    {
+      "path": "src/Tunner.Platform/Realtime/RealtimeAudience.cs",
+      "identity_f1_blob": "f0eef81196977104592cfd55ff1580781da9b387",
+      "architecture_a933_blob": "f0eef81196977104592cfd55ff1580781da9b387",
+      "working_blob": "f0eef81196977104592cfd55ff1580781da9b387",
+      "sha256": "da6eb307aa47b34ed93261c6267af4b1043bb3b3deed86918da7f532ea310759"
+    },
+    {
+      "path": "src/Tunner.Platform/Realtime/RealtimeResynchronizationHint.cs",
+      "identity_f1_blob": "32244a82311e9f82d63124c93ad4197029a82deb",
+      "architecture_a933_blob": "32244a82311e9f82d63124c93ad4197029a82deb",
+      "working_blob": "32244a82311e9f82d63124c93ad4197029a82deb",
+      "sha256": "b92cebd844b9b300f1714f98f9b334bdf91e52b1a958e8c95cc775dd8ff37fb9"
+    },
+    {
+      "path": "src/Tunner.Platform/Realtime/TunnerRealtimeHub.cs",
+      "identity_f1_blob": "1c30147f266fdeb7a9e0b81b4634afdcf89c2fdc",
+      "architecture_a933_blob": "1c30147f266fdeb7a9e0b81b4634afdcf89c2fdc",
+      "working_blob": "1c30147f266fdeb7a9e0b81b4634afdcf89c2fdc",
+      "sha256": "6a283f1f95bc941a36a397a5dc4f29ba06051f07d99f4f2d99a66cfc10fc4591"
+    },
+    {
+      "path": "src/Tunner.Platform/Realtime/TunnerRealtimeServiceCollectionExtensions.cs",
+      "identity_f1_blob": "7550040cc190080c86c8f4b37f377ef0279ad7bf",
+      "architecture_a933_blob": "7550040cc190080c86c8f4b37f377ef0279ad7bf",
+      "working_blob": "7550040cc190080c86c8f4b37f377ef0279ad7bf",
+      "sha256": "11f7086d391df5adbe0e2b7a24a9c8e6f5b6ed969105d9fef7cd124c6996a786"
+    },
+    {
+      "path": "src/Tunner.Platform/Redis/IEphemeralCache.cs",
+      "identity_f1_blob": "642293fc0cc9582f371ef624909a70402bd4f1ff",
+      "architecture_a933_blob": "642293fc0cc9582f371ef624909a70402bd4f1ff",
+      "working_blob": "642293fc0cc9582f371ef624909a70402bd4f1ff",
+      "sha256": "5de043f856d91f67b8c0995b35b0745d2b88037302e96d29cfd34d9fe8a1a4dd"
+    },
+    {
+      "path": "src/Tunner.Platform/Redis/IEphemeralCoordination.cs",
+      "identity_f1_blob": "12b555c4b164c4d7cd4805681022de18e4f94eb5",
+      "architecture_a933_blob": "12b555c4b164c4d7cd4805681022de18e4f94eb5",
+      "working_blob": "12b555c4b164c4d7cd4805681022de18e4f94eb5",
+      "sha256": "9b6f2575f294215f6a78811e0bf7b514e8151d810cc6b13777b702986f5c6fca"
+    },
+    {
+      "path": "src/Tunner.Platform/Redis/RedisEphemeralStore.cs",
+      "identity_f1_blob": "57e3fcc2b5bbe3942b7f0dac2ddddc7c5b614666",
+      "architecture_a933_blob": "57e3fcc2b5bbe3942b7f0dac2ddddc7c5b614666",
+      "working_blob": "57e3fcc2b5bbe3942b7f0dac2ddddc7c5b614666",
+      "sha256": "8e082dd4dfee337c22b6eff96624d10cbce852e26cb61293f356c1cf471d6d49"
+    },
+    {
+      "path": "src/Tunner.Platform/Secrets/AssemblyInfo.cs",
+      "identity_f1_blob": "28937310fa25b8dd259923427be7543f70cc06dd",
+      "architecture_a933_blob": "28937310fa25b8dd259923427be7543f70cc06dd",
+      "working_blob": "28937310fa25b8dd259923427be7543f70cc06dd",
+      "sha256": "604bcfffe8e2e45e27d1c2a6ed3e9e9e4fa2466e39ee2c9942a5f5524e03d056"
+    },
+    {
+      "path": "src/Tunner.Platform/Secrets/CredentialSecretReference.cs",
+      "identity_f1_blob": "ac803867c86323dbd5a9cd0d4911c543f610cb8a",
+      "architecture_a933_blob": "ac803867c86323dbd5a9cd0d4911c543f610cb8a",
+      "working_blob": "ac803867c86323dbd5a9cd0d4911c543f610cb8a",
+      "sha256": "700666e9d953a521c90577e3a60803c5ea495640087f5bc870296649a2d6f03d"
+    },
+    {
+      "path": "src/Tunner.Platform/Secrets/ISecretStore.cs",
+      "identity_f1_blob": "35a0d9a41111c0cc976859aad9810104a09f6470",
+      "architecture_a933_blob": "35a0d9a41111c0cc976859aad9810104a09f6470",
+      "working_blob": "35a0d9a41111c0cc976859aad9810104a09f6470",
+      "sha256": "2aeabffd77cf83960265b7bdbc474d9a6f42a1b80b62fd2f28fab522ccbc7cdf"
+    },
+    {
+      "path": "src/Tunner.Platform/Secrets/OpenBaoSecretStore.cs",
+      "identity_f1_blob": "e48e74811bfbc225ecfcc3d31768cefcba5678ff",
+      "architecture_a933_blob": "e48e74811bfbc225ecfcc3d31768cefcba5678ff",
+      "working_blob": "e48e74811bfbc225ecfcc3d31768cefcba5678ff",
+      "sha256": "9ce3b669ccd7926da9419f3e9dda76441ba616853c15120cd7c5399951774f68"
+    },
+    {
+      "path": "src/Tunner.Platform/Tunner.Platform.csproj",
+      "identity_f1_blob": "54a374c22b7a6fd661e708dc4aa30bef557feb31",
+      "architecture_a933_blob": "54a374c22b7a6fd661e708dc4aa30bef557feb31",
+      "working_blob": "54a374c22b7a6fd661e708dc4aa30bef557feb31",
+      "sha256": "ab0a346df25b7ff895932bc973fc3c1176843ffaedb04c9a56a6d99290b517f9"
+    },
+    {
+      "path": "src/Tunner.Platform/TunnerModuleRegistration.cs",
+      "identity_f1_blob": "a5175bea9aa36ea91a98f7af6fdaa00c969fca65",
+      "architecture_a933_blob": "a5175bea9aa36ea91a98f7af6fdaa00c969fca65",
+      "working_blob": "a5175bea9aa36ea91a98f7af6fdaa00c969fca65",
+      "sha256": "f2a79520d450769c337aadb99113af882ed90c71468fc68d77f86ca62b819245"
+    },
+    {
+      "path": "src/Tunner.Testing/PlaywrightSkeleton.cs",
+      "identity_f1_blob": "1d94fed4818b9729e7b82a6346dc0fedfc4ebc6a",
+      "architecture_a933_blob": "1d94fed4818b9729e7b82a6346dc0fedfc4ebc6a",
+      "working_blob": "1d94fed4818b9729e7b82a6346dc0fedfc4ebc6a",
+      "sha256": "052f34590c5b701f97da5659609535ec2be95e7c243ef1ffbfac5f44a1dfe884"
+    },
+    {
+      "path": "src/Tunner.Testing/TestHarnessProfiles.cs",
+      "identity_f1_blob": "d3b983f555e3e72274d72050f280c17f0262934d",
+      "architecture_a933_blob": "d3b983f555e3e72274d72050f280c17f0262934d",
+      "working_blob": "d3b983f555e3e72274d72050f280c17f0262934d",
+      "sha256": "86060d7e00f869f6109783c5b68e688e1fcbeb2b5374f4ea7bbed4b0baec901d"
+    },
+    {
+      "path": "src/Tunner.Testing/TestcontainersBaseline.cs",
+      "identity_f1_blob": "317ab71179044658c1574f51d4feb86b77720e18",
+      "architecture_a933_blob": "317ab71179044658c1574f51d4feb86b77720e18",
+      "working_blob": "317ab71179044658c1574f51d4feb86b77720e18",
+      "sha256": "5c4b41de0ab38d4adc2fe3aa8a70b3a4276765a6e06c869a8cb3097dade4bd95"
+    },
+    {
+      "path": "src/Tunner.Testing/Tunner.Testing.csproj",
+      "identity_f1_blob": "a14a23b06c322336cca5148e2d9886e615f26502",
+      "architecture_a933_blob": "a14a23b06c322336cca5148e2d9886e615f26502",
+      "working_blob": "a14a23b06c322336cca5148e2d9886e615f26502",
+      "sha256": "49e3582f146d8f403c31e275685d54211e162cc302c7f675a818e5fdd61b0c01"
+    },
+    {
+      "path": "src/Tunner.User.Bff/Program.cs",
+      "identity_f1_blob": "80740e9ca49eb40618aa6069ea2626bec8f7bcbd",
+      "architecture_a933_blob": "80740e9ca49eb40618aa6069ea2626bec8f7bcbd",
+      "working_blob": "80740e9ca49eb40618aa6069ea2626bec8f7bcbd",
+      "sha256": "b3062397aca152f8ef1d81740a31915cc2228b639f10b1b9ddb2cc60d4964b86"
+    },
+    {
+      "path": "src/Tunner.User.Bff/Tunner.User.Bff.csproj",
+      "identity_f1_blob": "3dfc3d84fa1e9c9516817fa5e52263b60c4c8963",
+      "architecture_a933_blob": "3dfc3d84fa1e9c9516817fa5e52263b60c4c8963",
+      "working_blob": "3dfc3d84fa1e9c9516817fa5e52263b60c4c8963",
+      "sha256": "023ca86413a84056b82b71e09cbbae6632d08c312cb6035fb2343d7494947d61"
+    },
+    {
+      "path": "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+      "identity_f1_blob": "7174de500cbef6e6e47f4ba6fa57d94c44c56e66",
+      "architecture_a933_blob": "7174de500cbef6e6e47f4ba6fa57d94c44c56e66",
+      "working_blob": "7174de500cbef6e6e47f4ba6fa57d94c44c56e66",
+      "sha256": "225754fa24c95d28cf7f837e24ad5fbad2a8748dfc77af242559b26f25f49c62"
+    },
+    {
+      "path": "src/Tunner.Worker/Messaging/IConfirmedOutboxPublisher.cs",
+      "identity_f1_blob": "ce17c5a5211e634f230a03106b2104e185906bbe",
+      "architecture_a933_blob": "ce17c5a5211e634f230a03106b2104e185906bbe",
+      "working_blob": "ce17c5a5211e634f230a03106b2104e185906bbe",
+      "sha256": "3e7e50cccffb611acfa86d3c238dda19c8aa6e80a1eed2e43cb0c589d9a68740"
+    },
+    {
+      "path": "src/Tunner.Worker/Messaging/OutboxDispatchCoordinator.cs",
+      "identity_f1_blob": "37ca385692d25f81fee1260e96d718336f74016b",
+      "architecture_a933_blob": "37ca385692d25f81fee1260e96d718336f74016b",
+      "working_blob": "37ca385692d25f81fee1260e96d718336f74016b",
+      "sha256": "4561dfa554d69df66c9ea4d367367d84a40b90dc571b0f553a61c97f76d109e4"
+    },
+    {
+      "path": "src/Tunner.Worker/Messaging/RabbitMqConfirmedOutboxPublisher.cs",
+      "identity_f1_blob": "fdc69ec14132481a2c7a6a7f36540b25163510db",
+      "architecture_a933_blob": "fdc69ec14132481a2c7a6a7f36540b25163510db",
+      "working_blob": "fdc69ec14132481a2c7a6a7f36540b25163510db",
+      "sha256": "672d8b17dfac77c910f7d7e0660d49d708fd24c542a722e1af4cdeec581a0d9b"
+    },
+    {
+      "path": "src/Tunner.Worker/Program.cs",
+      "identity_f1_blob": "753238edbe368f8bd99a351578669638f824c0ab",
+      "architecture_a933_blob": "753238edbe368f8bd99a351578669638f824c0ab",
+      "working_blob": "753238edbe368f8bd99a351578669638f824c0ab",
+      "sha256": "7ee6cb24bb1260ea37a75a7211f16292f36a37e70211e6b81000d10025bd3466"
+    },
+    {
+      "path": "src/Tunner.Worker/Tunner.Worker.csproj",
+      "identity_f1_blob": "cf38f8ecd2d95a96381bee9c93f7665e138a7a8c",
+      "architecture_a933_blob": "cf38f8ecd2d95a96381bee9c93f7665e138a7a8c",
+      "working_blob": "cf38f8ecd2d95a96381bee9c93f7665e138a7a8c",
+      "sha256": "0e8a81536df4e7e0f75000066558ace8900cec8b6fbd7bd69b53513bb7beaa88"
+    },
+    {
+      "path": "tests/Shared/NativeTotpCodeFixture.cs",
+      "identity_f1_blob": "b239703dbd00e49fbb291ce9e4dd24782f3a353f",
+      "architecture_a933_blob": "b239703dbd00e49fbb291ce9e4dd24782f3a353f",
+      "working_blob": "b239703dbd00e49fbb291ce9e4dd24782f3a353f",
+      "sha256": "e747ac0bbd93a6bb72171b9c394e89cc29669cee160c911f2da45f63fe5ee222"
+    },
+    {
+      "path": "tests/Shared/OpenBao/DisposableOpenBaoFixture.cs",
+      "identity_f1_blob": "5dcdc9ccbdc8ae795f38a5413dcbf09b1e207dc0",
+      "architecture_a933_blob": "5dcdc9ccbdc8ae795f38a5413dcbf09b1e207dc0",
+      "working_blob": "5dcdc9ccbdc8ae795f38a5413dcbf09b1e207dc0",
+      "sha256": "6124192a103273002c9bfac58b759e7de3f823da0866740688be79c9437e0009"
+    },
+    {
+      "path": "tests/Tunner.Accounts.Tests/AccountAgeCapabilityTests.cs",
+      "identity_f1_blob": "0f45dbaa8933ced5fd5ff08ba0daa62a7ef4fb77",
+      "architecture_a933_blob": "0f45dbaa8933ced5fd5ff08ba0daa62a7ef4fb77",
+      "working_blob": "0f45dbaa8933ced5fd5ff08ba0daa62a7ef4fb77",
+      "sha256": "f752a3ba0b79b008e9d55eae0df9b8201038f22faf4c293086a666438912a3e3"
+    },
+    {
+      "path": "tests/Tunner.Accounts.Tests/AgeEligibilityEvaluatorTests.cs",
+      "identity_f1_blob": "3523feaab2c6478b9b8ba7419c017acc7c656fb1",
+      "architecture_a933_blob": "3523feaab2c6478b9b8ba7419c017acc7c656fb1",
+      "working_blob": "3523feaab2c6478b9b8ba7419c017acc7c656fb1",
+      "sha256": "9ff6e5b1e08532cf3fd554d34ed05cbb82a3fdd793a82c3aef6246f7dcc3fdff"
+    },
+    {
+      "path": "tests/Tunner.Accounts.Tests/Tunner.Accounts.Tests.csproj",
+      "identity_f1_blob": "9a08c0b4009cc2d8f7c66ba75358a77ddf3dd288",
+      "architecture_a933_blob": "9a08c0b4009cc2d8f7c66ba75358a77ddf3dd288",
+      "working_blob": "9a08c0b4009cc2d8f7c66ba75358a77ddf3dd288",
+      "sha256": "f800a270da22fe4c133508428536d0249f736cfd7df460ce6d8d800b07fa6f0b"
+    },
+    {
+      "path": "tests/Tunner.AuditRemediation.FunctionalTests/Program.cs",
+      "identity_f1_blob": "49cca8491dfda9e34f7f54f8da91a94d48524038",
+      "architecture_a933_blob": "49cca8491dfda9e34f7f54f8da91a94d48524038",
+      "working_blob": "49cca8491dfda9e34f7f54f8da91a94d48524038",
+      "sha256": "625c56d32636f1c1a2411f88061ace6efbfd21d498955bfb991c371fd1d5f38d"
+    },
+    {
+      "path": "tests/Tunner.AuditRemediation.FunctionalTests/Tunner.AuditRemediation.FunctionalTests.csproj",
+      "identity_f1_blob": "a62ab3f29dbcd01113d64928681338759215c449",
+      "architecture_a933_blob": "a62ab3f29dbcd01113d64928681338759215c449",
+      "working_blob": "a62ab3f29dbcd01113d64928681338759215c449",
+      "sha256": "47a6d62b18d64355eb47e72b742c6bcd772833afda0f3aad715ef1ce0971213c"
+    },
+    {
+      "path": "tests/Tunner.Database.IntegrationTests/AuditAppendIntegrationTests.cs",
+      "identity_f1_blob": "d5ec17f090bf77a41c5fd405e4c1154c7b555a55",
+      "architecture_a933_blob": "d5ec17f090bf77a41c5fd405e4c1154c7b555a55",
+      "working_blob": "d5ec17f090bf77a41c5fd405e4c1154c7b555a55",
+      "sha256": "10478ea96f243dc5e022331d9061ec26e4df175c4654d027bbc9f846177d1c52"
+    },
+    {
+      "path": "tests/Tunner.Database.IntegrationTests/AuditEventTests.cs",
+      "identity_f1_blob": "f4cef797609aff131d6a9a583ba62a99c91d3c2e",
+      "architecture_a933_blob": "f4cef797609aff131d6a9a583ba62a99c91d3c2e",
+      "working_blob": "f4cef797609aff131d6a9a583ba62a99c91d3c2e",
+      "sha256": "7afb1127b09cf893ca2d06acd586a64251b69f31aef40c522eb82829f783b637"
+    },
+    {
+      "path": "tests/Tunner.Database.IntegrationTests/DurableWorkInboxIntegrationTests.cs",
+      "identity_f1_blob": "32f9e0d3154eac18dbbf4e9bc93ff1e29745c371",
+      "architecture_a933_blob": "32f9e0d3154eac18dbbf4e9bc93ff1e29745c371",
+      "working_blob": "32f9e0d3154eac18dbbf4e9bc93ff1e29745c371",
+      "sha256": "710a1272c84368210f939c848b39791438e8a0073e510442164b93823d612c3b"
+    },
+    {
+      "path": "tests/Tunner.Database.IntegrationTests/RedisEphemeralStoreIntegrationTests.cs",
+      "identity_f1_blob": "424865e07e27889a4227f1ee5a60c769c7fe7809",
+      "architecture_a933_blob": "424865e07e27889a4227f1ee5a60c769c7fe7809",
+      "working_blob": "424865e07e27889a4227f1ee5a60c769c7fe7809",
+      "sha256": "fb28d27312cdd3f740feac8c821bafc894a7f62fe03afdf6d8441dcd4262b663"
+    },
+    {
+      "path": "tests/Tunner.Database.IntegrationTests/TransactionalOutboxIntegrationTests.cs",
+      "identity_f1_blob": "2760dc48a77a2996250a05d94e9c2f8be40a0e97",
+      "architecture_a933_blob": "2760dc48a77a2996250a05d94e9c2f8be40a0e97",
+      "working_blob": "2760dc48a77a2996250a05d94e9c2f8be40a0e97",
+      "sha256": "d87a97d203cdfaacbdce3641cecee751d5d0d742e27b3e5b69db05585bbbc6ec"
+    },
+    {
+      "path": "tests/Tunner.Database.IntegrationTests/Tunner.Database.IntegrationTests.csproj",
+      "identity_f1_blob": "1aff9de9f163f40498c0a1736b207a44b2385117",
+      "architecture_a933_blob": "1aff9de9f163f40498c0a1736b207a44b2385117",
+      "working_blob": "1aff9de9f163f40498c0a1736b207a44b2385117",
+      "sha256": "7d36e56b59f4b1835aa748674737c1364baf58f0ba7564b3a8a74f5efbd24377"
+    },
+    {
+      "path": "tests/Tunner.Governance.FunctionalTests/Program.cs",
+      "identity_f1_blob": "f2b0f4ad023ae7dc70a342ee3ecf16d06d67a6f7",
+      "architecture_a933_blob": "f2b0f4ad023ae7dc70a342ee3ecf16d06d67a6f7",
+      "working_blob": "f2b0f4ad023ae7dc70a342ee3ecf16d06d67a6f7",
+      "sha256": "a1aa06274aa04ca0825565bd514e0ac149fcc00d03ae6ea017eda24f200fc704"
+    },
+    {
+      "path": "tests/Tunner.Governance.FunctionalTests/Tunner.Governance.FunctionalTests.csproj",
+      "identity_f1_blob": "fab0c709910e3f37530636ff8d674a472a8eb41d",
+      "architecture_a933_blob": "fab0c709910e3f37530636ff8d674a472a8eb41d",
+      "working_blob": "fab0c709910e3f37530636ff8d674a472a8eb41d",
+      "sha256": "cceabc9c01d6f2a57b387622343c97d17ad818aae2bd45ddab82037c0198d0e6"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AssurancePolicyTests.cs",
+      "identity_f1_blob": "100196674a682605e438161dc3d308803dd0d648",
+      "architecture_a933_blob": "100196674a682605e438161dc3d308803dd0d648",
+      "working_blob": "100196674a682605e438161dc3d308803dd0d648",
+      "sha256": "232d6f2ba7292b8478364077d8b36ac9196345f66bfadda5b8e3d9d66787dd11"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationOutcomeTests.cs",
+      "identity_f1_blob": "289c15bcd68d2ad43d59d935a4b4af6f93839d6d",
+      "architecture_a933_blob": "289c15bcd68d2ad43d59d935a4b4af6f93839d6d",
+      "working_blob": "289c15bcd68d2ad43d59d935a4b4af6f93839d6d",
+      "sha256": "741a639c516a8208eb0313b797f3fe89207e331ef88882206891bf238e532e9a"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationPolicyTests.cs",
+      "identity_f1_blob": "0d6c74b83a76ff7b99642d48b9e00c8025f2317b",
+      "architecture_a933_blob": "0d6c74b83a76ff7b99642d48b9e00c8025f2317b",
+      "working_blob": "0d6c74b83a76ff7b99642d48b9e00c8025f2317b",
+      "sha256": "60db736093c21e4057ef61c3c373ae0202ab7672fc608ac2eb76e3b1efc3c282"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+      "identity_f1_blob": "1919b2a986ee7ede5ca4df45ce8b07c16b8aa300",
+      "architecture_a933_blob": "1919b2a986ee7ede5ca4df45ce8b07c16b8aa300",
+      "working_blob": "1919b2a986ee7ede5ca4df45ce8b07c16b8aa300",
+      "sha256": "916dc18077e84ee63766f0241f7fe77560bf1f9cc70996037fa1b50e08886467"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationTests.cs",
+      "identity_f1_blob": "3629b30ce6dfede48e7849d7e0428cace21a3e37",
+      "architecture_a933_blob": "3629b30ce6dfede48e7849d7e0428cace21a3e37",
+      "working_blob": "3629b30ce6dfede48e7849d7e0428cace21a3e37",
+      "sha256": "ca69d6df831d5d866bda8fffc522733b6afc53fdb8e334224919d3282e5b699a"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FixtureAccountAgePolicies.cs",
+      "identity_f1_blob": "c6b083354a2a1ac241bc2913ca7c9052f70b6559",
+      "architecture_a933_blob": "c6b083354a2a1ac241bc2913ca7c9052f70b6559",
+      "working_blob": "c6b083354a2a1ac241bc2913ca7c9052f70b6559",
+      "sha256": "df7ba4628f03d3e4be1fdc197fb641016a159dc261d65fb5c714acda734c5010"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/IdentityFoundationTests.cs",
+      "identity_f1_blob": "cad9e4401cfd49f801e688bad07d4897f47089e4",
+      "architecture_a933_blob": "cad9e4401cfd49f801e688bad07d4897f47089e4",
+      "working_blob": "cad9e4401cfd49f801e688bad07d4897f47089e4",
+      "sha256": "61ef1535e6c0c8d7239c801216e631e0e5f123b5e8aa04f83d64e9f911cb8db5"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs",
+      "identity_f1_blob": "c049ef03023875661ff887a528b5c1d97f22d96e",
+      "architecture_a933_blob": "c049ef03023875661ff887a528b5c1d97f22d96e",
+      "working_blob": "c049ef03023875661ff887a528b5c1d97f22d96e",
+      "sha256": "dc4f0b0d55e3967528fd966942136ec2f8c48a738a72a3fb1eab4123a577821f"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyAuthenticator.cs",
+      "identity_f1_blob": "d5cfc9473c270c2c3d29dbbabdc92c6fb976f11f",
+      "architecture_a933_blob": "d5cfc9473c270c2c3d29dbbabdc92c6fb976f11f",
+      "working_blob": "d5cfc9473c270c2c3d29dbbabdc92c6fb976f11f",
+      "sha256": "c2a8553d605045f56b2630ebc01e13d04596490237acf134bc83b05eb0f6ae5e"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyMigrationTests.cs",
+      "identity_f1_blob": "3d7b01a2e62811ad04b0c902c0e7eeca2b21102f",
+      "architecture_a933_blob": "3d7b01a2e62811ad04b0c902c0e7eeca2b21102f",
+      "working_blob": "3d7b01a2e62811ad04b0c902c0e7eeca2b21102f",
+      "sha256": "710f6cc7ec63109b3d06de7ef0dddd9feee961e48121806339f782454170f765"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyOperationProofTests.cs",
+      "identity_f1_blob": "b93c04c601e7d46aff1504cd7d6d8b1de173431e",
+      "architecture_a933_blob": "b93c04c601e7d46aff1504cd7d6d8b1de173431e",
+      "working_blob": "b93c04c601e7d46aff1504cd7d6d8b1de173431e",
+      "sha256": "4d6b2ab37c0e3f83aa9d0b3f6b99207f41ffbeb8461a8840ee1ed84958e04112"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyProofFreshnessTests.cs",
+      "identity_f1_blob": "3a9d44af2fd5f74438fb08f8357dddf6b4364ab3",
+      "architecture_a933_blob": "3a9d44af2fd5f74438fb08f8357dddf6b4364ab3",
+      "working_blob": "3a9d44af2fd5f74438fb08f8357dddf6b4364ab3",
+      "sha256": "bf09515fbf3f890a42e804c9d6c4d911e5c6057037d9a96c77c31d1c05cbe00d"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyRecoveryTests.cs",
+      "identity_f1_blob": "00a1ee2d9d74a2c93902d1dbe25a78fc28bd5046",
+      "architecture_a933_blob": "00a1ee2d9d74a2c93902d1dbe25a78fc28bd5046",
+      "working_blob": "00a1ee2d9d74a2c93902d1dbe25a78fc28bd5046",
+      "sha256": "80f5973fd07cb5f546e066cf553d8023abd03cdea4cbb23a064aacea6f27a780"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyTests.cs",
+      "identity_f1_blob": "34868e3bf253d91b141714ebb6ea51ef78483645",
+      "architecture_a933_blob": "34868e3bf253d91b141714ebb6ea51ef78483645",
+      "working_blob": "34868e3bf253d91b141714ebb6ea51ef78483645",
+      "sha256": "d4d844c401a1605ee71baed3b58fd97c6965d05ccbded3943f21a58a44ceb7ec"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyUsageMigrationTests.cs",
+      "identity_f1_blob": "b4b81492c9d79e1ae5c590992ef05ff6ca1c72ee",
+      "architecture_a933_blob": "b4b81492c9d79e1ae5c590992ef05ff6ca1c72ee",
+      "working_blob": "b4b81492c9d79e1ae5c590992ef05ff6ca1c72ee",
+      "sha256": "b1c5b31e3a885d8f1895708b8a4087e23fc1e6f8c6475d49787100c48e13b537"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RegistrationBffTests.cs",
+      "identity_f1_blob": "8022ca726e12f0488c933ee01bc8f492edd5cb0e",
+      "architecture_a933_blob": "8022ca726e12f0488c933ee01bc8f492edd5cb0e",
+      "working_blob": "8022ca726e12f0488c933ee01bc8f492edd5cb0e",
+      "sha256": "66cb3920b559d74fd0f78d480acc0707370662991d4c8ee54f195e7fe1d617b8"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RegistrationTests.cs",
+      "identity_f1_blob": "6a025fc18da3145e237cdd3263efb8ea084cba73",
+      "architecture_a933_blob": "6a025fc18da3145e237cdd3263efb8ea084cba73",
+      "working_blob": "6a025fc18da3145e237cdd3263efb8ea084cba73",
+      "sha256": "50d8b66c5243fc923d67283580c3db666450fc4ba6379a79dc693f884499f44a"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/StepUpBrowserTests.cs",
+      "identity_f1_blob": "ee095cc6325ff41429e41948a0a888a131a92401",
+      "architecture_a933_blob": "ee095cc6325ff41429e41948a0a888a131a92401",
+      "working_blob": "ee095cc6325ff41429e41948a0a888a131a92401",
+      "sha256": "f96d0bcb9d33a3321eaa957ddd16b238b27c00803d7e05352e44e34e2d6c1702"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/StepUpTests.cs",
+      "identity_f1_blob": "5eacab77e231765fe4e1215577ea201be731991c",
+      "architecture_a933_blob": "5eacab77e231765fe4e1215577ea201be731991c",
+      "working_blob": "5eacab77e231765fe4e1215577ea201be731991c",
+      "sha256": "d553b172790d000dcc58a1d576b8fec86d22a8f53dd667c5603918878570ec20"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpCompositeTerminationTests.cs",
+      "identity_f1_blob": "35c6322e974079b72f1f21bfde6814f3033f2516",
+      "architecture_a933_blob": "35c6322e974079b72f1f21bfde6814f3033f2516",
+      "working_blob": "35c6322e974079b72f1f21bfde6814f3033f2516",
+      "sha256": "80d1cb9eb013c68369c8d93781ade25347305a03bb643b8bd2522ff7b3ef0b8b"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpFinalBoundaryTests.cs",
+      "identity_f1_blob": "537f5c895bf77f5258a91ac4a5a461bdef5aeda9",
+      "architecture_a933_blob": "537f5c895bf77f5258a91ac4a5a461bdef5aeda9",
+      "working_blob": "537f5c895bf77f5258a91ac4a5a461bdef5aeda9",
+      "sha256": "c61b293691368b372baf46bd49bb76f4442f098b39f1db866e92ff615369ecf1"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpOpenBaoIntegrationTests.cs",
+      "identity_f1_blob": "670eb8e1e4d18aa7159b601aca50dbdb787fbf1c",
+      "architecture_a933_blob": "670eb8e1e4d18aa7159b601aca50dbdb787fbf1c",
+      "working_blob": "670eb8e1e4d18aa7159b601aca50dbdb787fbf1c",
+      "sha256": "dbd5dd1b88ab2bfa41d9cfb48e6aee09725be2b757a0deec3bcec3fcf9c7340c"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpPasskeyMfaTests.cs",
+      "identity_f1_blob": "22e59761790610ca1a96288d85bd6d9a4d718742",
+      "architecture_a933_blob": "22e59761790610ca1a96288d85bd6d9a4d718742",
+      "working_blob": "22e59761790610ca1a96288d85bd6d9a4d718742",
+      "sha256": "3ec4da684e2257197ed4a78f0716795d07171c99133861d9854072ed14877b8b"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpProofContinuationTests.cs",
+      "identity_f1_blob": "65f80f274372d4f44a45d32e24ba9426b004f87f",
+      "architecture_a933_blob": "65f80f274372d4f44a45d32e24ba9426b004f87f",
+      "working_blob": "65f80f274372d4f44a45d32e24ba9426b004f87f",
+      "sha256": "3da7b6f327078ab08dc855ad08c1a84d6e3db80a3e55c782dcaefd780c463028"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpReplayTests.cs",
+      "identity_f1_blob": "3fba09a7bc020b3ec16b5eb51a0c74e5be70a8ca",
+      "architecture_a933_blob": "3fba09a7bc020b3ec16b5eb51a0c74e5be70a8ca",
+      "working_blob": "3fba09a7bc020b3ec16b5eb51a0c74e5be70a8ca",
+      "sha256": "aff41e982b4a90f14e0315f5eda6cd6ba2e289d02349dde3965a4cbe2bfe1150"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpTests.cs",
+      "identity_f1_blob": "b230e608ddd6a866e37b232c00cb51e5718c61fb",
+      "architecture_a933_blob": "b230e608ddd6a866e37b232c00cb51e5718c61fb",
+      "working_blob": "b230e608ddd6a866e37b232c00cb51e5718c61fb",
+      "sha256": "282c595b6b73e86774432e8fcdfeb6a0ea99fa246c308452ec7718b759882a81"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+      "identity_f1_blob": "3b87871dce43d847e61955afc965b57dc9f0364a",
+      "architecture_a933_blob": "3b87871dce43d847e61955afc965b57dc9f0364a",
+      "working_blob": "3b87871dce43d847e61955afc965b57dc9f0364a",
+      "sha256": "efa798313275df4b200e5b8c95e8d266f3e78fc07ee571490265bf0084c13a3c"
+    },
+    {
+      "path": "tests/Tunner.Installer.Tests/ConfiguredStorageTests.cs",
+      "identity_f1_blob": "690713b792d7a0d4d2cd31d781a71d2259f95c39",
+      "architecture_a933_blob": "690713b792d7a0d4d2cd31d781a71d2259f95c39",
+      "working_blob": "690713b792d7a0d4d2cd31d781a71d2259f95c39",
+      "sha256": "5be086d7254ff767b7764e7a13ae2511cf996bfc772e7d120d0be22f3b3e72e8"
+    },
+    {
+      "path": "tests/Tunner.Installer.Tests/CredentialSecretVersionTests.cs",
+      "identity_f1_blob": "2737f87c13d4a28608f0c0849f2ed5eb286b423a",
+      "architecture_a933_blob": "2737f87c13d4a28608f0c0849f2ed5eb286b423a",
+      "working_blob": "2737f87c13d4a28608f0c0849f2ed5eb286b423a",
+      "sha256": "9e5dff99d983478d4a2358a37c324d105cf486e1e917d505e546312c886ad372"
+    },
+    {
+      "path": "tests/Tunner.Installer.Tests/ExecutionReceiptTests.cs",
+      "identity_f1_blob": "8d6dad326d034269ae9e3d46c9f03ab0862821c9",
+      "architecture_a933_blob": "8d6dad326d034269ae9e3d46c9f03ab0862821c9",
+      "working_blob": "8d6dad326d034269ae9e3d46c9f03ab0862821c9",
+      "sha256": "31edbb63f2ec75385368104422783f4cd3a307f013230587fa9d75b3fdaa8585"
+    },
+    {
+      "path": "tests/Tunner.Installer.Tests/InstallerTests.cs",
+      "identity_f1_blob": "edb3c567e229f3534a1add5adae8ac083b810474",
+      "architecture_a933_blob": "edb3c567e229f3534a1add5adae8ac083b810474",
+      "working_blob": "edb3c567e229f3534a1add5adae8ac083b810474",
+      "sha256": "a1085e665d1f4b4703fbed9ab5c8bb13ec44b5ae4839b36c000c640f87a82e46"
+    },
+    {
+      "path": "tests/Tunner.Installer.Tests/LocalBootstrapTests.cs",
+      "identity_f1_blob": "31dc98d73ee510ec0747903ffe65f367ca6c2edf",
+      "architecture_a933_blob": "31dc98d73ee510ec0747903ffe65f367ca6c2edf",
+      "working_blob": "31dc98d73ee510ec0747903ffe65f367ca6c2edf",
+      "sha256": "b70c00bdef84116a5736d84ad578dc744bff3e39431b8a499b4f3069a1766b5a"
+    },
+    {
+      "path": "tests/Tunner.Installer.Tests/OpenBaoIntegrationTests.cs",
+      "identity_f1_blob": "707e4631812cda006e5a85cbe916f5722dadeb2f",
+      "architecture_a933_blob": "707e4631812cda006e5a85cbe916f5722dadeb2f",
+      "working_blob": "707e4631812cda006e5a85cbe916f5722dadeb2f",
+      "sha256": "24a9327088ea99256563cc3c7a6adb51d28177cfcf91fe33fe0dd7349251c87a"
+    },
+    {
+      "path": "tests/Tunner.Installer.Tests/Tunner.Installer.Tests.csproj",
+      "identity_f1_blob": "c51f64c9d5953d48f493765286ffac9b9f10120e",
+      "architecture_a933_blob": "c51f64c9d5953d48f493765286ffac9b9f10120e",
+      "working_blob": "c51f64c9d5953d48f493765286ffac9b9f10120e",
+      "sha256": "1a22b4ca46e39ab1026f6961e8382a3007a56df5e2baec160ba4900c29781355"
+    },
+    {
+      "path": "tests/Tunner.Observability.FunctionalTests/Program.cs",
+      "identity_f1_blob": "e4638aae152e340dc1b1a30c2a52528288445cbb",
+      "architecture_a933_blob": "e4638aae152e340dc1b1a30c2a52528288445cbb",
+      "working_blob": "e4638aae152e340dc1b1a30c2a52528288445cbb",
+      "sha256": "1c3b8cb64aa87277db7d093261258aac53556c2bfa5bdf3019ae72a79731ca43"
+    },
+    {
+      "path": "tests/Tunner.Observability.FunctionalTests/Tunner.Observability.FunctionalTests.csproj",
+      "identity_f1_blob": "9a0437a57bf26799d17e1f907879a8b1ecf6b54d",
+      "architecture_a933_blob": "9a0437a57bf26799d17e1f907879a8b1ecf6b54d",
+      "working_blob": "9a0437a57bf26799d17e1f907879a8b1ecf6b54d",
+      "sha256": "4e787560d871072b9bcfe8d62be7f904d7f7798c56742403d08db3906bda5179"
+    },
+    {
+      "path": "tests/Tunner.Platform.ArchitectureTests/AwsR2S3ClientTests.cs",
+      "identity_f1_blob": "7f1902cace6af56078a1a8791f0560d551cda9d6",
+      "architecture_a933_blob": "7f1902cace6af56078a1a8791f0560d551cda9d6",
+      "working_blob": "7f1902cace6af56078a1a8791f0560d551cda9d6",
+      "sha256": "c46d5b10fc102240835f56733bf22fbd78c6a52ad772aa5a271df604e1f00185"
+    },
+    {
+      "path": "tests/Tunner.Platform.ArchitectureTests/BffFoundationTests.cs",
+      "identity_f1_blob": "13176eaf72fd679580d98073d2ad0af63a0b99a7",
+      "architecture_a933_blob": "13176eaf72fd679580d98073d2ad0af63a0b99a7",
+      "working_blob": "13176eaf72fd679580d98073d2ad0af63a0b99a7",
+      "sha256": "f396b2616d5f89e89c6e9f535a3d311f9c87ca7310bb4328e9e014561967e0b5"
+    },
+    {
+      "path": "tests/Tunner.Platform.ArchitectureTests/EffectivePolicyVersionResolverTests.cs",
+      "identity_f1_blob": "6c8967f6128a6e02d9411d51dfeaed0886590f1d",
+      "architecture_a933_blob": "6c8967f6128a6e02d9411d51dfeaed0886590f1d",
+      "working_blob": "6c8967f6128a6e02d9411d51dfeaed0886590f1d",
+      "sha256": "d4197d854f0c9af30367b7998afb06225896f599414cfb616119d76742d19504"
+    },
+    {
+      "path": "tests/Tunner.Platform.ArchitectureTests/EngineeringEnvironmentConfigurationTests.cs",
+      "identity_f1_blob": "b9e63c821734df94d64297d09e15d5dacce2104a",
+      "architecture_a933_blob": "b9e63c821734df94d64297d09e15d5dacce2104a",
+      "working_blob": "b9e63c821734df94d64297d09e15d5dacce2104a",
+      "sha256": "f3c2f332f490bd440e943cb5fd82b4ee6027aa1425ea5f44bd4d2a64ceb7f149"
+    },
+    {
+      "path": "tests/Tunner.Platform.ArchitectureTests/HostCompositionTests.cs",
+      "identity_f1_blob": "72efa67ceffa6b5109f4a104f3c7a8d1abaad157",
+      "architecture_a933_blob": "72efa67ceffa6b5109f4a104f3c7a8d1abaad157",
+      "working_blob": "72efa67ceffa6b5109f4a104f3c7a8d1abaad157",
+      "sha256": "c739b89e3715f7ad2df2b2f69dcef7be9560ff255d0c3dbb09505f762661fd25"
+    },
+    {
+      "path": "tests/Tunner.Platform.ArchitectureTests/OpenApiContractFoundationTests.cs",
+      "identity_f1_blob": "6807a6fdfc04fd0af9829a89c99783b030717e91",
+      "architecture_a933_blob": "6807a6fdfc04fd0af9829a89c99783b030717e91",
+      "working_blob": "6807a6fdfc04fd0af9829a89c99783b030717e91",
+      "sha256": "6175a723f78c906f098526e847d8eb8a977c9ac64852eafa6de49ad7724b9366"
+    },
+    {
+      "path": "tests/Tunner.Platform.ArchitectureTests/ProviderCorrelationBoundaryTests.cs",
+      "identity_f1_blob": "69c4ec600b1bd817531a2048a62475bcbd1a8f24",
+      "architecture_a933_blob": "69c4ec600b1bd817531a2048a62475bcbd1a8f24",
+      "working_blob": "69c4ec600b1bd817531a2048a62475bcbd1a8f24",
+      "sha256": "bcde63928171ef21b5b147a88f916ed315e464321a58ac76825540e04e797deb"
+    },
+    {
+      "path": "tests/Tunner.Platform.ArchitectureTests/R2ObjectStorageTests.cs",
+      "identity_f1_blob": "6d935eb55a54b7d634eed3e71b5a955a56ec1ebc",
+      "architecture_a933_blob": "6d935eb55a54b7d634eed3e71b5a955a56ec1ebc",
+      "working_blob": "6d935eb55a54b7d634eed3e71b5a955a56ec1ebc",
+      "sha256": "f6b56ef1b48187652ae008700aba2d1fef3c684c10287fdbc6f18bbd0b444fa4"
+    },
+    {
+      "path": "tests/Tunner.Platform.ArchitectureTests/RealtimeFoundationTests.cs",
+      "identity_f1_blob": "b725387260c512ee7d1c252a7137d86caf3e0631",
+      "architecture_a933_blob": "b725387260c512ee7d1c252a7137d86caf3e0631",
+      "working_blob": "b725387260c512ee7d1c252a7137d86caf3e0631",
+      "sha256": "8429107adb3225e73a795cff5b15f247511d825fdf57b5233a15aeaf251c951c"
+    },
+    {
+      "path": "tests/Tunner.Platform.ArchitectureTests/RealtimeTransportTests.cs",
+      "identity_f1_blob": "567dfb161fc69d5f8314aed1a53499ed259d176d",
+      "architecture_a933_blob": "567dfb161fc69d5f8314aed1a53499ed259d176d",
+      "working_blob": "567dfb161fc69d5f8314aed1a53499ed259d176d",
+      "sha256": "4de49161972e5a09ebea834c4171bfe7405ddf43757839c380f88430bbd15f75"
+    },
+    {
+      "path": "tests/Tunner.Platform.ArchitectureTests/TechnicalCommandPrimitivesTests.cs",
+      "identity_f1_blob": "233f249e6b773d23108e015b7ee02d3102e8164d",
+      "architecture_a933_blob": "233f249e6b773d23108e015b7ee02d3102e8164d",
+      "working_blob": "233f249e6b773d23108e015b7ee02d3102e8164d",
+      "sha256": "b4aa173cbf78b59650732674c33be79ad3334d0033414bdd8ab68b1903a8a796"
+    },
+    {
+      "path": "tests/Tunner.Platform.ArchitectureTests/TechnicalProblemDetailsTests.cs",
+      "identity_f1_blob": "73fd4468f2a710a2303b898faecd2ae2e81501dc",
+      "architecture_a933_blob": "73fd4468f2a710a2303b898faecd2ae2e81501dc",
+      "working_blob": "73fd4468f2a710a2303b898faecd2ae2e81501dc",
+      "sha256": "a2b12dcdb11eb39e377b0d30772ab49c21c1df9972264ba95b40b68d22d216c1"
+    },
+    {
+      "path": "tests/Tunner.Platform.ArchitectureTests/Tunner.Platform.ArchitectureTests.csproj",
+      "identity_f1_blob": "c1a547ab3dbe15af3d9da0f87830a4b8acd84882",
+      "architecture_a933_blob": "c1a547ab3dbe15af3d9da0f87830a4b8acd84882",
+      "working_blob": "c1a547ab3dbe15af3d9da0f87830a4b8acd84882",
+      "sha256": "156526a590cb493c6cacdd64c68618ebb58860df91017b4964afd03b30a9c0f6"
+    },
+    {
+      "path": "tests/Tunner.TestHarness.Tests/TestHarnessBaselineTests.cs",
+      "identity_f1_blob": "4cad48c729e4c1e045eda0b042e28136abe8c652",
+      "architecture_a933_blob": "4cad48c729e4c1e045eda0b042e28136abe8c652",
+      "working_blob": "4cad48c729e4c1e045eda0b042e28136abe8c652",
+      "sha256": "717fb4eb0c1bfa26b107d566df09d0652385e2e8f684fa28143ec5823375dae3"
+    },
+    {
+      "path": "tests/Tunner.TestHarness.Tests/Tunner.TestHarness.Tests.csproj",
+      "identity_f1_blob": "06e632bec404b1d39b965327b0d60de99c00167e",
+      "architecture_a933_blob": "06e632bec404b1d39b965327b0d60de99c00167e",
+      "working_blob": "06e632bec404b1d39b965327b0d60de99c00167e",
+      "sha256": "af20ae0ef91758611836b1dacc9637ab773a214ded26ac513bb320472e39a580"
+    },
+    {
+      "path": "tests/Tunner.Worker.Tests/OutboxDispatchCoordinatorTests.cs",
+      "identity_f1_blob": "635e7085cb843ce4ca6611923ec2e751b354704f",
+      "architecture_a933_blob": "635e7085cb843ce4ca6611923ec2e751b354704f",
+      "working_blob": "635e7085cb843ce4ca6611923ec2e751b354704f",
+      "sha256": "3a6526efcc20c013a2f582847ecfd27e956deed3690844c6f67baff09562960d"
+    },
+    {
+      "path": "tests/Tunner.Worker.Tests/RabbitMqOutboxIntegrationTests.cs",
+      "identity_f1_blob": "c1ee084307163d2f220e595aef11493b4adda776",
+      "architecture_a933_blob": "c1ee084307163d2f220e595aef11493b4adda776",
+      "working_blob": "c1ee084307163d2f220e595aef11493b4adda776",
+      "sha256": "7d684626dd0b4edf55272362deb3e68f3e1356f2b366570eccd5817270e3a463"
+    },
+    {
+      "path": "tests/Tunner.Worker.Tests/RabbitMqRuntimeCompatibilityTests.cs",
+      "identity_f1_blob": "509ff11739e4329251bbc2ed5f6efedaa46716fb",
+      "architecture_a933_blob": "509ff11739e4329251bbc2ed5f6efedaa46716fb",
+      "working_blob": "509ff11739e4329251bbc2ed5f6efedaa46716fb",
+      "sha256": "58abc27428ae1b803ff448ef3e1a1b5dd77ebcf3cc18981dab5c7fd5e4ba90a0"
+    },
+    {
+      "path": "tests/Tunner.Worker.Tests/Tunner.Worker.Tests.csproj",
+      "identity_f1_blob": "4d3a22ae8a8cd9a5b3d02f022896aa843c91ebb6",
+      "architecture_a933_blob": "4d3a22ae8a8cd9a5b3d02f022896aa843c91ebb6",
+      "working_blob": "4d3a22ae8a8cd9a5b3d02f022896aa843c91ebb6",
+      "sha256": "a8db89cab0aaa43831b29cd04851d7f15ed47706a84004ab54c325584be1d5c4"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestHost.cs",
+      "identity_f1_blob": "9797792d4058eb1fe9032ba70b202183ffb2807e",
+      "architecture_a933_blob": "9797792d4058eb1fe9032ba70b202183ffb2807e",
+      "working_blob": "9797792d4058eb1fe9032ba70b202183ffb2807e",
+      "sha256": "1e1178b5409e1b08d7b122b398f0259e73c1d42bf21df24a91f5d6bd969c9fd0"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestPasskeys.cs",
+      "identity_f1_blob": "e9b77712c3c09ab73a6cd3f6d02fed442157345f",
+      "architecture_a933_blob": "e9b77712c3c09ab73a6cd3f6d02fed442157345f",
+      "working_blob": "e9b77712c3c09ab73a6cd3f6d02fed442157345f",
+      "sha256": "a6c7927ea226dcdeefced4af7f7107c67329951cd1a3e463ead7ee2f5a1f7eb9"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestStepUp.cs",
+      "identity_f1_blob": "73b95e14983606580f2d50b70664b17017ccd406",
+      "architecture_a933_blob": "73b95e14983606580f2d50b70664b17017ccd406",
+      "working_blob": "73b95e14983606580f2d50b70664b17017ccd406",
+      "sha256": "09a8a35c7671ffa9789ce08bea5d5a7db6b618bb98aad44e022962b9ee430597"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestTotp.cs",
+      "identity_f1_blob": "2b2524ea5059ba88eaa00e46fa205437ff0eb662",
+      "architecture_a933_blob": "2b2524ea5059ba88eaa00e46fa205437ff0eb662",
+      "working_blob": "2b2524ea5059ba88eaa00e46fa205437ff0eb662",
+      "sha256": "4d39963b9d485a2f6b15c1e42151f7ddbd2bbf83e3a63f88eca56f24c36a178c"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestTotpOracle.cs",
+      "identity_f1_blob": "7c8cc6a4bb3950c2f748087eff86f5777a40baac",
+      "architecture_a933_blob": "7c8cc6a4bb3950c2f748087eff86f5777a40baac",
+      "working_blob": "7c8cc6a4bb3950c2f748087eff86f5777a40baac",
+      "sha256": "a9a47790c3a6a625c5ccb3f21737cb861498daa7cab64b5db8f30662cee0c8e5"
+    },
+    {
+      "path": "tools/browser-testing/FiniteTotpBuildBinding.cs",
+      "identity_f1_blob": "53e49964d114b5cfa3fd9c3b5f96954759245f77",
+      "architecture_a933_blob": "53e49964d114b5cfa3fd9c3b5f96954759245f77",
+      "working_blob": "53e49964d114b5cfa3fd9c3b5f96954759245f77",
+      "sha256": "9002c1acbdaaf77ec1e836d0f01ab0cdf995d5adb2a7fd7919d779e1112115f6"
+    },
+    {
+      "path": "tools/browser-testing/FiniteTotpCoordinator.cs",
+      "identity_f1_blob": "a4e1ca84beec58a373c14cd06ae096a650bea64f",
+      "architecture_a933_blob": "a4e1ca84beec58a373c14cd06ae096a650bea64f",
+      "working_blob": "a4e1ca84beec58a373c14cd06ae096a650bea64f",
+      "sha256": "50e40c65c5c22f9a2871c9c6988d78597ac12b9587fb57acf2326099ff65bffb"
+    },
+    {
+      "path": "tools/browser-testing/FiniteTotpResources.cs",
+      "identity_f1_blob": "a396eec87cf5ad6255aa0c03957813455fe626a6",
+      "architecture_a933_blob": "a396eec87cf5ad6255aa0c03957813455fe626a6",
+      "working_blob": "a396eec87cf5ad6255aa0c03957813455fe626a6",
+      "sha256": "1963c5d00f00d0ef75c2993438b5d4bccf83b98ee00598eaee0d2df432736095"
+    },
+    {
+      "path": "tools/browser-testing/Program.cs",
+      "identity_f1_blob": "50346ab34923d8898d7ecdde1de6aba97b630045",
+      "architecture_a933_blob": "50346ab34923d8898d7ecdde1de6aba97b630045",
+      "working_blob": "50346ab34923d8898d7ecdde1de6aba97b630045",
+      "sha256": "a975162c7b534fbbc1311ad36764bfcf0eab523343e99824c1faa681221385cc"
+    },
+    {
+      "path": "tools/browser-testing/Tunner.BrowserTesting.csproj",
+      "identity_f1_blob": "6696de6cc928cf500f80ed483a76d91169dcbd5a",
+      "architecture_a933_blob": "6696de6cc928cf500f80ed483a76d91169dcbd5a",
+      "working_blob": "6696de6cc928cf500f80ed483a76d91169dcbd5a",
+      "sha256": "e0c6d32bd5462fb4cd18adddafe8dd906635f907fa203700e0801ff6cf1c1c3b"
+    },
+    {
+      "path": "tools/validation/fixtures/lgtm-grpc/Lgtm.GrpcFixture.csproj",
+      "identity_f1_blob": "4cc857c72b25392613b177efe15fb7e5f1a0b6dc",
+      "architecture_a933_blob": "4cc857c72b25392613b177efe15fb7e5f1a0b6dc",
+      "working_blob": "4cc857c72b25392613b177efe15fb7e5f1a0b6dc",
+      "sha256": "836982e1a61c356c42ef8b7694ec66537cff67f03defd9b7edd4f8b4ddd74700"
+    },
+    {
+      "path": "tools/validation/fixtures/lgtm-grpc/Program.cs",
+      "identity_f1_blob": "dd098c1e67e3c040539fb0633e625decabe01ced",
+      "architecture_a933_blob": "dd098c1e67e3c040539fb0633e625decabe01ced",
+      "working_blob": "dd098c1e67e3c040539fb0633e625decabe01ced",
+      "sha256": "09460ce79086035515188fe566e880594b08f22d12d1795e49f6c8d70a732d3c"
+    }
+  ]
+}

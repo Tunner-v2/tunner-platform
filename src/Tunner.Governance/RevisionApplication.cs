@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Numerics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -153,8 +154,14 @@ public static class RevisionApplication
     }
 
     public static CommandResult CloseCheck(DirectoryInfo repository, string id)
+        => CloseCheck(repository, id, new CommittedProofAssessment(repository));
+
+    internal static CommandResult CloseCheck(DirectoryInfo repository, string id, CommittedProofAssessment assessment)
+        => assessment.CloseCheck(repository, id, () => CloseCheckCore(repository, id, assessment));
+
+    private static CommandResult CloseCheckCore(DirectoryInfo repository, string id, CommittedProofAssessment assessment)
     {
-        var validation = (ValidationPayload)GovernanceApplication.Validate(repository).Payload;
+        var validation = (ValidationPayload)GovernanceApplication.Validate(repository, assessment).Payload;
         if (!validation.IsValid) return Result("revision close-check", id, "NOT_READY", validation.Diagnostics.Select(x => x.Message));
         var records = GovernanceApplication.LoadRecords(repository, []);
         var revision = Revisions(records).SingleOrDefault(x => x.Identifier == id);
@@ -169,9 +176,9 @@ public static class RevisionApplication
         foreach (var evidence in revision.StringList("evidence_refs"))
             if (!SafeFile(repository, evidence)) failures.Add($"required Revision evidence missing: {evidence}");
         if (CommitReadinessApplication.Read(revision)?.RepositoryChanged != true) failures.Add("repository-native Revision closure requires repository-changing committed-state lineage");
-        failures.AddRange(CommitReadinessApplication.Check(repository, revision));
+        failures.AddRange(CommitReadinessApplication.Check(repository, revision, null, assessment));
         var committedState = CommitReadinessApplication.Read(revision);
-        if (committedState?.RepositoryChanged == true && committedState.ValidatedCommitSha is { } sha && Parse(Git(repository, "show", sha + ":" + RepositoryRootResolver.ToLogicalPath(repository, revision.Path))) is null)
+        if (committedState?.RepositoryChanged == true && committedState.ValidatedCommitSha is { } sha && Parse(CommittedEvidenceApplication.Git(repository, assessment, "show", sha + ":" + RepositoryRootResolver.ToLogicalPath(repository, revision.Path))) is null)
             failures.Add("validated SHA must contain this Revision record");
         foreach (var workId in revision.StringList("work_items"))
         {
@@ -183,7 +190,7 @@ public static class RevisionApplication
             }
             var work = records.SingleOrDefault(x => x.Type.DefinitionName == "work-item" && x.Identifier == workId);
             if (work is null || work.Scalar("revision_ref") != id || work.Scalar("status") != "DONE") failures.Add($"Revision child is not complete and linked: {workId}");
-            else failures.AddRange(((GatePayload)GovernanceApplication.CheckGate(repository, workId).Payload).Failures.Select(x => $"{workId}: {x}"));
+            else failures.AddRange(((GatePayload)GovernanceApplication.CheckGate(repository, workId, assessment).Payload).Failures.Select(x => $"{workId}: {x}"));
         }
         foreach (var gateId in revision.StringList("required_gates"))
         {
@@ -208,13 +215,15 @@ public static class RevisionApplication
         return Result("revision close-check", id, failures.Count == 0 ? "PASS" : "NOT_READY", failures);
     }
 
-    internal static void AddDiagnostics(DirectoryInfo repository, IReadOnlyList<GovernanceRecord> records, List<Diagnostic> diagnostics)
+    internal static void AddDiagnostics(DirectoryInfo repository, IReadOnlyList<GovernanceRecord> records, List<Diagnostic> diagnostics,
+        CommittedProofAssessment assessment, string? head)
     {
+        JsonSchema? revisionSchema = null;
         foreach (var revision in Revisions(records))
         {
             try
             {
-                foreach (var failure in SchemaFailures(repository, revision).Concat(RecordFailures(repository, revision, records)))
+                foreach (var failure in SchemaFailures(repository, revision, ref revisionSchema).Concat(RecordFailures(repository, revision, records, assessment, head)))
                     diagnostics.Add(Diagnostic.Error(revision.Path, revision.Root.Start, "GOV_REVISION_INVALID", failure));
             }
             catch (Exception exception) when (exception is InvalidOperationException or IOException or JsonException)
@@ -309,7 +318,8 @@ public static class RevisionApplication
         return failures;
     }
 
-    private static List<string> RecordFailures(DirectoryInfo repository, GovernanceRecord revision, IReadOnlyList<GovernanceRecord> records)
+    private static List<string> RecordFailures(DirectoryInfo repository, GovernanceRecord revision, IReadOnlyList<GovernanceRecord> records,
+        CommittedProofAssessment? assessment = null, string? head = null)
     {
         var failures = new List<string>();
         var original = ResolveOriginal(records, revision.Scalar("original_scope_id") ?? "");
@@ -348,24 +358,86 @@ public static class RevisionApplication
                 failures.Add($"Revision {time} must be an ISO timestamp");
         if (NullValue(revision.Scalar("created_at")) is null) failures.Add("Revision creation timestamp is required");
         if ((revision.Scalar("status") == "CLOSED") != (NullValue(revision.Scalar("closed_at")) is not null)) failures.Add("closed_at is required exactly when Revision is CLOSED");
-        var old = Parse(Git(repository, "show", "HEAD:" + RepositoryRootResolver.ToLogicalPath(repository, revision.Path)));
+        var logicalPath = RepositoryRootResolver.ToLogicalPath(repository, revision.Path);
+        var old = Parse(assessment is not null && CommittedEvidenceApplication.IsSha(head)
+            ? assessment.ReadImmutableGit(repository, ["show", head + ":" + logicalPath],
+                () => Git(repository, "show", head + ":" + logicalPath))
+            : Git(repository, "show", "HEAD:" + logicalPath));
         if (old is not null)
         {
             var fields = GovernanceApplication.Fields(old);
             foreach (var field in IdentityFields)
                 if (NullValue(GovernanceApplication.Scalar(fields, field)) != NullValue(revision.Scalar(field))) failures.Add($"committed Revision identity field is immutable: {field}");
-            if (GovernanceApplication.Scalar(fields, "status") == "CLOSED" && JsonSerializer.Serialize(ToJson(old)) != JsonSerializer.Serialize(ToJson(revision.Root)))
-                failures.Add("closed Revision history is immutable; later work requires a new Revision");
+            if (GovernanceApplication.Scalar(fields, "status") == "CLOSED")
+            {
+                var committedJson = JsonSerializer.Serialize(ToJson(old));
+                var currentJson = JsonSerializer.Serialize(ToJson(revision.Root));
+                if (committedJson != currentJson)
+                {
+                    failures.Add("closed Revision history is immutable; later work requires a new Revision");
+                    failures.Add(ClosedComparisonDiagnostic(committedJson, currentJson));
+                }
+            }
         }
         return failures;
     }
 
+    private static string ClosedComparisonDiagnostic(string committedJson, string currentJson)
+    {
+        const string unavailable = "closed Revision comparison diagnostic: unavailable";
+        // Bound diagnostic work only. This limit never changes the preceding immutable-history refusal.
+        if (committedJson.Length > 131072 || currentJson.Length > 131072) return unavailable;
+        try
+        {
+            using var committed = JsonDocument.Parse(committedJson);
+            using var current = JsonDocument.Parse(currentJson);
+            var left = committed.RootElement;
+            var right = current.RootElement;
+            var equal = JsonElement.DeepEquals(left, right);
+            var path = "$";
+            var kinds = left.ValueKind + "/" + right.ValueKind;
+            if (!equal && left.ValueKind == JsonValueKind.Object && right.ValueKind == JsonValueKind.Object)
+            {
+                string[] approvedFields = ["schema_version", "revision_id", "revision_scope", "original_scope_id",
+                    "parent_revision_id", "parent_milestone_revision_id", "title", "revision_type", "status", "reason",
+                    "authority_refs", "decision_refs", "defect_refs", "change_refs", "impact_classification", "blocked_scope",
+                    "acceptance_criteria", "prerequisites", "work_items", "required_gates", "required_roles", "evidence_refs",
+                    "created_at", "closed_at", "git_state", "product_acceptance_required", "ui_evidence_ref"];
+                foreach (var name in left.EnumerateObject().Select(x => x.Name).Concat(right.EnumerateObject().Select(x => x.Name)).Distinct(StringComparer.Ordinal))
+                {
+                    var hasLeft = left.TryGetProperty(name, out var leftValue);
+                    var hasRight = right.TryGetProperty(name, out var rightValue);
+                    if (hasLeft && hasRight && JsonElement.DeepEquals(leftValue, rightValue)) continue;
+                    path = approvedFields.Contains(name, StringComparer.Ordinal) ? "$." + name : "$.[unrecognized-property]";
+                    kinds = leftValue.ValueKind + "/" + rightValue.ValueKind;
+                    break;
+                }
+            }
+            var committedHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(committedJson))).ToLowerInvariant();
+            var currentHash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(currentJson))).ToLowerInvariant();
+            return $"closed Revision comparison diagnostic: committed_sha256={committedHash}; current_sha256={currentHash}; comparison={(equal ? "semantic-equal-serialization-difference" : "semantic-difference")}; path={path}; kinds={kinds}";
+        }
+        catch (Exception exception) when (exception is JsonException or InvalidOperationException or ArgumentException or CryptographicException)
+        {
+            return unavailable;
+        }
+    }
+
     private static IEnumerable<string> SchemaFailures(DirectoryInfo repository, GovernanceRecord record)
+    {
+        JsonSchema? schema = null;
+        return SchemaFailures(repository, record, ref schema);
+    }
+
+    private static IEnumerable<string> SchemaFailures(DirectoryInfo repository, GovernanceRecord record, ref JsonSchema? schema)
     {
         try
         {
-            using var library = JsonDocument.Parse(File.ReadAllText(Path.Combine(repository.FullName, "governance", "schemas", "v1", "governance-record.schema.json")));
-            var schema = JsonSchema.FromText("{\"$defs\":" + library.RootElement.GetProperty("$defs").GetRawText() + ",\"$ref\":\"#/$defs/revision\"}");
+            if (schema is null)
+            {
+                using var library = JsonDocument.Parse(File.ReadAllText(Path.Combine(repository.FullName, "governance", "schemas", "v1", "governance-record.schema.json")));
+                schema = JsonSchema.FromText("{\"$defs\":" + library.RootElement.GetProperty("$defs").GetRawText() + ",\"$ref\":\"#/$defs/revision\"}");
+            }
             return schema.Evaluate(JsonSerializer.SerializeToElement(ToJson(record.Root))).IsValid ? [] : ["Revision fails executable JSON Schema field/type/enum validation"];
         }
         catch (Exception exception) when (exception is IOException or JsonException or InvalidOperationException)
@@ -486,7 +558,7 @@ public static class RevisionApplication
     {
         try
         {
-            var start = new ProcessStartInfo("git") { WorkingDirectory = repository.FullName, RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false, CreateNoWindow = true };
+            var start = new ProcessStartInfo("git") { WorkingDirectory = repository.FullName, RedirectStandardOutput = true, StandardOutputEncoding = Encoding.UTF8, RedirectStandardError = true, UseShellExecute = false, CreateNoWindow = true };
             foreach (var arg in args) start.ArgumentList.Add(arg);
             using var process = Process.Start(start);
             if (process is null) return "";

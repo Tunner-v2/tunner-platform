@@ -1,0 +1,26 @@
+{
+  "source": "a738e48269272c94c8276c729abfb7564797d1c1",
+  "result": "PASS_SCOPED",
+  "secret_paths": [
+    "src/Modules/Identity/SessionBulkRevocationContracts.cs",
+    "src/Modules/Identity/SessionBulkRevocationApplication.cs",
+    "src/Modules/Identity/AuthenticationSessionBulkRevocation.cs",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "tests/Tunner.Identity.Persistence.Tests/SessionBulkRevocationTests.cs",
+    "docs/contracts/session-bulk-revocation-contract.md"
+  ],
+  "secret_receipt": "secret-scan.log",
+  "sast_paths": [
+    "src/Modules/Identity/SessionBulkRevocationContracts.cs",
+    "src/Modules/Identity/SessionBulkRevocationApplication.cs",
+    "src/Modules/Identity/AuthenticationSessionBulkRevocation.cs",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "tests/Tunner.Identity.Persistence.Tests/SessionBulkRevocationTests.cs"
+  ],
+  "sast_rule_count": 4,
+  "findings": [],
+  "policy_sha256": "3c7e71681b62b44efcc56a486a845dea8f3b48276c91a245e9abd41ec72ee80c",
+  "rule_extraction": "Exact four single-quoted Name/Pattern literals from byte-unchanged approved scanner, fail-closed hash/count guards",
+  "scope": "Scoped changed source only; no broad scan, dependency/image qualification or external services.",
+  "wrapper_history": "Secret script passed; wrapper initially inspected stale LASTEXITCODE. AST shape assumption then failed before SAST scan. Existing passing secret receipt reused; literal rule loader replaces introspection, scanner policy unchanged."
+}

@@ -1,0 +1,20 @@
+schema_version: 1
+defect_id: DEF-TUN-P2-010-004
+work_item_id: TUN-P2-010
+classification: TEST_INFRASTRUCTURE
+severity: SEV-3
+status: CLOSED
+environment: federation HTTPS BFF integration acceptance coverage
+description: Domain-owner tests and separate native OIDC tests do not yet exercise the production BFF composition as one public start, native callback, paired-cookie registration descriptor, explicit notice completion and original-result path. Add one fixed finite integration case using the existing authenticated HTTPS host, registration source contracts and synthetic native provider. Verify cookie and CSRF rejection, source/version binding, no callback Account/session mutation, no registration grant and subsequent qualified linked sign-in. Do not add a host, runner, protocol or relaxed issuer check.
+expected_behavior_ref: docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md; docs/development/P2_010_FEDERATION_REFINEMENT.md
+evidence:
+  - governance/evidence/p2-010-federation-20261112/native-734828a/private76.json
+  - tests/Tunner.Identity.Persistence.Tests/FederationBffPrivateIntegrationTests.cs
+  - tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs
+  - tests/Tunner.Identity.Persistence.Tests/FederationOidcNativeProtocolTests.cs
+  - tests/Tunner.Identity.Persistence.Tests/FederationPrivateIntegrationTests.cs
+  - governance/evidence/TUN-P2-010-VALIDATION.json
+affected_versions:
+  - 0eacff82dc9780708b7272abb23aef53afadcc39
+created_at: 2026-11-12T18:32:54Z
+updated_at: 2026-11-12T20:33:44Z

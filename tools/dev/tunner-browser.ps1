@@ -3,7 +3,10 @@ param(
     [ValidateSet('start','stop','restart','status','logs')][string]$Command = 'start',
     [string]$RepositoryRoot,
     [switch]$NoBrowser,
-    [switch]$SkipCertificateTrust
+    [switch]$SkipCertificateTrust,
+    [switch]$GovernedContent,
+    [switch]$SyntheticAdmin,
+    [switch]$SyntheticIdentityConfiguration
 )
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -21,7 +24,11 @@ $projectName = 'tunner-browser-' + $rootHash
 # Per-request certificate pinning for readiness works in Windows PowerShell 5.1 and PowerShell 7.
 # It never changes global certificate validation or accepts an arbitrary certificate.
 if (-not ('TunnerBrowserLocalHttps' -as [type])) {
-    Add-Type -WarningAction SilentlyContinue -TypeDefinition @'
+    # Keep the .NET Framework-compatible certificate-pinned bridge on Windows PowerShell 5.1.
+    # Modern PowerShell compilers diagnose this API as obsolete; suppress only that compatibility diagnostic.
+    $browserCompileOptions = @{}
+    if ($PSVersionTable.PSVersion.Major -ge 7) { $browserCompileOptions.CompilerOptions = @('/nowarn:SYSLIB0014') }
+    Add-Type @browserCompileOptions -WarningAction SilentlyContinue -TypeDefinition @'
 using System;
 using System.IO;
 using System.Net;
@@ -92,6 +99,16 @@ function Read-BrowserState {
     foreach ($port in @($value.ApplicationPort,$value.PostgresPort,$value.SmtpPort,$value.MailpitPort)) {
         if ($port -lt 1024 -or $port -gt 65535) { throw 'Invalid saved local port.' }
     }
+    if ($null -eq $value.PSObject.Properties['GovernedContent']) { $value | Add-Member -NotePropertyName GovernedContent -NotePropertyValue $false }
+    if ($value.GovernedContent -isnot [bool]) { throw 'Invalid saved Content fixture mode.' }
+    if ($null -eq $value.PSObject.Properties['SyntheticAdmin']) { $value | Add-Member -NotePropertyName SyntheticAdmin -NotePropertyValue $false }
+    if ($null -eq $value.PSObject.Properties['AdminPort']) { $value | Add-Member -NotePropertyName AdminPort -NotePropertyValue 0 }
+    if ($null -eq $value.PSObject.Properties['SyntheticIdentityConfiguration']) { $value | Add-Member -NotePropertyName SyntheticIdentityConfiguration -NotePropertyValue $false }
+    if ($value.SyntheticIdentityConfiguration -isnot [bool] -or ($value.SyntheticIdentityConfiguration -and (-not $value.GovernedContent -or -not $value.SyntheticAdmin))) { throw 'Invalid saved synthetic Identity configuration mode.' }
+    if ($value.SyntheticAdmin -isnot [bool] -or ($value.SyntheticAdmin -and -not $value.GovernedContent) -or
+        ($value.AdminPort -ne 0 -and ($value.AdminPort -lt 1024 -or $value.AdminPort -gt 65535 -or @($value.ApplicationPort,$value.PostgresPort,$value.SmtpPort,$value.MailpitPort) -contains $value.AdminPort))) {
+        throw 'Invalid isolated synthetic Admin fixture state.'
+    }
     return $value
 }
 function Write-BrowserState {
@@ -103,21 +120,39 @@ function Get-BrowserStatus {
     if ($null -eq $State) { return $false }
     try {
         $status = [TunnerBrowserLocalHttps]::Get(('https://localhost:' + $State.ApplicationPort + '/browser-testing/status'),$State.CertificateSha256) | ConvertFrom-Json
-        return $status.ready -and $status.mode -eq $State.Mode -and $status.instanceId -eq $State.InstanceId
+        $contentReady = -not $State.GovernedContent -or ($null -ne $status.PSObject.Properties['governedContent'] -and $status.governedContent -eq $true)
+        if (-not ($status.ready -and $status.mode -eq $State.Mode -and $status.instanceId -eq $State.InstanceId -and $contentReady)) { return $false }
+        if ($State.SyntheticAdmin) {
+            if ($State.AdminPort -eq 0) { return $false }
+            $admin = [TunnerBrowserLocalHttps]::Get(('https://localhost:' + $State.AdminPort + '/browser-testing/status'),$State.CertificateSha256) | ConvertFrom-Json
+            $identityStatus = $admin.PSObject.Properties['syntheticIdentityConfiguration']
+            $identityReady = if ($null -eq $identityStatus) { -not $State.SyntheticIdentityConfiguration } else { $identityStatus.Value -is [bool] -and $identityStatus.Value -eq $State.SyntheticIdentityConfiguration }
+            return $admin.ready -and $admin.syntheticAdmin -and $admin.mode -eq $State.Mode -and $admin.instanceId -eq $State.InstanceId -and $identityReady
+        }
+        return $true
     } catch { return $false }
 }
 function Show-BrowserAddresses {
     param($State)
     Write-Host ('Application: https://localhost:' + $State.ApplicationPort + '/registration')
+    Write-Host ('Sign-in test: https://localhost:' + $State.ApplicationPort + '/login')
+    if ($State.GovernedContent) { Write-Host 'Login uses persisted synthetic Content publications. Existing publications and history are preserved on restart.' }
+    if ($State.SyntheticAdmin) {
+        Write-Host ('Synthetic Admin actors: https://localhost:' + $State.AdminPort + '/browser-testing/admin')
+        Write-Host 'Explicit local fixture only: author edits/validates, approver approves, publisher publishes. This is not workforce sign-in or production approval.'
+    }
+    if ($State.SyntheticIdentityConfiguration) { Write-Host ('Separate synthetic Identity configuration: https://localhost:' + $State.AdminPort + '/browser-testing/admin') }
+    Write-Host ('Identity verification test (sign in first): https://localhost:' + $State.ApplicationPort + '/browser-testing/step-up')
     Write-Host ('Verification inbox: http://127.0.0.1:' + $State.MailpitPort)
     Write-Host ('PostgreSQL: 127.0.0.1:' + $State.PostgresPort + ' -> container 5432; database tunner_browser_testing')
-    Write-Host 'ISOLATED LOCAL TEST DATA ONLY. Registration, verification and Personal Information are available. Sign-in and later P2 features are still under development.'
+    Write-Host 'ISOLATED LOCAL TEST DATA ONLY. Registration, verification, Personal Information and password sign-in/sign-out are available for isolated engineering testing. Production visual acceptance and later P2 features remain pending.'
 }
 function Open-BrowserAddresses {
     param($State)
     if (-not $NoBrowser) {
         Start-Process ('https://localhost:' + $State.ApplicationPort + '/registration')
         Start-Process ('http://127.0.0.1:' + $State.MailpitPort)
+        if ($State.SyntheticAdmin) { Start-Process ('https://localhost:' + $State.AdminPort + '/browser-testing/admin') }
     }
 }
 function Stop-BrowserHost {
@@ -139,8 +174,9 @@ function Stop-BrowserHost {
     Write-BrowserState $State
 }
 function Select-LocalPort {
-    param([int]$Preferred)
-    for ($candidate = $Preferred; $candidate -lt $Preferred + 50; $candidate++) {
+    param([int]$Preferred, [int[]]$ExcludedPorts = @())
+    for ($candidate = $Preferred; $candidate -lt $Preferred + 50 -and $candidate -le 65535; $candidate++) {
+        if ($ExcludedPorts -contains $candidate) { continue }
         $listener = [Net.Sockets.TcpListener]::new([Net.IPAddress]::Loopback,$candidate)
         try { $listener.Start(); return $candidate } catch [Net.Sockets.SocketException] { } finally { $listener.Stop() }
     }
@@ -175,6 +211,13 @@ function Assert-BrowserPrerequisites {
 }
 try {
     $state = Read-BrowserState
+    if ($Command -in @('start','restart')) {
+        $requestedContent = if ($PSBoundParameters.ContainsKey('GovernedContent')) { [bool]$GovernedContent } elseif ($null -ne $state) { $state.GovernedContent } else { $false }
+        $requestedAdmin = if ($PSBoundParameters.ContainsKey('SyntheticAdmin')) { [bool]$SyntheticAdmin } elseif (-not $requestedContent) { $false } elseif ($null -ne $state) { $state.SyntheticAdmin } else { $false }
+        $requestedIdentity = if ($PSBoundParameters.ContainsKey('SyntheticIdentityConfiguration')) { [bool]$SyntheticIdentityConfiguration } elseif (-not $requestedAdmin) { $false } elseif ($null -ne $state) { $state.SyntheticIdentityConfiguration } else { $false }
+        if ($requestedIdentity -and (-not $requestedContent -or -not $requestedAdmin)) { throw 'Synthetic Identity configuration requires both explicit governed Content and synthetic Admin.' }
+        if ($requestedAdmin -and -not $requestedContent) { throw 'Synthetic Admin requires the explicitly selected governed Content fixture.' }
+    }
     if ($Command -eq 'status') {
         if (Get-BrowserStatus $state) { Show-BrowserAddresses $state; return }
         Write-Host 'The browser application is not running. Start it with start-browser.cmd.'
@@ -193,7 +236,14 @@ try {
         if ($Command -eq 'stop') { return }
     }
     Assert-BrowserPrerequisites
-    if (Get-BrowserStatus $state) { Write-Host 'Already running. Use the restart command to rebuild after code changes.'; Show-BrowserAddresses $state; Open-BrowserAddresses $state; return }
+    if (Get-BrowserStatus $state) {
+        if ($PSBoundParameters.ContainsKey('GovernedContent') -and $state.GovernedContent -ne [bool]$GovernedContent) {
+            throw 'Use restart with the requested -GovernedContent value to change the isolated fixture mode.'
+        }
+        if ($state.SyntheticAdmin -ne $requestedAdmin) { throw 'Use restart with the requested -SyntheticAdmin value to change the isolated fixture mode.' }
+        if ($state.SyntheticIdentityConfiguration -ne $requestedIdentity) { throw 'Use restart with the requested -SyntheticIdentityConfiguration value to change the isolated fixture mode.' }
+        Write-Host 'Already running. Use the restart command to rebuild after code changes.'; Show-BrowserAddresses $state; Open-BrowserAddresses $state; return
+    }
     Stop-BrowserHost $state
     New-Item -ItemType Directory -Path $dataRoot -Force | Out-Null
     $certificate = Get-ChildItem Cert:\CurrentUser\My | Where-Object { $_.HasPrivateKey -and $_.NotAfter -gt (Get-Date) -and @($_.Extensions | Where-Object { $_.Oid.Value -eq '1.3.6.1.4.1.311.84.1.1' }).Count -gt 0 } | Sort-Object NotAfter -Descending | Select-Object -First 1
@@ -201,7 +251,16 @@ try {
     $certificateHash = [Security.Cryptography.SHA256]::Create()
     try { $certificateSha256 = [BitConverter]::ToString($certificateHash.ComputeHash($certificate.RawData)).Replace('-','') } finally { $certificateHash.Dispose() }
     if ($null -eq $state) {
-        $state = [pscustomobject]@{ Mode='ISOLATED_LOCAL_BROWSER_TESTING'; ProjectName=$projectName; InstanceId=[guid]::NewGuid().ToString(); ApplicationPort=(Select-LocalPort 24443); PostgresPort=(Select-LocalPort 25432); SmtpPort=(Select-LocalPort 21025); MailpitPort=(Select-LocalPort 28025); CertificateThumbprint=$certificate.Thumbprint; CertificateSha256=$certificateSha256; ProcessId=0; ProcessStartedTicks=0 }
+        $state = [pscustomobject]@{ Mode='ISOLATED_LOCAL_BROWSER_TESTING'; ProjectName=$projectName; InstanceId=[guid]::NewGuid().ToString(); ApplicationPort=(Select-LocalPort 24443); PostgresPort=(Select-LocalPort 25432); SmtpPort=(Select-LocalPort 21025); MailpitPort=(Select-LocalPort 28025); CertificateThumbprint=$certificate.Thumbprint; CertificateSha256=$certificateSha256; ProcessId=0; ProcessStartedTicks=0; GovernedContent=[bool]$GovernedContent }
+    }
+    if ($PSBoundParameters.ContainsKey('GovernedContent')) { $state.GovernedContent = [bool]$GovernedContent }
+    if ($null -eq $state.PSObject.Properties['SyntheticAdmin']) { $state | Add-Member -NotePropertyName SyntheticAdmin -NotePropertyValue $false }
+    if ($null -eq $state.PSObject.Properties['AdminPort']) { $state | Add-Member -NotePropertyName AdminPort -NotePropertyValue 0 }
+    if ($null -eq $state.PSObject.Properties['SyntheticIdentityConfiguration']) { $state | Add-Member -NotePropertyName SyntheticIdentityConfiguration -NotePropertyValue $false }
+    $state.SyntheticAdmin = $requestedAdmin
+    $state.SyntheticIdentityConfiguration = $requestedIdentity
+    if ($state.SyntheticAdmin -and $state.AdminPort -eq 0) {
+        $state.AdminPort = Select-LocalPort -Preferred 24444 -ExcludedPorts @($state.ApplicationPort,$state.PostgresPort,$state.SmtpPort,$state.MailpitPort)
     }
     $state.InstanceId = [guid]::NewGuid().ToString()
     $state.CertificateThumbprint = $certificate.Thumbprint
@@ -213,6 +272,7 @@ try {
     $postgres.ports = @('127.0.0.1:' + $state.PostgresPort + ':5432')
     $postgres.volumes = @(@{type='volume';source='browser-postgres-data';target='/var/lib/postgresql'})
     $mailpit = $baseCompose.services.mailpit
+    & (Join-Path $repositoryRoot 'tools/security/Ensure-TunnerDevelopmentImages.ps1') -Images @($postgres.image,$mailpit.image) -RepositoryRoot $repositoryRoot
     $mailpit.ports = @(("127.0.0.1:{0}:1025" -f $state.SmtpPort),("127.0.0.1:{0}:8025" -f $state.MailpitPort))
     @{services=@{postgres=$postgres;mailpit=$mailpit};volumes=@{'browser-postgres-data'=@{}}} | ConvertTo-Json -Depth 30 | Set-Content -LiteralPath $composePath -Encoding UTF8
     Write-BrowserState $state
@@ -243,7 +303,7 @@ try {
     }
     $options = [TunnerBrowserLocalHttps]::Get(('https://localhost:' + $state.ApplicationPort + '/registration/options'),$state.CertificateSha256) | ConvertFrom-Json
     if ($options.policyVersion -ne 'browser-test-registration-v2') { throw 'The registration providers did not pass the test-mode readiness check.' }
-    Write-Host 'Ready: database migrations, HTTPS, real registration API, packaged UI and local verification delivery.'
+    Write-Host 'Ready: database migrations, HTTPS, registration/authentication APIs, packaged UI and local verification delivery.'
     Show-BrowserAddresses $state
     Open-BrowserAddresses $state
 } catch {

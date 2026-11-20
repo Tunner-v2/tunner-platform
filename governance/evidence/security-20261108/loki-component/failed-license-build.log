@@ -1,0 +1,61 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from loki.Dockerfile
+#1 transferring dockerfile: 1.83kB 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110
+#2 ...
+
+#3 [auth] library/golang:pull token for registry-1.docker.io
+#3 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110
+#2 DONE 2.5s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [builder 2/5] ADD --checksum=sha256:f64c14e3aaeab3c14c013974c6a016e5f61fd1758354ca8dcd320dcce8c656aa https://codeload.github.com/grafana/loki/tar.gz/d3b4a2f76bfc5625abee7ceb00b8896fa3c31549 /tmp/loki.tar.gz
+#5 DONE 0.0s
+
+#6 [builder 1/5] FROM docker.io/library/golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110
+#6 resolve docker.io/library/golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110
+#6 resolve docker.io/library/golang:1.27.3-bookworm@sha256:5c3e9b43cfd3bb95c7937462e29d87ada57b481a96fa23ad0eb61778d7a00110 0.1s done
+#6 DONE 0.1s
+
+#7 [builder 2/5] ADD --checksum=sha256:f64c14e3aaeab3c14c013974c6a016e5f61fd1758354ca8dcd320dcce8c656aa https://codeload.github.com/grafana/loki/tar.gz/d3b4a2f76bfc5625abee7ceb00b8896fa3c31549 /tmp/loki.tar.gz
+#7 CACHED
+
+#8 [builder 3/5] WORKDIR /src/loki
+#8 CACHED
+
+#9 [builder 4/5] RUN tar -xzf /tmp/loki.tar.gz --strip-components=1 && mkdir -p /out/bin /out/provenance/loki
+#9 CACHED
+
+#10 [builder 5/5] RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared     --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared     set -eu; GOFLAGS=-mod=mod go get golang.org/x/net@v0.62.0; go mod verify;     go test -mod=readonly -p=2 -count=1 -json ./pkg/ui/... ./pkg/util/build/... > /out/provenance/loki/upstream-tests.json || { cat /out/provenance/loki/upstream-tests.json; exit 1; };     go build -mod=readonly -p=2 -trimpath -tags netgo -ldflags='-s -w -X github.com/grafana/loki/v3/pkg/util/build.Version=3.7.9 -X github.com/grafana/loki/v3/pkg/util/build.Revision=d3b4a2f76bfc5625abee7ceb00b8896fa3c31549 -X github.com/grafana/loki/v3/pkg/util/build.Branch=v3.7.9-tunner-dev' -o /out/bin/loki ./cmd/loki;     /out/bin/loki -version > /out/provenance/loki/version.txt 2>&1;     go version -m /out/bin/loki > /out/provenance/loki/buildinfo.txt;     cp go.mod go.sum LICENSE NOTICE /out/provenance/loki/; go list -mod=readonly -m -json all > /out/provenance/loki/modules.json
+#10 3.410 go: upgraded golang.org/x/net v0.61.0 => v0.62.0
+#10 166.3 all modules verified
+#10 358.0 cp: cannot stat 'NOTICE': No such file or directory
+#10 ERROR: process "/bin/sh -c set -eu; GOFLAGS=-mod=mod go get golang.org/x/net@v0.62.0; go mod verify;     go test -mod=readonly -p=2 -count=1 -json ./pkg/ui/... ./pkg/util/build/... > /out/provenance/loki/upstream-tests.json || { cat /out/provenance/loki/upstream-tests.json; exit 1; };     go build -mod=readonly -p=2 -trimpath -tags netgo -ldflags='-s -w -X github.com/grafana/loki/v3/pkg/util/build.Version=3.7.9 -X github.com/grafana/loki/v3/pkg/util/build.Revision=d3b4a2f76bfc5625abee7ceb00b8896fa3c31549 -X github.com/grafana/loki/v3/pkg/util/build.Branch=v3.7.9-tunner-dev' -o /out/bin/loki ./cmd/loki;     /out/bin/loki -version > /out/provenance/loki/version.txt 2>&1;     go version -m /out/bin/loki > /out/provenance/loki/buildinfo.txt;     cp go.mod go.sum LICENSE NOTICE /out/provenance/loki/; go list -mod=readonly -m -json all > /out/provenance/loki/modules.json" did not complete successfully: exit code: 1
+------
+ > [builder 5/5] RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared     --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared     set -eu; GOFLAGS=-mod=mod go get golang.org/x/net@v0.62.0; go mod verify;     go test -mod=readonly -p=2 -count=1 -json ./pkg/ui/... ./pkg/util/build/... > /out/provenance/loki/upstream-tests.json || { cat /out/provenance/loki/upstream-tests.json; exit 1; };     go build -mod=readonly -p=2 -trimpath -tags netgo -ldflags='-s -w -X github.com/grafana/loki/v3/pkg/util/build.Version=3.7.9 -X github.com/grafana/loki/v3/pkg/util/build.Revision=d3b4a2f76bfc5625abee7ceb00b8896fa3c31549 -X github.com/grafana/loki/v3/pkg/util/build.Branch=v3.7.9-tunner-dev' -o /out/bin/loki ./cmd/loki;     /out/bin/loki -version > /out/provenance/loki/version.txt 2>&1;     go version -m /out/bin/loki > /out/provenance/loki/buildinfo.txt;     cp go.mod go.sum LICENSE NOTICE /out/provenance/loki/; go list -mod=readonly -m -json all > /out/provenance/loki/modules.json:
+3.410 go: upgraded golang.org/x/net v0.61.0 => v0.62.0
+166.3 all modules verified
+358.0 cp: cannot stat 'NOTICE': No such file or directory
+------
+loki.Dockerfile:7
+--------------------
+   6 |     RUN tar -xzf /tmp/loki.tar.gz --strip-components=1 && mkdir -p /out/bin /out/provenance/loki
+   7 | >>> RUN --mount=type=cache,id=tunner-lgtm-go1273-mod,target=/go/pkg/mod,sharing=shared \
+   8 | >>>     --mount=type=cache,id=tunner-lgtm-go1273-build,target=/root/.cache/go-build,sharing=shared \
+   9 | >>>     set -eu; GOFLAGS=-mod=mod go get golang.org/x/net@v0.62.0; go mod verify; \
+  10 | >>>     go test -mod=readonly -p=2 -count=1 -json ./pkg/ui/... ./pkg/util/build/... > /out/provenance/loki/upstream-tests.json || { cat /out/provenance/loki/upstream-tests.json; exit 1; }; \
+  11 | >>>     go build -mod=readonly -p=2 -trimpath -tags netgo -ldflags='-s -w -X github.com/grafana/loki/v3/pkg/util/build.Version=3.7.9 -X github.com/grafana/loki/v3/pkg/util/build.Revision=d3b4a2f76bfc5625abee7ceb00b8896fa3c31549 -X github.com/grafana/loki/v3/pkg/util/build.Branch=v3.7.9-tunner-dev' -o /out/bin/loki ./cmd/loki; \
+  12 | >>>     /out/bin/loki -version > /out/provenance/loki/version.txt 2>&1; \
+  13 | >>>     go version -m /out/bin/loki > /out/provenance/loki/buildinfo.txt; \
+  14 | >>>     cp go.mod go.sum LICENSE NOTICE /out/provenance/loki/; go list -mod=readonly -m -json all > /out/provenance/loki/modules.json
+  15 |     FROM scratch AS candidate
+--------------------
+ERROR: failed to build: failed to solve: process "/bin/sh -c set -eu; GOFLAGS=-mod=mod go get golang.org/x/net@v0.62.0; go mod verify;     go test -mod=readonly -p=2 -count=1 -json ./pkg/ui/... ./pkg/util/build/... > /out/provenance/loki/upstream-tests.json || { cat /out/provenance/loki/upstream-tests.json; exit 1; };     go build -mod=readonly -p=2 -trimpath -tags netgo -ldflags='-s -w -X github.com/grafana/loki/v3/pkg/util/build.Version=3.7.9 -X github.com/grafana/loki/v3/pkg/util/build.Revision=d3b4a2f76bfc5625abee7ceb00b8896fa3c31549 -X github.com/grafana/loki/v3/pkg/util/build.Branch=v3.7.9-tunner-dev' -o /out/bin/loki ./cmd/loki;     /out/bin/loki -version > /out/provenance/loki/version.txt 2>&1;     go version -m /out/bin/loki > /out/provenance/loki/buildinfo.txt;     cp go.mod go.sum LICENSE NOTICE /out/provenance/loki/; go list -mod=readonly -m -json all > /out/provenance/loki/modules.json" did not complete successfully: exit code: 1

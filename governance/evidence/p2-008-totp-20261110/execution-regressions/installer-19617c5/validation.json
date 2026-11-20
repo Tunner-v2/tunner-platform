@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "scope": "P1-024-RV003_SHARED_LOCAL_VAULT_COMPATIBILITY",
+  "status": "PASS",
+  "execution_head": "183b557a37833fe658d60652b946860986e99ac6",
+  "installer_input_commit": "19617c5a2d15466ddc05260b05004506c7cde3f3",
+  "receipt_observed_head": "e79f482c3859d944f031a2846e36988cf90f0098",
+  "inputs_equivalent": true,
+  "build_performed": false,
+  "test_command": "dotnet test tests/Tunner.Installer.Tests/Tunner.Installer.Tests.csproj --no-build --no-restore --results-directory <evidence-directory> --logger trx;LogFileName=installer-full-19617c5.trx --logger console;verbosity=minimal",
+  "test_process_session": 7544,
+  "launcher_pid": 2068,
+  "exit_code": 0,
+  "counters": {
+    "total": 113,
+    "executed": 113,
+    "passed": 113,
+    "failed": 0,
+    "error": 0,
+    "timeout": 0,
+    "aborted": 0,
+    "inconclusive": 0,
+    "passedButRunAborted": 0,
+    "notRunnable": 0,
+    "notExecuted": 0,
+    "disconnected": 0,
+    "warning": 0,
+    "completed": 0,
+    "inProgress": 0,
+    "pending": 0
+  },
+  "started": "2026-11-10T13:25:51.0536994-05:00",
+  "finished": "2026-11-10T13:26:11.0167115-05:00",
+  "container_opt_in": true,
+  "isolated_docker_config": true,
+  "docker_endpoint_library": "npipe://./pipe/docker_engine",
+  "docker_endpoint_post_run_cli": "npipe:////./pipe/docker_engine",
+  "cached_image_reference": "openbao/openbao:2.7.0",
+  "cached_image_id_observed_after_run": "sha256:71156a1c6623a5fa3f5e61b0c6a8ead0faf0df29a778339188443551995d1315",
+  "image_pull_build_install_performed": false,
+  "coverage_passed": {
+    "real_openbao": 3,
+    "local_daemon_preflight": 14,
+    "cleanup": 5
+  },
+  "cleanup": {
+    "log_driver_none_loopback_no_volumes_cached_only_asserted": true,
+    "post_run_owned_label_container_count": 0,
+    "session_revocation_and_policy_removal_asserted": true,
+    "no_getlogs_or_config_env_inspection": true,
+    "post_run_checked_utc": "2026-11-10T18:30:45.5296154Z",
+    "fixture_cleanup_verified_by_passing_integration_tests": true
+  },
+  "evidence": [
+    {
+      "path": "input-equivalence.json",
+      "sha256": "35a704976e3e7ff34d6c904a1e174339442374e80eb2d48d74e33f24791c0869"
+    },
+    {
+      "path": "installer-full-19617c5.trx",
+      "sha256": "9c666b46e3a9c898311d5784f7dd28c480b4afc532c7250a41f741eccf3c435a"
+    },
+    {
+      "path": "installer-full.console.log",
+      "sha256": "d17696c80f65142c9f628a15a563939966f952cdb0d028c26d627267aad4bbdb"
+    },
+    {
+      "path": "post-run-docker-check-failed.json",
+      "sha256": "99fbe30f001f8f20a9f21b43f979ca16c17c51efa52161a4e849ce96ac5a3090"
+    },
+    {
+      "path": "post-run-docker-check.json",
+      "sha256": "a65d78ee9bd2bfe589844d63de1212b17cf17a987b13c95ee3c5ede27838bc9d"
+    }
+  ],
+  "limits": [
+    "Installer/shared fixture engineering validation only; no Product or release acceptance.",
+    "No live TOTP browser journey was run.",
+    "Cached image ID is a post-run cache observation; per-fixture selected metadata and cleanup were checked inside the passing tests.",
+    "An initial supplementary Docker CLI check used library-form npipe spelling and failed. The failed receipt is preserved; canonical CLI-form retry passed."
+  ]
+}

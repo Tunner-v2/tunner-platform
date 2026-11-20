@@ -1,0 +1,321 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-11-11T03:14:50.347Z",
+  "artifact_only": true,
+  "original_artifact_review_manifest": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v4/review-manifest.json",
+  "original_v4_manifest_sha256": "bfc6b95d31b71609a663aaadf5f83e9c680bc90d6fc42dca56c7015ccd702c49",
+  "actual_v4_receipt_ref": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v4/actual-receipt.json",
+  "actual_source_commit_sha": "eb9228cc3ed832980deb92407d80ab92e7b8a00e",
+  "actual_build_source_sha": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+  "duration_ms": 21859,
+  "browser": "151.0.7922.34",
+  "browser_predicates_passed": 13,
+  "coordinator_resource_checks_passed": 16,
+  "preparation_snapshots_preserved": true,
+  "historical_v4_manifest_execution_state": "NOT_EXECUTED",
+  "execution_state_boundary": "Review manifests and READMEs retain their pre-execution NOT_EXECUTED/PREPARED wording. Actual execution is a separate retained receipt; no preparation snapshot is rewritten.",
+  "prior_failures": [
+    {
+      "version": "v2",
+      "passed": false,
+      "stage": "HOST",
+      "receipt_ref": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v2/actual-receipt.json",
+      "disposition": "Helper readiness/socket-lifecycle correction; original failure retained. No application-source fix or domain assertion change."
+    },
+    {
+      "version": "v3",
+      "passed": false,
+      "stage": "BROWSER",
+      "receipt_ref": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v3/actual-receipt.json",
+      "disposition": "Private API trust-selection failure before account creation, documented by reviewed v4 lineage; existing system store selected through fixed child flag. Original failure retained."
+    }
+  ],
+  "archival_source_boundary": "Copied helpers are frozen evidence of the temporary artifact runner as executed. They retain original imports/relative paths and are archival source snapshots, not runnable tools at this evidence location, public product source, a new feature mode, or canonical future test configuration.",
+  "files": [
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/README.md",
+      "source_sha256": "4594fcfbfe86aad466460e8c3a551a35ba44d3ee7a931aeefb2db83af2013a36",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v1/README.md",
+        "sha256": "4594fcfbfe86aad466460e8c3a551a35ba44d3ee7a931aeefb2db83af2013a36",
+        "bytes": 3768
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/legacy-child.mjs",
+      "source_sha256": "bdbb80a20a6f2f21b28c7cf360b97f81f434cb43b080fcddf4b709a6212506cc",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v1/legacy-child.mjs",
+        "sha256": "bdbb80a20a6f2f21b28c7cf360b97f81f434cb43b080fcddf4b709a6212506cc",
+        "bytes": 13814
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/review-manifest.json",
+      "source_sha256": "71e5a575ac90d5a8fadefedcb8df7557131f011c0fee2eae66ad38bebd38b4de",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v1/review-manifest.json",
+        "sha256": "71e5a575ac90d5a8fadefedcb8df7557131f011c0fee2eae66ad38bebd38b4de",
+        "bytes": 3824
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/run-reviewed-smoke.mjs",
+      "source_sha256": "9c346779c9dd451db1f213c0833d18623e4f48070d2ce9ec47ee8bccdc2cb365",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v1/run-reviewed-smoke.mjs",
+        "sha256": "9c346779c9dd451db1f213c0833d18623e4f48070d2ce9ec47ee8bccdc2cb365",
+        "bytes": 22388
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v2/README.md",
+      "source_sha256": "d4eff157ec4d89cafbcdb2c8fcccb962d0df739d7330f8142574f6e58c7c03cf",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v2/README.md",
+        "sha256": "d4eff157ec4d89cafbcdb2c8fcccb962d0df739d7330f8142574f6e58c7c03cf",
+        "bytes": 1336
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v2/actual-receipt.json",
+      "source_sha256": "45de067aba39b43b79babcedf4448fbb6d4af19fa27233088bc1cbcc3a518068",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v2/actual-receipt.json",
+        "sha256": "22dc84378ebdbc6ddee32045a0cb0da708dca3b6bd2c137f2ff196d48ce96525",
+        "bytes": 1019
+      },
+      "byte_identical": false,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v2/legacy-child.mjs",
+      "source_sha256": "47cb7349a149ddfb8e29c32803da7b9dea08c206658fe9bff29c7c3835c5e905",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v2/legacy-child.mjs",
+        "sha256": "47cb7349a149ddfb8e29c32803da7b9dea08c206658fe9bff29c7c3835c5e905",
+        "bytes": 13901
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v2/review-manifest.json",
+      "source_sha256": "09fa0d1adab23758c9e70774588516e550db37d1ea9577eece844f71f873fdbe",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v2/review-manifest.json",
+        "sha256": "09fa0d1adab23758c9e70774588516e550db37d1ea9577eece844f71f873fdbe",
+        "bytes": 4566
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v2/run-reviewed-smoke.mjs",
+      "source_sha256": "c9b375a395bb30bc297d857e58f26eddc2610c6707bf56f64d1cd2efb6a9998a",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v2/run-reviewed-smoke.mjs",
+        "sha256": "c9b375a395bb30bc297d857e58f26eddc2610c6707bf56f64d1cd2efb6a9998a",
+        "bytes": 22403
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v3/README.md",
+      "source_sha256": "d9fcf0adeeff34752b04693ea54ef02ab077d1a434ae75b71240d36002287e95",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v3/README.md",
+        "sha256": "d9fcf0adeeff34752b04693ea54ef02ab077d1a434ae75b71240d36002287e95",
+        "bytes": 1969
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v3/actual-receipt.json",
+      "source_sha256": "f704180cd3d75c461d0251d4da039d78ff28a52e87591803471a5d1b2bbb1ae8",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v3/actual-receipt.json",
+        "sha256": "b94fd88ca11fdeed79d359aa7e8cd304e9abf0fa51eec317bf91c4097f253a12",
+        "bytes": 1431
+      },
+      "byte_identical": false,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v3/legacy-child.mjs",
+      "source_sha256": "daec0fd81b06beae17978eb8b2e1546c480d5786710bae270c5fe0821cf94736",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v3/legacy-child.mjs",
+        "sha256": "daec0fd81b06beae17978eb8b2e1546c480d5786710bae270c5fe0821cf94736",
+        "bytes": 14271
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v3/readiness-public-unit-receipt.json",
+      "source_sha256": "e63283142ba26fcac950e475413790744b09db0eaf6691f51b7bb546ac626f8d",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v3/readiness-public-unit-receipt.json",
+        "sha256": "e63283142ba26fcac950e475413790744b09db0eaf6691f51b7bb546ac626f8d",
+        "bytes": 693
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v3/readiness-public-units.mjs",
+      "source_sha256": "9c99ad93de7a6fb9b5a30fcbd1d899dcc2fe70ef98d001e83370545f68521bee",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v3/readiness-public-units.mjs",
+        "sha256": "9c99ad93de7a6fb9b5a30fcbd1d899dcc2fe70ef98d001e83370545f68521bee",
+        "bytes": 3925
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v3/review-manifest.json",
+      "source_sha256": "d6967e38ed5bc67e28ffbda04732c095910d9a9c691652eccd40e7375ebc8361",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v3/review-manifest.json",
+        "sha256": "d6967e38ed5bc67e28ffbda04732c095910d9a9c691652eccd40e7375ebc8361",
+        "bytes": 5538
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v3/run-reviewed-smoke.mjs",
+      "source_sha256": "b6981473040434997d0519dfae1c06752d66f67cebf701ffc6fa8e8f4716c641",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v3/run-reviewed-smoke.mjs",
+        "sha256": "b6981473040434997d0519dfae1c06752d66f67cebf701ffc6fa8e8f4716c641",
+        "bytes": 23845
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v4/README.md",
+      "source_sha256": "afd2a8a7cda817fcd53af16bf082805bdef5f59f758ee77f5afc6c479bc46f0c",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v4/README.md",
+        "sha256": "afd2a8a7cda817fcd53af16bf082805bdef5f59f758ee77f5afc6c479bc46f0c",
+        "bytes": 2118
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v4/actual-receipt.json",
+      "source_sha256": "7a30e7d0ed7ba5f137f26aea58ced5d88c11934dd2f6623508b99014d279f74a",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v4/actual-receipt.json",
+        "sha256": "cd587aa4c0e8a968af9e9488c045c026cac3d023251dc545216d359df6fdc665",
+        "bytes": 1825
+      },
+      "byte_identical": false,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v4/legacy-child.mjs",
+      "source_sha256": "e7c621bfccbec07ce44e680e193af4d449f70380187838db2fbd5350d811c535",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v4/legacy-child.mjs",
+        "sha256": "e7c621bfccbec07ce44e680e193af4d449f70380187838db2fbd5350d811c535",
+        "bytes": 15512
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v4/readiness-public-unit-receipt.json",
+      "source_sha256": "2dbe3fdc643260cb0aae3bbe7dacde044009b8509327315fa3d98dd47903a469",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v4/readiness-public-unit-receipt.json",
+        "sha256": "2dbe3fdc643260cb0aae3bbe7dacde044009b8509327315fa3d98dd47903a469",
+        "bytes": 693
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v4/readiness-public-units.mjs",
+      "source_sha256": "9c99ad93de7a6fb9b5a30fcbd1d899dcc2fe70ef98d001e83370545f68521bee",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v4/readiness-public-units.mjs",
+        "sha256": "9c99ad93de7a6fb9b5a30fcbd1d899dcc2fe70ef98d001e83370545f68521bee",
+        "bytes": 3925
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v4/review-manifest.json",
+      "source_sha256": "bfc6b95d31b71609a663aaadf5f83e9c680bc90d6fc42dca56c7015ccd702c49",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v4/review-manifest.json",
+        "sha256": "bfc6b95d31b71609a663aaadf5f83e9c680bc90d6fc42dca56c7015ccd702c49",
+        "bytes": 6699
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/legacy-host-smoke/v4/run-reviewed-smoke.mjs",
+      "source_sha256": "bda17e55d00d199225df26e04520345ab20698a8608a9a52cd9aa66fac214c99",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v4/run-reviewed-smoke.mjs",
+        "sha256": "bda17e55d00d199225df26e04520345ab20698a8608a9a52cd9aa66fac214c99",
+        "bytes": 24136
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/resume-third-20261110/node-system-trust-proof.json",
+      "source_sha256": "b00e30b9d7c36420b57e87d19f32243553cc275985f7c1d99e8fb58a6e42dd91",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/node-system-trust-proof.json",
+        "sha256": "241acc9e3c60a0a2487a39e8b1a6b0fba38659cc1ec90d8a4a4ddbe64b9cfd67",
+        "bytes": 329
+      },
+      "byte_identical": false,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    },
+    {
+      "source_artifact_ref": "artifacts/p2-008-totp-20261110/runtime-build-binding.json",
+      "source_sha256": "16417694eca04c38e459345fc205c8b45442e47d5e28a5f72c4da128fa2bde47",
+      "archival_copy": {
+        "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/runtime-build-binding.json",
+        "sha256": "16417694eca04c38e459345fc205c8b45442e47d5e28a5f72c4da128fa2bde47",
+        "bytes": 108485
+      },
+      "byte_identical": true,
+      "normalization": "UTF-8 without BOM and LF only; JSON values and helper source text retained. Original artifact byte hashes are separate from portable derivative hashes."
+    }
+  ],
+  "r_and_d_ref": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/node-system-trust-rd.json",
+  "build_binding": {
+    "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/runtime-build-binding.json",
+    "sha256": "16417694eca04c38e459345fc205c8b45442e47d5e28a5f72c4da128fa2bde47",
+    "bytes": 108485
+  },
+  "not_claimed": [
+    "No TOTP seed/oracle or integrated008 journey.",
+    "No Product/production/release acceptance."
+  ]
+}

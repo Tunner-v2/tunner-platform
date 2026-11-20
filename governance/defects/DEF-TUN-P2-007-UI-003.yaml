@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-007-UI-003",
+  "work_item_id": "TUN-P2-007",
+  "classification": "UI_VALIDATION_DEFECT",
+  "severity": "SEV-2",
+  "status": "RESOLVED",
+  "environment": "Frozen primary frontend review before browser acceptance",
+  "description": "Ambiguous start5xx clears original binding, even if PENDING start committed; a later rate-limited retry does not prove original absence. Required correction: Preserve immutable original request/kind/target/version through uncertainty; clear only a proved definitive outcome/pre-submit failure.",
+  "expected_behavior_ref": "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+  "evidence": [
+    "governance/evidence/TUN-P2-007-FRONTEND-REVIEW.json",
+    "governance/evidence/TUN-P2-007-DEFECT-VERIFICATION-20261110.json",
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json"
+  ],
+  "affected_versions": [],
+  "created_at": "2026-11-09T17:55:50.503Z",
+  "updated_at": "2026-11-10T12:48:20.365Z"
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-010-RV016",
+  "owner_work_item": "TUN-P2-010",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+  "validated_commit_sha": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+  "actual_tested_commit_sha": "36563dd35e5d1d4e84aaff5869163510b9bdbe41",
+  "owned_behavior_paths": [
+    "web/tests/authentication/federation.spec.ts",
+    "src/Modules/Identity/TotpContracts.cs"
+  ],
+  "qualification": "Windows13:132 affected cases PASS atd7e3fe11. Actual Linux15:1412 PASS, including all132 affected identities, at merge36563dd35 with exact tree equivalence to branchd5578374. Shared TOTP native mechanism is qualified13/15; four actual federation sequencing cases retain original counter/principal/path assertions at0e771a95 with unchanged current test source. All owned Git objects are unchanged through bd3739d3; lifecycle closure remains pending; no whole-CI or private HOST PASS.",
+  "evidence_refs": [
+    "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-windows13-d7e3fe11.trx",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-security-source-review.json",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-linux15-d5578374.trx"
+  ],
+  "source_sha256": "58f7b5e4ca74f1d76b5f84fdb695deadb5faa5797c714b64fb7fa661ced4e6bf",
+  "context_ref": null,
+  "review_refs": [
+    "governance/reviews/REV-P2-010-RV016-full-stack-engineer.yaml",
+    "governance/reviews/REV-P2-010-RV016-tester-qa-engineer.yaml",
+    "governance/reviews/REV-P2-010-RV016-cyber-security-engineer.yaml"
+  ],
+  "boundaries": "Qualified native/source compatibility only. Historical executions and CRLF source hashes are preserved. No whole-CI, private Recovery HOST, Product, production activation, merge or release acceptance is implied.",
+  "source_hashes": {
+    "web/tests/authentication/federation.spec.ts": "58f7b5e4ca74f1d76b5f84fdb695deadb5faa5797c714b64fb7fa661ced4e6bf",
+    "src/Modules/Identity/TotpContracts.cs": "699cc1b0b957e9d21882aaca4c04ba51b687dba2449bcd2553fe645bdfeffb9d"
+  },
+  "prior_test_only_execution_sha": "0e771a95352a1cf9490c431e8f2b8f932607c2d6",
+  "source_sha256_path": "web/tests/authentication/federation.spec.ts",
+  "qualified_carrier": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+  "qualified_git_tree": "b290cbdac0fca36ef1e84b12b824a5e8c7ae1911",
+  "source_binding_meaning": "d5578374 is the predeclared ancestor carrier whose full Git tree equals actual Linux merge36563dd3. Owned vectors and exact-version guards are unchanged through bd3739d3. Actual Windowsd7/Linuxmerge36563/federation0e executions remain distinct; current collector uses e9ed44/44, with da27 historical43 retained. Native source hashes describe original Windows CRLF bytes, not LF Git bytes. No new execution at the carrier or HEAD is invented."
+}

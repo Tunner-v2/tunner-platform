@@ -1,0 +1,1660 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-006",
+  "result": "PASS",
+  "recorded_at": "2026-11-10T12:35:24.364Z",
+  "tested_commit_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+  "inventory_sha256": "346d631ce5ec6ce433b5ea58eae6df54bb8f98ac3deec1f4af77ff57e0146299",
+  "owned_behavior_paths": [
+    "docs/contracts/ui-inventory.json",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+    "web/apps/user/step-up.css",
+    "web/apps/user/step-up.tsx",
+    "web/fixtures/step-up/fixture.css",
+    "web/fixtures/step-up/index.html",
+    "web/fixtures/step-up/main.tsx",
+    "web/fixtures/step-up/vite.config.ts",
+    "web/packages/ui/src/dialog.tsx",
+    "web/packages/ui/src/forms.tsx"
+  ],
+  "items": [
+    {
+      "id": "COMP-STEP-UP",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "additional_observed_design_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:28",
+          "reference_image": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-98-28.png"
+        }
+      ],
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Required/format/confirmation errors have approved field appearance. Exact per-item case groups: stepup.password, stepup.native, real.native, backend.nativeproof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            }
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Native constraint bubbles are not sole feedback. Exact per-item case groups: stepup.password, stepup.native, real.native, backend.nativeproof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            }
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Independent backend malformed/bypass rejection. Exact per-item case groups: backend.stepup, real.password, stepup.native, real.native, backend.nativeproof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Server errors map to governed field/form feedback without leakage. Exact per-item case groups: stepup.password, real.password, backend.stepup, feedback.proof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/results.json",
+              "sha256": "d8c77bc6651c01817ba92a6d332b989caffd484c227ae91bd2fcb98abdb3da20"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Clear/focus/association/safe-value/duplicate protection. Exact per-item case groups: stepup.password, stepup.native, real.native, backend.nativeproof, feedback.proof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/results.json",
+              "sha256": "d8c77bc6651c01817ba92a6d332b989caffd484c227ae91bd2fcb98abdb3da20"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Approved validation variants and screenshots. Exact per-item case groups: stepup.password, stepup.native, real.native, backend.nativeproof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            }
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current domain authority overrides stale Figma business copy. Exact per-item case groups: stepup.password, stepup.native, real.native, backend.nativeproof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "End-to-end route/validation regression across supported sizes. Exact per-item case groups: stepup.password, real.password, stepup.native, real.native, backend.nativeproof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Faithful approved screen/component. Exact per-item case groups: stepup.password, stepup.native, real.native, backend.nativeproof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "The approved design has a flat surface rather than a glow illustration. Its actual panel, surrounding surface and backdrop remain applicable fidelity checks.. Exact per-item case groups: stepup.password, stepup.native, real.native, backend.nativeproof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/changed-AUTHENTICATION_REQUIRED.png",
+              "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/changed-FORBIDDEN_SCOPE.png",
+              "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/changed-VERSION_CONFLICT.png",
+              "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/chooser-1024.png",
+              "sha256": "596ec0d7d40dfd99d427f9a29849b1c555489c1ead76a4ab28280f0c5c2c0d39"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/chooser-1440.png",
+              "sha256": "f4047c3995cb3f51ed02d6d08c37d850ec498d6164e484251759f70b3c4d0c13"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/chooser-320.png",
+              "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/chooser-390.png",
+              "sha256": "7b57720ca989a9db69dd31c6dee6d96419849607e4f5c80aaffb53363ff53f20"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/chooser-768.png",
+              "sha256": "ae989a1a7b284f26c9c46ff8db1679f6c7c7d1c2dbabbfd90010798da466366b"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/password-1024.png",
+              "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/password-320.png",
+              "sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/password-390.png",
+              "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/password-768.png",
+              "sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/server-error-1024.png",
+              "sha256": "10304b52d6eae205198b9f51dfa396fa82be32a23788b2e19e8b61b148ae3f9a"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/server-error-1440.png",
+              "sha256": "29f5e41d44a69ad1c6075bce15155b13afd7207cc37c4ee876da26b48457aff9"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/server-error-390.png",
+              "sha256": "f96cbb908b9b1afaf4f3ecf39714fef629eb8341be1303b60d1d5c0f831487a9"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/server-error-768.png",
+              "sha256": "cc1546e5e9bfbf11db552cbf4f56bb34bdb9d897972c0af40ad2f95953e1a761"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/short-viewport.png",
+              "sha256": "170d820c7c7e65433188df8da4843853379a3825d954afd5b833d7f17d7d8e79"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/passkeys/run-details/step-up-passkey-Shared-nat-26fc7-e-approved-overlay-at-320px/native-proof-320.png",
+              "sha256": "20097eaa6eaf6dfd8b87854667a5c7e3331f0597f4819dfda72c4c2953c37245"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/passkeys/run-details/step-up-passkey-Shared-nat-381e3--approved-overlay-at-1440px/native-proof-1440.png",
+              "sha256": "5180e83af255ff55678a9ff510cb980dc1380de884a81369a1814b0ae68773f8"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/passkeys/run-details/step-up-passkey-Shared-nat-3e7d6-e-approved-overlay-at-390px/native-proof-390.png",
+              "sha256": "2f65bb19532e7c29814c649737722791d8ed12251c52a46653983cfab674c5f9"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Reuse approved field/token patterns. Exact per-item case groups: stepup.password, stepup.native, real.native, backend.nativeproof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Novel patterns require actual scoped consent. Exact per-item case groups: stepup.password, stepup.native, real.native, backend.nativeproof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "UI/domain conflicts documented and approved. Exact per-item case groups: stepup.password, stepup.native, real.native, backend.nativeproof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "No TailAdmin-default visual override. Exact per-item case groups: stepup.password, stepup.native, real.native, backend.nativeproof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Responsive/accessibility evidence without unapproved drift. Exact per-item case groups: stepup.password, stepup.native, real.native, backend.nativeproof, feedback.proof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/results.json",
+              "sha256": "d8c77bc6651c01817ba92a6d332b989caffd484c227ae91bd2fcb98abdb3da20"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Link exact design/FRD/screenshots/consent/source. Exact per-item case groups: stepup.password, stepup.native, real.native, backend.nativeproof, feedback.proof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/results.json",
+              "sha256": "d8c77bc6651c01817ba92a6d332b989caffd484c227ae91bd2fcb98abdb3da20"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/changed-AUTHENTICATION_REQUIRED.png",
+          "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/changed-AUTHENTICATION_REQUIRED.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/changed-FORBIDDEN_SCOPE.png",
+          "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/changed-FORBIDDEN_SCOPE.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/changed-VERSION_CONFLICT.png",
+          "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/changed-VERSION_CONFLICT.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-1024.png",
+          "sha256": "596ec0d7d40dfd99d427f9a29849b1c555489c1ead76a4ab28280f0c5c2c0d39",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-1440.png",
+          "sha256": "f4047c3995cb3f51ed02d6d08c37d850ec498d6164e484251759f70b3c4d0c13",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-320.png",
+          "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-390.png",
+          "sha256": "7b57720ca989a9db69dd31c6dee6d96419849607e4f5c80aaffb53363ff53f20",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-768.png",
+          "sha256": "ae989a1a7b284f26c9c46ff8db1679f6c7c7d1c2dbabbfd90010798da466366b",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-768.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1024.png",
+          "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1440.png",
+          "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-320.png",
+          "sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-390.png",
+          "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-768.png",
+          "sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-768.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-1024.png",
+          "sha256": "10304b52d6eae205198b9f51dfa396fa82be32a23788b2e19e8b61b148ae3f9a",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-1440.png",
+          "sha256": "29f5e41d44a69ad1c6075bce15155b13afd7207cc37c4ee876da26b48457aff9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-320.png",
+          "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-390.png",
+          "sha256": "f96cbb908b9b1afaf4f3ecf39714fef629eb8341be1303b60d1d5c0f831487a9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-768.png",
+          "sha256": "cc1546e5e9bfbf11db552cbf4f56bb34bdb9d897972c0af40ad2f95953e1a761",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-768.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/short-viewport.png",
+          "sha256": "170d820c7c7e65433188df8da4843853379a3825d954afd5b833d7f17d7d8e79",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/short-viewport.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/passkeys/run-details/step-up-passkey-Shared-nat-26fc7-e-approved-overlay-at-320px/native-proof-320.png",
+          "sha256": "20097eaa6eaf6dfd8b87854667a5c7e3331f0597f4819dfda72c4c2953c37245",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-passkeys/run-details/step-up-passkey-Shared-nat-26fc7-e-approved-overlay-at-320px/native-proof-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/passkeys/run-details/step-up-passkey-Shared-nat-381e3--approved-overlay-at-1440px/native-proof-1440.png",
+          "sha256": "5180e83af255ff55678a9ff510cb980dc1380de884a81369a1814b0ae68773f8",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-passkeys/run-details/step-up-passkey-Shared-nat-381e3--approved-overlay-at-1440px/native-proof-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/passkeys/run-details/step-up-passkey-Shared-nat-3e7d6-e-approved-overlay-at-390px/native-proof-390.png",
+          "sha256": "2f65bb19532e7c29814c649737722791d8ed12251c52a46653983cfab674c5f9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-passkeys/run-details/step-up-passkey-Shared-nat-3e7d6-e-approved-overlay-at-390px/native-proof-390.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png",
+          "sha256": "fd7e613982e3f8f2ca2e9abe1fe725a86f86b177f3cbef0be3c9ffa50db03616",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+          "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/password-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/reference/figma/figma-98-28.png",
+          "sha256": "3fcb345a9475b6776cfc62bf77388ab8512bff8f9362453e9dbd330f7f75a643",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-98-28.png"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+            "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+            "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+          }
+        }
+      ]
+    },
+    {
+      "id": "DEV-STEP-UP",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "additional_observed_design_refs": [],
+      "checks": [
+        {
+          "id": "URL-001",
+          "result": "PASS",
+          "description": "Full-screen transitions produce canonical pathname. Exact per-item case groups: auth.routes, real.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/results.json",
+              "sha256": "4db227f6975b42a1770f904bbd9845bd51ee82cb3f9ab59d1a467bc9c0ec3688"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            }
+          ]
+        },
+        {
+          "id": "URL-002",
+          "result": "PASS",
+          "description": "No hash-only or stale-path full-screen routing. Exact per-item case groups: auth.routes, real.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/results.json",
+              "sha256": "4db227f6975b42a1770f904bbd9845bd51ee82cb3f9ab59d1a467bc9c0ec3688"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            }
+          ]
+        },
+        {
+          "id": "URL-003",
+          "result": "PASS",
+          "description": "Refresh/deep link/Back/Forward reconstruct safe correct view. Exact per-item case groups: auth.routes, real.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/results.json",
+              "sha256": "4db227f6975b42a1770f904bbd9845bd51ee82cb3f9ab59d1a467bc9c0ec3688"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            }
+          ]
+        },
+        {
+          "id": "URL-005",
+          "result": "PASS",
+          "description": "Unauthorized/expired stage blocked or redirected. Exact per-item case groups: auth.routes, real.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-authentication/results.json",
+              "sha256": "4db227f6975b42a1770f904bbd9845bd51ee82cb3f9ab59d1a467bc9c0ec3688"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            }
+          ]
+        },
+        {
+          "id": "URL-004",
+          "result": "PASS",
+          "description": "Same-screen modal/anchor state safe and consistent. Exact per-item case groups: stepup.password, real.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            }
+          ]
+        },
+        {
+          "id": "URL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "Product-origin OAuth/callback is not implemented in this feature slice (future P2-014). No future-flow PASS is claimed. Existing callback source was not changed; external query/fragment attempts do not authorize navigation.",
+          "authority_refs": [
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md"
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Faithful approved screen/component. Exact per-item case groups: stepup.password, real.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "The approved design has a flat surface rather than a glow illustration. Its actual panel, surrounding surface and backdrop remain applicable fidelity checks.. Exact per-item case groups: stepup.password, real.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/chooser-1024.png",
+              "sha256": "596ec0d7d40dfd99d427f9a29849b1c555489c1ead76a4ab28280f0c5c2c0d39"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/chooser-1440.png",
+              "sha256": "f4047c3995cb3f51ed02d6d08c37d850ec498d6164e484251759f70b3c4d0c13"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/chooser-320.png",
+              "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/chooser-390.png",
+              "sha256": "7b57720ca989a9db69dd31c6dee6d96419849607e4f5c80aaffb53363ff53f20"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/chooser-768.png",
+              "sha256": "ae989a1a7b284f26c9c46ff8db1679f6c7c7d1c2dbabbfd90010798da466366b"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/password-1024.png",
+              "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/password-320.png",
+              "sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/password-390.png",
+              "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/password-768.png",
+              "sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Reuse approved field/token patterns. Exact per-item case groups: stepup.password, real.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Novel patterns require actual scoped consent. Exact per-item case groups: stepup.password, real.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "UI/domain conflicts documented and approved. Exact per-item case groups: stepup.password, real.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "No TailAdmin-default visual override. Exact per-item case groups: stepup.password, real.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Responsive/accessibility evidence without unapproved drift. Exact per-item case groups: stepup.password, real.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Link exact design/FRD/screenshots/consent/source. Exact per-item case groups: stepup.password, real.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-1024.png",
+          "sha256": "596ec0d7d40dfd99d427f9a29849b1c555489c1ead76a4ab28280f0c5c2c0d39",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-1440.png",
+          "sha256": "f4047c3995cb3f51ed02d6d08c37d850ec498d6164e484251759f70b3c4d0c13",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-320.png",
+          "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-390.png",
+          "sha256": "7b57720ca989a9db69dd31c6dee6d96419849607e4f5c80aaffb53363ff53f20",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/chooser-768.png",
+          "sha256": "ae989a1a7b284f26c9c46ff8db1679f6c7c7d1c2dbabbfd90010798da466366b",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/chooser-768.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1024.png",
+          "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1440.png",
+          "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-320.png",
+          "sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-390.png",
+          "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-768.png",
+          "sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-768.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png",
+          "sha256": "fd7e613982e3f8f2ca2e9abe1fe725a86f86b177f3cbef0be3c9ffa50db03616",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+          "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/password-1440.png"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+            "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+          }
+        }
+      ]
+    },
+    {
+      "id": "FORM-STEP-UP",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "additional_observed_design_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257",
+          "reference_image": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-70-1257.png"
+        }
+      ],
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Required/format/confirmation errors have approved field appearance. Exact per-item case groups: stepup.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            }
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Native constraint bubbles are not sole feedback. Exact per-item case groups: stepup.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            }
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Independent backend malformed/bypass rejection. Exact per-item case groups: backend.stepup, real.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Server errors map to governed field/form feedback without leakage. Exact per-item case groups: stepup.password, real.password, backend.stepup, feedback.proof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/full-native/receipt.json",
+              "sha256": "c3090d6169b46bf49b57afc9f96b04a02aa88800d68843ea4b395fdc4d1915c0"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/results.json",
+              "sha256": "d8c77bc6651c01817ba92a6d332b989caffd484c227ae91bd2fcb98abdb3da20"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Clear/focus/association/safe-value/duplicate protection. Exact per-item case groups: stepup.password, feedback.proof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/results.json",
+              "sha256": "d8c77bc6651c01817ba92a6d332b989caffd484c227ae91bd2fcb98abdb3da20"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Approved validation variants and screenshots. Exact per-item case groups: stepup.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            }
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current domain authority overrides stale Figma business copy. Exact per-item case groups: stepup.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "End-to-end route/validation regression across supported sizes. Exact per-item case groups: stepup.password, real.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/real-current/results.json",
+              "sha256": "e1859cf07228730480eac26c87f985f129891ae31ca8f7956ff371015dd95af5"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Faithful approved screen/component. Exact per-item case groups: stepup.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "The approved design has a flat surface rather than a glow illustration. Its actual panel, surrounding surface and backdrop remain applicable fidelity checks.. Exact per-item case groups: stepup.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/password-1024.png",
+              "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/password-1440.png",
+              "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/password-320.png",
+              "sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/password-390.png",
+              "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/password-768.png",
+              "sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/server-error-1024.png",
+              "sha256": "10304b52d6eae205198b9f51dfa396fa82be32a23788b2e19e8b61b148ae3f9a"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/server-error-1440.png",
+              "sha256": "29f5e41d44a69ad1c6075bce15155b13afd7207cc37c4ee876da26b48457aff9"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/server-error-320.png",
+              "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/server-error-390.png",
+              "sha256": "f96cbb908b9b1afaf4f3ecf39714fef629eb8341be1303b60d1d5c0f831487a9"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/step-up/server-error-768.png",
+              "sha256": "cc1546e5e9bfbf11db552cbf4f56bb34bdb9d897972c0af40ad2f95953e1a761"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Reuse approved field/token patterns. Exact per-item case groups: stepup.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Novel patterns require actual scoped consent. Exact per-item case groups: stepup.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "UI/domain conflicts documented and approved. Exact per-item case groups: stepup.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "No TailAdmin-default visual override. Exact per-item case groups: stepup.password",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Responsive/accessibility evidence without unapproved drift. Exact per-item case groups: stepup.password, feedback.proof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/results.json",
+              "sha256": "d8c77bc6651c01817ba92a6d332b989caffd484c227ae91bd2fcb98abdb3da20"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "Link exact design/FRD/screenshots/consent/source. Exact per-item case groups: stepup.password, feedback.proof",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-item-evidence.json",
+              "sha256": "4bcde80142708f051f2820718a3c7961b4261ee0e43f432d4ce54095c0c12d23"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/results.json",
+              "sha256": "9e14d43f977ce0d72cfc60fb5a81e06433a5cfab11afff53963ef0ae9a9de146"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-edge/results.json",
+              "sha256": "6b1142f4250cfbfb2603c259ee8495580a44999ac85331f638f92f0170a816e6"
+            },
+            {
+              "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/current-firefox/results.json",
+              "sha256": "d8c77bc6651c01817ba92a6d332b989caffd484c227ae91bd2fcb98abdb3da20"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1024.png",
+          "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1440.png",
+          "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-320.png",
+          "sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-390.png",
+          "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-768.png",
+          "sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/password-768.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-1024.png",
+          "sha256": "10304b52d6eae205198b9f51dfa396fa82be32a23788b2e19e8b61b148ae3f9a",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-1024.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-1440.png",
+          "sha256": "29f5e41d44a69ad1c6075bce15155b13afd7207cc37c4ee876da26b48457aff9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-320.png",
+          "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-320.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-390.png",
+          "sha256": "f96cbb908b9b1afaf4f3ecf39714fef629eb8341be1303b60d1d5c0f831487a9",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-390.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/server-error-768.png",
+          "sha256": "cc1546e5e9bfbf11db552cbf4f56bb34bdb9d897972c0af40ad2f95953e1a761",
+          "role": "CURRENT_SOURCE_RENDER",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/20261110-final-80a32ab-step-up/server-error-768.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png",
+          "sha256": "fd7e613982e3f8f2ca2e9abe1fe725a86f86b177f3cbef0be3c9ffa50db03616",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/figma-98-27.png"
+        },
+        {
+          "path": "governance/evidence/ui/step-up-20261109/reference/password-1440.png",
+          "sha256": "dd270a71a32a0dee4420b0109ef58ecbf35bd196f97892c2d4e73c4d09ac61e8",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "governance/evidence/ui/step-up-20261109/reference/password-1440.png"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/reference/figma/figma-70-1257.png",
+          "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa",
+          "role": "APPROVED_REFERENCE_OR_SCOPED_PROPOSAL",
+          "original_execution_ref": "artifacts/p2-007-passkeys-20261109/ui-review/reference/figma-70-1257.png"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+            "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+            "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+          }
+        }
+      ]
+    }
+  ],
+  "source_binding": {
+    "tested_carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+    "actual_execution_shas_retained": true,
+    "cohort_equivalence": [
+      {
+        "cohort": "Current authentication21 and shared verification22",
+        "sha": "b0c04424136aace1b02c486baeaafd53ed61b8ec",
+        "paths": [
+          "web/apps/user",
+          "web/packages/ui",
+          "web/fixtures/authentication",
+          "web/tests/authentication",
+          "web/fixtures/step-up",
+          "web/tests/step-up",
+          "web/playwright.authentication.config.ts",
+          "web/playwright.step-up.config.ts",
+          "web/package.json",
+          "web/pnpm-lock.yaml",
+          "web/tsconfig.json"
+        ],
+        "carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_INPUTS",
+        "changed_paths": []
+      },
+      {
+        "cohort": "Foundation16",
+        "sha": "35ef6c3b64881cf50833209b739f0e47a43f5679",
+        "paths": [
+          "web/packages/ui",
+          "web/fixtures/ui",
+          "web/tests/browser",
+          "web/playwright.config.ts",
+          "web/package.json",
+          "web/pnpm-lock.yaml"
+        ],
+        "carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_INPUTS",
+        "changed_paths": []
+      },
+      {
+        "cohort": "Current native14 recovery and runtime server",
+        "sha": "80a32abb3c215a212bfa34bb7678c742d3cf765d",
+        "paths": [
+          "src",
+          "tests",
+          "tools/browser-testing",
+          "Directory.Build.props",
+          "Directory.Build.targets",
+          "Directory.Packages.props",
+          "global.json",
+          "NuGet.Config"
+        ],
+        "carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+        "result": "GIT_OBJECT_IDENTICAL_FOR_DECLARED_INPUTS",
+        "changed_paths": []
+      }
+    ],
+    "native_full_predecessor": {
+      "source_sha": "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+      "passed": 224,
+      "limitation": "Full224 remains actual executionat0ef; onlylaterC#delta is two-use localname clarification in PasskeySignInRecovery.cs, followedby actual14 recoveryat80a. No fullrun relabeling."
+    }
+  },
+  "review_provenance": "Executing-agent scope-by-scope technical review, with actual UI specialist187checks/all8currentrenders and independent read-only native/source reviews. Root inspected corrected Remove1440/Login320, owning Figma/reference evidence and actual current reports. No new Product consent or independent human role is claimed.",
+  "limits": [
+    "CurrentEdge60/Firefox60 andregistration24 execute at745; authentication21/shared22 atb0 have exact unchanged declared inputs. Foundation16 staysat35ef with unchanged sharedfixture inputs. Native224 remainsat0ef and recovery14at80a; currentC#unchanged80a→745.",
+    "Realreport has4PASS at745; native virtualauthenticator case is included in4 and is not counted twice. Physical hardware, nativeFirefox/Safari and production session policy are not certified.",
+    "Original historical map andRED7of8/b0backgroundwait59of60 reports remain retained. Current8feedbackcaptures and8regressions resolveclipping/focus; all17narrowperitemNAs convertedtoapplicablechecks.",
+    "WindowsPlaywrightWebKit actualStrictfailure retained withunchangedassertion andgoverned017followup; localtechnicalscope doesnotclaimproductionbrowsermatrixacceptance.",
+    "Axe0 isboundedautomation; recordedcontrastincompletes retain manualcontrastfacts. No blanketWCAGcertification, futureOAuth014 or allP2acceptance.",
+    "ScopedProductvisualconsent isactualuserapproval; manualFigma/Driveupdates remain owner-held andread-onlyforAI."
+  ],
+  "acceptance": "Technical per-item current implementation evidence for native UI gate evaluation. No wholeP2, productionbrowsermatrix, Figma/Drivewrite, newProductpolicy, protectedmainmerge, deployment or release acceptance."
+}

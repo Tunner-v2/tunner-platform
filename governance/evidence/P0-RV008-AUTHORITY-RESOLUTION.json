@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-RV008",
+  "outcome": "RESOLVED_EXISTING_AUTHORITY",
+  "reviewed_at": "2026-10-18T21:40:45.218Z",
+  "reviewed_authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+    "docs/authority/current/development/36_P0_Repository_Bootstrap_Governance_and_Context_Implementation_Spec.md"
+  ],
+  "reported": "Two Windows test executable dialogs with generic CLR exception0xe0434352; screenshot alone does not identify the original managed stack.",
+  "observed": "Governance main-body/fixture-delete failures already handled by closed P0-RV006. Its repository/fixture initialization remains before try. AuditRemediation initialization and finally deletion remain outside complete exception reporting, and body catch handles only InvalidOperationException.",
+  "existing_authority": "Doc09 requires actual failing test diagnostics and reproducible automation; Doc03/36 preserve closed history with corrective Revision lineage. This is test-process error reporting, not a Product or security decision.",
+  "bounded_resolution": "Guard setup,body and disposable fixture cleanup; return1 and actionable diagnostics. Test startup,body and cleanup fault paths for both harnesses plus ordinary suites. Preserve assertions, no Windows error-reporting registry or OS suppression.",
+  "historical_cause": "Unproven: bounded event read found no matching retained event. Do not attribute the generic prior dialog to a specific exception without its stack."
+}

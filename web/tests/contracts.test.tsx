@@ -1,8 +1,23 @@
+import { authenticationRoutes } from '../apps/user/authentication.routes';
+import {parseCandidate,type Candidate} from '../apps/admin/configuration.api';
+import {formForScope,formFromCandidate,candidateFromForm,candidateFields,candidateSchema,flattenForm} from '../apps/admin/configuration.validation';
+import './totp.contracts.test';
+import './recovery-codes.contracts.test';
+import { passkeyRoutes } from '../apps/user/passkeys.routes';
+import {totpRoutes} from '../apps/user/totp.routes';
+import {recoveryRoutes} from '../apps/user/recovery.routes';
+import {sessionRoutes} from '../apps/user/sessions.routes';
+import {deviceRoutes} from '../apps/user/devices.routes';
+import {productAuthorizationRoute} from '../apps/user/product-authorization.api';
+import { registrationSchema, verificationSchema, personalInformationSchema, validBirthDate } from '../apps/user/validation';
+import { registrationRoutes } from '../apps/user/routes';
+import inventory from '../../docs/contracts/ui-inventory.json' with { type: 'json' };
+import onboarding from '../../docs/contracts/registration-onboarding.openapi.json' with { type: 'json' };
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { renderToStaticMarkup } from 'react-dom/server';
 import type { ReactNode } from 'react';
-import { ThemeProvider, ContentProvider, PrimaryButton, TextField, TunnerBrand } from '../packages/ui/src/index';
+import { ThemeProvider, ContentProvider, ContentText, PrimaryButton, TextField, TunnerBrand, z, validateTunnerForm, FormErrorSummary } from '../packages/ui/src/index';
 import type { PublishedContentResolver, ThemeMode, ThemeSurface } from '../packages/ui/src/index';
 
 const published: PublishedContentResolver = (key, context) => ({ key, text: key === 'brand' ? 'Tunner' : `<${key}>`, locale: context.locale, state: 'PUBLISHED', variantRef: 'fixture', versionRef: 'v1', publicationRef: 'fixture-only' });
@@ -12,6 +27,12 @@ test('SSR is browser-independent with plain brand and no icon', () => { const ht
 test('native button defaults to button, with explicit owner submit supported', () => { assert.match(render(<PrimaryButton labelKey="action"/>), /type="button"/); assert.match(render(<PrimaryButton labelKey="action" type="submit"/>), /type="submit"/); });
 test('owner disabled and busy state preserved', () => { const html = render(<PrimaryButton labelKey="action" disabled aria-busy/>); assert.match(html, /disabled=""/); assert.match(html, /aria-busy="true"/); });
 test('content text is escaped and provenance is preserved', () => { const html = render(<PrimaryButton labelKey="script"/>); assert.match(html, /&lt;script&gt;/); assert.doesNotMatch(html, /<script>/); assert.match(html, /data-content-version="v1"/); assert.match(html, /data-content-publication="fixture-only"/); });
+test('published templates render escaped bounded variables and retain original provenance',()=>{
+  const resolver:PublishedContentResolver=(key,context)=>({...published(key,context)!,text:'Authenticator app {position}'});
+  const html=render(<ContentText contentKey="choice" values={{position:'<2>'}}/>,resolver);assert.match(html,/Authenticator app &lt;2&gt;/);assert.match(html,/data-content-key="choice"/);assert.match(html,/data-content-version="v1"/);
+  assert.throws(()=>render(<ContentText contentKey="choice" values={{other:'2'}}/>,resolver),/variables/);
+  assert.throws(()=>render(<ContentText contentKey="choice" values={{position:'2',other:'ignored'}}/>,resolver),/variables/);
+});
 test('missing required key fails without fallback', () => { assert.throws(() => render(<PrimaryButton labelKey="missing"/>, () => undefined), /Invalid published content/); });
 test('mismatched key or locale and unpublished snapshots fail', () => {
   for (const override of [{key:'other'},{locale:'fr'},{state:'DRAFT'}]) assert.throws(() => render(<PrimaryButton labelKey="action"/>, (key, context) => ({...published(key, context)!, ...override}) as never), /Invalid published content/);
@@ -31,4 +52,70 @@ test('placeholder requires its own published copy and provenance while retaining
   assert.match(html,/for="published-placeholder"/); assert.match(html,/placeholder="&lt;placeholder&gt;"/);
   assert.match(html,/<input[^>]*data-content-key="placeholder"/);
   assert.throws(()=>render(<TextField labelKey="label" placeholderKey="placeholder" value="" readOnly/>,(key,context)=>key==='placeholder'?undefined:published(key,context)),/Invalid published content/);
+});
+
+// Shared mechanics carry only the owning schema's message keys and cross-field policy.
+
+test('typed schemas enforce required, format, range and cross-field rules using domain keys', () => {
+ const schema = z.object({ email:z.string().email('example.email'), amount:z.number().min(1,'example.range'), confirmation:z.string() }).refine(value=>value.confirmation==='confirmed',{path:['confirmation'],message:'example.confirmation'});
+ const result = validateTunnerForm(schema,{email:'bad',amount:0,confirmation:''});
+ assert.equal(result.valid,false);assert.deepEqual(result.errors,{email:'example.email',amount:'example.range',confirmation:'example.confirmation'});
+ const corrected=validateTunnerForm(schema,{email:'example@example.test',amount:1,confirmation:'confirmed'});assert.equal(corrected.valid,true);assert.deepEqual(corrected.errors,{});
+});
+test('schema form-level errors and published summary remain separate from field rules',()=>{
+ const schema=z.object({value:z.string()}).refine(()=>false,{message:'example.form'});const result=validateTunnerForm(schema,{value:'safe'});assert.equal(result.valid,false);if(!result.valid)assert.equal(result.formErrorKey,'example.form');
+ const html=render(<FormErrorSummary contentKey="example.form"/>);assert.match(html,/role="alert"/);assert.match(html,/data-content-key="example.form"/);assert.doesNotMatch(html,/<example.form>/);
+});
+
+test('domain schemas use current policy and do not inherit historical Figma password or age restrictions',()=>{
+ const policy={passwordMinimumLength:15,passwordMaximumLength:128,proofDigits:6};const password='a'.repeat(15);const schema=registrationSchema(policy);
+ assert.equal(validateTunnerForm(schema,{email:'person@example.test',password,password_confirmation:password,notices:true}).valid,true);
+ const invalid=validateTunnerForm(schema,{email:'bad',password:'short',password_confirmation:'other',notices:false});assert.equal(invalid.valid,false);assert.deepEqual(Object.keys(invalid.errors).sort(),['email','notices','password','password_confirmation']);
+ const unicode='😀'.repeat(15);assert.equal(validateTunnerForm(schema,{email:'person@localhost',password:unicode,password_confirmation:unicode,notices:true}).valid,true);
+ assert.equal(validateTunnerForm(verificationSchema(6),{verification_code:'12345'}).valid,false);assert.equal(validateTunnerForm(verificationSchema(6),{verification_code:'１２３４５６'}).valid,false);assert.equal(validateTunnerForm(verificationSchema(6),{verification_code:'123456'}).valid,true);
+ const profile=personalInformationSchema(4,4,'2026-10-17');assert.equal(validateTunnerForm(profile,{full_name:'😀😀😀😀',display_name:'',date_of_birth:'2015-01-01'}).valid,true);assert.equal(validateTunnerForm(profile,{full_name:'😀😀😀😀😀',display_name:'',date_of_birth:'2015-01-01'}).valid,false);
+});
+test('DOB schema is calendar-safe and rejects future dates without client age eligibility policy',()=>{
+ for(const date of ['2025-02-29','2024-02-30','0000-01-01','2026-10-18','not-a-date'])assert.equal(validBirthDate(date,'2026-10-17'),false,date);
+ for(const date of ['2024-02-29','0099-01-01','2026-10-17','2015-01-01'])assert.equal(validBirthDate(date,'2026-10-17'),true,date);
+});
+test('every implemented screen route agrees with the central inventory and known BFF fallback contract',()=>{
+ const rows=inventory.items.filter(row=>row.kind==='SCREEN'&&row.status==='IMPLEMENTED'&&row.app==='user');const routes=[...Object.values(registrationRoutes),...Object.values(authenticationRoutes),...Object.values(passkeyRoutes),...Object.values(totpRoutes),...Object.values(recoveryRoutes),...Object.values(sessionRoutes),...Object.values(deviceRoutes),productAuthorizationRoute];assert.equal(rows.length,routes.length);
+ for(const route of routes){const row=rows.find(r=>r.id===route.id);assert.ok(row);assert.equal(row.pathname,route.pathname);assert.equal(row.runtime_pathname,route.pathname);assert.ok(row.guard);assert.ok(row.figma_refs.length);}
+ assert.deepEqual(Object.values(registrationRoutes).map(r=>r.pathname),onboarding['x-tunner-screen-paths']);
+ const forms=inventory.items.filter(row=>row.kind==='FORM'&&row.status==='IMPLEMENTED');const formScreens=new Map(inventory.items.filter(row=>row.kind==='SCREEN'&&(row.status==='IMPLEMENTED'||row.status==='TEST_FIXTURE')).map(row=>[row.id,row]));
+ const parentIds=(form:(typeof forms)[number])=>[...new Set([...(form.screen_id===undefined?[]:[form.screen_id]),...(form.screen_ids??[])])];
+ assert.ok(forms.every(form=>parentIds(form).length>0&&parentIds(form).every(parentId=>formScreens.has(parentId))));for(const form of forms){for(const parentId of parentIds(form)){const parent=formScreens.get(parentId);assert.ok(parent?.guard);assert.ok(parent?.pathname?.startsWith('/'));}}assert.ok(forms.some(form=>form.id==='FORM-LOGIN'));assert.equal(new Set(forms.map(form=>form.id)).size,forms.length);
+});
+
+test('Admin native Identity versions 13 and 15 round-trip without defaults or coercion',()=>{
+ const interval={from:'2099-01-01T00:00:00Z',includesFrom:true,until:null,includesUntil:false};
+ const raw=(family:'Totp'|'RecoveryCodes',nativeVersion:string):{metadata:unknown;values:Record<string,unknown>}=>({
+  metadata:{versionId:'fixture-native-policy',status:'ACTIVE',scope:family==='Totp'?'TOTP':'RECOVERY_CODES',effectiveInterval:interval,supersedesVersionId:null,approvalEvidenceReferences:['fixture-owner-evidence']},
+  values:family==='Totp'?{
+   version:'fixture-native-policy',origin:'https://totp.fixture.example.test',issuer:'Fixture only',nativeVerifierVersion:nativeVersion,algorithm:'SHA1',digits:6,periodSeconds:30,nativeWindowSteps:2,
+   enrollmentLifetime:'00:05:00',resultRecoveryLifetime:'00:05:00',maximumClockDeviation:'00:00:00',maximumVerificationDuration:'00:00:10',replayRetention:'00:03:00',replayHashIterations:10000,maximumLiveReplayClaims:16,maximumActiveAuthenticators:3,maximumPendingOperations:8,
+   disableSessionEffect:1,resetSessionEffect:2,replacementOrdering:2,resetBehavior:1,enrollmentAssurancePolicyVersion:'fixture-enroll',disableAssurancePolicyVersion:'fixture-disable',resetAssurancePolicyVersion:'fixture-reset',operationProofAssurance:'fixture-proof',mfaAssurances:{pwd:'fixture-mfa'},secretBindingVersion:'fixture-secret-ref',processingReference:'fixture-processing',retentionReference:'fixture-retention'
+  }:{
+   version:'fixture-native-policy',origin:'https://recovery.fixture.example.test',crypto:{version:'fixture-crypto',nativeIdentityVersion:nativeVersion,codesPerSet:5,maximumCodesPerSet:10,hashIterations:10,maximumHashWork:'9007199254740995',maximumGenerationAttempts:10,maximumConcurrentWork:2,maximumWorkDuration:'00:00:10.0000001'},
+   formatProfileVersion:'NATIVE_HEX32_V1',deliveryProfileVersion:'fixture-delivery',operationLifetime:'00:05:00.0000001',resultRecoveryLifetime:'00:05:00',maximumActiveSets:2,maximumPendingOperations:4,generationAdmission:1,replacementMechanism:1,sessionEffect:1,deliveryMechanism:1,generateAssurancePolicyVersion:'fixture-generate',replaceAssurancePolicyVersion:'fixture-replace',consumptionAccountAttemptLimit:2,consumptionNetworkAttemptLimit:5,processingReference:'fixture-processing',retentionReference:'fixture-retention'
+  }
+ });
+ const versionOf=(candidate:Candidate)=>candidate.family==='Totp'?candidate.value.values.nativeVerifierVersion:candidate.family==='RecoveryCodes'?candidate.value.values.crypto.nativeIdentityVersion:undefined;
+ for(const family of ['Totp','RecoveryCodes'] as const){
+  const scope={family},field=family==='Totp'?'nativeVerifierVersion':'crypto.nativeIdentityVersion',diff='values.'+field;
+  assert.equal(formForScope(scope).fields[field],'');
+  for(const version of ['10.0.13','10.0.15'] as const){
+   const original=parseCandidate(family,raw(family,version)),form=formFromCandidate(original);
+   assert.equal(versionOf(original),version);assert.equal(form.fields[field],version);
+   assert.equal(validateTunnerForm(candidateSchema(scope,form,16384),flattenForm(form)).valid,true);
+   const posted=candidateFromForm(form,scope);assert.deepEqual(posted,original);assert.deepEqual(parseCandidate(family,posted.value),original);
+   assert.equal(candidateFields(original).find(row=>row.key===diff)?.value,version);
+   for(const rejected of ['', '10.0.14','10.0.15 ','15']){
+    assert.throws(()=>parseCandidate(family,raw(family,rejected)));
+    const changed={...form,fields:{...form.fields,[field]:rejected}};
+    const result=validateTunnerForm(candidateSchema(scope,changed,16384),flattenForm(changed));assert.equal(result.valid,false);assert.ok(result.errors[field]);assert.throws(()=>candidateFromForm(changed,scope));
+   }
+  }
+ }
 });

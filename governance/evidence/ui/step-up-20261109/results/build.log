@@ -1,0 +1,83 @@
+$ pnpm theme:check && pnpm typecheck && vite build --config packages/ui/vite.config.ts && vite build --config fixtures/ui/vite.config.ts && vite build --config apps/user/vite.config.ts && vite build --config fixtures/step-up/vite.config.ts
+$ node packages/ui/tools/build-theme.mjs --check
+Theme outputs CURRENT
+$ tsc --noEmit
+vite v8.2.4 building client environment for production...
+transforming...
+✓ 104 modules transformed.
+rendering chunks...
+computing gzip size...
+packages/ui/dist/tunner-ui.js  489.92 kB │ gzip: 101.12 kB
+
+✓ built in 851ms
+vite v8.2.4 building client environment for production...
+transforming...
+✓ 118 modules transformed.
+rendering chunks...
+computing gzip size...
+fixtures/ui/dist/index.html                                              0.37 kB │ gzip:  0.27 kB
+fixtures/ui/dist/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2    7.42 kB
+fixtures/ui/dist/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2      8.00 kB
+fixtures/ui/dist/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2     10.25 kB
+fixtures/ui/dist/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2      11.23 kB
+fixtures/ui/dist/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2       15.08 kB
+fixtures/ui/dist/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2      16.51 kB
+fixtures/ui/dist/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2       18.74 kB
+fixtures/ui/dist/assets/inter-greek-wght-normal-CkhJZR-_.woff2          18.99 kB
+fixtures/ui/dist/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2   25.96 kB
+fixtures/ui/dist/assets/geist-latin-wght-normal-BgDaEnEv.woff2          29.40 kB
+fixtures/ui/dist/assets/inter-latin-wght-normal-Dx4kXJAl.woff2          48.25 kB
+fixtures/ui/dist/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2      85.06 kB
+fixtures/ui/dist/assets/index-CR0H2j57.css                              23.76 kB │ gzip:  4.45 kB
+fixtures/ui/dist/assets/index-C_UUTa77.js                              276.96 kB │ gzip: 84.95 kB
+
+✓ built in 2.37s
+vite v8.2.4 building client environment for production...
+transforming...
+✓ 126 modules transformed.
+rendering chunks...
+computing gzip size...
+apps/user/dist/index.html                                              0.62 kB │ gzip:  0.32 kB
+apps/user/dist/authentication.html                                     0.62 kB │ gzip:  0.32 kB
+apps/user/dist/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2    7.42 kB
+apps/user/dist/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2      8.00 kB
+apps/user/dist/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2     10.25 kB
+apps/user/dist/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2      11.23 kB
+apps/user/dist/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2       15.08 kB
+apps/user/dist/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2      16.51 kB
+apps/user/dist/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2       18.74 kB
+apps/user/dist/assets/inter-greek-wght-normal-CkhJZR-_.woff2          18.99 kB
+apps/user/dist/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2   25.96 kB
+apps/user/dist/assets/geist-latin-wght-normal-BgDaEnEv.woff2          29.40 kB
+apps/user/dist/assets/inter-latin-wght-normal-Dx4kXJAl.woff2          48.25 kB
+apps/user/dist/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2      85.06 kB
+apps/user/dist/assets/authentication-B7PNq43F.css                      5.43 kB │ gzip:  1.43 kB
+apps/user/dist/assets/registration-D62K8Yei.css                        7.49 kB │ gzip:  1.86 kB
+apps/user/dist/assets/validation-DMez9Jr9.css                         18.43 kB │ gzip:  2.86 kB
+apps/user/dist/assets/authentication-By6Ekm-j.js                       8.59 kB │ gzip:  2.51 kB
+apps/user/dist/assets/registration-CSeu5nyE.js                        16.09 kB │ gzip:  4.09 kB
+apps/user/dist/assets/validation-C_cE7ORg.js                         276.27 kB │ gzip: 84.83 kB
+
+✓ built in 3.04s
+vite v8.2.4 building client environment for production...
+transforming...
+✓ 121 modules transformed.
+rendering chunks...
+computing gzip size...
+fixtures/step-up/dist/index.html                                              0.43 kB │ gzip:  0.28 kB
+fixtures/step-up/dist/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2    7.42 kB
+fixtures/step-up/dist/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2      8.00 kB
+fixtures/step-up/dist/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2     10.25 kB
+fixtures/step-up/dist/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2      11.23 kB
+fixtures/step-up/dist/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2       15.08 kB
+fixtures/step-up/dist/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2      16.51 kB
+fixtures/step-up/dist/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2       18.74 kB
+fixtures/step-up/dist/assets/inter-greek-wght-normal-CkhJZR-_.woff2          18.99 kB
+fixtures/step-up/dist/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2   25.96 kB
+fixtures/step-up/dist/assets/geist-latin-wght-normal-BgDaEnEv.woff2          29.40 kB
+fixtures/step-up/dist/assets/inter-latin-wght-normal-Dx4kXJAl.woff2          48.25 kB
+fixtures/step-up/dist/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2      85.06 kB
+fixtures/step-up/dist/assets/index-CM9FMMMr.css                              22.78 kB │ gzip:  3.74 kB
+fixtures/step-up/dist/assets/index-BsEtqrRW.js                              293.43 kB │ gzip: 89.03 kB
+
+✓ built in 6.70s

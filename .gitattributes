@@ -1,3 +1,10 @@
+# Preserve the actual Recovery V04 qualification bytes across Windows/Linux checkouts.
+governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/** -text whitespace=cr-at-eol
+governance/evidence/TUN-P2-011-V04-VISUAL-CONSENT.json -text whitespace=cr-at-eol
+governance/evidence/TUN-P2-011-UI-COMPLIANCE.json text eol=lf
+governance/evidence/GLOBAL-UI-COMPLIANCE.json text eol=lf
+governance/evidence/p2-019-content-20261116/native-recovery-46041e95/** -text whitespace=cr-at-eol
+
 # Canonical authority mirrors retain source bytes, including Markdown hard-break spaces.
 docs/authority/amendments/AMD-0002/** -whitespace
 docs/authority/amendments/AMD-0003/AMD-0003_Location-Independent_Repository_and_Path_Resolution.md whitespace=-trailing-space
@@ -34,3 +41,42 @@ docs/authority/source-bundle/pre-p0-implementation-package/AGENTS.md text eol=cr
 "docs/authority/source-bundle/pre-p0-implementation-package/Governance Templates/work-item.template.yaml" text eol=crlf
 docs/authority/source-bundle/pre-p0-implementation-package/PRE_P0_PACKAGE_INDEX.md text eol=crlf
 docs/authority/source-bundle/pre-p0-implementation-package/PRE_P0_PACKAGE_MANIFEST.json text eol=crlf
+
+# Preserve exact bytes for the source-bound recovery compatibility evidence.
+governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/** -text whitespace=cr-at-eol
+governance/evidence/TUN-P2-003-004-005-006-RECOVERY-COMPATIBILITY-20261111.json -text whitespace=cr-at-eol
+governance/evidence/TUN-P2-00[456]-UI-COMPLIANCE-RECOVERY-20261111.json -text whitespace=cr-at-eol
+governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/** -text whitespace=cr-at-eol
+governance/evidence/p2-009-recovery-20261111/closure-796d316/** -text whitespace=cr-at-eol
+governance/evidence/TUN-P2-009-UI-COMPLIANCE.json -text whitespace=cr-at-eol
+
+# Preserve the existing hash-governed Windows evidence bytes on every checkout.
+governance/evidence/TUN-P2-004-UI-COMPLIANCE-TOTP-20261110.json text eol=crlf
+governance/evidence/TUN-P2-008-VISUAL-CONSENT.json text eol=crlf
+governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json text eol=crlf
+governance/evidence/TUN-P2-009-VISUAL-CONSENT.json text eol=crlf
+governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json text eol=crlf
+governance/evidence/TUN-P1-018-DESIGN-SOURCES.json text eol=crlf
+governance/evidence/p2-019-content-20261116/admin-bootstrap-63fb7514/results.json text eol=crlf
+governance/evidence/p2-019-content-20261116/recovery-password-mapping-d81d4f9f/9e1ffadcba6a44209d5d27518ba52fae/focused.trx -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/session-revocation-binding-b9b35fd2/1134eb379b1140e9910b731429172a0c/focused.trx -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/session-bulk-binding-371a2c8e/18237542a0cc4fc9b61178ffe86080ae/focused.trx -text whitespace=cr-at-eol
+# Preserve original committed-candidate fixture results and screenshot bytes.
+governance/evidence/p2-008-replay-clock-20261119/fixture-boundary.trx -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/backend-resume-20261119/backend-143.trx -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-worker-failure-2c0daf3c.trx -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-worker-offline-81d91a61-frozen.trx -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-worker-linux-2881372e.trx -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-identity-linux15-2881372e.trx -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/p016-ready-0b822041.json -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/p019-readiness-7162c8b4.json -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-worker-linux-2881372e.trx -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-identity-linux15-2881372e.trx -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-worker-offline-81d91a61-frozen.trx -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/manual-identity-7c626363/** -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-identity-linux15-bd3739d3.trx -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/fixture-compatibility-2c0daf3c/** -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/fixture-compatibility-2c0daf3c/** -text whitespace=cr-at-eol
+governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-identity-linux15-bd3739d3.trx -text whitespace=cr-at-eol
+# Preserve original committed-candidate fixture results and screenshot bytes.
+governance/evidence/p2-019-content-20261116/manual-identity-7c626363/** -text whitespace=cr-at-eol

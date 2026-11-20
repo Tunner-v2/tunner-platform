@@ -1,0 +1,261 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "../artifacts/p2-019-content-20261116/manual-identity-d9170ef9/trusted.config.mjs",
+      "--grep",
+      "Synthetic Identity ",
+      "--workers",
+      "1"
+    ],
+    "configFile": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-019-content-20261116\\manual-identity-d9170ef9\\trusted.config.mjs",
+    "rootDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/browser-testing",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/artifacts/p2-019-content-20261116/manual-identity-d9170ef9/new/screenshots",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/browser-testing",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-019-content-20261116\\manual-identity-d9170ef9\\new\\results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "admin-security.spec.ts",
+      "file": "admin-security.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Synthetic Identity six fixed actors retain Origin CSRF cookie switching and cross-domain authority boundaries",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 19840,
+                  "error": {
+                    "message": "Error: Isolated fixture HTTPS request failed.",
+                    "stack": "Error: Isolated fixture HTTPS request failed.\n    at local (C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts:43:16)\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts:147:13",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts",
+                      "column": 16,
+                      "line": 43
+                    },
+                    "snippet": "  41 |     const response=await fetch(url,{...options,redirect:'manual',signal:AbortSignal.timeout(10000)});\n  42 |     return {status:response.status,headers:response.headers,body:await response.text()};\n> 43 |   }catch{throw new Error('Isolated fixture HTTPS request failed.');}\n     |                ^\n  44 | }\n  45 | function issued(headers:Headers){return headers.getSetCookie().some(value=>value.startsWith(adminCookie+'='));}\n  46 | async function bootstrap(jar:CookieJar){"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts",
+                        "column": 16,
+                        "line": 43
+                      },
+                      "message": "Error: Isolated fixture HTTPS request failed.\n\n  41 |     const response=await fetch(url,{...options,redirect:'manual',signal:AbortSignal.timeout(10000)});\n  42 |     return {status:response.status,headers:response.headers,body:await response.text()};\n> 43 |   }catch{throw new Error('Isolated fixture HTTPS request failed.');}\n     |                ^\n  44 | }\n  45 | function issued(headers:Headers){return headers.getSetCookie().some(value=>value.startsWith(adminCookie+'='));}\n  46 | async function bootstrap(jar:CookieJar){\n    at local (C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts:43:16)\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts:147:13"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T17:35:38.492Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-019-content-20261116\\manual-identity-d9170ef9\\new\\screenshots\\admin-security-Synthetic-I-ce071-domain-authority-boundaries\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\admin-security.spec.ts",
+                    "column": 16,
+                    "line": 43
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "720098cec6eac07e561e-a12cabb607277266fea2",
+          "file": "admin-security.spec.ts",
+          "line": 117,
+          "column": 1
+        },
+        {
+          "title": "Synthetic Identity defaults off while the real Content-only Admin retains exactly its original three actors",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11545,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T17:35:59.379Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "720098cec6eac07e561e-cebfcc5ec91a1344df4e",
+          "file": "admin-security.spec.ts",
+          "line": 180,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "governed-content-flow.spec.ts",
+      "file": "governed-content-flow.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Synthetic Identity sixteen governed workspaces preserve separate actors and complete approved typed publication and prospective restore",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 10645,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Password & session policy', exact: true, level: 1 })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Password & session policy', exact: true, level: 1 })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Password & session policy', exact: true, level: 1 })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Password & session policy', exact: true, level: 1 })\u001b[22m\n\n    at identityActor (C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\governed-content-flow.spec.ts:76:96)\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\governed-content-flow.spec.ts:114:58",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\governed-content-flow.spec.ts",
+                      "column": 96,
+                      "line": 76
+                    },
+                    "snippet": "  74 |  await page.getByRole('button',{name:'Use Identity '+name,exact:true}).click();expect((await admitted).status()).toBe(204);\n  75 |  await expect(page).toHaveURL(adminOrigin+configurationPath('Authentication'));\n> 76 |  await expect(page.getByRole('heading',{level:1,name:'Password & session policy',exact:true})).toBeVisible();\n     |                                                                                                ^\n  77 | }\n  78 | async function identityRead<T>(page:Page,path:string,body?:Record<string,unknown>):Promise<T>{\n  79 |  // The real browser owns its cookies and CSRF. Never export either into a report or assertion."
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\governed-content-flow.spec.ts",
+                        "column": 96,
+                        "line": 76
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('heading', { name: 'Password & session policy', exact: true, level: 1 })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('heading', { name: 'Password & session policy', exact: true, level: 1 })\u001b[22m\n\n\n  74 |  await page.getByRole('button',{name:'Use Identity '+name,exact:true}).click();expect((await admitted).status()).toBe(204);\n  75 |  await expect(page).toHaveURL(adminOrigin+configurationPath('Authentication'));\n> 76 |  await expect(page.getByRole('heading',{level:1,name:'Password & session policy',exact:true})).toBeVisible();\n     |                                                                                                ^\n  77 | }\n  78 | async function identityRead<T>(page:Page,path:string,body?:Record<string,unknown>):Promise<T>{\n  79 |  // The real browser owns its cookies and CSRF. Never export either into a report or assertion.\n    at identityActor (C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\governed-content-flow.spec.ts:76:96)\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\governed-content-flow.spec.ts:114:58"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-18T17:36:11.110Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-019-content-20261116\\manual-identity-d9170ef9\\new\\screenshots\\governed-content-flow-Synt-54304-ion-and-prospective-restore\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\browser-testing\\governed-content-flow.spec.ts",
+                    "column": 96,
+                    "line": 76
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "9c3febb29f7c3d743877-4fc3119999b8ec585ba0",
+          "file": "governed-content-flow.spec.ts",
+          "line": 106,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-18T17:35:36.074Z",
+    "duration": 47113.491,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

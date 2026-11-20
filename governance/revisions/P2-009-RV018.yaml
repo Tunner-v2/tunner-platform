@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-009-RV018",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-009",
+  "parent_revision_id": "P2-009-RV017",
+  "parent_milestone_revision_id": null,
+  "title": "Expose fixed public resource-canary failure stages",
+  "revision_type": "COMPATIBILITY",
+  "status": "CLOSED",
+  "reason": "Existing P011 runtime qualification fails during public fixture create/start with only a coarse category. Independently reviewed one-file patch records fixed stage and closed exception categories through the existing failureCode field; preserve all acceptance and privacy controls and historical closure.",
+  "authority_refs": [
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeExecution.cs",
+    "governance/evidence/P2-009-RV018-VALIDATION.json",
+    "governance/revisions/P2-010-RV019.yaml",
+    "governance/evidence/P2-010-RV019-VALIDATION.json"
+  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Own only tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeExecution.cs. Require exact independent Cyber Security, Architecture and QA source review, compile, fresh source-bound protocol qualification and one fixed public-canaries diagnostic. Preserve all assertions, receipt shapes, timeouts, images and production boundaries; no resource or journey PASS is implied."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "cyber-security-engineer",
+    "solution-architect",
+    "tester-qa-engineer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P2-009-RV018-VALIDATION.json"
+  ],
+  "created_at": "2026-11-20T03:15:12.5665837+00:00",
+  "closed_at": "2026-11-20T21:12:40.492Z",
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "tested_commit_sha": "5f7e27976452fae361783e20be355d6e0137415e",
+    "validated_commit_sha": "5f7e27976452fae361783e20be355d6e0137415e",
+    "work_item_commit_shas": [
+      "48a15b6c05d47f27439fc0a882deea6057e58df0",
+      "20f39f24acba0fc6c14b2b52d95d5c285211319a",
+      "5f7e27976452fae361783e20be355d6e0137415e",
+      "5a13e9210caccf6a946f5be9bd9d34fb1783646d"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED",
+    "remaining_uncommitted_paths": [
+      "docs/context/current/",
+      "docs/project/",
+      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/",
+      "%SystemDrive%/",
+      ".vscode/",
+      "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode/"
+    ]
+  }
+}

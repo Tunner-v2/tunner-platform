@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "state": "PREPARED_REVIEW_CANDIDATE",
+  "execution_state": "NOT_EXECUTED",
+  "head_sha_at_preparation": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+  "inputs": [
+    {
+      "path": "artifacts/p2-008-totp-20261110/legacy-host-smoke/legacy-child.mjs",
+      "sha256": "bdbb80a20a6f2f21b28c7cf360b97f81f434cb43b080fcddf4b709a6212506cc"
+    },
+    {
+      "path": "artifacts/p2-008-totp-20261110/legacy-host-smoke/run-reviewed-smoke.mjs",
+      "sha256": "9c346779c9dd451db1f213c0833d18623e4f48070d2ce9ec47ee8bccdc2cb365"
+    },
+    {
+      "path": "web/tests/totp/sensitive/supervisor.mjs",
+      "sha256": "d2a81f0ac1ab481f84c869c4852a893ecd21a4903fe79c3aa54754450fd98779"
+    },
+    {
+      "path": "web/tests/totp/sensitive/contract.mjs",
+      "sha256": "e4d64aec3ee878234f48858e6fabe03ac9aa069568cb08369d6f33b9c4c98bc3"
+    }
+  ],
+  "prepared_dll_observation": {
+    "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.BrowserTesting.dll",
+    "sha256": "a9fda5337d4432e8bb671abb79b26e14a16d761b0897b68e66ecd8c421890bf8",
+    "bytes": 212992,
+    "binding_requirement": "Actual execution verifies the root-generated current complete runtime-build-binding.json; this observation is not a build-source proof."
+  },
+  "native_source_edits": false,
+  "dotnet_build_started": false,
+  "containers_started": false,
+  "accounts_created": false,
+  "unrelated_dirty_paths": {
+    "count": 13,
+    "all_hashes_equal": true
+  },
+  "reused_mechanics": [
+    "childEnvironment",
+    "stopOwnedChild",
+    "removeOwnedSurface",
+    "scanSurface"
+  ],
+  "actual_flow_pending": [
+    "ordinary --local-browser-testing with Totp:null",
+    "registration 202",
+    "owned Mailpit verification",
+    "Personal Information completed",
+    "password login and signed-in reload",
+    "generic password step-up same operation",
+    "code-free completed-owner recovery",
+    "logout and guarded direct entries"
+  ],
+  "resource_scope": {
+    "postgres": "New positively labeled cached c6a image, loopback ephemeral port, tmpfs only; hardcoded ordinary database exists only in that container.",
+    "mailpit": "New positively labeled cached 0306 image, loopback ephemeral SMTP/API, no mounts, logging none.",
+    "borrowed_postgres": "Docker identity/running/started/ports compared before and after; no SQL, lifecycle or volume action.",
+    "config": "New canonical owned temp directory contains public config, empty Docker config/pgpass and ordinary encrypted DP/network state only; removed after owned process exit.",
+    "browser": "Pinned installed raw Chromium; private IPC; no runner, HTTP interception, trace, screenshot, HAR, video or storage-state export."
+  },
+  "boundary_notes": [
+    "Root must review before explicitly executing --execute-reviewed.",
+    "Readiness uses the same fixed approved local certificate pin boundary as the ordinary starter; browser TLS trust is independently required without ignoreHTTPS.",
+    "No passwords, email, verification values, cookies, bodies or raw diagnostics leave the child; exact safe predicates only.",
+    "Ordinary host has no shutdown API. Actual close of its captured process is required; no graceful ASP.NET shutdown claim is made on Windows.",
+    "No TOTP seed or native oracle is involved. This is bounded ordinary-host compatibility, not a TOTP integrated journey or Product acceptance."
+  ],
+  "source_references": [
+    "web/tests/browser-testing/fixtures.ts",
+    "web/tests/browser-testing/authentication-flow.spec.ts",
+    "tools/dev/tunner-browser.ps1",
+    "tools/browser-testing/Program.cs",
+    "tools/browser-testing/BrowserTestHost.cs",
+    "tools/browser-testing/BrowserTestStepUp.cs",
+    "src/Modules/Identity/StepUpBrowserEndpoints.cs"
+  ],
+  "static_checks": {
+    "node_syntax": "PASS_2_OF_2",
+    "runtime": "NOT_EXECUTED"
+  }
+}

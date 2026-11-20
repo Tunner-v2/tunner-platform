@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-009-UI-001",
+  "work_item_id": "TUN-P2-009",
+  "classification": "UI_FIDELITY_DEFECT",
+  "severity": "SEV-3",
+  "status": "RESOLVED",
+  "environment": "Actual isolated public React presentation at committed 3b251bf2407721c9186ac8b7ff5d196eececb9c5; 42 presentation graph inputs equal that committed source. Shared TS/API candidate was uncommitted and excluded from this component graph. Edge Chromium, no functional codes or owner/file transport.",
+  "description": "After keyboard activation of Download, the controlled requested status expands the scrollable modal. Immediate Done.focus({preventScroll:true}) executes before the new layout. Done receives focus but lies below the visible dialog viewport in five actual mobile probes (390x844,390x640,320x568,390x480,320x480); laptop1366x768 passes. At390x844 Done.bottom=957.5 while the dialog clip bottom is827. This fails responsive visible keyboard focus under UX-FID-007. Preserve approved layout, shared ModalDialog/buttons and exact one-request semantics; use a download-user-intent guard and post-layout focus that scrolls Done into view after requested feedback. Existing24 public PASS assertions did not include this visibility predicate. Any resolution remains pending a committed corrective candidate and actual unchanged/new regression results; this proposal does not close the defect or validate P2-009. Resolution: the post-layout user-intent focus correction first committed at fd287d0 is verified at c71495cbcb1e0e6f8e1dd89c3f42c59b1ed834a6 by all six unchanged visibility assertions within public52, plus six current independent keyboard geometry/ring probes. Current public52, contracts43 and affected legacy146 pass; Axe has0 violations and all15 raw incomplete contrast targets retain explicit exact-target manual resolution. The archived scoped role/root reviews support only this defect resolution. Native/private transport and whole P2-009/UI gate acceptance remain pending.",
+  "expected_behavior_ref": "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+  "evidence": [
+    "artifacts/p2-009-recovery-20261111/ui-refinement/integration-v2/mobile-focus-3b251bf/result.json",
+    "artifacts/p2-009-recovery-20261111/ui-refinement/integration-v2/probe-mobile-focus.mjs",
+    "artifacts/p2-009-recovery-20261111/ui-refinement/integration-v2/public-3b251bf/evidence-index.json",
+    "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+    "governance/revisions/P1-018-RV007.yaml",
+    "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/copy-index.json",
+    "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/root-review.json",
+    "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json"
+  ],
+  "affected_versions": [
+    "3b251bf2407721c9186ac8b7ff5d196eececb9c5"
+  ],
+  "created_at": "2026-11-11T09:52:15Z",
+  "updated_at": "2026-11-11T12:04:17.107Z"
+}

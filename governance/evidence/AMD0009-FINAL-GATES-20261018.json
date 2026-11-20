@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "scope_id": "GLOBAL_UI",
+  "status": "PASS_CURRENT_IMPLEMENTED_SCOPE",
+  "evaluated_at_commit": "b89a4ac700d0fe4300d3b305f262de43c4cad73e",
+  "checked_at": "2026-10-18T21:55:36.612Z",
+  "tested_ui_sha": "bea01cfcd813bf8000a7e1c64b8c74492c4b4e31",
+  "tested_harness_sha": "623d3db08ee73182904a12dd08351260a715449c",
+  "product_acceptance_ref": "governance/evidence/AMD0009-CURRENT-UI-PRODUCT-ACCEPTANCE.json",
+  "ui_closure_ref": "governance/evidence/AMD0009-CURRENT-UI-CLOSURE.json",
+  "native": {
+    "final-global-ui-check.json": {
+      "ExitCode": 0,
+      "Command": "ui check",
+      "Payload": {
+        "Outcome": "PASS",
+        "ScopeId": "GLOBAL_UI",
+        "CoveredItems": [
+          "U-AUTH-02",
+          "U-AUTH-03",
+          "U-AUTH-03A",
+          "U-AUTH-CONSENT",
+          "U-AUTH-RESULT",
+          "FORM-REGISTRATION",
+          "FORM-VERIFY-EMAIL",
+          "FORM-PERSONAL-INFORMATION",
+          "SHARED-FORM-USER",
+          "SHARED-FORM-ADMIN"
+        ],
+        "Failures": []
+      }
+    },
+    "final-p0-enable-after-error-fix.json": {
+      "ExitCode": 0,
+      "Command": "milestone close-check",
+      "Payload": {
+        "MilestoneId": "P0",
+        "Outcome": "PASS",
+        "Failures": [],
+        "Satisfied": [
+          "governance validation passed",
+          "authority verification passed",
+          "milestone lifecycle state permits closure evaluation: CLOSED",
+          "work-item final gate passed: TUN-P0-001",
+          "work-item final gate passed: TUN-P0-002",
+          "work-item final gate passed: TUN-P0-003",
+          "work-item final gate passed: TUN-P0-004",
+          "work-item final gate passed: TUN-P0-005",
+          "work-item final gate passed: TUN-P0-006",
+          "work-item final gate passed: TUN-P0-007",
+          "work-item final gate passed: TUN-P0-008",
+          "work-item final gate passed: TUN-P0-009",
+          "work-item final gate passed: TUN-P0-010",
+          "work-item final gate passed: TUN-P0-011",
+          "work-item final gate passed: TUN-P0-012",
+          "work-item final gate passed: TUN-P0-013",
+          "work-item final gate passed: TUN-P0-014",
+          "work-item final gate passed: TUN-P0-015",
+          "work-item final gate passed: TUN-P0-019",
+          "work-item final gate passed: TUN-P0-026",
+          "work-item final gate passed: TUN-P0-027",
+          "work-item final gate passed: TUN-P0-028",
+          "work-item final gate passed: TUN-P0-029",
+          "work-item final gate passed: TUN-P0-030",
+          "work-item final gate passed: TUN-P0-031",
+          "work-item final gate passed: TUN-P0-032",
+          "work-item final gate passed: TUN-P0-033",
+          "work-item final gate passed: TUN-P0-034",
+          "work-item final gate passed: TUN-P0-035",
+          "milestone role review passed: governance-engineer",
+          "milestone role review passed: tester-qa-engineer",
+          "milestone role review passed: auditor",
+          "milestone evidence exists: governance/evidence/DEC-0001-P0-LOCAL-INTEGRATION.json",
+          "milestone evidence exists: governance/decisions/DEC-0002.yaml",
+          "milestone evidence exists: governance/evidence/DEC-0002-GOVERNED-INCREMENTAL-P0-PR.json",
+          "milestone evidence exists: governance/evidence/TUN-P0-003-SCHEMA-VALIDATION.json",
+          "milestone evidence exists: governance/evidence/P0-MILESTONE-ROLE-REVIEWS.json",
+          "milestone evidence exists: governance/evidence/P0-CLOSE-CHECK-20261002.json",
+          "milestone evidence exists: governance/evidence/P0-DEEP-AUDIT-20261001.json",
+          "required milestone gate evaluated by this P0 close-check: P0_ENABLEMENT"
+        ]
+      }
+    },
+    "rv008-close-check.json": {
+      "ExitCode": 0,
+      "Command": "revision close-check",
+      "Payload": {
+        "RevisionId": "P0-RV008",
+        "Outcome": "PASS",
+        "Findings": [],
+        "Satisfied": []
+      }
+    },
+    "rv008-closed-transition.json": {
+      "ExitCode": 0,
+      "Command": "revision transition check",
+      "Payload": {
+        "RevisionId": "P0-RV008",
+        "Outcome": "ALLOWED",
+        "Findings": [],
+        "Satisfied": []
+      }
+    }
+  },
+  "next": [
+    {
+      "WorkItemId": "TUN-P2-002",
+      "Status": "VALIDATION",
+      "Actionable": true,
+      "Reason": "all recorded prerequisites and blockers permit work"
+    },
+    {
+      "WorkItemId": "TUN-P2-003",
+      "Status": "VALIDATION",
+      "Actionable": true,
+      "Reason": "all recorded prerequisites and blockers permit work"
+    },
+    {
+      "WorkItemId": "TUN-P2-004",
+      "Status": "VALIDATION",
+      "Actionable": true,
+      "Reason": "all recorded prerequisites and blockers permit work"
+    },
+    {
+      "WorkItemId": "TUN-P2-005",
+      "Status": "BACKLOG",
+      "Actionable": false,
+      "Reason": "mandatory role review is missing: auditor; mandatory role review is missing: compliance-specialist; mandatory role review is missing: content-writer; mandatory role review is missing: cyber-security-engineer; mandatory role review is missing: end-user-ux-reviewer; mandatory role review is missing: frontend-engineer; mandatory role review is missing: full-stack-engineer; mandatory role review is missing: sdk-engineer; mandatory role review is missing: solution-architect; mandatory role review is missing: tester-qa-engineer; mandatory role review is missing: ui-ux-engineer"
+    }
+  ],
+  "preservation": {
+    "count": 13,
+    "paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json"
+    ],
+    "result": "PASS_BYTE_IDENTICAL"
+  },
+  "portable_error_fix_receipts": {
+    "count": 9,
+    "result": "PASS_RAW_GIT_BLOB_HASH"
+  },
+  "pr": {
+    "number": 18,
+    "url": "https://github.com/Tunner-v2/tunner-platform/pull/18",
+    "title": "Enforce approved UI fidelity, canonical routes and shared form validation",
+    "draft": true,
+    "head": "codex/global-ui-compliance",
+    "base": "main",
+    "head_sha": "b89a4ac700d0fe4300d3b305f262de43c4cad73e",
+    "base_sha": "f3a3f4a7169bb9761a82169aeebf173b2546a349",
+    "auto_merge_enabled": false,
+    "parent_dependency": 17
+  },
+  "boundary": "PR/CI/human integration remain separate. Parent TUN-P2-004 and whole P2 are not accepted by the scoped UI consent. No production deployment or release.",
+  "ci_observation_ref": "governance/evidence/P1-RV001-UI-PR-CI-OBSERVATION-20261018.json",
+  "integration_status": "BLOCKED:4 container-policy failures under open P1-RV001; current web/security baseline jobs PASS; draft human gate retained."
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "scope_type": "WORK_ITEM",
+  "scope_id": "TUN-P2-007",
+  "reviewed_at": "2026-11-09T15:45:40.810Z",
+  "sources": [
+    {
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/security/authentication/passkeys/?view=aspnetcore-10.0",
+      "finding": "Built-in Identity passkey registration and authentication, explicit RP/origin configuration, optional attestation verification, resource bounds and protected temporary state. Reuse the framework rather than custom WebAuthn crypto."
+    },
+    {
+      "url": "https://github.com/dotnet/aspnetcore/blob/v10.0.13/src/Identity/Core/src/SignInManager.cs",
+      "finding": "Pinned approved runtime source. Inspect ceremony-only APIs and their state lifecycle; preserve Tunner authoritative session issuance instead of introducing an unrelated Identity application-cookie session."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.identity.signinmanager-1.performpasskeyassertionasync?view=aspnetcore-10.0",
+      "finding": "Ceremony-only assertion produces a verified user/passkey result. Persist updated framework passkey metadata through supported Identity storage APIs."
+    },
+    {
+      "url": "https://www.w3.org/TR/2026/REC-webauthn-3-20260825/",
+      "finding": "Level3 Recommendation,25 August2026, verified separately from the newer editor/draft URL. Apply challenge, RP/origin, type, user-presence/verification and signature/counter/backup validation to the supported ceremonies."
+    },
+    {
+      "url": "https://csrc.nist.gov/pubs/sp/800/63/b/4/final",
+      "finding": "Final SP800-63B-4 publication July2025; use final guidance already referenced by FRD17, not superseded draft material."
+    },
+    {
+      "url": "https://pages.nist.gov/800-63-4/sp800-63b/aal/",
+      "finding": "Assurance depends on verified factors/capabilities and policy. A passkey name alone does not grant AAL2/3; syncable credentials cannot meet AAL3. Do not invent Tunner policy values."
+    }
+  ],
+  "local_primary_api_verification": {
+    "reference": "Microsoft.AspNetCore.App.Ref@10.0.13/ref/net10.0/Microsoft.AspNetCore.Identity.xml",
+    "sha256": "6aafd1af1bba3ed083cbeb8350f4c1d20ce1a2b0fe135165f4c842d670e2543d",
+    "verified_apis": [
+      "SignInManager.MakePasskeyCreationOptionsAsync",
+      "SignInManager.MakePasskeyRequestOptionsAsync",
+      "SignInManager.PerformPasskeyAttestationAsync",
+      "SignInManager.PerformPasskeyAssertionAsync",
+      "IPasskeyHandler",
+      "PasskeyHandler(UserManager,IOptions<IdentityPasskeyOptions>)"
+    ]
+  },
+  "decision": "RESOLVED_EXISTING_ADR_0006: use approved .NET10.0.13 Identity and its existing schema3 passkey store; no new FIDO dependency, cryptographic verifier or identity/session authority.",
+  "boundary": "Primary-source R&D is not Security/Product approval of RP domains, origins, assurance mappings, retention or deployment configuration. Those remain explicit trusted approved inputs; local synthetic fixtures cannot activate production."
+}

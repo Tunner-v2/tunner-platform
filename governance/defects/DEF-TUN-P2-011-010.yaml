@@ -1,0 +1,20 @@
+schema_version: 1
+defect_id: DEF-TUN-P2-011-010
+work_item_id: TUN-P2-011
+classification: BUG
+severity: SEV-3
+status: CLOSED
+environment: real HTTPS finite recovery browser journey at committedeb7f640
+description: The first real recovery journey reaches entry, validation, pending, original history/pointer restoration, foreign-browser and CSRF guards, then cancellation. Its privacy predicate fails because explicit API POST responses omit Referrer-Policy while the existing HTML layer sets no-referrer. Backend and QA independently confirm the missing header makes the header conjunct false; no runtime secret or storage payload was exported. Preserve the privacy assertion and centrally extend the existing no-referrer protection to normal BFF and problem responses, including early guard rejection and cleared exception responses. Validate both User/Admin success, Origin-CSRF/auth/exception errors and existing callback behavior before the qualified recovery journey. No observed secret disclosure or business/session-policy change is claimed.
+  Actual closure at committedaba6daf is limited to this privacy-header defect:63 existing BFF/callback tests pass, current protocol17/resources6/browserpublic37plus12 qualify, and the real recovery journey passes117.422s with every browser/coordinator/source/process/cleanup/borrowed flag true across all four viewports. Canonical raw TRX and complete controller receipt support closure; no secret values are exported. Six existing recovery-code regressions and revision/whole011 acceptance remain separate pending checks.
+expected_behavior_ref: docs/authority/baselines/1.6.0/08_Security_Privacy_Compliance_and_Global_Market_Governance.md; src/Modules/Identity/IdentityWebAssets.cs; src/Tunner.Platform/Bff/TunnerBffFoundation.cs
+evidence:
+  - governance/evidence/p2-011-recovery-20261112/browser-eb7f640/failed-new-journey.json
+  - governance/evidence/P2-010-RV004-VALIDATION.json
+  - governance/evidence/TUN-P2-011-VALIDATION.json
+  - governance/evidence/p2-011-recovery-20261112/browser-aba6daf/bff-foundation-callback.trx
+  - governance/evidence/p2-011-recovery-20261112/browser-aba6daf/new-journey-receipt.json
+affected_versions:
+  - eb7f640567923ba3f51f95a2441a55b1d5b44dee
+created_at: 2026-11-13T22:50:00Z
+updated_at: 2026-11-14T03:10:00Z

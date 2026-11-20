@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-014",
+  "recorded_at": "2026-11-15T18:42:06Z",
+  "question_item_id": "[\"request_user_input_async\",\"call_24d0f2745cfa4e3b848d2745f217e436\",0]",
+  "human_response": "Authorize this scoped OIDC integration",
+  "outcome": "AUTHORIZED_SCOPED_IMPLEMENTATION_AND_VALIDATION",
+  "review_ref": "artifacts/p2-014-authorization-20261115/interaction-authorization/REVIEW.md",
+  "reviewed_patch_ref": "artifacts/p2-014-authorization-20261115/interaction-authorization/interaction-controls.patch",
+  "reviewed_patch_sha256": "a077999e6430d649b88fedfacc13638e4c724b7918cf7abf1c357b532923e389",
+  "scope": "Prepared four-file OIDC authentication-context/freshness patch and necessary native/continuation integration: original request binding, forced fresh sign-in, maximum authentication age, explicit exact ACR mappings and qualified original-sign-in ID-token claims.",
+  "prior_automatic_review": "Rejected source edit because core authorization/authentication-freshness behavior required a specific grant beyond general continued development. Original patch remained unapplied until this response.",
+  "exclusions": ["Shared StepUp implementation", "Production policy/mapping/claim-value selection", "Protected-main merge", "Deployment or release", "Final feature acceptance"]
+}

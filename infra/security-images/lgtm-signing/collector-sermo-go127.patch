@@ -1,0 +1,14 @@
+diff --git a/crypto/none.go b/crypto/none.go
+--- a/crypto/none.go
++++ b/crypto/none.go
+@@ -6,10 +6,6 @@ import (
+ 	"io"
+ )
+ 
+-func init() {
+-	crypto.RegisterHash(crypto.Hash(0), h)
+-}
+-
+ // h is passed to crypto.RegisterHash.
+ func h() hash.Hash {
+ 	return &f{Writer: nil}

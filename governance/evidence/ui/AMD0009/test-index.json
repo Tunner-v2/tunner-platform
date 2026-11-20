@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "source_commit": "bea01cfcd813bf8000a7e1c64b8c74492c4b4e31",
+  "result": "PASS",
+  "checked_at": "2026-10-18T03:59:28.855Z",
+  "unit": {
+    "passed": 31,
+    "failed": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "theme",
+        "passed": 10
+      },
+      {
+        "name": "contracts/domain schemas",
+        "passed": 21
+      }
+    ]
+  },
+  "browser": {
+    "passed": 40,
+    "failed": 0,
+    "skipped": 0,
+    "suites": [
+      {
+        "name": "current routes/forms",
+        "passed": 22
+      },
+      {
+        "name": "shared User/Admin variants",
+        "passed": 16
+      },
+      {
+        "name": "real HTTPS/SMTP",
+        "passed": 2
+      }
+    ]
+  },
+  "backend": {
+    "passed": 398,
+    "failed": 0,
+    "skipped": 0,
+    "container_execution": "TUNNER_RUN_CONTAINER_TESTS=1",
+    "suites": [
+      {
+        "suite": "Tunner.TestHarness.Tests",
+        "total": 13,
+        "passed": 13,
+        "failed": 0,
+        "not_executed": 0,
+        "receipt": "governance/evidence/ui/AMD0009/backend-Tunner.TestHarness.Tests.trx"
+      },
+      {
+        "suite": "Tunner.Worker.Tests",
+        "total": 6,
+        "passed": 6,
+        "failed": 0,
+        "not_executed": 0,
+        "receipt": "governance/evidence/ui/AMD0009/backend-Tunner.Worker.Tests.trx"
+      },
+      {
+        "suite": "Tunner.Platform.ArchitectureTests",
+        "total": 237,
+        "passed": 237,
+        "failed": 0,
+        "not_executed": 0,
+        "receipt": "governance/evidence/ui/AMD0009/backend-Tunner.Platform.ArchitectureTests.trx"
+      },
+      {
+        "suite": "Tunner.Identity.Persistence.Tests",
+        "total": 51,
+        "passed": 51,
+        "failed": 0,
+        "not_executed": 0,
+        "receipt": "governance/evidence/ui/AMD0009/backend-Tunner.Identity.Persistence.Tests.trx"
+      },
+      {
+        "suite": "Tunner.Database.IntegrationTests",
+        "total": 34,
+        "passed": 34,
+        "failed": 0,
+        "not_executed": 0,
+        "receipt": "governance/evidence/ui/AMD0009/backend-Tunner.Database.IntegrationTests.trx"
+      },
+      {
+        "suite": "Tunner.Accounts.Tests",
+        "total": 57,
+        "passed": 57,
+        "failed": 0,
+        "not_executed": 0,
+        "receipt": "governance/evidence/ui/AMD0009/backend-Tunner.Accounts.Tests.trx"
+      }
+    ]
+  },
+  "operator_probe": {
+    "result": "PASS",
+    "checks": 10,
+    "viewport": {
+      "width": 1366,
+      "height": 768
+    },
+    "normal_browser_tls_validation": true,
+    "receipt": "governance/evidence/ui/AMD0009/real-route-probe.json"
+  },
+  "starter": {
+    "windows_powershell": "7 safety checks PASS",
+    "powershell_7": "same 7 safety checks PASS; not counted twice as unique checks"
+  },
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 1024
+    },
+    {
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "width": 320,
+      "height": 1024
+    }
+  ],
+  "limits": [
+    "Fixture browser responses use synthetic published content; real local host uses Development-only synthetic policy/content and isolated PostgreSQL/SMTP. No production publication or provider acceptance.",
+    "Shared Admin fixtures prove controls, not unimplemented Admin workflows. Future screens require separate inventory, authority, approval and per-item proof.",
+    "Visual pixel metrics are diagnostics; approved source geometry/assets/colors and explicit consent govern acceptance. Text rasterization and native date affordances are recorded."
+  ],
+  "failed_attempts": [
+    {
+      "receipt": "artifacts/global-ui-20261017/global-registration-browser-attempt1.log",
+      "finding": "Development Vite canonical /registration entry required an internal base-path rewrite; sensitive field/reset and error assertion gaps corrected before final source."
+    },
+    {
+      "receipt": "artifacts/global-ui-20261017/global-registration-browser-attempt2.log",
+      "finding": "Verification proof was retained after server rejection; final source clears it and resets touched errors safely."
+    },
+    {
+      "receipt": "artifacts/global-ui-20261017/global-registration-browser-attempt3.log",
+      "finding": "History test helper replaced its stateful server mock; corrected the test to use its existing mock."
+    },
+    {
+      "receipt": "artifacts/global-ui-20261017/failed-build-overlapping-generated-assets.log",
+      "finding": "Initial concurrent frontend/backend build raced on generated Vite assets; completed final build is PASS with zero warnings/errors."
+    },
+    {
+      "receipt": "artifacts/global-ui-20261017/real-route-probe-attempt1.json",
+      "finding": "Supplemental operator probe timed out on a 5s URL expectation before observing the asynchronous registration response. Final status-observed probe verifies HTTP202 and all ten checks; no application change was made for this probe."
+    },
+    {
+      "receipt": "artifacts/global-ui-20261017/validated-browser-starter-restart.log",
+      "finding": "PowerShell7 diagnosed the legacy certificate bridge API as obsolete. The final committed helper suppresses only SYSLIB0014 on modern PowerShell, retaining Windows PowerShell5.1 behavior and exact certificate pinning."
+    }
+  ]
+}

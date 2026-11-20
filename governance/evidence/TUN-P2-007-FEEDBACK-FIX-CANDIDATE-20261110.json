@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "result": "FROZEN_PENDING_GREEN_EXECUTION",
+  "recorded_at": "2026-11-10T12:11:23.693Z",
+  "parent_commit_sha": "312af8855526c8e557f5156957f5386237738b15",
+  "authority": "Actual V03/V04/V06, UI/QA implementation and NAV01/NAV02 approvals remain valid; no new visual system, content, policy or public contract.",
+  "defect_refs": [
+    "DEF-TUN-P2-007-UI-007",
+    "DEF-TUN-P2-007-UI-008"
+  ],
+  "red_execution": {
+    "source_sha": "312af8855526c8e557f5156957f5386237738b15",
+    "implementation_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
+    "passed": 1,
+    "failed": 7,
+    "skipped": 0,
+    "flaky": 0,
+    "exit_code": 1,
+    "duration_ms": 54852.674,
+    "report": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/failures/feedback-red/results.json",
+    "report_sha256": "99373e31dd23c3ceeab58e1da6226d0617feffa86f4ad31e60d2b1a05d56799b"
+  },
+  "owned_behavior_paths": [
+    "web/apps/user/passkeys.css",
+    "web/apps/user/passkeys.tsx",
+    "web/apps/user/passkeys.sign-in.tsx"
+  ],
+  "source_fingerprints": [
+    {
+      "path": "web/apps/user/passkeys.css",
+      "working_tree_sha256": "9ae2febede1b4bd8d42c8ba6d5ab0f76fb4fd74e420f223f2fada8e0c0e4964d",
+      "git_text_lf_sha256": "9ae2febede1b4bd8d42c8ba6d5ab0f76fb4fd74e420f223f2fada8e0c0e4964d"
+    },
+    {
+      "path": "web/apps/user/passkeys.tsx",
+      "working_tree_sha256": "9dd225651004db4d2c616c98825d9b0889016fe34890ccc9a61938f192d268ec",
+      "git_text_lf_sha256": "9dd225651004db4d2c616c98825d9b0889016fe34890ccc9a61938f192d268ec"
+    },
+    {
+      "path": "web/apps/user/passkeys.sign-in.tsx",
+      "working_tree_sha256": "eb6cdfa44bd66b944ab6b36d164165534300d3416713c2ea056bed1216060559",
+      "git_text_lf_sha256": "eb6cdfa44bd66b944ab6b36d164165534300d3416713c2ea056bed1216060559"
+    }
+  ],
+  "change_summary": [
+    "Remove feedback uses intrinsic height; normal review keeps approved330px.",
+    "Caller-owned current recovery-action focus on explicit pending Close only; reset intent on route change.",
+    "Login restores enabled logical action only after settled known/unknown feedback from explicit initiation/check/resume; mounted/abort guards preserve navigation."
+  ],
+  "preserved": "Original eight RED regressions, original52 assertions, exact request/ceremony/operation IDs, unknown recovery, disabled/native guards, and shared component APIs unchanged.",
+  "required_validation": [
+    "8RED-to-GREEN feedback cases",
+    "60Edge passkey/proof/navigation cases",
+    "60Firefox passkey/proof/navigation cases",
+    "rendered feedback captures at desktop and mobile",
+    "relevant existing user-flow regressions",
+    "real HTTPS/Postgres native passkey journey",
+    "TypeScript,contracts,theme,architecture,security and native UI gates"
+  ]
+}

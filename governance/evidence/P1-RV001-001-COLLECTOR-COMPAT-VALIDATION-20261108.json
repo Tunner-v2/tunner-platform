@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "status": "PASS_COLLECTOR_AUTHENTICATION_REGRESSIONS_ONLY",
+  "reviewed_at": "2026-11-08",
+  "tested_commit": "00a556bada529437a2365eb575e89985961db2df",
+  "execution_log": "artifacts/security-followup-20261028/collector-sermo-compat-proof-build.log",
+  "execution_completed_utc_date": "2026-10-29",
+  "passed_test_cases": 16,
+  "failed_test_cases": 0,
+  "skipped_test_cases": 0,
+  "case_names": [
+    "TestTunnerLegacyHashZeroIsNotRegistered",
+    "TestTunnerAsapSupportedSignaturesRemainValid/RS256",
+    "TestTunnerAsapSupportedSignaturesRemainValid/RS384",
+    "TestTunnerAsapSupportedSignaturesRemainValid/RS512",
+    "TestTunnerAsapSupportedSignaturesRemainValid/PS256",
+    "TestTunnerAsapSupportedSignaturesRemainValid/PS384",
+    "TestTunnerAsapSupportedSignaturesRemainValid/PS512",
+    "TestTunnerAsapSupportedSignaturesRemainValid/ES256",
+    "TestTunnerAsapSupportedSignaturesRemainValid/ES384",
+    "TestTunnerAsapSupportedSignaturesRemainValid/ES512",
+    "TestTunnerAsapSupportedSignaturesRemainValid",
+    "TestTunnerAsapStillRejectsUnsupportedAlgorithms/none",
+    "TestTunnerAsapStillRejectsUnsupportedAlgorithms/HS256",
+    "TestTunnerAsapStillRejectsUnsupportedAlgorithms/HS384",
+    "TestTunnerAsapStillRejectsUnsupportedAlgorithms/HS512",
+    "TestTunnerAsapStillRejectsUnsupportedAlgorithms"
+  ],
+  "preserved_behavior": [
+    "Nine RSA/RSA-PSS/ECDSA algorithms accept valid signatures and reject wrong keys, tampering, expiry, issuer/audience mismatches",
+    "none and HMAC remain rejected before key lookup by the unchanged ASAP validators",
+    "Unsupported global crypto.Hash(0) remains unregistered; existing low-level library methods are unchanged"
+  ],
+  "legacy_module": {
+    "path": "github.com/SermoDigital/jose",
+    "version": "v0.9.2-0.20180104203859-803625baeddc",
+    "original_none_go_sha256": "1365f81ed151630f18a83c644898007017994c8a1a42fe812642decdc66df123",
+    "patched_none_go_sha256": "3103d0bae77df9b0c5ab88b005c4cc8b08732d6c6021d31f71e7ef7f1e926e80"
+  },
+  "asap_version": "v2.26.3",
+  "patch": "infra/security-images/lgtm-signing/collector-sermo-go127.patch",
+  "adr": "docs/development/ADR-LGTM-COLLECTOR-GO127-COMPATIBILITY-20261028.md",
+  "evidence_sha256": {
+    "governance/evidence/security-20261108/collector-compat/legacy-jose-compat-tests.jsonl": "e87d160c4c9e8226e8b9b6b8078b53de7f2a38568ec248a8f8e8f4bab863001a",
+    "governance/evidence/security-20261108/collector-compat/legacy-jose-module.json": "2915611990d54c89076f4efa0763b5e9282b15e5f11f6042aa5f4ade9f33a943",
+    "governance/evidence/security-20261108/collector-compat/asap-module.json": "169bc50299680cd95e0a58844f103caf989b9827fee6a6436e5c8ee0b2650ed4",
+    "governance/evidence/security-20261108/collector-compat/patched-legacy-jose.sha256": "cc403facd12c644ae9943d70e6ed66b78b9d64b0a70c364b27afcb0896b6c3cd",
+    "governance/evidence/security-20261108/collector-compat/patched-legacy-none.go.txt": "3103d0bae77df9b0c5ab88b005c4cc8b08732d6c6021d31f71e7ef7f1e926e80"
+  },
+  "boundary": "Early preservation tests only. Full Collector executable startup, complete LGTM image security scan, 41-check private runtime compatibility, final reviews and CI remain required. No runtime adoption, publication, merge or production approval."
+}

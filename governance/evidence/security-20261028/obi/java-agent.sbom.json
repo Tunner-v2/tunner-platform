@@ -1,0 +1,167 @@
+{
+  "bomFormat" : "CycloneDX",
+  "specVersion" : "1.6",
+  "serialNumber" : "urn:uuid:08dfbfb6-4da0-4c49-beab-f065c9c0baa0",
+  "version" : 1,
+  "metadata" : {
+    "timestamp" : "2026-10-16T13:21:00Z",
+    "tools" : {
+      "components" : [
+        {
+          "type" : "application",
+          "author" : "CycloneDX",
+          "name" : "cyclonedx-gradle-plugin",
+          "version" : "3.5.0"
+        }
+      ]
+    },
+    "component" : {
+      "type" : "application",
+      "bom-ref" : "pkg:maven/io.opentelemetry.obi/obi-java-agent@v0.15.2?project_path=%3Aagent",
+      "group" : "io.opentelemetry.obi",
+      "name" : "obi-java-agent",
+      "version" : "v0.15.2",
+      "purl" : "pkg:maven/io.opentelemetry.obi/obi-java-agent@v0.15.2?project_path=%3Aagent",
+      "modified" : false,
+      "externalReferences" : [
+        {
+          "type" : "vcs",
+          "url" : "https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation"
+        }
+      ]
+    }
+  },
+  "components" : [
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/net.bytebuddy/byte-buddy-agent@1.18.14-jdk5?type=jar",
+      "group" : "net.bytebuddy",
+      "name" : "byte-buddy-agent",
+      "version" : "1.18.14-jdk5",
+      "description" : "The Byte Buddy agent offers convenience for attaching an agent to the local or a remote VM.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "ced75742508a3bb378281ac2f5dc8054"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "9108339c1a71ebda23ec1aa9ebdc2f7f61878118"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "9686d4092bf03604795efc4b75e7402534b1289ba3fdf280c901aa702140d86b"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "0292c799a41b0ec9e4901a8c5597feb7af9dc50be4f9d6a0e3416f7a689748c2ce11a8558b69f00111886937f590a7a25b67ab6a41cdd281561ee73c5f110f9a"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "3de39256832643112ad76449b169425808eeb12057d2a6b3f93ace679afa1565"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "11bc9f80a248b39f55bb5f47b63bebdd2ed517e80b6c1e2f738ae50d3c6f8f3e4011764a17b5fc96355cfbf1311cb98d506e0d2fb34cc72333e1dc937da3ba5d"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "1b6e00649a370955abbad649814ecf383159be2e1506afecf78a6b883c71e5352e586258e13415e6a4871390ed4b01d6"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "9ddb0fb637f5cda52ff0bb95a77e1e26f72c554ead8e10ce022946ed0f46de304382960e325e338166d2880e06fe6760"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/net.bytebuddy/byte-buddy-agent@1.18.14-jdk5?type=jar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    },
+    {
+      "type" : "library",
+      "bom-ref" : "pkg:maven/net.bytebuddy/byte-buddy@1.18.14-jdk5?type=jar",
+      "group" : "net.bytebuddy",
+      "name" : "byte-buddy",
+      "version" : "1.18.14-jdk5",
+      "description" : "Byte Buddy is a Java library for creating Java classes at run time. This artifact is a build of Byte Buddy with all ASM dependencies repackaged into its own name space.",
+      "hashes" : [
+        {
+          "alg" : "MD5",
+          "content" : "171592705a4b1552f5904fa58d5201f5"
+        },
+        {
+          "alg" : "SHA-1",
+          "content" : "924f03ef0dcc7efc8626a9eddba47a6e88e6bacc"
+        },
+        {
+          "alg" : "SHA-256",
+          "content" : "862359855a4d8582a08e1f1cd8961f6ddf16b67f06773f7298797ccecc5b1585"
+        },
+        {
+          "alg" : "SHA-512",
+          "content" : "264ecbfc1d4b52e431eac971880ac6d824823770fc3bdce48105ac094ddf89893e4dabd0cfe5e445ab2bde36ee4002ea305fdadbed1005f9956b6242dff891f8"
+        },
+        {
+          "alg" : "SHA3-256",
+          "content" : "dddc944f0a432a731474990b6ba1ea552edae2713c04e36337b4c08a149a1fa5"
+        },
+        {
+          "alg" : "SHA3-512",
+          "content" : "9ce5dc526e278a4a8a0bf4a5573bb4ad407c66b041bce16e4ed493e0940546b304c33f036d3202a302f010ef250ce3015fa2577186c39365524b05b5331c31ce"
+        },
+        {
+          "alg" : "SHA-384",
+          "content" : "48fde4d6d2d73d5b1fe4915222662f41931770dc42ba8442df247f73bd1de05be319d5442995c7c3328f57fca00a775c"
+        },
+        {
+          "alg" : "SHA3-384",
+          "content" : "b909275473e8d88901f03d5f42ccd5e82533ea9442c73ccdadabb9ac7a8b13f8ea8cc96cc2a3eee7eecb46dfc6eac008"
+        }
+      ],
+      "licenses" : [
+        {
+          "license" : {
+            "id" : "Apache-2.0"
+          }
+        }
+      ],
+      "purl" : "pkg:maven/net.bytebuddy/byte-buddy@1.18.14-jdk5?type=jar",
+      "modified" : false,
+      "properties" : [
+        {
+          "name" : "cdx:maven:package:test",
+          "value" : "false"
+        }
+      ]
+    }
+  ],
+  "dependencies" : [
+    {
+      "ref" : "pkg:maven/io.opentelemetry.obi/obi-java-agent@v0.15.2?project_path=%3Aagent",
+      "dependsOn" : [
+        "pkg:maven/net.bytebuddy/byte-buddy-agent@1.18.14-jdk5?type=jar",
+        "pkg:maven/net.bytebuddy/byte-buddy@1.18.14-jdk5?type=jar"
+      ]
+    },
+    {
+      "ref" : "pkg:maven/net.bytebuddy/byte-buddy-agent@1.18.14-jdk5?type=jar",
+      "dependsOn" : [ ]
+    },
+    {
+      "ref" : "pkg:maven/net.bytebuddy/byte-buddy@1.18.14-jdk5?type=jar",
+      "dependsOn" : [ ]
+    }
+  ]
+}

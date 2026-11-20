@@ -1,0 +1,39 @@
+{
+  "source_commit_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+  "result": "PASS_SCOPED_LOCAL_FINITE_JOURNEYS",
+  "executions": [
+    {
+      "file": "enrollment-password-mfa-preserve.json",
+      "sha256": "78e3f9a36fe47f8ba25739dc5ab4b98e6498ca62363861f660b954c4e874a4c3",
+      "journey": "TOTP_ENROLLMENT_PASSWORD_MFA_PRESERVE_V1",
+      "browserChecks": 24,
+      "coordinatorChecks": 21,
+      "accepted": true,
+      "persistence": true
+    },
+    {
+      "file": "operation-proof-causal-revoke.json",
+      "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8",
+      "journey": "TOTP_OPERATION_PROOF_CAUSAL_REVOKE_V1",
+      "browserChecks": 23,
+      "coordinatorChecks": 21,
+      "accepted": true,
+      "persistence": true
+    },
+    {
+      "file": "passkey-mfa-reset.json",
+      "sha256": "0ce0c98e5b87cc7318af88da665df9e5e7158d0d6c43dd6d3ad5d46dc4675a46",
+      "journey": "TOTP_PASSKEY_MFA_RESET_V1",
+      "browserChecks": 23,
+      "coordinatorChecks": 21,
+      "accepted": true,
+      "persistence": true
+    }
+  ],
+  "browser_predicates": 70,
+  "coordinator_predicates": 63,
+  "unknown_cache_metadata_unchanged": true,
+  "unknown_cache_contents_read": false,
+  "global_host_filesystem_absence_claim": false,
+  "product_or_release_approval": false
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-010-RV011",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-010",
+  "parent_revision_id": "P2-010-RV010",
+  "parent_milestone_revision_id": null,
+  "title": "Repair committed classification proof without changing qualified behavior",
+  "revision_type": "CORRECTIVE",
+  "status": "CLOSED",
+  "reason": "The preceding technical revision closed using an execution SHA whose evidence snapshot omitted validation_kind. Its current evidence and code tests passed, but effective closed-parent classification correctly refuses that older snapshot. Preserve the closed record; supersede its ownership with a candidate that commits COMMITTED classification before validation and verifies unchanged behavior plus the retained actual tests. No code, Product, architecture, lifecycle policy or production change.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md",
+    "docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Candidate contains the exact scope, COMMITTED validation kind and complete owned classification before testing; unchanged-source comparison, carrier smoke and native effective parent proof all pass. Original closed record remains immutable."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["tester-qa-engineer", "auditor"],
+  "evidence_refs": [
+    "governance/evidence/P2-010-RV011-VALIDATION.json",
+    "governance/evidence/P2-010-RV010-VALIDATION.json",
+    "governance/evidence/TUN-P2-016-VALIDATION.json",
+    "governance/evidence/TUN-P2-016-ROLE-REVIEWS.json",
+    "governance/reviews/REV-P2-010-RV010-full-stack-engineer.yaml",
+    "governance/reviews/REV-P2-010-RV010-tester-qa-engineer.yaml",
+    "governance/reviews/REV-P2-010-RV010-cyber-security-engineer.yaml"
+  ],
+  "product_acceptance_required": false,
+  "created_at": "2026-11-16T03:44:05.1140346\u002B00:00",
+  "closed_at": "2026-11-16T04:01:11Z",
+  "git_state": {"repository_changed":true,"tested_commit_sha":"58023be5299d024cf2ae0bf05bbcbda2f1384e26","validated_commit_sha":"58023be5299d024cf2ae0bf05bbcbda2f1384e26","work_item_commit_shas":["58023be5299d024cf2ae0bf05bbcbda2f1384e26"],"closure_commit_sha":null,"remaining_uncommitted_paths":["docs/context/current","docs/project",".vscode/settings.json","governance/evidence/p2-009-recovery-20261111/public-integration-c71495c"],"remaining_uncommitted_classification":"PREEXISTING_UNRELATED"}
+}

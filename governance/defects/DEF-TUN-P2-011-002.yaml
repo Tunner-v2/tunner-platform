@@ -1,0 +1,21 @@
+schema_version: 1
+defect_id: DEF-TUN-P2-011-002
+work_item_id: TUN-P2-011
+classification: TEST_INFRASTRUCTURE
+severity: SEV-3
+status: CLOSED
+environment: finite migration-only capacity admission for the82-database workload
+description: Candidate2693119 passed protocol17 and resource5of6; only bulk capacity hit the existing150-second provisioning deadline. CapacityAsync now uses two bounded workers through the unchanged helper, full settlement and atomic completed count/one retained connection. Actual committed e61b246 qualification passes protocol17 and resource6of6, including all82 fully migrated databases,863725870 database bytes and570425344 WAL bytes within2GiB. All original150/90/180-second budgets, migration/model checks, ownership and cleanup remain; the initial failure is retained. This closes the capacity defect only, not recovery feature acceptance.
+expected_behavior_ref: docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md; docs/development/P2_011_RECOVERY_REFINEMENT.md
+evidence:
+  - tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeExecution.cs
+  - artifacts/p2-009-recovery-20261111/native-resource-qualification/6ea8947a184b4e469548db370fd7faef/details.json
+  - artifacts/p2-011-recovery-20261112/candidate-2693119-native/resources-launch.json
+  - artifacts/p2-011-recovery-20261112/candidate-e61b246-native/resource-qualification.json
+  - artifacts/p2-011-recovery-20261112/candidate-e61b246-native/resources-launch.json
+  - artifacts/p2-009-recovery-20261111/native-resource-qualification/709f27f70a364aaaa93f01a1e467fa8b/details.json
+  - governance/evidence/TUN-P2-011-VALIDATION.json
+affected_versions:
+  - 269311952d80e9dafcdc2f2344794310a478e08a
+created_at: 2026-11-12T23:12:31Z
+updated_at: 2026-11-12T23:40:53Z

@@ -1,0 +1,374 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "recorded_at": "2026-11-11T05:08:15.562852+00:00",
+  "review_type": "FINAL_INCREMENTAL_LOCAL_ENGINEERING_REVIEW",
+  "tested_behavior_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+  "reviewed_metadata_carrier_sha": "d3f14fa49c11a89784a75d8318354f90eff180d5",
+  "scope_boundary": "Local synthetic engineering evidence only; no human, Product, production-policy, merge or release approval.",
+  "whole_work_item_acceptance": false,
+  "result": "PASS_LOCAL_ENGINEERING_TRACEABILITY",
+  "prior_traceability": {
+    "path": "artifacts/p2-008-totp-20261110/final-engineering-review/requirement-traceability.json",
+    "sha256": "f9137d9b0ee637e237fe76e59f4efc88ff17de5bc5511fb765df2ada153dae2e"
+  },
+  "authority_basis": "FRD17 sections6/7/8/14/15/16; catalog32; governed cached FigJam38 readback nodes in existing authority-resolution; Docs06/15 and existing ADR-0006. No new external reads or Product choices.",
+  "criteria": [
+    {
+      "criterion_index": 1,
+      "approved_criterion": "Keep TOTP enrollment inactive until the first valid verification code.",
+      "implementation": [
+        "TotpApplication.ActivateAsync",
+        "TotpRows/TotpMigrationSql"
+      ],
+      "actual_native_test_names": [
+        "FreshProofOneTimeDisclosureAndFirstNativeCodeAreSeparateAtomicStages"
+      ],
+      "assessment": "PASS_SCOPED_LOCAL_ENGINEERING_WITH_CURRENT947_INTEGRATION",
+      "current_real_evidence": [
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/enrollment-password-mfa-preserve.json",
+          "sha256": "78e3f9a36fe47f8ba25739dc5ab4b98e6498ca62363861f660b954c4e874a4c3",
+          "journey_id": "TOTP_ENROLLMENT_PASSWORD_MFA_PRESERVE_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 24,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        },
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/operation-proof-causal-revoke.json",
+          "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8",
+          "journey_id": "TOTP_OPERATION_PROOF_CAUSAL_REVOKE_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 23,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        },
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/passkey-mfa-reset.json",
+          "sha256": "0ce0c98e5b87cc7318af88da665df9e5e7158d0d6c43dd6d3ad5d46dc4675a46",
+          "journey_id": "TOTP_PASSKEY_MFA_RESET_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 23,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        }
+      ]
+    },
+    {
+      "criterion_index": 2,
+      "approved_criterion": "Protect seed material and require approved step-up/policy for enable/disable/reset; do not expose seeds to Admin/Support.",
+      "implementation": [
+        "TotpEndpoints/AddTunnerTotp",
+        "StepUpApplication",
+        "TotpAuthenticationAuthority"
+      ],
+      "actual_native_test_names": [
+        "SeparateDisableAndResetUseOwnExactProofAndExplicitFactorSessionEffect",
+        "OwnerFailureContinuesOnlyItsOriginalActiveProofWithoutCodeAndDisabledSourceFailsClosed"
+      ],
+      "assessment": "PASS_SCOPED_LOCAL_ENGINEERING_WITH_CURRENT947_INTEGRATION",
+      "current_real_evidence": [
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/enrollment-password-mfa-preserve.json",
+          "sha256": "78e3f9a36fe47f8ba25739dc5ab4b98e6498ca62363861f660b954c4e874a4c3",
+          "journey_id": "TOTP_ENROLLMENT_PASSWORD_MFA_PRESERVE_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 24,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        },
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/operation-proof-causal-revoke.json",
+          "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8",
+          "journey_id": "TOTP_OPERATION_PROOF_CAUSAL_REVOKE_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 23,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        },
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/passkey-mfa-reset.json",
+          "sha256": "0ce0c98e5b87cc7318af88da665df9e5e7158d0d6c43dd6d3ad5d46dc4675a46",
+          "journey_id": "TOTP_PASSKEY_MFA_RESET_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 23,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        }
+      ]
+    },
+    {
+      "criterion_index": 3,
+      "approved_criterion": "Preserve operation identity and audit evidence without storing secrets in logs/events.",
+      "implementation": [
+        "TotpApplication.Event",
+        "OpenBaoTotpSeedStore",
+        "FiniteTotpDatabase.InspectSafePersistenceAsync"
+      ],
+      "actual_native_test_names": [
+        "RealScopedOpenBaoBindsOwnerGenerationAndVersionOneWhenLatestVersionChanges"
+      ],
+      "assessment": "PASS_SCOPED_LOCAL_ENGINEERING_WITH_CURRENT947_INTEGRATION",
+      "current_real_evidence": [
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/enrollment-password-mfa-preserve.json",
+          "sha256": "78e3f9a36fe47f8ba25739dc5ab4b98e6498ca62363861f660b954c4e874a4c3",
+          "journey_id": "TOTP_ENROLLMENT_PASSWORD_MFA_PRESERVE_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 24,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        },
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/operation-proof-causal-revoke.json",
+          "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8",
+          "journey_id": "TOTP_OPERATION_PROOF_CAUSAL_REVOKE_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 23,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        },
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/passkey-mfa-reset.json",
+          "sha256": "0ce0c98e5b87cc7318af88da665df9e5e7158d0d6c43dd6d3ad5d46dc4675a46",
+          "journey_id": "TOTP_PASSKEY_MFA_RESET_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 23,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        }
+      ]
+    },
+    {
+      "criterion_index": 4,
+      "approved_criterion": "Verify active TOTP through the existing shared exact-operation proof lifecycle; adding a primary method or setup screen alone does not satisfy this requirement.",
+      "implementation": [
+        "TotpOperationProof",
+        "StepUpTotpBrowserEndpoints",
+        "StepUpApplication.ExecuteOutcomeAsync"
+      ],
+      "actual_native_test_names": [
+        "OwnerFailureContinuesOnlyItsOriginalActiveProofWithoutCodeAndDisabledSourceFailsClosed",
+        "OperationProofFinalAccessTransitionCannotCommitReplayProofOrAttempt"
+      ],
+      "assessment": "PASS_SCOPED_LOCAL_ENGINEERING_WITH_CURRENT947_INTEGRATION",
+      "current_real_evidence": [
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/operation-proof-causal-revoke.json",
+          "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8",
+          "journey_id": "TOTP_OPERATION_PROOF_CAUSAL_REVOKE_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 23,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        }
+      ]
+    },
+    {
+      "criterion_index": 5,
+      "approved_criterion": "Integrate policy-required TOTP second-factor completion after primary proof and before issuing a qualifying final Tunner session. Enrollment alone never imposes MFA for every login, and TOTP is not a standalone primary method.",
+      "implementation": [
+        "TotpPrimaryMfa.CompleteTotpMfaAsync",
+        "AuthenticationApplication.CreateSession"
+      ],
+      "actual_native_test_names": [
+        "RequiredMfaCreatesNoEarlySessionAndLostFinalResponseRecoversWithoutCode",
+        "NativePasskeyPrimaryRequiresTotpBeforeSessionAndBothLostResponsesRecoverExactOriginalResult"
+      ],
+      "assessment": "PASS_SCOPED_LOCAL_ENGINEERING_WITH_CURRENT947_INTEGRATION",
+      "current_real_evidence": [
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/enrollment-password-mfa-preserve.json",
+          "sha256": "78e3f9a36fe47f8ba25739dc5ab4b98e6498ca62363861f660b954c4e874a4c3",
+          "journey_id": "TOTP_ENROLLMENT_PASSWORD_MFA_PRESERVE_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 24,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        },
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/passkey-mfa-reset.json",
+          "sha256": "0ce0c98e5b87cc7318af88da665df9e5e7158d0d6c43dd6d3ad5d46dc4675a46",
+          "journey_id": "TOTP_PASSKEY_MFA_RESET_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 23,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        }
+      ]
+    },
+    {
+      "criterion_index": 6,
+      "approved_criterion": "Enforce one-time seed/QR disclosure, inactive first-code enrollment, exact original result recovery and no secret in configuration, Identity tables, URLs, logs, events or evidence.",
+      "implementation": [
+        "TotpApplication.DiscloseAsync/ActivateAsync",
+        "OpenBaoTotpSeedStore",
+        "TotpNativeVerifier"
+      ],
+      "actual_native_test_names": [
+        "UnknownProviderCreateReconcilesOnlyItsImmutableTargetAndNeverRegenerates",
+        "NativeFullWindowBoundedHistoryRejectsAToBToAAndRetainsActivationClaim",
+        "ConcurrentIdenticalNativeCodesHaveExactlyOneCommittedAcceptance"
+      ],
+      "assessment": "PASS_SCOPED_LOCAL_ENGINEERING_WITH_CURRENT947_INTEGRATION",
+      "current_real_evidence": [
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/enrollment-password-mfa-preserve.json",
+          "sha256": "78e3f9a36fe47f8ba25739dc5ab4b98e6498ca62363861f660b954c4e874a4c3",
+          "journey_id": "TOTP_ENROLLMENT_PASSWORD_MFA_PRESERVE_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 24,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        },
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/operation-proof-causal-revoke.json",
+          "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8",
+          "journey_id": "TOTP_OPERATION_PROOF_CAUSAL_REVOKE_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 23,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        },
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/passkey-mfa-reset.json",
+          "sha256": "0ce0c98e5b87cc7318af88da665df9e5e7158d0d6c43dd6d3ad5d46dc4675a46",
+          "journey_id": "TOTP_PASSKEY_MFA_RESET_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 23,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        }
+      ]
+    },
+    {
+      "criterion_index": 7,
+      "approved_criterion": "Keep configured cardinality, session effects, replacement ordering, retention, assurance and provider binding explicit; reject unsupported/unapproved profiles without production defaults.",
+      "implementation": [
+        "TotpPolicy.Validate",
+        "TotpPolicyCatalog",
+        "BrowserTestTotp synthetic profiles",
+        "TunnerAuthenticatedUserBffHost opt-in"
+      ],
+      "actual_native_test_names": [
+        "CapacityClockAndUnsupportedProfileFailClosedWithoutEvictingLiveClaims"
+      ],
+      "assessment": "PASS_SCOPED_LOCAL_ENGINEERING_WITH_CURRENT947_INTEGRATION",
+      "current_real_evidence": [
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/enrollment-password-mfa-preserve.json",
+          "sha256": "78e3f9a36fe47f8ba25739dc5ab4b98e6498ca62363861f660b954c4e874a4c3",
+          "journey_id": "TOTP_ENROLLMENT_PASSWORD_MFA_PRESERVE_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 24,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        },
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/operation-proof-causal-revoke.json",
+          "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8",
+          "journey_id": "TOTP_OPERATION_PROOF_CAUSAL_REVOKE_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 23,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        },
+        {
+          "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/passkey-mfa-reset.json",
+          "sha256": "0ce0c98e5b87cc7318af88da665df9e5e7158d0d6c43dd6d3ad5d46dc4675a46",
+          "journey_id": "TOTP_PASSKEY_MFA_RESET_V1",
+          "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+          "browser_passed": 23,
+          "coordinator_passed": 21,
+          "persistence_true": 5,
+          "accepted": true,
+          "cleanup_verified": true,
+          "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+        }
+      ]
+    }
+  ],
+  "finding_dispositions": [
+    {
+      "id": "TUN-P2-008-ENG-REVIEW-001",
+      "status": "RESOLVED_FOR_SCOPED_LOCAL_ENGINEERING_REVIEW",
+      "evidence": {
+        "path": "artifacts/p2-008-totp-20261110/real-journeys-947f8b0/operation-proof-causal-revoke.json",
+        "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8",
+        "journey_id": "TOTP_OPERATION_PROOF_CAUSAL_REVOKE_V1",
+        "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+        "browser_passed": 23,
+        "coordinator_passed": 21,
+        "persistence_true": 5,
+        "accepted": true,
+        "cleanup_verified": true,
+        "build_binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+      },
+      "finding": "Current947 operation-proof journey completes native proof, owner failure followed by original proof continuation, stale-source denial, exact causal self-revoke and unrelated-factor preservation. All prior failed receipts remain historical and unchanged."
+    },
+    {
+      "id": "TUN-P2-008-ENG-REVIEW-002",
+      "status": "VERIFIED_FIXED_FOR_SCOPED_LOCAL_ENGINEERING_REVIEW",
+      "source_commit": "6653a3cac663394d3cd32776d519988f99a410ad",
+      "finding": "Acknowledged same-path cancellation now schedules the existing owner-scoped options/method/recovery refresh. Flight/busy remains guarded until its current scope settles; obsolete loads cannot unblock newer work. Public red8 -> green43, keyboard/composition4 and real947 operation proof verify the fix; no helper reload/assertion relaxation hides stale state.",
+      "governance_defect_closure": "Root-owned final record, not performed by this artifact."
+    }
+  ],
+  "limits": [
+    "Original native execution SHA and unchanged-input proof remain separate from current947 real executions.",
+    "No historical failure, Product consent, parent proof, UI inventory or ordered112 array is overwritten.",
+    "This is not the native final gate, UI compliance record, human approval or production policy selection."
+  ]
+}

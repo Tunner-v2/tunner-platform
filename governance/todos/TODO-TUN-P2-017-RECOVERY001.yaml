@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "id": "TODO-TUN-P2-017-RECOVERY001",
+  "work_item_id": "TUN-P2-017",
+  "title": "Implement and verify policy-bound recovery-code owner data lifecycle before production activation",
+  "status": "OPEN",
+  "priority": "P1",
+  "owner_role": "full-stack-engineer",
+  "prerequisites": [],
+  "acceptance_condition": "Use governance/evidence/TUN-P2-009-DATA-LIFECYCLE-ASSESSMENT.json and governance/evidence/TUN-P2-009-DATA-INVENTORY.json. Identity implements recovery-specific discovery and safe privacy projections/actions, bounded retention eligibility and deletion/anonymization, active-hold precedence and governed release, plus policy-bound restore/reconciliation in the active009 owner scope or governed RV lineage if closed. P2-019 supplies approved scoped processing, trigger/action/hold/restore inputs; do not invent legal basis, duration, default purge or new provider/production activation. P2-017 coordinates integration and must actually prove applicable actions against disposable owned infrastructure before production activation and corresponding conformance acceptance. Preserve live code/proof/action/result-recovery validity, Account/set/entry/operation identity, immutable required lineage and unrelated records. Verify held/not-yet-eligible denial, exact owner isolation, bounded concurrency/idempotency, failure/cancel/UNKNOWN/retry reconciliation and restore behavior with safe reference-only outcomes; attempted cleanup or fixture teardown cannot become domain purge PASS. No verifier/recovery value may enter ordinary export, diagnostics, notifications or evidence. Record committed source and actual test identities; leave this follow-up OPEN until its implementation and actual proof are complete. This is remaining engineering work, not a new Product/authority decision or a blanket stop of independent authorized local development.",
+  "created_at": "2026-11-12T08:09:55.154131Z",
+  "updated_at": "2026-11-12T08:09:55.154131Z"
+}

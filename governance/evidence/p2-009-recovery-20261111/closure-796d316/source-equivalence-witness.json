@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-009",
+  "current_candidate_sha": "796d316bbc1be878f71d515e06be13d7a77b3c1d",
+  "production_source_equivalence": {
+    "from_actual_native62_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+    "to_candidate_sha": "796d316bbc1be878f71d515e06be13d7a77b3c1d",
+    "scope": [
+      "src"
+    ],
+    "changed_paths": [],
+    "verified": true
+  },
+  "reuse_boundaries": [
+    "Native62 and SQL5 remain their actual committed execution identities; no rerun is claimed.",
+    "First three browser journeys executed at26270f8; Passkey Replace atf7d1cd1; TOTP Generate and Replace at796d316.",
+    "Later test changes were reviewed: replacement preparation wait; fixed checkpoints; Recovery-only TOTP helper binding and scoped password selection; passkey withdrawal test against the authoritative API; TOTP-only fixture assurance and DTO-field assertion. Production source is unchanged.",
+    "Earlier passing Password and Passkey Generate evidence is reused with its original SHA; no failed full-six wrapper is relabeled PASS.",
+    "Current qualification validates37 public cases plus12 protocol cases; native17 and resource6 qualifications are separate.",
+    "Real-BFF journeys use default1280 viewport; other viewports rely on unchanged earlier actual UI/render evidence."
+  ],
+  "interrupted_attempt": {
+    "ref": "governance/evidence/p2-009-recovery-20261111/closure-796d316/browser-public37-interrupted-launch.json",
+    "status": "PHASE_TIMEOUT_NOT_QUALIFIED",
+    "progress_passed": 35,
+    "workers_closed": true,
+    "exact_surface_cleanup": "UNKNOWN_NO_CAPTURED_OWNERSHIP",
+    "docker_fixture_cleanup": "NOT_APPLICABLE_PUBLIC_CASE_NO_FIXTURES",
+    "retained_without_cleanup_claim": true
+  },
+  "runtime": [
+    {
+      "registration": "RECOVERY_GENERATE_PASSWORD_V1",
+      "actual_tested_commit_sha": "26270f830bb214a5df8ba143b62ecc21be0a286a",
+      "native_binding_sha256": "27d73fc7acf4c48bf92fb355a9e8bd9c68343a9d05ea19ef56f4147ed999368f",
+      "browser_binding_sha256": "6cf3745afa608d18fbe87e49585096e436ec91f7eef28c64a68301b4118abf20",
+      "receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/runtime-RECOVERY_GENERATE_PASSWORD_V1.json",
+      "sha256": "1e36d5fe5bdcaec4e0e1c28376f45819a686883783ecb7b32297960bdcbb16b0",
+      "passed": true
+    },
+    {
+      "registration": "RECOVERY_REPLACE_PASSWORD_V1",
+      "actual_tested_commit_sha": "26270f830bb214a5df8ba143b62ecc21be0a286a",
+      "native_binding_sha256": "27d73fc7acf4c48bf92fb355a9e8bd9c68343a9d05ea19ef56f4147ed999368f",
+      "browser_binding_sha256": "6cf3745afa608d18fbe87e49585096e436ec91f7eef28c64a68301b4118abf20",
+      "receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/runtime-RECOVERY_REPLACE_PASSWORD_V1.json",
+      "sha256": "15db0f3f35dacde7ec051f6d765c5a9cbb9d1b34091ec54e473088e1eeacef2a",
+      "passed": true
+    },
+    {
+      "registration": "RECOVERY_GENERATE_PASSKEY_V1",
+      "actual_tested_commit_sha": "26270f830bb214a5df8ba143b62ecc21be0a286a",
+      "native_binding_sha256": "27d73fc7acf4c48bf92fb355a9e8bd9c68343a9d05ea19ef56f4147ed999368f",
+      "browser_binding_sha256": "6cf3745afa608d18fbe87e49585096e436ec91f7eef28c64a68301b4118abf20",
+      "receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/runtime-RECOVERY_GENERATE_PASSKEY_V1.json",
+      "sha256": "6a82e8b0f7611398154cbf9ecb89e6b6755dd15a20577f41d3b2bebfb6304dda",
+      "passed": true
+    },
+    {
+      "registration": "RECOVERY_REPLACE_PASSKEY_V1",
+      "actual_tested_commit_sha": "f7d1cd19bb364ce576d0e672f2903b942c4859d9",
+      "native_binding_sha256": "222f7c7b8c46d54c3ccfa4a6fdd5e7d621fe6cbd61df69c03a5ef93540b00d00",
+      "browser_binding_sha256": "b5ed429401dc5db143fbb1cfa899e590c41d9952b86d05bb1f9137a5a88c19b1",
+      "receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/runtime-RECOVERY_REPLACE_PASSKEY_V1.json",
+      "sha256": "58a8b3bef9326169159cbcea5401c169b74e9401cd15846bb4219650b65208c5",
+      "passed": true
+    },
+    {
+      "registration": "RECOVERY_GENERATE_TOTP_V1",
+      "actual_tested_commit_sha": "796d316bbc1be878f71d515e06be13d7a77b3c1d",
+      "native_binding_sha256": "33fcb5438c1a13188099c883009f3183f0c4514f56d8ab0f51dd7754efe5137f",
+      "browser_binding_sha256": "aca2958558f461c198323516a04540901150faef4678cf9ed415b8e0e048b0f7",
+      "receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/runtime-RECOVERY_GENERATE_TOTP_V1.json",
+      "sha256": "03a0d881a2ee48f932b7e89c6e6d965e812562d8fa6ea08e6264104ced098d4f",
+      "passed": true
+    },
+    {
+      "registration": "RECOVERY_REPLACE_TOTP_V1",
+      "actual_tested_commit_sha": "796d316bbc1be878f71d515e06be13d7a77b3c1d",
+      "native_binding_sha256": "33fcb5438c1a13188099c883009f3183f0c4514f56d8ab0f51dd7754efe5137f",
+      "browser_binding_sha256": "aca2958558f461c198323516a04540901150faef4678cf9ed415b8e0e048b0f7",
+      "receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/runtime-RECOVERY_REPLACE_TOTP_V1.json",
+      "sha256": "51d5275d2e76351659fdd7ca5aecb9722c0343a660174572cd5e862f8813e013",
+      "passed": true
+    }
+  ]
+}

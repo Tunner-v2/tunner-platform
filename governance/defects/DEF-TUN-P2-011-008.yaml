@@ -1,0 +1,23 @@
+schema_version: 1
+defect_id: DEF-TUN-P2-011-008
+work_item_id: TUN-P2-011
+classification: BUG
+severity: SEV-2
+status: CLOSED
+environment: isolated owned finite native PostgreSQL cohort at committed5200a65
+description: Actual109case cohort reaches106PASS then the next database-backed federation case fails with the fixed direct PostgreSQL disk-full category. The same late failure shifted when case order changed; no federation lifetime defect was established. Existing finite database disposal releases services but retains every migrated case database until container cleanup. Migration-only110database capacity leaves limited headroom for actual case writes and WAL within the unchanged2GiB limit. Correct finite private-case database lifecycle only, using verified owned-resource guards and existing provisioning/deletion capabilities. Preserve PublicCapacity110database measurement, borrowed/operator databases, every test assertion, resource/security limits and production behavior. Close only after actual current-source fullcohort and physical cleanup validation.
+expected_behavior_ref: tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs; tests/Shared/RecoveryCodeOwnedDockerFixture.cs; docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+evidence:
+  - artifacts/p2-011-recovery-20261112/candidate-5200a65-native/resumed-20261113/private-recovery-summary.json
+  - tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeExecution.cs
+  - tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs
+  - governance/evidence/TUN-P2-011-VALIDATION.json
+  - governance/evidence/p2-011-recovery-20261112/native-579c274/private109.json
+  - governance/evidence/p2-011-recovery-20261112/native-579c274/sql13.json
+  - governance/evidence/p2-011-recovery-20261112/native-579c274/resource-details.json
+affected_versions:
+  - b5611cc3fa10c11681854d6c8390261405d61001
+  - 2cd195a25ac22cbab1f86022a83685c860090b19
+  - 5200a653d1077fa947458c9fe102dba109b94387
+created_at: 2026-11-13T16:36:00Z
+updated_at: 2026-11-13T18:13:49Z

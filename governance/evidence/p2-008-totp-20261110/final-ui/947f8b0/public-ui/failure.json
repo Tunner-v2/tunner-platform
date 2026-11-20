@@ -1,0 +1,60 @@
+{
+  "failure": "Error: composition exit 1",
+  "actual_invocation_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+  "commands": [
+    {
+      "name": "typecheck",
+      "cwd": "web",
+      "args": [
+        "node_modules/typescript/bin/tsc",
+        "--noEmit"
+      ],
+      "started_at": "2026-11-11T04:56:49.414Z",
+      "exit_code": 0
+    },
+    {
+      "name": "contracts-build",
+      "cwd": "web",
+      "args": [
+        "node_modules/vite/bin/vite.js",
+        "build",
+        "--config",
+        "tests/vite.config.ts"
+      ],
+      "started_at": "2026-11-11T04:57:02.443Z",
+      "exit_code": 0
+    },
+    {
+      "name": "contracts",
+      "cwd": "web",
+      "args": [
+        "--test",
+        "--test-reporter=tap",
+        "tests/dist/contracts.test.js"
+      ],
+      "started_at": "2026-11-11T04:57:03.132Z",
+      "exit_code": 0
+    },
+    {
+      "name": "totp",
+      "cwd": "web",
+      "args": [
+        "node_modules/@playwright/test/cli.js",
+        "test",
+        "--config",
+        "<repo-root>\\artifacts\\p2-008-totp-20261110\\ui005-review\\green-947f8b0\\reuse-totp.config.mts"
+      ],
+      "started_at": "2026-11-11T04:57:05.614Z",
+      "exit_code": 0
+    },
+    {
+      "name": "composition",
+      "cwd": "web",
+      "args": [
+        "<repo-root>\\artifacts\\p2-008-totp-20261110\\ui005-review\\capture-ui005.mjs"
+      ],
+      "started_at": "2026-11-11T04:57:54.799Z",
+      "exit_code": 1
+    }
+  ]
+}

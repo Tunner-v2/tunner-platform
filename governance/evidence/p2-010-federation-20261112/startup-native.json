@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-010",
+  "phase": "ISOLATED_STARTUP_AND_REFINEMENT_ONLY",
+  "base_source_commit": "df84a35790a486fd34d76490087c157929c6ca2c",
+  "branch": "codex/p2-010-federation-20261112",
+  "authority": {
+    "ExitCode": 0,
+    "Command": "authority verify",
+    "Payload": {
+      "Outcome": "VERIFIED",
+      "CheckedArtifacts": 196,
+      "Findings": []
+    }
+  },
+  "status": {
+    "exit_code": 0,
+    "scope": "Native governance status completed. Full console output exceeded the tool display budget; no full raw status copy or feature validation is claimed."
+  },
+  "next": {
+    "exit_code": 0,
+    "diagnostics": [],
+    "scope_snapshot": {
+      "WorkItemId": "TUN-P2-010",
+      "Status": "BACKLOG",
+      "Actionable": false,
+      "Reason": "mandatory role review is missing: auditor; mandatory role review is missing: compliance-specialist; mandatory role review is missing: content-writer; mandatory role review is missing: cyber-security-engineer; mandatory role review is missing: end-user-ux-reviewer; mandatory role review is missing: frontend-engineer; mandatory role review is missing: full-stack-engineer; mandatory role review is missing: rd-engineer; mandatory role review is missing: sdk-engineer; mandatory role review is missing: solution-architect; mandatory role review is missing: tester-qa-engineer; mandatory role review is missing: ui-ux-engineer"
+    },
+    "timing": "Started before the twelve role files were added; retained only as pre-registration startup state, not post-review work-start."
+  },
+  "transition_check": {
+    "command": "governance transition check TUN-P2-010 REFINEMENT",
+    "exit_code": 0,
+    "from": "BACKLOG",
+    "destination": "REFINEMENT",
+    "outcome": "ALLOWED",
+    "reason": "The destination is the next declared normal lifecycle state."
+  },
+  "applied_status": "REFINEMENT",
+  "context_startup": {
+    "command": "context build --work-item TUN-P2-010 --output artifacts/p2-010-federation-20261112/context-startup",
+    "exit_code": 0,
+    "outcome": "GENERATED",
+    "included": 45,
+    "findings": [],
+    "generated_at": "2026-11-12T03:16:19.8860433+00:00",
+    "work_item_state_at_build": "BACKLOG",
+    "verify_outcome": "STALE",
+    "verify_exit_code": 1,
+    "verify_findings": [
+      "authoritative governance changed; regenerate CURRENT_STATE/HANDOFF/PROJECT_CONTEXT"
+    ],
+    "scope": "Metadata changed during the build's long native next evaluation. This pack is preserved as startup observation, not current implementation context. Generated HANDOFF reported010 all recorded prerequisites and blockers permit work."
+  },
+  "work_start": {
+    "executed": false,
+    "outcome": "NOT_CLAIMED",
+    "reason": "Finish concrete contracts and stabilize metadata, then coordinate a fresh context/work-start window before code."
+  },
+  "checks": {
+    "json_records_parsed": 20,
+    "mandatory_role_records": 12,
+    "role_set_equals_declared": true,
+    "current_skill_byte_hashes_match": true,
+    "diff_check": true,
+    "tests_builds_or_feature_execution": false,
+    "provider_activity": false,
+    "external_writes": false
+  },
+  "next_action": "Review/refine docs/development/P2_010_FEDERATION_REFINEMENT.md, qualify exact native OIDC dependency and provider evidence profiles, resolve bounded intake/unlink lifecycle, then coordinate fresh context plus eligibility. Do not implement before work-start ELIGIBLE."
+}

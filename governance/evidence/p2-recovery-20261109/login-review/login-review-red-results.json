@@ -1,0 +1,286 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "<repo-root>\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.authentication.config.ts",
+      "--grep",
+      "Uncertain password|Lost password-login|History entry refreshes"
+    ],
+    "configFile": "<repo-root>\\web\\playwright.authentication.config.ts",
+    "rootDir": "<repo-root>/web/tests/authentication",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "<repo-root>/web/test-results/runs/authentication",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "<repo-root>/web/tests/authentication",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/authentication/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config apps/user/vite.config.ts",
+      "url": "http://127.0.0.1:5189/registration/",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "authentication.spec.ts",
+      "file": "authentication.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Uncertain password login does not accept a surviving session from another account",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6705,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('alert')\nExpected: \u001b[32m\"We couldn’t complete the request. Please try again.\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('alert')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('alert')\nExpected: \u001b[32m\"We couldn’t complete the request. Please try again.\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('alert')\u001b[22m\n\n    at <repo-root>\\web\\tests\\authentication\\authentication.spec.ts:66:40",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\authentication\\authentication.spec.ts",
+                      "column": 40,
+                      "line": 66
+                    },
+                    "snippet": "  64 |  await page.route('**/authentication/result',route=>{resultReads++;return route.fulfill({status:404,json:{error_code:'RESULT_UNAVAILABLE'}});});\n  65 |  await page.goto('/login');await fill(page);await page.getByRole('button',{name:'Sign in',exact:true}).click();\n> 66 |  await expect(page.getByRole('alert')).toHaveText(proposal.content['authentication.error.unavailable'],{timeout:5000});\n     |                                        ^\n  67 |  await expect(page).toHaveURL(root+'/login');expect(resultReads).toBe(1);\n  68 | });\n  69 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\authentication\\authentication.spec.ts",
+                        "column": 40,
+                        "line": 66
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByRole('alert')\nExpected: \u001b[32m\"We couldn’t complete the request. Please try again.\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveText\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('alert')\u001b[22m\n\n\n  64 |  await page.route('**/authentication/result',route=>{resultReads++;return route.fulfill({status:404,json:{error_code:'RESULT_UNAVAILABLE'}});});\n  65 |  await page.goto('/login');await fill(page);await page.getByRole('button',{name:'Sign in',exact:true}).click();\n> 66 |  await expect(page.getByRole('alert')).toHaveText(proposal.content['authentication.error.unavailable'],{timeout:5000});\n     |                                        ^\n  67 |  await expect(page).toHaveURL(root+'/login');expect(resultReads).toBe(1);\n  68 | });\n  69 |\n    at <repo-root>\\web\\tests\\authentication\\authentication.spec.ts:66:40"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T16:54:50.593Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\web\\test-results\\runs\\authentication\\authentication-Uncertain-p-665bc-ession-from-another-account\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\authentication\\authentication.spec.ts",
+                    "column": 40,
+                    "line": 66
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "70f6afe7e350c931056e-874b9f5277ec27c26ecd",
+          "file": "authentication.spec.ts",
+          "line": 61,
+          "column": 1
+        },
+        {
+          "title": "Lost password-login body requires the exact original attempted result and fresh CSRF",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1555,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n    at <repo-root>\\web\\tests\\authentication\\authentication.spec.ts:75:70",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\authentication\\authentication.spec.ts",
+                      "column": 70,
+                      "line": 75
+                    },
+                    "snippet": "  73 |  await page.route('**/authentication/result',route=>{resultReads++;expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-authenticated-csrf');expect(route.request().postDataJSON()).toEqual({idempotencyKey:'12121212-3434-4567-8989-121212121212',email:'person@example.test',rememberMe:true});return route.fulfill({json:{status:'COMPLETED',idempotencyKey:'12121212-3434-4567-8989-121212121212'}});});\n  74 |  await page.goto('/login');await fill(page);await page.getByRole('checkbox',{name:'Remember me'}).check();await page.getByRole('button',{name:'Sign in',exact:true}).click();\n> 75 |  await expect(page).toHaveURL(root+'/signed-in');expect(resultReads).toBe(1);\n     |                                                                      ^\n  76 | });\n  77 |\n  78 | test('History entry refreshes Login bootstrap before enabling another credential submission',async({page})=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\authentication\\authentication.spec.ts",
+                        "column": 70,
+                        "line": 75
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n\n  73 |  await page.route('**/authentication/result',route=>{resultReads++;expect(route.request().headers()['x-tunner-csrf']).toBe('fixture-authenticated-csrf');expect(route.request().postDataJSON()).toEqual({idempotencyKey:'12121212-3434-4567-8989-121212121212',email:'person@example.test',rememberMe:true});return route.fulfill({json:{status:'COMPLETED',idempotencyKey:'12121212-3434-4567-8989-121212121212'}});});\n  74 |  await page.goto('/login');await fill(page);await page.getByRole('checkbox',{name:'Remember me'}).check();await page.getByRole('button',{name:'Sign in',exact:true}).click();\n> 75 |  await expect(page).toHaveURL(root+'/signed-in');expect(resultReads).toBe(1);\n     |                                                                      ^\n  76 | });\n  77 |\n  78 | test('History entry refreshes Login bootstrap before enabling another credential submission',async({page})=>{\n    at <repo-root>\\web\\tests\\authentication\\authentication.spec.ts:75:70"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T16:55:00.345Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\web\\test-results\\runs\\authentication\\authentication-Lost-passwo-558f9-mpted-result-and-fresh-CSRF\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\authentication\\authentication.spec.ts",
+                    "column": 70,
+                    "line": 75
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "70f6afe7e350c931056e-238b539ada4867fc8597",
+          "file": "authentication.spec.ts",
+          "line": 70,
+          "column": 1
+        },
+        {
+          "title": "History entry refreshes Login bootstrap before enabling another credential submission",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6506,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at <repo-root>\\web\\tests\\authentication\\authentication.spec.ts:84:116",
+                    "location": {
+                      "file": "<repo-root>\\web\\tests\\authentication\\authentication.spec.ts",
+                      "column": 116,
+                      "line": 84
+                    },
+                    "snippet": "  82 |  await page.route('**/authentication/sign-in',route=>{posts++;expect(route.request().postDataJSON().idempotencyKey).toBe(latestKey);expect(route.request().headers()['x-tunner-csrf']).toBe(latestCsrf);state.authenticated=true;return route.fulfill({json:{authenticated:true}});});\n  83 |  await page.goto('/login');await fill(page);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(root+'/signed-in');await expect(page.getByRole('heading',{name:'You’re signed in'})).toBeVisible();const beforeBack=optionReads;\n> 84 |  await page.goBack();await expect(page).toHaveURL(root+'/login');await expect.poll(()=>optionReads,{timeout:5000}).toBeGreaterThan(beforeBack);await fill(page);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(root+'/signed-in');expect(posts).toBe(2);\n     |                                                                                                                    ^\n  85 | });\n  86 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "<repo-root>\\web\\tests\\authentication\\authentication.spec.ts",
+                        "column": 116,
+                        "line": 84
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m1\u001b[39m\nReceived:   \u001b[31m1\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n\n  82 |  await page.route('**/authentication/sign-in',route=>{posts++;expect(route.request().postDataJSON().idempotencyKey).toBe(latestKey);expect(route.request().headers()['x-tunner-csrf']).toBe(latestCsrf);state.authenticated=true;return route.fulfill({json:{authenticated:true}});});\n  83 |  await page.goto('/login');await fill(page);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(root+'/signed-in');await expect(page.getByRole('heading',{name:'You’re signed in'})).toBeVisible();const beforeBack=optionReads;\n> 84 |  await page.goBack();await expect(page).toHaveURL(root+'/login');await expect.poll(()=>optionReads,{timeout:5000}).toBeGreaterThan(beforeBack);await fill(page);await page.getByRole('button',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(root+'/signed-in');expect(posts).toBe(2);\n     |                                                                                                                    ^\n  85 | });\n  86 |\n    at <repo-root>\\web\\tests\\authentication\\authentication.spec.ts:84:116"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-09T16:55:03.968Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "<repo-root>\\web\\test-results\\runs\\authentication\\authentication-History-ent-9f4b6-other-credential-submission\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "<repo-root>\\web\\tests\\authentication\\authentication.spec.ts",
+                    "column": 116,
+                    "line": 84
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "70f6afe7e350c931056e-e7da1e8ea49a1d3a464a",
+          "file": "authentication.spec.ts",
+          "line": 78,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-09T16:54:46.369Z",
+    "duration": 171378.08599999998,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

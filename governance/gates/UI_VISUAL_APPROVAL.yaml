@@ -3,12 +3,13 @@
   "gate_id": "UI_VISUAL_APPROVAL",
   "scope_type": "MILESTONE",
   "scope_id": "P2",
-  "status": "BLOCKED",
+  "status": "PASS",
   "checks": [
     "Approved Figma node/snapshot and FRD mapping for each implemented screen",
     "All approved composition/assets/styles/states reproduced at matching viewports",
     "Explicit scoped Product Owner consent for material adaptations; approved Figma synchronized",
-    "Responsive/accessibility/keyboard and required role evidence pass; no open fidelity defect"
+    "Responsive/accessibility/keyboard and required role evidence pass; no open fidelity defect",
+    "Current implemented scope only:five registration screens,three forms and applicable shared development controls. Global and all four owning-scope native UI checks pass; future UI must obtain separate current per-item evidence."
   ],
   "required_roles": [
     "ui-ux-engineer",
@@ -20,12 +21,13 @@
     "governance/evidence/AMD0008-UI-AUDIT.json",
     "docs/development/AMD0008_UI_REVIEW.md",
     "governance/evidence/AMD0008-UI-VISUAL-VALIDATION.json",
-    "governance/evidence/AMD0008-PRODUCT-OWNER-VISUAL-CONSENT.json"
+    "governance/evidence/AMD0008-PRODUCT-OWNER-VISUAL-CONSENT.json",
+    "governance/evidence/GLOBAL-UI-COMPLIANCE.json",
+    "governance/evidence/ui/AMD0009/test-index.json",
+    "governance/evidence/AMD0009-ADMIN-BORDER-PRODUCT-OWNER-CONSENT.json",
+    "governance/evidence/AMD0009-CURRENT-UI-PRODUCT-ACCEPTANCE.json"
   ],
-  "blocking_findings": [
-    "TODO-AMD0008-GOV001: prospective bootstrap/role/schema/CI propagation through governed P0 Revision remains open",
-    "P2 milestone gate must be re-evaluated for every remaining implemented P2 UI scope; registration-only pass cannot approve future screens"
-  ],
-  "evaluated_at": "2026-10-17T21:41:25.392Z",
-  "tool_version": "AMD0008-existing-milestone-gate-v1"
+  "blocking_findings": [],
+  "evaluated_at": "2026-10-18T21:07:55.704Z",
+  "tool_version": "AMD0008-AMD0009-current-scope-native-UI-check-v1"
 }

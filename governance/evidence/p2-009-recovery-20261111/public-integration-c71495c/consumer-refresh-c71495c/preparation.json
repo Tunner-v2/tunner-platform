@@ -1,0 +1,138 @@
+{
+  "recorded_at": "2026-11-11T11:31:57.172Z",
+  "expected_source_prefix": "c71495c",
+  "scope": "CURRENT_SHARED_UI_CONSUMER_REGRESSION_PREPARATION",
+  "cohorts": [
+    {
+      "name": "authentication",
+      "canonical": {
+        "path": "web/playwright.authentication.config.ts",
+        "sha256": "95467dd11d3ea6485a0abf826322c2953d44ef9a0fb7972740a18369d5bae118"
+      },
+      "wrapper": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/authentication.config.mjs",
+        "sha256": "54cae02de99a689312b5d1644c57f185ea02fca950b1449359a93346d7ec4195"
+      },
+      "expected": 21,
+      "servers": [
+        {
+          "command": "node node_modules/vite/bin/vite.js --config apps/user/vite.config.ts",
+          "url": "http://127.0.0.1:5189/registration/"
+        }
+      ],
+      "transport_delta": "Import canonical unchanged. Resolve testDir/cwd only because artifact wrapper is outside web; reuseExistingServer:true only after runner starts and verifies its own canonical-port Vites. CLI JSON/output locations only. use/projects/viewports/channel/retries/assertions unchanged."
+    },
+    {
+      "name": "step-up",
+      "canonical": {
+        "path": "web/playwright.step-up.config.ts",
+        "sha256": "bb17fe3538db0e2b5b068ccb6096d03d9346430bba14c49084b30d9d46d1223c"
+      },
+      "wrapper": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up.config.mjs",
+        "sha256": "1196fa66f833875c4881146ae71340bb56fd0febbc697744148799796e1cefe7"
+      },
+      "expected": 22,
+      "servers": [
+        {
+          "command": "node node_modules/vite/bin/vite.js --config fixtures/step-up/vite.config.ts",
+          "url": "http://127.0.0.1:5192/browser-testing/step-up-assets/"
+        }
+      ],
+      "transport_delta": "Import canonical unchanged. Resolve testDir/cwd only because artifact wrapper is outside web; reuseExistingServer:true only after runner starts and verifies its own canonical-port Vites. CLI JSON/output locations only. use/projects/viewports/channel/retries/assertions unchanged."
+    },
+    {
+      "name": "passkeys",
+      "canonical": {
+        "path": "web/playwright.passkeys.config.ts",
+        "sha256": "e996d351edafd776928aa955e9ddb2699fb5f003db61587e3294e23814d06db5"
+      },
+      "wrapper": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys.config.mjs",
+        "sha256": "9f56a435445bc496111547f488f9c2a085cb6a9767115c78a117d9a7116fbd6b"
+      },
+      "expected": 60,
+      "servers": [
+        {
+          "command": "node node_modules/vite/bin/vite.js --config apps/user/vite.config.ts --port 5193",
+          "url": "http://127.0.0.1:5193/registration/"
+        }
+      ],
+      "transport_delta": "Import canonical unchanged. Resolve testDir/cwd only because artifact wrapper is outside web; reuseExistingServer:true only after runner starts and verifies its own canonical-port Vites. CLI JSON/output locations only. use/projects/viewports/channel/retries/assertions unchanged."
+    },
+    {
+      "name": "totp",
+      "canonical": {
+        "path": "web/playwright.totp.config.ts",
+        "sha256": "4ce17bcabf93922d225c8c628130431bb0872bf3df0f4caadde1310ffd6049b8"
+      },
+      "wrapper": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp.config.mjs",
+        "sha256": "4073110830804d736a775ff7fafce56666da07e2814229b913f5b854185745c6"
+      },
+      "expected": 43,
+      "servers": [
+        {
+          "command": "node node_modules/vite/bin/vite.js --config apps/user/vite.config.ts --port 5194",
+          "url": "http://127.0.0.1:5194/registration/"
+        },
+        {
+          "command": "node node_modules/vite/bin/vite.js --config fixtures/step-up/vite.config.ts --port 5195",
+          "url": "http://127.0.0.1:5195/browser-testing/step-up-assets/"
+        }
+      ],
+      "transport_delta": "Import canonical unchanged. Resolve testDir/cwd only because artifact wrapper is outside web; reuseExistingServer:true only after runner starts and verifies its own canonical-port Vites. CLI JSON/output locations only. use/projects/viewports/channel/retries/assertions unchanged."
+    },
+    {
+      "name": "registration",
+      "canonical": {
+        "path": "web/playwright.registration.config.ts",
+        "sha256": "ddffc499fb583333e1118a74d5896288709724ef522704a96dad56fccc13a18c"
+      },
+      "wrapper": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/registration.config.mjs",
+        "sha256": "175ecacddc51cc10f3b9660442ae396c7017a0b8c5f18c914536f2b8b28edbad"
+      },
+      "expected": 24,
+      "servers": [
+        {
+          "command": "node node_modules/vite/bin/vite.js --config apps/user/vite.config.ts",
+          "url": "http://127.0.0.1:5189/registration/"
+        }
+      ],
+      "transport_delta": "Import canonical unchanged. Resolve testDir/cwd only because artifact wrapper is outside web; reuseExistingServer:true only after runner starts and verifies its own canonical-port Vites. CLI JSON/output locations only. use/projects/viewports/channel/retries/assertions unchanged."
+    },
+    {
+      "name": "foundation",
+      "canonical": {
+        "path": "web/playwright.config.ts",
+        "sha256": "7bb33b595cb9b57204dc17df70c875047890d8b0e899962d26d1581c9a5cc84d"
+      },
+      "wrapper": {
+        "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/foundation.config.mjs",
+        "sha256": "188b377e2f29867c2a6ef1d62a9ba76cb2aa56908856086c68572716d4dff8c6"
+      },
+      "expected": 16,
+      "servers": [
+        {
+          "command": "node node_modules/vite/bin/vite.js --config fixtures/ui/vite.config.ts",
+          "url": "http://127.0.0.1:5188"
+        }
+      ],
+      "transport_delta": "Import canonical unchanged. Resolve testDir/cwd only because artifact wrapper is outside web; reuseExistingServer:true only after runner starts and verifies its own canonical-port Vites. CLI JSON/output locations only. use/projects/viewports/channel/retries/assertions unchanged."
+    }
+  ],
+  "default_cohorts": [
+    "authentication",
+    "step-up",
+    "passkeys",
+    "totp"
+  ],
+  "default_expected_total": 146,
+  "optional_broad_parent_cohorts": [
+    "registration",
+    "foundation"
+  ],
+  "optional_expected_total": 40,
+  "tests_executed": 0
+}

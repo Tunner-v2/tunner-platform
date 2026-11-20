@@ -1,0 +1,96 @@
+{
+  "observed_at": "2026-10-28T23:18:48.5117484+00:00",
+  "branch": "main",
+  "main_sha": "bcf8f8da10131a10060e04587259779048bbe8d0",
+  "protected": true,
+  "effective_rules": [
+    {
+      "type": "deletion",
+      "ruleset_id": 24217332,
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "Tunner-v2/tunner-platform",
+      "parameters": null
+    },
+    {
+      "type": "non_fast_forward",
+      "ruleset_id": 24217332,
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "Tunner-v2/tunner-platform",
+      "parameters": null
+    },
+    {
+      "type": "pull_request",
+      "ruleset_id": 24217332,
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "Tunner-v2/tunner-platform",
+      "parameters": {
+        "required_approving_review_count": 1,
+        "dismiss_stale_reviews_on_push": true,
+        "required_reviewers": [],
+        "require_code_owner_review": true,
+        "dismissal_restriction": {
+          "enabled": false,
+          "allowed_actors": []
+        },
+        "require_last_push_approval": false,
+        "required_review_thread_resolution": false,
+        "require_extra_approval_for_unattributed_changes": true,
+        "allowed_merge_methods": [
+          "merge",
+          "squash",
+          "rebase"
+        ]
+      }
+    },
+    {
+      "type": "required_status_checks",
+      "ruleset_id": 24217332,
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "Tunner-v2/tunner-platform",
+      "parameters": {
+        "strict_required_status_checks_policy": true,
+        "do_not_enforce_on_create": false,
+        "required_status_checks": [
+          {
+            "context": "Security baseline",
+            "integration_id": 15368
+          },
+          {
+            "context": "Container security gate",
+            "integration_id": 15368
+          },
+          {
+            "context": "Web build tests and dependency audit",
+            "integration_id": 15368
+          }
+        ]
+      }
+    }
+  ],
+  "required_status_checks": [
+    {
+      "type": "required_status_checks",
+      "parameters": {
+        "strict_required_status_checks_policy": true,
+        "do_not_enforce_on_create": false,
+        "required_status_checks": [
+          {
+            "context": "Security baseline",
+            "integration_id": 15368
+          },
+          {
+            "context": "Container security gate",
+            "integration_id": 15368
+          },
+          {
+            "context": "Web build tests and dependency audit",
+            "integration_id": 15368
+          }
+        ]
+      },
+      "ruleset_source_type": "Repository",
+      "ruleset_source": "Tunner-v2/tunner-platform",
+      "ruleset_id": 24217332
+    }
+  ]
+}

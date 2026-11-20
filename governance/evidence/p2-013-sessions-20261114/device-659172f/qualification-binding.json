@@ -1,0 +1,390 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-013_DEVICE_INTEGRATION",
+  "result": "PASS_SCOPED_SPLIT_QUALIFICATION",
+  "tested_commit_sha": "659172ff87be7e65764d71cd62a3a24a0f5b36a8",
+  "production_commit_sha": "b0aa64709fa88a8438008b10d0f8f586b02887bd",
+  "browser_test_commit_sha": "455d0057fe1e7511d1a8ac20478f0c2afb3b3db4",
+  "qualification": {
+    "distinct_backend_passed": 120,
+    "device_core": 24,
+    "device_https": 32,
+    "shared_session_native": 64,
+    "actual_invocations": "116PASS/4fixtureFAIL at455d005; six focused cases PASS at659172f including all four failures and two adjacent guards. This is not one120/120 invocation.",
+    "production_assembly_sha256": "38e4f63f372842a5957b51eee99363cb697cb61150f90e4c7958ec66a0e3a980",
+    "production_unchanged_by_test_corrections": true,
+    "controlled_ui_client": 26,
+    "existing_session_ui_regression": 11,
+    "real_browser": 1,
+    "real_browser_seconds": 20.513,
+    "strict_browser_tls": true,
+    "typescript": "PASS root exit0",
+    "user_build": "PASS author frozen production; source unchanged since integration",
+    "test_project_build": "PASS root no-restore/no-dependencies0warnings0errors after fixture-only corrections",
+    "browser_host_build": "PASS author0warnings0errors; actual app ready, packaged guarded routes and strictTLS live journey qualified"
+  },
+  "failure_resolution": {
+    "csrf": "Existing shared BFF rejects missing header400 VALIDATION_ERROR; replaced broad wrong401/403 expectation with exact status/code and retained no-effect assertions.",
+    "final_qualification": "Existing final shared proof denial is403 STEP_UP_REQUIRED; assert hook observed COMPLETED before policy mutation, exact denial code, operation PENDING, proof ACTIVE and no trust/outbox effect.",
+    "federation": "Base synthetic publication already contains federation keys; use existing ordinal deduplication before StepUpPresentation construction. No assertion, native proof, PKCE/freshness or production validation was relaxed."
+  },
+  "execution_boundaries": "Every HTTP invocation retained exact assembly hashes unchanged during execution, zero owned containers remaining and borrowed Tunner resources preserved. No other-project image or container changes.",
+  "executions": [
+    {
+      "summary": {
+        "exit_code": 0,
+        "owned_containers_remaining": 0,
+        "borrowed_preserved": true,
+        "run_id": "87640003e576486a8e462c617a2cb3bf",
+        "timed_out": false,
+        "executed": 1,
+        "source": "b0aa64709fa88a8438008b10d0f8f586b02887bd",
+        "failed": 0,
+        "not_executed": 0,
+        "accepted": true,
+        "passed": 1
+      },
+      "assemblies": [
+        {
+          "sha256": "38e4f63f372842a5957b51eee99363cb697cb61150f90e4c7958ec66a0e3a980",
+          "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.dll"
+        },
+        {
+          "sha256": "6904242d9805a7cb8ead73c8ebd1ffa7f209cd28cf93470167554e494614972b",
+          "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.Tests.dll"
+        }
+      ]
+    },
+    {
+      "summary": {
+        "timed_out": false,
+        "run_id": "70490ae9fb5a4f2b9b7d5ce8fff8239f",
+        "not_executed": 0,
+        "passed": 7,
+        "exit_code": 0,
+        "source": "455d0057fe1e7511d1a8ac20478f0c2afb3b3db4",
+        "owned_containers_remaining": 0,
+        "borrowed_preserved": true,
+        "executed": 7,
+        "failed": 0,
+        "accepted": true
+      },
+      "assemblies": [
+        {
+          "sha256": "38e4f63f372842a5957b51eee99363cb697cb61150f90e4c7958ec66a0e3a980",
+          "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.dll"
+        },
+        {
+          "sha256": "6904242d9805a7cb8ead73c8ebd1ffa7f209cd28cf93470167554e494614972b",
+          "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.Tests.dll"
+        }
+      ]
+    },
+    {
+      "summary": {
+        "borrowed_preserved": true,
+        "exit_code": 1,
+        "timed_out": false,
+        "failed": 4,
+        "not_executed": 0,
+        "accepted": false,
+        "executed": 120,
+        "owned_containers_remaining": 0,
+        "passed": 116,
+        "run_id": "20bb20a1e6d64edd8258f157f3da1499",
+        "source": "455d0057fe1e7511d1a8ac20478f0c2afb3b3db4"
+      },
+      "assemblies": [
+        {
+          "sha256": "38e4f63f372842a5957b51eee99363cb697cb61150f90e4c7958ec66a0e3a980",
+          "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.dll"
+        },
+        {
+          "sha256": "6904242d9805a7cb8ead73c8ebd1ffa7f209cd28cf93470167554e494614972b",
+          "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.Tests.dll"
+        }
+      ]
+    },
+    {
+      "summary": {
+        "accepted": true,
+        "failed": 0,
+        "source": "659172ff87be7e65764d71cd62a3a24a0f5b36a8",
+        "passed": 6,
+        "run_id": "05bf2b03d1cd4b328fd7f1c71acda74b",
+        "executed": 6,
+        "not_executed": 0,
+        "timed_out": false,
+        "owned_containers_remaining": 0,
+        "exit_code": 0,
+        "borrowed_preserved": true
+      },
+      "assemblies": [
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.dll",
+          "sha256": "38e4f63f372842a5957b51eee99363cb697cb61150f90e4c7958ec66a0e3a980"
+        },
+        {
+          "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.Tests.dll",
+          "sha256": "b962adc5159591fd28329b420b90b5169eea66490ae86e971d6f1561db4ca3bb"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/http-87640003e576486a8e462c617a2cb3bf.trx.gz",
+      "sha256": "cfd6290e4dffc21ac41e64fd3d7df59b3c274d12e27b49fa0a22d9b85f81b70e",
+      "compression": "lossless gzip",
+      "kind": "HTTP_RAW",
+      "original_sha256": "33191f3a552b9dee978595f6272db7555288b270982698633765296ca7c91bbc"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/http-70490ae9fb5a4f2b9b7d5ce8fff8239f.trx.gz",
+      "sha256": "59a66a5d31e04449a0fa657a86260d32b197e80323e4a4ac9c9c0b2e2bdfdc68",
+      "compression": "lossless gzip",
+      "kind": "HTTP_RAW",
+      "original_sha256": "20e0af9ca30698d603b4e165d4754cc1c37ca1dcb56e992f21f96b77622b3221"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/http-20bb20a1e6d64edd8258f157f3da1499.trx.gz",
+      "sha256": "44e72d68d2b2a2271d357d3d53b66ed6428fa3a91a635b098b89383d866ad6a1",
+      "compression": "lossless gzip",
+      "kind": "HTTP_RAW",
+      "original_sha256": "e20f66f325cf51eb864111fa34d9c470e990bb45da89b063b6f2e67d64cc5fc8"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/http-05bf2b03d1cd4b328fd7f1c71acda74b.trx.gz",
+      "sha256": "6c23127e3a82c3c06a6e017bc6ab175621316dd7791897f1be47b4b107672d4e",
+      "compression": "lossless gzip",
+      "kind": "HTTP_RAW",
+      "original_sha256": "2f7318b49d7744262a39dc1c408093ec235d571a50f3e7acf6cd42a972af23f5"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled26.json.gz",
+      "sha256": "72b847a33141100c72a02beef7b8e088ce19b77a838ba10b25135684aa488597",
+      "compression": "lossless gzip",
+      "kind": "CONTROLLED_UI_RAW",
+      "original_sha256": "357b9c8eb2e25052a22b800e972d881a2637783e77a12d6c0e7eba6599b2a1ed"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/sessions11.json.gz",
+      "sha256": "be2b4cd4de07f1d6333dbc3ea274aabc584b2bd98c0418211b0a7596a552d3c3",
+      "compression": "lossless gzip",
+      "kind": "SESSION_REGRESSION_RAW",
+      "original_sha256": "7ad245639cb5ed63333775092264ace27c440a3659bc16e25ce79e8be6a241b4"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/live1.json.gz",
+      "sha256": "f3f86c96ce389f3c6fdbd88a4c1aed363c1973509ef42942f993cde900bad69c",
+      "compression": "lossless gzip",
+      "kind": "LIVE_BROWSER_RAW",
+      "original_sha256": "df2f8859be5dc5c28b28700c0c951c022232fb98196a06632b9053f6a4aafb4d"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/unconfirmed-result.png",
+      "sha256": "1ac40dee9d5504cd7e4db601e78acc70ca4fb59eb7a408e08e3db5cb4f5afde2",
+      "compression": "none",
+      "kind": "RENDERED_CONTROLLED",
+      "original_sha256": "1ac40dee9d5504cd7e4db601e78acc70ca4fb59eb7a408e08e3db5cb4f5afde2"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/confirm-1440.png",
+      "sha256": "107394c4509b5fdaae1657ec65dc12d36fde24a347a1c895003f5abbff8c1198",
+      "compression": "none",
+      "kind": "RENDERED_CONTROLLED",
+      "original_sha256": "107394c4509b5fdaae1657ec65dc12d36fde24a347a1c895003f5abbff8c1198"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/details-1440.png",
+      "sha256": "746a3f4406799cb4933ccc9c0b4be26e757d76a24cdf771b1b3bff07388d9bc2",
+      "compression": "none",
+      "kind": "RENDERED_CONTROLLED",
+      "original_sha256": "746a3f4406799cb4933ccc9c0b4be26e757d76a24cdf771b1b3bff07388d9bc2"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/list-1440.png",
+      "sha256": "220a06e1077713df8a6c0cccf783eb51ad5f878541352a9225c6ab309e5c0483",
+      "compression": "none",
+      "kind": "RENDERED_CONTROLLED",
+      "original_sha256": "220a06e1077713df8a6c0cccf783eb51ad5f878541352a9225c6ab309e5c0483"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/confirm-390.png",
+      "sha256": "6d29aff790141d197605cdc93a4490724fa8ba0ff6699ab7db688e968a5b087b",
+      "compression": "none",
+      "kind": "RENDERED_CONTROLLED",
+      "original_sha256": "6d29aff790141d197605cdc93a4490724fa8ba0ff6699ab7db688e968a5b087b"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/details-390.png",
+      "sha256": "7b582722d4bfaaafea4fd2e8d305d13a24c341f636bcbefa03dac8f489359f3b",
+      "compression": "none",
+      "kind": "RENDERED_CONTROLLED",
+      "original_sha256": "7b582722d4bfaaafea4fd2e8d305d13a24c341f636bcbefa03dac8f489359f3b"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/list-390.png",
+      "sha256": "0a586633335efabd15f47cf0ada770faa2e07696a6e96d8751204af703911be2",
+      "compression": "none",
+      "kind": "RENDERED_CONTROLLED",
+      "original_sha256": "0a586633335efabd15f47cf0ada770faa2e07696a6e96d8751204af703911be2"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/controlled/exact-result.png",
+      "sha256": "99d73dacfdab2377aeb3832548055e0815106f74fa202f5cb981ed7571494cb2",
+      "compression": "none",
+      "kind": "RENDERED_CONTROLLED",
+      "original_sha256": "99d73dacfdab2377aeb3832548055e0815106f74fa202f5cb981ed7571494cb2"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/live/devices-confirm-390.png",
+      "sha256": "71b5d5d31f97f3f389dfefd90866ffb4ab1a54e18798574db61598f834a8ab46",
+      "compression": "none",
+      "kind": "RENDERED_LIVE",
+      "original_sha256": "71b5d5d31f97f3f389dfefd90866ffb4ab1a54e18798574db61598f834a8ab46"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/live/devices-list-1440.png",
+      "sha256": "8d51f0a797c91c2cd299aa85c86483da9c4709a1da2cfc93031e35017a399d59",
+      "compression": "none",
+      "kind": "RENDERED_LIVE",
+      "original_sha256": "8d51f0a797c91c2cd299aa85c86483da9c4709a1da2cfc93031e35017a399d59"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/live/devices-result-390.png",
+      "sha256": "7a75015a0db14dfe4ea094d0b76c9d3a3cd234f64583c23ba06dafac207a4145",
+      "compression": "none",
+      "kind": "RENDERED_LIVE",
+      "original_sha256": "7a75015a0db14dfe4ea094d0b76c9d3a3cd234f64583c23ba06dafac207a4145"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/live/devices-unknown-1440.png",
+      "sha256": "9881017a7734a6174770b478de4c7608caa17176904e7b8c7e67fb1727eed1b7",
+      "compression": "none",
+      "kind": "RENDERED_LIVE",
+      "original_sha256": "9881017a7734a6174770b478de4c7608caa17176904e7b8c7e67fb1727eed1b7"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/approved/review.html",
+      "sha256": "b731084950059d709bc997ea956ea07517b2d4ee10783b32d7c79864044cfa2f",
+      "compression": "none",
+      "kind": "APPROVED_REFERENCE",
+      "original_sha256": "b731084950059d709bc997ea956ea07517b2d4ee10783b32d7c79864044cfa2f"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/approved/exactscopes.md",
+      "sha256": "c868fa2d7184b811a2e811c0f7363f5cfa0217e86a00513ffd653f3cfb659f25",
+      "compression": "none",
+      "kind": "APPROVED_REFERENCE",
+      "original_sha256": "c868fa2d7184b811a2e811c0f7363f5cfa0217e86a00513ffd653f3cfb659f25"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/approved/device.js",
+      "sha256": "fff56fe006d9fe156df2b217273e18984601caec7a04381fe35921a5b5d72c2d",
+      "compression": "none",
+      "kind": "APPROVED_REFERENCE",
+      "original_sha256": "fff56fe006d9fe156df2b217273e18984601caec7a04381fe35921a5b5d72c2d"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/approved/device.css",
+      "sha256": "a3facca336cafdc4379c6787e18542dabc47e0216854b2f4ec7dff756b11253a",
+      "compression": "none",
+      "kind": "APPROVED_REFERENCE",
+      "original_sha256": "a3facca336cafdc4379c6787e18542dabc47e0216854b2f4ec7dff756b11253a"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/approved/desktop-devices.png",
+      "sha256": "e1b2b052f879b70dcef263a304a673abb1ced96a13cf95530753d0e2b7c06d76",
+      "compression": "none",
+      "kind": "APPROVED_REFERENCE",
+      "original_sha256": "e1b2b052f879b70dcef263a304a673abb1ced96a13cf95530753d0e2b7c06d76"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/approved/mobile-devices.png",
+      "sha256": "f90296d8fe726eb485f99f95cea327e9a58759c5ccf21b0f4ce389ae102f8b95",
+      "compression": "none",
+      "kind": "APPROVED_REFERENCE",
+      "original_sha256": "f90296d8fe726eb485f99f95cea327e9a58759c5ccf21b0f4ce389ae102f8b95"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/approved/desktop-remove-trust.png",
+      "sha256": "b261b1337e9fa49127daa4a83151fa31b571d9a958a00b310c16b267f5ebfa84",
+      "compression": "none",
+      "kind": "APPROVED_REFERENCE",
+      "original_sha256": "b261b1337e9fa49127daa4a83151fa31b571d9a958a00b310c16b267f5ebfa84"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/approved/mobile-remove-trust.png",
+      "sha256": "4791b459028ca7cf60448c2b0b11c74ac4a9141ee18ab9f97b93294a6ce6d428",
+      "compression": "none",
+      "kind": "APPROVED_REFERENCE",
+      "original_sha256": "4791b459028ca7cf60448c2b0b11c74ac4a9141ee18ab9f97b93294a6ce6d428"
+    },
+    {
+      "path": "governance/evidence/p2-013-sessions-20261114/device-659172f/approved/approved-device-details.png",
+      "sha256": "b624c0e46ee9f41b4254e6aaea437c608195b4039088d2586c32d0eb99c82e09",
+      "compression": "none",
+      "kind": "APPROVED_REFERENCE",
+      "original_sha256": "b624c0e46ee9f41b4254e6aaea437c608195b4039088d2586c32d0eb99c82e09"
+    }
+  ],
+  "review": {
+    "reviewer": "AI /root/p2_013_bulk_review; one disclosed reviewer applying eleven required technical role contracts, not eleven people or human acceptance.",
+    "source": "455d005 integrated source plus independently reviewed659172f fixture-only corrections.",
+    "contracts": [
+      "full-stack-engineer",
+      "tester-qa-engineer",
+      "solution-architect",
+      "cyber-security-engineer",
+      "auditor",
+      "compliance-specialist",
+      "ui-ux-engineer",
+      "frontend-engineer",
+      "end-user-ux-reviewer",
+      "content-writer",
+      "governance-engineer"
+    ],
+    "result": "No actionable findings. Prior cross-owner bug remedied and six focused regressions actually pass. Nine consent hashes match; approved/live/controlled desktop/mobile renders inspected. Reviewer did not execute tests; root executed and bound runtime results.",
+    "consent": "governance/evidence/TUN-P2-013-DEVICE-VISUAL-CONSENT.json"
+  },
+  "security": {
+    "secret_scan": "PASS28ownedfiles plus new E2E1 and correctedfixture1; initial synthetic identifier/value matches corrected without suppression",
+    "sast": "PASS13CSharpfiles using four unchanged policy rules",
+    "sast_policy_sha256": "3c7e71681b62b44efcc56a486a845dea8f3b48276c91a245e9abd41ec72ee80c",
+    "sensitive_state": "Protected HttpOnly/Secure/Strict installation/original cookies; no URL/storage authority. Browser tests prove no JS cookie exposure, no query/fragment/local/session storage and exact causal receipt."
+  },
+  "ui_coverage": {
+    "inventory_sha256": "5768b17be0221622c1b33298fb6322e7695bddcbf15aa4c76e11a1cfb1bb8c37",
+    "device_items": [
+      "U-ACCT-DEVICES",
+      "U-ACCT-DEVICE-DETAILS",
+      "COMP-DEVICE-TRUST-REMOVE"
+    ],
+    "shared_items": [
+      "COMP-STEP-UP",
+      "FORM-STEP-UP"
+    ],
+    "existing_items": [
+      "U-ACCT-04",
+      "U-ACCT-SESSION-DETAILS",
+      "COMP-SESSION-REVOKE"
+    ],
+    "viewports": "Approved1440x1100/390x844 compositions; controlled1366/1024/768/320 geometry, real1440desktop/390mobile; keyboard, focus trapping/return, shared validation, axe and no overflow.",
+    "source_and_visual_currentness": "Existing Session evidence identities remain historical. Eleven post-extraction Session UI regressions and all64current shared HTTPS/native cases validate preserved behavior; new controlled26 and real1 cover Device/shared-proof adaptations. No unrelated screen is approved by this scope."
+  },
+  "remaining": [
+    "Native committed per-item UI gate and corresponding currentness records.",
+    "Separate pending bulk-session UI consent and implementation.",
+    "TODO-TUN-P2-017-DEVICE001 before production privacy/lifecycle activation.",
+    "WholeP2-013/P2 Product acceptance, protected-main integration, provider-live/production and release remain separate."
+  ],
+  "local_browser": {
+    "mode": "ISOLATED_LOCAL_BROWSER_TESTING",
+    "url": "https://localhost:24443",
+    "postgres": "127.0.0.1:25432 -> existing container5432; tunner_browser_testing",
+    "mailpit": "http://127.0.0.1:28025",
+    "host_identity_file": "artifacts/p2-013-sessions-20261114/device-browser/host-process.json",
+    "persistent_data_and_existing_certificate_preserved": true
+  }
+}

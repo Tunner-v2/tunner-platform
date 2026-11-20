@@ -1,0 +1,75 @@
+using System.Text.Json;
+using Tunner.Identity.Persistence;
+using Tunner.Platform.Bff;
+
+namespace Tunner.Admin.Bff;
+
+internal static class AdminIdentityConfigurationScreens
+{
+    private static readonly object FailureStatus = new();
+    internal static void Map(IEndpointRouteBuilder endpoints, BffWebAssets assets) => assets.MapScreens(endpoints, "configuration.html",
+        ["/identity/settings/authentication", "/identity/settings/authentication/review", "/identity/settings/authentication/history",
+         "/identity/settings/assurance", "/identity/settings/assurance/review", "/identity/settings/assurance/history",
+         "/identity/settings/authentication-content", "/identity/settings/authentication-content/review", "/identity/settings/authentication-content/history",
+         "/identity/settings/registration", "/identity/settings/registration/review", "/identity/settings/registration/history",
+         "/identity/settings/totp", "/identity/settings/totp/review", "/identity/settings/totp/history",
+         "/identity/settings/registration-content", "/identity/settings/registration-content/review", "/identity/settings/registration-content/history",
+         "/identity/settings/passkey", "/identity/settings/passkey/review", "/identity/settings/passkey/history",
+         "/identity/settings/totp-content", "/identity/settings/totp-content/review", "/identity/settings/totp-content/history",
+         "/identity/settings/passkey-content", "/identity/settings/passkey-content/review", "/identity/settings/passkey-content/history",
+         "/identity/settings/step-up-content", "/identity/settings/step-up-content/review", "/identity/settings/step-up-content/history",
+         "/identity/settings/recovery-codes", "/identity/settings/recovery-codes/review", "/identity/settings/recovery-codes/history",
+         "/identity/settings/session-listing", "/identity/settings/session-listing/review", "/identity/settings/session-listing/history",
+         "/identity/settings/session-listing-content", "/identity/settings/session-listing-content/review", "/identity/settings/session-listing-content/history",
+         "/identity/settings/session-revocation-content", "/identity/settings/session-revocation-content/review", "/identity/settings/session-revocation-content/history",
+         "/identity/settings/session-bulk-revocation-content", "/identity/settings/session-bulk-revocation-content/review", "/identity/settings/session-bulk-revocation-content/history",
+         "/identity/settings/recovery-password-content", "/identity/settings/recovery-password-content/review", "/identity/settings/recovery-password-content/history"],
+        Allowed, allowAnonymous: false, static context => Results.StatusCode(
+            context.Items.TryGetValue(FailureStatus, out var status) && status is int code ? code : StatusCodes.Status403Forbidden));
+
+    private static async Task<bool> Allowed(HttpContext context)
+    {
+        try
+        {
+            if (context.Request.QueryString.HasValue) return false;
+            var clock = context.RequestServices.GetRequiredService<TimeProvider>();
+            var profile = context.RequestServices.GetRequiredService<IAdminIdentityConfigurationHttpProfileSource>().RequireEffective(clock.GetUtcNow());
+            profile.Require(clock.GetUtcNow());
+            context.Items[AdminIdentityConfigurationAuthorization.ProfileItem] = JsonSerializer.Serialize(profile);
+            await AdminIdentityConfigurationAuthorization.CurrentSession(context,
+                context.RequestServices.GetRequiredService<IAdminIdentityConfigurationSessionSource>(), clock, context.RequestAborted).ConfigureAwait(false);
+            var family = context.Request.Path.Value!.Split('/')[3] switch
+            {
+                "authentication" => IdentityConfigurationFamily.Authentication,
+                "assurance" => IdentityConfigurationFamily.Assurance,
+                "authentication-content" => IdentityConfigurationFamily.AuthenticationContent,
+                "registration" => IdentityConfigurationFamily.Registration,
+                "totp" => IdentityConfigurationFamily.Totp,
+                "registration-content" => IdentityConfigurationFamily.RegistrationContent,
+                "passkey" => IdentityConfigurationFamily.Passkey,
+                "totp-content" => IdentityConfigurationFamily.TotpContent,
+                "passkey-content" => IdentityConfigurationFamily.PasskeyContent,
+                "step-up-content" => IdentityConfigurationFamily.StepUpContent,
+                "recovery-codes" => IdentityConfigurationFamily.RecoveryCodes,
+                "session-listing" => IdentityConfigurationFamily.SessionListing,
+                "session-listing-content" => IdentityConfigurationFamily.SessionListingContent,
+                "session-revocation-content" => IdentityConfigurationFamily.SessionRevocationContent,
+                "session-bulk-revocation-content" => IdentityConfigurationFamily.SessionBulkRevocationContent,
+                "recovery-password-content" => IdentityConfigurationFamily.RecoveryPasswordContent,
+                _ => throw new IdentityConfigurationForbiddenException()
+            };
+            var scopes = profile.Scopes.Where(x => x.Family == family).ToArray(); if (scopes.Length == 0) return false;
+            var application = context.RequestServices.GetRequiredService<IdentityRuntimeConfigurationApplication>();
+            var budgets = context.RequestServices.GetRequiredService<IIdentityConfigurationBrowseBudgetSource>();
+            foreach (var scope in scopes)
+            {
+                var operation = Guid.NewGuid().ToString("N");
+                await application.WorkspaceAsync(scope, budgets, "OP-IDENTITY-CONFIG-" + operation, operation, context.RequestAborted).ConfigureAwait(false);
+            }
+            return true;
+        }
+        catch (IdentityConfigurationForbiddenException) { return false; }
+        catch (Exception error) when (error is InvalidOperationException or System.Data.Common.DbException or TimeoutException)
+        { context.Items[FailureStatus] = StatusCodes.Status503ServiceUnavailable; return false; }
+    }
+}

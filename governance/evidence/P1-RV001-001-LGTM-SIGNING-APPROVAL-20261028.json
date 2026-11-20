@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "received_at": "2026-10-28T18:43:18.915Z",
+  "provenance": "Direct Product Owner reply in current chat",
+  "question_item_id": "[\"request_user_input_async\",\"call_919ab78ea2a54c028a168c58640595d7\",0]",
+  "answer": "Approve dev/test signing extension",
+  "review_packet": {
+    "path": "artifacts/security-followup-20261028/lgtm-signing-review.md",
+    "sha256": "ae2ffc03cdf7cd64590c92b04846c22a1760e6d7ae4ca10b95b6d94632053ae8"
+  },
+  "approved_scope": [
+    "Design, implementation and validation of additional Tunner signing root for dev/test maintained LGTM only",
+    "Keep complete stack and all plugins with existing identifiers, APIs, ports and data contracts",
+    "Preserve vendor trust path; separately verify exact allowlisted Tunner rebuilt plugin identities, manifest/file hashes, pinned key version and fingerprint",
+    "Private keys outside source, logs and final layers; isolated synthetic prototype keys establish no production trust",
+    "Local ADR and key-custody/verifier contract before implementation; architect/security/governance review and positive/tamper/wrong-key/wrong-plugin/revocation tests before adoption"
+  ],
+  "excluded": [
+    "Production trust or deployment",
+    "Registry publication",
+    "Protected-main merge",
+    "Release acceptance",
+    "Unsigned-plugin bypass",
+    "Removal or CVE suppression",
+    "Figma or Google Drive writes"
+  ],
+  "supersession": "Extends only the dev/test signing-root exclusion in the 20261020 maintenance receipt and 20261021 signed-plugin boundary; all other exclusions remain."
+}

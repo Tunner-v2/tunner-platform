@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "qualification_id": "PASSKEY-COMPLETED-RELOAD-462e269a",
+  "result": "PASS",
+  "source_review_result": "PASS",
+  "source_carrier": "462e269ad5c701034aceb7374f15f0c249a87529",
+  "production_fix_source": "42dfecf308d029f530237d84c4c42145a8df9040",
+  "production_source_equal_between_execution_carriers": true,
+  "delta_paths": [
+    "web/apps/user/passkeys.tsx",
+    "web/tests/passkeys/passkeys.spec.ts",
+    "web/tests/browser-testing/passkeys-flow.spec.ts"
+  ],
+  "closed_owner_revisions": ["P2-009-RV012", "P2-010-RV013", "P2-013-RV005"],
+  "revision_state": "CLOSED_AFTER_THREE_PASSING_NATIVE_CLOSE_CHECKS",
+  "actual_executions": {
+    "red": {"source_head": "5b8f13b18611a16fab13d6c635d216606dd9e4ba", "failed": 1, "note": "Production unchanged; new regression uncommitted. Retained as failed.", "ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/fixture-red/observed-extract.json"},
+    "fixture_green": {"source_sha": "42dfecf308d029f530237d84c4c42145a8df9040", "passed": 4, "ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/fixture-green/observed-extract.json"},
+    "initial_real": {"source_sha": "42dfecf308d029f530237d84c4c42145a8df9040", "failed": 1, "note": "Final logout/navigation assertion failed; actual network cancellation was not directly established. Retained as failed.", "ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/browser-initial-failure/observed-extract.json"},
+    "strengthened_real": {"source_sha": "462e269ad5c701034aceb7374f15f0c249a87529", "passed": 1, "strict_tls": true, "ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/browser-real/observed-extract.json"}
+  },
+  "technical_review": {
+    "reviewer": "AI agent p214_continuation_qa",
+    "reviewer_count": 1,
+    "role_assessment_count": 6,
+    "reuse": "The same six bounded assessments apply to the identical delta across the three owner revisions; not eighteen independent assessments or six people.",
+    "authorship_disclosure": "Reviewer authored the one-line final test synchronization, independently reviewed by root; production fix and other test changes were authored by another agent.",
+    "roles": [
+      {"role": "frontend-engineer", "version": "1.1.0", "skill": ".agent/skills/frontend-engineer/SKILL.md", "sha256": "3472e745aa478457939b1aeeba319f72989bb9e97791e458f0b9979ec1b538d7", "result": "PASS", "assessment": "Completed-only exact-result reconciliation preserves route/abort guards and existing recovery handling."},
+      {"role": "tester-qa-engineer", "version": "1.1.0", "skill": ".agent/skills/tester-qa-engineer/SKILL.md", "sha256": "52aee18f251a614e339adba9f7c886a5da1ef4ab0482ae6b77044184128415c6", "result": "PASS", "assessment": "Meaningful RED, four focused GREEN cases and strengthened real journey PASS; earlier failed runs retained."},
+      {"role": "ui-ux-engineer", "version": "1.1.0", "skill": ".agent/skills/ui-ux-engineer/SKILL.md", "sha256": "498ff7e4b46012b1e90773cd29ebac903d7ac83767d739cc327d9b69a3b4c5c2", "result": "PASS", "assessment": "Existing approved controls/states restored; final screenshot has no false pending feedback or disabled Add. No redesign."},
+      {"role": "end-user-ux-reviewer", "version": "1.1.0", "skill": ".agent/skills/end-user-ux-reviewer/SKILL.md", "sha256": "cfaa2eeffd945eef70a6ff1023b1af42fc0413add7b357b2fcd914473e976665", "result": "PASS", "assessment": "Acknowledged completion resolves after reload; failed exact reads preserve deliberate usable recovery and block new actions."},
+      {"role": "cyber-security-engineer", "version": "1.0.0", "skill": ".agent/skills/cyber-security-engineer/SKILL.md", "sha256": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97", "result": "PASS", "assessment": "No blind acknowledgement/replay, new secrets/storage, policy, cookie or mutation changes; mismatched results remain rejected."},
+      {"role": "auditor", "version": "1.0.0", "skill": ".agent/skills/auditor/SKILL.md", "sha256": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921", "result": "PASS", "assessment": "Actual source attribution retained; no aggregate cohort, Product/CODEOWNER acceptance or unexecuted native closure claim."}
+    ]
+  },
+  "scoped_ui_gate": {"scope": "TUN-P2-007", "outcome": "PASS", "covered_items": 9, "failures": [], "checked_commit_sha": "bb8314d58a50c09a8b1296a9e65ed79028285db8", "receipt_ref": "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/scoped-ui/TUN-P2-007.json"},
+  "shared_context": {"selected_scope":"P2-009-RV012","built_at_commit_sha":"ba82f555b87b911435d7b858b3eaa03ab28887c3","verification_outcome":"CURRENT","verification_boundary":"Actual verification at ACTIVE before metadata-only validation/closure; not a claim that a changed pack remains current.","included_items":100,"owner_lineages":3,"scope_bound_reviews":18,"role_contracts":6,"exact_delta_paths":3,"scoped_ui_receipt_included":true,"manifest_ref":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/shared-context/manifest.json","manifest_sha256":"265d5ccb9973c5d2f2433253ceabebdabdc144cc9ff81ed6c433792c047345ee","actual_verify_ref":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/shared-context/verify.json"},
+  "global_ci_ui": "PENDING_SIX_EXISTING_RECOVERY_KEYBOARD_CHECK_MAPPINGS",
+  "boundary": "Narrow shared passkey state correction only. Recovery, Federation and Session owner domain behavior is unchanged. Original closed records and their whole-UI historical limits remain intact. No new TOTP/private Recovery cohort, whole-P2 qualification, human Product/CODEOWNER approval, production activation or release is claimed."
+}

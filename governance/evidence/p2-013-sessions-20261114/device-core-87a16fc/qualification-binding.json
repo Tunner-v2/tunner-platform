@@ -1,0 +1,226 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-013_DEVICE_CORE",
+  "result": "PASS_DEVICE_CORE_SPLIT_AND_SHARED64",
+  "production_commit_sha": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+  "latest_fixture_commit_sha": "4d2c7607e3545a9709c3f3119578ca5be675a991",
+  "sources": [
+    {
+      "path": "src/Modules/Identity/AuthenticationApplication.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "898c32a6034e93fe72c013afaa023f543a853092"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationDevices.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "7c1b8d114110b71ae94d6925c9a8ac00545be14e"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "bceabb8767ad3e75e6bac1ae36d2a93b6d8a0f32"
+    },
+    {
+      "path": "src/Modules/Identity/DeviceApplication.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "70dad4f76a20de0c12e53489d36775d83e74fca7"
+    },
+    {
+      "path": "src/Modules/Identity/DeviceAuthenticationEvidence.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "0284f17aac1e11c9df6bd60973eb6ca8e0a7f914"
+    },
+    {
+      "path": "src/Modules/Identity/DeviceBrowserService.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "fa9d182552ccc7483b6875454fdd53a4a7a8492c"
+    },
+    {
+      "path": "src/Modules/Identity/DeviceContracts.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "048cf6589c33640a4fc4b85b313b03976f953c09"
+    },
+    {
+      "path": "src/Modules/Identity/DeviceMigrationSql.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "c6c4d5b41de13e091389708c6d80410dbfedb042"
+    },
+    {
+      "path": "src/Modules/Identity/DeviceOperationApplication.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "e3a4d49d62088696fd9d3e6895721a86e500185d"
+    },
+    {
+      "path": "src/Modules/Identity/DeviceRows.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "b3ac5caaad15cf2eb1a06889013f8d2e92de46e2"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "91ac72b7ea6610429bb0b63b61a96afae8de01a6"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261115081132_P2DeviceEvidenceAndTrust.Designer.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "171ff20d508e76254fce90325d19210d2e66ef00"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261115081132_P2DeviceEvidenceAndTrust.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "eba07edcc62540cf10f66386c72574f4d26d066b"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "753f5ad63b761a4b14a817d3da28376a7c87fcaa"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpOutcomes.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "097ded18b0449f28ce2cdf643953a42c70c78452"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/DeviceTrustModelTests.cs",
+      "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+      "git_blob": "a4374d93ce114aa32f7e1401a0b5606647649989"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/DeviceTrustTests.cs",
+      "source": "4d2c7607e3545a9709c3f3119578ca5be675a991",
+      "git_blob": "9cd9a79641dd628da935849e7f1e95f5808a3c95"
+    }
+  ],
+  "assemblies_after_integrity_retry": [
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.dll",
+      "sha256": "c24cca57fba9a80beadc03bcdb6978990847df94d6ca29516f15707acfbb9d3e"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/bin/Debug/net10.0/Tunner.Identity.Persistence.Tests.dll",
+      "sha256": "9aec8f947042916fba121c5626254a759ef8b5774db2b44ff3b8b9f0817bdeeb"
+    }
+  ],
+  "executions": [
+    {
+      "label": "device-happy",
+      "summary": {
+        "exit_code": 0,
+        "passed": 1,
+        "accepted": true,
+        "not_executed": 0,
+        "run_id": "c45c23efd7fc4bdb9142339ac5797c44",
+        "failed": 0,
+        "executed": 1,
+        "owned_containers_remaining": 0,
+        "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+        "borrowed_preserved": true,
+        "timed_out": false
+      },
+      "raw_trx": "governance/evidence/p2-013-sessions-20261114/device-core-87a16fc/device-happy.trx.gz",
+      "raw_trx_sha256": "730c1fb2eca2f310b3d54cb6ce30fd8b7bfe397e3e7af245961ed8b09efb179a",
+      "compression": "lossless gzip"
+    },
+    {
+      "label": "device24",
+      "summary": {
+        "run_id": "78b6f240d522489f93437cdd770499e5",
+        "timed_out": false,
+        "exit_code": 1,
+        "borrowed_preserved": true,
+        "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+        "accepted": false,
+        "failed": 2,
+        "executed": 24,
+        "not_executed": 0,
+        "owned_containers_remaining": 0,
+        "passed": 22
+      },
+      "raw_trx": "governance/evidence/p2-013-sessions-20261114/device-core-87a16fc/device24.trx.gz",
+      "raw_trx_sha256": "233518bf82cbda3e74914ca13c49b3c47f23fb9020e7f089d9d2e8d5560d6a45",
+      "compression": "lossless gzip"
+    },
+    {
+      "label": "integrity-two",
+      "summary": {
+        "passed": 2,
+        "owned_containers_remaining": 0,
+        "exit_code": 0,
+        "run_id": "1eb0f0d05de34635ae5d8bf172b6f027",
+        "failed": 0,
+        "accepted": true,
+        "timed_out": false,
+        "executed": 2,
+        "not_executed": 0,
+        "source": "4d2c7607e3545a9709c3f3119578ca5be675a991",
+        "borrowed_preserved": true
+      },
+      "raw_trx": "governance/evidence/p2-013-sessions-20261114/device-core-87a16fc/integrity-two.trx.gz",
+      "raw_trx_sha256": "228af41a0c891ed15ab9d988490ba61b0532c560247a22edb3b34d5c71b2d640",
+      "compression": "lossless gzip"
+    },
+    {
+      "label": "shared64",
+      "summary": {
+        "run_id": "8c05f96432814436a97d756f8f99f7df",
+        "executed": 64,
+        "passed": 64,
+        "accepted": true,
+        "source": "87a16fce9be0206fff4cc0b06b37177fd353ca58",
+        "exit_code": 0,
+        "borrowed_preserved": true,
+        "failed": 0,
+        "timed_out": false,
+        "not_executed": 0,
+        "owned_containers_remaining": 0
+      },
+      "raw_trx": "governance/evidence/p2-013-sessions-20261114/device-core-87a16fc/shared64.trx.gz",
+      "raw_trx_sha256": "6af4e89744cc2c9755b3c91d40c462168fb615e2f953f5c2c2777216e45c5e20",
+      "compression": "lossless gzip"
+    }
+  ],
+  "device_case_groups": {
+    "87a16fce9be0206fff4cc0b06b37177fd353ca58": 22,
+    "4d2c7607e3545a9709c3f3119578ca5be675a991": 2
+  },
+  "qualification": {
+    "device_distinct_cases": 24,
+    "device_invocations": "22PASS/2fixtureFAIL at87a16fc, then exactly2 corrected SQL probes PASS at4d2c760; no single final-source24PASS claim",
+    "shared_session_native_cases": 64,
+    "shared_invocation": "Single64/64PASS at87a16fc, zero failures/skips",
+    "happy_case_repeated_within_device_cohort": true,
+    "production_unchanged_by_fixture_fix": true,
+    "fixture_correction": "Parameterize literal empty JSON in ExecuteSqlRawAsync; its unescaped braces caused FormatException before PostgreSQL. No product SQL, assertion, migration or policy was changed by this correction."
+  },
+  "build": {
+    "test_project": "Backend author final frozen-source no-restore build PASS0warnings0errors",
+    "fixture_only_rebuild": "Root --no-restore --no-dependencies PASS0/0 23.04s, qualified production module hash unchanged",
+    "ef_model": "Author ran existing local dotnet-ef has-pending-model-changes with no-build: exit0, No changes. Official generated migration20261115081132_P2DeviceEvidenceAndTrust; laterSQL-only hardening does not change model. Tool10.0.12/runtime10.0.13 informational difference retained; no dependency changes."
+  },
+  "review": {
+    "independent": "AI p2_013_bulk_review inspected8new source+4shared deltas for exact grant/correlation/privacyqualification/eligibility/finalpolicy/causaloutcome; no actionable finding, static only",
+    "root_findings_verified": "Actor-null terminalization rollback split; populated downgrade guard before removing triggers/tables; unqualified DELETE/TRUNCATE history bypass blocked. Actual SQL tests prove guards, retained rows and empty downgrade/up compatibility.",
+    "scope": "No real production policy/collector/privacy approval or physical-device authentication claim."
+  },
+  "security": {
+    "secret_scan": {
+      "files": 17,
+      "findings": 0,
+      "result": "PASS_SCOPED"
+    },
+    "sast": {
+      "files": 17,
+      "unchanged_rules": 4,
+      "findings": 0,
+      "result": "PASS_SCOPED",
+      "policy_sha256": "3c7e71681b62b44efcc56a486a845dea8f3b48276c91a245e9abd41ec72ee80c"
+    }
+  },
+  "remaining": [
+    "Private Device HTTPS/shared proof/local profile integration now in progress; not covered by this source checkpoint.",
+    "Approved D01-D03 Device UI implementation and actual per-item URL/VAL/UX acceptance.",
+    "Separate pending bulk visual consent.",
+    "Qualified production device collection/eligibility/processing/classification/retention and owner data lifecycle conformance; no production activation or cleanup qualification.",
+    "Required technical/native gates and whole013/P2 Product/integration/release remain pending."
+  ]
+}

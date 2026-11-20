@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "recorded_at": "2026-11-11T09:07:44.198110+00:00",
+  "observed_head": "3c9d4c388b2acff1c61f9f01ed6fee55d39b2d70",
+  "observed_work_item_state": "IN_PROGRESS",
+  "phase": "ARTIFACT_ONLY_TECHNICAL_SEAM_REVIEW",
+  "implementation_authorized_by_this_packet": false,
+  "tests_executed": false,
+  "production_profile_selected": false,
+  "status": "PROPOSED_SUPPORTED_MECHANISM_NOT_PRODUCTION_OR_EXECUTED_PROFILE",
+  "crypto_profile": {
+    "candidate_id": "NATIVE_BYTES_HEX32_IDENTITY_V3_SHA512_V1",
+    "generation": "RandomNumberGenerator.GetBytes(16) then Convert.ToHexString; no custom RNG or native default recovery token store.",
+    "canonical_input": "Raw input maximum39 characters. Exactly32 ASCII hex, or exactly8 groups of4 ASCII hex separated by ASCII hyphens; canonical uppercase32. Other Unicode/whitespace/separators/lengths rejected.",
+    "entropy": "128 random bits after the accepted canonical mapping; salt/verifier uniqueness does not prove generated-code uniqueness. Use bounded transient canonical collision detection.",
+    "native_hash": "PasswordHasher IdentityV3 PBKDF2-HMAC-SHA512 with native16-byte salt/32-byte subkey and required owner-supplied iterations.",
+    "pre_verify_admission": "Bound base64 length/decoded length, require V3 marker/PRF/salt/subkey and exact approved per-row profile iteration count before native Verify. Native configuration is not a cost cap; synchronous PBKDF2 cannot be preempted by a stopwatch.",
+    "domain_frame": [
+      "fixed recovery-verifier-purpose/version",
+      "authoritative AccountId",
+      "immutable set reference/generation",
+      "internal entry reference",
+      "format/verifier profile version",
+      "canonical code"
+    ],
+    "frame_mechanics": "Use fixed unambiguous versioned serialization and the native hasher; no ambiguous concatenation, generic-user purpose assumption, fast global code digest or copied KDF."
+  },
+  "replacement_mechanism": {
+    "candidate_id": "ATOMIC_RETIRE_EXACT_EXPECTED_SETS_AT_ISSUE_COMMIT_V1",
+    "plan": "Server-derived bounded exact owned set-reference/lifecycle-version list is bound into owner context. Generate has no retirement targets; Replace requires policy-admitted exact targets. Retire those and issue new verifiers in the same fresh-proof commit.",
+    "unsupported": [
+      "deferred or first-use retirement",
+      "implicit target selection by browser",
+      "session/proof-source mutation",
+      "automatic after-use replenishment"
+    ],
+    "selection_boundary": "Owner must explicitly select/admit this supported mechanism and cardinality/effects; absent or different active policy fails closed. No production replacement order or preserve/revoke default is selected here."
+  },
+  "delivery_mechanism": "Actual consented same-view display plus at most one requested local download; one winning server response only, no escrow or recovery of first delivery.",
+  "required_owner_values": [
+    "effective version/origin and native implementation binding",
+    "CodesPerSet and admitted set/pending-operation cardinalities",
+    "approved iterations plus stored-profile admission",
+    "measured candidate-count/hash-call/work/concurrency/time/collision bounds",
+    "Generate/Replace assurance/current source/intervals",
+    "exact replacement plan and explicit no-session-mutation admission for this adapter",
+    "processing/retention/holds/notification references",
+    "published supported impact/content"
+  ],
+  "activation_rule": "Cryptographic shape is concrete; numerical work and policy inputs must be explicit complete labelled finite or production owner values and measured/reviewed before activation. No arbitrary defaults are supplied.",
+  "research": {
+    "nist": "https://pages.nist.gov/800-63-4/sp800-63b/events/#saved-recovery-codes",
+    "rng": "https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.randomnumbergenerator?view=net-10.0",
+    "hasher": "https://github.com/dotnet/aspnetcore/blob/v10.0.13/src/Identity/Extensions.Core/src/PasswordHasher.cs",
+    "support": "https://dotnet.microsoft.com/en-us/platform/support/policy"
+  },
+  "version_boundary": "Pinned13 behavior and latest-support-table15 remain distinct; no dependency change or FIPS/NIST deployment certification is made."
+}

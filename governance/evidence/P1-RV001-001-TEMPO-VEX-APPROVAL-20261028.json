@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "received_at": "2026-10-28T20:16:10.596Z",
+  "provenance": "Direct authorized Product Owner answer in this conversation",
+  "question_item_id": "[\"request_user_input_async\",\"call_59332930e09644ba9c8e9fbc6e6199ea\",0]",
+  "answer": "Approve these scoped dev/test VEX corrections",
+  "packet": {
+    "path": "artifacts/security-followup-20261028/tempo-vex-review.md",
+    "sha256": "5347401ecb278ffae4b60ebdda2ac9ec2a7d2a78a979e5eabd7a0a0945f2e2c3"
+  },
+  "draft": {
+    "path": "artifacts/security-followup-20261028/tempo-plugin-vex-draft.json",
+    "sha256": "af6d18d7e7292f376458a7688abea62615e2756e6ec90428ad8cfa06976a6a5a"
+  },
+  "approved_cves": [
+    "CVE-2026-21728",
+    "CVE-2026-28377"
+  ],
+  "plugin_id": "tempo",
+  "plugin_version": "13.2.4",
+  "binary_sha256": "963c415f3eb286c4d9a1001cab275d9563d4bd4b548ad5b6dd84953e17be61b9",
+  "dependency_source_commit": "9db7df79d2af105a90d96484e6403e1fda0d011e",
+  "dependency_source_sum": "h1:RWARH/pJYWYyhMan2XnvecRlYxnWf4Wa1AmY067hI4I=",
+  "valid_until_utc": "2026-11-27T00:00:00Z",
+  "required_before_consumption": [
+    "Exact source/binary/context/hash guards",
+    "Architect/security/governance reviews",
+    "Positive and wrong-source/wrong-hash/wrong-CVE/expired-evidence rejection tests",
+    "Retain original unfiltered findings"
+  ],
+  "excluded": [
+    "Any other CVE, package version, plugin or binary",
+    "General ignore files or threshold reduction",
+    "Component removal",
+    "Registry publication",
+    "Protected-main merge",
+    "Production release or deployment"
+  ],
+  "authority_resolution_ref": "governance/evidence/P1-RV001-001-TEMPO-VEX-AUTHORITY-RESOLUTION-20261028.json",
+  "status": "SCOPE_AUTHORIZED_NOT_GATE_ACCEPTANCE"
+}

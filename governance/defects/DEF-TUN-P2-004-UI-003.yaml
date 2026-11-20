@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-004-UI-003",
+  "work_item_id": "TUN-P2-004",
+  "classification": "UI_ROUTING_DEFECT",
+  "severity": "SEV-3",
+  "status": "RESOLVED",
+  "environment": "P2 audit at 16a06672058dbc4074647611f893481bbb87e6e2",
+  "description": "When operation material expires before the still-valid browser context, progress returns NOT_FOUND but the UI keeps the same key; every retry targets the retained expired row. Required correction: Use the existing protected restart endpoint before exposing a new registration form, preserving old Account/evidence and unknown-response idempotency.",
+  "expected_behavior_ref": "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+  "evidence": [
+    "governance/evidence/P2-001-007-AUDIT-20261109.json",
+    "governance/evidence/p2-recovery-20261109/test-index.json",
+    "governance/evidence/p2-recovery-20261109/readonly-review.md"
+  ],
+  "affected_versions": [
+    "16a06672058dbc4074647611f893481bbb87e6e2"
+  ],
+  "created_at": "2026-11-09T10:46:27.012Z",
+  "updated_at": "2026-11-09T11:34:33.591Z"
+}

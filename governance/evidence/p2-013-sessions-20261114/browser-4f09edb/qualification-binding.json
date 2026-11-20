@@ -1,0 +1,414 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-013",
+  "result": "PASS_SELECTED_OTHER_SESSION_INCREMENT_ONLY",
+  "tested_commit_sha": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+  "sources": [
+    {
+      "path": "docs/contracts/session-listing-contract.md",
+      "git_blob": "5959fe38bc302f072c7c86b3cc46b3bcd5f1d8aa",
+      "working_sha256": "589035958c7fbf74f8c1079c7693678b3dd4862f4643d17443860e6d2d18befe"
+    },
+    {
+      "path": "docs/contracts/session-revocation-contract.md",
+      "git_blob": "14f104ca64fd135d8dd44d254d0de899aab787d3",
+      "working_sha256": "bb465148ddad7461d76f556bab4c851ec0fa2d3341f794ddb97553d001490ac6"
+    },
+    {
+      "path": "docs/contracts/ui-inventory.json",
+      "git_blob": "3d573e5771fc03becae2a2fa564982373833b35f",
+      "working_sha256": "1654f225d14fde2bf8ecd7284023bb1917c8e5de1731dc30effac369296b63c2"
+    },
+    {
+      "path": "docs/development/P2_013_SESSION_SCOPE.md",
+      "git_blob": "abf53878cfd421723e120e60f111304b799b0793",
+      "working_sha256": "49db455fa7d6b67338db2012e7c3db753532d310d50399bf0f7b5f9eab6eb3c3"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationApplication.cs",
+      "git_blob": "1af423219093497d683c8656bfc5bfe5be967aa9",
+      "working_sha256": "1b9e1f133f7d6247947d88d5aa44b63d0a5c836deda296872a9f6cc4cbb68a03"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "git_blob": "8d0cd42c3c47194461ec54b7e76c6956b77c8f55",
+      "working_sha256": "6a9303d92b52ac404748e672aeb380a333841cc675cc00404d3e612fe3475372"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationSessionListing.cs",
+      "git_blob": "91523dc9dfb4c6ff2113bb8a27d93bef19aa2e05",
+      "working_sha256": "7068fce953c48e3a1615354ad1bd3fd0a041ed639579ccb4696daebccbbe2f15"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationSessionLocking.cs",
+      "git_blob": "ebae855be0a823862593ff5946cc6b1affc405b3",
+      "working_sha256": "77d9352a3c0dcf77c20b491f6c74d64f52a33c7377eda38e9d22b93d15738e0f"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationSessionRevocation.cs",
+      "git_blob": "834c8367cb5f8f2168ce1445a7c1efd1c9301175",
+      "working_sha256": "56852c13b4ef19417f274f5fa38644da8cecdd2a6a995742dc520ab6c8e8c00e"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAuthentication.cs",
+      "git_blob": "94fb00d1453af2aaa52f087764da8299da8f118b",
+      "working_sha256": "963bb22b7dbbdd1cfba43a59870c92e681e2765230ec24814ae1bbacb9039451"
+    },
+    {
+      "path": "src/Modules/Identity/FederationOperationProofBrowserService.cs",
+      "git_blob": "9b95ee802b371422945457ef52f2e5d8f0b3190a",
+      "working_sha256": "858007d79e7cf4b69cbf229c01e5fd77ec63a0b955cb49d616b16cff7aea9219"
+    },
+    {
+      "path": "src/Modules/Identity/FederationStepUpOwner.cs",
+      "git_blob": "a7e5fd6331783585843d83922857b5f8bd276825",
+      "working_sha256": "e47521e6149aaffca2316b24e13a3009c2999076109bd44bd987cc0adf37f824"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs",
+      "git_blob": "d8e60b844b72754db7bd4b9f2488eed5d830a2ad",
+      "working_sha256": "5057cd4c9dea10a10f8ed7324c5bf5f32dccf94cd10d54d44748bf1b39db75b6"
+    },
+    {
+      "path": "src/Modules/Identity/SessionListingContracts.cs",
+      "git_blob": "62b2100e90c78045c9a9f90c09c76024d0865f1e",
+      "working_sha256": "04810c252465c27be57d0c3948e67553e1951a0a63c63ee597942c6ddc72235d"
+    },
+    {
+      "path": "src/Modules/Identity/SessionListingEndpoints.cs",
+      "git_blob": "0caefb8c97adc55e07d7bf234503f4ca2366a40f",
+      "working_sha256": "23ca6940b85f67a2cff9a3937277ee0ef9146ac781093d62bde5c094634ab354"
+    },
+    {
+      "path": "src/Modules/Identity/SessionListingPresentation.cs",
+      "git_blob": "e678cd90aa45fd89e52118d39640f040def78050",
+      "working_sha256": "f5d194d59d501d82390a444319603e2c14cdab06348e5dadf702ddf5a33d3339"
+    },
+    {
+      "path": "src/Modules/Identity/SessionRevocationApplication.cs",
+      "git_blob": "89ae19e2036f83d119a1a0f115f3651af38b2012",
+      "working_sha256": "0b6acc67268d80ec01489622700c52c906350859dd605be3b03f28a3c93e546f"
+    },
+    {
+      "path": "src/Modules/Identity/SessionRevocationBrowser.cs",
+      "git_blob": "41b2091117a3583e652a2a4a34bf9a7e9e587a08",
+      "working_sha256": "1da44fb12cf71913cfdf351b06e4d91ce7e7a5f2a74a96e6bd9d4d208f413d75"
+    },
+    {
+      "path": "src/Modules/Identity/SessionRevocationContracts.cs",
+      "git_blob": "9208fa4a05d10e48f32cb76b0d60d1dcb860548c",
+      "working_sha256": "c79d234e45d6ef7ac5f7c28ca59129cfe3e3d582d31e01f9cae2fafb1f58f2c3"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpApplication.cs",
+      "git_blob": "3649e5fc5409be50473e36891cb447715058d842",
+      "working_sha256": "2b1c6288676a919a6153c816cfcdd89259c9b5401710e004853aa625fe5200a8"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+      "git_blob": "2565a926587bbfe471e9b627e8aa9db0dc5cf93e",
+      "working_sha256": "21343e2bf0a42a190b6bb5e77ea963d61fe9dc4450620922a6e4107f0744c1a2"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpFederationBrowserEndpoints.cs",
+      "git_blob": "8f598c28f3b83760324047a00840b760fd9833d9",
+      "working_sha256": "e7fdb8b44a59c48c6e5536c5078f84f56d751bea38e7b120c48dbbfc78fea0d3"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs",
+      "git_blob": "39d6cd455e2cca0ede757098d723d1c534a2f2c1",
+      "working_sha256": "7e33cae39f2b0bac7dc4a63de5471275a97b57eb55e2b8589f22a788690b0175"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+      "git_blob": "9a99fb9a13eb136faf08bcfbb1d2c2bcbfdf2df2",
+      "working_sha256": "2b7ecd03a07cfc5338d98e4c548aa3e03381255fd0977eee76a4c84f31b9922e"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/SessionListingHttpTests.cs",
+      "git_blob": "d4c247c3c5384f24ea6d64e8436610c3068fcb31",
+      "working_sha256": "0eae7aef4d518c4e8f6cf1ed2b6d21ed895dbb57a13f581789daf8ea9326f126"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/SessionListingTests.cs",
+      "git_blob": "79a4e5d8cb11bccd7e2411aa1e222d441818c93e",
+      "working_sha256": "c812d70bd2aca57f235433d636a48ea9cca75b087cb903f88b0f3e9f7919a57e"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/SessionRevocationHttpTests.cs",
+      "git_blob": "565f05ac4d9918bb7a2ba72985e0cb7c9b094cd8",
+      "working_sha256": "744eb3ad61db7ca48cc3a12c7af0214073acc9b24f06e9b2935a8f4d7fc20990"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/SessionRevocationTests.cs",
+      "git_blob": "983930b6379685f99d81ec807ddb09ec510cc39f",
+      "working_sha256": "40b324262c61c8b243697fa33fd57e92095d5883d27ade7414307fa4026007bc"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestHost.cs",
+      "git_blob": "2efed215d3bb9c78dbbfa52c10238406b2a8e5a6",
+      "working_sha256": "9e5141251072bb054a6d0ca5d9ea31f9cc89ebf873d3415e1f3283affc36db80"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestSessions.cs",
+      "git_blob": "72bbb952b4f3c09e8af3e601c6361ff373246db1",
+      "working_sha256": "38e3ec71052883f62132a1772b9b47859d156fec53dbee4ea4fc57e8dcd3f39d"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestStepUp.cs",
+      "git_blob": "ceb1f0e7d143602abad97743770826c91c646ccd",
+      "working_sha256": "13e007c9aad2ccfa954c2896a55f01147cc6874f8f1970a1f8836fba67d221a6"
+    },
+    {
+      "path": "tools/browser-testing/Tunner.BrowserTesting.csproj",
+      "git_blob": "3403cd079f97767a89b873bddf099e8725e79088",
+      "working_sha256": "24100da0e7cb9c8daf1e7e0c5a400bc211513075bd624a11e61bb5c97eef9c47"
+    },
+    {
+      "path": "web/apps/user/federation.api.ts",
+      "git_blob": "5ca3b35b0701a2cfdf7aee1ae078db63c4082f0d",
+      "working_sha256": "9ee3b75d1decf850df4269e463a9f09c6309d9be369cd1a743f7a0ea9606500e"
+    },
+    {
+      "path": "web/apps/user/passkeys.api.ts",
+      "git_blob": "835b283e271c438f8cc2525e47e295fb48bc057f",
+      "working_sha256": "7d21b6fc9cc8917294a30451d5e552b65c731ac68139bee9018c60d7900372ad"
+    },
+    {
+      "path": "web/apps/user/passkeys.tsx",
+      "git_blob": "d81e8e26e386d5494a7785d88c143a33fc7c7f58",
+      "working_sha256": "41b80767ae232f154c1993bbac023105531c627a7ce739c87892e4837f59fc32"
+    },
+    {
+      "path": "web/apps/user/recovery-codes.api.ts",
+      "git_blob": "d5dc0d5f3f41ab04db2883668f81eb90745815e5",
+      "working_sha256": "1d81d52c2e2699c46d8a666dad49c765bd5b0b37e9075585e472dd1cdd078d67"
+    },
+    {
+      "path": "web/apps/user/sessions.api.ts",
+      "git_blob": "afbbd6dc323a1651c9ed18006c2e86b81ee7c0ee",
+      "working_sha256": "7f0174f9d043ed0d9a21b131877cd7437e1da9c8f269120862cbb79876a87808"
+    },
+    {
+      "path": "web/apps/user/sessions.content-keys.ts",
+      "git_blob": "37342d46b2880d4808c30804b235209effa638b1",
+      "working_sha256": "3d928246694506aab6a266b0c3ec5b6fa9f3ae6f23e76924170a84a27640022e"
+    },
+    {
+      "path": "web/apps/user/sessions.content.proposal.json",
+      "git_blob": "84dd12c39979dae54249b3eab70ecd8f623ba4f2",
+      "working_sha256": "521b8b944d327c903fff5bf31deffb18828bfb799a1cd6f9370cb50afc4e0a4c"
+    },
+    {
+      "path": "web/apps/user/sessions.css",
+      "git_blob": "1d75c73b1c46021cc338f4fde8e5953ca7701bf4",
+      "working_sha256": "4368efcfb6ca58589cd6895841266435c0e7d1d051b83ddc4527bffd01d999cc"
+    },
+    {
+      "path": "web/apps/user/sessions.html",
+      "git_blob": "36e86f2817f5a0ac30815ced400dccaac65b6d0d",
+      "working_sha256": "796d94cb0e44fce5d589f9ad6d4fd50eacfdfd478cd0b100422a596d7d7f5146"
+    },
+    {
+      "path": "web/apps/user/sessions.revocation.tsx",
+      "git_blob": "20862b117238d6927ec23e71d5af63efb23fea51",
+      "working_sha256": "15d34d6fa7cd741d751cbe507de598c57cb6c2abda44b89fd1172cf4e146ad45"
+    },
+    {
+      "path": "web/apps/user/sessions.routes.ts",
+      "git_blob": "609d879abbf39d2f7beac9d9f4f090ce1a7ecaf6",
+      "working_sha256": "850cfc8a8b7fef9c6ced0f8f11539bc5da4b9740b9cced5f672992221d1d1ce6"
+    },
+    {
+      "path": "web/apps/user/sessions.tsx",
+      "git_blob": "c73c59fb9c8a04b58bca24aff923480918475574",
+      "working_sha256": "b77639a9dc0b2f92be1f9fd6ce1ed1f3582ebc7d454dd13f0431cb85b53f7f7f"
+    },
+    {
+      "path": "web/apps/user/sessions.ui.tsx",
+      "git_blob": "5eb6cb73dfe98d77dc979f3411e285f4d069d6d6",
+      "working_sha256": "b61a885796ed03cacf8f75561d8500e3999ae4c171a05c9242dc553a6a6c0ef5"
+    },
+    {
+      "path": "web/apps/user/step-up.completion.ts",
+      "git_blob": "40c32ba0791259d0fda949949569767686324dc2",
+      "working_sha256": "1f451f8100cb72f00832c9e88be8b7d464b286d8999e691192935c929c2a6413"
+    },
+    {
+      "path": "web/apps/user/step-up.content.proposal.json",
+      "git_blob": "d02386b3e8e95864e951f45a68d78c0611d673dc",
+      "working_sha256": "f3638a44572dddba70188d47cca5b63fa359ffc9fcaece81f0b6423c37f4b499"
+    },
+    {
+      "path": "web/apps/user/step-up.css",
+      "git_blob": "1711d6dd2a21633aea2aa6009d4a006b217e9820",
+      "working_sha256": "d2b834b36459cd1bc374545e5103fbccd235c15908e4f8a8c2c0acd1a58f72a7"
+    },
+    {
+      "path": "web/apps/user/step-up.federation.tsx",
+      "git_blob": "9b45cb2c082dde95e2ed2daa620f27978448536b",
+      "working_sha256": "821339815a8246369a96d4800f3beb882415ae6f23de406a718597d47a4e5c85"
+    },
+    {
+      "path": "web/apps/user/step-up.passkey.ts",
+      "git_blob": "6ecd273214a5126de046adeb7d3ba4660198a34e",
+      "working_sha256": "e1bef6dfece91676d7dc64212a42795070b82324933953a631a7de425618503f"
+    },
+    {
+      "path": "web/apps/user/step-up.totp.tsx",
+      "git_blob": "f48615cf9d3bc1d0f9d7c8eeda4213af67cfba42",
+      "working_sha256": "99507fa6461ebb5e3cdcbdff39b9e2f2eb7d82943f2067e6d30bb5fe3ed6e0f4"
+    },
+    {
+      "path": "web/apps/user/step-up.tsx",
+      "git_blob": "8499d6fc755c19072b912f970d02a8a11fd1715b",
+      "working_sha256": "68d47cb50b526a6d8c5a03c23d45dc4080b853231baa7b5206e49179a339800f"
+    },
+    {
+      "path": "web/apps/user/totp.api.ts",
+      "git_blob": "7e8a4c5f2ca3e46ef78b97eeec93bc9b74a31679",
+      "working_sha256": "4ec05c3c846acb3237f47964ba3bf4c3258a6929feb65d56cdbba5d875929580"
+    },
+    {
+      "path": "web/apps/user/totp.code.tsx",
+      "git_blob": "cc263705496709cb4192d45c83e64bc4d4d5670d",
+      "working_sha256": "2bc7d8a675ad6b793e5025c430abaa21b7c035d073e3da919521312a80206357"
+    },
+    {
+      "path": "web/apps/user/totp.content-keys.ts",
+      "git_blob": "cedfa5020970e1fb973c3fb1662954d87879a34c",
+      "working_sha256": "e0af7e50a591041c674fb992ec33ffbda1630e33149119706627c5cbd328fe14"
+    },
+    {
+      "path": "web/apps/user/totp.css",
+      "git_blob": "ac46a8f3077c4e4cc3ea5a3e7b57c62b9caa4741",
+      "working_sha256": "7b75dabcd05092f584ebebef75b100da52b130a3b2b067e43cef93754c807470"
+    },
+    {
+      "path": "web/apps/user/totp.picker.tsx",
+      "git_blob": "c40ab5255bce748d8f56a5cffbff49f7792f3162",
+      "working_sha256": "18143e2ed9bc1b52709386939ed2cab66bc9b68264c79b476d1d11701a6c441c"
+    },
+    {
+      "path": "web/apps/user/totp.validation.ts",
+      "git_blob": "ad876cde4f9b1a293562782526222517c989bd58",
+      "working_sha256": "3eb9b3316bc680398d337ea95a3374a9c95482030d83e9bff8e517fac97f21da"
+    },
+    {
+      "path": "web/apps/user/vite.config.ts",
+      "git_blob": "a387d68d8f485af0fb06384bc66285f6e04b1039",
+      "working_sha256": "f7508db56d05d79960e967c9a0b4bd9703a88232863d4dc5af4febc547099c75"
+    },
+    {
+      "path": "web/packages/ui/src/content.tsx",
+      "git_blob": "e9b10d155b9bf06bc80454e4714e33c75b08029f",
+      "working_sha256": "38e6efb190d36c1b1744d55cf200d3c7bd555661a4c78eb20015bff6278e94b6"
+    },
+    {
+      "path": "web/packages/ui/src/controls.tsx",
+      "git_blob": "ae1d997a7b76eae8a76b74af3328ac1573329c7e",
+      "working_sha256": "1efa6f238ddc65c1cf6adcb3639eceb1bc44837d6a20f1c5e26ffa3f37281b78"
+    },
+    {
+      "path": "web/packages/ui/src/dialog.tsx",
+      "git_blob": "376d07c8953aa24ffe2c03fa4938050b8cd8b0d7",
+      "working_sha256": "29004f6f70676a49fadaca48020b02c363e61a1d2647130d3963eb0d4ef8560c"
+    },
+    {
+      "path": "web/packages/ui/src/forms.tsx",
+      "git_blob": "a60383e7bbe73eaefc55c250be209fd2eff85b2c",
+      "working_sha256": "c68bbf115c0cb0b5ff80938b56cc09b99e136abe10a218e93a8b24264b16acb3"
+    },
+    {
+      "path": "web/playwright.sessions.config.ts",
+      "git_blob": "54b3450607955f5c522f41c05c0de7d6dc32c715",
+      "working_sha256": "f8d7709064b481781ecd82a4cae28994edd6c187bb5997a84614d6ac2220890c"
+    },
+    {
+      "path": "web/tests/browser-testing/sessions-flow.spec.ts",
+      "git_blob": "3bfdbac37153aca4d516177c007e55da83c25961",
+      "working_sha256": "4168cf01eb668fad9acc28a2388a67f8584939192aa026a0d88ddc63d82cf881"
+    },
+    {
+      "path": "web/tests/sessions.api.test.tsx",
+      "git_blob": "0d30e7d54676950e5848ba3cdd44eb72aa6a6724",
+      "working_sha256": "8f42562d8348ce56ee2f66f18e59aaea09096cbd15c6d4cda5b4edcec26b7b27"
+    },
+    {
+      "path": "web/tests/sessions/sessions.spec.ts",
+      "git_blob": "75a106cdfc0f4d74b6e6233855b4d4f1cf5b4dbd",
+      "working_sha256": "92db8c7efffb3e59dda5a931dfa7fe6bfdddf5ddf92bfcdf2ada2a441e5bec2b"
+    }
+  ],
+  "actual_invocations": [
+    {
+      "source": "075485ba3c03073855f5b16ae1961f3e4110636e",
+      "evidence": "governance/evidence/p2-013-sessions-20261114/revocation-075485b/qualification.json",
+      "kind": "APPLICATION",
+      "count": 18
+    },
+    {
+      "source": "7a6a69b4e806309eeb98396b8e5ccf9ca3de29d3",
+      "evidence": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/http20-7a6a69b/summary.json",
+      "kind": "HTTPS",
+      "count": 20
+    },
+    {
+      "source": "8b65583cbf59960e6da63b65c79b58dede75f7b0",
+      "evidence": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/ui42-8b65583/summary.json",
+      "kind": "API_AND_CONTROLLED_BROWSER",
+      "count": 42
+    },
+    {
+      "source": "7a6a69b4e806309eeb98396b8e5ccf9ca3de29d3",
+      "evidence": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/responsive4-7a6a69b/summary.json",
+      "kind": "ADDITIONAL_RESPONSIVE",
+      "count": 4
+    },
+    {
+      "source": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+      "evidence": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/summary.json",
+      "kind": "FRESH_AFFECTED_VISUAL_CASES",
+      "count": 6
+    },
+    {
+      "source": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+      "evidence": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/feedback2-4f09edb/summary.json",
+      "kind": "FRESH_AFFECTED_FEEDBACK_CASES",
+      "count": 2
+    },
+    {
+      "source": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+      "evidence": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/summary.json",
+      "kind": "REAL_BFF_SMTP_TWO_BROWSER_SESSION_JOURNEY",
+      "count": 1
+    }
+  ],
+  "application_source_equivalence": {
+    "from": "075485ba3c03073855f5b16ae1961f3e4110636e",
+    "changed_paths": [],
+    "paths": [
+      "src/Modules/Identity/AuthenticationApplication.cs",
+      "src/Modules/Identity/FederationAuthentication.cs",
+      "src/Modules/Identity/StepUpApplication.cs",
+      "src/Modules/Identity/AuthenticationSessionLocking.cs",
+      "src/Modules/Identity/AuthenticationSessionRevocation.cs",
+      "src/Modules/Identity/SessionRevocationApplication.cs",
+      "src/Modules/Identity/SessionRevocationContracts.cs",
+      "tests/Tunner.Identity.Persistence.Tests/SessionRevocationTests.cs"
+    ]
+  },
+  "http_source_equivalence": {
+    "from": "7a6a69b4e806309eeb98396b8e5ccf9ca3de29d3",
+    "changed_paths": [],
+    "paths": [
+      "src/Modules/Identity/SessionRevocationBrowser.cs",
+      "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+      "tests/Tunner.Identity.Persistence.Tests/SessionRevocationHttpTests.cs"
+    ]
+  },
+  "frontend_qualification": "42 original cases plus four distinct responsive cases. Fresh six-case and two-case invocations requalify CSS-affected states; they are repeats of existing case identities, not eight additional unique cases. Live test executes actual BFF, PostgreSQL and SMTP; controlled tests remain separately identified.",
+  "security_evidence": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/security-7a6a69b.json",
+  "security_after_7a": "Only one test locator and approved CSS presentation changed; no new executable backend or dependency source.",
+  "limitations": "No whole-P2-013 acceptance, device/trust/bulk completion, Product propagation, production policy, live provider or release claim."
+}

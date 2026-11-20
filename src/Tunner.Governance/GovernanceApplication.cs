@@ -30,12 +30,19 @@ public static class GovernanceApplication
     ];
 
     public static CommandResult Validate(DirectoryInfo repository)
+        => Validate(repository, new CommittedProofAssessment(repository));
+
+    internal static CommandResult Validate(DirectoryInfo repository, CommittedProofAssessment assessment)
     {
         var diagnostics = new List<Diagnostic>();
         AddAuthorityDiagnostics(repository, diagnostics);
         var schemas = SchemaCatalog.Load(repository, diagnostics);
         var records = LoadRecords(repository, diagnostics);
+        // Resolve mutable HEAD again for every validation; only explicit historical objects may be reused.
+        var head = records.Any(record => record.Type.DefinitionName == "revision")
+            ? RevisionApplication.Git(repository, "rev-parse", "--verify", "HEAD") : null;
         _ = IntegrationPolicy.Load(repository, diagnostics);
+        JsonSchema? gitStateSchema = null;
 
         foreach (var record in records)
         {
@@ -65,9 +72,12 @@ public static class GovernanceApplication
 
             if (record.Fields.TryGetValue("git_state", out var gitState))
             {
-                using var library = JsonDocument.Parse(File.ReadAllText(Path.Combine(repository.FullName, "governance/schemas/v1/governance-record.schema.json")));
-                var executable = JsonSchema.FromText("{\"$defs\":" + library.RootElement.GetProperty("$defs").GetRawText() + ",\"$ref\":\"#/$defs/gitState\"}");
-                if (!executable.Evaluate(JsonSerializer.SerializeToElement(RevisionApplication.ToJson(gitState))).IsValid)
+                if (gitStateSchema is null)
+                {
+                    using var library = JsonDocument.Parse(File.ReadAllText(Path.Combine(repository.FullName, "governance/schemas/v1/governance-record.schema.json")));
+                    gitStateSchema = JsonSchema.FromText("{\"$defs\":" + library.RootElement.GetProperty("$defs").GetRawText() + ",\"$ref\":\"#/$defs/gitState\"}");
+                }
+                if (!gitStateSchema.Evaluate(JsonSerializer.SerializeToElement(RevisionApplication.ToJson(gitState))).IsValid)
                     diagnostics.Add(Diagnostic.Error(record.Path, gitState.Start, "GOV_GIT_STATE_SCHEMA", "git_state fails executable required field/type/SHA validation"));
             }
 
@@ -78,7 +88,7 @@ public static class GovernanceApplication
         }
 
         AddAuthorityResolutionDiagnostics(records, diagnostics);
-        RevisionApplication.AddDiagnostics(repository, records, diagnostics);
+        RevisionApplication.AddDiagnostics(repository, records, diagnostics, assessment, head);
 
         var isValid = diagnostics.All(item => item.Severity != "ERROR");
         return new CommandResult(isValid ? 0 : 1, "validate", new ValidationPayload(isValid, records.Count, diagnostics));
@@ -100,17 +110,32 @@ public static class GovernanceApplication
         return new CommandResult(validation.ExitCode, "status", new StatusPayload(milestones, workItems, validation.Payload, RevisionApplication.Status(records), RevisionApplication.HistoricalScopes(repository, records)));
     }
 
-    public static CommandResult Next(DirectoryInfo repository)
+    public static CommandResult Next(DirectoryInfo repository) => NextCore(repository, null);
+
+    /// <summary>Assess one declared scope using the same global validation and complete prerequisite universe.</summary>
+    public static CommandResult Next(DirectoryInfo repository, string scopeId)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(scopeId);
+        return NextCore(repository, scopeId);
+    }
+
+    private static CommandResult NextCore(DirectoryInfo repository, string? scopeId)
     {
         var diagnostics = new List<Diagnostic>();
         var records = LoadRecords(repository, diagnostics);
         var workItems = WorkItems(records);
+        if (scopeId is not null && !workItems.ContainsKey(scopeId) &&
+            !records.Any(item => item.Type.DefinitionName == "revision" && StringComparer.Ordinal.Equals(item.Identifier, scopeId)))
+            diagnostics.Add(Diagnostic.Error("governance", null, "GOV_SCOPE_NOT_FOUND", "selected scope does not exist: " + scopeId));
         var dependencies = DependencyRecords(records);
         var integrationPolicy = IntegrationPolicy.Load(repository, diagnostics);
         var allowValidatedP0Prerequisites = HasApprovedP0LocalIntegration(records);
         var next = new List<NextItem>();
         var integrationActions = new List<IntegrationAction>();
-        var validation = (ValidationPayload)Validate(repository).Payload;
+        // A single assessment reuses identical prerequisite proof; new commands always start fresh.
+        var committedReadiness = new Dictionary<(string PrerequisiteId, string EffectiveState), bool>();
+        var assessment = new CommittedProofAssessment(repository);
+        var validation = (ValidationPayload)Validate(repository, assessment).Payload;
         diagnostics.AddRange(validation.Diagnostics);
 
         var authority = AuthorityApplication.Verify(repository);
@@ -122,14 +147,14 @@ public static class GovernanceApplication
                 diagnostics.Add(Diagnostic.Error("docs/authority", null, "GOV_AUTHORITY_INVALID", finding));
             }
 
-            foreach (var record in workItems.Values.Where(item => !TerminalStates.Contains(item.Scalar("status") ?? "UNKNOWN", StringComparer.Ordinal)).OrderBy(item => item.Identifier, StringComparer.Ordinal))
+            foreach (var record in workItems.Values.Where(item => scopeId is null || StringComparer.Ordinal.Equals(item.Identifier, scopeId)).Where(item => !TerminalStates.Contains(item.Scalar("status") ?? "UNKNOWN", StringComparer.Ordinal)).OrderBy(item => item.Identifier, StringComparer.Ordinal))
             {
                 next.Add(new NextItem(record.Identifier, record.Scalar("status") ?? "UNKNOWN", false, "authority verification failed"));
             }
 
             return new CommandResult(1, "next", new NextPayload(next, [], diagnostics));
         }
-        foreach (var record in workItems.Values.OrderBy(item => item.Identifier, StringComparer.Ordinal))
+        foreach (var record in workItems.Values.Where(item => scopeId is null || StringComparer.Ordinal.Equals(item.Identifier, scopeId)).OrderBy(item => item.Identifier, StringComparer.Ordinal))
         {
             var state = record.Scalar("status") ?? "UNKNOWN";
             if (TerminalStates.Contains(state, StringComparer.Ordinal))
@@ -137,7 +162,7 @@ public static class GovernanceApplication
                 continue;
             }
 
-            var reasons = ReadinessReasons(repository, record, workItems, dependencies, integrationPolicy, allowValidatedP0Prerequisites);
+            var reasons = ReadinessReasons(repository, record, workItems, dependencies, integrationPolicy, allowValidatedP0Prerequisites, committedReadiness, assessment);
             var revisionReasons = RevisionApplication.BlockingReasons(records, record);
             reasons.AddRange(revisionReasons);
             integrationActions.AddRange(PendingIntegrationActions(repository, record, workItems, dependencies, integrationPolicy));
@@ -148,7 +173,9 @@ public static class GovernanceApplication
             next.Add(new NextItem(record.Identifier, state, validation.IsValid && reasons.Count == 0, reason));
         }
 
-        next.AddRange(RevisionApplication.Next(repository, records, validation.IsValid));
+        if (scopeId is null || records.Any(item => item.Type.DefinitionName == "revision" && StringComparer.Ordinal.Equals(item.Identifier, scopeId)))
+            next.AddRange(RevisionApplication.Next(repository, records, validation.IsValid)
+                .Where(item => scopeId is null || StringComparer.Ordinal.Equals(item.WorkItemId, scopeId)));
 
         var actions = integrationActions
             .DistinctBy(item => (item.WorkItemId, item.PrerequisiteWorkItemId, item.RequiredReadiness))
@@ -159,6 +186,9 @@ public static class GovernanceApplication
     }
 
     public static CommandResult CheckGate(DirectoryInfo repository, string workItemId)
+        => CheckGate(repository, workItemId, new CommittedProofAssessment(repository));
+
+    internal static CommandResult CheckGate(DirectoryInfo repository, string workItemId, CommittedProofAssessment assessment)
     {
         var diagnostics = new List<Diagnostic>();
         var records = LoadRecords(repository, diagnostics);
@@ -168,9 +198,9 @@ public static class GovernanceApplication
             return new CommandResult(2, "gate check", new GatePayload(workItemId, "NOT_FOUND", ["work item does not exist"], []));
         }
 
-        var failures = ReadinessReasons(repository, workItem, workItems, DependencyRecords(records), IntegrationPolicy.Load(repository, diagnostics), HasApprovedP0LocalIntegration(records));
+        var failures = ReadinessReasons(repository, workItem, workItems, DependencyRecords(records), IntegrationPolicy.Load(repository, diagnostics), HasApprovedP0LocalIntegration(records), assessment: assessment);
         failures.AddRange(RevisionApplication.BlockingReasons(records, workItem));
-        failures.AddRange(CommitReadinessApplication.Check(repository, workItem));
+        failures.AddRange(CommitReadinessApplication.Check(repository, workItem, "LOCAL_VALIDATED", assessment));
         var authority = AuthorityApplication.Verify(repository);
         if (authority.ExitCode != 0)
         {
@@ -200,6 +230,7 @@ public static class GovernanceApplication
             failures.Add($"role review evidence missing: {reviewEvidence}");
         }
 
+        UiComplianceApplication.AddGateFailures(repository, workItem, failures, satisfied);
         var roleCheck = RoleActivationApplication.CheckReviews(repository, workItem, records);
         failures.AddRange(roleCheck.Failures);
         satisfied.AddRange(roleCheck.Satisfied);
@@ -237,6 +268,14 @@ public static class GovernanceApplication
                 workItem.StringList("defects").Any(id => records.Any(x => x.Type.DefinitionName == "defect" && x.Identifier == id));
             var valid = ((ValidationPayload)Validate(repository).Payload).IsValid;
             return new CommandResult(causation && valid ? 0 : 1, "transition check", new TransitionPayload(workItemId, from, destination, causation && valid ? "ALLOWED" : "REJECTED", "Approved Document 03: reopened active acceptance/release work resumes active work with preserved completion causation."));
+        }
+        if (from == "UI_REQUIRED" && destination == "REFINEMENT")
+        {
+            var failures = ResolvedUiRequiredFailures(repository, workItem, records);
+            return new CommandResult(failures.Count == 0 ? 0 : 1, "transition check", new TransitionPayload(workItemId, from, destination,
+                failures.Count == 0 ? "ALLOWED" : "REJECTED", failures.Count == 0
+                    ? "Approved Document 10: resolved, committed and validated UI work returns to refinement; ordinary sequential lifecycle and Product acceptance remain required."
+                    : string.Join("; ", failures)));
         }
         if (policy.SideStates.Contains(from, StringComparer.Ordinal) || policy.SideStates.Contains(destination, StringComparer.Ordinal))
         {
@@ -484,7 +523,7 @@ public static class GovernanceApplication
             return;
         }
 
-        var logicalPath = $"governance/evidence/{milestone.Identifier}-MILESTONE-ROLE-REVIEWS.json";
+        var logicalPath = MilestoneReviewRevalidation.Resolve(repository, milestone, $"governance/evidence/{milestone.Identifier}-MILESTONE-ROLE-REVIEWS.json");
         var path = Path.Combine(repository.FullName, logicalPath.Replace('/', Path.DirectorySeparatorChar));
         if (!File.Exists(path))
         {
@@ -611,7 +650,36 @@ public static class GovernanceApplication
     internal static Dictionary<string, GovernanceRecord> WorkItems(IReadOnlyList<GovernanceRecord> records)
         => records.Where(item => item.Type.DefinitionName == "work-item" && item.Identifier.Length > 0).GroupBy(item => item.Identifier, StringComparer.Ordinal).ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
 
-    private static List<string> ReadinessReasons(DirectoryInfo repository, GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy, bool allowValidatedP0Prerequisites)
+    private static IReadOnlyList<string> ResolvedUiRequiredFailures(DirectoryInfo repository, GovernanceRecord workItem, IReadOnlyList<GovernanceRecord> records)
+    {
+        var failures = new List<string>();
+        if (CommitReadinessApplication.Read(workItem)?.RepositoryChanged != true)
+            failures.Add("resolved UI_REQUIRED work requires committed repository-changing validation");
+        if (!workItem.Fields.TryGetValue("authority_resolution", out var node) || node is not YamlMappingNode resolution ||
+            Scalar(Fields(resolution), "outcome") != "RESOLVED_EXISTING_AUTHORITY")
+            failures.Add("resolved UI_REQUIRED work requires a recorded existing-authority resolution");
+        var uiReference = workItem.Scalar("ui_evidence_ref");
+        if (string.IsNullOrWhiteSpace(uiReference)) failures.Add("resolved UI_REQUIRED work requires scope-bound UI evidence");
+        foreach (var field in new[] { "todos", "defects" })
+        {
+            var type = field == "todos" ? "todo" : "defect";
+            var closed = field == "todos" ? new[] { "DONE", "CANCELED", "NOT_APPLICABLE", "SUPERSEDED" }
+                : new[] { "CLOSED", "RESOLVED", "NOT_APPLICABLE", "SUPERSEDED" };
+            foreach (var reference in workItem.StringList(field))
+            {
+                var matches = records.Where(record => record.Type.DefinitionName == type && record.Identifier == reference).ToArray();
+                if (matches.Length != 1 || !closed.Contains(matches[0].Scalar("status"), StringComparer.Ordinal))
+                    failures.Add("resolved UI_REQUIRED work has a missing, ambiguous or unresolved tracked " + type + ": " + reference);
+            }
+        }
+        if (failures.Count > 0) return failures;
+        failures.AddRange(((GatePayload)CheckGate(repository, workItem.Identifier).Payload).Failures);
+        failures.AddRange(((UiCompliancePayload)UiComplianceApplication.Check(repository, workItem.Identifier, uiReference!).Payload).Failures);
+        return failures.Distinct(StringComparer.Ordinal).ToArray();
+    }
+
+    private static List<string> ReadinessReasons(DirectoryInfo repository, GovernanceRecord workItem, Dictionary<string, GovernanceRecord> workItems, IReadOnlyList<GovernanceRecord> dependencies, IntegrationPolicyDefinition integrationPolicy, bool allowValidatedP0Prerequisites,
+        Dictionary<(string PrerequisiteId, string EffectiveState), bool>? committedReadiness = null, CommittedProofAssessment? assessment = null)
     {
         var failures = new List<string>();
         foreach (var prerequisite in workItem.StringList("prerequisites"))
@@ -637,16 +705,25 @@ public static class GovernanceApplication
                 continue;
             }
 
-            if (!HasRequiredCommittedState(repository, prerequisiteRecord))
-            {
-                failures.Add($"prerequisite '{prerequisite}' lacks valid committed-state readiness evidence");
-                continue;
-            }
-
-
             if (!IsPrerequisiteReady(repository, workItem, prerequisiteRecord, declaration, readiness, allowValidatedP0Prerequisites))
             {
                 failures.Add($"prerequisite '{prerequisite}' requires {readiness} but is {prerequisiteRecord.Scalar("status") ?? "UNKNOWN"}");
+                continue;
+            }
+
+            // VALIDATION may satisfy local dependencies only with the same current source proof as LOCAL_VALIDATED.
+            var effectiveState = readiness == "LOCAL_VALIDATED" ? "LOCAL_VALIDATED" : null;
+            var proofKey = (prerequisiteRecord.Identifier, effectiveState ?? prerequisiteRecord.Scalar("status") ?? "UNKNOWN");
+            var proofFailures = new List<string>();
+            if (committedReadiness is null || !committedReadiness.TryGetValue(proofKey, out var hasCommittedState))
+            {
+                hasCommittedState = HasRequiredCommittedState(repository, prerequisiteRecord, effectiveState, assessment, proofFailures);
+                if (committedReadiness is not null) committedReadiness[proofKey] = hasCommittedState;
+            }
+            if (!hasCommittedState)
+            {
+                failures.Add($"prerequisite '{prerequisite}' lacks valid committed-state readiness evidence");
+                failures.AddRange(proofFailures.Select(reason => $"prerequisite '{prerequisite}' committed-state proof: {reason}"));
             }
         }
 
@@ -701,15 +778,18 @@ public static class GovernanceApplication
     private static bool RequiresCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null)
         => CommitReadinessApplication.IsRequired(repository, record, state);
 
-    private static bool HasRequiredCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null)
+    private static bool HasRequiredCommittedState(DirectoryInfo repository, GovernanceRecord record, string? state = null, CommittedProofAssessment? assessment = null, List<string>? proofFailures = null)
     {
         if (!RequiresCommittedState(repository, record, state))
         {
             return true;
         }
 
-        return CommitReadinessApplication.Read(record) is not null
-            && CommitReadinessApplication.Check(repository, record).Count == 0;
+        if (CommitReadinessApplication.Read(record) is null) return false;
+        var failures = CommitReadinessApplication.Check(repository, record, state, assessment ?? new CommittedProofAssessment(repository));
+        if (proofFailures is not null)
+            foreach (var failure in failures) proofFailures.Add(failure);
+        return failures.Count == 0;
     }
 
     private static bool IsPrerequisiteReady(DirectoryInfo repository, GovernanceRecord workItem, GovernanceRecord prerequisite, GovernanceRecord? declaration, string readiness, bool allowValidatedP0Prerequisites)

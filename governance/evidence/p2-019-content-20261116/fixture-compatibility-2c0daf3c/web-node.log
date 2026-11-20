@@ -1,0 +1,79 @@
+$ node --test tests/theme.test.mjs && vite build --config tests/vite.config.ts && node --test tests/dist/contracts.test.js
+✔ deterministic compiled profiles preserve exact Figma control roles (9.7872ms)
+✔ unknown alias fails with the responsible reference (1.1153ms)
+✔ component alias cycle fails (0.8525ms)
+✔ missing approved surface and incomplete semantic profile fail (0.6834ms)
+✔ future mode requires a complete profile for both surfaces (4.1004ms)
+✔ noncanonical token names and CSS injection are rejected (0.6823ms)
+✔ unsupported schema fails (0.7058ms)
+✔ checked-in generated views are current and root-independent (130.8991ms)
+✔ text, actions, errors and interactive boundaries meet governed contrast (1.5244ms)
+✔ duplicate source properties and stale generated output fail (2.1569ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 326.4354
+vite v8.2.4 building client environment for production...
+transforming...
+✓ 126 modules transformed.
+rendering chunks...
+computing gzip size...
+tests/dist/contracts.test.js  537.77 kB │ gzip: 92.43 kB
+
+✓ built in 195ms
+✔ TOTP code grammar preserves leading zeroes and mirrors the server ASCII separators and raw bound (12.0337ms)
+✔ TOTP reconciliation rejects another operation, selected source, kind or expected version (6.2362ms)
+✔ one-time disclosure requires exact original IDs and matching local otpauth/manual-key material without raw diagnostics (6.2711ms)
+✔ MFA-required is not final authentication and final recovery requires the exact request receipt (2.918ms)
+✔ terminal result cannot turn a generic session loss or another factor action into confirmed removal (1.8846ms)
+✔ server replay rejection keeps its safe classification and selects the published TOTP replay variant (63.1559ms)
+✔ current factor capabilities remain explicit and a missing server capability fails closed without raw diagnostics (5.0662ms)
+✔ recovery options preserve both independently admitted actions without choosing capacity or targets (6.8151ms)
+✔ safe recovery options and operation reads reject a delivery field even when null (9.8829ms)
+✔ missing published current impact never becomes an enabled pending operation (3.9516ms)
+✔ safe versions, profiles and explicit count bounds fail closed before use (3.3428ms)
+✔ current publication must match held original version, digest, key, facts and exact interval (3.5115ms)
+✔ start reconciliation is exact original owner identity and kind, not a new request (0.4264ms)
+✔ safe completed operation means unavailable, never a fresh display grant (0.4886ms)
+✔ winning delivery is synchronously captured before safe completion and only once (2.7986ms)
+✔ owner and proof request identifiers are independently bound (0.599ms)
+✔ all immutable set, context and profile bindings must match the held original (0.8052ms)
+✔ delivery count, uniqueness and canonical response representation are admitted before capture (1.5319ms)
+✔ a canceled or stale receiver cannot capture a late winning body (0.363ms)
+✔ unexpected recipient, terminal combination and extra carrier fields reject rather than strip (0.7873ms)
+✔ legacy completion and body-loss status remain safe without manufacturing delivery (0.321ms)
+✔ SSR is browser-independent with plain brand and no icon (18.8062ms)
+✔ native button defaults to button, with explicit owner submit supported (2.777ms)
+✔ owner disabled and busy state preserved (1.2857ms)
+✔ content text is escaped and provenance is preserved (1.1252ms)
+✔ published templates render escaped bounded variables and retain original provenance (2.654ms)
+✔ missing required key fails without fallback (1.1714ms)
+✔ mismatched key or locale and unpublished snapshots fail (1.9443ms)
+✔ missing provenance and blank required copy fail (1.875ms)
+✔ resolver receives bounded surface/locale/audience context (0.6625ms)
+✔ required theme/content boundaries fail explicitly (0.5777ms)
+✔ invalid modes/surfaces fail rather than silently applying defaults (0.3965ms)
+✔ empty locale/audience is rejected (0.494ms)
+✔ field label/help/error IDs and noncolor text preserve associations (1.8789ms)
+✔ absent optional slots stay absent (1.5311ms)
+✔ generated label IDs are unique (1.8218ms)
+✔ nested surface providers preserve independent DOM boundaries (2.071ms)
+✔ placeholder requires its own published copy and provenance while retaining the visible label (1.8287ms)
+✔ typed schemas enforce required, format, range and cross-field rules using domain keys (2.4127ms)
+✔ schema form-level errors and published summary remain separate from field rules (2.133ms)
+✔ domain schemas use current policy and do not inherit historical Figma password or age restrictions (7.6812ms)
+✔ DOB schema is calendar-safe and rejects future dates without client age eligibility policy (0.2123ms)
+✔ every implemented screen route agrees with the central inventory and known BFF fallback contract (1.1082ms)
+✔ Admin native Identity versions 13 and 15 round-trip without defaults or coercion (33.4984ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 44
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 587.2912

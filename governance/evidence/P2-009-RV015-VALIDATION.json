@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-009-RV015",
+  "owner_work_item": "TUN-P2-009",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "native_transition_receipts": {"validation": "ALLOWED", "closed": "ALLOWED", "closure_checked_commit": "29e90670405fc4ac6a24557f5fdfc83395101ce9", "findings": [], "recording_authorization": "call_79bd7d36c82d415090a3b4923c93a76e"},
+  "historical_backend_qualification_hold": {"decision_id":"call_e170b714d08449ea9f7de3d94153c1d8","answer":"Keep backend qualification blocked","current_backend_tests_executed":0,"evidence_ref":"governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json","scope":"Do not promote this expanded vector from frontend checks, historical qualification or Linux CI as a substitute for the unexecuted Windows/native-session cases."},
+  "tested_commit_sha": "9d42e94cf34c68628fdf8e105def23c2ce9c685a",
+  "validated_commit_sha": "9d42e94cf34c68628fdf8e105def23c2ce9c685a",
+  "historical_actual_tested_commit_sha": "36563dd35e5d1d4e84aaff5869163510b9bdbe41",
+  "actual_tested_commit_sha": "9d42e94cf34c68628fdf8e105def23c2ce9c685a",
+  "source_sha256": "25acbbb1b1e786bce25980b4607c38f3778088669a77b5dd79db5c19f100065b",
+  "source_sha256_path": "web/tests/contracts.test.tsx",
+  "tested_commit_semantics": "Windows143 actually ran at9d42e94c; all owned source objects unchanged from8d. Linux1418 actually ran at8f0f82e6, tree-equivalent8d; all current143 case IDs/names are Passed exactly once. Original executions retain their historical identities.",
+  "current_qualification": {
+    "result": "PASS",
+    "windows_cases": 143,
+    "failed": 0,
+    "skipped": 0,
+    "original_132_missing_ids": 0,
+    "session_database_cases": 9,
+    "session_contract_cases": 2,
+    "native_identity_version": "10.0.13",
+    "linux_identity_version": "10.0.15",
+    "raw_result_ref": "governance/evidence/p2-019-content-20261116/backend-resume-20261119/backend-143.trx",
+    "raw_result_sha256": "3f982813a534a8e702b10f0f7414c8df617b83ab2681343384bfc5d903fbd842",
+    "authorization_and_cache_ref": "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
+    "scope": "Current qualification supersedes the historical hold only for the executed143 obligation. Qualified host/starter bytes at7c,44 Node checks,7 actual browser cases and distinct retained default-case atd917 are reused by exact source identity, not claimed as a new8-case run. Root and one disclosed independent reviewer applied actual QA/Cyber contracts; native closure gates remain required."
+  },
+  "boundaries": "Technical compatibility only; no whole-CI, Product, production/provider activation, protected-main merge or release approval. Container remediation remains stopped.",
+  "owned_behavior_paths": [
+    "web/tests/contracts.test.tsx",
+    "src/Modules/Identity/RecoveryCodeContracts.cs",
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs",
+    "tools/browser-testing/Program.cs",
+    "tools/browser-testing/Tunner.BrowserTesting.csproj"
+  ],
+  "historical_qualification": "Windows13:132 affected cases PASS atd7e3fe11. Actual Linux15:1412 PASS, including all132 affected identities, at merge36563dd35 with exact tree equivalence to branchd5578374. Recovery native generation/profile/work limits, wrong-supported-version rejection and typed configuration/HTTP guards are covered on both qualified runtimes. All owned Git objects are unchanged through bd3739d3; lifecycle closure remains pending; no whole-CI or private HOST PASS.",
+  "evidence_refs": [
+    "governance/evidence/p2-019-content-20261116/backend-resume-20261119/backend-143.trx",
+    "governance/evidence/p2-008-replay-clock-20261119/ci-result.json",
+    "governance/evidence/p2-019-content-20261116/ui/admin-native-e9ed8400/contracts.tap",
+    "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-windows13-d7e3fe11.trx",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-security-source-review.json",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/remaining-source-compatibility/ci-native-linux15-d5578374.trx",
+    "governance/evidence/TUN-P2-019-TEST001-VALIDATION.json",
+    "governance/evidence/TUN-P2-019-SYNTHETIC-IDENTITY-AUTHORIZATION.json"
+  ],
+  "historical_source_sha256": "25acbbb1b1e786bce25980b4607c38f3778088669a77b5dd79db5c19f100065b",
+  "context_ref": null,
+  "review_refs": [
+    "governance/reviews/REV-P2-009-RV015-full-stack-engineer.yaml",
+    "governance/reviews/REV-P2-009-RV015-tester-qa-engineer.yaml",
+    "governance/reviews/REV-P2-009-RV015-cyber-security-engineer.yaml"
+  ],
+  "historical_boundaries": "Expanded technical compatibility only. Preserve all original actual test sources and historical hashes, original accepted feature closure, qualified native guards and separate Product/production/merge/release gates. PENDING until committed-source and existing review/closure checks complete.",
+  "historical_source_hashes": {
+    "web/tests/contracts.test.tsx": "25acbbb1b1e786bce25980b4607c38f3778088669a77b5dd79db5c19f100065b",
+    "src/Modules/Identity/RecoveryCodeContracts.cs": "3e84b2f5ca357d44019453f5ee14886939139303972908c7347fdf5f0aee3d8c",
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs": "ebf48ccfee217dd4b9f184e8f7d4f508fecf2aee5a9bd7559f9a34c5c3c61494"
+  },
+  "prior_test_only_execution_sha": "da27cec467ad94183ac5320eae4a48998fca1cc6",
+  "historical_source_sha256_path": "web/tests/contracts.test.tsx",
+  "historical_qualified_carrier": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+  "historical_qualified_git_tree": "b290cbdac0fca36ef1e84b12b824a5e8c7ae1911",
+  "historical_source_binding_meaning": "Pending committed classification carrier for the expanded source vector. Original actual executions remain at their recorded SHAs; fixture qualification at7c and CI merge daa9/tree-equivalent bd are reused by exact source identity, not represented as a new execution. Historical Windows CRLF source hashes and all13/15 native/version-guard evidence remain unchanged.",
+  "prior_qualified_binding": {
+    "validated_commit_sha": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+    "tested_commit_sha": "d5578374e8563758d4a6e0dc3b9f9cf17e76df1b",
+    "owned_behavior_paths": [
+      "web/tests/contracts.test.tsx",
+      "src/Modules/Identity/RecoveryCodeContracts.cs",
+      "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs"
+    ],
+    "result": "PASS"
+  },
+  "historical_tested_commit_semantics": "Pending committed classification carrier for the expanded source vector. Original actual executions remain at their recorded SHAs; fixture qualification at7c and CI merge daa9/tree-equivalent bd are reused by exact source identity, not represented as a new execution.",
+  "fixture_compatibility": {
+    "qualification_scope": "Original qualification statements and source hashes apply to prior_qualified_binding.owned_behavior_paths. Added inherited paths use the separately source-bound fixture qualification below; no all-path single-run claim.",
+    "authorization_ref": "governance/evidence/TUN-P2-019-SYNTHETIC-IDENTITY-AUTHORIZATION.json",
+    "qualification_ref": "governance/evidence/TUN-P2-019-TEST001-VALIDATION.json",
+    "actual_fixture_source": "7c626363893b29c9130fb3bdc23942d15eaea570",
+    "ci_branch_source": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
+    "ci_actual_checkout": "daa9c4699bf020fa2ab30c3edd8c83d11a8ab3bf",
+    "inherited_paths": [
+      "tools/browser-testing/Program.cs",
+      "tools/browser-testing/Tunner.BrowserTesting.csproj"
+    ],
+    "boundary": "Exact already-authorized host/starter bytes. The closed fixture retains21 AST/mock function-status checks,7 real browser and12 real PostgreSQL cases; these are distinct qualifications, not21 HTTP journeys. Original default-mode PASS remains atd917. Current CI1912PASS is separately source-bound. No production values or User providers are activated."
+  }
+}

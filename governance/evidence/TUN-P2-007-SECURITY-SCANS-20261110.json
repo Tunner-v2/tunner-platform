@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "result": "PASS",
+  "recorded_at": "2026-11-10T12:57:34.129Z",
+  "scan_head_sha": "baffd2d0f3ad71fe8ca270e5372b422d721ec67f",
+  "production_source_carrier_sha": "745f9c2dc1b9060c4be0318b33b4019ae77e9e36",
+  "production_source_unchanged_since_carrier": true,
+  "phase": "Finalsourceandreviewevidencewerescannedbeforecommittingcurrentproofs; thisreceipt/manifestonlymetadataisrecordedafterobservedexits.",
+  "files_inspected": 3859,
+  "sast": {
+    "exit_code": 0,
+    "controls_changed": false,
+    "log": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/security-final/sast.log",
+      "sha256": "c07379efa3e6d2d6d92ac5e32ddbf9b792bf802c13a8de241135bfca97bcbf79"
+    }
+  },
+  "secrets": {
+    "exit_code": 0,
+    "controls_changed": false,
+    "log": {
+      "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/security-final/secrets.log",
+      "sha256": "8131c1ea9af4176cef4a847ac36cbcb6516d6215d78395c7512569e828563fd3"
+    }
+  },
+  "prior_evidence_hit": {
+    "result": "NO_SECRET_FOUND_HISTORICAL_CODE_DIFF_DUPLICATION",
+    "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/current-native/source-inputs.json",
+    "resolution": "Duplicate oldsourcepatch replaced byimmutableGitcomparison andoriginalpatchdigest. Rawexecutioninput+hashretained; no scanner exception/suppression or actualsourcebehaviorchange."
+  },
+  "limits": [
+    "These are source/evidence scans, not clean containerimage/release approvals. ExistingP1security/releasegate remains separatelygoverned.",
+    "No operatorenv/credentialconfiguration ispublished; unrelated13files remainunchanged."
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-009-RV005",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-009",
+  "parent_revision_id": "P2-009-RV004",
+  "parent_milestone_revision_id": null,
+  "title": "Preserve HTTPS test helper defaults for session transport validation",
+  "revision_type": "COMPATIBILITY",
+  "status": "CLOSED",
+  "reason": "Actual415 coverage for P2-013 needs the existing Kestrel HTTPS RawPost helper to accept an optional mediaType while retaining application/json default. The helper is owned by original009/010; preserve CLOSED RV004 ancestry, exact pinned client/cert/request mechanics and all prior assertions. No new client/TLS harness, product source, policy or UI change.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Existing JSON helper behavior plus actualunsupportedContentType/strictbody/session HTTP regressions pass on committed source; exact helper defaults/client/cert remain unchanged and scoped native closure preserves original009 acceptance."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["full-stack-engineer", "solution-architect", "tester-qa-engineer", "cyber-security-engineer", "auditor", "compliance-specialist", "governance-engineer"],
+  "evidence_refs": ["governance/evidence/P2-009-RV005-VALIDATION.json"],
+  "product_acceptance_required": false,
+  "created_at": "2026-11-14T05:46:14.7921584\u002B00:00",
+  "closed_at": "2026-11-14T06:09:45Z",
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "ea731ea0a62d5fbc673d84f17864c3c283b582e7",
+    "tested_commit_sha": "ea731ea0a62d5fbc673d84f17864c3c283b582e7",
+    "work_item_commit_shas": [
+      "ea731ea0a62d5fbc673d84f17864c3c283b582e7"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json",
+      "%SystemDrive%/",
+      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
+}

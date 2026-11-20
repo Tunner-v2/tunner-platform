@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-010",
+  "recorded_at": "2026-11-12T12:33:04Z",
+  "result": "APPROVED_SCOPED_PRODUCT_OWNER_VISUAL_CONSENT",
+  "source": {
+    "call_id": "call_cbc4cf8125104506bc973ba1cba8ac90",
+    "verbatim_answer": "Approve 010-V01–V03 (Recommended)"
+  },
+  "approved_scopes": [
+    {"id": "010-V01", "scope": "Safe provider-return and collision-to-link continuation in the existing Login shell; keep provider authentication, existing Tunner authentication/recovery and explicit final link consent separate, without account enumeration or a forced password."},
+    {"id": "010-V02", "scope": "Google/Microsoft Sign-in Methods rows and explicit link/unlink, blocked, changed, uncertain and confirmed-result states using authoritative facts and permitted effects. Missing required details block confirmation; no locally selected remaining-method count or session effect."},
+    {"id": "010-V03", "scope": "Conditionally eligible federated method in the existing proof chooser with handoff/checking/rejection feedback. Actual supported provider evidence, current policy and owner binding remain prerequisites; no automatic freshness/assurance inference."},
+    {"id": "010-V04", "scope": "Qualified federated registration omits Password and Confirmation, displays the provider-verified email read-only, and retains explicit Tunner terms/privacy acceptance and shared validation. Regular registration and later Personal Information remain unchanged. No provider capability or production policy is selected."}
+  ],
+  "additional_consent": [
+    {
+      "scope_id": "010-V04",
+      "recorded_at": "2026-11-12T17:34:53Z",
+      "call_id": "call_23d273a184e44ec8a61a8d037519751f",
+      "verbatim_answer": "Approve 010-V04 (Recommended)",
+      "proposal": "artifacts/p2-010-federation-20261112/registration-intake-review/review.html",
+      "proposal_sha256": "d473e7d509895f2f3e6d15a8bc0227e2fa8e50ea0bb88726ac3844a82ce6c6fe",
+      "exact_scope": "artifacts/p2-010-federation-20261112/registration-intake-review/REVIEW.md",
+      "exact_scope_sha256": "adc1f64c274ba81ab58f80c1316ffec7a9489d05b2b7f8b3c32c8e7572969563",
+      "boundary": "Product Owner consent to the pictured variant only. Implementation, native/rendered validation and whole-feature acceptance remain pending; external design and authority documents stay read-only."
+    }
+  ],
+  "proposal": {
+    "path": "artifacts/p2-010-federation-20261112/ui-review/review.html",
+    "sha256": "e4a088bbab5534dcf6fad021135de75dfd4da65bfa05433ce5993996bd69d781",
+    "capture_check": "artifacts/p2-010-federation-20261112/ui-review/rendered/checks.json",
+    "screenshots": 12,
+    "boundary": "Synthetic pictured proposals and mockup checks; not production acceptance or live provider execution."
+  },
+  "authority": "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+  "exclusions": [
+    "No production provider/account-type/tenant/assurance/session/retention policy selected",
+    "No Figma, FigJam or Drive write",
+    "No protected-main merge, publication, release or production activation",
+    "No whole-feature acceptance or substitute for required rendered implementation tests"
+  ],
+  "owner_manual_backfill": "TODO-TUN-P2-010-DESIGN001"
+}

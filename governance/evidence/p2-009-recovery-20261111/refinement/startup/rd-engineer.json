@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "recorded_at": "2026-11-11T06:56:55.872023+00:00",
+  "requested_review_head": "667afadc21541acb1c70fd7cc1e21a2b40c33007",
+  "observed_head": "ebfd9af892a7c771a7b5b76a860a5883cedc6cf7",
+  "work_item_state": "REFINEMENT",
+  "phase": "ARTIFACT_ONLY_REFINEMENT_AND_STARTUP_REVIEW",
+  "implementation_authorized": false,
+  "tests_executed": false,
+  "product_or_human_approval": false,
+  "role": "rd-engineer",
+  "role_contract": {
+    "path": ".agent/skills/rd-engineer/SKILL.md",
+    "sha256": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187",
+    "version": "1.0.0"
+  },
+  "result": "PASS_STARTUP_ONLY",
+  "assignment": "Explicit root startup/refinement role request; native activation/registration remains root-owned.",
+  "mandatory_checks": [
+    {
+      "check": "Source authority",
+      "startup_assessment": "Only official NIST/Microsoft and pinned framework sources support material native claims; mirrored Tunner authority takes precedence for Product/domain behavior."
+    },
+    {
+      "check": "Version/date",
+      "startup_assessment": "NIST63B-4 final July31,2025; exact Identity10.0.13 source researched; current Microsoft support table updatedNov10,2026 is separately recorded."
+    },
+    {
+      "check": "Support/EOL",
+      "startup_assessment": ".NET10 active LTS through2028-11-14; latest support table10.0.15 differs from repo10.0.13. No silent version change or false current-patch claim."
+    },
+    {
+      "check": "Security changes",
+      "startup_assessment": "Raw native recovery token storage and default47-bit format are not adopted. Built-in RNG/native hasher plus reviewed entropy/canonicalization/work binding are proposed."
+    },
+    {
+      "check": "Normative status",
+      "startup_assessment": "Use final saved-code guidance; do not claim draft/final/FIPS/deployment certification interchangeably. Replenishment/notification applicability is not ignored or automatically implemented."
+    },
+    {
+      "check": "Implementation impact",
+      "startup_assessment": "One reviewed native profile and supported adapter inside the selected stack; no new crypto/dependency/ADR is necessary from this analysis. Actual tests and profile disposition remain required."
+    }
+  ],
+  "evidence": [
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/authority-and-native-resolution.json",
+      "sha256": "4f2b67bec77b5796142531b0147060681ac50a79542420060a34f51b7b0223f8"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/execution-boundaries.json",
+      "sha256": "3b05fd003d6aeee172056a7357a149e9cd8af7075a7eef775af436d804f05929"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/owner-runtime-inputs.json",
+      "sha256": "0e3b27ae9a72dc380dce1f1d5f303b2c13c9742f0ea86cb3ac9782df286b2559"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/typed-contract-proposal.cs.txt",
+      "sha256": "971dea48798d1d853543fb931a892a013c89b31e52ae97a56848c5e6e0c9b845"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/ui-authority-lean-v2/comparison-and-scopes.json",
+      "sha256": "ca458974bc08ba25b1b33ade20ec834cdba2ead9b9dccdeaeb22d4c24bbf8a2b"
+    }
+  ],
+  "blocking_findings": [],
+  "required_before_implementation_or_acceptance": [
+    "Native work-start/context eligibility",
+    "Supported owner profile and precise delivery/replacement inputs",
+    "Root-reviewed first-delivery BFF seam before module API edits",
+    "Actual tests and applicable UI consent/evidence"
+  ],
+  "final_role_review": false,
+  "final_work_item_pass": false,
+  "test_results_claimed": []
+}

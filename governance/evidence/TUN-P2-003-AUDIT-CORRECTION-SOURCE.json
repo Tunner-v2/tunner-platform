@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-003",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+  "validated_commit_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+  "owned_behavior_paths": [
+    "Directory.Packages.props",
+    "Tunner.Platform.slnx",
+    "docs/development/P2_003_IDENTITY_PERSISTENCE.md",
+    "governance/evidence/TUN-P2-003-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/TUN-P2-003-DATA-INVENTORY.json",
+    "governance/evidence/TUN-P2-003-RD-SOURCES.json",
+    "src/Modules/Accounts/AccountSnapshot.cs",
+    "src/Modules/Identity/AssemblyInfo.cs",
+    "src/Modules/Identity/IdentityMigrationSql.cs",
+    "src/Modules/Identity/IdentityModelConfiguration.cs",
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+    "src/Modules/Identity/IdentityPersistenceDbContextFactory.cs",
+    "src/Modules/Identity/IdentityPersistenceRegistration.cs",
+    "src/Modules/Identity/IdentityRows.cs",
+    "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.Designer.cs",
+    "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.cs",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+    "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+    "tests/Tunner.Identity.Persistence.Tests/IdentityFoundationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs",
+    "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+    "src/Modules/Identity/AccountPersonalInformationRows.cs",
+    "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.cs",
+    "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.Designer.cs"
+  ],
+  "historical_validation_ref": "governance/evidence/TUN-P2-003-VALIDATION.json",
+  "note": "Exact ordered24-path ownership and VALIDATION history retained. Current bounded compatibility uses actualad744fde native62 including10 existing parent invocations; SQL5 retains actual5d543965 with explicit unchanged-source witness. UI146 stays actualc714, registration24/foundation16 stays actualeb1c/carrier6e. Old bulk260/237 and ordinary-host identities are not relabelled. No009 final/Product/release/wholeP2 acceptance. Current federation technical-source binding covers only the added unused central client-package pin (Identity graph40/40 unchanged).37 scoped carrier invocationsPASS at8a932ef; original schema/domain/native/SQL/browser/visual cohorts retain actual execution SHAs and unchanged other owned source. No full010 or new UI acceptance.",
+  "source_binding_ref": "governance/evidence/P2-010-COMPATIBILITY-SCOPE.json",
+  "historical_source_binding_ref": "governance/evidence/TUN-P2-003-PASSKEY-COMPATIBILITY-20261110.json",
+  "prior_current_source_bindings": [
+    {
+      "tested_commit_sha": "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+      "validated_commit_sha": "0efbb6ed89b0715d78ddfbcd97b1ee96f829f9dd",
+      "source_binding_ref": "governance/evidence/TUN-P2-003-PASSKEY-COMPATIBILITY-20261110.json",
+      "source_envelope_git_ref": "215b61d62fe43a6c0ef5d43237c6dee270fc2963:governance/evidence/TUN-P2-003-AUDIT-CORRECTION-SOURCE.json"
+    },
+    {
+      "tested_commit_sha": "e79f482c3859d944f031a2846e36988cf90f0098",
+      "validated_commit_sha": "e79f482c3859d944f031a2846e36988cf90f0098",
+      "source_binding_ref": "governance/evidence/TUN-P2-003-TOTP-COMPATIBILITY-20261110.json",
+      "source_envelope_git_ref": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1:governance/evidence/TUN-P2-003-AUDIT-CORRECTION-SOURCE.json"
+    },
+    {
+      "tested_commit_sha": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+      "validated_commit_sha": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+      "source_binding_ref": "governance/evidence/TUN-P2-003-FINITE-RUNTIME-COMPATIBILITY-20261110.json",
+      "source_envelope_git_ref": "ad744fde52aa03404f3944c47ebb79070185e9f2:governance/evidence/TUN-P2-003-AUDIT-CORRECTION-SOURCE.json"
+    },
+    {
+      "tested_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+      "validated_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+      "source_binding_ref": "governance/evidence/TUN-P2-003-004-005-006-RECOVERY-COMPATIBILITY-20261111.json",
+      "source_envelope_git_ref": "8a932ef09491c80999a5a9c07eb080887c2acecd:governance/evidence/TUN-P2-003-AUDIT-CORRECTION-SOURCE.json"
+    },
+    {
+      "tested_commit_sha": "8a932ef09491c80999a5a9c07eb080887c2acecd",
+      "validated_commit_sha": "8a932ef09491c80999a5a9c07eb080887c2acecd",
+      "source_binding_ref": "governance/evidence/P2-010-COMPATIBILITY-SCOPE.json",
+      "source_envelope_git_ref": "734828a78d9736eaa8da32c1b80ae0654a7f3641:governance/evidence/TUN-P2-003-AUDIT-CORRECTION-SOURCE.json"
+    }
+  ],
+  "final_federation_compatibility": {
+    "source_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+    "evidence_ref": "governance/evidence/TUN-P2-010-VALIDATION.json",
+    "runtime_ref": "governance/evidence/p2-010-federation-20261112/native-734828a/private76.json",
+    "result": "PASS",
+    "assessment": "Actual committed PRIVATE76 includes existing registration boundary/age-aware flow/progress, ordinary authentication/session and shared proof consumers plus new native HTTPS registration, link/finality and proof cases. Current complete77-database migration resource gate and prior13 SQL/model92 checks substantiate changed shared persistence. Earlier unaffected original domain/UI/SQL cohorts retain their actual sources; no historical result is relabelled or Product acceptance inferred.",
+    "dependency_limit": "Same-day admitted five-package signatures/audited restore and unchanged Identity graph remain evidence. Fresh010 advisory/SBOM closure is separately pending; this updates bounded parent source compatibility only."
+  },
+  "recovery_current_source_compatibility": {
+    "result": "PASS_BOUNDED_CURRENT_SOURCE_COMPATIBILITY",
+    "recorded_at": "2026-11-13T18:31:41Z",
+    "metadata_carrier_commit_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+    "actual_native_execution_commit_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+    "prior_current_binding": {
+      "tested_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+      "validated_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+      "envelope_git_ref": "51a80e5f4104292966eef5601747b86ed666c6d9:governance/evidence/TUN-P2-003-AUDIT-CORRECTION-SOURCE.json"
+    },
+    "carrier_semantics": "Top-level binding is the actual579 scoped compatibility carrier and native execution. PRIVATE109/SQL13/protocol17/resources6 retain actual579 identity and build binding. Presentation32/integration48 retain actual2cd UI execution with ten unchanged production/test UI objects through579; retained nine visual pairs remain actual51a. No liveBFF browser E2E, full original-suite rerun or full556-input UI equivalence is claimed.",
+    "ordered_ownership": {
+      "count": 24,
+      "unchanged_from_candidate_envelope": true,
+      "all_owned_objects_match_native_candidate_and_working": true,
+      "working_drift": 0,
+      "native_manifest_covered": 20,
+      "outside_native_manifest": 4,
+      "changed_since734": 3,
+      "changed_since51a": 2,
+      "changed_owned_paths_since51a": [
+        "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+        "tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs"
+      ]
+    },
+    "current_actual_evidence": {
+      "native_private_ref": "governance/evidence/p2-011-recovery-20261112/native-579c274/private109.json",
+      "native_private_passed": 109,
+      "sql_ref": "governance/evidence/p2-011-recovery-20261112/native-579c274/sql13.json",
+      "sql_passed": 13,
+      "protocol_ref": "governance/evidence/p2-011-recovery-20261112/native-579c274/protocol-qualification.json",
+      "protocol_passed": 17,
+      "resources_ref": "governance/evidence/p2-011-recovery-20261112/native-579c274/resource-qualification.json",
+      "resources_passed": 6,
+      "ui_integration_ref": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/integration48.json",
+      "ui_integration_passed": 48,
+      "ui_capture_ref": "governance/evidence/p2-011-recovery-20261112/ui-51a80e5/visual/visual-review-manifest.json",
+      "ui_capture_count": 9,
+      "retained_presentation_ref": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/presentation32.json",
+      "retained_presentation_passed": 32,
+      "native_private_duration_seconds": 502.083,
+      "sql_duration_seconds": 67.054,
+      "ui_source_witness_ref": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json"
+    },
+    "source_verification": "Executing-agent batched Git-object checks verify all24 ordered owned files match actual579 and working source with zero drift; 20 covered objects and SHA256 match the actual579 build manifest. The remaining4 outside-manifest paths have object-currentness only, not new runtime coverage. All ten declared UI production/test paths match actual2cd through579. Original ordered arrays and historical fields are preserved.",
+    "affected_owner_coverage": "Since51a, only the shared model snapshot and opt-in private-database fixture release lifecycle changed in this ordered scope. Actual579 resource provisioning migrates110databases; SQL13 and PRIVATE109 include unchanged PARENT003_REGISTRATION_BOUNDARY/FLOW/PROGRESS cases. All other owned objects are unchanged since51a; original full foundation/domain/UI cohorts retain their execution identities.",
+    "tests_executed_by_this_metadata_update": false,
+    "new_full_parent_execution_claimed": false,
+    "limitations": [
+      "Original status remains VALIDATION, historical cohorts/approvals/source identities remain intact.",
+      "No DONE/Product/production/merge/release, production governed-producer or V04 acceptance follows. Native+BFF browser E2E and final per-item UI acceptance remain separate."
+    ],
+    "actual_ui_execution_commit_sha": "2cd195a25ac22cbab1f86022a83685c860090b19",
+    "native_build_binding_sha256": "8d9f64e1a963add4806a99ef1168bda458192bd19bf77775543874ffc6f931b3",
+    "prior_carrier_bindings": [
+      {
+        "metadata_carrier_commit_sha": "51a80e5f4104292966eef5601747b86ed666c6d9",
+        "actual_native_execution_commit_sha": "095eb59e322ed25d28ebc7c0f069185d64ec874a",
+        "envelope_git_ref": "579c2742c5c4c59a5bcf7e92610d7de32078714a:governance/evidence/TUN-P2-003-AUDIT-CORRECTION-SOURCE.json",
+        "history": "Immutable envelope at579 retains the complete prior51a carrier, actual095 native101 and UI51a/095 execution identities; prior734 binding and earlier history remain unchanged."
+      }
+    ]
+  }
+}

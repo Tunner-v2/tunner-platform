@@ -1,0 +1,118 @@
+import { useEffect, useId, useRef, useState } from 'react';
+import { z, ContentProvider, ContentText, FormErrorSummary, ModalDialog, PrimaryButton, TextField, useTunnerForm } from '@tunner/ui';
+import type { PublishedContent } from '@tunner/ui';
+import './step-up.css';
+import {requirePublished} from './passkeys.api';
+import {stepUpPasskeyKeys,stepUpPasskeyRecoverySchema,useStepUpPasskey} from './step-up.passkey';
+import {StepUpTotpDialog,stepUpTotpRecoverySchema} from './step-up.totp';
+import {totpChoiceSchema} from './totp.api';
+import {stepUpTotpKeys,totpSelectionKeys} from './totp.content-keys';
+import {parseStepUpOutcome,parseStepUpProofReady,rejectStepUpRecoveryDelivery} from './step-up.completion';
+import type {StepUpCompletion,StepUpOutcome,StepUpProofReady} from './step-up.completion';
+import type {RecoveryCodeDeliveryReceiver} from './recovery-codes.api';
+import {StepUpFederationChoices,stepUpFederationKeys,stepUpFederationSchema,useStepUpFederation} from './step-up.federation';
+export type {StepUpCompletion,StepUpOutcome,StepUpProofReady} from './step-up.completion';
+
+const keys=['heading','description','passkey','passkey.description','authenticator','authenticator.description','other','unavailable','password.description',
+  'password.label','password.placeholder','back','cancel','confirm','working','error.password','error.highlighted','error.credentials','error.limited','error.unavailable','error.changed'] as const;
+export interface StepUpBootstrap {status:'PENDING';requestId:string;csrfToken:string;passwordMaximumLength:number;passwordAvailable:boolean;locale:string;content:Record<string,PublishedContent>;operationReference?:string|undefined;passkeyAvailable?:boolean|undefined;maximumCredentialJsonBytes?:number|null|undefined;passkeyRecovery?:z.infer<typeof stepUpPasskeyRecoverySchema>|null|undefined;totpAvailable?:boolean|undefined;totpAuthenticators?:z.infer<typeof totpChoiceSchema>[]|undefined;totpRecovery?:z.infer<typeof stepUpTotpRecoverySchema>|null|undefined;federation?:z.infer<typeof stepUpFederationSchema>|undefined}
+const pending=z.object({status:z.literal('PENDING'),requestId:z.uuid(),csrfToken:z.string().min(1),passwordMaximumLength:z.number().int().positive(),
+  passwordAvailable:z.boolean(),operationReference:z.string().min(1).optional(),passkeyAvailable:z.boolean().optional(),maximumCredentialJsonBytes:z.number().int().min(1024).max(1048576).nullable().optional(),passkeyRecovery:stepUpPasskeyRecoverySchema.nullable().optional(),totpAvailable:z.boolean().optional(),totpAuthenticators:z.array(totpChoiceSchema).optional(),totpRecovery:stepUpTotpRecoverySchema.nullable().optional(),federation:stepUpFederationSchema.optional(),locale:z.string().min(1),content:z.record(z.string(),z.object({key:z.string(),variantRef:z.string().min(1),versionRef:z.string().min(1),publicationRef:z.string().min(1),locale:z.string().min(1),state:z.literal('PUBLISHED'),text:z.string().min(1)}))});
+export function stepUpPasswordSchema(maximum:number){return z.object({password:z.string().refine(value=>Array.from(value).length>0&&Array.from(value).length<=maximum,'stepUp.error.password')});}
+const completed=z.object({status:z.literal('COMPLETED'),requestId:z.uuid().nullable(),operationReference:z.string().min(1).optional(),totpRecovery:stepUpTotpRecoverySchema.nullable().optional()});
+type StepUpOptions=StepUpBootstrap|{status:'COMPLETED';requestId:string|null;operationReference?:string|undefined;totpRecovery?:z.infer<typeof stepUpTotpRecoverySchema>|null|undefined};
+export function loadStepUpOptions(signal?:AbortSignal):Promise<StepUpOptions>;
+export function loadStepUpOptions(signal:AbortSignal|undefined,expectedProofOperation:string):Promise<StepUpOptions|StepUpProofReady>;
+export async function loadStepUpOptions(signal?:AbortSignal,expectedProofOperation?:string):Promise<StepUpOptions|StepUpProofReady>{
+  const response=await fetch('/authentication/step-up/options',{credentials:'same-origin',cache:'no-store',redirect:'error',...(signal?{signal}:{})});
+  if(!response.ok)throw new Error('Step-up unavailable');
+  const raw:unknown=await response.json();rejectStepUpRecoveryDelivery(raw);
+  if(raw!==null&&typeof raw==='object'&&'status' in raw&&raw.status==='PROOF_READY')return parseStepUpProofReady(raw,expectedProofOperation,expectedProofOperation!==undefined);
+  const done=completed.safeParse(raw);if(done.success)return done.data;
+  const result=pending.parse(raw);
+  const native=result.passkeyAvailable===true||!!result.passkeyRecovery;
+  if(native&&(!result.operationReference||result.passkeyAvailable===true&&!result.maximumCredentialJsonBytes))throw new Error('Explicit native proof context is required.');
+  if(result.passkeyRecovery&&(result.passkeyRecovery.requestId!==result.requestId||result.passkeyRecovery.operationReference!==result.operationReference))throw new Error('The original proof context changed.');
+  const totp=result.totpAvailable===true||!!result.totpRecovery;
+  if(totp&&!result.operationReference||result.totpRecovery&&result.totpRecovery.requestId!==result.requestId||result.totpRecovery&&result.passkeyRecovery)throw new Error('The original TOTP proof context changed.');
+  const federation=result.federation;const federated=!!federation&&(federation.choices.length>0||!!federation.recovery);
+  if(federated&&!result.operationReference||federation?.recovery&&federation.recovery.requestId!==result.requestId||[result.passkeyRecovery,result.totpRecovery,federation?.recovery].filter(Boolean).length>1)throw new Error('The original federated proof context changed.');
+  requirePublished(result.content,result.locale,[...keys.map(key=>'stepUp.'+key),...(native?stepUpPasskeyKeys:[]),...(totp?[...stepUpTotpKeys,...totpSelectionKeys]:[]),...stepUpFederationKeys(federation)]);
+  return result;
+}
+export interface StepUpDismissal{unresolved:boolean}
+export interface StepUpDialogProps{bootstrap:StepUpBootstrap;onComplete:(outcome:StepUpCompletion)=>void;onProofReady?:(outcome:StepUpProofReady)=>void;onCancel:(outcome?:StepUpDismissal)=>void;returnFocusTo?:HTMLElement|null;reconcile?:(signal:AbortSignal)=>Promise<StepUpOutcome|null>;recoveryCodeDelivery?:RecoveryCodeDeliveryReceiver}
+export function StepUpDialog({bootstrap,onComplete,onProofReady,onCancel,returnFocusTo,reconcile,recoveryCodeDelivery}:StepUpDialogProps){
+  return <ContentProvider locale={bootstrap.locale} audience="step-up" resolve={key=>bootstrap.content[key]}><Dialog bootstrap={bootstrap} onComplete={onComplete} onCancel={onCancel} {...(onProofReady?{onProofReady}:{})} {...(returnFocusTo?{returnFocusTo}:{})} {...(reconcile?{reconcile}:{})} {...(recoveryCodeDelivery?{recoveryCodeDelivery}:{})}/></ContentProvider>;
+}
+function Dialog({bootstrap,onComplete,onProofReady,onCancel,returnFocusTo,reconcile,recoveryCodeDelivery}:StepUpDialogProps){
+  const [view,setView]=useState<'chooser'|'password'|'changed'|'totp'>(bootstrap.totpRecovery?'totp':'chooser');const [password,setPassword]=useState('');
+  const [error,setError]=useState<string>();const [serverField,setServerField]=useState<string>();
+  const form=useTunnerForm(stepUpPasswordSchema(bootstrap.passwordMaximumLength),{password});
+  const id=useId();const controller=useRef(new AbortController());const closed=useRef(false);
+  const federationSelected=useRef(!!bootstrap.federation?.recovery);
+  useEffect(()=>{closed.current=false;controller.current=new AbortController();return()=>{closed.current=true;controller.current.abort();};},[]);
+  const load=(signal:AbortSignal)=>onProofReady?loadStepUpOptions(signal,bootstrap.operationReference??''):loadStepUpOptions(signal);
+  const native=useStepUpPasskey({bootstrap,load,complete,reconcile,recoveryCodeDelivery,...(onProofReady?{proofReady}:{})});
+  const federation=useStepUpFederation({bootstrap,blocked:()=>closed.current||native.active||native.busy||form.submitPending||view!=='chooser',complete,reconcile,recoveryCodeDelivery,...(onProofReady?{proofReady}:{}),dismiss:()=>{if(closed.current)return;closed.current=true;setPassword('');onCancel({unresolved:true});}});
+  useEffect(()=>{document.getElementById(!native.active&&!federation.active&&view==='password'?id+'-password':id+'-heading')?.focus();},[view,id,native.mode,native.active,federation.mode,federation.active]);
+  useEffect(()=>{if(serverField&&!form.submitPending)document.getElementById(id+'-password')?.focus();},[serverField,id,form.submitPending]);
+  function cancel(){if(form.submitPending||native.busy||federation.busy)return;if(federation.active){void federation.cancel();return;}closed.current=true;setPassword('');onCancel(native.unresolved?{unresolved:true}:undefined);}
+  function complete(outcome:StepUpCompletion={status:'COMPLETED',signInRequired:false}){if(closed.current)return;closed.current=true;setPassword('');onComplete(outcome);}
+  function proofReady(outcome:StepUpProofReady){if(closed.current)return;const ready=parseStepUpProofReady(outcome,bootstrap.operationReference,!!onProofReady);closed.current=true;setPassword('');onProofReady!(ready);}
+  function accept(outcome:StepUpOutcome){if(outcome.status==='PROOF_READY')proofReady(outcome);else complete(outcome);}
+  async function reconcileOwner(){if(!reconcile)return false;const outcome=await reconcile(controller.current.signal);if(closed.current)return false;rejectStepUpRecoveryDelivery(outcome);if(outcome){accept(parseStepUpOutcome(outcome,bootstrap.requestId,bootstrap.operationReference,undefined,!!onProofReady));return true;}return false;}
+  function changed(){setPassword('');setError(undefined);setServerField(undefined);setView('changed');}
+  async function submit(){
+    if(federationSelected.current)return;
+    setError(undefined);setServerField(undefined);
+    try{
+      const response=await fetch('/authentication/step-up/password',{method:'POST',credentials:'same-origin',cache:'no-store',redirect:'error',signal:controller.current.signal,
+        headers:{'Content-Type':'application/json','X-Tunner-CSRF':bootstrap.csrfToken},body:JSON.stringify({requestId:bootstrap.requestId,password})});
+      if(closed.current)return;
+      if(response.ok){const raw:unknown=await response.json();if(closed.current)return;accept(parseStepUpOutcome(raw,bootstrap.requestId,bootstrap.operationReference,recoveryCodeDelivery,!!onProofReady));return;}
+      const problem=await response.json() as {error_code?:string};
+      if(response.status===401&&problem.error_code==='AUTHENTICATION_FAILED'){
+        const session=await fetch('/authentication/session',{credentials:'same-origin',cache:'no-store',redirect:'error',signal:controller.current.signal});
+        if(!session.ok){if(await reconcileOwner())return;changed();return;}setServerField('stepUp.error.credentials');
+      }else if(response.status===429)setError('stepUp.error.limited');
+      else if(response.status===400&&problem.error_code==='VALIDATION_ERROR')setServerField('stepUp.error.password');
+      else if([401,403,404,409].includes(response.status)){if(await reconcileOwner())return;changed();}
+      else setError('stepUp.error.unavailable');
+    }catch{
+      if(closed.current)return;
+      try{
+        if(await reconcileOwner())return;
+        const current=await load(controller.current.signal);
+        if(closed.current)return;
+        if(current.status==='PROOF_READY'){proofReady(current);return;}
+        if(current.requestId!==bootstrap.requestId||bootstrap.operationReference!==undefined&&current.operationReference!==bootstrap.operationReference){changed();return;}
+        if(current.status==='COMPLETED'){complete({status:'COMPLETED',signInRequired:false,...(current.operationReference?{operationReference:current.operationReference}:{})});return;}
+      }catch{/* Keep the original owner/view binding and allow only an explicit safe retry. */}
+      if(!closed.current)setError('stepUp.error.unavailable');
+    }finally{if(!closed.current){setPassword('');form.reset();}}
+  }
+  if(view==='totp')return <StepUpTotpDialog bootstrap={bootstrap} load={load} onComplete={complete} {...(onProofReady?{onProofReady:proofReady}:{})} onBack={()=>setView('chooser')} onCancel={outcome=>{closed.current=true;setPassword('');onCancel(outcome);}} {...(returnFocusTo?{returnFocusTo}:{})} {...(reconcile?{reconcile}:{})} {...(recoveryCodeDelivery?{recoveryCodeDelivery}:{})}/>;
+  return <ModalDialog labelledBy={id+'-heading'} describedBy={id+'-description'} busy={form.submitPending||native.busy||federation.busy} {...(returnFocusTo?{returnFocusTo}:{})} onRequestClose={cancel} className="step-up-dialog">
+    <div data-tunner-component="COMP-STEP-UP" className={'step-up-card '+view+(bootstrap.federation&&(bootstrap.federation.choices.length||bootstrap.federation.recovery)?' has-federation':'')}>
+      <h1 id={id+'-heading'} tabIndex={-1}><ContentText contentKey="stepUp.heading"/></h1>
+      <p id={id+'-description'} className="step-up-intro"><ContentText contentKey={federation.active?'stepUp.federation.description':native.active||view==='chooser'?'stepUp.description':'stepUp.password.description'}/></p>
+      {federation.active?<div className="step-up-federation" data-tunner-component="COMP-STEP-UP-FEDERATION"><p className="step-up-status" role="status"><ContentText contentKey={federation.busy?'stepUp.federation.pending':federation.mode==='changed'?'stepUp.error.changed':'stepUp.federation.unknown'}/></p>{federation.error&&<FormErrorSummary contentKey={federation.error}/>}<div className="step-up-actions"><PrimaryButton labelKey="stepUp.federation.cancel" appearance="outline" disabled={federation.busy} onClick={cancel}/><PrimaryButton labelKey="stepUp.federation.check" appearance="outline" disabled={federation.busy} onClick={()=>void federation.check()}/>{federation.canContinue&&<PrimaryButton labelKey="stepUp.federation.continue" disabled={federation.busy} onClick={()=>void federation.resume()}/>}</div></div>:native.active?<div className="step-up-passkey" data-tunner-component="COMP-STEP-UP-PASSKEY"><p className="step-up-status" role="status"><ContentText contentKey={native.mode==='pending'?'stepUp.passkey.pending':native.mode==='not-completed'?'stepUp.passkey.notCompleted':native.mode==='changed'?'stepUp.error.changed':'stepUp.passkey.unknown'}/></p>{native.error&&<FormErrorSummary contentKey={native.error}/>}<div className="step-up-actions">{native.mode==='not-completed'&&<PrimaryButton labelKey="stepUp.back" appearance="outline" disabled={native.busy} onClick={native.back}/>}<PrimaryButton labelKey={native.unresolved?'stepUp.passkey.close':'stepUp.cancel'} appearance="outline" disabled={native.busy} onClick={cancel}/>{(native.mode==='unknown'||native.mode==='issued')&&<><PrimaryButton labelKey="stepUp.passkey.check" appearance="outline" disabled={native.busy} onClick={()=>void native.check()}/><PrimaryButton labelKey="stepUp.passkey.resume" disabled={native.busy||!native.canResume} onClick={()=>void native.resume()}/></>}</div></div>:view==='chooser'?<><div className="step-up-choices">
+        <button className="step-up-choice" type="button" disabled={!native.canBegin} title={native.canBegin?undefined:bootstrap.content[bootstrap.passkeyAvailable===true?'stepUp.passkey.unsupported':'stepUp.unavailable']!.text} aria-label={bootstrap.content['stepUp.passkey']!.text} aria-describedby={id+'-passkey-description'} onClick={()=>{if(!federationSelected.current)void native.begin();}}><strong><ContentText contentKey="stepUp.passkey"/></strong><small id={id+'-passkey-description'}><ContentText contentKey="stepUp.passkey.description"/></small><span aria-hidden="true">›</span></button>
+        <button className="step-up-choice" type="button" disabled={bootstrap.totpAvailable!==true||!bootstrap.totpAuthenticators?.length} title={bootstrap.totpAvailable===true&&bootstrap.totpAuthenticators?.length?undefined:bootstrap.content['stepUp.unavailable']!.text} onClick={()=>{if(federationSelected.current)return;setPassword('');setView('totp');}}><strong><ContentText contentKey="stepUp.authenticator"/></strong><small><ContentText contentKey="stepUp.authenticator.description"/></small><span aria-hidden="true">›</span></button>
+        <StepUpFederationChoices options={bootstrap.federation} disabled={form.submitPending||native.busy||native.active||federation.busy||federation.active} onSelect={choice=>{if(closed.current||federationSelected.current||form.submitPending||native.active||native.busy)return;federationSelected.current=true;setPassword('');form.reset();setError(undefined);setServerField(undefined);void federation.begin(choice);}}/>
+        <button className="step-up-choice other" type="button" disabled={!bootstrap.passwordAvailable} title={bootstrap.passwordAvailable?undefined:bootstrap.content['stepUp.unavailable']!.text} onClick={()=>{if(!federationSelected.current)setView('password');}}><strong><ContentText contentKey="stepUp.other"/></strong><span aria-hidden="true">›</span></button>
+      </div>{bootstrap.passkeyAvailable===true&&!native.supported&&<p className="step-up-status" role="status"><ContentText contentKey="stepUp.passkey.unsupported"/></p>}<div className="step-up-actions chooser-actions"><PrimaryButton labelKey="stepUp.cancel" appearance="outline" onClick={cancel}/></div></>:
+      view==='changed'?<><p className="step-up-notice" role="alert"><ContentText contentKey="stepUp.error.changed"/></p><div className="step-up-actions"><PrimaryButton labelKey="stepUp.cancel" appearance="outline" onClick={cancel}/></div></>:
+      <form noValidate data-tunner-form="FORM-STEP-UP" onSubmit={event=>void form.handleSubmit(event,submit)}>
+        <TextField id={id+'-password'} name="password" labelKey="stepUp.password.label" placeholderKey="stepUp.password.placeholder" type="password" autoComplete="current-password" required
+          value={password} disabled={form.submitPending} errorKey={serverField??form.errors.password} onBlur={event=>form.onBlur('password',event)} onChange={event=>{setPassword(event.target.value);setError(undefined);setServerField(undefined);}}/>
+        {form.hasErrors&&<FormErrorSummary contentKey="stepUp.error.highlighted"/>}
+        {error&&<FormErrorSummary contentKey={error}/>}
+        <div className="step-up-actions"><PrimaryButton labelKey="stepUp.back" appearance="outline" disabled={form.submitPending} onClick={()=>{setPassword('');form.reset();setError(undefined);setServerField(undefined);setView('chooser');}}/>
+          <PrimaryButton labelKey="stepUp.cancel" appearance="outline" disabled={form.submitPending} onClick={cancel}/><PrimaryButton labelKey="stepUp.confirm" type="submit" disabled={form.submitPending} aria-busy={form.submitPending}/></div>
+        {form.submitPending&&<p className="step-up-status" role="status"><ContentText contentKey="stepUp.working"/></p>}
+      </form>}
+    </div>
+  </ModalDialog>;
+}

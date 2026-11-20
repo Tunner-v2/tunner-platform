@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "recorded_at": "2026-11-11T06:56:55.872023+00:00",
+  "requested_review_head": "667afadc21541acb1c70fd7cc1e21a2b40c33007",
+  "observed_head": "ebfd9af892a7c771a7b5b76a860a5883cedc6cf7",
+  "work_item_state": "REFINEMENT",
+  "phase": "ARTIFACT_ONLY_REFINEMENT_AND_STARTUP_REVIEW",
+  "implementation_authorized": false,
+  "tests_executed": false,
+  "product_or_human_approval": false,
+  "role": "business-analyst",
+  "role_contract": {
+    "path": ".agent/skills/business-analyst/SKILL.md",
+    "sha256": "ca6e24da90c6dac80b7b75124f04a81a2d590e73cc1e99781546c4aad1bca04f",
+    "version": "1.0.0"
+  },
+  "result": "PASS_STARTUP_ONLY",
+  "assignment": "Explicit root startup/refinement role request; native activation/registration remains root-owned.",
+  "mandatory_checks": [
+    {
+      "check": "Actors/ownership",
+      "startup_assessment": "Account owner issues/replaces; trusted recovery owner consumes evidence. Support never bypasses or retrieves existing codes."
+    },
+    {
+      "check": "Pre/postconditions",
+      "startup_assessment": "Fresh Generate/Replace proof; verifier-only committed set and individual consumption. Successful consumption alone does not complete recovery or impose a strong-session prerequisite."
+    },
+    {
+      "check": "Business rules",
+      "startup_assessment": "Three009 acceptance criteria resolve to FRD17/current flow. Counts/assurance/retention/replacement timing and delivery admission remain explicit owner refinement inputs."
+    },
+    {
+      "check": "Alternates",
+      "startup_assessment": "Lost disclosure, concurrent submit, stale policy/set, owner rollback and unknown commit require safe non-disclosing status, not silent regeneration."
+    },
+    {
+      "check": "State",
+      "startup_assessment": "Reuse technical pending-proof/completed/rejected/expired owner lifecycle; do not copy TOTP inactive-first-code activation into recovery codes."
+    },
+    {
+      "check": "Evidence",
+      "startup_assessment": "Source hashes, private actual tests and exact UI item evidence are future requirements; Figma sample code count is illustrative only."
+    },
+    {
+      "check": "Acceptance",
+      "startup_assessment": "Startup/refinement is distinct from implementation/test/UI acceptance. Existing reveal/modal is found; material009-L01..03 additions remain proposals."
+    },
+    {
+      "check": "Cross-domain",
+      "startup_assessment": "011 precedence/restoration,016 notifications and Privacy retention remain owner contracts. PDR0011 forbids a made-up age gate or duplicate identity."
+    }
+  ],
+  "evidence": [
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/authority-and-native-resolution.json",
+      "sha256": "4f2b67bec77b5796142531b0147060681ac50a79542420060a34f51b7b0223f8"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/execution-boundaries.json",
+      "sha256": "3b05fd003d6aeee172056a7357a149e9cd8af7075a7eef775af436d804f05929"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/owner-runtime-inputs.json",
+      "sha256": "0e3b27ae9a72dc380dce1f1d5f303b2c13c9742f0ea86cb3ac9782df286b2559"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/contract-refinement/typed-contract-proposal.cs.txt",
+      "sha256": "971dea48798d1d853543fb931a892a013c89b31e52ae97a56848c5e6e0c9b845"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/ui-authority-lean-v2/comparison-and-scopes.json",
+      "sha256": "ca458974bc08ba25b1b33ade20ec834cdba2ead9b9dccdeaeb22d4c24bbf8a2b"
+    }
+  ],
+  "blocking_findings": [],
+  "required_before_implementation_or_acceptance": [
+    "Native work-start/context eligibility",
+    "Supported owner profile and precise delivery/replacement inputs",
+    "Root-reviewed first-delivery BFF seam before module API edits",
+    "Actual tests and applicable UI consent/evidence"
+  ],
+  "final_role_review": false,
+  "final_work_item_pass": false,
+  "test_results_claimed": []
+}

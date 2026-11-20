@@ -20,6 +20,18 @@ public sealed class IdentityPersistenceDbContext(DbContextOptions<IdentityPersis
         IdentityModelConfiguration.Configure(builder);
         RegistrationModelConfiguration.Configure(builder);
         AccountPersonalInformationModel.Configure(builder);
+        AuthenticationModelConfiguration.Configure(builder);
+        StepUpModelConfiguration.Configure(builder);
+        PasskeyModelConfiguration.Configure(builder);
+        TotpModelConfiguration.Configure(builder);
+        RecoveryCodeModelConfiguration.Configure(builder);
+        RecoveryCaseModelConfiguration.Configure(builder);
+        RecoveryEntryModelConfiguration.Configure(builder);
+        RecoveryContactModelConfiguration.Configure(builder);
+        FederationAttemptModel.Configure(builder);
+        FederationLinkOperationModel.Configure(builder);
+        DeviceModelConfiguration.Configure(builder);
+        IdentityRuntimeConfigurationModel.Configure(builder);
     }
 
     public async Task<AccountSnapshot?> ReadAccountAsync(string accountId, CancellationToken cancellationToken = default)
@@ -36,4 +48,15 @@ public sealed class IdentityPersistenceDbContext(DbContextOptions<IdentityPersis
     void ITransactionalOutboxContext.AddOutboxMessage(OutboxMessage message) => Set<OutboxMessage>().Add(message);
     Task<int> ITransactionalOutboxContext.SaveChangesAsync(CancellationToken cancellationToken)
         => base.SaveChangesAsync(cancellationToken);
+}
+
+/// <summary>Shared Identity schema naming, leaving framework-owned Identity column contracts unchanged.</summary>
+internal static class IdentityColumnNames
+{
+    internal static void UseSnakeCase(ModelBuilder model, params Type[] types)
+    {
+        foreach (var type in types)
+            foreach (var property in model.Entity(type).Metadata.GetProperties())
+                property.SetColumnName(string.Concat(property.Name.Select((c, i) => char.IsUpper(c) ? (i > 0 ? "_" : "") + char.ToLowerInvariant(c) : c.ToString())));
+    }
 }

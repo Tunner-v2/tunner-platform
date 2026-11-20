@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "assessment_scope": "ARTIFACT_ONLY_STARTUP_REFINEMENT",
+  "result": "REVIEWED_REFINEMENT_INPUT_NOT_IMPLEMENTATION_ACCEPTANCE",
+  "authority_resolution": {
+    "method": "AMD-0005 scoped resolution using current mirrored authority, frozen Backend009 preparation, actual shared source and current UI-role readback. No authority or decision is created by this proposal.",
+    "resolved": [
+      {"id": "AUTH-01", "basis": "FRD17 sections2/6/13/15; P2-009 acceptance criteria", "conclusion": "Identity owns recovery-code sets, individual single-use state and safe operation lineage. Persist only verifier-safe code representations; no retrievable recovery-code escrow in application tokens, vault, encrypted operation payload, outbox, logs or QA evidence."},
+      {"id": "AUTH-02", "basis": "FRD17 section7; Catalog32 sections2/4/10/18", "conclusion": "Generate/Replace requires fresh authorized shared step-up bound to exact caller, session, origin, operation, correlation, scope/resource, expected version and canonical context. Resolve effective policy at execution and final owner commit."},
+      {"id": "AUTH-03", "basis": "FRD17 section10; P2-011 criteria", "conclusion": "Recovery-code consumption is fallback evidence inside a trusted recovery-owner operation. Do not implicitly demand an already-held password/strong-factor session, expose a generic public validity oracle, grant a session, reset another factor, or complete recovery. P2-011 owns precedence and explicit RecoveryResult effects."},
+      {"id": "AUTH-04", "basis": "P2-009 criterion2; Catalog32 section2; existing owner transaction/outbox seams", "conclusion": "One individual claim, its exact dependent owner effect and safe outbox share transactional finality. Failed owner application rolls the claim back. Stable operation identity reconciles duplicates/uncertainty without another generation, consumption or secret disclosure."},
+      {"id": "AUTH-05", "basis": "FRD17 sections6/13/15; current UI lean comparison and FigJam readback", "conclusion": "One-time disclosure/download does not authorize a server read-again or silent replacement after loss. Approved baseline reveal exists. Detailed combined reveal/local requested-download admission and replacement/loss feedback remain explicit refinements, not an invented missing-design declaration."},
+      {"id": "AUTH-06", "basis": "Doc06 sections4/5; Doc08 sections10/11; FRD17 sections14/15; Doc28 audit/support boundaries", "conclusion": "Recovery values are restricted authentication material. Safe events/status contain references and minimum metadata. Admin/Support cannot recover values. No raw request, exception, assertion diff, diagnostic capture, URL or evidence may carry them."},
+      {"id": "AUTH-07", "basis": "Doc29 sections4/5/6/7/8; Doc33; P2-019 POLICY001", "conclusion": "Inventory new verifier/set/operation/delivery metadata and explicit owner cleanup/hold behavior. Production requires approved scoped inputs. Consumed, invalidated or expired is not physically erased; no retention duration, legal basis or production activation is selected here."},
+      {"id": "AUTH-08", "basis": "PDR0011/AMD0007; FRD17 sections4/5", "conclusion": "Preserve universal Account identity and explicit capability policy. No new adult-only recovery rule, duplicate child identity or inferred commercial entitlement."}
+    ],
+    "new_decision_or_blocker_recommended": false,
+    "production_input_absence_is_not_a_blanket_local_stop": true
+  },
+  "source_review": {
+    "frozen_backend": "artifacts/p2-009-recovery-20261111/refinement-prep-v1/manifest.json",
+    "frozen_backend_observed_commit": "6653a3cac663394d3cd32776d519988f99a410ad",
+    "frozen_backend_manifest_sha256": "2e894c787a3ea3d337241a45f9e7a3a9fe3dd9ffa63cac31ce1c4855c3030a4c",
+    "reuse_seams": [
+      {"path": "src/Modules/Identity/StepUpApplication.cs", "scope": "ExecuteOutcomeAsync validates exact binding, invokes the owner within the transaction, rechecks current source/session/policy after awaited work, rolls back owner conflicts/stale authority and consumes proof with outbox at commit. Recovery issue/replace should reuse this seam, not a parallel proof manager."},
+      {"path": "src/Modules/Identity/TotpNativeVerifier.cs", "scope": "Framework verifier mechanics and bounded work illustrate reuse. Its six-digit canonicalization, clock/replay horizon and purpose are TOTP-specific and must not be copied into recovery policy."},
+      {"path": "src/Modules/Identity/IdentityPersistenceRegistration.cs", "scope": "Audit all native store registrations/call sites so a recovery convenience API cannot silently reach the raw RecoveryCodes token path."},
+      {"path": "src/Modules/Identity/IdentityPersistenceDbContext.cs", "scope": "Use Identity-owned set/generation, per-code verifier, exact operation and transactional outbox state. No new service, generic credential repository or plaintext seed-store adaptation is justified."},
+      {"path": "web/tests/totp/sensitive/real-child.mjs", "scope": "Current context sets acceptDownloads:false. Current contract scanner requires non-profile artifact/download roots empty. A recovery requested download is outside that registered contract; no existing TOTP privacy PASS proves it."}
+    ],
+    "native_default_constraints": [
+      "Frozen primary R&D identifies UserStoreBase recovery replacement/redemption as a redeemable-string token path, incompatible with AUTH-01 when used unchanged.",
+      "Framework PasswordHasher is a candidate for salted verifier mechanics; its user parameter alone does not establish owner/set/purpose binding. Review explicit unambiguous context binding and test it with the same test code across distinct contexts.",
+      "Fresh primary-source follow-up identifies default generator entropy as unsuitable for the reviewed saved-recovery profile; see primary-source-followup.json. Do not treat frozen-v1 generator reuse as selected or approved.",
+      "The framework convenience generation API passes distinct values to storage but returns its original list. A candidate must prove exact unique returned/stored cardinality under forced collisions rather than infer it from the API name."
+    ]
+  },
+  "typed_sketch_cross_review": {
+    "path": "artifacts/p2-009-recovery-20261111/contract-refinement/typed-contract-proposal.cs.txt",
+    "sha256": "971dea48798d1d853543fb931a892a013c89b31e52ae97a56848c5e6e0c9b845",
+    "status": "READ_ONLY_SIGNATURE_PROPOSAL_NOT_COMPILED_OR_APPROVED",
+    "finding": "No unsafe business default or public validation oracle selected. Internal consume context, provisional claim, verifier-only ledger and one winning post-commit first-delivery constraints align with this review.",
+    "technical_refinements": [
+      "Require the actual active same-owner transaction; reject an absent or mismatched transaction and recheck trusted case/policy/set authority after awaited verification at final commit.",
+      "Define lifecycle-version versus per-code usage/version semantics explicitly so different-code concurrency follows the selected owner policy.",
+      "Require the effective runtime profile to match current server origin/scope/operation, not merely an effective time or caller-provided profile reference.",
+      "Existing CompleteBrowserAsync returns Task and ProofCompleted emits fixed JSON. A narrowly reviewed owner response projection must carry transient delivery only in the winning current request after confirmed commit; no singleton/scoped cross-request cache, later GET or generic result hook that rediscloses values."
+    ]
+  },
+  "current_ui_alignment": {
+    "path": "artifacts/p2-009-recovery-20261111/ui-refinement/requested-download-behavior.json",
+    "sha256": "19ab7aa0d58990f9053060657d20bbf0257dcc43b9c181f30644138b8a7d0736",
+    "scope": "Contingent admission and public inert accessibility illustration only; no live file or additional display/download grant. Requested is not saved; loss stays nondisclosing. Exact approved existing reveal is retained."
+  },
+  "threats_and_required_controls": [
+    {"threat": "Database/token/outbox compromise recovers redeemable values", "control": "Only salted supported verifiers plus classified minimum metadata; no plaintext/encrypted reversible fallback. Integration tests inspect actual writes, native token rows and safe outbox projections."},
+    {"threat": "Code/proof replay or cross-owner/context substitution", "control": "Explicit purpose/owner/set-generation binding, exact trusted operation context, current version and one transactional winner; same-operation retry returns safe lineage only."},
+    {"threat": "Consume/replace race or stale proof commits after source change", "control": "Existing owner/session lock ordering and final authority revalidation; PostgreSQL concurrency and rollback proof with barriers around hash/owner awaits. Replacement timing follows the selected owner contract."},
+    {"threat": "Hash amplification, unbounded per-set scan or account enumeration", "control": "Explicit validated finite profile, count/input/work limits and applicable authoritative throttling. No unbounded hash loop, lower-cost silent fallback or public code-validation oracle."},
+    {"threat": "Lost response causes regeneration or second disclosure", "control": "Stable generation/operation identity; preselected single-delivery admission; metadata-only recovery. Preserve UNKNOWN when commit or delivery cannot be proved."},
+    {"threat": "Download exemption becomes general secret capture", "control": "Separate literal recovery registration, one armed request and exact owned-file identity; inspect bytes only inside protected child; reject any other file/download/capture; verify removal and process/surface cleanup."}
+  ],
+  "owner_inputs_to_refine": [
+    {"input": "Supported saved-code profile", "needed": "Concrete generator/encoding/canonicalization with entropy accounting, unique set cardinality, finite input/count/hash-work/resource limits and version compatibility.", "owner_boundary": "Identity/Security technical contract within existing authority; no production format/count/work value selected by this review."},
+    {"input": "Issue/replace authorization", "needed": "Versioned effective assurance/method mapping, proof lifetime, policy selection and source/currentness checks.", "owner_boundary": "Existing Identity assurance owner and P2-019 approved runtime inputs; no TOTP assurance copied by default."},
+    {"input": "Replacement admission and timing", "needed": "Exact expected-set version, when old codes stop being valid, handling of delivery loss/UNKNOWN and explicitly selected effects.", "owner_boundary": "Identity contract refinement; no automatic revoke-all, coexistence or deferred activation invented."},
+    {"input": "One-time presentation/download", "needed": "Whether the same held transient disclosure permits one explicitly requested local download; exact request admission, disposal and loss semantics; scoped visual/feedback consent where material.", "owner_boundary": "Identity owns authorization/delivery, UI implements approved presentation; baseline reveal is already designed. No additional grant is inferred from an inert picture."},
+    {"input": "NIST saved-code lifecycle applicability", "needed": "Explicit handling of after-use replacement and notification obligations across issuance/consumption/recovery workflow.", "owner_boundary": "009/011 Identity and016 notification contracts; do not silently auto-issue or claim conformance while unresolved."},
+    {"input": "Production data lifecycle", "needed": "Inventory, scoped processing authority, retention trigger/action/holds, restore behavior and physical cleanup evidence.", "owner_boundary": "Identity owns lifecycle implementation,019 approved inputs,017 conformance. No global/legal duration or development stop inferred."}
+  ],
+  "disposition": "Security/QA refinement can proceed under existing authority. Implementation waits native eligibility and the specific typed/UI/private-download refinements. Proposed tests are not executed evidence; startup review is not final role, Product, production or release acceptance.",
+  "source_or_governed_changes": false,
+  "runtime_or_recovery_values_generated": false
+}

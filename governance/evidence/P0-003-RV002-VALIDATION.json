@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-003-RV002",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "58023be5299d024cf2ae0bf05bbcbda2f1384e26",
+  "validated_commit_sha": "58023be5299d024cf2ae0bf05bbcbda2f1384e26",
+  "actual_qualification": {"functional_source":"58023be5299d024cf2ae0bf05bbcbda2f1384e26","functional_exit_code":0,"functional_elapsed_ms":231787,"functional_ref":"governance/evidence/admission-performance-20261115/functional-classification-58023be.log","context_source":"c13fc65236f3147bb37e260fbf22bca1290dc442","context_outcome":"CONTEXT_READY","context_elapsed_ms":287319,"context_receipt_ref":"governance/evidence/admission-performance-20261115/context-qualified.json","context_manifest_sha256":"44b077fbd444dcc765df4f0b07b74bf40cd1d4a870af96f86e8e4cd364b387bc","source_compatibility":"Owned behavior is unchanged58023be..c13fc65. Public global next, selected projection and dependency/role/authority/integration denials pass. New committed-kind/scope regression38 checks passes; no policy or closed history is weakened.","freshness_boundary":"Generation succeeded at c13fc65. A subsequent legitimate lineage metadata commit made durable project state STALE; no final CURRENT verification is claimed. Refresh and verify the next authorized context after closure metadata settles. Native lifecycle checks remain required."},
+  "scope": "Selected-task admission/context performance compatibility; preserve full global validation and prerequisite universe, current lifecycle/role/security/integration checks, and public global next behavior.",
+  "owned_behavior_paths": [
+    "src/Tunner.Governance/GovernanceApplication.cs",
+    "src/Tunner.Governance/OrchestratorApplication.cs",
+    "src/Tunner.Governance/ContextApplication.cs",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs"
+  ],
+  "qualification_ref": "governance/evidence/P0-004-RV005-VALIDATION.json",
+  "prepared_patch_sha256": "20a85f0637853a911b8c8dfec7f408fde3d7f5a4d4d48e0defc9eefb99d81e47",
+  "required_qualification": [
+    "Scoped/global projection and global diagnostic equivalence",
+    "Authority/dependency/role/integration denial controls",
+    "Existing functional regression and current selected-task context timing"
+  ],
+  "acceptance_boundary": "Technical maintenance only. No original closed record, P0 enablement, Product authority, lifecycle policy or production setting is changed."
+}

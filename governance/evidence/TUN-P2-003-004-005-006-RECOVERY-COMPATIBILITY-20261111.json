@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "scope_ids": [
+    "TUN-P2-003",
+    "TUN-P2-004",
+    "TUN-P2-005",
+    "TUN-P2-006"
+  ],
+  "result": "PASS_BOUNDED_PARENT_COMPATIBILITY",
+  "current_source_carrier_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+  "execution_scope": "Existing003-006 compatibility only; actual10 parent calls inside native62 plus currentSQL5 structural evidence and per-item UI source/evidence reuse. No009 final validation, Product, release or wholeP2 acceptance.",
+  "actual_native_invocation_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+  "actual_sql_invocation_sha": "5d5439659624aa3413731083a4f1fd94228bb914",
+  "actual_ui146_invocation_sha": "c71495cbcb1e0e6f8e1dd89c3f42c59b1ed834a6",
+  "native62": {
+    "receipt": {
+      "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+      "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed",
+      "original_artifact_ref": "artifacts/p2-009-recovery-20261111/fixed-next-runners-v4/results/native-private62-dfd65dbd81494e08aa92efa46f962a42/01.json"
+    },
+    "summary": {
+      "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62-summary.json",
+      "sha256": "a8a156a8801a2c485edc962e35ac9338cd78682a2bdf830f324fc8d7713b0b1f",
+      "original_artifact_ref": "artifacts/p2-009-recovery-20261111/fixed-next-runners-v4/results/native-private62-dfd65dbd81494e08aa92efa46f962a42/summary.json"
+    },
+    "build_binding": {
+      "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-build-binding-ad744fd.json",
+      "sha256": "73f3d920ec8fee98845ed25f954d3a3d3723cc8b6f165a5e4834c7903c0e539d",
+      "original_artifact_ref": "artifacts/p2-009-recovery-20261111/root-review/binding-ad744fd/native-runtime-build-binding.json"
+    },
+    "passed": 62,
+    "failed": 0,
+    "not_invoked": 0,
+    "note": "62 are fixed native invocations, not an xUnit bulk suite or browser journey. Exactly10 existing parent calls are identified separately."
+  },
+  "parent_cases": [
+    {
+      "scope_id": "TUN-P2-003",
+      "case_ids": [
+        "PARENT003_REGISTRATION_BOUNDARY",
+        "PARENT003_REGISTRATION_FLOW",
+        "PARENT003_REGISTRATION_PROGRESS"
+      ],
+      "all_passed": true
+    },
+    {
+      "scope_id": "TUN-P2-004",
+      "case_ids": [
+        "PARENT003_REGISTRATION_BOUNDARY",
+        "PARENT003_REGISTRATION_FLOW",
+        "PARENT003_REGISTRATION_PROGRESS"
+      ],
+      "all_passed": true
+    },
+    {
+      "scope_id": "TUN-P2-005",
+      "case_ids": [
+        "PARENT005_AUTH_SESSION",
+        "PARENT005_AUTH_DUPLICATE",
+        "PARENT005_AUTH_CONTACT_CURRENT"
+      ],
+      "all_passed": true
+    },
+    {
+      "scope_id": "TUN-P2-006",
+      "case_ids": [
+        "PARENT006_PROOF_SESSION",
+        "PARENT006_PROOF_ROLLBACK",
+        "PARENT006_BROWSER_ORIGINAL",
+        "PARENT006_BROWSER_ABSENCE"
+      ],
+      "all_passed": true
+    }
+  ],
+  "sql5": {
+    "receipt": {
+      "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-sql5-5d54396.json",
+      "sha256": "0930060bc92541d6f7ef417dbec3076534209b6df33516ec5df78fd44cf31d36",
+      "original_artifact_ref": "artifacts/p2-009-recovery-20261111/fixed-next-runners-v4/results/native-sql5-6ea074abd8a64bebbd034da8d92fbacd/01.json"
+    },
+    "summary": {
+      "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-sql5-5d54396-summary.json",
+      "sha256": "72c7706fa890b19833e41769e12171f981a041041b192146bc508c6b2f6183b6",
+      "original_artifact_ref": "artifacts/p2-009-recovery-20261111/fixed-next-runners-v4/results/native-sql5-6ea074abd8a64bebbd034da8d92fbacd/summary.json"
+    },
+    "passed": 5,
+    "case_ids": [
+      "ISSUANCE_BINDING",
+      "RETIREMENT_BINDING",
+      "ENTRY_ONE_WAY",
+      "SET_ONE_WAY",
+      "OPERATION_ONE_WAY"
+    ],
+    "note": "Actual5d SQL invocation retained. Unchanged production/package/SQL/provisioning mechanics are compared explicitly to ad744fde; no old full-build equivalence is inferred."
+  },
+  "source_witness": {
+    "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/source-witness.json",
+    "sha256": "c9222da89f5ef15c3880e1e3c61f99f602a98c3c21f9c682afcb62ec6ff75d14"
+  },
+  "current_ui_review": {
+    "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+    "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a",
+    "original_artifact_ref": "artifacts/p2-009-recovery-20261111/parent-ui-compatibility-review-v2/review.json"
+  },
+  "actual_ui146_index": {
+    "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+    "sha256": "f8484eb1ace2a6a4489c595d0d92e2553a50c37722c51103a59d8e2572762002"
+  },
+  "historical_registration24_foundation16_index": {
+    "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/execution-index.json",
+    "sha256": "b3c3823b8b394fcbdb8fdd3c0bf3a87b5e28990f1571485cd3cdd253527abc57"
+  },
+  "historical_bulk_evidence": {
+    "identity": "Actual fullIdentity260 remains f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1; not rerun or relabelled.",
+    "architecture": "ActualArchitecture237 remains a933 invocation in the existing prior source-binding records; not rerun or relabelled.",
+    "ordinary_host": "Existing eb9228c ordinary-host13 browser +16 resource checks retain their original identity; no new ordinary browser invocation is claimed."
+  },
+  "preserved": {
+    "core_ordered_owned_counts": [
+      24,
+      78,
+      48,
+      45
+    ],
+    "work_item_status": "VALIDATION",
+    "historical_source_and_ui_records_unchanged": true,
+    "historical_check_verdicts_and17_item_specific_NAs_unchanged": true,
+    "unrelated_dirty_classification": "PREEXISTING_UNRELATED"
+  },
+  "remaining_obligations": [
+    "Commit this exact metadata/evidence packet, then actual governance validate and003-006 UI/readiness gates.",
+    "Refresh governance next and009 task context; do not infer009 final acceptance or other dependent work eligibility."
+  ]
+}

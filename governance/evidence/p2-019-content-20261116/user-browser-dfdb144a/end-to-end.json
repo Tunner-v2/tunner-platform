@@ -1,0 +1,24 @@
+{
+  "source_sha": "dfdb144a65f3b0e87d06ff5d329d53acf09022eb",
+  "fixture": "existing tests/browser-testing/fixtures.ts registerVerifiedAccount",
+  "certificate_errors_ignored": false,
+  "checks": [
+    "Real registration without initial DOB, local Mailpit proof, Personal Information and Account Ready",
+    "Real password sign-in through governed Login, guarded confirmation and refresh, protected cookie and empty browser storage",
+    "Real sign-out and denied direct entry to signed-in screen"
+  ],
+  "sensitive_values_persisted": false,
+  "sign_in_status": 200,
+  "session_flags": {
+    "http_only": true,
+    "secure": true,
+    "same_site": "Lax"
+  },
+  "csrf_cookie_flags": {
+    "http_only": true,
+    "secure": true,
+    "same_site": "Strict"
+  },
+  "initial_check_correction": "Session cookie uses enforced Lax foundation; initial proof-cookie Strict expectation retained in end-to-end-initial-cookie-check.json. CSRF Strict remains asserted; product unchanged.",
+  "result": "PASS"
+}

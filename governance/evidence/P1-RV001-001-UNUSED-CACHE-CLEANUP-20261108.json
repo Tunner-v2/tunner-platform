@@ -1,0 +1,35 @@
+{
+  "removed_caches": [
+    {
+      "id": "sqdkm6fjle12jb28izj286nym",
+      "description": "cached mount /go/pkg/mod from exec /bin/sh -c set -eu; go build -mod=vendor -p=2 -trimpath -tags grpcnotrace -ldflags='-s -w' -o /out/bin/otelcol-contrib .;     cp go.mod go.sum components.go /out/provenance/collector/;     go version -m /out/bin/otelcol-contrib > /out/provenance/collector/buildinfo.txt;     go list -mod=readonly -m -json all > /out/provenance/collector/modules.json;     /out/bin/otelcol-contrib --version > /out/provenance/collector/version.txt;     /out/bin/otelcol-contrib components > /out/provenance/collector/components.txt with id \"/tunner-lgtm-go1273-mod\"",
+      "listed_size": "4.677GB",
+      "result": [
+        "ID\t\t\t\t\t\tRECLAIMABLE\tSIZE\t\tLAST ACCESSED",
+        "sqdkm6fjle12jb28izj286nym*              \ttrue \t\t4.677GB   \t54 minutes ago",
+        "Total:\t4.677GB"
+      ]
+    },
+    {
+      "id": "rfiz2y2vhluxr8bpywybh6z40",
+      "description": "cached mount /root/.cache/go-build from exec /bin/sh -c set -eu; go build -mod=vendor -p=2 -trimpath -tags grpcnotrace -ldflags='-s -w' -o /out/bin/otelcol-contrib .;     cp go.mod go.sum components.go /out/provenance/collector/;     go version -m /out/bin/otelcol-contrib > /out/provenance/collector/buildinfo.txt;     go list -mod=readonly -m -json all > /out/provenance/collector/modules.json;     /out/bin/otelcol-contrib --version > /out/provenance/collector/version.txt;     /out/bin/otelcol-contrib components > /out/provenance/collector/components.txt with id \"/tunner-lgtm-go1273-build\"",
+      "listed_size": "13.18GB",
+      "result": [
+        "ID\t\t\t\t\t\tRECLAIMABLE\tSIZE\t\tLAST ACCESSED",
+        "rfiz2y2vhluxr8bpywybh6z40*              \ttrue \t\t13.18GB   \t54 minutes ago",
+        "Total:\t13.18GB"
+      ]
+    }
+  ],
+  "image_references_preserved": true,
+  "containers_removed": 0,
+  "volumes_removed": 0,
+  "scope": "Only the abandoned explicit Tunner LGTM cache IDs; no general prune or shared cache cleanup.",
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "recorded_at": "2026-11-09T03:07:14.604Z",
+  "provenance": "User requested removal of unused Tunner Docker resources to save storage while protecting other projects. The two records were explicitly named/tunner-lgtm-go1273, reclaimable, unshared and no longer used after the custom rebuild was deferred.",
+  "docker_reported_reclaimed_gb_approx": 17.857,
+  "host_drive_free_bytes_observed_after": 14664908800,
+  "host_space_boundary": "Docker reported cache reclamation; Windows host free space is recorded independently and no VHD compaction or host storage settings were changed."
+}

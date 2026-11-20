@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-004-RV004",
+  "status": "PASS_ENGINEERING_SCOPE",
+  "reviewed_commit_sha": "9a01dac5a9cf83acc5150eb69b3afc1fbea24ab5",
+  "recorded_at": "2026-11-09T16:50:06.041Z",
+  "provenance": "Executing agent applying activated role contracts; not independent human or Product/release approval.",
+  "reviews": [
+    {
+      "role": "governance-engineer",
+      "skill_hash": "3c948ff290690b012d3736b561021989681c2b6fcac3f115b96ca1083672536f",
+      "result": "PASS_ENGINEERING_SCOPE",
+      "assessment": "Next reuses only exact prerequisite/effective-state results inside one call; all consumer reasons and independent gate enforcement remain.28 focused cases and full native suite pass.",
+      "review_ref": "governance/reviews/REV-P0-004-RV004-governance-engineer.yaml"
+    },
+    {
+      "role": "full-stack-engineer",
+      "skill_hash": "59adbe2133cf4ce88cbc9ca4eafce1d5a9d83b9562b6580c1571e6fc148d46b5",
+      "result": "PASS_ENGINEERING_SCOPE",
+      "assessment": "Two-file focused change retains direct own-gate checks; builds without warnings/errors and full native functional regression passes.",
+      "review_ref": "governance/reviews/REV-P0-004-RV004-full-stack-engineer.yaml"
+    },
+    {
+      "role": "tester-qa-engineer",
+      "skill_hash": "52aee18f251a614e339adba9f7c886a5da1ef4ab0482ae6b77044184128415c6",
+      "result": "PASS_ENGINEERING_SCOPE",
+      "assessment": "Executed28 effective-readiness cases including three scope aliases and separate-invocation mutation/freshness rejection; full native suite passes. Failed analyzer/host receipts are retained honestly.",
+      "review_ref": "governance/reviews/REV-P0-004-RV004-tester-qa-engineer.yaml"
+    },
+    {
+      "role": "solution-architect",
+      "skill_hash": "664ffba70d0f97e75951c3548b7f8391854781e4cf90cc50fc8829543783a35b",
+      "result": "PASS_ENGINEERING_SCOPE",
+      "assessment": "Method-local keyed dictionary introduces no service, shared persistent cache, domain authority, dependency reversal or durable state; no ADR-triggering architecture change.",
+      "review_ref": "governance/reviews/REV-P0-004-RV004-solution-architect.yaml"
+    },
+    {
+      "role": "auditor",
+      "skill_hash": "191c796fc5df0332ff2c3c464ca611d2c6d3ffc5ba7e2807986a71ad2e40d921",
+      "result": "PASS_ENGINEERING_SCOPE",
+      "assessment": "Validated/tested source9a01dac is committed and two owned paths unchanged. Raw/portable execution hashes, actual failures and qualified timing are retained; historical RV003 remains immutable. This is executing-agent assessment, not independent human review.",
+      "review_ref": "governance/reviews/REV-P0-004-RV004-auditor.yaml"
+    },
+    {
+      "role": "cyber-security-engineer",
+      "skill_hash": "2d32ff3d7fb503f29cf930e9852ed4a757bb48a08e3fa4e3f6d5a23139a47f97",
+      "result": "PASS_ENGINEERING_SCOPE",
+      "assessment": "Source-gate decisions remain scope/readiness keyed and fresh across commands; wrong/stale/dirty proofs still fail. Actual SAST and secret scans pass, with in-progress worktree coverage disclosed.",
+      "review_ref": "governance/reviews/REV-P0-004-RV004-cyber-security-engineer.yaml"
+    },
+    {
+      "role": "rd-engineer",
+      "skill_hash": "2834c223dfd847a6d7cd28f52de4113efc574d621391d059e8dc1469bdf33187",
+      "result": "PASS_ENGINEERING_SCOPE",
+      "assessment": "No new package, protocol or external technology decision; local algorithm/call-graph assessment and existing governance authority suffice. Timing is not represented as Product SLO evidence.",
+      "review_ref": "governance/reviews/REV-P0-004-RV004-rd-engineer.yaml"
+    },
+    {
+      "role": "devops-engineer",
+      "skill_hash": "0def19cfd8cf73f9fe47851ab171d3154e7e80b4675ded65964f10856789b50c",
+      "result": "PASS_ENGINEERING_SCOPE",
+      "assessment": "No CI, environment, images, secrets, deployment or publication changes. PowerShell7 executes existing scanner scripts without changing Windows trust or persistent execution policy.",
+      "review_ref": "governance/reviews/REV-P0-004-RV004-devops-engineer.yaml"
+    },
+    {
+      "role": "project-manager",
+      "skill_hash": "ae262bf4c9a2e26c688106c7af420fbc4dc26a116048e04ae01a5e4e01ead927",
+      "result": "PASS_ENGINEERING_SCOPE",
+      "assessment": "Original and prior closure preserved through RV004. Technical completion is limited to deterministic source-check reuse and observed latency; P2 remains ACTIVE and passkey feature remains IN_PROGRESS.",
+      "review_ref": "governance/reviews/REV-P0-004-RV004-project-manager.yaml"
+    }
+  ]
+}

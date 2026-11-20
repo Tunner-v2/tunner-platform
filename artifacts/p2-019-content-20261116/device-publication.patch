@@ -1,0 +1,798 @@
+diff --git a/src/Modules/Identity/PublishedDevicePresentationSource.cs b/src/Modules/Identity/PublishedDevicePresentationSource.cs
+new file mode 100644
+--- /dev/null
++++ b/src/Modules/Identity/PublishedDevicePresentationSource.cs
+@@ -0,0 +1,164 @@
++using System.Data.Common;
++using System.Text.Json;
++using Microsoft.EntityFrameworkCore;
++using Microsoft.EntityFrameworkCore.Storage;
++using Microsoft.Extensions.DependencyInjection;
++using Tunner.Platform.Policies;
++using Tunner.PresentationContent;
++
++namespace Tunner.Identity.Persistence;
++
++public sealed record DeviceContentBinding(string AuthenticationPolicyVersion, string DevicePolicyVersion,
++    string ConfigurationVersionReference, string QualificationReference, string ContentScope, string VariantReference,
++    EffectivePolicyInterval EffectiveInterval, ContentTransactionReadQualification ReadQualification);
++
++/// <summary>Explicit authoritative local binding: no database/network I/O, blocking waits or stale cache.</summary>
++public interface IDeviceLocalContentBindingSource
++{
++    DeviceContentBinding RequireCurrentLocal(AuthenticationPolicy authenticationPolicy, string devicePolicyVersion, DateTimeOffset effectiveAt);
++}
++
++/// <summary>Optional owner-transaction preparation; the ordinary local presentation contract is unchanged.</summary>
++public interface IDeviceAsyncPresentationSource : IDevicePresentationSource
++{
++    ValueTask<DevicePreparedPresentation> PreparePublishedAsync(AuthenticationPolicy authenticationPolicy, string devicePolicyVersion,
++        CancellationToken cancellationToken);
++}
++
++/// <summary>Request-scoped publication witness. A browser point-in-time read cannot qualify a native transaction.</summary>
++public sealed class DevicePreparedPresentation
++{
++    private readonly IdentityPersistenceDbContext owner;
++    private readonly DbTransaction? transaction;
++    private readonly string authenticationSnapshot;
++    private readonly string deviceVersion;
++    private readonly IDeviceLocalContentBindingSource bindings;
++    private readonly string bindingSnapshot;
++    private readonly ContentTransactionProfileWitness profile;
++    private readonly EffectivePolicyInterval availability;
++    internal DevicePreparedPresentation(IdentityPersistenceDbContext owner, DbTransaction? transaction, AuthenticationPolicy authenticationPolicy,
++        string devicePolicyVersion, IDeviceLocalContentBindingSource bindings, DeviceContentBinding binding,
++        ContentTransactionProfileWitness profile, EffectivePolicyInterval availability, DevicePresentation presentation)
++    {
++        this.owner = owner; this.transaction = transaction; authenticationSnapshot = JsonSerializer.Serialize(authenticationPolicy);
++        deviceVersion = devicePolicyVersion; this.bindings = bindings; bindingSnapshot = JsonSerializer.Serialize(binding);
++        this.profile = profile; this.availability = availability; Presentation = presentation;
++    }
++    public DevicePresentation Presentation { get; }
++    internal bool IsOwnerTransaction(IdentityPersistenceDbContext database) => transaction is not null && ReferenceEquals(owner, database) &&
++        ReferenceEquals(database.Database.CurrentTransaction?.GetDbTransaction(), transaction) &&
++        ReferenceEquals(transaction.Connection, database.Database.GetDbConnection());
++    internal bool CurrentAt(IdentityPersistenceDbContext database, AuthenticationPolicy authenticationPolicy, string devicePolicyVersion, DateTimeOffset at)
++    {
++        try
++        {
++            if (!ReferenceEquals(owner, database) || authenticationSnapshot != JsonSerializer.Serialize(authenticationPolicy) || deviceVersion != devicePolicyVersion ||
++                !availability.Contains(at) || !profile.CurrentAt(at)) return false;
++            // A detached browser snapshot is never promoted into an owner/native witness.
++            if (transaction is null ? owner.Database.CurrentTransaction is not null :
++                !ReferenceEquals(owner.Database.CurrentTransaction?.GetDbTransaction(), transaction) ||
++                !ReferenceEquals(transaction.Connection, owner.Database.GetDbConnection())) return false;
++            var current = bindings.RequireCurrentLocal(authenticationPolicy, devicePolicyVersion, at);
++            return current is not null && current.EffectiveInterval is not null && current.EffectiveInterval.Contains(at) &&
++                JsonSerializer.Serialize(current) == bindingSnapshot;
++        }
++        catch (Exception error) when (error is InvalidOperationException or ArgumentException) { return false; }
++    }
++    internal DevicePreparedPresentation ForBrowser(AuthenticationPolicy authenticationPolicy, string devicePolicyVersion,
++        IDeviceLocalContentBindingSource source, DeviceContentBinding binding) =>
++        new(owner, null, authenticationPolicy, devicePolicyVersion, source, binding, profile, availability, Presentation);
++    public override string ToString() => nameof(DevicePreparedPresentation);
++}
++
++/// <summary>Presentation-only adapter. Device permission, collection, trust, proof and session effects retain their owners.</summary>
++public sealed class PublishedDevicePresentationSource(IdentityPersistenceDbContext database, PresentationContentApplication content,
++    IDeviceLocalContentBindingSource bindings, TimeProvider clock) : IDeviceAsyncPresentationSource
++{
++    private DevicePreparedPresentation? nativePreparation;
++    public DevicePresentation RequirePublished(AuthenticationPolicy authenticationPolicy, string devicePolicyVersion) =>
++        throw new InvalidOperationException("This explicitly selected Device publication requires asynchronous preparation.");
++    public async ValueTask<DevicePreparedPresentation> PreparePublishedAsync(AuthenticationPolicy authenticationPolicy, string devicePolicyVersion,
++        CancellationToken cancellationToken)
++    {
++        if (database.Database.CurrentTransaction is not null)
++        {
++            // Repeat owner resolution must not acquire new Content keys after the Device lock.
++            // A transaction-pinned witness is reused only while all its current local authorities still match.
++            if (nativePreparation?.IsOwnerTransaction(database) == true)
++            {
++                cancellationToken.ThrowIfCancellationRequested();
++                if (!nativePreparation.CurrentAt(database, authenticationPolicy, devicePolicyVersion, clock.GetUtcNow()))
++                    throw new InvalidOperationException("Prepared Device publication qualification changed or expired.");
++                return nativePreparation;
++            }
++            nativePreparation = (await PrepareInTransactionAsync(authenticationPolicy, devicePolicyVersion, cancellationToken).ConfigureAwait(false)).Prepared;
++            return nativePreparation;
++        }
++        // Browser selection has point-in-time read semantics. Only this newly owned, read-only transaction is disposed here.
++        (DevicePreparedPresentation Prepared, DeviceContentBinding Binding) read;
++        await using (var transaction = await database.Database.BeginTransactionAsync(cancellationToken).ConfigureAwait(false))
++        {
++            read = await PrepareInTransactionAsync(authenticationPolicy, devicePolicyVersion, cancellationToken).ConfigureAwait(false);
++            await transaction.RollbackAsync(cancellationToken).ConfigureAwait(false);
++        }
++        var detached = read.Prepared.ForBrowser(authenticationPolicy, devicePolicyVersion, bindings, read.Binding);
++        if (!detached.CurrentAt(database, authenticationPolicy, devicePolicyVersion, clock.GetUtcNow()))
++            throw new InvalidOperationException("Device browser publication changed or expired.");
++        cancellationToken.ThrowIfCancellationRequested(); return detached;
++    }
++    private async Task<(DevicePreparedPresentation Prepared, DeviceContentBinding Binding)> PrepareInTransactionAsync(AuthenticationPolicy authenticationPolicy,
++        string devicePolicyVersion, CancellationToken cancellationToken)
++    {
++        var transaction = database.Database.CurrentTransaction?.GetDbTransaction()
++            ?? throw new InvalidOperationException("The current Identity owner transaction is required.");
++        var binding = Require(authenticationPolicy, devicePolicyVersion, clock.GetUtcNow());
++        var resolved = await content.ResolveInTransactionAsync(new(binding.ContentScope, binding.VariantReference, clock.GetUtcNow()),
++            database.Database.GetDbConnection(), transaction, binding.ReadQualification, cancellationToken).ConfigureAwait(false);
++        var resolution = resolved.Resolution;
++        if (resolution.Scope != binding.ContentScope || resolution.RequestedVariantReference != binding.VariantReference ||
++            string.IsNullOrWhiteSpace(resolution.Locale) || string.IsNullOrWhiteSpace(resolution.EffectiveVariantReference) ||
++            resolution.Content.Any(x => x.Key != x.Value.Key || x.Value.Locale != resolution.Locale || x.Value.VariantReference != resolution.EffectiveVariantReference))
++            throw new InvalidOperationException("Published Device content provenance is unavailable.");
++        var presentation = Project(resolution.Locale, resolution.Content.Values.Select(x => new RegistrationPublishedText(x.Key, x.VariantReference,
++            x.VersionReference, x.PublicationReference, x.Locale, "PUBLISHED", x.Text)));
++        var current = Require(authenticationPolicy, devicePolicyVersion, clock.GetUtcNow());
++        if (JsonSerializer.Serialize(current) != JsonSerializer.Serialize(binding) ||
++            !ReferenceEquals(database.Database.CurrentTransaction?.GetDbTransaction(), transaction))
++            throw new InvalidOperationException("Device publication qualification changed.");
++        var profile = content.RequireLocalProfileWitness(resolved, clock.GetUtcNow());
++        var interval = PublishedPresentationAvailability.Intersect(binding.EffectiveInterval, resolved.Availability);
++        var prepared = new DevicePreparedPresentation(database, transaction, authenticationPolicy, devicePolicyVersion, bindings, binding, profile, interval, presentation);
++        if (!prepared.CurrentAt(database, authenticationPolicy, devicePolicyVersion, clock.GetUtcNow()))
++            throw new InvalidOperationException("Device publication changed or expired during preparation.");
++        cancellationToken.ThrowIfCancellationRequested(); return (prepared, binding);
++    }
++    private DeviceContentBinding Require(AuthenticationPolicy authenticationPolicy, string devicePolicyVersion, DateTimeOffset at)
++    {
++        ArgumentNullException.ThrowIfNull(authenticationPolicy); authenticationPolicy.Validate(); ArgumentException.ThrowIfNullOrWhiteSpace(devicePolicyVersion);
++        var binding = bindings.RequireCurrentLocal(authenticationPolicy, devicePolicyVersion, at);
++        if (binding is null || binding.AuthenticationPolicyVersion != authenticationPolicy.Version || binding.DevicePolicyVersion != devicePolicyVersion ||
++            binding.EffectiveInterval is null || !binding.EffectiveInterval.Contains(at) || binding.ReadQualification is null ||
++            new[] { binding.ConfigurationVersionReference, binding.QualificationReference, binding.ContentScope, binding.VariantReference }.Any(string.IsNullOrWhiteSpace))
++            throw new InvalidOperationException("Exact qualified Device content configuration is unavailable.");
++        return binding;
++    }
++    private static DevicePresentation Project(string locale, IEnumerable<RegistrationPublishedText> texts)
++    {
++        try { return new(locale, texts); }
++        catch (ArgumentException) { throw new InvalidOperationException("Complete published Device content is unavailable."); }
++    }
++}
++
++public static class PublishedDevicePresentationRegistration
++{
++    /// <summary>Explicit publication selection only. Device routes, policy and trust-removal activation remain separate.</summary>
++    public static IServiceCollection AddTunnerPublishedDevicePresentation(this IServiceCollection services)
++    {
++        ArgumentNullException.ThrowIfNull(services);
++        Type[] required = [typeof(IdentityPersistenceDbContext), typeof(PresentationContentApplication),
++            typeof(IDeviceLocalContentBindingSource), typeof(TimeProvider)];
++        if (required.Any(type => !services.Any(x => x.ServiceType == type)) || services.Any(x => x.ServiceType == typeof(IDevicePresentationSource)))
++            throw new InvalidOperationException("Published Device content requires explicit unique Content, binding, Identity and clock providers.");
++        services.AddScoped<IDevicePresentationSource, PublishedDevicePresentationSource>(); return services;
++    }
++}
+diff --git a/src/Modules/Identity/DeviceStepUpOwner.cs b/src/Modules/Identity/DeviceStepUpOwner.cs
+--- a/src/Modules/Identity/DeviceStepUpOwner.cs
++++ b/src/Modules/Identity/DeviceStepUpOwner.cs
+@@ -18,8 +18,15 @@
+ {
+     private StepUpCaller Caller(HttpContext http) => StepUpCaller.FromPrincipal(http.User, surface.Origin,
+         partitions.Network(http.Connection.RemoteIpAddress ?? throw new ArgumentException("A current peer is required.")));
++    private async ValueTask<DevicePreparedPresentation?> PreparePublicationAsync(CancellationToken ct)
++    {
++        var auth = authenticationPolicies.RequireEffective(clock.GetUtcNow()); auth.Validate();
++        var policy = devicePolicies.RequireCurrent(surface.Origin, clock.GetUtcNow()); policy.Require(surface.Origin, clock.GetUtcNow());
++        return await DeviceBrowserEndpoints.PreparePublicationAsync(publications, auth, policy.Metadata.VersionId, ct).ConfigureAwait(false);
++    }
++    private DeviceBrowserExecutionValidity Witness(HttpContext http, DeviceBrowserEndpoints.Original original,
++        UserStepUpOperationContext context, DevicePreparedPresentation? prepared) =>
++        new(http, protection, budgets, publications, devicePolicies, authenticationPolicies, original, context, prepared, database);
+-    private DeviceBrowserExecutionValidity Witness(HttpContext http, DeviceBrowserEndpoints.Original original, UserStepUpOperationContext context) =>
+-        new(http, protection, budgets, publications, devicePolicies, authenticationPolicies, original, context);
+     public async Task<UserStepUpOperationContext?> ResolveAsync(UserStepUpActor actor, CancellationToken ct)
+     {
+         var http = accessor.HttpContext ?? throw new InvalidOperationException("A current User request is required.");
+@@ -30,9 +37,11 @@
+         if (caller.AccountId != actor.AccountId || caller.SessionId != actor.SessionId || caller.Origin != actor.Origin) return null;
+         if (other is not null && StepUpBrowserService.Digest(other) != original.FallbackDigest) return other;
+         if (at < original.CreatedAt || at >= original.ExpiresAt) return other;
++        // In a native owner transaction, Content locks must precede ResolveBrowserRemovalAsync's Device lock.
++        var prepared = await PreparePublicationAsync(ct).ConfigureAwait(false);
+         var resolved = await devices.ResolveBrowserRemovalAsync(caller, original.Request, ct).ConfigureAwait(false);
+         if (resolved.Context is not { } context || StepUpBrowserService.Digest(context) != original.BindingDigest) return null;
++        var witness = Witness(http, original, context, prepared);
+-        var witness = Witness(http, original, context);
+         // The outer Session router compares this same candidate with the baseline it captured at its Confirm.
+         // Changing its selector must not manufacture a different underlying fallback during that comparison.
+         // Execution still requires the original selector and exact live proof view at the final decision.
+@@ -60,7 +69,8 @@
+         if (!ReferenceEquals(context, database) || database.Database.CurrentTransaction is null) return UserStepUpOperationApplyOutcome.Conflict();
+         var http = accessor.HttpContext ?? throw new InvalidOperationException("A current User request is required.");
+         var original = DeviceBrowserEndpoints.ReadOriginal(http, protection, actor); if (original is null) return UserStepUpOperationApplyOutcome.Conflict();
++        var prepared = await PreparePublicationAsync(ct).ConfigureAwait(false);
++        var caller = Caller(http); var witness = Witness(http, original, operation, prepared);
+-        var caller = Caller(http); var witness = Witness(http, original, operation);
+         if (!witness.CurrentAt(caller, operation.Binding, clock.GetUtcNow())) return UserStepUpOperationApplyOutcome.Conflict();
+         using var outcome = await devices.ApplyRemovalAsync(caller, operation, ct).ConfigureAwait(false);
+         return outcome.DeviceValidity is { } validity ? outcome.ForDevice(validity with { Browser = witness }) : UserStepUpOperationApplyOutcome.Conflict();
+@@ -79,8 +89,10 @@
+ /// <summary>Pure final-clock browser qualification, carried by the existing Device owner outcome.</summary>
+ internal sealed class DeviceBrowserExecutionValidity(HttpContext http, IDataProtectionProvider protection, IDeviceHttpBudgetSource budgets,
+     IDevicePresentationSource publications, IDeviceEvidencePolicySource devicePolicies, IAuthenticationPolicySource authenticationPolicies,
++    DeviceBrowserEndpoints.Original original, UserStepUpOperationContext operation, DevicePreparedPresentation? prepared = null,
++    IdentityPersistenceDbContext? publicationOwner = null)
+-    DeviceBrowserEndpoints.Original original, UserStepUpOperationContext operation)
+ {
++    internal bool UsesPreparedPublication => prepared is not null;
+     internal bool SelectionCurrentAt(StepUpCaller caller, StepUpOperation binding, DateTimeOffset at, bool requireSessionSelection = true)
+     {
+         if (caller.AccountId != original.AccountId || caller.SessionId != original.ActorSessionId || caller.Origin != original.Origin ||
+@@ -93,7 +105,11 @@
+             DeviceBrowserEndpoints.ReadOriginal(http, protection, new(caller)) != original) return false;
+         var auth = authenticationPolicies.RequireEffective(at); auth.Validate();
+         var policy = devicePolicies.RequireCurrent(caller.Origin, at); policy.Require(caller.Origin, at);
++        var budget = DeviceHttpBudget.Current(budgets, at);
++        // Ordinary owners retain their existing local port. Persisted publications use only their prepared local witness here.
++        if (prepared is not null && (publicationOwner is null || !prepared.CurrentAt(publicationOwner, auth, policy.Metadata.VersionId, at))) return false;
++        if (prepared is null && publications is IDeviceAsyncPresentationSource) return false;
++        var published = prepared?.Presentation ?? DeviceBrowserEndpoints.Publication(publications, auth, policy.Metadata.VersionId);
+-        var budget = DeviceHttpBudget.Current(budgets, at); var published = DeviceBrowserEndpoints.Publication(publications, auth, policy.Metadata.VersionId);
+         return auth.Version == original.AuthenticationVersion && AuthenticationIdentity.Digest(budget.Snapshot) == original.TransportDigest &&
+             DeviceBrowserEndpoints.PublicationDigest(published) == original.PublicationDigest;
+     }
+diff --git a/src/Modules/Identity/DeviceBrowserEndpoints.cs b/src/Modules/Identity/DeviceBrowserEndpoints.cs
+--- a/src/Modules/Identity/DeviceBrowserEndpoints.cs
++++ b/src/Modules/Identity/DeviceBrowserEndpoints.cs
+@@ -86,6 +86,19 @@
+         try { return source.RequirePublished(authenticationPolicy, devicePolicyVersion) ?? throw new InvalidOperationException("Device publication is unavailable."); }
+         catch (ArgumentException e) { throw new InvalidOperationException("Device publication is unavailable.", e); }
+     }
++    internal static async ValueTask<DevicePreparedPresentation?> PreparePublicationAsync(IDevicePresentationSource source,
++        AuthenticationPolicy authenticationPolicy, string devicePolicyVersion, CancellationToken ct)
++    {
++        if (source is not IDeviceAsyncPresentationSource asyncSource) return null;
++        return await asyncSource.PreparePublishedAsync(authenticationPolicy, devicePolicyVersion, ct).ConfigureAwait(false)
++            ?? throw new InvalidOperationException("Prepared Device publication is unavailable.");
++    }
++    internal static async Task<DevicePresentation> PublicationAsync(IDevicePresentationSource source, AuthenticationPolicy authenticationPolicy,
++        string devicePolicyVersion, CancellationToken ct)
++    {
++        var prepared = await PreparePublicationAsync(source, authenticationPolicy, devicePolicyVersion, ct).ConfigureAwait(false);
++        return prepared?.Presentation ?? Publication(source, authenticationPolicy, devicePolicyVersion);
++    }
+     internal static bool Fits(string name, string value, CookieOptions cookie, int maximum) => SessionRevocationOriginalSelection.Fits(name, value, cookie, maximum);
+     internal static IResult Problem(int status, string code) => TechnicalProblemDetails.HttpResult(status, "about:blank", "The request could not be completed.",
+         new TechnicalProblemMetadata(code, Guid.NewGuid().ToString("N"), "UNSPECIFIED"));
+@@ -134,7 +147,8 @@
+     private StepUpCaller Caller(HttpContext http) => StepUpCaller.FromPrincipal(http.User, surface.Origin,
+         partitions.Network(http.Connection.RemoteIpAddress ?? throw new ArgumentException("A current peer is required.")));
+     private DeviceEvidencePolicy Policy(DateTimeOffset at) { var value = policies.RequireCurrent(surface.Origin, at); value.Require(surface.Origin, at); return value; }
++    private Task<DevicePresentation> PublicationAsync(DeviceEvidencePolicy policy, CancellationToken ct) =>
++        DeviceBrowserEndpoints.PublicationAsync(publications, authenticationPolicies.RequireEffective(clock.GetUtcNow()), policy.Metadata.VersionId, ct);
+-    private DevicePresentation Publication(DeviceEvidencePolicy policy) => DeviceBrowserEndpoints.Publication(publications, authenticationPolicies.RequireEffective(clock.GetUtcNow()), policy.Metadata.VersionId);
+     private static string Digest(DeviceHttpBudget value) => AuthenticationIdentity.Digest(value.Snapshot);
+     private static string Digest(DeviceEvidencePolicy value) => AuthenticationIdentity.Digest(value.Snapshot);
+     private static bool Version(string? text, out long value) => long.TryParse(text, NumberStyles.None, CultureInfo.InvariantCulture, out value) &&
+@@ -159,7 +173,7 @@
+     internal Task<IResult> OptionsAsync(HttpContext http) => DeviceBrowserEndpoints.Guard(http, async () =>
+     {
+         var caller = Caller(http); var at = clock.GetUtcNow(); var budget = DeviceHttpBudget.Current(budgets, at); var policy = Policy(at);
++        var auth = authenticationPolicies.RequireEffective(at); auth.Validate(); var publication = await PublicationAsync(policy, http.RequestAborted).ConfigureAwait(false);
+-        var auth = authenticationPolicies.RequireEffective(at); auth.Validate(); var publication = Publication(policy);
+         var draft = ReadDraft(http, caller, budget, policy, auth);
+         if (draft is not null && await database.Set<DeviceOperationRow>().AsNoTracking().AnyAsync(x => x.SessionId == caller.SessionId && x.RequestId == draft.RequestId && x.State == "COMPLETED", http.RequestAborted).ConfigureAwait(false)) draft = null;
+         draft ??= new(Guid.NewGuid(), caller.AccountId, caller.SessionId, caller.Origin, auth.Version, Digest(budget), Digest(policy), at,
+@@ -167,9 +181,10 @@
+         var encoded = protection.CreateProtector("Tunner.User.Device.Draft.v1").Protect(JsonSerializer.Serialize(draft));
+         if (!DeviceBrowserEndpoints.Fits(DeviceBrowserEndpoints.DraftCookie, encoded, DeviceBrowserEndpoints.Cookie(draft.ExpiresAt - at), budget.MaximumSetCookieBytes))
+             return DeviceBrowserEndpoints.Problem(503, "TRANSPORT_CAPACITY_EXCEEDED");
++        var currentPublication = await PublicationAsync(policy, http.RequestAborted).ConfigureAwait(false);
+         var finalAt = clock.GetUtcNow();
+         if (finalAt >= draft.ExpiresAt || auth != authenticationPolicies.RequireEffective(finalAt) || Digest(budget) != Digest(DeviceHttpBudget.Current(budgets, finalAt)) || Digest(policy) != Digest(Policy(finalAt)) ||
++            DeviceBrowserEndpoints.PublicationDigest(publication) != DeviceBrowserEndpoints.PublicationDigest(currentPublication)) return DeviceBrowserEndpoints.Problem(409, "VERSION_CONFLICT");
+-            DeviceBrowserEndpoints.PublicationDigest(publication) != DeviceBrowserEndpoints.PublicationDigest(Publication(policy))) return DeviceBrowserEndpoints.Problem(409, "VERSION_CONFLICT");
+         http.Response.Cookies.Append(DeviceBrowserEndpoints.DraftCookie, encoded, DeviceBrowserEndpoints.Cookie(draft.ExpiresAt - finalAt));
+         return Results.Json(new { draft.RequestId, publication.Locale, publication.Content });
+     });
+@@ -214,7 +229,7 @@
+     {
+         if (!http.Request.HasJsonContentType()) return DeviceBrowserEndpoints.Problem(415, "VALIDATION_ERROR");
+         var caller = Caller(http); var at = clock.GetUtcNow(); var budget = DeviceHttpBudget.Current(budgets, at); var policy = Policy(at);
++        var auth = authenticationPolicies.RequireEffective(at); auth.Validate(); var publication = await PublicationAsync(policy, http.RequestAborted).ConfigureAwait(false);
+-        var auth = authenticationPolicies.RequireEffective(at); auth.Validate(); var publication = Publication(policy);
+         var command = await IdentityJsonCommand.ReadAsync<PrepareCommand>(http, budget.MaximumRequestBytes).ConfigureAwait(false);
+         if (!command.Confirmed || command.RequestId == Guid.Empty || command.Reference == Guid.Empty || !Version(command.ExpectedVersion, out var version) ||
+             !Version(command.ExpectedTrustVersion, out var trustVersion) || trustVersion == long.MaxValue) return DeviceBrowserEndpoints.Problem(400, "VALIDATION_ERROR");
+@@ -242,13 +257,14 @@
+         var resolved = await devices.ResolveBrowserRemovalAsync(caller, request, http.RequestAborted).ConfigureAwait(false);
+         if (resolved.Original is not { } row || resolved.Context is null) return DeviceBrowserEndpoints.Problem(409, "VERSION_CONFLICT");
+         var other = fallback.SingleOrDefault() is { } f ? await f.Owner.ResolveAsync(new(caller), http.RequestAborted).ConfigureAwait(false) : null;
++        var currentPublication = await PublicationAsync(policy, http.RequestAborted).ConfigureAwait(false);
+         at = clock.GetUtcNow(); var expires = Clip(row.ExpiresAt, row.CreatedAt + budget.IntentLifetime, row.CreatedAt + auth.BrowserContextLifetime, budget.Metadata.EffectiveInterval.Until, policy.Metadata.EffectiveInterval.Until);
+         var recovery = Clip(row.RecoveryExpiresAt, expires + budget.ResultLifetime);
+         var original = new DeviceBrowserEndpoints.Original(caller.AccountId, caller.SessionId, caller.Origin, request, StepUpBrowserService.Digest(prepared), auth.Version,
+             Digest(budget), DeviceBrowserEndpoints.PublicationDigest(publication), SessionRevocationOriginalSelection.Fingerprint(http), row.CreatedAt, expires, recovery, other is null ? null : StepUpBrowserService.Digest(other));
+         var encoded = protection.CreateProtector(DeviceBrowserEndpoints.OriginalPurpose).Protect(JsonSerializer.Serialize(original));
+         if (at >= expires || expires >= recovery || Digest(budget) != Digest(DeviceHttpBudget.Current(budgets, at)) || Digest(policy) != Digest(Policy(at)) || auth != authenticationPolicies.RequireEffective(at) ||
++            DeviceBrowserEndpoints.PublicationDigest(publication) != DeviceBrowserEndpoints.PublicationDigest(currentPublication)) return DeviceBrowserEndpoints.Problem(409, "VERSION_CONFLICT");
+-            DeviceBrowserEndpoints.PublicationDigest(publication) != DeviceBrowserEndpoints.PublicationDigest(Publication(policy))) return DeviceBrowserEndpoints.Problem(409, "VERSION_CONFLICT");
+         if (!DeviceBrowserEndpoints.Fits(DeviceBrowserEndpoints.OriginalCookie, encoded, DeviceBrowserEndpoints.Cookie(recovery - at), budget.MaximumSetCookieBytes)) return DeviceBrowserEndpoints.Problem(503, "TRANSPORT_CAPACITY_EXCEEDED");
+         http.Response.Cookies.Append(DeviceBrowserEndpoints.OriginalCookie, encoded, DeviceBrowserEndpoints.Cookie(recovery - at));
+         // Existing owner selections remain truthful independent originals. Only the old proof dialog is superseded.
+@@ -267,7 +283,10 @@
+         if (context.Completed) return context;
+         var other = fallback.SingleOrDefault() is { } f ? await f.Owner.ResolveAsync(new(caller), http.RequestAborted).ConfigureAwait(false) : null;
+         if (other is not null && StepUpBrowserService.Digest(other) != original.FallbackDigest) return null;
++        var auth = authenticationPolicies.RequireEffective(clock.GetUtcNow()); auth.Validate();
++        var policy = Policy(clock.GetUtcNow());
++        var prepared = await DeviceBrowserEndpoints.PreparePublicationAsync(publications, auth, policy.Metadata.VersionId, http.RequestAborted).ConfigureAwait(false);
++        var witness = new DeviceBrowserExecutionValidity(http, protection, budgets, publications, policies, authenticationPolicies, original, context, prepared, database);
+-        var witness = new DeviceBrowserExecutionValidity(http, protection, budgets, publications, policies, authenticationPolicies, original, context);
+         return witness.SelectionCurrentAt(caller, context.Binding, clock.GetUtcNow()) ? context : null;
+     }
+     internal Task<IResult> ContextAsync(HttpContext http) => DeviceBrowserEndpoints.Guard(http, async () =>
+diff --git a/src/Modules/Identity/StepUpApplication.cs b/src/Modules/Identity/StepUpApplication.cs
+--- a/src/Modules/Identity/StepUpApplication.cs
++++ b/src/Modules/Identity/StepUpApplication.cs
+@@ -237,6 +237,25 @@
+                 }
+                 ct.ThrowIfCancellationRequested(); await transaction.CommitAsync(ct).ConfigureAwait(false);
+             }
++            else if (outcome.DeviceValidity is { Browser: { UsesPreparedPublication: true } } devicePublication)
++            {
++                var deviceProofAuthenticatedAt = row.AuthenticatedAt; var deviceProofExpiresAt = row.ExpiresAt;
++                var deviceProofLifetime = policy.ProofLifetime; var deviceAssuranceInterval = policy.Metadata.EffectiveInterval;
++                var deviceSessionUseInterval = continuation!.SessionUseInterval; var deviceOperationInterval = continuation.OperationInterval;
++                await database.SaveChangesAsync(ct).ConfigureAwait(false);
++                var deviceDecisionAt = clock.GetUtcNow();
++                // Recheck immutable time bounds and local witnesses; ACTIVE/pre-save proof state no longer applies after SaveChanges.
++                if (deviceDecisionAt < deviceProofAuthenticatedAt || deviceDecisionAt >= deviceProofExpiresAt ||
++                    deviceDecisionAt - deviceProofAuthenticatedAt >= deviceProofLifetime || !deviceAssuranceInterval.Contains(deviceDecisionAt) ||
++                    !deviceSessionUseInterval.Contains(deviceDecisionAt) || !deviceOperationInterval.Contains(deviceDecisionAt) ||
++                    session.State != "ACTIVE" || AuthenticationApplication.Expired(session, currentAuthentication, deviceDecisionAt) ||
++                    !devicePublication.CurrentAt(database, caller, operation, deviceDecisionAt))
++                {
++                    await transaction.RollbackAsync(ct).ConfigureAwait(false); database.ChangeTracker.Clear();
++                    return new(false, "STEP_UP_REQUIRED");
++                }
++                ct.ThrowIfCancellationRequested(); await transaction.CommitAsync(ct).ConfigureAwait(false);
++            }
+             else await FinishAsync(transaction, true, ct).ConfigureAwait(false);
+             pending = outcome.TakeRecoveryDelivery(); committedTerminal = terminal;
+           }
+diff --git a/tests/Tunner.Identity.Persistence.Tests/DeviceHttpTests.cs b/tests/Tunner.Identity.Persistence.Tests/DeviceHttpTests.cs
+--- a/tests/Tunner.Identity.Persistence.Tests/DeviceHttpTests.cs
++++ b/tests/Tunner.Identity.Persistence.Tests/DeviceHttpTests.cs
+@@ -17,7 +17,7 @@
+ 
+ namespace Tunner.Identity.Persistence.Tests;
+ 
+-public sealed class DeviceHttpTests(SessionListingPostgresFixture fixture) : IClassFixture<SessionListingPostgresFixture>
++public sealed partial class DeviceHttpTests(SessionListingPostgresFixture fixture) : IClassFixture<SessionListingPostgresFixture>
+ {
+     private const string Root = "/account/devices";
+     private static readonly string[] FederationMethods = ["mfa", "pwd"];
+diff --git a/tests/Tunner.Identity.Persistence.Tests/PublishedDevicePresentationIntegrationTests.cs b/tests/Tunner.Identity.Persistence.Tests/PublishedDevicePresentationIntegrationTests.cs
+new file mode 100644
+--- /dev/null
++++ b/tests/Tunner.Identity.Persistence.Tests/PublishedDevicePresentationIntegrationTests.cs
+@@ -0,0 +1,423 @@
++using System.Data.Common;
++using System.Net;
++using System.Net.Http.Json;
++using System.Security.Cryptography;
++using System.Security.Claims;
++using Microsoft.AspNetCore.Http;
++using System.Text;
++using System.Text.Json;
++using Microsoft.EntityFrameworkCore;
++using Microsoft.EntityFrameworkCore.Diagnostics;
++using Microsoft.EntityFrameworkCore.Storage;
++using Microsoft.Extensions.DependencyInjection;
++using Tunner.Database.Outbox;
++using Tunner.Platform.Policies;
++using Tunner.PresentationContent;
++using Xunit;
++using static Tunner.Identity.Persistence.Tests.AuthenticationTestHost;
++
++namespace Tunner.Identity.Persistence.Tests;
++
++// Reuse the existing private Device Scenario/Create/Login/Prepare/ProofOptions/NoRemoval fixtures and real HTTPS host.
++public sealed partial class DeviceHttpTests
++{
++    [Fact]
++    public async Task PublishedDeviceContentCoversListingTrustRemovalAndExactPrivateResultReplay()
++    {
++        var configured = await PublishedDeviceScenario(); await using var test = configured.Scenario;
++        var publications = configured.Publications;
++        using (var options = await test.Host.Get(Root + "/options", test.Actor.Cookies))
++        {
++            Assert.Equal(HttpStatusCode.OK, options.StatusCode); Headers(options);
++            var body = await options.Content.ReadFromJsonAsync<JsonElement>();
++            foreach (var entry in publications)
++            {
++                var actual = body.GetProperty("content").GetProperty(entry.Key);
++                Assert.Equal(entry.Value.PublicationReference.ToString("N"), actual.GetProperty("publicationRef").GetString());
++                Assert.Equal(entry.Value.VersionReference.ToString("N"), actual.GetProperty("versionRef").GetString());
++                Assert.Equal("PUBLISHED", actual.GetProperty("state").GetString());
++            }
++        }
++        var device = await Device(test);
++        using (var details = await test.Host.Post(Root + "/details", new { reference = device.GetProperty("reference").GetGuid() }, test.Actor.Cookies, test.Actor.Csrf))
++            Assert.Equal(HttpStatusCode.OK, details.StatusCode);
++        var original = await Prepare(test, device: device); var proof = await ProofOptions(test, original);
++        using (var response = await test.Host.Post("/authentication/step-up/password", new { requestId = proof.RequestId, password = Password }, proof.Cookies, proof.Csrf))
++        {
++            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
++            var body = await response.Content.ReadFromJsonAsync<JsonElement>();
++            Assert.Equal("COMPLETED", body.GetProperty("status").GetString()); Assert.False(body.GetProperty("signInRequired").GetBoolean());
++        }
++        for (var i = 0; i < 2; i++)
++        {
++            using var response = await test.Host.Post(Root + "/result", new { requestId = original.RequestId }, proof.Cookies, proof.Csrf);
++            Assert.Equal(HttpStatusCode.OK, response.StatusCode); Headers(response);
++            var result = await response.Content.ReadFromJsonAsync<JsonElement>();
++            Assert.Equal("REVOKED", result.GetProperty("status").GetString()); Assert.Equal(original.OperationReference, result.GetProperty("operationReference").GetString());
++            Assert.Equal(device.GetProperty("reference").GetGuid(), result.GetProperty("target").GetProperty("reference").GetGuid());
++        }
++        using var duplicate = await test.Host.Post("/authentication/step-up/password", new { requestId = proof.RequestId, password = Password }, proof.Cookies, proof.Csrf);
++        Assert.Equal(HttpStatusCode.OK, duplicate.StatusCode);
++        using var session = await test.Host.Get("/authentication/session", proof.Cookies); Assert.Equal(HttpStatusCode.OK, session.StatusCode);
++        await using var read = test.Database.Context();
++        Assert.Equal(1, await read.Set<DeviceTrustRow>().CountAsync(x => x.State == "REVOKED"));
++        Assert.Equal(1, await read.Set<StepUpProofRow>().CountAsync(x => x.State == "CONSUMED"));
++        Assert.Equal(1, await read.Set<OutboxMessage>().CountAsync(x => x.EventType == "DeviceTrustRevoked"));
++        Assert.False(await read.Set<OutboxMessage>().AnyAsync(x => x.EventType == "TunnerSessionRevoked"));
++    }
++
++    [Theory]
++    [InlineData("passkey")]
++    [InlineData("totp")]
++    public async Task PublishedDeviceNativeProofCompletesExistingTrustRemovalWithoutChangingSessionEffect(string method)
++    {
++        var totp = new TotpTests.Profile(); using var key = new PasskeyAuthenticator();
++        Task<AuthenticationTestHost> Starter(IdentityTestDatabase db, Action<IServiceCollection> setup) => method == "passkey"
++            ? PasskeyTests.StartRecoveryFixtureAsync(db, setup) : TotpTests.StartTotp(db, totp, setup);
++        var configured = await PublishedDeviceScenario(start: Starter, configure: (_, profile) =>
++        {
++            if (method == "passkey")
++            {
++                profile.Methods.Add(PasskeyPolicy.MethodKey(false, false), profile.RequiredAssurance);
++                profile.ScopeVersions.Add(PasskeyApplication.EnrollmentScope, "fixture-enrollment-v1");
++                profile.ScopeVersions.Add(PasskeyApplication.RevocationScope, "fixture-revocation-v1");
++            }
++            else
++            {
++                profile.RequiredAssurance = totp.Policy.OperationProofAssurance; profile.Methods["pwd"] = profile.RequiredAssurance;
++                profile.Methods.Add("totp", profile.RequiredAssurance); profile.NativePresentation = totp;
++                foreach (var scope in new[] { TotpApplication.EnrollmentScope, TotpApplication.DisableScope, TotpApplication.ResetScope })
++                    profile.ScopeVersions.Add(scope, totp.AssuranceVersion);
++            }
++        });
++        await using var test = configured.Scenario;
++        var source = method == "passkey" ? (await PasskeyTests.SeedRecoveryCredentialAsync(test.Host, key)).Reference :
++            (await TotpTests.Enroll(test.Host, totp, await TotpTests.Login(test.Host))).Reference;
++        var original = await Prepare(test); var proof = await ProofOptions(test, original); var attempt = Guid.NewGuid();
++        HttpResponseMessage response;
++        if (method == "passkey")
++        {
++            using var options = await test.Host.Post("/authentication/step-up/passkey/options", new { requestId = proof.RequestId, attemptId = attempt }, proof.Cookies, proof.Csrf);
++            Assert.Equal(HttpStatusCode.OK, options.StatusCode); var native = await options.Content.ReadFromJsonAsync<JsonElement>();
++            response = await test.Host.Post("/authentication/step-up/passkey", new { requestId = proof.RequestId, attemptId = attempt,
++                ceremonyId = native.GetProperty("ceremonyId").GetGuid(), credential = key.Assert(native.GetProperty("publicKey"), Origin) }, Merge(proof.Cookies, options), proof.Csrf);
++        }
++        else response = await test.Host.Post("/authentication/step-up/totp", new { requestId = proof.RequestId, attemptId = attempt,
++            authenticatorReference = source, code = TotpTests.NativeCode(totp.Seed(source), 1) }, proof.Cookies, proof.Csrf);
++        using (response)
++        {
++            Assert.Equal(HttpStatusCode.OK, response.StatusCode); var body = await response.Content.ReadFromJsonAsync<JsonElement>();
++            Assert.Equal("COMPLETED", body.GetProperty("status").GetString()); Assert.False(body.GetProperty("signInRequired").GetBoolean());
++        }
++        using var result = await test.Host.Post(Root + "/result", new { requestId = original.RequestId }, proof.Cookies, proof.Csrf);
++        Assert.Equal(HttpStatusCode.OK, result.StatusCode);
++        await using var read = test.Database.Context(); Assert.Equal(1, await read.Set<DeviceTrustRow>().CountAsync(x => x.State == "REVOKED"));
++        Assert.False(await read.Set<OutboxMessage>().AnyAsync(x => x.EventType == "TunnerSessionRevoked"));
++    }
++
++    [Theory]
++    [InlineData("replacement")]
++    [InlineData("binding")]
++    [InlineData("profile")]
++    [InlineData("expiry")]
++    public async Task PublishedDeviceRejectsChangedOriginalPublicationBeforeAnyTrustRemoval(string change)
++    {
++        var configured = await PublishedDeviceScenario(); await using var test = configured.Scenario;
++        var original = await Prepare(test); var proof = await ProofOptions(test, original);
++        if (change == "replacement")
++        {
++            test.Host.Clock.Advance(TimeSpan.FromSeconds(1)); const string key = "account.devices.title";
++            _ = await configured.Content.PublishTextAsync(key, "Synthetic changed Device title", supersedes: configured.Publications[key].PublicationReference);
++        }
++        else if (change == "binding") configured.Authority.ConfigurationVersion = "fixture-device-binding-changed";
++        else if (change == "profile") configured.Authority.Available = false;
++        else configured.Authority.Until = test.Host.Clock.GetUtcNow();
++        using var response = await test.Host.Post("/authentication/step-up/password", new { requestId = proof.RequestId, password = Password }, proof.Cookies, proof.Csrf);
++        Assert.NotEqual(HttpStatusCode.OK, response.StatusCode); await NoRemoval(test, 1);
++        await using var read = test.Database.Context(); Assert.False(await read.Set<StepUpProofRow>().AnyAsync(x => x.State == "CONSUMED"));
++    }
++
++    [Theory]
++    [InlineData("expiry")]
++    [InlineData("publication-expiry")]
++    [InlineData("profile")]
++    [InlineData("binding")]
++    public async Task PublishedDeviceFinalLocalWitnessRollsBackSavedRemovalWhenQualificationChanges(string change)
++    {
++        var observer = new DevicePublicationSqlGuard(); var configured = await PublishedDeviceScenario(observer,
++            publicationLifetime: change == "publication-expiry" ? TimeSpan.FromSeconds(1) : null);
++        await using var test = configured.Scenario; var original = await Prepare(test); var proof = await ProofOptions(test, original);
++        if (change == "expiry") configured.Authority.Until = test.Host.Clock.GetUtcNow().AddSeconds(1);
++        observer.AfterDeviceSave = () =>
++        {
++            if (change is "expiry" or "publication-expiry") test.Host.Clock.Advance(TimeSpan.FromSeconds(1));
++            else if (change == "profile") configured.Authority.Available = false;
++            else configured.Authority.ConfigurationVersion = "fixture-device-after-save";
++        };
++        using var response = await test.Host.Post("/authentication/step-up/password", new { requestId = proof.RequestId, password = Password }, proof.Cookies, proof.Csrf);
++        Assert.True(observer.Fired); Assert.NotEqual(HttpStatusCode.OK, response.StatusCode); await NoRemoval(test, 1);
++        await using var read = test.Database.Context();
++        Assert.True(await read.Set<DeviceOperationRow>().AllAsync(x => x.State == "PENDING" && x.Version == 1));
++        Assert.False(await read.Set<StepUpProofRow>().AnyAsync(x => x.State == "CONSUMED"));
++    }
++
++    [Theory]
++    [InlineData("proof")]
++    [InlineData("session-use")]
++    [InlineData("operation-access")]
++    public async Task PublishedDeviceSavedChangesCannotOutliveQualifiedProofOrAccessWithLivePublicationAndOriginal(string boundary)
++    {
++        var observer = new DevicePublicationSqlGuard();
++        var configured = await PublishedDeviceScenario(observer, configure: (_, profile) =>
++        { if (boundary == "proof") profile.ProofLifetime = TimeSpan.FromSeconds(1); });
++        await using var test = configured.Scenario; var original = await Prepare(test); var proof = await ProofOptions(test, original);
++        if (boundary != "proof")
++            test.Host.Access.BeforeDecision = request => test.Host.Access.DecisionLifetime =
++                request.Operation == (boundary == "session-use" ? "SESSION_USE" : DeviceApplication.RevokeScope.Operation)
++                    ? TimeSpan.FromSeconds(1) : TimeSpan.FromHours(1);
++        observer.AfterDeviceSave = () => test.Host.Clock.Advance(TimeSpan.FromSeconds(2));
++        using var response = await test.Host.Post("/authentication/step-up/password", new { requestId = proof.RequestId, password = Password }, proof.Cookies, proof.Csrf);
++        Assert.True(observer.Fired); Assert.NotEqual(HttpStatusCode.OK, response.StatusCode); await NoRemoval(test, 1);
++        var at = test.Host.Clock.GetUtcNow(); Assert.True(original.View.GetProperty("expiresAt").GetDateTimeOffset() > at);
++        Assert.True(configured.Authority.RequireCurrentLocal(test.Host.Policies.Policy, configured.Authority.DeviceVersion, at).EffectiveInterval.Contains(at));
++        Assert.True(test.Qualification.RequireCurrent(Origin, at).Metadata.EffectiveInterval.Contains(at));
++        await using var read = test.Database.Context();
++        var row = await read.Set<StepUpProofRow>().SingleAsync(x => x.Operation == DeviceApplication.RevokeScope.Operation);
++        Assert.Equal("ACTIVE", row.State); if (boundary != "proof") Assert.True(row.ExpiresAt > at);
++        Assert.True(await read.Set<DeviceOperationRow>().AllAsync(x => x.State == "PENDING" && x.Version == 1));
++    }
++
++    [Fact]
++    public async Task PublishedDeviceActualNativeOwnerResolutionTakesContentBeforeDeviceAndReusesOnlyExactTransactionWitness()
++    {
++        var observer = new DevicePublicationSqlGuard(); var configured = await PublishedDeviceScenario(observer); await using var test = configured.Scenario;
++        var original = await Prepare(test); var proof = await ProofOptions(test, original);
++        await using var scope = test.Host.Services.CreateAsyncScope(); var database = scope.ServiceProvider.GetRequiredService<IdentityPersistenceDbContext>();
++        var account = await database.Set<AuthenticationSessionRow>().Where(x => x.SessionId == test.Actor.SessionId).Select(x => x.AccountId).SingleAsync();
++        var http = new DefaultHttpContext { RequestServices = scope.ServiceProvider,
++            User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, account),
++                new Claim(AuthenticationIdentity.SessionClaim, test.Actor.SessionId.ToString("D")), new Claim(AuthenticationIdentity.OriginClaim, Origin) }, AuthenticationIdentity.Scheme)) };
++        http.Connection.RemoteIpAddress = IPAddress.Loopback; http.Request.Method = "POST"; http.Request.Path = "/authentication/step-up/password";
++        http.Request.Headers.Cookie = proof.Cookies;
++        var accessor = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>(); var previous = accessor.HttpContext; accessor.HttpContext = http;
++        using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(15));
++        await using var blocker = test.Database.Context(); await using var writer = await blocker.Database.BeginTransactionAsync(deadline.Token);
++        var content = configured.Content; var contentKey = "presentation-content:publication:" + Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(
++            JsonSerializer.Serialize(new { content.Scope, Key = DevicePresentation.RequiredKeys[0], VariantReference = content.Variant }))));
++        await blocker.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended({contentKey},0))", deadline.Token);
++        Task<UserStepUpOperationContext?>? resolving = null; var released = false;
++        try
++        {
++            await using var transaction = await database.Database.BeginTransactionAsync(deadline.Token);
++            var caller = StepUpCaller.FromPrincipal(http.User, Origin, scope.ServiceProvider.GetRequiredService<AuthenticationPartitionKey>().Network(IPAddress.Loopback));
++            Assert.NotNull(await scope.ServiceProvider.GetRequiredService<AuthenticationApplication>().LockForOperationAsync(caller, DeviceApplication.RevokeScope.Operation, deadline.Token));
++            var owner = scope.ServiceProvider.GetRequiredService<IUserStepUpOperationSource>();
++            resolving = owner.ResolveAsync(new(caller), deadline.Token);
++            await using var probe = test.Database.Context(); var pid = ((Npgsql.NpgsqlConnection)database.Database.GetDbConnection()).ProcessID;
++            while (!await probe.Database.SqlQuery<bool>($"SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE pid={pid} AND wait_event_type='Lock' AND query LIKE '%pg_advisory_xact_lock_shared%') AS \"Value\"").SingleAsync(deadline.Token))
++                await Task.Delay(10, deadline.Token);
++            var deviceLock = "device:" + original.Target.GetProperty("reference").GetGuid().ToString("N");
++            Assert.True(await probe.Database.SqlQuery<bool>($"SELECT pg_try_advisory_xact_lock(hashtextextended({deviceLock},0)) AS \"Value\"").SingleAsync(deadline.Token));
++            await writer.RollbackAsync(deadline.Token); released = true;
++            var selected = await resolving; Assert.NotNull(selected); Assert.Equal(original.OperationReference, selected.Binding.CorrelationId);
++            Assert.Same(transaction, database.Database.CurrentTransaction);
++            Assert.False(await probe.Database.SqlQuery<bool>($"SELECT pg_try_advisory_xact_lock(hashtextextended({deviceLock},0)) AS \"Value\"").SingleAsync(deadline.Token));
++            // Preparation after Device is held must reuse the pinned read, never re-read or lock new Content keys.
++            var source = Assert.IsType<PublishedDevicePresentationSource>(scope.ServiceProvider.GetRequiredService<IDevicePresentationSource>());
++            var prepared = await source.PreparePublishedAsync(test.Host.Policies.Policy, configured.Authority.DeviceVersion, deadline.Token);
++            var profileReads = configured.Authority.OrdinaryProfileReads; var sqlReads = observer.SqlReads; observer.RejectSql = true;
++            try
++            {
++                Assert.Same(prepared, await source.PreparePublishedAsync(test.Host.Policies.Policy, configured.Authority.DeviceVersion, deadline.Token));
++                configured.Authority.ContentScopeOverride = "fixture-changed-device-content";
++                await Assert.ThrowsAsync<InvalidOperationException>(() => source.PreparePublishedAsync(test.Host.Policies.Policy, configured.Authority.DeviceVersion, deadline.Token).AsTask());
++                Assert.Equal(profileReads, configured.Authority.OrdinaryProfileReads); Assert.Equal(sqlReads, observer.SqlReads);
++            }
++            finally { observer.RejectSql = false; }
++            await transaction.RollbackAsync(deadline.Token);
++        }
++        finally
++        {
++            deadline.Cancel(); if (!released) await writer.RollbackAsync(CancellationToken.None);
++            if (resolving is not null) try { await resolving; } catch (Exception error) when (error is OperationCanceledException or InvalidOperationException) { }
++            accessor.HttpContext = previous;
++        }
++        await NoRemoval(test, 1);
++    }
++
++    [Fact]
++    public async Task PublishedDeviceBrowserSnapshotCannotBecomeNativeAndOwnerWitnessPerformsNoResolverOrDatabaseIo()
++    {
++        var observer = new DevicePublicationSqlGuard(); var configured = await PublishedDeviceScenario(observer);
++        await using var test = configured.Scenario; await using var scope = test.Host.Services.CreateAsyncScope();
++        var database = scope.ServiceProvider.GetRequiredService<IdentityPersistenceDbContext>();
++        var source = Assert.IsType<PublishedDevicePresentationSource>(scope.ServiceProvider.GetRequiredService<IDevicePresentationSource>());
++        var auth = test.Host.Policies.Policy; var version = configured.Authority.DeviceVersion;
++        var browser = await source.PreparePublishedAsync(auth, version, CancellationToken.None);
++        Assert.Null(database.Database.CurrentTransaction); Assert.True(browser.CurrentAt(database, auth, version, test.Host.Clock.GetUtcNow()));
++        DevicePreparedPresentation native;
++        await using (var tx = await database.Database.BeginTransactionAsync())
++        {
++            Assert.False(browser.CurrentAt(database, auth, version, test.Host.Clock.GetUtcNow()));
++            native = await source.PreparePublishedAsync(auth, version, CancellationToken.None); Assert.Same(tx, database.Database.CurrentTransaction);
++            await using var foreign = test.Database.Context();
++            Assert.False(native.CurrentAt(foreign, auth, version, test.Host.Clock.GetUtcNow()));
++            var ordinaryReads = configured.Authority.OrdinaryProfileReads; var sql = observer.SqlReads; observer.RejectSql = true;
++            try
++            {
++                Assert.True(native.CurrentAt(database, auth, version, test.Host.Clock.GetUtcNow()));
++                Assert.Equal(ordinaryReads, configured.Authority.OrdinaryProfileReads); Assert.Equal(sql, observer.SqlReads);
++                Assert.Throws<InvalidOperationException>(() => source.RequirePublished(auth, version));
++            }
++            finally { observer.RejectSql = false; }
++            await tx.RollbackAsync();
++        }
++        Assert.False(native.CurrentAt(database, auth, version, test.Host.Clock.GetUtcNow()));
++        Assert.True(browser.CurrentAt(database, auth, version, test.Host.Clock.GetUtcNow()));
++        await NoRemoval(test, 0);
++    }
++
++    [Fact]
++    public async Task PublishedDeviceBorrowedReadLocksContentBeforeDeviceAndCancellationPreservesOwnerTransaction()
++    {
++        var configured = await PublishedDeviceScenario(); await using var test = configured.Scenario;
++        var target = await Device(test);
++        await using var blocker = test.Database.Context(); await using var writer = await blocker.Database.BeginTransactionAsync();
++        var content = configured.Content; var key = "presentation-content:publication:" + Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(
++            JsonSerializer.Serialize(new { content.Scope, Key = DevicePresentation.RequiredKeys[0], VariantReference = content.Variant }))));
++        await blocker.Database.ExecuteSqlInterpolatedAsync($"SELECT pg_advisory_xact_lock(hashtextextended({key},0))");
++        await using var scope = test.Host.Services.CreateAsyncScope(); var database = scope.ServiceProvider.GetRequiredService<IdentityPersistenceDbContext>();
++        await using var tx = await database.Database.BeginTransactionAsync(); using var cancellation = new CancellationTokenSource();
++        var source = Assert.IsType<PublishedDevicePresentationSource>(scope.ServiceProvider.GetRequiredService<IDevicePresentationSource>());
++        var read = source.PreparePublishedAsync(test.Host.Policies.Policy, configured.Authority.DeviceVersion, cancellation.Token).AsTask();
++        try
++        {
++            using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(15));
++            await using var probe = test.Database.Context();
++            while (!await probe.Database.SqlQueryRaw<bool>("SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE datname=current_database() AND wait_event_type='Lock' AND query LIKE '%pg_advisory_xact_lock_shared%') AS \"Value\"").SingleAsync(deadline.Token))
++                await Task.Delay(10, deadline.Token);
++            Assert.False(read.IsCompleted);
++            // During Content lock acquisition, no later Device lock may have been acquired.
++            var deviceLock = "device:" + target.GetProperty("reference").GetGuid().ToString("N");
++            await using var deviceProbeTransaction = await probe.Database.BeginTransactionAsync(deadline.Token);
++            Assert.True(await probe.Database.SqlQuery<bool>($"SELECT pg_try_advisory_xact_lock(hashtextextended({deviceLock},0)) AS \"Value\"").SingleAsync(deadline.Token));
++            await deviceProbeTransaction.RollbackAsync(deadline.Token);
++            cancellation.Cancel(); await Assert.ThrowsAnyAsync<OperationCanceledException>(() => read);
++            Assert.Same(tx, database.Database.CurrentTransaction);
++            // PostgreSQL cancellation aborts statements in this caller's transaction; the caller remains responsible for rollback.
++            await tx.RollbackAsync();
++        }
++        finally
++        {
++            cancellation.Cancel();
++            try { await read; } catch (Exception error) when (error is OperationCanceledException or InvalidOperationException) { }
++            await writer.RollbackAsync();
++        }
++        await NoRemoval(test, 0);
++    }
++
++    [Fact]
++    public void PublishedDeviceSelectionRequiresExplicitDependenciesAndDoesNotActivateDevices()
++    {
++        var services = new ServiceCollection();
++        Assert.Throws<InvalidOperationException>(() => services.AddTunnerPublishedDevicePresentation());
++        Assert.DoesNotContain(services, item => item.ServiceType == typeof(IDevicePresentationSource) || item.ServiceType == typeof(DeviceManagementBrowserService));
++    }
++
++    private async Task<(Scenario Scenario, PresentationContentTestEnvironment Content, DevicePublicationAuthority Authority,
++        Dictionary<string, ContentHistoryEntry> Publications)> PublishedDeviceScenario(DevicePublicationSqlGuard? observer = null,
++        Func<IdentityTestDatabase, Action<IServiceCollection>, Task<AuthenticationTestHost>>? start = null, Action<IServiceCollection, Profile>? configure = null, TimeSpan? publicationLifetime = null)
++    {
++        IdentityTestDatabase? database = null; string? role = null; PresentationContentTestEnvironment? content = null; DevicePublicationAuthority? authority = null;
++        var scenario = await Create(start: async (actual, setup) =>
++        {
++            database = actual; await using var reader = actual.Context();
++            role = await reader.Database.SqlQueryRaw<string>("SELECT current_user::text AS \"Value\"").SingleAsync();
++            return await (start ?? ((db, callback) => Start(db, callback)))(actual, setup);
++        }, configure: (services, profile) =>
++        {
++            configure?.Invoke(services, profile);
++            var clock = Assert.IsType<TestClock>(services.Last(x => x.ServiceType == typeof(TimeProvider)).ImplementationInstance);
++            var policy = Assert.IsType<TestPolicies>(services.Last(x => x.ServiceType == typeof(IAuthenticationPolicySource)).ImplementationInstance).Policy;
++            var devicePolicy = Assert.IsType<DeviceTrustTests.Qualification>(services.Last(x => x.ServiceType == typeof(IDeviceEvidencePolicySource)).ImplementationInstance).RequireCurrent(Origin, clock.GetUtcNow());
++            content = new(database!, clock, DevicePresentation.RequiredKeys.ToDictionary(key => key, key => "Synthetic Device copy: " + key, StringComparer.Ordinal));
++            authority = new(content, policy.Version, devicePolicy.Metadata.VersionId, new Npgsql.NpgsqlConnectionStringBuilder(database!.ConnectionString).Database!, role!);
++            services.AddSingleton<IPresentationContentProfileSource>(authority); services.AddSingleton<IPresentationContentAuthorizationSource>(content.Authorization);
++            services.AddTunnerPresentationContent(database.ConnectionString); services.AddSingleton<IDeviceLocalContentBindingSource>(authority);
++            services.Remove(services.Single(x => x.ServiceType == typeof(IDevicePresentationSource))); services.AddTunnerPublishedDevicePresentation();
++            if (observer is not null) services.AddDbContext<IdentityPersistenceDbContext>(options => options.AddInterceptors(observer, new DevicePublicationSaveGuard(observer)));
++        });
++        try
++        {
++            Assert.NotNull(content); Assert.NotNull(authority); Assert.Same(scenario.Host.Clock, content.Clock);
++            // PostgreSQL stores microseconds; align the same clock forward before publication seeding, never rewind it.
++            var remainder = scenario.Host.Clock.GetUtcNow().UtcTicks % TimeSpan.TicksPerMicrosecond;
++            if (remainder != 0) scenario.Host.Clock.Advance(TimeSpan.FromTicks(TimeSpan.TicksPerMicrosecond - remainder));
++            Assert.Equal(0L, scenario.Host.Clock.GetUtcNow().UtcTicks % TimeSpan.TicksPerMicrosecond);
++            await content.InitializeAsync();
++            var publications = new Dictionary<string, ContentHistoryEntry>(StringComparer.Ordinal);
++            foreach (var definition in content.Profile.Definitions)
++            {
++                if (publicationLifetime is not { } lifetime || definition.Key != DevicePresentation.RequiredKeys[0])
++                {
++                    publications.Add(definition.Key, await content.PublishTextAsync(definition.Key, "Synthetic Device copy: " + definition.Key)); continue;
++                }
++                await using var writer = content.Open(); content.Authorization.Actor = "fixture-author";
++                var proposal = await writer.Application.CreateDraftAsync(content.Draft("Synthetic finite Device copy", definition.Key));
++                proposal = await writer.Application.ValidateAsync(content.Command(proposal)); content.Authorization.Actor = "fixture-approver";
++                proposal = await writer.Application.ApproveAsync(content.Command(proposal)); content.Authorization.Actor = "fixture-publisher";
++                publications.Add(definition.Key, await writer.Application.PublishAsync(content.Publish(proposal) with
++                { EffectiveInterval = new(content.Clock.GetUtcNow(), true, content.Clock.GetUtcNow() + lifetime, false) }));
++            }
++            return (scenario, content, authority, publications);
++        }
++        catch { await scenario.DisposeAsync(); throw; }
++    }
++
++    private sealed class DevicePublicationAuthority(PresentationContentTestEnvironment content, string authenticationVersion,
++        string deviceVersion, string database, string role) : IDeviceLocalContentBindingSource, IContentTransactionLocalProfileSource
++    {
++        internal string ConfigurationVersion = "fixture-device-content-v1";
++        internal string? ContentScopeOverride;
++        internal bool Available = true;
++        internal DateTimeOffset? Until;
++        internal int OrdinaryProfileReads;
++        internal string DeviceVersion => deviceVersion;
++        public DeviceContentBinding RequireCurrentLocal(AuthenticationPolicy policy, string version, DateTimeOffset at)
++        {
++            if (!Available) throw new InvalidOperationException("Synthetic Device binding unavailable.");
++            var interval = new EffectivePolicyInterval(content.Interval.From, true, Until, false);
++            var qualification = new ContentTransactionReadQualification(new("fixture-device-content-read", "ACTIVE", content.Scope, content.Interval, null, ["SYNTHETIC-ONLY"]),
++                "fixture-device-read-evidence", database, role, 512, 512, 10, TimeSpan.FromSeconds(10));
++            return new(authenticationVersion, deviceVersion, ConfigurationVersion, "fixture-device-content-qualification", ContentScopeOverride ?? content.Scope, content.Variant, interval, qualification);
++        }
++        public ContentGovernanceProfile RequireEffective(string scope, DateTimeOffset at)
++        { OrdinaryProfileReads++; return RequireCurrentLocal(scope, at); }
++        public ContentGovernanceProfile RequireCurrentLocal(string scope, DateTimeOffset at) =>
++            Available ? content.RequireEffective(scope, at) : throw new ContentUnavailableException();
++    }
++
++    private sealed class DevicePublicationSqlGuard : DbCommandInterceptor
++    {
++        internal bool RejectSql, Fired;
++        internal int SqlReads;
++        internal Action? AfterDeviceSave;
++        public override InterceptionResult<DbDataReader> ReaderExecuting(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result)
++        { Check(); return result; }
++        public override ValueTask<InterceptionResult<DbDataReader>> ReaderExecutingAsync(DbCommand command, CommandEventData eventData,
++            InterceptionResult<DbDataReader> result, CancellationToken cancellationToken = default)
++        { Check(); return ValueTask.FromResult(result); }
++        private void Check() { SqlReads++; if (RejectSql) throw new InvalidOperationException("Synthetic pure-witness SQL violation."); }
++    }
++    private sealed class DevicePublicationSaveGuard(DevicePublicationSqlGuard owner) : SaveChangesInterceptor
++    {
++        public override ValueTask<int> SavedChangesAsync(SaveChangesCompletedEventData eventData, int result, CancellationToken cancellationToken = default)
++        {
++            if (!owner.Fired && owner.AfterDeviceSave is not null && eventData.Context is IdentityPersistenceDbContext db &&
++                db.ChangeTracker.Entries<DeviceOperationRow>().Any(x => x.Entity.State == "COMPLETED") &&
++                db.ChangeTracker.Entries<StepUpProofRow>().Any(x => x.Entity.State == "CONSUMED"))
++            { owner.Fired = true; owner.AfterDeviceSave(); }
++            return ValueTask.FromResult(result);
++        }
++    }
++}

@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2_AUDIT_001_007_POST_CORRECTION",
+  "result": "PASS_CURRENT_P2_SOURCE_AND_CORRECTION_GATES",
+  "recorded_at": "2026-11-09T12:25:21.338Z",
+  "current_lineage_sha": "c01dd8d989e4285a71f171a51bc68980e670be13",
+  "source_commits": {
+    "functional_corrections": "c208fdd589ac5bcac9055eb39f8cbe184ccdd123",
+    "governance_enforcement": "0c53340f6ad81be1578624c7b622f9b2855655b8",
+    "active_p2_002_003_005": "80ea799cbfc0f9f9ad721723d1944fefae7e97bd",
+    "test_compatibility": "b23753e07bc8be08a766e27201fe76c3517c0dd3"
+  },
+  "closed_revisions": [
+    "P1-018-RV004",
+    "P2-004-UI001-RV002",
+    "P2-004-UI002-RV002",
+    "P0-004-RV003",
+    "P2-004-UI001-RV003",
+    "P2-004-UI002-RV003"
+  ],
+  "p2_committed_source_audit": {
+    "ExitCode": 0,
+    "Command": "commit-readiness audit",
+    "Payload": {
+      "Outcome": "PASS",
+      "Findings": []
+    }
+  },
+  "actual_tests": {
+    "full_governance": "PASS including25 effective-readiness cases",
+    "accounts": 57,
+    "identity": 148,
+    "browser": 81,
+    "ui_unit_theme": 31,
+    "starter": 7,
+    "architecture_current": 237
+  },
+  "test_provenance_refs": [
+    "governance/evidence/p2-recovery-20261109/test-index.json",
+    "governance/evidence/p2-recovery-20261109/active-source-refresh.json",
+    "governance/evidence/p2-recovery-20261109/governance/test-index.json"
+  ],
+  "architecture_recheck": "Restricted run could not import its generated Windows fixture key. The same test binary passed237/237 outside filesystem restriction; no trust or certificate code change. Failed and passing results retained.",
+  "ui_scope": "Existing16 inventory items and exact original scoped approvals only; P2-007 and later UI remain unimplemented and unaccepted.",
+  "inherited_p1_source_audit": {
+    "result": "REMEDIATION_REQUIRED",
+    "finding_count": 34,
+    "ref": "governance/evidence/p2-recovery-20261109/governance/p1-inherited-source-audit.json",
+    "governed_followup": "TODO-TUN-P2-017-GOV002",
+    "boundary": "Current source proof drift after later integration/authority changes; historical P1 closure remains valid and immutable. Reconcile exact current path ownership by later scoped RVs before final integration/acceptance; do not falsely report global P1 PASS."
+  },
+  "remaining_goal": "All remaining P2 features and managed production content/configuration still required. Product acceptance, merge, production configuration/enablement and release stay separate.",
+  "receipts": [
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/p2-source-final.json",
+      "raw_sha256": "40127aef8da9c87afe0fb3200dac969a29ca6a881edff117f68f770cb2ef00a1",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/p2-source-audit.json",
+      "portable_sha256": "cde8b865e65656ffdd8cdb516264a0c76e0b979b6e63e30f1cb3528578b7537e",
+      "normalization": "LF, trailing line whitespace and local repo/package/temp/machine/user references normalized; raw source SHA retained."
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/p1-source-after-enforcement.json",
+      "raw_sha256": "c50013fe89fb698888124603b40af78ab6fc2c2496dd9fb87803e90143424633",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/p1-inherited-source-audit.json",
+      "portable_sha256": "4b519981c47ddb26bf357ebc2f87a619331925a130b1d1930ca22b1085bb4d99",
+      "normalization": "LF, trailing line whitespace and local repo/package/temp/machine/user references normalized; raw source SHA retained."
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/architecture-governance.log",
+      "raw_sha256": "3bd5be4d9bed76a97b286e11a40d84d996f8bb8179881b8e3b2b500f078e4e5d",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/architecture-restricted.log",
+      "portable_sha256": "dd378b5fc876f5807a28fbfddc00be06cfd9fa940cbc33ac1d4f8689b344d65f",
+      "normalization": "LF, trailing line whitespace and local repo/package/temp/machine/user references normalized; raw source SHA retained."
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/tests/architecture-governance.trx",
+      "raw_sha256": "8bd60bc44f13d7eb9158a71fa1224295dfd2c88f3176002990bc50f739c1f0ae",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/architecture-restricted.trx",
+      "portable_sha256": "e4c6a5e59a2f7cb3fe4e502c9e5fcff83776f0302ea3c44382a3cca9e7a264a8",
+      "normalization": "LF, trailing line whitespace and local repo/package/temp/machine/user references normalized; raw source SHA retained."
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/architecture-governance-authorized.log",
+      "raw_sha256": "8f6190a0e47846169421669b29ed6898938d8b054619e95865b525331d8c2373",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/architecture-pass.log",
+      "portable_sha256": "1912b452404abff4ab5f6e92d081529d9884347931870fddcab765fae7973d89",
+      "normalization": "LF, trailing line whitespace and local repo/package/temp/machine/user references normalized; raw source SHA retained."
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/tests/architecture-governance-authorized.trx",
+      "raw_sha256": "b7bceb7dd2569f9ae47142d22f6e416e11b2447e0f6b11f97d765b0ab93afdb6",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/governance/architecture-pass.trx",
+      "portable_sha256": "5e3d381bee5822f5a06e6d6b321515c3b2f5c956390680ca383e1085dfb71fd8",
+      "normalization": "LF, trailing line whitespace and local repo/package/temp/machine/user references normalized; raw source SHA retained."
+    }
+  ]
+}

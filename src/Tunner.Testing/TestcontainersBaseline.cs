@@ -6,7 +6,7 @@ namespace Tunner.Testing;
 public static class TestcontainersBaseline
 {
     public static IContainer CreateRabbitMqContainer(string user, string password)
-        => new ContainerBuilder("rabbitmq:4.3.6-management")
+        => new ContainerBuilder("rabbitmq:4.3.7-management-alpine@sha256:eb338b3fc8f5c251028c0022ac0de3fe1db2d599d1c6a08b45898f756f248881")
             .WithEnvironment("RABBITMQ_DEFAULT_USER", user)
             .WithEnvironment("RABBITMQ_DEFAULT_PASS", password)
             .WithPortBinding(5672, true)
@@ -14,7 +14,7 @@ public static class TestcontainersBaseline
             .Build();
 
     public static IContainer CreateRedisContainer()
-        => new ContainerBuilder("redis:8.10.2-alpine")
+        => new ContainerBuilder("redis:8.10.3-alpine@sha256:71885d8cc6e42f2bc0aa2eb853bfc4be200b5108a46ac50e117ae1df0531fb80")
             .WithPortBinding(6379, true)
             .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(6379))
             .Build();

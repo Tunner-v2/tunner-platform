@@ -1,0 +1,517 @@
+{
+  "schema_version": 1,
+  "tested_ui_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+  "viewports": [
+    {
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "width": 1100,
+      "height": 1100
+    },
+    {
+      "width": 1101,
+      "height": 1100
+    }
+  ],
+  "states": [
+    "manage-active",
+    "manage-multiple",
+    "setup-consumed",
+    "remove-affected",
+    "reset-current",
+    "proof-code",
+    "login-mfa",
+    "login-picker"
+  ],
+  "total": 24,
+  "passed": 24,
+  "findings": [],
+  "contrast": [
+    {
+      "state": "reset-current",
+      "width": 1366,
+      "target": [
+        "span[data-content-key=\"totp.reset.separateEnrollment\"]"
+      ],
+      "key": "totp.reset.separateEnrollment",
+      "foreground": [
+        71,
+        89,
+        107
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 7.218535441658394,
+      "minimum": 4.5,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Inline text wraps within its opaque card/dialog surface. Inspect representative multiline screenshots; retained DOM boxes and zero clipping support class review. Contrast uses actual inherited foreground and opaque surface."
+    },
+    {
+      "state": "login-mfa",
+      "width": 1366,
+      "target": [
+        "span[data-content-key=\"brand.tunner\"]"
+      ],
+      "key": "brand.tunner",
+      "foreground": [
+        0,
+        0,
+        0
+      ],
+      "background": [
+        248,
+        250,
+        252
+      ],
+      "ratio": 20.071189561616038,
+      "minimum": 3,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Brand over approved page/glow assets: conservative RGB floor from source SVG colors and page; no dark overlay. Logo also exceeds large-text threshold."
+    },
+    {
+      "state": "login-mfa",
+      "width": 1366,
+      "target": [
+        "span[data-content-key=\"authentication.footer.privacy\"]"
+      ],
+      "key": "authentication.footer.privacy",
+      "foreground": [
+        71,
+        85,
+        105
+      ],
+      "background": [
+        248,
+        250,
+        252
+      ],
+      "ratio": 7.242510935504382,
+      "minimum": 4.5,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Inline text wraps within its opaque card/dialog surface. Inspect representative multiline screenshots; retained DOM boxes and zero clipping support class review. Contrast uses actual inherited foreground and opaque surface."
+    },
+    {
+      "state": "login-mfa",
+      "width": 1366,
+      "target": [
+        "span[data-content-key=\"authentication.footer.terms\"]"
+      ],
+      "key": "authentication.footer.terms",
+      "foreground": [
+        71,
+        85,
+        105
+      ],
+      "background": [
+        248,
+        250,
+        252
+      ],
+      "ratio": 7.242510935504382,
+      "minimum": 4.5,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Inline text wraps within its opaque card/dialog surface. Inspect representative multiline screenshots; retained DOM boxes and zero clipping support class review. Contrast uses actual inherited foreground and opaque surface."
+    },
+    {
+      "state": "login-picker",
+      "width": 1366,
+      "target": [
+        "span[data-content-key=\"brand.tunner\"]"
+      ],
+      "key": "brand.tunner",
+      "foreground": [
+        0,
+        0,
+        0
+      ],
+      "background": [
+        248,
+        250,
+        252
+      ],
+      "ratio": 20.071189561616038,
+      "minimum": 3,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Brand over approved page/glow assets: conservative RGB floor from source SVG colors and page; no dark overlay. Logo also exceeds large-text threshold."
+    },
+    {
+      "state": "login-picker",
+      "width": 1366,
+      "target": [
+        ".totp-number-help > span[data-content-variant=\"PUBLIC-RENDER-FIXTURE\"][data-content-version=\"public-v1\"][data-content-publication=\"SYNTHETIC-NOT-PRODUCTION\"]"
+      ],
+      "key": "totp.selection.numberExplanation",
+      "foreground": [
+        71,
+        89,
+        105
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 7.2392469868633755,
+      "minimum": 4.5,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Inline text wraps within its opaque card/dialog surface. Inspect representative multiline screenshots; retained DOM boxes and zero clipping support class review. Contrast uses actual inherited foreground and opaque surface."
+    },
+    {
+      "state": "login-picker",
+      "width": 1366,
+      "target": [
+        "span[data-content-key=\"authentication.footer.privacy\"]"
+      ],
+      "key": "authentication.footer.privacy",
+      "foreground": [
+        71,
+        85,
+        105
+      ],
+      "background": [
+        248,
+        250,
+        252
+      ],
+      "ratio": 7.242510935504382,
+      "minimum": 4.5,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Inline text wraps within its opaque card/dialog surface. Inspect representative multiline screenshots; retained DOM boxes and zero clipping support class review. Contrast uses actual inherited foreground and opaque surface."
+    },
+    {
+      "state": "login-picker",
+      "width": 1366,
+      "target": [
+        "span[data-content-key=\"authentication.footer.terms\"]"
+      ],
+      "key": "authentication.footer.terms",
+      "foreground": [
+        71,
+        85,
+        105
+      ],
+      "background": [
+        248,
+        250,
+        252
+      ],
+      "ratio": 7.242510935504382,
+      "minimum": 4.5,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Inline text wraps within its opaque card/dialog surface. Inspect representative multiline screenshots; retained DOM boxes and zero clipping support class review. Contrast uses actual inherited foreground and opaque surface."
+    },
+    {
+      "state": "reset-current",
+      "width": 1100,
+      "target": [
+        "span[data-content-key=\"totp.reset.separateEnrollment\"]"
+      ],
+      "key": "totp.reset.separateEnrollment",
+      "foreground": [
+        71,
+        89,
+        107
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 7.218535441658394,
+      "minimum": 4.5,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Inline text wraps within its opaque card/dialog surface. Inspect representative multiline screenshots; retained DOM boxes and zero clipping support class review. Contrast uses actual inherited foreground and opaque surface."
+    },
+    {
+      "state": "login-mfa",
+      "width": 1100,
+      "target": [
+        "span[data-content-key=\"brand.tunner\"]"
+      ],
+      "key": "brand.tunner",
+      "foreground": [
+        0,
+        0,
+        0
+      ],
+      "background": [
+        248,
+        250,
+        252
+      ],
+      "ratio": 20.071189561616038,
+      "minimum": 3,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Brand over approved page/glow assets: conservative RGB floor from source SVG colors and page; no dark overlay. Logo also exceeds large-text threshold."
+    },
+    {
+      "state": "login-picker",
+      "width": 1100,
+      "target": [
+        "span[data-content-key=\"brand.tunner\"]"
+      ],
+      "key": "brand.tunner",
+      "foreground": [
+        0,
+        0,
+        0
+      ],
+      "background": [
+        248,
+        250,
+        252
+      ],
+      "ratio": 20.071189561616038,
+      "minimum": 3,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Brand over approved page/glow assets: conservative RGB floor from source SVG colors and page; no dark overlay. Logo also exceeds large-text threshold."
+    },
+    {
+      "state": "login-picker",
+      "width": 1100,
+      "target": [
+        ".totp-number-help > span[data-content-variant=\"PUBLIC-RENDER-FIXTURE\"][data-content-version=\"public-v1\"][data-content-publication=\"SYNTHETIC-NOT-PRODUCTION\"]"
+      ],
+      "key": "totp.selection.numberExplanation",
+      "foreground": [
+        71,
+        89,
+        105
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 7.2392469868633755,
+      "minimum": 4.5,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Inline text wraps within its opaque card/dialog surface. Inspect representative multiline screenshots; retained DOM boxes and zero clipping support class review. Contrast uses actual inherited foreground and opaque surface."
+    },
+    {
+      "state": "reset-current",
+      "width": 1101,
+      "target": [
+        "span[data-content-key=\"totp.reset.separateEnrollment\"]"
+      ],
+      "key": "totp.reset.separateEnrollment",
+      "foreground": [
+        71,
+        89,
+        107
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 7.218535441658394,
+      "minimum": 4.5,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Inline text wraps within its opaque card/dialog surface. Inspect representative multiline screenshots; retained DOM boxes and zero clipping support class review. Contrast uses actual inherited foreground and opaque surface."
+    },
+    {
+      "state": "login-mfa",
+      "width": 1101,
+      "target": [
+        "span[data-content-key=\"brand.tunner\"]"
+      ],
+      "key": "brand.tunner",
+      "foreground": [
+        0,
+        0,
+        0
+      ],
+      "background": [
+        248,
+        250,
+        252
+      ],
+      "ratio": 20.071189561616038,
+      "minimum": 3,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Brand over approved page/glow assets: conservative RGB floor from source SVG colors and page; no dark overlay. Logo also exceeds large-text threshold."
+    },
+    {
+      "state": "login-picker",
+      "width": 1101,
+      "target": [
+        "span[data-content-key=\"brand.tunner\"]"
+      ],
+      "key": "brand.tunner",
+      "foreground": [
+        0,
+        0,
+        0
+      ],
+      "background": [
+        248,
+        250,
+        252
+      ],
+      "ratio": 20.071189561616038,
+      "minimum": 3,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Brand over approved page/glow assets: conservative RGB floor from source SVG colors and page; no dark overlay. Logo also exceeds large-text threshold."
+    },
+    {
+      "state": "login-picker",
+      "width": 1101,
+      "target": [
+        ".totp-number-help > span[data-content-variant=\"PUBLIC-RENDER-FIXTURE\"][data-content-version=\"public-v1\"][data-content-publication=\"SYNTHETIC-NOT-PRODUCTION\"]"
+      ],
+      "key": "totp.selection.numberExplanation",
+      "foreground": [
+        71,
+        89,
+        105
+      ],
+      "background": [
+        255,
+        255,
+        255
+      ],
+      "ratio": 7.2392469868633755,
+      "minimum": 4.5,
+      "result": "RESOLVED_PASS_CURRENT_CLASS",
+      "class_basis": "Inline text wraps within its opaque card/dialog surface. Inspect representative multiline screenshots; retained DOM boxes and zero clipping support class review. Contrast uses actual inherited foreground and opaque surface."
+    }
+  ],
+  "core_manual_contrast_ref": "../review-r2/contrast-resolution-final.json",
+  "core_manual_contrast_sha256": "68ef7dff051dc6dfa5c5266532b7978d58ed0a0444ad19cf1aa6e6b17d1323e0",
+  "manual_visual_review": "Reviewed actual1366 two-factor management and adjacent1100/1101 consumed-setup screenshots. At1100 the grid stacks and header search is hidden; at1101 proportional columns remain inside the main panel. Content wraps without horizontal clipping, actions remain present, native modal focus wraps and returns correctly. Normal vertical scrolling is retained on768px laptop height.",
+  "result": "PASS_PUBLIC_LAPTOP_BREAKPOINT_SCOPE_ONLY",
+  "boundary": "24critical public-fixture views only, not all41states atthese3sizes; no native real journey/Product/release approval.",
+  "files": [
+    {
+      "path": "rendered/checks.json",
+      "sha256": "2742ed44096131e2563edd7c7381d6164724633f6c215e14cdc2508346214489",
+      "bytes": 562944
+    },
+    {
+      "path": "rendered/login-mfa-1100.png",
+      "sha256": "2b87a5a97fffef566af62668adef6d4a57a9dae82cc93037d5454d79d5da14bc",
+      "bytes": 79481
+    },
+    {
+      "path": "rendered/login-mfa-1101.png",
+      "sha256": "6089127671e0601e54796bd242335a9b05b576bc5c2eeb5dc9840346ea630925",
+      "bytes": 79671
+    },
+    {
+      "path": "rendered/login-mfa-1366.png",
+      "sha256": "d226e01e5bfe13c8483af40e7bc019d7ece6fb5747200720a807bbba03acb334",
+      "bytes": 83073
+    },
+    {
+      "path": "rendered/login-picker-1100.png",
+      "sha256": "d39c05c2d93878e6bbd8ec662b3e18adbd479abf89e02a1984b81e1e46629716",
+      "bytes": 89713
+    },
+    {
+      "path": "rendered/login-picker-1101.png",
+      "sha256": "bf67b0a4387878767a83dd128e52e39b1045c21bc5c1e39b175516cee019fffd",
+      "bytes": 89716
+    },
+    {
+      "path": "rendered/login-picker-1366.png",
+      "sha256": "7b29ff5479ddad82aaf2fc15c3b8712905d326caec750ab7b4f4c7e78ab586ae",
+      "bytes": 92939
+    },
+    {
+      "path": "rendered/manage-active-1100.png",
+      "sha256": "da21beb01d5828b9a9c3298396e4ec69063418a701e44149b701f742b22909fc",
+      "bytes": 92647
+    },
+    {
+      "path": "rendered/manage-active-1101.png",
+      "sha256": "a2553c155f045c65ac5701004ab6783c17112343c2afe3a874f4a36e1ded087c",
+      "bytes": 93257
+    },
+    {
+      "path": "rendered/manage-active-1366.png",
+      "sha256": "d068e5f10af34ac0a5ba46a324f52d9e71c284c52f15d1fbd1860021bb667d00",
+      "bytes": 92553
+    },
+    {
+      "path": "rendered/manage-multiple-1100.png",
+      "sha256": "3ae3c91a89aa81acfaabc66ca0b1b7d78da63c7bb7a8614e6c8a5441fd0b78ef",
+      "bytes": 93641
+    },
+    {
+      "path": "rendered/manage-multiple-1101.png",
+      "sha256": "95a6f4762fdeeefd526c1bab18a14d43c5bede3fe0af60734174df26add2c531",
+      "bytes": 93611
+    },
+    {
+      "path": "rendered/manage-multiple-1366.png",
+      "sha256": "7e1df2013337dc4aa4de9139d3051a1bcf4c96f8b5e30ac428e3ec5b43c99d72",
+      "bytes": 94542
+    },
+    {
+      "path": "rendered/proof-code-1100.png",
+      "sha256": "2093be261dad47f855848169cb39f91f575f712a807cd252558c71fcd6ccbfd3",
+      "bytes": 44024
+    },
+    {
+      "path": "rendered/proof-code-1101.png",
+      "sha256": "7d625a638bd965fa1af3facc1fe0c3619c06545a45bf45d613eabb50264e8a83",
+      "bytes": 43838
+    },
+    {
+      "path": "rendered/proof-code-1366.png",
+      "sha256": "1e777a891b47378c1ec0743cc6875ba4f058c81d6eff5486c97858c9fe1d57af",
+      "bytes": 38662
+    },
+    {
+      "path": "rendered/remove-affected-1100.png",
+      "sha256": "9ce1257fb276aa6acda8c25826e0303972c1a069bed10a965af6a0abdab977b3",
+      "bytes": 85133
+    },
+    {
+      "path": "rendered/remove-affected-1101.png",
+      "sha256": "645776ffb823a61052a883d31f12e479142074377fefc2e0574778eff9d771e7",
+      "bytes": 91608
+    },
+    {
+      "path": "rendered/remove-affected-1366.png",
+      "sha256": "9ec223f089cc2c51f97c6ce229039243338386cae85f176dc37b2f656ce8d910",
+      "bytes": 88712
+    },
+    {
+      "path": "rendered/reset-current-1100.png",
+      "sha256": "35e88ea0c4776e4ffc882e98842009322041a75bcb0dfab1967fca737c2ed59c",
+      "bytes": 87147
+    },
+    {
+      "path": "rendered/reset-current-1101.png",
+      "sha256": "060507e7a6dec3807d573c22f8fb80447d8109ed180a4b8a5da48f889c62f288",
+      "bytes": 94060
+    },
+    {
+      "path": "rendered/reset-current-1366.png",
+      "sha256": "0900bfc71ac9693fd467dcd60561e8c48a4e8f702706e4962aedb1062f3daae8",
+      "bytes": 89274
+    },
+    {
+      "path": "rendered/setup-consumed-1100.png",
+      "sha256": "50a7ecfd00849422466087104f56c1af8bd4946121b78545afb551ec608d5530",
+      "bytes": 86657
+    },
+    {
+      "path": "rendered/setup-consumed-1101.png",
+      "sha256": "668166553e90a515c7e386be619abb256d52fb40901f966597d964bea4d48864",
+      "bytes": 92516
+    },
+    {
+      "path": "rendered/setup-consumed-1366.png",
+      "sha256": "549a4c4d947605543e31b11b81a2b1a693f62b182e50da03bb30a6775a8c8baa",
+      "bytes": 91218
+    }
+  ]
+}

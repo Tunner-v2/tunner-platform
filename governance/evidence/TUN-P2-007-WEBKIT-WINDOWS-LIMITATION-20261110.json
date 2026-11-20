@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-007",
+  "result": "CONFIRMED_TEST_ENGINE_LIMITATION_NOT_TUNNER_POLICY_WAIVER",
+  "source_carrier_sha": "516ec0090253ee21b93c7e61922bd9d1f1caecfa",
+  "recorded_at": "2026-11-10T11:38:52.523Z",
+  "environment": {
+    "playwright": "1.62.1",
+    "webkit": "26.5",
+    "build": "2336",
+    "platform": "Windows Curl port",
+    "pinned_webkit_commit": "343e13bf22dca9d0ec227801419aab0f9001a32f"
+  },
+  "observed": {
+    "server_user_session": "Lax; Secure; HttpOnly (preserved existing authentication profile)",
+    "server_operation_pointer": "Strict; Secure; HttpOnly",
+    "browser_projection": "None already after ordinary options before interception",
+    "ordinary_browser_behavior": "Same-origin baseline and Lax cross-site positive control passed; distinct-site top-level127→localhost also sent StrictStepUp, so this engine did not enforce the declaredStrict attribute.",
+    "interception_limit": "Separate route.fetch/abort navigation-header observations lacked same-origin/Lax positive controls and are inconclusive; they are not used to prove omission.",
+    "native_browser_api": "Required nativecredential methods absent; actual app disables unsupported action and preserves password alternative."
+  },
+  "primary_source_refs": [
+    {
+      "url": "https://raw.githubusercontent.com/microsoft/playwright/v1.62.1/browser_patches/webkit/UPSTREAM_CONFIG.sh",
+      "supports": "Pinned upstream revision"
+    },
+    {
+      "url": "https://github.com/WebKit/WebKit/blob/343e13bf22dca9d0ec227801419aab0f9001a32f/Source/cmake/OptionsWin.cmake#L106",
+      "supports": "Windows usesCurl"
+    },
+    {
+      "url": "https://github.com/WebKit/WebKit/blob/343e13bf22dca9d0ec227801419aab0f9001a32f/Source/WebCore/platform/network/curl/CookieJarDB.cpp#L46",
+      "supports": "Cookie database has noSameSite storage; getAllCookies reconstructs without it"
+    },
+    {
+      "url": "https://github.com/WebKit/WebKit/blob/343e13bf22dca9d0ec227801419aab0f9001a32f/Source/WebCore/platform/network/curl/NetworkStorageSessionCurl.cpp#L223",
+      "supports": "Request-cookie implementation ignoresSameSiteInfo"
+    }
+  ],
+  "provenance": "Independent BA/architecture investigator read pinned upstream and installedPlaywright source; root verified primarysource links and actual values-redacted runtime diagnostic. No browser fork, app control change, native/Safari claim or exception.",
+  "evidence_refs": [
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/webkit-real/results.json",
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/webkit-diagnostic/findings.json",
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/browser/webkit-unsupported-login/provenance.json"
+  ],
+  "followup": "TODO-TUN-P2-017-WEBKIT001",
+  "acceptance_boundary": "Edge current cohorts andFirefox52 remain actualpasses. WebKitreal2/3FAIL and interrupted forcedpositive run remain retained; fullWebKit/Safari security/native acceptance is NOTgranted. Run requiredprofile on a compatible runner under P2-017; no unsupported test engine is relabeled as PASS."
+}

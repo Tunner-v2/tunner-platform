@@ -1,0 +1,286 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "result": "PASS_EXECUTED_LOCAL_ENGINEERING_SCOPE",
+  "tested_commit_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+  "validated_commit_sha": "2b15d5cffc306f44797c237b50894c85586013d9",
+  "execution_provenance": "Actual root finite native-provider runs and UI-role public runs; current source-bound composition with earlier exact native cohort executions. No invocation is relabelled.",
+  "runtime_build": {
+    "source_commit_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+    "source_inputs": 372,
+    "build_outputs": 133,
+    "binding_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960",
+    "reference": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/runtime-build-binding.json"
+  },
+  "current_real_journeys": [
+    {
+      "file": "enrollment-password-mfa-preserve.json",
+      "sha256": "78e3f9a36fe47f8ba25739dc5ab4b98e6498ca62363861f660b954c4e874a4c3",
+      "journey": "TOTP_ENROLLMENT_PASSWORD_MFA_PRESERVE_V1",
+      "browserChecks": 24,
+      "coordinatorChecks": 21,
+      "accepted": true,
+      "persistence": true,
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/enrollment-password-mfa-preserve.json"
+    },
+    {
+      "file": "operation-proof-causal-revoke.json",
+      "sha256": "bccf0b17a6d71e936bb5721e28033f78188691ec8332e0b537fefe074ea9cee8",
+      "journey": "TOTP_OPERATION_PROOF_CAUSAL_REVOKE_V1",
+      "browserChecks": 23,
+      "coordinatorChecks": 21,
+      "accepted": true,
+      "persistence": true,
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/operation-proof-causal-revoke.json"
+    },
+    {
+      "file": "passkey-mfa-reset.json",
+      "sha256": "0ce0c98e5b87cc7318af88da665df9e5e7158d0d6c43dd6d3ad5d46dc4675a46",
+      "journey": "TOTP_PASSKEY_MFA_RESET_V1",
+      "browserChecks": 23,
+      "coordinatorChecks": 21,
+      "accepted": true,
+      "persistence": true,
+      "path": "governance/evidence/p2-008-totp-20261110/final-ui/947f8b0/passkey-mfa-reset.json"
+    }
+  ],
+  "current_counts": {
+    "real_browser_predicates": 70,
+    "coordinator_predicates": 63,
+    "persistence_observations": 15,
+    "public_totp_cases": 43,
+    "contract_tests": 29,
+    "typescript_exit_code": 0,
+    "composition_keyboard_cases": 4,
+    "boundary_unit_tests": 20,
+    "native_ui_items": 17
+  },
+  "native_cohorts": [
+    {
+      "name": "Identity",
+      "passed": 260,
+      "failed": 0,
+      "skipped": 0,
+      "actual_invocation_sha": "f1dd54a3a6a4f4d3f0e1d66e92c02fb52053d7a1",
+      "reference": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/f1dd54a/execution-index.json"
+    },
+    {
+      "name": "Architecture",
+      "passed": 237,
+      "failed": 0,
+      "skipped": 0,
+      "actual_invocation_sha": "a933b5f004b0341b2f1e2f26568928ec98603f21",
+      "reference": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/f1dd54a/execution-index.json"
+    },
+    {
+      "name": "Installer",
+      "passed": 113,
+      "failed": 0,
+      "skipped": 0,
+      "actual_invocation_sha": "183b557a37833fe658d60652b946860986e99ac6",
+      "source_inputs_sha": "19617c5a2d15466ddc05260b05004506c7cde3f3",
+      "reference": "governance/evidence/TUN-P2-008-EXECUTION-REGRESSIONS-PHASE2-20261110.json"
+    }
+  ],
+  "native_reuse": "Current core/provider/test input equivalence is explicitly reviewed in the final engineering and four-role source witnesses; no unaffected native cohort is claimed as a947 execution.",
+  "public_boundary_reuse": "Earlier complete public failure matrices/resource canaries retain their exact SHAs and outcomes. Current strict20 units and native public journey-entry requalify the unchanged private-boundary contract; expected failed sensitive runs remain failed.",
+  "ui_evidence_ref": "governance/evidence/TUN-P2-008-UI-COMPLIANCE.json",
+  "role_reviews_ref": "governance/evidence/TUN-P2-008-ROLE-REVIEWS.json",
+  "files": [
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/owned-source-witness.json",
+      "sha256": "f808accd638999f8b4e6a40b6c71fcb1a02b1c774f0d291ad5e48b074ce5beb6"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/runtime-build-binding.json",
+      "sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/boundary-tests-current.tap",
+      "sha256": "665bd989aeb5921988e7073c752fad7df6ff4e273d607f9c70a1061708c876b5"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/public-journey-entry-current.json",
+      "sha256": "cad58c742d73eb5707b6f68b4aeb258d81a754751078a11afc3af5c6b7825dff"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/native-ui-check.json",
+      "sha256": "340e21c3909898ee0a800e56fa690f77d5bc53c1d1f603cae8e7c0cace79adfa"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/native-ui-check-initial-crlf-failure.json",
+      "sha256": "4ff1f88210d5ddae772fca95c44b9885be18d614f8192160b7840a6232853c58"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/history/8ceb64b/enrollment-password-mfa-preserve.json",
+      "sha256": "05e615f1ede64651dcbc380f15aab71af9fe09df277f05c3dfdf361182064669"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/history/3f883e0/enrollment-password-mfa-preserve.json",
+      "sha256": "9a467b97a1466a981849069d121245e9ab9a7328c0b660e1bba947a75399682e"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/history/acd474e/operation-proof-causal-revoke.json",
+      "sha256": "5a80b31efef81f6abdd09df1abc5bacdd36b8b5e00eb98932a5b2755d8bf4b17"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/history/acd474e/passkey-mfa-reset.json",
+      "sha256": "4d158f3b348ef898cb029909383ca7bcecf7d8dcb729b65672b34660064581ae"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/history/f5c143c/operation-proof-causal-revoke.json",
+      "sha256": "43e567f0d307fefd9e6134c6c946fb97ca5c9441a6c572f6ad50329cfe420f1e"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/history/75988ad/operation-proof-causal-revoke.json",
+      "sha256": "c2b1344b450a3293280e6f2b7f2f492a5a47567cce69d579a01f424509bd17ee"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/preservation-and-environment.json",
+      "sha256": "18b4dc00108d7558d61f74ad2a11290017be1d3e3cc1b1a25045145c2e2a2b42"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/production-build/runtime-build.log",
+      "sha256": "38922980e46ec39d9dd0efed3fb29bf1843de0a3c5a0149a39b2bb62af0cefa0"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/production-build/app-build.log",
+      "sha256": "d3a4c6db0bb053661b6221e3d4d4f6b9d6a5dac97b0e8c6cc8d9bb183e9be602"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/production-build/dist-files-as-recorded.json",
+      "sha256": "fd51cfdbe49576f1aae5efa5b500d5130356b78ad7faae9a9533ac723ef89fb8"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/native-rv006-ui-check.json",
+      "sha256": "08524fe2aef514d24e2d0781bae7a11c5f269ceab6a73e839e1cb56b6f703566"
+    }
+  ],
+  "historical_failure_preservation": "Earlier failed receipts and UI005 red baseline remain immutable; PASS applies only to the final stated candidate.",
+  "approval_boundary": "Local engineering evidence only. No whole-P2 Product acceptance, production policy/content activation, protected-main integration, publication or release approval.",
+  "copy_lineage": [
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/owned-source-witness.json",
+      "raw_sha256": "f808accd638999f8b4e6a40b6c71fcb1a02b1c774f0d291ad5e48b074ce5beb6",
+      "portable_sha256": "f808accd638999f8b4e6a40b6c71fcb1a02b1c774f0d291ad5e48b074ce5beb6",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/runtime-build-binding.json",
+      "raw_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960",
+      "portable_sha256": "4f9d1ac2e4882df92d08948589613572f24e9be7c44892db895e711fef764960",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/boundary-tests-current.tap",
+      "raw_sha256": "665bd989aeb5921988e7073c752fad7df6ff4e273d607f9c70a1061708c876b5",
+      "portable_sha256": "665bd989aeb5921988e7073c752fad7df6ff4e273d607f9c70a1061708c876b5",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/public-journey-entry-current.json",
+      "raw_sha256": "cad58c742d73eb5707b6f68b4aeb258d81a754751078a11afc3af5c6b7825dff",
+      "portable_sha256": "cad58c742d73eb5707b6f68b4aeb258d81a754751078a11afc3af5c6b7825dff",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/native-ui-check.json",
+      "raw_sha256": "0ed3544e752868f503294b9f94cce1964377810ba34df86e269f0aa59f935a81",
+      "portable_sha256": "340e21c3909898ee0a800e56fa690f77d5bc53c1d1f603cae8e7c0cace79adfa",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/native-ui-check-initial-crlf-failure.json",
+      "raw_sha256": "b7360dc847da0078c910a2b2518396172e790c5f21ab626b600c5a6efe21b70f",
+      "portable_sha256": "4ff1f88210d5ddae772fca95c44b9885be18d614f8192160b7840a6232853c58",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/history/8ceb64b/enrollment-password-mfa-preserve.json",
+      "raw_sha256": "a419596e1c01ddb70389333cb921c474d5e1a3ff73bef42ef9653a12bd7bca13",
+      "portable_sha256": "05e615f1ede64651dcbc380f15aab71af9fe09df277f05c3dfdf361182064669",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/history/3f883e0/enrollment-password-mfa-preserve.json",
+      "raw_sha256": "a9b3b7caaa1ad7921ffc084db8ac22d790ccd374eaf2b7860e9c2954b6a3f045",
+      "portable_sha256": "9a467b97a1466a981849069d121245e9ab9a7328c0b660e1bba947a75399682e",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/history/acd474e/operation-proof-causal-revoke.json",
+      "raw_sha256": "5a80b31efef81f6abdd09df1abc5bacdd36b8b5e00eb98932a5b2755d8bf4b17",
+      "portable_sha256": "5a80b31efef81f6abdd09df1abc5bacdd36b8b5e00eb98932a5b2755d8bf4b17",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/history/acd474e/passkey-mfa-reset.json",
+      "raw_sha256": "4d158f3b348ef898cb029909383ca7bcecf7d8dcb729b65672b34660064581ae",
+      "portable_sha256": "4d158f3b348ef898cb029909383ca7bcecf7d8dcb729b65672b34660064581ae",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/history/f5c143c/operation-proof-causal-revoke.json",
+      "raw_sha256": "43e567f0d307fefd9e6134c6c946fb97ca5c9441a6c572f6ad50329cfe420f1e",
+      "portable_sha256": "43e567f0d307fefd9e6134c6c946fb97ca5c9441a6c572f6ad50329cfe420f1e",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/history/75988ad/operation-proof-causal-revoke.json",
+      "raw_sha256": "c2b1344b450a3293280e6f2b7f2f492a5a47567cce69d579a01f424509bd17ee",
+      "portable_sha256": "c2b1344b450a3293280e6f2b7f2f492a5a47567cce69d579a01f424509bd17ee",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/preservation-and-environment.json",
+      "raw_sha256": "18b4dc00108d7558d61f74ad2a11290017be1d3e3cc1b1a25045145c2e2a2b42",
+      "portable_sha256": "18b4dc00108d7558d61f74ad2a11290017be1d3e3cc1b1a25045145c2e2a2b42",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/production-build/runtime-build.log",
+      "raw_sha256": "ec0d45336d3d493df1ff63ea41730efec61bf514864d058cdea3c7f0798f4fc0",
+      "portable_sha256": "38922980e46ec39d9dd0efed3fb29bf1843de0a3c5a0149a39b2bb62af0cefa0",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/production-build/app-build.log",
+      "raw_sha256": "c7b56c05665abf12331a4b3125fa686c2cf6cc03f0f698be1a85e19e6451c245",
+      "portable_sha256": "d3a4c6db0bb053661b6221e3d4d4f6b9d6a5dac97b0e8c6cc8d9bb183e9be602",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/production-build/dist-files-as-recorded.json",
+      "raw_sha256": "1815b47de9724b855cd70f4080c436a79d0f5ede884d92c02a19c10102be4eb2",
+      "portable_sha256": "fd51cfdbe49576f1aae5efa5b500d5130356b78ad7faae9a9533ac723ef89fb8",
+      "normalization": "UTF8 without BOM; LF; dynamically resolved checkout root replaced by <repo-root>; outcomes unchanged; terminal LF added to portable JSON"
+    },
+    {
+      "path": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/native-rv006-ui-check.json",
+      "raw_sha256": "13b24eb413f91b0e1a5324a699599fc3ec9cb307ebfaada5149e0964a5ea793b",
+      "portable_sha256": "08524fe2aef514d24e2d0781bae7a11c5f269ceab6a73e839e1cb56b6f703566",
+      "normalization": "UTF8 without BOM; LF; outcomes unchanged"
+    }
+  ],
+  "native_ui_execution": {
+    "observed_metadata_commit_sha": "938a41b367d194d785c508060098ef72fb200edd",
+    "result": "PASS",
+    "covered_items": 17,
+    "failures": 0
+  },
+  "production_ui_build": {
+    "actual_invocation_sha": "6653a3cac663394d3cd32776d519988f99a410ad",
+    "tested_ui_sha": "947f8b090b4f74a474a71e47badcb595424bd734",
+    "production_source_unchanged_between_build_and_test": true,
+    "app_dist_files": 49,
+    "step_up_dist_files": 15,
+    "all64_copied_asset_hashes_bound_by_final_runtime_manifest": true
+  },
+  "revision_ui_gate": {
+    "scope_id": "P1-018-RV006",
+    "result": "PASS",
+    "covered_items": 17,
+    "failures": 0,
+    "observed_metadata_commit_sha": "a16433717d900f5cf9145166e620f5bbe40e048f"
+  }
+}

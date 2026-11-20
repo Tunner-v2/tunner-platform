@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-005-UI-002",
+  "work_item_id": "TUN-P2-005",
+  "classification": "UI_VALIDATION_DEFECT",
+  "severity": "SEV-2",
+  "status": "OPEN",
+  "environment": "Read-only review of204797f plus the paused staged/unstaged/untracked snapshot",
+  "description": "An uncertain password-login response is treated as success when any existing session answers200. Bind read-only recovery to original bootstrap nonce/key, attempted normalized identifier/remember choice and exact current authoritative result session; never infer attempt completion from generic session existence.",
+  "expected_behavior_ref": "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+  "evidence": [
+    "governance/evidence/P2-001-007-REVIEW-FINDINGS-20261109.json"
+  ],
+  "affected_versions": [
+    "204797f9e147f5f3d942baf9074d05cdb2a1f6d7"
+  ],
+  "created_at": "2026-11-09T16:51:56.478Z",
+  "updated_at": "2026-11-09T16:51:56.478Z"
+}

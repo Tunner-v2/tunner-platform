@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-008-UI-005",
+  "work_item_id": "TUN-P2-008",
+  "classification": "UI_VALIDATION_DEFECT",
+  "severity": "SEV-2",
+  "status": "RESOLVED",
+  "environment": "Actual isolated Chromium journey at committed 75988ad; safe failure stage JOURNEY_MUTATION_BEGIN after stale-source rejection and acknowledged cancellation. No private output was exported.",
+  "description": "After another session disables factor B, cancelling the exact rejected verification on the management pathname clears the operation but does not refresh options or factor metadata. navigatePath returns early for the current pathname. The browser can retain two active rows while the server reports only factor A, leaving action availability and the single-factor removal control stale. Refresh through the existing owner-scoped load mechanism after acknowledged same-path cancellation; preserve guards, original operation identity, focus, approved composition and server authority. Linked active P1-018-RV006. No new Product or visual deviation is required.",
+  "expected_behavior_ref": "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+  "evidence": [
+    "artifacts/p2-008-totp-20261110/real-journeys-75988ad/operation-proof-causal-revoke.json",
+    "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+    "governance/revisions/P1-018-RV006.yaml",
+    "governance/evidence/TUN-P2-008-UI-005-VERIFICATION-20261111.json",
+    "governance/evidence/TUN-P2-008-UI-COMPLIANCE.json"
+  ],
+  "affected_versions": [
+    "75988ad1004685bededfa1b22cc306e09b87b89c"
+  ],
+  "created_at": "2026-11-11T04:40:47Z",
+  "updated_at": "2026-11-11T05:11:48.794Z"
+}

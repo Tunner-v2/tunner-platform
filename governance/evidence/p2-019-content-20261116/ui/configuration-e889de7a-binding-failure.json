@@ -1,0 +1,220 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.configuration-admin.config.ts",
+      "--grep",
+      "Authentication content binding",
+      "--reporter=list,json",
+      "--output=test-results/runs/configuration-admin-binding-correction"
+    ],
+    "configFile": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\playwright.configuration-admin.config.ts",
+    "rootDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/configuration-admin",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/test-results/runs/configuration-admin-binding-correction",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/configuration-admin",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config apps/admin/vite.config.ts --port 5298",
+      "url": "http://127.0.0.1:5298/identity/settings/authentication",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "configuration.spec.ts",
+      "file": "configuration.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Authentication content binding validates links and rolls back the exact immutable source at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 9050,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Save draft', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Save draft', exact: true })\u001b[22m\n\u001b[2m    2 × locator resolved to <button disabled type=\"submit\" aria-busy=\"false\" data-appearance=\"filled\" class=\"tn-primary-button\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m      - unexpected value \"inactive\"\u001b[22m\n\u001b[2m    12 × locator resolved to <button type=\"submit\" aria-busy=\"false\" data-appearance=\"filled\" class=\"tn-primary-button\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Save draft', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Save draft', exact: true })\u001b[22m\n\u001b[2m    2 × locator resolved to <button disabled type=\"submit\" aria-busy=\"false\" data-appearance=\"filled\" class=\"tn-primary-button\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m      - unexpected value \"inactive\"\u001b[22m\n\u001b[2m    12 × locator resolved to <button type=\"submit\" aria-busy=\"false\" data-appearance=\"filled\" class=\"tn-primary-button\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:73:140",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                      "column": 140,
+                      "line": 73
+                    },
+                    "snippet": "  71 |  await terms.fill('https://terms.example.test/');await terms.press('Tab');await expect(terms).not.toHaveAttribute('aria-invalid','true');await expect(page.getByLabel('Privacy link',{exact:true})).toHaveValue('https://privacy.example.test/');await expect(page.getByLabel('Content scope',{exact:true})).toHaveValue('fixture-login-copy');\n  72 |  await page.getByRole('link',{name:'Publication history',exact:true}).click();await expect(page.getByRole('button',{name:'Republish approved version'})).toBeDisabled();await expect(page.getByRole('dialog')).toHaveCount(0);await page.getByRole('link',{name:'Edit draft',exact:true}).click();\n> 73 |  const save=page.getByRole('button',{name:'Save draft',exact:true});await expect(save).toBeEnabled();await save.focus();await expect(save).toBeFocused();await page.keyboard.press('Enter');await expect.poll(()=>server.writes.length).toBe(1);await page.getByRole('link',{name:'Publication history',exact:true}).click();const restore=page.getByRole('button',{name:'Republish approved version'});await expect(restore).toBeEnabled();await restore.focus();await page.keyboard.press('Enter');const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();\n     |                                                                                                                                            ^\n  74 |  await dialog.getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');await expect(dialog.getByLabel('Available from · UTC',{exact:true})).toBeFocused();await fillPublication(page);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);\n  75 |  await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);await expect(restore).toBeFocused();expect(server.writes).toHaveLength(1);await page.keyboard.press('Enter');await expect(page.getByRole('dialog')).toBeVisible();await fillPublication(page);await page.getByRole('dialog').getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');\n  76 |  await expect.poll(()=>server.writes.length).toBe(2);expect(server.writes[1]).toMatchObject({path:'/rollback',body:{approvedVersionReference:versionId,supersedesPublicationReference:publicationId}});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                        "column": 140,
+                        "line": 73
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Save draft', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Save draft', exact: true })\u001b[22m\n\u001b[2m    2 × locator resolved to <button disabled type=\"submit\" aria-busy=\"false\" data-appearance=\"filled\" class=\"tn-primary-button\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m      - unexpected value \"inactive\"\u001b[22m\n\u001b[2m    12 × locator resolved to <button type=\"submit\" aria-busy=\"false\" data-appearance=\"filled\" class=\"tn-primary-button\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  71 |  await terms.fill('https://terms.example.test/');await terms.press('Tab');await expect(terms).not.toHaveAttribute('aria-invalid','true');await expect(page.getByLabel('Privacy link',{exact:true})).toHaveValue('https://privacy.example.test/');await expect(page.getByLabel('Content scope',{exact:true})).toHaveValue('fixture-login-copy');\n  72 |  await page.getByRole('link',{name:'Publication history',exact:true}).click();await expect(page.getByRole('button',{name:'Republish approved version'})).toBeDisabled();await expect(page.getByRole('dialog')).toHaveCount(0);await page.getByRole('link',{name:'Edit draft',exact:true}).click();\n> 73 |  const save=page.getByRole('button',{name:'Save draft',exact:true});await expect(save).toBeEnabled();await save.focus();await expect(save).toBeFocused();await page.keyboard.press('Enter');await expect.poll(()=>server.writes.length).toBe(1);await page.getByRole('link',{name:'Publication history',exact:true}).click();const restore=page.getByRole('button',{name:'Republish approved version'});await expect(restore).toBeEnabled();await restore.focus();await page.keyboard.press('Enter');const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();\n     |                                                                                                                                            ^\n  74 |  await dialog.getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');await expect(dialog.getByLabel('Available from · UTC',{exact:true})).toBeFocused();await fillPublication(page);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);\n  75 |  await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);await expect(restore).toBeFocused();expect(server.writes).toHaveLength(1);await page.keyboard.press('Enter');await expect(page.getByRole('dialog')).toBeVisible();await fillPublication(page);await page.getByRole('dialog').getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');\n  76 |  await expect.poll(()=>server.writes.length).toBe(2);expect(server.writes[1]).toMatchObject({path:'/rollback',body:{approvedVersionReference:versionId,supersedesPublicationReference:publicationId}});\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:73:140"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T09:13:19.811Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\configuration-admin-binding-correction\\configuration-Authenticati-11408-ct-immutable-source-at-1440\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                    "column": 140,
+                    "line": 73
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-3beb7159d8b3ceeedcf8",
+          "file": "configuration.spec.ts",
+          "line": 66,
+          "column": 31
+        },
+        {
+          "title": "Authentication content binding validates links and rolls back the exact immutable source at 390",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 9059,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Save draft', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Save draft', exact: true })\u001b[22m\n\u001b[2m    2 × locator resolved to <button disabled type=\"submit\" aria-busy=\"false\" data-appearance=\"filled\" class=\"tn-primary-button\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m      - unexpected value \"inactive\"\u001b[22m\n\u001b[2m    12 × locator resolved to <button type=\"submit\" aria-busy=\"false\" data-appearance=\"filled\" class=\"tn-primary-button\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Save draft', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Save draft', exact: true })\u001b[22m\n\u001b[2m    2 × locator resolved to <button disabled type=\"submit\" aria-busy=\"false\" data-appearance=\"filled\" class=\"tn-primary-button\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m      - unexpected value \"inactive\"\u001b[22m\n\u001b[2m    12 × locator resolved to <button type=\"submit\" aria-busy=\"false\" data-appearance=\"filled\" class=\"tn-primary-button\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:73:140",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                      "column": 140,
+                      "line": 73
+                    },
+                    "snippet": "  71 |  await terms.fill('https://terms.example.test/');await terms.press('Tab');await expect(terms).not.toHaveAttribute('aria-invalid','true');await expect(page.getByLabel('Privacy link',{exact:true})).toHaveValue('https://privacy.example.test/');await expect(page.getByLabel('Content scope',{exact:true})).toHaveValue('fixture-login-copy');\n  72 |  await page.getByRole('link',{name:'Publication history',exact:true}).click();await expect(page.getByRole('button',{name:'Republish approved version'})).toBeDisabled();await expect(page.getByRole('dialog')).toHaveCount(0);await page.getByRole('link',{name:'Edit draft',exact:true}).click();\n> 73 |  const save=page.getByRole('button',{name:'Save draft',exact:true});await expect(save).toBeEnabled();await save.focus();await expect(save).toBeFocused();await page.keyboard.press('Enter');await expect.poll(()=>server.writes.length).toBe(1);await page.getByRole('link',{name:'Publication history',exact:true}).click();const restore=page.getByRole('button',{name:'Republish approved version'});await expect(restore).toBeEnabled();await restore.focus();await page.keyboard.press('Enter');const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();\n     |                                                                                                                                            ^\n  74 |  await dialog.getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');await expect(dialog.getByLabel('Available from · UTC',{exact:true})).toBeFocused();await fillPublication(page);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);\n  75 |  await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);await expect(restore).toBeFocused();expect(server.writes).toHaveLength(1);await page.keyboard.press('Enter');await expect(page.getByRole('dialog')).toBeVisible();await fillPublication(page);await page.getByRole('dialog').getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');\n  76 |  await expect.poll(()=>server.writes.length).toBe(2);expect(server.writes[1]).toMatchObject({path:'/rollback',body:{approvedVersionReference:versionId,supersedesPublicationReference:publicationId}});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                        "column": 140,
+                        "line": 73
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator:  getByRole('button', { name: 'Save draft', exact: true })\nExpected: focused\nReceived: inactive\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByRole('button', { name: 'Save draft', exact: true })\u001b[22m\n\u001b[2m    2 × locator resolved to <button disabled type=\"submit\" aria-busy=\"false\" data-appearance=\"filled\" class=\"tn-primary-button\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m      - unexpected value \"inactive\"\u001b[22m\n\u001b[2m    12 × locator resolved to <button type=\"submit\" aria-busy=\"false\" data-appearance=\"filled\" class=\"tn-primary-button\" data-presentation=\"standard\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  71 |  await terms.fill('https://terms.example.test/');await terms.press('Tab');await expect(terms).not.toHaveAttribute('aria-invalid','true');await expect(page.getByLabel('Privacy link',{exact:true})).toHaveValue('https://privacy.example.test/');await expect(page.getByLabel('Content scope',{exact:true})).toHaveValue('fixture-login-copy');\n  72 |  await page.getByRole('link',{name:'Publication history',exact:true}).click();await expect(page.getByRole('button',{name:'Republish approved version'})).toBeDisabled();await expect(page.getByRole('dialog')).toHaveCount(0);await page.getByRole('link',{name:'Edit draft',exact:true}).click();\n> 73 |  const save=page.getByRole('button',{name:'Save draft',exact:true});await expect(save).toBeEnabled();await save.focus();await expect(save).toBeFocused();await page.keyboard.press('Enter');await expect.poll(()=>server.writes.length).toBe(1);await page.getByRole('link',{name:'Publication history',exact:true}).click();const restore=page.getByRole('button',{name:'Republish approved version'});await expect(restore).toBeEnabled();await restore.focus();await page.keyboard.press('Enter');const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();\n     |                                                                                                                                            ^\n  74 |  await dialog.getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');await expect(dialog.getByLabel('Available from · UTC',{exact:true})).toBeFocused();await fillPublication(page);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);\n  75 |  await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);await expect(restore).toBeFocused();expect(server.writes).toHaveLength(1);await page.keyboard.press('Enter');await expect(page.getByRole('dialog')).toBeVisible();await fillPublication(page);await page.getByRole('dialog').getByRole('button',{name:'Confirm publication'}).focus();await page.keyboard.press('Enter');\n  76 |  await expect.poll(()=>server.writes.length).toBe(2);expect(server.writes[1]).toMatchObject({path:'/rollback',body:{approvedVersionReference:versionId,supersedesPublicationReference:publicationId}});\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:73:140"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T09:13:30.544Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\configuration-admin-binding-correction\\configuration-Authenticati-95329-act-immutable-source-at-390\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                    "column": 140,
+                    "line": 73
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-db8d1d7ce8b565795841",
+          "file": "configuration.spec.ts",
+          "line": 66,
+          "column": 31
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-16T09:13:17.093Z",
+    "duration": 23476.945,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

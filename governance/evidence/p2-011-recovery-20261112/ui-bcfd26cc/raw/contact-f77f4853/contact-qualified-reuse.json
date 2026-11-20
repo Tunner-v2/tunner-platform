@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-011",
+  "increment": "CONTACT_PROOF_FORMAT",
+  "result": "FOCUSED_UI_QUALIFIED_PENDING_NATIVE_GATES",
+  "recorded_at": "2026-11-19T21:40:46.754Z",
+  "source_carrier_sha": "f77f4853fc1b59c36cc5108cdb30197d5106afc2",
+  "defect": {
+    "type": "UI_VALIDATION_DEFECT",
+    "status": "RESOLVED_BY_ACTUAL_FOCUSED_TESTS",
+    "finding": "Contact purpose previously validated nonempty only although native owner requires exact supplied ProofDigits ASCII0..9.",
+    "resolution": "Current server proofDigits reaches contact model; missing/noninteger/out-of-range6..9 fails closed. Shared typed schema and defensive controller handoff enforce exact ASCII length without trimming or numeric conversion. Generic recovery-code input remains required-only.",
+    "authority": "src/Modules/Identity/RecoveryContactExecution.cs:97"
+  },
+  "actual_execution": {
+    "source_commit": "f77f4853fc1b59c36cc5108cdb30197d5106afc2",
+    "ssr": {
+      "passed": 17,
+      "exit_code": 0,
+      "report": {
+        "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/ssr.json",
+        "sha256": "9457c5253c98c0409b41af5bfefe3e1aebce670e7ea347f9644da68a411ca4a8"
+      },
+      "tap": {
+        "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/ssr.tap",
+        "sha256": "19c4e603785a81a5c5b781f25acc3e5b9e4d80104347a46590d7c92076c6e876"
+      }
+    },
+    "component": {
+      "passed": 4,
+      "exit_code": 0,
+      "report": {
+        "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/component4.json",
+        "sha256": "b140a49e28375c84c803e6c9b80c9f5f2b25942cae5785a369c11def37bdf934"
+      },
+      "coverage": "Changed contact-format case plus existing generic code validation, duplicate/DOM clearing and pagehide/context lifecycle regressions. Contact error state at320x900 has passing axe/containment assertion."
+    },
+    "integrated": {
+      "passed": 4,
+      "exit_code": 0,
+      "report": {
+        "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/integrated4.json",
+        "sha256": "e3b2123f4c3c789844fe09b972a8d1ee12404d6d9531626fb4c0ace361945ca5"
+      },
+      "coverage": "Current server lengths6 and7 reject malformed/short/long/Unicode/space and forced duplicate requestSubmit after native required removal without mutation; leading-zero012345 binds exact atomic contact body/challenge; foreign original refused."
+    },
+    "witnesses": [
+      {
+        "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/source-before.json",
+        "sha256": "527889b6cb72678403fd45bee769c49c356620f36399da9f160ae5387ba1596a"
+      },
+      {
+        "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/source-after.json",
+        "sha256": "e3190d9cd197d0fc86be63af081977ca34cae57f924400075652fc1d83a89c3f"
+      }
+    ],
+    "inputs": [
+      {
+        "path": "web/apps/user/recovery.tsx",
+        "sha256": "06fca3c3fb0281a661a3d0dcdea2ac5909b44deb24fb375ff034454a379051d6",
+        "committed_blob_oid": "cfba4f8690f20eeabdbd8c82fc0d23b9f604f771",
+        "working_blob_oid": "cfba4f8690f20eeabdbd8c82fc0d23b9f604f771",
+        "equal": true
+      },
+      {
+        "path": "web/apps/user/recovery.app.tsx",
+        "sha256": "a14467359daeb84efdf796c2b78e67313dfd32bf70b63af9db978b3b5017148a",
+        "committed_blob_oid": "b86597d24d30d4335d6484a59ad4fc36cdf0bb2e",
+        "working_blob_oid": "b86597d24d30d4335d6484a59ad4fc36cdf0bb2e",
+        "equal": true
+      },
+      {
+        "path": "web/apps/user/recovery.content.proposal.json",
+        "sha256": "b0c089f41f094022f994263341bdacb7c73817c2f2cc6bed0c5c47154c863638",
+        "committed_blob_oid": "94298fedfe28418ff499db5083d32882326fa45f",
+        "working_blob_oid": "94298fedfe28418ff499db5083d32882326fa45f",
+        "equal": true
+      },
+      {
+        "path": "web/tests/recovery-case.presentation.test.tsx",
+        "sha256": "c92b7504ab041d141170ae6573ff66053033cc17e79d63f8339f4847e5fbb7af",
+        "committed_blob_oid": "125d66708b27d6c586c45b096b8b9443b02aae56",
+        "working_blob_oid": "125d66708b27d6c586c45b096b8b9443b02aae56",
+        "equal": true
+      },
+      {
+        "path": "web/tests/recovery-case/presentation.spec.ts",
+        "sha256": "c4042c90092d7ad2ff7d8114ce85318bbc210066de890f5165795a15fab9ac4c",
+        "committed_blob_oid": "14d245d4239c07e0f8f3c365453f5a4d640195fd",
+        "working_blob_oid": "14d245d4239c07e0f8f3c365453f5a4d640195fd",
+        "equal": true
+      },
+      {
+        "path": "web/tests/authentication/recovery.spec.ts",
+        "sha256": "b845a5a8b43d8a811aa3103375fa219eabee21f85a6f048030dcd3d1de7a1d61",
+        "committed_blob_oid": "cee90a9b6cfcdf8ae77fba21a1d627a52c57a37f",
+        "working_blob_oid": "cee90a9b6cfcdf8ae77fba21a1d627a52c57a37f",
+        "equal": true
+      }
+    ]
+  },
+  "visual_review": {
+    "reviewer": "Executing AI reviewer; no new human/Product approval.",
+    "screenshot": {
+      "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/raw/contact-f77f4853/contact-format-error-320.png",
+      "sha256": "be86fd593f93e8a2de78059aa9bf08526594e6feffd9f87a3a966cad8f98ae17"
+    },
+    "dimensions": "320x900",
+    "finding": "Existing approved V02/shared TextField/FieldError/FormErrorSummary and focus treatment retained; proposed format copy wraps within320, with no horizontal overflow or clipped controls. No new help, layout or visual system."
+  },
+  "qualified_reuse": {
+    "prior_receipt": {
+      "path": "governance/evidence/p2-011-recovery-20261112/ui-bcfd26cc/increment-qualification.json",
+      "sha256": "7c3b9053add3a769779cac3bb65f99d5b841eb078f1bdb5bc432ff45c5965cd4"
+    },
+    "scope": "Prior V04 SSR15/component6/integrated10/legacy13 and committed-e685 cross-device3 retain actual sources. This contact-only delta is qualified by actual17/4/4; all unaffected branch/report/consent identities stay historical, not rerun at f77.",
+    "backend_native": {
+      "actual_qualified_source_sha": "46041e95c6535caa6a3889a40d8f6cf36802c12f",
+      "private123": "Verified actual raw123/123 PASS at source46041, including RECOVERY_PASSWORD_VALIDITY and RECOVERY_CONTACT_VALIDITY. Declared backend/native fixture paths are unchanged by f77 frontend-only correction; no native execution or full build-binding equivalence at f77 is asserted.",
+      "combined_browser_limit": "No current combined real-browser plus native HTTPS repair E2E claim.",
+      "actual_qualification": {
+        "path": "governance/evidence/p2-019-content-20261116/native-recovery-46041e95/private123.json",
+        "sha256": "5d248f73a0380b4956c0cab0fdb783db980d915e257007e7d7839a14f0fad514"
+      }
+    }
+  },
+  "cleanup": [
+    {
+      "run": "component4",
+      "pid": 12064,
+      "start_local": "2026-11-19 16:34:26",
+      "original_session": 53491,
+      "executable": "C:/Program Files/nodejs/node.exe",
+      "action": "After all expected cases emitted ok, rechecked exact PID/start/executable, stopped only owned Vite on Windows shutdown stall, observed original runner exit0 and verified PID absence."
+    },
+    {
+      "run": "integrated4",
+      "pid": 18564,
+      "start_local": "2026-11-19 16:35:22",
+      "original_session": 50567,
+      "executable": "C:/Program Files/nodejs/node.exe",
+      "action": "After all expected cases emitted ok, rechecked exact PID/start/executable, stopped only owned Vite on Windows shutdown stall, observed original runner exit0 and verified PID absence."
+    }
+  ],
+  "limits": [
+    "Scoped/global native UI gates require root review, committed updated envelopes and actual execution.",
+    "No repeated prior10/legacy13/native123/protocol17/resource6 invocation; no historical execution is relabelled current.",
+    "No feature/lifecycle/Product/production/merge/release acceptance or new proof-policy/source grant."
+  ]
+}

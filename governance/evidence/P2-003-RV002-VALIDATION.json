@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-003-RV002",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
+  "validated_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
+  "owned_behavior_paths": [
+    "Directory.Packages.props",
+    "src/Modules/Identity/Tunner.Identity.Persistence.csproj"
+  ],
+  "owner_work_item": "TUN-P2-014",
+  "scope": "Qualified pinned native-server dependency and opt-in composition preserve existing Account/Identity persistence. Actual native81, ordinary shared59, corrected HTMLguard1 and UI qualifications are retained in the owner work item's validation; no production provider activation.",
+  "contract_ref": "docs/contracts/product-authorization-contract.md",
+  "rd_ref": "governance/evidence/TUN-P2-014-RD-SOURCES.json",
+  "required_qualification": [
+    "Pinned native-server dependency and unchanged existing versions",
+    "Core-only persistence does not activate server",
+    "Native authorization-code/PKCE, replay, transaction and exact-owner isolation tests",
+    "Applicable shared authentication/federation and dependency/security regression gates"
+  ],
+  "technical_binding": {"candidate_commit_sha": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c", "qualification": "Qualified application and owned behavior at committed candidate; actual execution SHAs remain distinct in main validation. No behavior changes after the candidate. Metadata-only engineering validation; native readiness/closure and genuine Product acceptance remain separate.", "evidence_ref": "governance/evidence/TUN-P2-014-VALIDATION.json", "ui_gate_ref": "governance/evidence/p2-014-authorization-20261115/ui/native-ui-e45e31f.json"}
+}

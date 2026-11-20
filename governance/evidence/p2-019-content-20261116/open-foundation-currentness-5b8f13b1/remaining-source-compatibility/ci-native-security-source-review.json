@@ -1,0 +1,118 @@
+{
+  "scope": "P1-RV001-001 bounded Identity native 13/15 pre-application design and upstream source review",
+  "reviewer": "Independent cyber-security-engineer subagent",
+  "result": "NO_BLOCKING_PREAPPLICATION_SECURITY_FINDING",
+  "patch": {
+    "path": "artifacts/p1-rv001-20261118/identity-native-13-15-qualification.patch",
+    "sha256": "1882fa710615ab00837e0056d550fd26a081997c097f640312233e3846009709",
+    "application_state_at_review": "UNAPPLIED",
+    "git_apply_check_exit_code": 0,
+    "changed_paths": 7,
+    "production_changes": "Only RecoveryCodeCryptoProfile and TotpPolicy supported-version admission become exact 10.0.13-or-10.0.15 alternatives.",
+    "native_mechanisms_changed": false,
+    "production_policy_selected_or_activated": false
+  },
+  "authority_assessment": {
+    "classification": "Authorized engineering compatibility qualification under eligible P1-RV001-001; no inspected explicit Product approval prerequisite for this bounded implementation.",
+    "refs": [
+      "AGENTS.md",
+      ".agent/skills/cyber-security-engineer/SKILL.md",
+      "governance/work-items/P1-RV001-001.yaml",
+      "docs/authority/baselines/1.6.0/decisions/ADR-0006_Identity_ASPNET_Identity_OpenIddict.md",
+      "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+      "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+      "docs/development/P2_009_RECOVERY_CODES_SCOPE.md",
+      "governance/evidence/TUN-P2-008-RD-SOURCES.json",
+      "governance/evidence/TUN-P2-009-TECHNICAL-DESIGN-REVIEW.json",
+      "governance/evidence/p2-009-recovery-20261111/technical-design/closed-profile-candidate.json"
+    ],
+    "boundaries": "Independent source/test reviews, actual qualification and exact committed evidence remain mandatory. Owner production policy, activation, protected integration, Product acceptance and release stay separate. Historical 13 receipts retain their original identity."
+  },
+  "upstream_comparison": {
+    "repository": "https://github.com/dotnet/aspnetcore",
+    "tags": ["v10.0.13", "v10.0.15"],
+    "method": "Official raw.githubusercontent.com HTTPS downloads from exact tags; raw bytes hashed locally. Sources read as text only and never compiled or executed. Main three also compared with git diff --no-index: zero differences, exit code 0.",
+    "initial_network_failure_preserved": "artifacts/p1-rv001-20261118/identity-upstream-source-fetch.json",
+    "successful_url_hash_manifests": [
+      "artifacts/p1-rv001-20261118/identity-upstream-source-fetch-network.json",
+      "artifacts/p1-rv001-20261118/identity-upstream-direct-dependencies-fetch.json",
+      "artifacts/p1-rv001-20261118/identity-upstream-provider-selection-fetch.json"
+    ],
+    "equal_raw_byte_sha256_for_both_tags": {
+      "PasswordHasher.cs": "20651aff5f029d4a4eaf95c96f21776ad16e77bad7319f537c776e8ded41f38c",
+      "AuthenticatorTokenProvider.cs": "0a9bc25694d34a4ba0ff4698e804238b697a7fd2f1e3ee84c83f3474c9ec72a6",
+      "Rfc6238AuthenticationService.cs": "20e0c09665ee6745b158fdbb80be35cbaa0d79c06785174f4edc05482e1fbfb8",
+      "KeyDerivation.cs": "e6f01fab14f5a0499eb55098c03101b4b35749576e21d4eb464ce43cfea39c6c",
+      "KeyDerivationPrf.cs": "5c767bf3e130242003592389c708a90d42b486547d4e416f6c3b68aecd7ce204",
+      "NetCorePbkdf2Provider.cs": "586479e4d26224caaeaa74e3337bd2614b37dcc43526feb89701c4e9460f2c48",
+      "Pbkdf2Util.cs": "cbe4702e08ad6db84d77222cfa5f44b17c7a56c95de315aabdabdc3fa7ae8cb1",
+      "PasswordHasherOptions.cs": "3005d6f61dd9b2faa02160f17dc15945ae411db463b21a1c9d367eebd00a9a38",
+      "Base32.cs": "be7a7d40836065befa0e30007ff81d68fe4e5942b24f3667f74097aeda154006"
+    },
+    "findings": [
+      "No differences in any of the nine bounded source files or their direct crypto/encoding/provider-selection references.",
+      "IdentityV3 generation remains PBKDF2-HMAC-SHA512, PRF enum value 2, 16-byte random salt, 32-byte subkey, marker 0x01, three big-endian UInt32 header fields, 61 binary bytes and 84 base64 characters. Iteration count remains explicit in Tunner and embedded in stored verifiers.",
+      "Native verification still follows embedded iteration/PRF/size values. Tunner's existing pre-KDF exact header/cost admission remains required and unchanged. A surrounding stopwatch still does not interrupt a synchronous PBKDF2 call.",
+      "NETCOREAPP PBKDF2 selection still uses NetCorePbkdf2Provider and Rfc2898DeriveBytes.Pbkdf2. This bounded ASP.NET source review does not assert equality of dotnet/runtime binaries or OS cryptographic providers.",
+      "AuthenticatorTokenProvider still obtains the seed through the manager, Base32-decodes it, computes Unix seconds divided by 30 and checks offsets -2 through +2 using Rfc6238AuthenticationService.ComputeTotp with null modifier. NET6+ ComputeTotp still uses HMACSHA1.TryHashData and modulo 1000000, with the same dynamic truncation.",
+      "The separate Rfc6238AuthenticationService three-minute GenerateCode/ValidateCode helpers are not the AuthenticatorTokenProvider thirty-second acceptance path. Its stale 90-second comment does not override the actual five-counter loop.",
+      "Native TOTP returns bool without a matched-counter result or replay consumption; Tunner's existing full-horizon retention, transactional replay claims, owner locks, capacity, clock and budget guards remain unchanged."
+    ],
+    "material_source_difference_found": false
+  },
+  "patch_security_findings": [
+    "Both production profile contracts admit only exact strings 10.0.13 and 10.0.15. All algorithm, digits, period, native window, retention, work, concurrency, format, origin and owner-policy validation is preserved.",
+    "RecoveryCodeNative and TotpNativeVerifier are absent from the patch. Their installed AssemblyInformationalVersion StartsWith(selectedVersion + plus, Ordinal) checks remain intact; admitting the pair does not allow a profile pinned to the other installed patch.",
+    "Shared test-only helper requires a nonempty build-metadata suffix and exact allowlisted version before supplying a synthetic fixture value. Tests reject missing metadata, empty values, 14 and 16, and verify PasswordHasher and AuthenticatorTokenProvider share the same assembly.",
+    "Recovery negative creates the other admitted profile, proves Supports returns false, and requires native construction to throw InvalidOperationException. This reaches the installed native guard rather than merely failing unsupported profile validation.",
+    "TOTP negative validates the other admitted profile, submits a canonical native code through the existing real-transaction/Account-row/advisory-lock helper, expects DEPENDENCY_UNAVAILABLE, and compares complete persisted factor plus ordered replay-claim snapshots before/after committed SaveChanges. Restoring the original version then accepts the exact same code, proving rejection did not consume it. No raw seed/code is serialized into snapshots.",
+    "Existing finite browser oracle and recovery browser fixture remain pinned to 13; this patch does not qualify 15 browser execution or change their fail-closed behavior. Do not treat later browser failures on 15 as covered by this native qualification."
+  ],
+  "remaining_before_qualification_pass": [
+    "Root may apply this exact patch, preserving unrelated work and native source guards.",
+    "Build and execute the new negative cases and affected Recovery/TOTP suites on actual Windows13 and real LinuxCI15, retaining full failed-run provenance and existing assertions.",
+    "Retain focused native verifier/header/work/format/owner-binding, replay full-window/A-to-B-to-A, concurrent exactly-once, rollback, capacity and clock evidence for the affected source/runtime cohorts.",
+    "Measure the actual installed Identity informational version and bind it to source/build/runtime/test receipts. Observed SDK10.0.404/runtime10.0.15 is not itself a direct Identity-version measurement.",
+    "Review actual final diff and executed results; commit work-owned changes and revalidate any later behavior changes before native completed handoff."
+  ],
+  "tests_executed_by_this_review": false,
+  "runtime15_pass_claimed": false,
+  "product_merge_release_approval_claimed": false,
+  "source_changes_applied_by_reviewer": false,
+  "preapplication_receipt_sha256_before_append": "69cdfb1c753dac27e000d71f8de896742204347744731d41951173d156a00084",
+  "final_source_review_phase": {
+    "classification": "Independent committed-source assessment before runtime qualification; no combined code/test qualification PASS",
+    "result": "NO_BLOCKING_COMMITTED_SOURCE_SECURITY_FINDING_RUNTIME_QUALIFICATION_PENDING",
+    "base_commit": "3ccfe3fd62879c218425df7cbf8e9124c9ccfe55",
+    "reviewed_commit": "d7e3fe11e639add5d15deee281fa8e74b019ba5e",
+    "amended_patch_sha256": "bdd7f08020c6c0861d1afe6e84325cb623659d8f406c32751152f328e0bb0c69",
+    "historical_original_patch_sha256": "1882fa710615ab00837e0056d550fd26a081997c097f640312233e3846009709",
+    "original_phase_preserved": "All original receipt fields above retain their pre-application meaning and original patch identity. The patch artifact was subsequently amended/applied by root. This appended phase records the actual resulting commit independently.",
+    "verified_diff_scope": "Exactly seven source/test files, 62 insertions and 5 deletions. Production delta is confined to the two explicit version-admission expressions; five other files are synthetic test helpers/tests.",
+    "metadata_delta": "Compared with the originally reviewed proposal, NativeTotpCodeFixture exposes the same reflected public AssemblyInformationalVersion through IdentityInformationalVersion and the new test prints it with fixed IDENTITY_TEST_ASSEMBLY_INFORMATIONAL_VERSION prefix. IdentityVersion still passes this value through the unchanged strict 13/15 test allowlist. No credential, seed, code, verifier, user input or private IPC frame enters this output.",
+    "unchanged_native_guard_git_blobs_at_both_commits": {
+      "src/Modules/Identity/RecoveryCodeNative.cs": "2a8d67f1e4394ee16fa9ab31f8cfcb92c4a02dde",
+      "src/Modules/Identity/TotpNativeVerifier.cs": "19683f384c698453db529f96a9e1081e42fd946a"
+    },
+    "findings": [
+      "Exact installed-version guards remain byte-identical. Each still requires selected profile version plus the literal plus delimiter with Ordinal comparison, rather than accepting arbitrary admitted installed versions.",
+      "Both production contracts deny every version other than exact 10.0.13 or 10.0.15, preserving all other algorithm/work/window/retention/format constraints. Shared synthetic selector still rejects null/empty/missing build metadata and unlisted14/16 examples.",
+      "Committed Recovery negative remains meaningful: native.Supports rejects the complementary admitted profile and native constructor must throw after contract validation has admitted that version.",
+      "Committed TOTP negative still reaches the native guard in the existing actual transaction/owner-lock helper, requires DEPENDENCY_UNAVAILABLE, checks full persisted factor and ordered replay snapshots after committed SaveChanges, and restores the original version before accepting that identical code. This assesses the assertion design only; execution is not inferred.",
+      "No configuration publisher, ACTIVE production profile, policy owner input, UI file, browser-oracle version, private IPC protocol, native algorithm or native guard changes exist in this committed diff.",
+      "Root metadata evidence correctly retains runtime15_pass=false and production_profile_selected=false. Its source-review wording must continue to be read together with runtime qualification pending. No installed Identity informational value was directly observed during this review merely because the test now prints it."
+    ],
+    "read_only_verification": {
+      "git_diff_check_exit_code": 0,
+      "amended_patch_reverse_apply_check_exit_code": 0,
+      "reviewed_source_worktree_diff_from_commit_empty": true,
+      "original_receipt_hash_verified_before_append": true
+    },
+    "tests_executed_by_this_phase": false,
+    "runtime13_qualification_claimed_by_this_phase": false,
+    "runtime15_qualification_claimed_by_this_phase": false,
+    "combined_code_and_test_review_pass_claimed": false,
+    "next_action": "Complete QA Windows13 qualification and actual Linux15 CI at the committed source, capture the printed installed Identity informational version, review actual results and retain failures. Production activation, protected integration and release remain separate.",
+    "source_changes_applied_by_reviewer": false
+  }
+}

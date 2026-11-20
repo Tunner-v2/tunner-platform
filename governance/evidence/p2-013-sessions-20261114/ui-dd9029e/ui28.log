@@ -1,0 +1,42 @@
+[WebServer] (node:6472) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./totp.routes" without a file extension (apps/user/vite.config.ts:3:26). Add the file extension
+[WebServer]   - import "./recovery.routes" without a file extension (apps/user/vite.config.ts:4:31). Add the file extension
+[WebServer]   - import "./sessions.routes" without a file extension (apps/user/vite.config.ts:5:30). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 28 tests using 1 worker
+
+(node:26252) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\sessions\sessions.spec.ts:31:2 › Approved listing/detail pattern, truthful state and responsive layout at 1440 (3.4s)
+  ok  2 tests\sessions\sessions.spec.ts:31:2 › Approved listing/detail pattern, truthful state and responsive layout at 1366 (4.4s)
+  ok  3 tests\sessions\sessions.spec.ts:31:2 › Approved listing/detail pattern, truthful state and responsive layout at 1024 (3.5s)
+  ok  4 tests\sessions\sessions.spec.ts:31:2 › Approved listing/detail pattern, truthful state and responsive layout at 768 (3.4s)
+  ok  5 tests\sessions\sessions.spec.ts:31:2 › Approved listing/detail pattern, truthful state and responsive layout at 390 (3.6s)
+  ok  6 tests\sessions\sessions.spec.ts:31:2 › Approved listing/detail pattern, truthful state and responsive layout at 320 (3.4s)
+  ok  7 tests\sessions\sessions.spec.ts:52:1 › Load more uses one retained body cursor; double clicks do not issue duplicate requests (1.1s)
+  ok  8 tests\sessions\sessions.spec.ts:57:1 › Direct detail entry/reload safely reselects through list; history preserves only current server-owned rows (1.7s)
+  ok  9 tests\sessions\sessions.spec.ts:62:1 › An actor/context change cannot display a retained detail row absent from the freshly authorized page (1.2s)
+  ok 10 tests\sessions\sessions.spec.ts:67:2 › Pagination 404 clears stale rows and requires explicit refresh, without automatic retry (1.3s)
+  ok 11 tests\sessions\sessions.spec.ts:67:2 › Pagination 409 clears stale rows and requires explicit refresh, without automatic retry (1.2s)
+  ok 12 tests\sessions\sessions.spec.ts:67:2 › Pagination 503 clears stale rows and requires explicit refresh, without automatic retry (1.3s)
+  ok 13 tests\sessions\sessions.spec.ts:73:1 › Current session detail retains ordinary Account-menu sign-out; lost response offers a read, never a fresh retry (1.7s)
+  ok 14 tests\sessions\sessions.spec.ts:78:1 › Anonymous actor is redirected before data is requested (994ms)
+  ok 15 tests\sessions\sessions.spec.ts:81:1 › Ordinary current-session sign-out uses only the existing operation and returns to sign in (1.3s)
+  ok 16 tests\sessions\sessions.spec.ts:84:1 › Published loading and empty response do not invent a current row, total or target action (1.3s)
+  ok 17 tests\sessions\sessions.spec.ts:87:1 › Withdrawn publication fails closed and renders no session facts (818ms)
+  ok 18 tests\sessions\sessions.spec.ts:90:1 › A stale in-flight list response cannot restore data after navigation leaves its revision (1.2s)
+  ok 19 tests\sessions\sessions.spec.ts:96:1 › An initial list failure uses the current published retry state; withdrawn refreshed publication exposes no stale facts (1.2s)
+  ok 20 tests\sessions\sessions.spec.ts:101:1 › Navigation while ordinary sign-out is in flight becomes check-only UNKNOWN and never replays the POST (1.5s)
+  ok 21 tests\sessions\sessions.spec.ts:107:1 › Expired detail continuation discards selection and refresh returns to a fresh first page (1.5s)
+  ok 22 tests\sessions.api.test.tsx:9:1 › Exact safe DTO preserves long versions as strings and rejects private/unrecognized fields (21ms)
+  ok 23 tests\sessions.api.test.tsx:13:1 › Malformed, duplicate or inconsistent pages fail closed without making a selection (12ms)
+  ok 24 tests\sessions.api.test.tsx:16:1 › Every required key must be published with matching locale/provenance; draft copy is not bootstrap (39ms)
+  ok 25 tests\sessions.api.test.tsx:21:1 › Authenticated CSRF precedes published options and never uses anonymous authentication options (9ms)
+  ok 26 tests\sessions.api.test.tsx:25:1 › Continuation is only a POST body value, with no browser selector/budget/query or private error retention (3ms)
+  ok 27 tests\sessions.api.test.tsx:29:1 › HTTP failures use closed safe kinds and do not retain server/private problem content (14ms)
+  ok 28 tests\sessions.api.test.tsx:33:1 › Lost ordinary sign-out is not retried; checking status is a separate authenticated read (3ms)
+
+  28 passed (46.2s)

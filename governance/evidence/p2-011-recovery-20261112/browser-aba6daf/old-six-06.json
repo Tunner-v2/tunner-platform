@@ -1,0 +1,326 @@
+{
+  "registration": "RECOVERY_REPLACE_TOTP_V1",
+  "passed": true,
+  "casePasses": 1,
+  "receipt": {
+    "version": 2,
+    "type": "browserControllerReceipt",
+    "registration": "RECOVERY_REPLACE_TOTP_V1",
+    "cohort": "BROWSER",
+    "publicFault": null,
+    "resourceCut": null,
+    "malformedCase": null,
+    "sourceCommit": "aba6daf62fd0afef46878741062aad98a4e4fe6f",
+    "buildSourceCommit": "aba6daf62fd0afef46878741062aad98a4e4fe6f",
+    "buildBindingSha256": "285c3e594ede3c6deb224185a3d66e3ab992bf99103db783faef1bb60df278cc",
+    "workerBuildBindingSha256": "7ba8b88e40dfbc3ac1e5eaf6c2002629ec0adee8e1cf57e84b94f25bcb8157a2",
+    "sourceCurrent": true,
+    "protocolValid": true,
+    "processId": 25864,
+    "processStartUtc": "2026-11-14T03:16:46.1376233Z",
+    "processStartVerified": true,
+    "processClosed": true,
+    "exitCode": 0,
+    "rawOutputRejected": false,
+    "unexpectedManagedOutput": false,
+    "timedOut": false,
+    "forced": false,
+    "cutObserved": false,
+    "publicTimeoutObserved": false,
+    "reconciled": true,
+    "borrowedPreserved": true,
+    "surfaceClean": true,
+    "surfaceRemoved": true,
+    "helperProcessesClosed": true,
+    "terminal": {
+      "version": 1,
+      "sourceCommit": "aba6daf62fd0afef46878741062aad98a4e4fe6f",
+      "runId": "8a6298d54a1140d98ef6ac096b22aeb4",
+      "journeyId": "RECOVERY_REPLACE_TOTP_V1",
+      "mode": "browser",
+      "selection": "RECOVERY_REPLACE_TOTP_V1",
+      "accepted": true,
+      "failureCode": "NONE",
+      "managedOutputRejected": false,
+      "publicBoundaryContained": false,
+      "publicResourceContained": false,
+      "publicCleanupReducerRejected": false,
+      "buildBinding": {
+        "sourceCommit": "aba6daf62fd0afef46878741062aad98a4e4fe6f",
+        "manifestSha256": "7ba8b88e40dfbc3ac1e5eaf6c2002629ec0adee8e1cf57e84b94f25bcb8157a2",
+        "sourceInputs": 557,
+        "buildOutputs": 146
+      },
+      "browserReceipt": {
+        "version": 1,
+        "type": "recoveryPrivateBrowserReceipt",
+        "journeyId": "RECOVERY_REPLACE_TOTP_V1",
+        "mode": "live",
+        "publicFault": null,
+        "sourceCommit": "aba6daf62fd0afef46878741062aad98a4e4fe6f",
+        "sourceCommitted": true,
+        "sourceFingerprint": "35ba785779322c1086f1233ba4d874f02084ac7deacbeadd60655dad6b2c97e8",
+        "browserVersion": "151.0.7922.34",
+        "status": "JOURNEY_OK",
+        "stage": "COMPLETE",
+        "failureCode": "NONE",
+        "checks": {
+          "BROWSER_ENGINE": true,
+          "BFF_IDENTITY": true,
+          "ACTUAL_PROOF_METHOD": true,
+          "EXACT_OWNER_AND_STEP_UP_BINDING": true,
+          "CANONICAL_FIRST_DELIVERY": true,
+          "DUPLICATE_NO_REDISCLOSURE": true,
+          "NO_EARLY_DELIVERY": true,
+          "COOKIE_FLAGS": true,
+          "NO_SECRET_URL_OR_STORAGE": true,
+          "VOLATILE_CLEAR": true,
+          "REQUESTED_NOT_SAVED": true,
+          "STRICT_OWNED_SURFACE": true,
+          "NATIVE_TOTP_PROOF": true,
+          "CURRENT_PUBLICATION": true,
+          "NO_SESSION_MUTATION": true,
+          "SURFACE_CHECKED": true
+        },
+        "supervisor": {
+          "SOURCE_CURRENT": true,
+          "PROTOCOL_VALID": true,
+          "OUTPUT_CONTAINED": true,
+          "CHILD_CLOSED": true,
+          "ORACLE_CLOSED": true,
+          "CHILD_SURFACES_CLOSED": true,
+          "SURFACE_REMOVED": true
+        },
+        "childResultAccepted": true,
+        "protocolRejected": false,
+        "rawOutputRejected": false,
+        "timedOut": false,
+        "cleanupForced": false,
+        "exitCode": 0,
+        "contextClosed": true,
+        "browserClosed": true,
+        "serverExited": true,
+        "oracleExited": true,
+        "oracleGraceful": true,
+        "surfaceClean": true,
+        "surfaceRemoved": true,
+        "cleanupCompleted": true,
+        "publicFaultObserved": false,
+        "publicOwnership": null,
+        "accepted": true
+      },
+      "coordinatorChecks": {
+        "SOURCE_BUILD_CURRENT": true,
+        "OWNED_DATABASE": true,
+        "OWNED_MAILPIT": true,
+        "EPHEMERAL_DP": true,
+        "CURRENT_MIGRATIONS": true,
+        "SAFE_PERSISTENCE": true,
+        "SAFE_OUTBOX": true,
+        "HOST_STOPPED": true,
+        "RESOURCES_REMOVED": true,
+        "BORROWED_POSTGRES_PRESERVED": true,
+        "PUBLICATION_DRIFT_ROLLED_BACK": true
+      },
+      "cleanup": {
+        "app": true,
+        "postgres": true,
+        "mailpit": true,
+        "vaultSession": true,
+        "vaultContainer": true,
+        "dockerConfig": true
+      },
+      "fixtureObservations": {
+        "ownerFailureObserved": false,
+        "publicationFinalFaultObserved": true,
+        "bodyDropObserved": false
+      },
+      "boundary": "Finite local test only; no production policy, P2-011 workflow, Product or global filesystem acceptance."
+    },
+    "capacity": null,
+    "heldSurface": null,
+    "helperProcesses": [
+      {
+        "processId": 22008,
+        "processStartUtc": "2026-11-14T03:16:44.2895964Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 1660,
+        "processStartUtc": "2026-11-14T03:16:46.3386323Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 24304,
+        "processStartUtc": "2026-11-14T03:16:50.6948748Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 23992,
+        "processStartUtc": "2026-11-14T03:16:52.7868454Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 24052,
+        "processStartUtc": "2026-11-14T03:17:03.0337194Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 24900,
+        "processStartUtc": "2026-11-14T03:17:05.0847754Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 6384,
+        "processStartUtc": "2026-11-14T03:17:07.4480157Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 10348,
+        "processStartUtc": "2026-11-14T03:17:09.6626002Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 16788,
+        "processStartUtc": "2026-11-14T03:17:50.6251998Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 24936,
+        "processStartUtc": "2026-11-14T03:17:52.4476887Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 14004,
+        "processStartUtc": "2026-11-14T03:17:54.1807627Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      },
+      {
+        "processId": 16500,
+        "processStartUtc": "2026-11-14T03:17:55.8980599Z",
+        "closed": true,
+        "exitCode": 0,
+        "protocolValid": true,
+        "unexpectedManagedOutput": false,
+        "rawOutputRejected": false,
+        "failureCode": "NONE"
+      }
+    ],
+    "reconciliationMetadata": {
+      "localDockerEndpoint": "npipe:////./pipe/dockerDesktopLinuxEngine",
+      "expectedEngineId": "b81c329c-42bf-4ce2-812c-2570fbcda327",
+      "borrowedContainerId": "f72775e18f1dc226de5877a5017b4a26681097b60f79d372804293f4f720f143"
+    },
+    "owners": [
+      {
+        "owner": {
+          "ownerId": "cc112b36abed4137be12ff6d56abe058",
+          "role": "config",
+          "name": "tunner-p2-009-docker-cc112b36abed4137be12ff6d56abe058",
+          "imageId": null
+        },
+        "preparationVerified": true,
+        "preparedAckSent": true,
+        "createdAckSent": false,
+        "containerId": null,
+        "absent": true
+      },
+      {
+        "owner": {
+          "ownerId": "eeabde1f9fe248c4b73f638b75fcb530",
+          "role": "native-postgres",
+          "name": "tunner-p2-009-native-postgres-eeabde1f9fe248c4b73f638b75fcb530",
+          "imageId": "sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873"
+        },
+        "preparationVerified": true,
+        "preparedAckSent": true,
+        "createdAckSent": true,
+        "containerId": "fb10544bb919e0f440378b119296699cc0cb7f72166c6e17aea00282d2a78362",
+        "absent": true
+      },
+      {
+        "owner": {
+          "ownerId": "f0674b6cedbb4fa0a78ab9b8550fc47e",
+          "role": "mailpit",
+          "name": "tunner-p2-009-mailpit-f0674b6cedbb4fa0a78ab9b8550fc47e",
+          "imageId": "sha256:0306debe903ec7a44a4d49266ac54c54667183efc5de1586d75093d9b60b823b"
+        },
+        "preparationVerified": true,
+        "preparedAckSent": true,
+        "createdAckSent": true,
+        "containerId": "f787e6a841c2f3b148df4d1293cfa3c399a39c774dcd4449ac7a1011a06573da",
+        "absent": true
+      },
+      {
+        "owner": {
+          "ownerId": "ce84642f20f8494bbc6fae26794faa3c",
+          "role": "openbao",
+          "name": "tunner-p2-009-openbao-ce84642f20f8494bbc6fae26794faa3c",
+          "imageId": "sha256:71156a1c6623a5fa3f5e61b0c6a8ead0faf0df29a778339188443551995d1315"
+        },
+        "preparationVerified": true,
+        "preparedAckSent": true,
+        "createdAckSent": true,
+        "containerId": "27eaffa6ba7b419d6e638d27a20b4b970318e1e61b8683721b1653ab6e9f7664",
+        "absent": true
+      }
+    ],
+    "publicContainmentAccepted": false,
+    "accepted": true
+  }
+}

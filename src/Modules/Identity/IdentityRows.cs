@@ -54,4 +54,10 @@ internal sealed class ExternalIdentityLinkRow
     public string Subject { get; set; } = string.Empty;
     public long Version { get; set; }
     public string EvidenceReference { get; set; } = string.Empty;
+    // Historical namespace rows are not silently promoted into a qualified runtime registration.
+    public string LinkState { get; set; } = "LEGACY_UNQUALIFIED";
+    public string? QualifiedClientId { get; set; }
+    public string? QualificationProfileVersion { get; set; }
+    public string? IssuerMappingEvidenceReference { get; set; }
+    public string? QualificationEvidenceReference { get; set; }
 }

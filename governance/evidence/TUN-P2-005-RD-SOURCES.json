@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-005",
+  "reviewed_at": "2026-10-21T17:36:06.868Z",
+  "sources": [
+    {
+      "url": "https://learn.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-10.0",
+      "finding": "Cookie events, explicit auth properties and authoritative principal/session validation."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/dotnet/aspnetcore/v10.0.13/src/Security/Authentication/Cookies/src/CookieAuthenticationHandler.cs",
+      "finding": "Existing session key is renewed on SignInAsync; force new credential-authentication context to guarantee fresh lookup key."
+    },
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authentication.cookies.iticketstore?view=aspnetcore-10.0",
+      "finding": "Framework server ticket-store contract; do not invent a new cookie wire protocol."
+    },
+    {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
+      "finding": "Generic errors, authoritative checks, abuse and no silent password truncation."
+    },
+    {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html",
+      "finding": "Rotate authentication identifiers, server expiry/revocation and protected cookie transport."
+    },
+    {
+      "url": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+      "finding": "Protect login and logout from CSRF; same-site cookies do not replace origin/token validation."
+    }
+  ],
+  "technology_decision": "No new technology or package. Reuse pinned ASP.NET10/Identity/EF, PostgreSQL, Data Protection, existing policy and @tunner/ui capabilities. Guidance does not establish Product policy values.",
+  "runtime_verification": {
+    "observed_runtime": "Microsoft.AspNetCore.App 10.0.13",
+    "reviewed_source_tag": "v10.0.13",
+    "framework_handler_branch": "StoreAsync for new credential authentication; existing key RenewAsync must remain disabled",
+    "ef_generation": "Existing governed dotnet-ef10.0.12 generated the migration against EF runtime10.0.13; executable no-pending-model/migration tests are required; no package/tool upgrade is introduced."
+  },
+  "scope_type": "WORK_ITEM"
+}

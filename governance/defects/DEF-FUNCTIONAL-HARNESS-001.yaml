@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-FUNCTIONAL-HARNESS-001",
+  "work_item_id": "P0-RV008",
+  "classification": "FUNCTIONAL_DEFECT",
+  "severity": "SEV-3",
+  "status": "CLOSED",
+  "environment": "Windows .NET functional test processes",
+  "description": "Managed setup or fixture cleanup errors can escape current test harness diagnostic handlers. Generic user screenshots identify a CLR exception but not its original stack. Resolved at 623d3db08ee73182904a12dd08351260a715449c: both normal suites and all6 controlled managed failure cases pass; original historical stack remains unproven.",
+  "expected_behavior_ref": "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md",
+  "evidence": [
+    "governance/evidence/P0-RV008-AUTHORITY-RESOLUTION.json",
+    "governance/evidence/P0-RV008-VALIDATION.json"
+  ],
+  "affected_versions": [
+    "de08aaec13cf77fdb5b28bed69c280aab89fe67a"
+  ],
+  "created_at": "2026-10-18T21:40:45.218Z",
+  "updated_at": "2026-10-18T21:49:04.022Z"
+}

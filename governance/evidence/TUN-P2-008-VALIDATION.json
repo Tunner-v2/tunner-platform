@@ -1,0 +1,525 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-008",
+  "source_currentness_462e269a": {"previous_source_carrier":"98807ebe4bb7cb4e74b1aecf938a9edb8c243475","source_carrier":"462e269ad5c701034aceb7374f15f0c249a87529","result":"ENGINEERING_SOURCE_QUALIFIED_COMPATIBILITY_AND_CURRENT_NATIVE_GATES_PENDING","binding_meaning":"Top-level tested/validated SHA identifies the reviewed source carrier, not execution of every retained cohort at that SHA. Existing engineering PASS and work-item VALIDATION remain; current native readiness and Product acceptance are separate.","owned_paths_count":112,"unchanged_owned_paths_count":101,"changed_owned_paths":["docs/contracts/ui-inventory.json","src/Modules/Identity/AuthenticationEndpoints.cs","src/Modules/Identity/IdentityPersistenceDbContext.cs","src/Modules/Identity/IdentityWebAssets.cs","src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs","src/Modules/Identity/StepUpApplication.cs","tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj","tools/browser-testing/BrowserTestHost.cs","tools/browser-testing/Program.cs","tools/browser-testing/Tunner.BrowserTesting.csproj","web/apps/user/passkeys.tsx"],"qualification_map":[{"paths":["src/Modules/Identity/AuthenticationEndpoints.cs","src/Modules/Identity/StepUpApplication.cs"],"change":"Optional async Recovery publication/availability and Recovery/Device final publication guards; ordinary Passkey/TOTP effect branches preserved.","exact_source_carrier":"1bf5971739f163d15777498b211ff0f48f677bc8","source_equivalence":"These two files are byte-identical from the actual qualified source through this carrier.","qualification_refs":["governance/evidence/p2-019-content-20261116/native-recovery-1bf59717/private-receipt.json","governance/evidence/p2-019-content-20261116/native/1cb9e925d1064eceb9cba1915b95906b/summary.json","governance/evidence/p2-019-content-20261116/native/shared-proof-04c86d0a/presentation.trx"],"technical_review_refs":["governance/evidence/P2-009-RV009-VALIDATION.json","governance/evidence/P2-009-RV010-VALIDATION.json"],"execution_boundary":"Original123 at1bf, Device19 across retained actual runs and shared35 at04c retain their original sources; no current-binary private123 PASS is claimed."},{"paths":["src/Modules/Identity/IdentityPersistenceDbContext.cs","src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs","tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj"],"change":"Adds configuration model and audit mapping plus Admin BFF test reference; existing Passkey/TOTP entities unchanged.","exact_source_carrier":"196d522b52830bae0e57c908883cba3431fd5a81","source_equivalence":"All three paths are byte-identical from this qualified source through this carrier.","qualification_refs":["governance/evidence/P2-003-RV006-VALIDATION.json","governance/evidence/p2-019-content-20261116/native/9d7b9df9e7054126b2dd0f340b37f327/summary.json","governance/evidence/p2-019-content-20261116/native/3bf29b35ca644014aa6d054560198221/summary.json","governance/evidence/p2-019-content-20261116/native/13e2ee804aee4647a02a1f347ee4aefd/summary.json"],"execution_boundary":"Retained actual migration/configuration cohorts keep their source SHAs and repaired subsets; no blanket historical rerun."},{"paths":["src/Modules/Identity/IdentityWebAssets.cs"],"change":"Delegates registration asset and screen rendering to the cohesive BffWebAssets owner; existing admission callbacks retained.","exact_source_carrier":"94f04a133921ef7f6fa41b5b43d3d3965a6f10d3","source_equivalence":"This file is byte-identical from the qualified source through this carrier.","qualification_refs":["governance/evidence/P1-019-RV002-VALIDATION.json","governance/evidence/p2-019-content-20261116/shared-assets-94f04a13/summary.json","governance/evidence/p2-019-content-20261116/shared-assets-94f04a13/default-hosts.trx"],"execution_boundary":"Four fresh default-host cases plus separately retained exact-source wrapper/routes/assets qualification, not four runtime-tool cases."},{"paths":["tools/browser-testing/Program.cs","tools/browser-testing/Tunner.BrowserTesting.csproj","tools/browser-testing/BrowserTestHost.cs"],"change":"Explicit isolated governed-content/manual fixture composition; finite/default mode and native authentication guards preserved.","exact_source_carrier":"d114784293ac0ab21b360073cc7c799ea340b2f5","source_equivalence":"These tool paths are byte-identical from the qualified source through this carrier.","qualification_refs":["governance/evidence/p2-019-content-20261116/admin-browser-d1147842/initial-results.json","governance/evidence/p2-019-content-20261116/admin-browser-d1147842/switch-repair-results.json","governance/evidence/p2-019-content-20261116/admin-browser-d1147842/query-repair-results.json","governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode-bounded-b1d5becc.json","governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/production-guard-b1d5becc.json"],"execution_boundary":"Four distinct Admin fixture identities across retained runs; separate bounded legacy-default/Production-refusal evidence. No same-run four-case or production activation claim."},{"paths":["docs/contracts/ui-inventory.json"],"change":"Inventory extended for independently qualified P2-019 scopes; existing feature rows and approvals retained.","qualification_refs":["governance/evidence/TUN-P2-008-UI-COMPLIANCE.json"],"execution_boundary":"The active same-feature UI envelope is reconciled separately in this batch; historical item checks/screenshots/approvals and TOTP execution identities remain unchanged."},{"paths":["web/apps/user/passkeys.tsx"],"supporting_test_paths":["web/tests/passkeys/passkeys.spec.ts","web/tests/browser-testing/passkeys-flow.spec.ts"],"change":"Reconcile a COMPLETED passkey parent from only its exact original committed result after reload; preserve authorization, password/proof policy, cookies and other Recovery/Federation/Session effects.","production_fix_source_sha":"42dfecf308d029f530237d84c4c42145a8df9040","strengthened_real_test_source_sha":"462e269ad5c701034aceb7374f15f0c249a87529","source_equivalence":"Production passkeys.tsx is byte-identical42df-to462; only the final live-test logout synchronization changes.","qualification_refs":["governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/fixture-red/execution.json","governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/fixture-red/observed-extract.json","governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/fixture-green/execution.json","governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/fixture-green/observed-extract.json","governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/browser-initial-failure/execution.json","governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/browser-initial-failure/observed-extract.json","governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/browser-real/execution.json","governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/browser-real/observed-extract.json","governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/web-build-execution.json","governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/native-build-execution.json","governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/application-refresh.json"],"execution_boundary":"Meaningful fixture RED at5b8 and initial whole live failure at42df remain retained. Four fixture GREEN cases execute at42df; one strengthened strict-TLS live journey executes at462, zero unexpected/skipped/flaky/retry. These are five affected identities, not a full historical rerun."}],"pre_fix_focused_execution":{"source_sha":"5b8f13b18611a16fab13d6c635d216606dd9e4ba","executed":1,"passed":1,"failed":0,"skipped":0,"flaky":0,"strict_tls":true,"assertions_unchanged":true,"execution_ref":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/passkey-browser/execution.json","receipt_ref":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/passkey-browser/observed-extract.json","scope":"One existing real native Passkey onboarding/sign-in/proof/enrollment/self-removal journey; no fresh TOTP or full private-cohort claim."},"compatibility_bridge_boundary":{"pending_revision_ids":["P2-009-RV012","P2-010-RV013","P2-013-RV005"],"state_at_preparation":"PROPOSED","scope":"Shared source compatibility only; native eligibility/reviews/closure remain pending and no historical owner closure or whole-scope UI proof is overwritten.","global_ci_boundary":"GLOBAL UI remains separately pending on unrelated P011 keyboard evidence; scoped P007 UI and these exact affected tests do not claim GLOBAL PASS."}},
+  "post_commit_currentness_20261116": {"prior_carrier":"e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c","current_carrier":"98807ebe4bb7cb4e74b1aecf938a9edb8c243475","changed_owned_paths":["tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj"],"qualification_ref":"governance/evidence/TUN-P2-016-VALIDATION.json","actual_qualification":"Existing test project gains only the test-only Worker reference and shared broker fixture link. The real 78-case integration at 98807eb passes with the same project. Application, browser, UI and other owned paths are byte-identical to the prior carrier; all original executions and acceptance boundaries are retained. No original full cohort rerun is claimed."},
+  "final_source_compatibility_20261115": {"carrier":"1e8cc76bd5b22aceb169b44d446c0df049410b73","prior_carrier":"4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b","changed_owned_paths":["docs/contracts/ui-inventory.json","src/Modules/Identity/AuthenticationApplication.cs","src/Modules/Identity/AuthenticationEndpoints.cs","src/Modules/Identity/IdentityPersistenceDbContext.cs","src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs","src/Modules/Identity/StepUpApplication.cs","src/Modules/Identity/StepUpBrowserEndpoints.cs","src/Modules/Identity/StepUpOutcomes.cs","src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs","tools/browser-testing/BrowserTestHost.cs","tools/browser-testing/BrowserTestStepUp.cs","web/apps/user/vite.config.ts"],"unqualified_changed_paths":[],"receipt_ref":"governance/evidence/TUN-P2-013-PACKAGING-CURRENTNESS.json","execution_identity":"Qualified shared-source compatibility; original executions remain at their actual SHAs/counts. No legacy full rerun or Product acceptance is asserted."},
+  "selected_session_currentness_20261114": {
+    "qualification_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/qualification-binding.json",
+    "current_source_carrier": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+    "execution_identity": "Original cohorts/approvals remain at their original SHAs. New affected compatibility:18app075485b,20HTTPS7a6a69b,42API/controlled8b65583+4responsive7a6a69b, fresh6/2affectedCSS and1strictlive4f09edb. No original complete cohort is claimed rerun.",
+    "review_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/technical-review.json",
+    "visual_review_ref": "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+    "limit": "Engineering currentness only. Original VALIDATION and Product acceptance boundaries remain unchanged; whole013 remains pending.",
+    "changed_owned_paths": [
+      "docs/contracts/ui-inventory.json",
+      "src/Modules/Identity/AuthenticationApplication.cs",
+      "src/Modules/Identity/StepUpApplication.cs",
+      "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+      "tools/browser-testing/BrowserTestHost.cs",
+      "tools/browser-testing/BrowserTestStepUp.cs",
+      "tools/browser-testing/Tunner.BrowserTesting.csproj",
+      "web/apps/user/passkeys.tsx"
+    ],
+    "all_changed_owned_paths_in_qualification": true,
+    "prior_tested_commit_sha": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
+    "prior_validated_commit_sha": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179"
+  },
+  "sessions_packaging_currentness_20261114": {
+    "receipt_ref": "governance/evidence/TUN-P2-013-PACKAGING-CURRENTNESS.json",
+    "assessed_source_carrier": "dd9029e8fc479693de954b4d1c4ffdf8cf7fb179",
+    "prior_envelope_ref": "4021ec1f214a6beb3d456689d64975ed95204a08:governance/evidence/TUN-P2-008-VALIDATION.json",
+    "prior_tested_commit_sha": "ea731ea0a62d5fbc673d84f17864c3c283b582e7",
+    "prior_validated_commit_sha": "ea731ea0a62d5fbc673d84f17864c3c283b582e7",
+    "actual_new_execution_sha": "41501e3b006041ef2efaa2766a0a1fe1e73534af",
+    "legacy_tests_rerun": false
+  },
+  "http_listing_currentness_20261114": {
+    "result": "PASS_BOUNDED_CURRENT_SOURCE_COMPATIBILITY",
+    "actual_execution_sha": "ea731ea0a62d5fbc673d84f17864c3c283b582e7",
+    "prior_envelope_git_ref": "ea731ea0a62d5fbc673d84f17864c3c283b582e7:governance/evidence/TUN-P2-008-VALIDATION.json",
+    "prior_tested_validated_sha": "aba6daf62fd0afef46878741062aad98a4e4fe6f",
+    "changed_owned_paths": [
+      "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs"
+    ],
+    "coverage": "One optional source-gated mapcall and optional RawPost mediaType retainingJSONdefault; oldauthentication/mapping/client/cert/sourcebodies unchanged. Actualcurrent21 covers source-absent sign-in/session/signout, JSON defaults/guards, actual415, newprotectedlisting and11app/contractregressions. NativeKestrelHTTPS/SQLcleanup/source bound toea731; seven independentrole reviews inspectrawresults.",
+    "evidence_root": "governance/evidence/p2-013-sessions-20261114/http-ea731ea",
+    "historical_limits": "All orderedownership/lifecycle/prior approvals and execution records preserved through immutablepriorenvelope. Not a full original registration/passkey/TOTP/federation/browser/visual rerun; current UIobjects unchanged. Later actor/SDK/native/provider or production decisions remain separate."
+  },
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "462e269ad5c701034aceb7374f15f0c249a87529",
+  "validated_commit_sha": "462e269ad5c701034aceb7374f15f0c249a87529",
+  "recovery_fixture_currentness_20261114": {
+    "result": "PASS_BOUNDED_CURRENT_SOURCE_COMPATIBILITY",
+    "prior_envelope_git_ref": "aba6daf62fd0afef46878741062aad98a4e4fe6f:governance/evidence/TUN-P2-008-VALIDATION.json",
+    "prior_tested_validated_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+    "actual_current_execution_sha": "aba6daf62fd0afef46878741062aad98a4e4fe6f",
+    "changed_owned_paths_since_prior": ["tools/browser-testing/BrowserTestHost.cs", "web/tests/totp/sensitive/real-journey.mjs"],
+    "source_resolution": "Ordered112 ownership preserved. Only two owned test-fixture paths change: optional null-default RecoveryCase host composition and one literal preparation-helper ID. TOTP dispatcher/defaults, native oracle, vault/seed, method-specific production and original journey body remain unchanged. The existing six recovery regressions, including both actual TOTP journeys, execute current host/helper source atE; new case also uses actual registration/Mailpit mechanics. No full original TOTP matrix rerun is claimed.",
+    "actual_evidence_root": "governance/evidence/p2-011-recovery-20261112/browser-aba6daf",
+    "actual_results": "Protocol17/resources6/public37plus12/newrealjourney1/oldrealjourneys6 allPASS; current source/build/process/physical/borrowed flags true. The independent reviewer inspected all seven raw browser receipts, not summaries alone.",
+    "historical_evidence": "All previous envelopes, original337/947 cohorts, actual579native109/SQL13 and actual2cdUI80 retain their true invocation/source identities through immutable prior envelope. This is a current scoped compatibility carrier, not a new full-parent execution or Product/production/merge/release acceptance; status remains VALIDATION."
+  },
+  "owned_behavior_paths": [
+    "docs/contracts/ui-inventory.json",
+    "docs/development/P2_008_TOTP_SCOPE.md",
+    "docs/development/THIRD_PARTY_COMPONENTS.json",
+    "src/Modules/Identity/AuthenticationApplication.cs",
+    "src/Modules/Identity/AuthenticationContracts.cs",
+    "src/Modules/Identity/AuthenticationEndpoints.cs",
+    "src/Modules/Identity/AuthenticationRows.cs",
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+    "src/Modules/Identity/IdentityPersistenceTime.cs",
+    "src/Modules/Identity/IdentityWebAssets.cs",
+    "src/Modules/Identity/Migrations/20261110164421_P2TotpLifecycle.Designer.cs",
+    "src/Modules/Identity/Migrations/20261110164421_P2TotpLifecycle.cs",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+    "src/Modules/Identity/OpenBaoTotpSeedStore.cs",
+    "src/Modules/Identity/PasskeyApplication.cs",
+    "src/Modules/Identity/PasskeyContracts.cs",
+    "src/Modules/Identity/PasskeyEndpoints.cs",
+    "src/Modules/Identity/PasskeySignInRecovery.cs",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "src/Modules/Identity/StepUpBrowserContracts.cs",
+    "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+    "src/Modules/Identity/StepUpOutcomes.cs",
+    "src/Modules/Identity/StepUpPasskeyBrowserEndpoints.cs",
+    "src/Modules/Identity/StepUpRows.cs",
+    "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs",
+    "src/Modules/Identity/TotpApplication.cs",
+    "src/Modules/Identity/TotpAuthenticationAuthority.cs",
+    "src/Modules/Identity/TotpContracts.cs",
+    "src/Modules/Identity/TotpEndpoints.cs",
+    "src/Modules/Identity/TotpMigrationSql.cs",
+    "src/Modules/Identity/TotpNativeVerifier.cs",
+    "src/Modules/Identity/TotpOperationProof.cs",
+    "src/Modules/Identity/TotpPrimaryMfa.cs",
+    "src/Modules/Identity/TotpRows.cs",
+    "src/Tunner.Installer/LocalOpenBaoCredentialScope.cs",
+    "src/Tunner.Installer/LocalOpenBaoSession.cs",
+    "src/Tunner.Platform/Secrets/CredentialSecretReference.cs",
+    "src/Tunner.Platform/Secrets/OpenBaoSecretStore.cs",
+    "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+    "tests/Shared/OpenBao/DisposableOpenBaoFixture.cs",
+    "tests/Shared/OpenBao/README.md",
+    "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+    "tests/Tunner.Identity.Persistence.Tests/PasskeyUsageMigrationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/TotpCompositeTerminationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/TotpFinalBoundaryTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/TotpOpenBaoIntegrationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/TotpPasskeyMfaTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/TotpProofContinuationTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/TotpReplayTests.cs",
+    "tests/Tunner.Identity.Persistence.Tests/TotpTests.cs",
+    "tests/Tunner.Installer.Tests/CredentialSecretVersionTests.cs",
+    "tests/Tunner.Installer.Tests/LocalBootstrapTests.cs",
+    "tests/Tunner.Installer.Tests/OpenBaoIntegrationTests.cs",
+    "tests/Tunner.Installer.Tests/Tunner.Installer.Tests.csproj",
+    "web/apps/user/authentication.tsx",
+    "web/apps/user/passkeys.api.ts",
+    "web/apps/user/passkeys.sign-in.tsx",
+    "web/apps/user/passkeys.tsx",
+    "web/apps/user/public/third-party-notices.txt",
+    "web/apps/user/step-up.totp.tsx",
+    "web/apps/user/step-up.tsx",
+    "web/apps/user/totp-qr.ts",
+    "web/apps/user/totp.api.ts",
+    "web/apps/user/totp.code.tsx",
+    "web/apps/user/totp.content-keys.ts",
+    "web/apps/user/totp.content.proposal.json",
+    "web/apps/user/totp.css",
+    "web/apps/user/totp.html",
+    "web/apps/user/totp.method-row.tsx",
+    "web/apps/user/totp.mfa.tsx",
+    "web/apps/user/totp.picker.tsx",
+    "web/apps/user/totp.routes.ts",
+    "web/apps/user/totp.tsx",
+    "web/apps/user/totp.ui.tsx",
+    "web/apps/user/totp.validation.ts",
+    "web/apps/user/vite.config.ts",
+    "web/packages/ui/src/content.tsx",
+    "web/playwright.totp.config.ts",
+    "web/tests/contracts.test.tsx",
+    "web/tests/totp.contracts.test.ts",
+    "web/tests/totp/QR_VALIDATION.md",
+    "web/tests/totp/qr.test.mjs",
+    "web/tests/totp/sensitive/README.md",
+    "web/tests/totp/sensitive/child.mjs",
+    "web/tests/totp/sensitive/contract.mjs",
+    "web/tests/totp/sensitive/public-canaries.mjs",
+    "web/tests/totp/sensitive/supervisor.mjs",
+    "web/tests/totp/ui/totp.spec.ts",
+    "web/tools/build-qr-vendor.mjs",
+    "web/vendor/nayuki/.gitattributes",
+    "web/vendor/nayuki/qrcodegen.d.mts",
+    "web/vendor/nayuki/qrcodegen.mjs",
+    "web/vendor/nayuki/upstream/qrcodegen.ts",
+    "tests/Shared/NativeTotpCodeFixture.cs",
+    "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+    "tools/browser-testing/Program.cs",
+    "tools/browser-testing/Tunner.BrowserTesting.csproj",
+    "tools/browser-testing/BrowserTestHost.cs",
+    "tools/browser-testing/BrowserTestStepUp.cs",
+    "tools/browser-testing/BrowserTestTotp.cs",
+    "tools/browser-testing/BrowserTestTotpOracle.cs",
+    "tools/browser-testing/FiniteTotpBuildBinding.cs",
+    "tools/browser-testing/FiniteTotpCoordinator.cs",
+    "tools/browser-testing/FiniteTotpResources.cs",
+    "tools/dev/new-tunner-totp-build-binding.mjs",
+    "web/tests/totp/sensitive/boundary-tests.mjs",
+    "web/tests/totp/sensitive/oracle-bridge.mjs",
+    "web/tests/totp/sensitive/private-frames.mjs",
+    "web/tests/totp/sensitive/public-real-canaries.mjs",
+    "web/tests/totp/sensitive/real-child.mjs",
+    "web/tests/totp/sensitive/real-journey.mjs",
+    "web/tests/totp/sensitive/real-supervisor.mjs"
+  ],
+  "note": "Committed carrier337 has actual focused native operation-proof23/coordinator21/persistence5 and strict20-unit PASS. Full947 three journeys70/63/15, public43/contracts29/composition4 and earlier native260/237/113 retain their true invocation identities and exact unchanged-source proofs. Ordered ownership is unchanged. No Product/production/merge/release approval. Current bounded734828a shared-source compatibility is recorded in current_source_compatibility; original full/cohort/source/visual receipts and ordered ownership are preserved, with no new whole-parent execution or lifecycle claim.",
+  "current_source_compatibility": {
+    "result": "PASS_BOUNDED_CURRENT_SOURCE_COMPATIBILITY",
+    "recorded_at": "2026-11-12T21:21:00Z",
+    "tested_source_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+    "scope": "Current shared-owner/BFF/model/UI compatibility; not a new whole passkey/TOTP/provider/vault/browser-matrix execution or lifecycle closure.",
+    "historical_binding": {
+      "tested_commit_sha": "337b1967c1581212141a0cc4299731fa79d0ea6d",
+      "validated_commit_sha": "337b1967c1581212141a0cc4299731fa79d0ea6d",
+      "envelope_git_ref": "734828a78d9736eaa8da32c1b80ae0654a7f3641:governance/evidence/TUN-P2-008-VALIDATION.json",
+      "source_binding_ref": "governance/evidence/p2-008-totp-20261110/final-carrier/337b196/execution-index.json"
+    },
+    "ordered_ownership": {
+      "count": 112,
+      "unchanged_from_envelope_git_ref": "734828a78d9736eaa8da32c1b80ae0654a7f3641:governance/evidence/TUN-P2-008-VALIDATION.json",
+      "all_paths_exist_at_tested_source": true,
+      "current_head_owned_path_delta_count": 0,
+      "unchanged_from_historical_carrier_count": 79,
+      "changed_from_historical_carrier_count": 33
+    },
+    "current_actual_evidence": {
+      "main_validation_ref": "governance/evidence/TUN-P2-010-VALIDATION.json",
+      "private_receipt_ref": "governance/evidence/p2-010-federation-20261112/native-734828a/private76.json",
+      "private_invocations": 1,
+      "private_passed": 76,
+      "private_failed": 0,
+      "build_binding_ref": "governance/evidence/p2-010-federation-20261112/native-734828a/build-binding.json",
+      "protocol_ref": "governance/evidence/p2-010-federation-20261112/native-734828a/protocol-qualification.json",
+      "resources_ref": "governance/evidence/p2-010-federation-20261112/native-734828a/resource-qualification.json",
+      "ui_ref": "governance/evidence/TUN-P2-010-UI-COMPLIANCE.json",
+      "compatibility_scope_ref": "governance/evidence/P2-010-COMPATIBILITY-SCOPE.json"
+    },
+    "source_coverage": {
+      "all_changed_csharp_project_paths_in_current497_build_inputs": true,
+      "all_changed_web_app_paths_in_current102_ui_source_witness": true,
+      "method_specific_core_unchanged": [
+        "src/Modules/Identity/TotpApplication.cs",
+        "src/Modules/Identity/TotpNativeVerifier.cs",
+        "src/Modules/Identity/TotpOperationProof.cs"
+      ],
+      "changed_shared_owner_mapping": "Current PRIVATE76 actually covers original registration/authentication/shared password-proof/browser consumers, all retained recovery ownership/admission/rollback/one-time-delivery cases, and added federation source/MFA/management/history/proof/HTTPS consumers. Native package/model checks retain their original sources; no current full old-method suite is inferred.",
+      "guarded_default_mapping": "New federation method/source fields and finality dispatch are closed additive branches. Recovery browser/selector/one-time-delivery adaptations retain old methods and default TOTP paths; fixed coordinator changes expose existing mechanics without changing ordinary TOTP dispatch. Native source/ownership/no-log/deadline/cleanup qualification remains explicit.",
+      "ui_mapping": "All changed application UI paths are covered by current010UI's102-path source-currentness witness and its retained actual public cohorts, including shared Passkey60 and shared StepUp22. Inventory changes add specifically approved010 items; they do not overwrite original007/008 visual acceptance.",
+      "test_harness_mapping": "Current build inputs include every changed C# project/helper path. Explicit recovery/native selectors and preparation ports reuse existing finite boundaries; ordinary TOTP defaults and its retained journey/core authority remain. No new runner or alternate connection is introduced."
+    },
+    "retained_regression_evidence": [
+      {
+        "ref": "governance/evidence/p2-010-federation-20261112/public/management-shared-passkeys-regression/results.json",
+        "passed": 60,
+        "failed": 0,
+        "source_identity": "Retain original WIP invocation/time and010UI source-currentness witness; not a734 rerun."
+      },
+      {
+        "ref": "governance/evidence/p2-010-federation-20261112/public/management-proof-shared-stepup-regression/results.json",
+        "passed": 22,
+        "failed": 0,
+        "source_identity": "Retain original WIP invocation/time and010UI source-currentness witness; not a734 rerun."
+      },
+      {
+        "ref": "artifacts/p2-010-federation-20261112/registration-wip-models/registration-models.trx",
+        "passed": 92,
+        "failed": 0,
+        "source_identity": "Existing010 working-source model/binding/freshness/policy invocation, retained at actual identity."
+      },
+      {
+        "ref": "artifacts/p2-010-federation-20261112/wire-wip-native/wire-native-regression.trx",
+        "passed": 62,
+        "failed": 0,
+        "source_identity": "Existing native40/event22 invocation, retained at actual identity."
+      },
+      {
+        "ref": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+        "source_identity": "Earlier six real recovery consumers with Password/Passkey/TOTP keep their actual mixed source SHAs; not relabelled734."
+      },
+      {
+        "ref": "governance/evidence/p2-008-totp-20261110/final-carrier/337b196/execution-index.json",
+        "source_identity": "Original parent carrier and full historical component/journey source chain retained unchanged."
+      }
+    ],
+    "changed_owned_paths": [
+      {
+        "path": "docs/contracts/ui-inventory.json",
+        "prior_blob_oid": "e9d0050a8d946e3eb07454189641eb594015b513",
+        "current_blob_oid": "d3556ca2532b96e2ceda8d85cd6599049eff2264"
+      },
+      {
+        "path": "src/Modules/Identity/AuthenticationApplication.cs",
+        "prior_blob_oid": "b33f36a98f898143ee8a33f296db2639f611ca8b",
+        "current_blob_oid": "fefa7a27677a188a7cd2cb57ad6eb8eddf7d2cf8"
+      },
+      {
+        "path": "src/Modules/Identity/AuthenticationEndpoints.cs",
+        "prior_blob_oid": "e2bb76e34c2741413fdc21c906ff9800c17f2bcd",
+        "current_blob_oid": "58a8108d544a0d155d8ab579e6efb2ca3bd29b0d"
+      },
+      {
+        "path": "src/Modules/Identity/AuthenticationRows.cs",
+        "prior_blob_oid": "a4fd6c99fe9632a5c76533876a844db668104fa4",
+        "current_blob_oid": "26a198bc2f5cc8dfe729240fbdb442b6bf1a8ded"
+      },
+      {
+        "path": "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+        "prior_blob_oid": "bffb856d8150def131106d1e11a71c974e4c1cf9",
+        "current_blob_oid": "42aa67785432fe7d4707895884e00674bc8fb0c3"
+      },
+      {
+        "path": "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+        "prior_blob_oid": "b79988b9d063b49d39d1e4396753f383c709688d",
+        "current_blob_oid": "829d39d885615fe273e07ddbea05e6c28cd2a0c2"
+      },
+      {
+        "path": "src/Modules/Identity/PasskeyEndpoints.cs",
+        "prior_blob_oid": "dd41f50b49e3d04af67e766852b49036868607f6",
+        "current_blob_oid": "cf7a37dc618d5abde4c2647ec49302f498898a74"
+      },
+      {
+        "path": "src/Modules/Identity/StepUpApplication.cs",
+        "prior_blob_oid": "6dcfd096c603ec5318d3c7f9a59f72c5212a0e7b",
+        "current_blob_oid": "31bc9f1b948df30c89dc2e6fdca674c3308de263"
+      },
+      {
+        "path": "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "prior_blob_oid": "8f7bf101045edef2f4ff88fa6cc62dcbacffb3d1",
+        "current_blob_oid": "ac4ff1fed9b8feab858abd64fc0ccbbbede611ff"
+      },
+      {
+        "path": "src/Modules/Identity/StepUpOutcomes.cs",
+        "prior_blob_oid": "23c81408f3998b3bd8f93e90a5029eebcc530087",
+        "current_blob_oid": "b46caf8b90b6fa53df0265b08950bba5105bf73e"
+      },
+      {
+        "path": "src/Modules/Identity/StepUpRows.cs",
+        "prior_blob_oid": "f0c88429d086fada2c6c579a4e1b539c57fac4d2",
+        "current_blob_oid": "ae05b409a3d6464039e91da3e7163680a3d859cc"
+      },
+      {
+        "path": "src/Modules/Identity/TotpAuthenticationAuthority.cs",
+        "prior_blob_oid": "f852f5b1996b2ca93c7128f2d7f4aa1657efa425",
+        "current_blob_oid": "efe0d148f50c68df8046bad5123f32a78d8ebffd"
+      },
+      {
+        "path": "src/Modules/Identity/TotpContracts.cs",
+        "prior_blob_oid": "704bdca320a3693365afd872628a21e65d4a0b9d",
+        "current_blob_oid": "838b36873334210f503eba3de1ed266f7816c89e"
+      },
+      {
+        "path": "src/Modules/Identity/TotpEndpoints.cs",
+        "prior_blob_oid": "e3e5d257ac52f5514d7b50b3bce6b494f8d4e73d",
+        "current_blob_oid": "b641eaa0521eb1e46f71b93d84d829c75d3e7972"
+      },
+      {
+        "path": "src/Modules/Identity/TotpPrimaryMfa.cs",
+        "prior_blob_oid": "a5aedb27862dd4ecb16cf23d4ce65b281f6b8307",
+        "current_blob_oid": "af71651b11be4940e12e4eeeff8e7f10d7614d02"
+      },
+      {
+        "path": "src/Modules/Identity/TotpRows.cs",
+        "prior_blob_oid": "b21525aac7d6f7dc401563d7181559a5ae5f7646",
+        "current_blob_oid": "ba3c3cadb6524630e9a9e0a465faf80afaad6e6f"
+      },
+      {
+        "path": "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+        "prior_blob_oid": "7174de500cbef6e6e47f4ba6fa57d94c44c56e66",
+        "current_blob_oid": "7952650f26e443a28538099c2c7ff3fca0bc2a14"
+      },
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+        "prior_blob_oid": "1919b2a986ee7ede5ca4df45ce8b07c16b8aa300",
+        "current_blob_oid": "67ec8ae59787ab4f24406f357c3b620b6d31b44e"
+      },
+      {
+        "path": "web/apps/user/authentication.tsx",
+        "prior_blob_oid": "e82584122116bf0759bd2e00db730bf09fd8efb4",
+        "current_blob_oid": "d8e1c6f1e37809d18ba58311444e8024389b0b86"
+      },
+      {
+        "path": "web/apps/user/passkeys.api.ts",
+        "prior_blob_oid": "ff7d6cf6a086686116b7ea82f0ba55d13fec91e0",
+        "current_blob_oid": "835b283e271c438f8cc2525e47e295fb48bc057f"
+      },
+      {
+        "path": "web/apps/user/passkeys.tsx",
+        "prior_blob_oid": "b029de547e82c32ba9b1a1196441c0c63c3f6780",
+        "current_blob_oid": "b735eeabe36b0f8ace7539acc2cf4746396c7c57"
+      },
+      {
+        "path": "web/apps/user/step-up.totp.tsx",
+        "prior_blob_oid": "e65fb7ab67307d7ea3d7fcbbfe2e1c83e57df8c5",
+        "current_blob_oid": "f48615cf9d3bc1d0f9d7c8eeda4213af67cfba42"
+      },
+      {
+        "path": "web/apps/user/step-up.tsx",
+        "prior_blob_oid": "88489cf653aa03ad20218f3ade6ab16f7e98665d",
+        "current_blob_oid": "8499d6fc755c19072b912f970d02a8a11fd1715b"
+      },
+      {
+        "path": "web/tests/contracts.test.tsx",
+        "prior_blob_oid": "6021b66f32e758e622bee26c3cf15e7e205a145b",
+        "current_blob_oid": "01c21157cdd87e7e9a863997264a3570dc6e10dd"
+      },
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+        "prior_blob_oid": "3b87871dce43d847e61955afc965b57dc9f0364a",
+        "current_blob_oid": "e79c50b30eda57065fd5ad9a20beced10170da72"
+      },
+      {
+        "path": "tools/browser-testing/Program.cs",
+        "prior_blob_oid": "50346ab34923d8898d7ecdde1de6aba97b630045",
+        "current_blob_oid": "cabea4ef96fdacd1538a6f136d5a618583438855"
+      },
+      {
+        "path": "tools/browser-testing/Tunner.BrowserTesting.csproj",
+        "prior_blob_oid": "6696de6cc928cf500f80ed483a76d91169dcbd5a",
+        "current_blob_oid": "1b8d1b036c4506fdf495b8ea7b545b2a673bb07e"
+      },
+      {
+        "path": "tools/browser-testing/BrowserTestHost.cs",
+        "prior_blob_oid": "9797792d4058eb1fe9032ba70b202183ffb2807e",
+        "current_blob_oid": "baa273651ae166d0fdf408b210908cbbe7446a70"
+      },
+      {
+        "path": "tools/browser-testing/BrowserTestStepUp.cs",
+        "prior_blob_oid": "715bb1070446818dcd4a1e2cacacd9a799bcce2d",
+        "current_blob_oid": "997320b2a7aa8927f8f9abe718e5081facc2039b"
+      },
+      {
+        "path": "tools/browser-testing/FiniteTotpBuildBinding.cs",
+        "prior_blob_oid": "53e49964d114b5cfa3fd9c3b5f96954759245f77",
+        "current_blob_oid": "aa1cd0b601a3f72cc9c635ce20fe2e3d609ccd11"
+      },
+      {
+        "path": "tools/browser-testing/FiniteTotpCoordinator.cs",
+        "prior_blob_oid": "dd4e77f09329f96e176c699e77ca9a03a2699a92",
+        "current_blob_oid": "2c151343e0514d22c21678c733b4ab65c6c21df1"
+      },
+      {
+        "path": "tools/dev/new-tunner-totp-build-binding.mjs",
+        "prior_blob_oid": "37d01eade9f519f1fbbd0ea6a2360d2d1ea1074c",
+        "current_blob_oid": "2ec1a6f2396fcbaf3f62a2952040434608b663b4"
+      },
+      {
+        "path": "web/tests/totp/sensitive/real-journey.mjs",
+        "prior_blob_oid": "5af9802e35ecf2a34eadaf3589dcf3966c28b4d2",
+        "current_blob_oid": "c87f0c2a21ab3d0cef9e4933c72099842a196563"
+      }
+    ],
+    "tests_or_gates_executed_by_this_update": false,
+    "new_full_parent_execution_claimed": false,
+    "uncovered_changed_behavior_identified": [],
+    "limitations": [
+      "Original item remains VALIDATION; this currentness refresh does not claim original-item DONE, new Product acceptance or release.",
+      "Historical passkey full ceremony/native-provider and TOTP vault/full three-journey/browser-matrix results remain at their true source identities, using unchanged method-specific core plus bounded affected-source compatibility.",
+      "No production policy/profile, live provider, secret/vault activation or unrelated dirty-path mutation is introduced."
+    ]
+  },
+  "initial_candidate_commit_sha": "771834330bf2ddb764aa6b81fcf974185e37a0b2",
+  "source_binding_ref": "governance/evidence/TUN-P2-014-VALIDATION.json",
+  "role_reviews_ref": "governance/evidence/TUN-P2-008-ROLE-REVIEWS.json",
+  "ui_evidence_ref": "governance/evidence/TUN-P2-008-UI-COMPLIANCE.json",
+  "base_full_validation_ref": "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/execution-index.json",
+  "recovery_current_source_compatibility": {
+    "result": "PASS_BOUNDED_CURRENT_SOURCE_COMPATIBILITY",
+    "recorded_at": "2026-11-13T18:31:41Z",
+    "metadata_carrier_commit_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+    "actual_native_execution_commit_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+    "prior_current_binding": {
+      "tested_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+      "validated_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+      "envelope_git_ref": "51a80e5f4104292966eef5601747b86ed666c6d9:governance/evidence/TUN-P2-008-VALIDATION.json"
+    },
+    "carrier_semantics": "Top-level binding is the actual579 scoped compatibility carrier and native execution. PRIVATE109/SQL13/protocol17/resources6 retain actual579 identity and build binding. Presentation32/integration48 retain actual2cd UI execution with ten unchanged production/test UI objects through579; retained nine visual pairs remain actual51a. No liveBFF browser E2E, full original-suite rerun or full556-input UI equivalence is claimed.",
+    "ordered_ownership": {
+      "count": 112,
+      "unchanged_from_candidate_envelope": true,
+      "all_owned_objects_match_native_candidate_and_working": true,
+      "working_drift": 0,
+      "native_manifest_covered": 105,
+      "outside_native_manifest": 7,
+      "changed_since734": 7,
+      "changed_since51a": 1,
+      "changed_owned_paths_since51a": [
+        "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs"
+      ]
+    },
+    "current_actual_evidence": {
+      "native_private_ref": "governance/evidence/p2-011-recovery-20261112/native-579c274/private109.json",
+      "native_private_passed": 109,
+      "sql_ref": "governance/evidence/p2-011-recovery-20261112/native-579c274/sql13.json",
+      "sql_passed": 13,
+      "protocol_ref": "governance/evidence/p2-011-recovery-20261112/native-579c274/protocol-qualification.json",
+      "protocol_passed": 17,
+      "resources_ref": "governance/evidence/p2-011-recovery-20261112/native-579c274/resource-qualification.json",
+      "resources_passed": 6,
+      "ui_integration_ref": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/integration48.json",
+      "ui_integration_passed": 48,
+      "ui_capture_ref": "governance/evidence/p2-011-recovery-20261112/ui-51a80e5/visual/visual-review-manifest.json",
+      "ui_capture_count": 9,
+      "retained_presentation_ref": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/presentation32.json",
+      "retained_presentation_passed": 32,
+      "native_private_duration_seconds": 502.083,
+      "sql_duration_seconds": 67.054,
+      "ui_source_witness_ref": "governance/evidence/p2-011-recovery-20261112/ui-2cd195a/source-witness.json"
+    },
+    "source_verification": "Executing-agent batched Git-object checks verify all112 ordered owned files match actual579 and working source with zero drift; 105 covered objects and SHA256 match the actual579 build manifest. The remaining7 outside-manifest paths have object-currentness only, not new runtime coverage. All ten declared UI production/test paths match actual2cd through579. Original ordered arrays and historical fields are preserved.",
+    "affected_owner_coverage": "Since51a, only the shared governed-recovery model snapshot changed in this ordered scope. Method-specific TOTP/vault core remains unchanged from734, and PRIVATE109 retains shared proof/session/MFA/federation consumers against actual579 persistence. All other owned objects are unchanged since51a; no full TOTP vault/first-code/browser matrix rerun is claimed.",
+    "tests_executed_by_this_metadata_update": false,
+    "new_full_parent_execution_claimed": false,
+    "limitations": [
+      "Original status remains VALIDATION, historical cohorts/approvals/source identities remain intact.",
+      "No DONE/Product/production/merge/release, production governed-producer or V04 acceptance follows. Native+BFF browser E2E and final per-item UI acceptance remain separate."
+    ],
+    "actual_ui_execution_commit_sha": "2cd195a25ac22cbab1f86022a83685c860090b19",
+    "native_build_binding_sha256": "8d9f64e1a963add4806a99ef1168bda458192bd19bf77775543874ffc6f931b3",
+    "prior_carrier_bindings": [
+      {
+        "metadata_carrier_commit_sha": "51a80e5f4104292966eef5601747b86ed666c6d9",
+        "actual_native_execution_commit_sha": "095eb59e322ed25d28ebc7c0f069185d64ec874a",
+        "envelope_git_ref": "579c2742c5c4c59a5bcf7e92610d7de32078714a:governance/evidence/TUN-P2-008-VALIDATION.json",
+        "history": "Immutable envelope at579 retains the complete prior51a carrier, actual095 native101 and UI51a/095 execution identities; prior734 binding and earlier history remain unchanged."
+      }
+    ]
+  },
+  "product_authorization_currentness_20261115": {
+    "prior_envelope_git_ref": "c9de7399f16cdc779ec3d3f6da21bf4294afb25d:governance/evidence/TUN-P2-008-VALIDATION.json",
+    "prior_tested_commit_sha": "1e8cc76bd5b22aceb169b44d446c0df049410b73",
+    "prior_validated_commit_sha": "1e8cc76bd5b22aceb169b44d446c0df049410b73",
+    "prior_source_binding_ref": "governance/evidence/p2-008-totp-20261110/final-carrier/337b196/execution-index.json",
+    "current_source_carrier": "e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c",
+    "changed_owned_paths": [
+      "docs/contracts/ui-inventory.json",
+      "src/Modules/Identity/AuthenticationApplication.cs",
+      "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "src/Modules/Identity/StepUpApplication.cs",
+      "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+      "web/apps/user/authentication.tsx",
+      "web/apps/user/step-up.totp.tsx",
+      "web/apps/user/step-up.tsx",
+      "web/apps/user/vite.config.ts"
+    ],
+    "source_receipt_ref": "governance/evidence/TUN-P2-014-VALIDATION.json",
+    "ui_qualification_ref": {
+      "path": "governance/evidence/p2-014-authorization-20261115/ui/qualification-binding.json",
+      "sha256": "20e31bc9a2683e9708dcc7a35746a9b361ba7960cf636ba1c32f9387969e3ae2"
+    },
+    "execution_identity": "Bounded P2-014 shared-source compatibility only. Native Product81 is67+12+2 at a4bd89f; ordinary59 are the passing subset of a failed60-case invocation at4557422, with corrected HTML1 separate at ac80a710. UI127 is54+41+21+11 at their recorded sources. Original parent executions, counts, approvals and VALIDATION/Product acceptance boundaries remain unchanged; no full legacy rerun."
+  }
+}

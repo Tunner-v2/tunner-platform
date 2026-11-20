@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "scope": "READ_ONLY_PRIMARY_R_AND_D_DELTA_TO_FROZEN_BACKEND_PREPARATION",
+  "checked_date_utc": "2026-11-11",
+  "sources": [
+    {
+      "url": "https://pages.nist.gov/800-63-4/sp800-63b/events/#saved-recovery-codes",
+      "section": "4.2.1.1 Saved Recovery Codes",
+      "observed": "The saved-code profile specifies at least64 random bits, hashed storage and throttling. It also requires a replacement after use and recovery notifications for replacement/account recovery.",
+      "application": "FRD17 follows Revision4 guidance. Preserve these technical constraints for the reviewed saved-code profile; refine lifecycle responsibilities across009/011/016. Do not copy issued-contact-code lifetimes, invent automatic side effects, or claim complete NIST conformance."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/dotnet/aspnetcore/v10.0.13/src/Identity/Extensions.Core/src/UserManager.cs",
+      "section": "CreateTwoFactorRecoveryCode/GetRandomRecoveryCodeChar/AllowedChars; GenerateNewTwoFactorRecoveryCodesAsync",
+      "observed": "Default generation uses ten random positions drawn from26 symbols and a fixed separator. Storage receives Distinct(), while the original list is returned.",
+      "inference": "Maximum default entropy is10*log2(26)=47.004397181410916bits, below the saved-code floor. Default format reuse must remain unselected; built-in framework RNG plus supported encoding and native salted hasher is a narrow candidate, not copied cryptography or an approved production profile. Force-collision testing must prove returned/stored uniqueness."
+    }
+  ],
+  "limits": [
+    "No package install, new dependency, runtime generator execution, private values or external writes.",
+    "API choice alone is not evidence of approved-random-generator/FIPS deployment validation.",
+    "No new business count, format, assurance, retention duration or replacement timing selected.",
+    "The frozen-v1 research packet remains unchanged; this is an explicit later refinement finding."
+  ],
+  "new_decision_or_blocker_created": false
+}

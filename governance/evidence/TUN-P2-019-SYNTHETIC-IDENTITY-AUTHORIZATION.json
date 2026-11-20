@@ -1,0 +1,24 @@
+{
+  "evidence_id": "TUN-P2-019-SYNTHETIC-IDENTITY-AUTHORIZATION",
+  "scope_id": "TUN-P2-019-TEST001",
+  "classification": "EXISTING_USER_AUTHORIZATION_RECEIPT",
+  "predecessor_ref": "governance/evidence/TUN-P2-019-SYNTHETIC-ADMIN-AUTHORIZATION.json",
+  "user_authorization": {
+    "question_id": "call_1b64030222014490aa8c29dabafdde34",
+    "answer": "Authorize this isolated Identity settings fixture and tests (Recommended)",
+    "patch_sha256": "21ecf240136c4dff8490deddc02c3b64a9e6083930f78e4f1eb8408e787ae9e6",
+    "work_item_id": "TUN-P2-019-TEST001",
+    "scope": "New explicit SyntheticIdentityConfiguration opt-in for16 existing settings families and separate synthetic Identity author/approver/publisher; preserve original Content-only grant and existing isolation/Origin/CSRF/cookie safeguards. Fixed inputs and labels reuse qualified tests. User providers and production policies are not activated.",
+    "review": "Independent root source/security review of six-file unapplied patch; apply-check and starter syntax check passed. Build/runtime qualification remains required.",
+    "owned_paths": [
+      "tools/browser-testing/Program.cs",
+      "tools/browser-testing/Tunner.BrowserTesting.csproj",
+      "tools/browser-testing/BrowserTestGovernedContent.cs",
+      "tools/dev/tunner-browser.ps1",
+      "tools/browser-testing/BrowserTestIdentityConfiguration.cs",
+      "tools/browser-testing/browser-test-identity-configuration-content.json"
+    ],
+    "historical_boundary": "Original user_authorization and boundaries above remain the exact original Content-only scope; this subsequent explicit grant authorizes only the stated fixture extension."
+  },
+  "provenance": "Preserves the actual subsequent user grant recorded atd9170ef9 in a separate receipt so the original Content-only receipt and historical UI hash bindings remain byte-exact. No new authority or scope is introduced."
+}

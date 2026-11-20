@@ -338,8 +338,13 @@ public static class ContextApplication
         var current = records.SingleOrDefault(x => x.Identifier == selected);
         var state = current is null ? null : CommitReadinessApplication.Read(current);
         var rows = string.Join("\n", lineage.Select(x => $"- {x.Id}: {x.Status}; original {x.OriginalScopeId}; parent {x.ParentMilestoneRevision ?? "none"}; {x.Type}: {x.Reason}"));
-        var next = (NextPayload)GovernanceApplication.Next(repository).Payload;
+        var next = (NextPayload)(current is null
+            ? GovernanceApplication.Next(repository)
+            : GovernanceApplication.Next(repository, selected)).Payload;
         var action = next.Items.FirstOrDefault(x => x.Actionable && x.WorkItemId == selected) ?? next.Items.FirstOrDefault(x => x.Actionable);
+        // Preserve the existing global recovery recommendation when the selected scope cannot proceed.
+        if (action is null && current is not null)
+            action = ((NextPayload)GovernanceApplication.Next(repository).Payload).Items.FirstOrDefault(x => x.Actionable);
         var details = current is null ? "" : $"\nPrerequisites: {string.Join(", ", current.StringList("prerequisites"))}\nAuthority: {string.Join(", ", current.StringList("authority_refs"))}\nDefects: {string.Join(", ", current.StringList(current.Type.DefinitionName == "revision" ? "defect_refs" : "defects"))}\nEvidence: {string.Join(", ", current.StringList(current.Type.DefinitionName == "work-item" ? "required_evidence" : "evidence_refs"))}\n";
         var content = "# Governed project recovery state\n\nDerived deterministically from repository-native governance. Regenerate with tunner context build.\n\n" + history + "\n\nLatest bounded Revision lineage:\n" + rows +
             $"\n\nSelected scope: {selected}\nValidated SHA: {state?.ValidatedCommitSha ?? "not recorded"}\nTested SHA: {state?.TestedCommitSha ?? "not recorded"}\nClosure SHA: {state?.ClosureCommitSha ?? (current is null ? null : CommittedEvidenceApplication.ClosureSha(repository, current)) ?? "not recorded"}\n" + details +

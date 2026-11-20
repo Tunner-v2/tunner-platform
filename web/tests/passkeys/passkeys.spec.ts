@@ -1,0 +1,243 @@
+import {test,expect} from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+import {activeCredential,passwordProof,paths,setup} from './fixtures';
+import type {Page,Route} from '@playwright/test';
+import type {PasskeyOperation} from '../../apps/user/passkeys.api';
+
+const nativeCounts=(page:Page)=>page.evaluate(()=>(window as unknown as {passkeyFixture:{creates:number;gets:number}}).passkeyFixture);
+async function authorizeEnrollment(page:Page){await page.getByRole('button',{name:'Add passkey',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Add passkey',exact:true}).click();await expect(page.getByRole('heading',{name:'Confirm it’s you'})).toBeVisible();await passwordProof(page);await expect(page.getByRole('dialog').getByRole('button',{name:'Continue setup',exact:true})).toBeVisible();}
+async function noBrowserStorage(page:Page){expect(await page.evaluate(()=>({local:localStorage.length,session:sessionStorage.length,query:location.search,hash:location.hash}))).toEqual({local:0,session:0,query:'',hash:''});}
+
+for(const width of [1440,768,390,320]){
+  test('Approved methods/Add composition, actual facts, keyboard and accessibility at '+width,async({page})=>{
+    await page.setViewportSize({width,height:1100});await setup(page);await page.goto(paths.methods);await expect(page.getByRole('heading',{name:'Passkeys & two-step verification'})).toBeVisible();await expect(page.getByText('No passkey added yet',{exact:true})).toBeVisible();
+    expect(await page.locator('.passkeys-header').boundingBox()).toMatchObject({x:0,y:0,width});
+    await expect(page.getByText(/Farhan|Taylor|PROTECTED|STRONG|SMS backup|View codes|Authenticator app enabled/)).toHaveCount(0);await expect(page.getByRole('button',{name:'Add passkey',exact:true})).toBeEnabled();
+    await page.evaluate(()=>document.fonts.ready);expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    await page.screenshot({path:'test-results/passkeys/methods-'+width+'.png',fullPage:true});await page.getByRole('button',{name:'Add passkey',exact:true}).click();await expect(page).toHaveURL(new RegExp(paths.methods+'$'));
+    const dialog=page.getByRole('dialog');await expect(dialog.getByRole('heading',{name:'Add a passkey'})).toBeFocused();const box=await dialog.boundingBox();expect(box?.width).toBe(Math.min(520,width-32));expect(box?.height).toBe(410);await expect(dialog.getByText('Current browser',{exact:true})).toBeVisible();await expect(dialog.getByText(/Chrome|Windows/)).toHaveCount(0);
+    await page.keyboard.press('Tab');await expect(dialog.getByRole('button',{name:'Not now'})).toBeFocused();await page.keyboard.press('Shift+Tab');await expect(dialog.getByRole('button',{name:'Add passkey',exact:true})).toBeFocused();await page.keyboard.press('Escape');await expect(dialog).toHaveCount(0);await expect(page.getByRole('button',{name:'Add passkey',exact:true})).toBeFocused();
+    await page.getByRole('button',{name:'Add passkey',exact:true}).click();expect((await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa','wcag22aa']).analyze()).violations).toEqual([]);await page.screenshot({path:'test-results/passkeys/add-'+width+'.png'});await noBrowserStorage(page);
+  });
+}
+
+test('Canonical security/method routes survive direct entry, refresh and browser history; modal stays local',async({page})=>{
+  await setup(page);await page.goto(paths.security);await expect(page.getByRole('heading',{name:'Protect your Tunner account'})).toBeVisible();await expect(page.getByText('Security activity is unavailable here.')).toBeVisible();await page.getByRole('link',{name:'Review passkeys'}).click();await expect(page).toHaveURL(new RegExp(paths.methods+'$'));await page.reload();await expect(page.getByRole('heading',{name:'Passkeys & two-step verification'})).toBeVisible();await page.goBack();await expect(page.getByRole('heading',{name:'Protect your Tunner account'})).toBeVisible();await page.goForward();await expect(page.getByRole('heading',{name:'Passkeys & two-step verification'})).toBeVisible();
+  await page.goto(paths.methods+'?fixture=not-sensitive#section');await expect(page).toHaveURL(new RegExp(paths.methods+'$'));await noBrowserStorage(page);
+});
+test('Unauthenticated direct entry is guarded and missing policy/publication never becomes an empty ready account',async({page})=>{
+  const state=await setup(page,{authenticated:false});await page.goto(paths.methods);await expect(page).toHaveURL(/\/login$/);await expect(page.getByRole('heading',{name:'Welcome back'})).toBeVisible();state.authenticated=true;state.missingPolicy=true;await page.goto(paths.methods);await expect(page.getByRole('alert')).toHaveText('The request could not be completed.');await expect(page.getByRole('button',{name:'Add passkey'})).toHaveCount(0);state.missingPolicy=false;state.missingContent=true;await page.reload();await expect(page.getByRole('alert')).toHaveText('The request could not be completed.');
+});
+test('Enrollment stays inactive after step-up; native create and exact committed result own activation',async({page})=>{
+  const state=await setup(page);await page.goto(paths.methods);await page.getByRole('button',{name:'Add passkey',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Add passkey',exact:true}).evaluate(element=>{(element as HTMLButtonElement).click();(element as HTMLButtonElement).click();});await expect(page.getByRole('heading',{name:'Confirm it’s you'})).toBeVisible();expect(state.starts).toHaveLength(1);expect((await nativeCounts(page)).creates).toBe(0);expect(state.credentials).toHaveLength(0);
+  await passwordProof(page);await expect(page.getByRole('button',{name:'Continue setup',exact:true})).toBeVisible();expect(state.proofs).toBe(1);expect(state.enrollments).toBe(0);expect((await nativeCounts(page)).creates).toBe(0);await expect(page.getByText('Changes saved successfully')).toHaveCount(0);
+  await page.getByRole('button',{name:'Continue setup',exact:true}).click();await expect(page.getByText('Changes saved successfully',{exact:true})).toBeVisible();expect(state.enrollments).toBe(1);expect((await nativeCounts(page)).creates).toBe(1);await expect(page.getByText('ACTIVE',{exact:true})).toBeVisible();await noBrowserStorage(page);
+});
+test('Native cancellation cancels only its exact inactive enrollment and the next deliberate request uses a new UUID',async({page})=>{
+  const state=await setup(page);await page.goto(paths.methods);await authorizeEnrollment(page);await page.evaluate(()=>(window as unknown as {passkeyFixture:{mode:string}}).passkeyFixture.mode='cancel');await page.getByRole('button',{name:'Continue setup',exact:true}).click();await expect(page.getByText('Passkey setup was cancelled. No passkey was added.')).toBeVisible();expect(state.credentials).toHaveLength(0);expect(state.enrollments).toBe(0);const previous=state.starts[0]!.body.requestId;await page.getByRole('dialog').getByRole('button',{name:'Close',exact:true}).click();await page.getByRole('button',{name:'Add passkey',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Add passkey',exact:true}).click();await expect(page.getByRole('heading',{name:'Confirm it’s you'})).toBeVisible();expect(state.starts[1]!.body.requestId).not.toBe(previous);
+});
+test('Lost enrollment response checks the exact original result without another mutation or native create',async({page})=>{
+  const state=await setup(page,{loseEnrollment:true});await page.goto(paths.methods);await authorizeEnrollment(page);await page.getByRole('button',{name:'Continue setup',exact:true}).click();await expect(page.getByRole('dialog').getByText('We are checking whether this passkey was added. Please wait before trying again.')).toBeVisible();await expect(page.getByText('Changes saved successfully')).toHaveCount(0);const original=state.operation!;await page.getByRole('dialog').getByRole('button',{name:'Check status',exact:true}).click();await expect(page.getByText('Changes saved successfully')).toBeVisible();expect(state.operation?.ceremonyId).toBe(original.ceremonyId);expect(state.enrollments).toBe(1);expect(state.starts).toHaveLength(1);expect((await nativeCounts(page)).creates).toBe(1);
+});
+test('@regression Completed revocation reload verifies the exact result without false pending or another mutation',async({page})=>{
+  const credential=activeCredential();const state=await setup(page,{credentials:[credential]});
+  const resultBodies:Array<Record<string,unknown>>=[];
+  page.on('request',request=>{if(request.method()==='POST'&&request.url().endsWith('/account/passkeys/result'))resultBodies.push(request.postDataJSON());});
+  await page.goto(paths.methods);await page.getByRole('button',{name:'Manage',exact:true}).click();
+  await page.getByRole('dialog').getByRole('button',{name:'Remove passkey',exact:true}).click();await passwordProof(page);
+  await expect(page.getByText('Changes saved successfully',{exact:true})).toBeVisible();
+  const original={...state.operation!};const reads=state.resultReads;const before={starts:state.starts.length,proofs:state.proofs,enrollments:state.enrollments};
+  await page.reload();await expect(page.getByRole('heading',{name:'Passkeys & two-step verification'})).toBeVisible();
+  await expect(page.getByText('A passkey request is in progress. Check its status before trying again.',{exact:true})).toHaveCount(0);
+  await expect(page.getByRole('button',{name:'Check status',exact:true})).toHaveCount(0);
+  await expect(page.getByRole('button',{name:'Add passkey',exact:true})).toBeEnabled();
+  await expect(page.getByText('REMOVED',{exact:true})).toHaveCount(1);
+  expect(state.resultReads).toBe(reads+1);expect(resultBodies.at(-1)).toEqual({requestId:original.requestId,ceremonyId:original.ceremonyId});
+  expect({starts:state.starts.length,proofs:state.proofs,enrollments:state.enrollments}).toEqual(before);
+  expect(await nativeCounts(page)).toMatchObject({creates:0,gets:0});await noBrowserStorage(page);
+  // A failed exact read still requires deliberate recovery; a completed bootstrap alone is not acknowledgement.
+  state.unrelatedResult=true;await page.reload();await expect(page.getByRole('button',{name:'Check status',exact:true})).toBeEnabled();
+  await expect(page.getByRole('button',{name:'Add passkey',exact:true})).toBeDisabled();await expect(page.getByText('Changes saved successfully',{exact:true})).toHaveCount(0);
+  state.unrelatedResult=false;await page.getByRole('button',{name:'Check status',exact:true}).click();
+  await expect(page.getByRole('button',{name:'Add passkey',exact:true})).toBeEnabled();
+  expect(resultBodies.slice(reads).every(body=>body.requestId===original.requestId&&body.ceremonyId===original.ceremonyId)).toBe(true);
+  expect({starts:state.starts.length,proofs:state.proofs,enrollments:state.enrollments}).toEqual(before);await noBrowserStorage(page);
+});
+test('Reload recovers original authorized metadata from server context without browser storage or new request',async({page})=>{
+  const state=await setup(page);await page.goto(paths.methods);await authorizeEnrollment(page);const original=state.operation!;await page.reload();await expect(page.getByText('A passkey request is in progress. Check its status before trying again.')).toBeVisible();await page.getByRole('button',{name:'Check status',exact:true}).click();await expect(page.getByRole('dialog').getByRole('button',{name:'Continue setup',exact:true})).toBeVisible();expect(state.starts).toHaveLength(1);expect(state.operation?.requestId).toBe(original.requestId);expect((await nativeCounts(page)).creates).toBe(0);await noBrowserStorage(page);
+});
+test('A different tab’s selected proof owner cannot be authenticated under the displayed enrollment review',async({page})=>{
+  const state=await setup(page,{wrongProofOwner:true});await page.goto(paths.methods);await page.getByRole('button',{name:'Add passkey',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Add passkey',exact:true}).click();await expect(page.getByRole('alert')).toHaveText('This request has changed or expired. Refresh to review your current options.');await expect(page.getByRole('heading',{name:'Confirm it’s you'})).toHaveCount(0);expect(state.proofs).toBe(0);expect(state.enrollments).toBe(0);
+});
+for(const effect of ['PreserveExistingSessions','RevokeCredentialSessions'] as const){for(const lost of [false,true]){
+  test('Revocation uses trusted '+effect+' and exact terminal recovery; lost proof='+lost,async({page})=>{
+    const state=await setup(page,{credentials:[activeCredential()],effect,loseProof:lost});await page.goto(paths.methods);await page.getByRole('button',{name:'Manage',exact:true}).click();const dialog=page.getByRole('dialog');await expect(dialog.getByText(effect==='PreserveExistingSessions'?'Your existing Tunner sessions will remain signed in.':'Tunner sessions signed in with this passkey will end. If this includes your current session, you will need to sign in again.')).toBeVisible();await dialog.getByRole('button',{name:'Remove passkey',exact:true}).click();await passwordProof(page);
+    if(effect==='RevokeCredentialSessions'){await expect(page.getByRole('heading',{name:'This passkey was removed. Sign in again to continue.'})).toBeVisible();expect(state.authenticated).toBe(false);await expect(page.getByText('Changes saved successfully')).toHaveCount(0);await page.getByRole('link',{name:'Sign in',exact:true}).click();await expect(page).toHaveURL(/\/login$/);await expect(page.getByText('This passkey was removed. Sign in again to continue.')).toBeVisible();}
+    else{await expect(page.getByText('Changes saved successfully')).toBeVisible();await expect(page.getByText('REMOVED',{exact:true})).toBeVisible();expect(state.authenticated).toBe(true);}
+    expect(state.proofs).toBe(1);expect(state.starts).toHaveLength(1);expect(state.credentials[0]!.state).toBe('REVOKED');await noBrowserStorage(page);
+  });
+}}
+test('An ended session without exact terminal proof cannot claim that removal succeeded',async({page})=>{
+  await setup(page,{credentials:[activeCredential()],effect:'RevokeCredentialSessions',loseProof:true});await page.route('**/account/passkeys/terminal-result',route=>route.fulfill({status:404,json:{error_code:'NOT_FOUND_OR_NOT_DISCLOSABLE'}}));await page.goto(paths.methods);await page.getByRole('button',{name:'Manage',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Remove passkey',exact:true}).click();await passwordProof(page);await expect(page.getByRole('heading',{name:'Your session has ended. Sign in again to continue.'})).toBeVisible();await expect(page.getByText('This passkey was removed. Sign in again to continue.')).toHaveCount(0);
+});
+for(const lost of [false,true]){test('Primary passkey assertion uses native get and exact original result; lost body='+lost,async({page})=>{
+  const state=await setup(page,{authenticated:false,loseSignIn:lost});await page.goto('/login');await page.getByRole('checkbox',{name:'Remember me'}).check();await page.getByRole('button',{name:'Sign in with passkey',exact:true}).click();await expect(page).toHaveURL(/\/signed-in$/);await expect(page.getByRole('heading',{name:'You’re signed in'})).toBeVisible();expect(state.assertions).toBe(1);expect((await nativeCounts(page)).gets).toBe(1);if(lost)expect(state.resultReads).toBe(1);await noBrowserStorage(page);
+});}
+test('An unrelated surviving session/result is not accepted after an uncertain primary assertion',async({page})=>{
+  await setup(page,{authenticated:true,loseSignIn:true,unrelatedResult:true});await page.goto('/login');await page.getByRole('button',{name:'Sign in with passkey',exact:true}).click();await expect(page.getByText('We are checking whether this sign-in completed. Please wait before trying again.')).toBeVisible();await expect(page).toHaveURL(/\/login$/);await expect(page.getByRole('button',{name:'Sign in',exact:true})).toBeDisabled();await noBrowserStorage(page);
+});
+test('Lost challenge options explicitly recover the same request/ceremony before native assertion',async({page})=>{
+  const state=await setup(page,{authenticated:false});let first=true;const requests:string[]=[];await page.route('**/authentication/passkeys/options',async route=>{const body=route.request().postDataJSON();requests.push(body.requestId);if(first){first=false;state.loginOperation={requestId:body.requestId,ceremonyId:'12345678-1234-4234-9234-123456789abc',kind:'SIGN_IN',status:'PENDING',credentialReference:null,expectedVersion:0,expiresAt:new Date(Date.now()+300000).toISOString(),resultHandle:null,publicKey:null} satisfies PasskeyOperation;await route.fulfill({status:200,contentType:'application/json',body:'{'});return;}await route.fallback();});await page.goto('/login');await page.getByRole('button',{name:'Sign in with passkey',exact:true}).click();await expect(page.getByText('We are checking whether this sign-in completed. Please wait before trying again.')).toBeVisible();await page.getByRole('button',{name:'Continue this sign-in'}).click();await expect(page).toHaveURL(/\/signed-in$/);expect(requests.length).toBe(2);expect(new Set(requests).size).toBe(1);expect((await nativeCounts(page)).gets).toBe(1);
+});
+test('Unsupported browser and known native cancellation remain truthful and preserve password alternative',async({page})=>{
+  await setup(page,{authenticated:false});await page.goto('/login');await page.evaluate(()=>(window as unknown as {passkeyFixture:{mode:string}}).passkeyFixture.mode='cancel');await page.getByRole('button',{name:'Sign in with passkey',exact:true}).click();await expect(page.getByText('We could not complete passkey sign-in. Try again or choose another sign-in method.')).toBeVisible();await expect(page.getByRole('button',{name:'Sign in',exact:true})).toBeEnabled();await page.addInitScript(()=>Object.defineProperty(window,'PublicKeyCredential',{configurable:true,value:undefined}));await page.reload();await expect(page.getByRole('button',{name:'Sign in with passkey',exact:true})).toBeDisabled();await expect(page.getByText('This browser does not support passkeys. Use another available sign-in method.')).toBeVisible();
+});
+
+// Regression-first cases: these are anchored and run RED against the unmodified primary candidate.
+test('@regression SIGN_IN hard reload retains the protected original IDs and remember setting',async({page})=>{
+  const state=await setup(page,{authenticated:false,exposeSignInRecovery:true});const resultBodies:Array<Record<string,unknown>>=[];const optionBodies:Array<Record<string,unknown>>=[];
+  page.on('request',request=>{if(request.method()==='POST'&&request.url().endsWith('/authentication/passkeys/result'))resultBodies.push(request.postDataJSON());if(request.method()==='POST'&&request.url().endsWith('/authentication/passkeys/options'))optionBodies.push(request.postDataJSON());});
+  await page.route('**/authentication/passkeys/sign-in',route=>route.abort('connectionreset'));
+  await page.goto('/login');await page.getByRole('checkbox',{name:'Remember me'}).check();await page.getByRole('button',{name:'Sign in with passkey',exact:true}).click();await expect(page.getByText('We are checking whether this sign-in completed. Please wait before trying again.')).toBeVisible();const original={...state.loginOperation!};expect(state.loginRememberMe).toBe(true);
+  await page.reload();await expect(page.getByText('We are checking whether this sign-in completed. Please wait before trying again.')).toBeVisible();await expect(page.getByRole('button',{name:'Sign in',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Sign in with passkey',exact:true})).toHaveCount(0);
+  await page.getByRole('button',{name:'Check sign-in status',exact:true}).click();await expect.poll(()=>resultBodies.at(-1)).toEqual({requestId:original.requestId,ceremonyId:original.ceremonyId});expect(optionBodies).toHaveLength(1);await noBrowserStorage(page);
+});
+test('@regression Committed revocation-start503 and later429 retain the exact immutable start snapshot',async({page})=>{
+  const credential=activeCredential();const state=await setup(page,{credentials:[credential],startFailureStatus:503});await page.goto(paths.methods);await page.getByRole('button',{name:'Manage',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Remove passkey',exact:true}).click();const original={...state.operation!};
+  await expect(page.getByRole('dialog').getByText('We are checking whether this passkey was removed. Please wait before trying again.')).toBeVisible();state.recovery=false;await page.getByRole('dialog').getByRole('button',{name:'Close',exact:true}).click();
+  const rateLimit=(route:Route)=>{state.starts.push({path:'revocation',body:route.request().postDataJSON()});return route.fulfill({status:429,json:{error_code:'RATE_OR_ABUSE_LIMITED'}});};await page.route('**/account/passkeys/revocation/start',rateLimit);await page.getByRole('button',{name:'Try again',exact:true}).click();await expect(page.getByRole('alert')).toHaveText('Too many attempts. Please try again later.');
+  expect(state.starts).toHaveLength(2);for(const entry of state.starts)expect(entry.body).toEqual({requestId:original.requestId,credentialReference:credential.credentialReference,expectedVersion:credential.version});await expect(page.getByRole('button',{name:'Add passkey',exact:true})).toBeDisabled();await expect(page.getByRole('button',{name:'Manage',exact:true})).toBeDisabled();
+  await page.unroute('**/account/passkeys/revocation/start',rateLimit);state.recovery=true;const beforeReads=state.resultReads;await page.getByRole('button',{name:'Check status',exact:true}).click();await expect.poll(()=>state.resultReads).toBe(beforeReads+1);expect(state.operation?.requestId).toBe(original.requestId);expect(state.operation?.ceremonyId).toBe(original.ceremonyId);expect(state.proofs).toBe(0);await noBrowserStorage(page);
+});
+test('@regression Unresolved startA cannot adopt another tab completedB during canonical SPA navigation',async({page})=>{
+  const state=await setup(page,{loseStart:true});const readResults:Array<Record<string,unknown>>=[];page.on('request',request=>{if(request.method()==='POST'&&request.url().endsWith('/account/passkeys/result'))readResults.push(request.postDataJSON());});await page.goto(paths.security);await page.getByRole('button',{name:'Add passkey',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Add passkey',exact:true}).click();await expect(page.getByRole('dialog').getByText('We are checking whether this passkey was added. Please wait before trying again.')).toBeVisible();const original={...state.operation!};await page.getByRole('dialog').getByRole('button',{name:'Close',exact:true}).click();
+  const otherCredential=activeCredential();state.operation={...original,requestId:'99999999-9999-4999-8999-999999999999',ceremonyId:'88888888-8888-4888-8888-888888888888',status:'COMPLETED',credentialReference:otherCredential.credentialReference,resultHandle:'synthetic-other-tab-read-only-handle'};state.credentials.push(otherCredential);state.recovery=true;
+  await page.getByRole('link',{name:'Review passkeys',exact:true}).click();await expect(page).toHaveURL(new RegExp(paths.methods+'$'));await page.getByRole('button',{name:'Check status',exact:true}).click();await expect(page.getByRole('alert')).toHaveText('We couldn’t complete the request. Please try again.');await expect(page.getByText('Changes saved successfully')).toHaveCount(0);expect(readResults.some(body=>body.requestId===state.operation?.requestId||body.ceremonyId===state.operation?.ceremonyId)).toBe(false);expect(state.starts).toHaveLength(1);await noBrowserStorage(page);
+});
+test('Password row is rendered only from the current owner availability fact, with no invented management action',async({page})=>{
+  const state=await setup(page,{passwordAvailable:true});await page.goto(paths.methods);const password=page.getByRole('group',{name:'Password',exact:true});await expect(password).toBeVisible();await expect(password.getByText('Available as a sign-in method',{exact:true})).toBeVisible();await expect(password.getByRole('button')).toHaveCount(0);state.passwordAvailable=false;await page.reload();await expect(page.getByRole('heading',{name:'Passkeys & two-step verification'})).toBeVisible();await expect(page.getByRole('group',{name:'Password',exact:true})).toHaveCount(0);await noBrowserStorage(page);
+});
+
+test('@feedback-regression Remove error keeps every action within the desktop dialog without scrolling',async({page},testInfo)=>{
+  const state=await setup(page,{credentials:[activeCredential()],startFailureStatus:503,effect:'RevokeCredentialSessions'});
+  await page.goto(paths.methods);
+  await page.getByRole('button',{name:'Manage',exact:true}).click();
+  const dialog=page.getByRole('dialog');
+  expect(await dialog.boundingBox()).toMatchObject({width:500,height:330});
+  await dialog.getByRole('button',{name:'Remove passkey',exact:true}).click();
+  await expect(dialog.getByRole('alert')).toHaveText('Passkeys are not available right now. Please try again later.');
+  await expect(dialog.getByRole('heading',{name:'Remove this passkey?',exact:true})).toBeFocused();
+  await page.screenshot({path:testInfo.outputPath('remove-error-desktop.png'),fullPage:true});
+  const container=await dialog.boundingBox();
+  expect(container).not.toBeNull();
+  for(const name of ['Close','Check status']){
+    const box=await dialog.getByRole('button',{name,exact:true}).boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.y+box!.height,name+' bottom is inside the visible dialog').toBeLessThanOrEqual(container!.y+container!.height-1);
+    expect(box!.y,name+' top is inside the visible dialog').toBeGreaterThanOrEqual(container!.y+1);
+  }
+  expect(await dialog.evaluate(element=>element.scrollHeight<=element.clientHeight+1)).toBe(true);
+  expect(state.starts).toHaveLength(1);
+  expect(state.proofs).toBe(0);
+  expect(state.credentials[0]!.state).toBe('ACTIVE');
+});
+
+for(const kind of ['ENROLL','REVOKE'] as const)test('@feedback-regression '+kind+' unknown Close focuses existing recovery without replacing the request',async({page},testInfo)=>{
+  const state=await setup(page,{credentials:kind==='REVOKE'?[activeCredential()]:[],startFailureStatus:503});
+  const resultBodies:Array<Record<string,unknown>>=[];
+  page.on('request',request=>{if(request.url().endsWith('/account/passkeys/result'))resultBodies.push(request.postDataJSON());});
+  await page.goto(paths.methods);
+  const trigger=page.getByRole('button',{name:kind==='ENROLL'?'Add passkey':'Manage',exact:true});
+  await trigger.click();
+  const dialog=page.getByRole('dialog');
+  await dialog.getByRole('button',{name:kind==='ENROLL'?'Add passkey':'Remove passkey',exact:true}).click();
+  await expect(dialog.getByRole('alert')).toHaveText('Passkeys are not available right now. Please try again later.');
+  const original={...state.operation!};
+  await dialog.getByRole('heading').first().focus();
+  await page.keyboard.press('Tab');
+  await expect(dialog.getByRole('button',{name:'Close',exact:true})).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(dialog).toHaveCount(0);
+  await page.screenshot({path:testInfo.outputPath(kind.toLowerCase()+'-unknown-closed.png'),fullPage:true});
+  const recovery=page.getByRole('button',{name:'Check status',exact:true});
+  await expect(recovery).toBeFocused();
+  await expect(recovery).toBeEnabled();
+  await expect(trigger).toBeDisabled();
+  expect(state.starts).toHaveLength(1);
+  expect(state.operation).toEqual(original);
+  expect(state.proofs).toBe(0);
+  expect(state.enrollments).toBe(0);
+  const reads=state.resultReads;
+  await page.keyboard.press('Enter');
+  await expect.poll(()=>state.resultReads).toBe(reads+1);
+  expect(resultBodies.at(-1)).toEqual({requestId:original.requestId,ceremonyId:original.ceremonyId});
+  expect(state.starts).toHaveLength(1);
+  expect(state.operation?.ceremonyId).toBe(original.ceremonyId);
+  await noBrowserStorage(page);
+});
+
+for(const feedback of ['native-cancel','http-429'] as const)test('@feedback-regression Login '+feedback+' restores its available action without another attempt',async({page},testInfo)=>{
+  const state=await setup(page,{authenticated:false});
+  const optionsBodies:Array<Record<string,unknown>>=[];
+  page.on('request',request=>{if(request.url().endsWith('/authentication/passkeys/options'))optionsBodies.push(request.postDataJSON());});
+  if(feedback==='http-429')await page.route('**/authentication/passkeys/options',route=>route.fulfill({status:429,json:{error_code:'RATE_OR_ABUSE_LIMITED'}}));
+  await page.goto('/login');
+  if(feedback==='native-cancel')await page.evaluate(()=>(window as unknown as {passkeyFixture:{mode:string}}).passkeyFixture.mode='cancel');
+  const action=page.getByRole('button',{name:'Sign in with passkey',exact:true});
+  await action.click();
+  if(feedback==='native-cancel')await expect(page.getByText('We could not complete passkey sign-in. Try again or choose another sign-in method.',{exact:true})).toBeVisible();
+  else await expect(page.getByRole('alert')).toHaveText('Too many attempts. Please try again later.');
+  await expect(action).toBeEnabled();
+  await page.screenshot({path:testInfo.outputPath('login-'+feedback+'-focus.png'),fullPage:true});
+  await expect(action).toBeFocused();
+  await expect(page.getByRole('button',{name:'Sign in',exact:true})).toBeEnabled();
+  expect(optionsBodies).toHaveLength(1);
+  expect(state.assertions).toBe(0);
+  expect((await nativeCounts(page)).gets).toBe(feedback==='native-cancel'?1:0);
+  await noBrowserStorage(page);
+});
+
+test('@feedback-regression Uncertain Login focuses only exact read-only recovery and never resubmits on focus',async({page},testInfo)=>{
+  const state=await setup(page,{authenticated:false,loseSignIn:true,unrelatedResult:true});
+  const resultBodies:Array<Record<string,unknown>>=[];
+  page.on('request',request=>{if(request.url().endsWith('/authentication/passkeys/result'))resultBodies.push(request.postDataJSON());});
+  await page.goto('/login');
+  await page.getByRole('button',{name:'Sign in with passkey',exact:true}).click();
+  await expect(page.getByText('We are checking whether this sign-in completed. Please wait before trying again.',{exact:true})).toBeVisible();
+  const original={...state.loginOperation!};
+  const recovery=page.getByRole('button',{name:'Check sign-in status',exact:true});
+  await expect(recovery).toBeEnabled();
+  await page.screenshot({path:testInfo.outputPath('login-uncertain-recovery-focus.png'),fullPage:true});
+  await expect(recovery).toBeFocused();
+  await expect(page.getByRole('button',{name:'Sign in',exact:true})).toBeDisabled();
+  expect(state.assertions).toBe(1);
+  expect((await nativeCounts(page)).gets).toBe(1);
+  const reads=state.resultReads;
+  await page.keyboard.press('Enter');
+  await expect.poll(()=>state.resultReads).toBe(reads+1);
+  await expect(recovery).toBeEnabled();
+  await expect(recovery).toBeFocused();
+  expect(resultBodies.at(-1)).toEqual({requestId:original.requestId,ceremonyId:original.ceremonyId});
+  expect(state.loginOperation?.requestId).toBe(original.requestId);
+  expect(state.assertions).toBe(1);
+  expect((await nativeCounts(page)).gets).toBe(1);
+  await noBrowserStorage(page);
+});
+
+test('@feedback-regression Aborted Login ceremony cannot steal new-route focus or submit credentials',async({page},testInfo)=>{
+  const state=await setup(page,{authenticated:true});
+  await page.goto('/login');
+  await page.evaluate(()=>(window as unknown as {passkeyFixture:{mode:string}}).passkeyFixture.mode='hold');
+  await page.getByRole('button',{name:'Sign in with passkey',exact:true}).click();
+  await expect.poll(async()=>(await nativeCounts(page)).gets).toBe(1);
+  await page.evaluate(()=>{history.pushState({},'', '/signed-in');dispatchEvent(new PopStateEvent('popstate'));});
+  await expect(page).toHaveURL(/\/signed-in$/);
+  const heading=page.getByRole('heading',{name:'You’re signed in',exact:true});
+  await expect(heading).toBeFocused();
+  await page.evaluate(()=>new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve()))));
+  await expect(heading).toBeFocused();
+  await page.screenshot({path:testInfo.outputPath('aborted-login-new-route-focus.png'),fullPage:true});
+  expect(state.assertions).toBe(0);
+  expect((await nativeCounts(page)).gets).toBe(1);
+  await expect(page.getByRole('button',{name:'Sign in with passkey',exact:true})).toHaveCount(0);
+});

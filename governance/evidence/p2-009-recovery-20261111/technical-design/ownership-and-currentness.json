@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "work_item_id": "TUN-P2-009",
+  "recorded_at": "2026-11-11T09:07:44.198110+00:00",
+  "observed_head": "3c9d4c388b2acff1c61f9f01ed6fee55d39b2d70",
+  "observed_work_item_state": "IN_PROGRESS",
+  "phase": "ARTIFACT_ONLY_TECHNICAL_SEAM_REVIEW",
+  "implementation_authorized_by_this_packet": false,
+  "tests_executed": false,
+  "production_profile_selected": false,
+  "carrier_chain": [
+    "Recovery owner local guard",
+    "applied outcome with closed recovery validity",
+    "StepUpApplication local pending guard",
+    "confirmed SaveChanges+COMMIT+transaction disposal",
+    "owned secret-safe execution result",
+    "existing safe completion hook",
+    "dedicated IResult",
+    "ExecuteAsync finally disposal"
+  ],
+  "carrier_type": "Internal sealed IDisposable, no general getter/record printing/deconstruction/automatic JSON; one-shot move, exact actor/owner/request/set/context/profile binding, idempotent owned-buffer disposal.",
+  "clone_rule": "ForPasskey/ForTotp copy all unrelated validity fields and move/preserve the same carrier intentionally. Separate closed-shape validation rejects unsupported combinations; nothing is silently nulled or converted into an auth bypass.",
+  "final_validity": {
+    "placement": "Existing StepUpApplication final decisionAt after all awaited owner/source/native checks",
+    "dependency": "Optional IRecoveryCodePolicySource plus closed RecoveryCodeExecutionValidity; no RecoveryCodeApplication dependency cycle or generic validation callback.",
+    "receipt_fields": [
+      "Account/session/origin",
+      "owner operation/correlation/context digest and expected resource version",
+      "recovery profile/version/effective interval",
+      "issued set reference/lifecycle/profile",
+      "exact expected prior-set retirement plan and resulting transaction-pinned rows"
+    ],
+    "checks": "Synchronous current effective policy re-resolution, exact scope/actor/row/plan/source/interval checks. Bind/revalidate impact-relevant usage facts through separate usage version/facts digest without bumping lifecycle version for ordinary use. All existing proof/session/contact/method/assurance/expiry/receipt checks remain independent.",
+    "causal_source": "Recovery validity is not added to the existing passkey/TOTP causal-source exemption. Initial recovery adapter makes no proof-source or session mutation."
+  },
+  "failure_frontiers": [
+    {
+      "frontier": "Owner prepares then rejects/throws",
+      "rule": "Owner local finally disposes before returning conflict; no mutation/proof/outbox commit."
+    },
+    {
+      "frontier": "Post-owner currentness drift",
+      "rule": "Rollback all owner/proof/effects/outbox and dispose pending delivery."
+    },
+    {
+      "frontier": "Save/commit failure or cancellation with UNKNOWN commit",
+      "rule": "Dispose; never return pending codes even if a later read finds committed completion."
+    },
+    {
+      "frontier": "Transaction DisposeAsync fails after COMMIT",
+      "rule": "Do not transfer before leaving await-using block successfully; outer pending guard disposes."
+    },
+    {
+      "frontier": "Browser-completion hook/response construction fails",
+      "rule": "Execution-result guard disposes; safe exact status can be read later, no payload recovery."
+    },
+    {
+      "frontier": "Canceled before write",
+      "rule": "Dedicated result emits no payload and disposes. Committed owner state is not falsely called rolled back."
+    },
+    {
+      "frontier": "Mid-write abort/serialization exception",
+      "rule": "Result finally disposes; bytes already sent cannot be promised erased. Later COMPLETED says codes unavailable, never shown/saved."
+    },
+    {
+      "frontier": "Duplicate/competing request/completed continuation",
+      "rule": "Only safe factory available; no shared-owner cache or reconstructed payload."
+    }
+  ],
+  "normalization_limit": "Clear only owned mutable buffers; native immutable strings, managed copies and authorized network receipt cannot be claimed exhaustively erased.",
+  "safe_result_factory": "Keep ProofCompleted safe-only. Add a dedicated bound recovery first-delivery IResult called only on actual committed Applied; do not give reconciliation helpers an optional secret parameter."
+}

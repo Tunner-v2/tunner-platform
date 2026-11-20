@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-010-RV002",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-010",
+  "parent_revision_id": "P2-010-RV001",
+  "parent_milestone_revision_id": null,
+  "title": "Preserve federation ownership during governed recovery completion",
+  "revision_type": "COMPATIBILITY",
+  "status": "CLOSED",
+  "reason": "P2-011 renewed eligibility passes at d14a751. The reviewed consumer-only governed recovery increment requires shared Identity model snapshot and existing finite recovery test registry changes after P2-010-RV001 legitimately closed. Preserve original and prior revision closure; register only necessary affected source ownership before edit.",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": ["docs/development/P2_011_RECOVERY_REFINEMENT.md"],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Preserve federation and existing authentication behavior with actual committed-source regressions; no producer, Support override, production policy or UI approval is introduced."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["full-stack-engineer", "solution-architect", "tester-qa-engineer", "cyber-security-engineer", "auditor", "compliance-specialist", "governance-engineer"],
+  "evidence_refs": ["governance/evidence/P2-011-COMPATIBILITY-SCOPE.json", "governance/evidence/P2-010-RV002-VALIDATION.json"],
+  "product_acceptance_required": false,
+  "created_at": "2026-11-13T14:45:08.5154994\u002B00:00",
+  "closed_at": "2026-11-13T20:08:52Z",
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+    "tested_commit_sha": "579c2742c5c4c59a5bcf7e92610d7de32078714a",
+    "work_item_commit_shas": [
+      "5a3034c60ffafaba6272f48acd49bfb2a9ed123a",
+      "b5611cc3fa10c11681854d6c8390261405d61001",
+      "2cd195a25ac22cbab1f86022a83685c860090b19",
+      "5200a653d1077fa947458c9fe102dba109b94387",
+      "b46ef3883a93220c28410e4eeda81d26217ce18d",
+      "0ca7c91d994bb6933cd6072daedf6555af379db1",
+      "579c2742c5c4c59a5bcf7e92610d7de32078714a"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json",
+      "%SystemDrive%/",
+      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
+}

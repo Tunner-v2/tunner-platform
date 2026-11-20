@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "provenance": "Direct authorized Product Owner answer in this conversation, approving the exact20261108 rebind packet.",
+  "question_item_id": "[\"request_user_input_async\",\"call_dd1f326b85204d9885c846684fbabb3b\",0]",
+  "answer": "Approve these scoped dev/test VEX corrections",
+  "packet": {
+    "path": "docs/development/P1_RV001_TEMPO_VEX_REBIND_20261108.md",
+    "sha256": "16476c3a7dd788217b66335e23c92f79e1e9875eb160e66fb8467726dabc9757",
+    "byte_scope": "Reviewed working-copy bytes; Markdown source is Git-normalized separately."
+  },
+  "approved_cves": [
+    "CVE-2026-21728",
+    "CVE-2026-28377"
+  ],
+  "plugin_id": "tempo",
+  "plugin_version": "13.2.4",
+  "binary_sha256": "36d85399e4d2fa0e38e8d33ea6f6171ee3fc494184b3275dcd322b1e268d91c7",
+  "dependency_source_commit": "9db7df79d2af105a90d96484e6403e1fda0d011e",
+  "dependency_source_sum": "h1:RWARH/pJYWYyhMan2XnvecRlYxnWf4Wa1AmY067hI4I=",
+  "valid_until_utc": "2026-11-27T00:00:00Z",
+  "required_before_consumption": [
+    "Exact source/binary/context/hash guards",
+    "Architect/security/governance reviews",
+    "Positive and wrong-source/wrong-hash/wrong-CVE/expired-evidence rejection tests",
+    "Retain original unfiltered findings"
+  ],
+  "excluded": [
+    "Any other CVE, package version, plugin or binary",
+    "General ignore files or threshold reduction",
+    "Component removal",
+    "Registry publication",
+    "Protected-main merge",
+    "Production release or deployment"
+  ],
+  "authority_resolution_ref": "governance/evidence/security-20261108/tempo-rebind-proposal/proposal.json",
+  "status": "SCOPE_AUTHORIZED_NOT_GATE_ACCEPTANCE",
+  "recorded_at": "2026-11-09T02:02:25.773Z",
+  "prior_approval_ref": "governance/evidence/P1-RV001-001-TEMPO-VEX-APPROVAL-20261028.json",
+  "prior_binary_sha256": "963c415f3eb286c4d9a1001cab275d9563d4bd4b548ad5b6dd84953e17be61b9",
+  "supersession_boundary": "New executable only; original approval/evidence remains immutable. Same two CVEs, verified dependency source/sum and original expiry."
+}

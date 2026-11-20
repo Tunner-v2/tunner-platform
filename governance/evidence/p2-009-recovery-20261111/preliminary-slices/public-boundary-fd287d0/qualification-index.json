@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "result": "PASS_PUBLIC_ONLY_11_UNITS_AND_15_BOUNDARY_CANARIES",
+  "actual_execution_commit": "fd287d0d1bde81a9f72f54ed335c59d9f5d7a058",
+  "unit_counters": {
+    "tests": 11,
+    "pass": 11,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "unit_controller_exit": 0,
+  "matrix_scenarios": 15,
+  "matrix_canaries_qualified": 15,
+  "matrix_controller_exit": 0,
+  "matrix_controller_elapsed_seconds": 33.046,
+  "source_bindings": {
+    "count": 11,
+    "before_after_equal_both_runs": true,
+    "actual_current_hashes_rechecked": true
+  },
+  "cleanup": {
+    "unit_owned_roots": 3,
+    "matrix_owned_roots": 15,
+    "all18_recorded_paths_independently_lstat_absent": true,
+    "raw_children_closed": 15,
+    "child_browser_context_close_proofs": 15,
+    "claim": "These recorded roots/children and component close facts only; no global browser/process/filesystem or memory absence claim."
+  },
+  "negative_case_distinctions": {
+    "malformed_result": "Protocol rejection qualified; child result NOT_ACCEPTED and no accepted journey observations. Separate strict cleanup proof plus observed child close allowed owned-root removal.",
+    "unexpected_artifact": "Expected child SURFACE_FAILED with surfaceClean=false before verified removal, not a clean accepted run or artifact exemption.",
+    "unexpected_output": "Raw bytes rejected/count-only; public fault containment is distinct from a successful child run.",
+    "timeout": "Expected supervisor cancellation/failed child qualified; no live acceptance.",
+    "sensitive_run_acceptance": false
+  },
+  "history": [
+    {
+      "source": "7be0f513879079c4b62bd1c41443dc6b358aa9d7",
+      "unit_result": "8PASS_3FAIL_0SKIP",
+      "tap_ref": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/public-qualification-7be0f51/units.tap",
+      "tap_sha256": "8e975b60e883ccddbe74cff0ed75b5786fb362412996e0dc85cd90f1d720f7dd",
+      "cleanup": "ORIGINAL3_UNCAPTURED_PUBLIC_UNIT_ROOTS_UNKNOWN_UNTOUCHED",
+      "matrix": "NOT_STARTED"
+    },
+    {
+      "source": "4d8728243c8f253869cd332f93f79d59a72a15d7",
+      "unit_result": "8PASS_3FAIL_0SKIP",
+      "tap_ref": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/public-qualification-4d87282/units.tap",
+      "tap_sha256": "ae115d9ad407418c1d7480d5f557f266be8be507ddc35e218a403df627694e7b",
+      "cleanup": "EXACT3_RECORDED_EMPTY_ROOTS_NONRECURSIVELY_REMOVED_AND_ABSENCE_VERIFIED",
+      "cleanup_receipt_ref": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/canonical-native-correction-v2/recorded-4d-root-cleanup.json",
+      "cleanup_receipt_sha256": "59bfd87fd35848fa85271a5ac135ae1641b92c86401c7337b6cf4e5473e63497",
+      "matrix": "NOT_STARTED"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/public-qualification-fd287d0/actual-matrix-receipt.json",
+      "sha256": "6ae233e356f42c3763292fd8ba36b244398ee008a77d69a6b999d6dfb0a0c258"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/public-qualification-fd287d0/finalize.py",
+      "sha256": "310a27a5edd13170bd193762babefc6bd46b3e2f26ac3f05c1368d5810689383"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/public-qualification-fd287d0/matrix-controller-start.json",
+      "sha256": "b943ea637794d26d15ce2b7cc6eac7fe50f0c01a190940c0f30b4beaedf18fd5"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/public-qualification-fd287d0/matrix-source-after.json",
+      "sha256": "db4f558f2cf7c9fb745d3793ee3834310c45f7f3fb48dfd584759a39dee9cfe9"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/public-qualification-fd287d0/matrix-source-before.json",
+      "sha256": "db4f558f2cf7c9fb745d3793ee3834310c45f7f3fb48dfd584759a39dee9cfe9"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/public-qualification-fd287d0/matrix-terminal.json",
+      "sha256": "6159fc5466999ce2b20dfaf8b1caa5f9e48dbcfe802e23b5b19148834c0d29f9"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/public-qualification-fd287d0/matrix.ndjson",
+      "sha256": "6ad4c46bb6506c5adfdfe505d709647290a10483018b2a4553116d2502022f04"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/public-qualification-fd287d0/run-public.py",
+      "sha256": "7cfbd6efe3007ad4246b55d784b1af4b43e10f442befa7bb1f43d15145358c02"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/public-qualification-fd287d0/units-controller-start.json",
+      "sha256": "453648c5348fa3e04d0f680c0fe37174b21d583bc74354655b2880d320da8116"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/public-qualification-fd287d0/units-source-after.json",
+      "sha256": "db4f558f2cf7c9fb745d3793ee3834310c45f7f3fb48dfd584759a39dee9cfe9"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/public-qualification-fd287d0/units-source-before.json",
+      "sha256": "db4f558f2cf7c9fb745d3793ee3834310c45f7f3fb48dfd584759a39dee9cfe9"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/public-qualification-fd287d0/units-terminal.json",
+      "sha256": "59f816ba4083ab67cb89ded249082546844cc07d75dc4f8d1265cd1fd00d01d1"
+    },
+    {
+      "path": "artifacts/p2-009-recovery-20261111/security-refinement/seam-v2/public-qualification-fd287d0/units.tap",
+      "sha256": "f1a1437b380e35da71e942274d45e096367ebb3ffbb52e1dc7f57ee63d267d16"
+    }
+  ],
+  "native_coordinator_fixtures": "NOT_EXECUTED_BY_THIS_DRIVER",
+  "real_codes_bff_native_resources_docker": false,
+  "totp_defaults_or_sources_changed": false,
+  "private_production_product_release_acceptance": false,
+  "next_action": "Root reviews/registers this scoped public qualification. Shared/private implementation, owner inputs, native/full integration and acceptance remain separately authorized; no new scope follows automatically."
+}

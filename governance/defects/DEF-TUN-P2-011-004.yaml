@@ -1,0 +1,20 @@
+schema_version: 1
+defect_id: DEF-TUN-P2-011-004
+work_item_id: TUN-P2-011
+classification: TEST_INFRASTRUCTURE
+severity: SEV-3
+status: CLOSED
+environment: first native passkey recovery positive scenario on committed c9bb541
+description: The new strong fixture appended its IPasskeyPolicySource to the existing StartPasskeys source. Native enrollment StepUp invokes AuthenticationApplication.PasskeyOutcomeCurrentAt, whose IEnumerable source SingleOrDefault requires one provider and throws for duplicates. The actual95-case run stopped at first RECOVERY_PASSKEY_EFFECT with CASE_FAILED; remaining94 were NOT_RUN, and all source/resource/cleanup guards passed. Fixture correction removes inherited registrations before adding Authority and asserts exactly one; native enrollment/security expectations and production code are unchanged. Source cause is confirmed; close only after actual runtime proof.
+expected_behavior_ref: docs/development/P2_011_RECOVERY_REFINEMENT.md; docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md
+evidence:
+  - tests/Tunner.Identity.Persistence.Tests/RecoveryPasskeyRepairPrivateIntegrationTests.cs
+  - tests/Tunner.Identity.Persistence.Tests/PasskeyTests.cs
+  - src/Modules/Identity/AuthenticationApplication.cs
+  - artifacts/p2-011-recovery-20261112/candidate-c9bb541-native/resumed-20261113/private-recovery-summary.json
+  - governance/evidence/TUN-P2-011-VALIDATION.json
+  - artifacts/p2-011-recovery-20261112/candidate-cb03d1d-native/resumed-20261113/private-recovery-summary.json
+affected_versions:
+  - c9bb5413429a6f7490fea417106f6613e8e68ad1
+created_at: 2026-11-13T09:20:10Z
+updated_at: 2026-11-13T10:44:59Z

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-007-UI-009",
+  "work_item_id": "TUN-P2-007",
+  "classification": "UI_FIDELITY_DEFECT",
+  "severity": "SEV-3",
+  "status": "RESOLVED",
+  "environment": "Existing passkey fixture and isolated real HTTPS browser application",
+  "description": "A hard reload discarded the in-memory acknowledgement and rendered a server-COMPLETED passkey operation as pending, disabling Add. The committed correction reconciles only COMPLETED through the existing exact-result read, preserves route/abort and failed-read recovery, and introduces no mutation, cookie, policy or visual-system change. Meaningful RED is retained; four focused regressions and the strengthened real journey pass. Source compatibility and work-item acceptance remain separately gated.",
+  "expected_behavior_ref": "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+  "evidence": [
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/fixture-red/observed-extract.json",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/fixture-green/observed-extract.json",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/browser-real/observed-extract.json",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/browser-real/real-native-passkeys-removed.png"
+  ],
+  "affected_versions": ["5b8f13b18611a16fab13d6c635d216606dd9e4ba"],
+  "created_at": "2026-11-18T00:16:28Z",
+  "updated_at": "2026-11-18T00:16:28Z"
+}

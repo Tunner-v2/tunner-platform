@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-005-RV002",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-005",
+  "parent_revision_id": "P2-005-RV001",
+  "parent_milestone_revision_id": null,
+  "title": "Qualify verified Recovery V04 source compatibility",
+  "revision_type": "COMPATIBILITY",
+  "status": "CLOSED",
+  "reason": "One bounded source comparison identified exact approved V04 deltas underlying the current Recovery eligibility refusal. Preserve all closed ancestors and actual historical executions; qualify only the declared changed paths using existing genuine source-bound tests and reviews.",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [
+    "docs/contracts/ui-inventory.json",
+    "governance/evidence/P2-005-RV002-VALIDATION.json"
+  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Qualify only docs/contracts/ui-inventory.json through retained genuine evidence and committed-carrier source equality. Preserve original closure, acceptance and runtime execution identities; no application/policy/design changes, new execution, production, merge or release. Only two Recovery inventory amendments and two additions; owning rows unchanged."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "governance-engineer",
+    "tester-qa-engineer",
+    "auditor"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P2-005-RV002-VALIDATION.json"
+  ],
+  "created_at": "2026-11-20T00:44:48.4836063+00:00",
+  "closed_at": "2026-11-20T02:10:59.250Z",
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "tested_commit_sha": "cf604f8503e269fcd1c19d8f1b8ccc7956e42614",
+    "validated_commit_sha": "cf604f8503e269fcd1c19d8f1b8ccc7956e42614",
+    "work_item_commit_shas": [
+      "cf604f8503e269fcd1c19d8f1b8ccc7956e42614"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/",
+      "docs/project/",
+      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/",
+      "%SystemDrive%/",
+      ".vscode/",
+      "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode/"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
+}

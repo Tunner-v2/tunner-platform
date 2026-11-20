@@ -35,7 +35,7 @@ foreach ($service in @("postgres:", "rabbitmq:", "redis:", "openbao:", "mailpit:
     if (-not $compose.Contains($service)) { throw "Compose service missing: $service" }
 }
 
-foreach ($image in @("postgres:18.6", "rabbitmq:4.3.6-management", "redis:8.10.2", "openbao/openbao:2.7.0", "axllent/mailpit:v1.31.3", "grafana/otel-lgtm:0.34.0")) {
+foreach ($image in @("postgres:18.6", "rabbitmq:4.3.7-management-alpine@sha256:eb338b3fc8f5c251028c0022ac0de3fe1db2d599d1c6a08b45898f756f248881", "redis:8.10.3-alpine@sha256:71885d8cc6e42f2bc0aa2eb853bfc4be200b5108a46ac50e117ae1df0531fb80", "tunner-security/openbao:2.7.2-r1", "tunner-security/mailpit:1.33.1-r1", "grafana/otel-lgtm:0.38.1@sha256:0df9bc14142000b161344bd24caf6ddd319b7319055aedaf9b0692b125730af7")) {
     if (-not $envExample.Contains($image)) { throw "Pinned image is missing from .env.example: $image" }
 }
 
@@ -53,7 +53,7 @@ if ($envExample -match '(?m)^(POSTGRES_PORT|RABBITMQ_AMQP_PORT|RABBITMQ_MANAGEME
 if ($compose -match '(?im)^\s*image:\s*.*:(latest|edge)\s*$' -or $envExample -match '(?im)=.*:(latest|edge)\s*$') {
     throw "Mutable latest or edge image tag found."
 }
-if ($compose -match '(?im)minio|object-store|cloudflare|r2') { throw "P0-006 Compose must not introduce object-store emulation or R2 configuration." }
+if ($compose -match '(?im)minio|object-store|cloudflare|(?<![A-Za-z0-9-])r2(?![A-Za-z0-9-])') { throw "P0-006 Compose must not introduce object-store emulation or R2 configuration." }
 if ($compose -match '(?im)(root[_-]?token|dev[_-]?root[_-]?token)') { throw "P0-006 Compose must not contain an OpenBao root token." }
 if ($envExample -match '(?im)(password|secret|token|api[_-]?key)\s*=\s*\S+') { throw ".env.example must not contain credentials or secrets." }
 

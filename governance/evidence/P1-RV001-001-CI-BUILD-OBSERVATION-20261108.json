@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "status": "PASS_COMPLETE_BUILD_FAIL_CURRENT_SECURITY_SCAN",
+  "run": "https://github.com/Tunner-v2/tunner-platform/actions/runs/42495242996/job/128776070955",
+  "tested_commit": "4ab3f9cd1f64fc2d7e2a2a572fe481813f0c6617",
+  "pull_request_head": "26bad52eff812efefa724f4bc7acb6c4a60a05cf",
+  "archive_id": 13625020205,
+  "archive_sha256": "068ad72ea7811e9028c80c5daf0eff7be6456cfd513c06ed344a3674a36a5a8c",
+  "archive_raw": "artifacts/security-followup-20261028/ci-26bad52-lgtm-proof.zip",
+  "source_recipe_sha256": "62e587001acb95abf2a549a9116102e045cbc3cd7b01c664e713c8025688b0ff",
+  "image_id": "sha256:eb7d6d93118fe9dac517f6ea97fd4ce4b0eaab087409f608ecac0e4642fbe47e",
+  "collector": {
+    "version": "0.163.2",
+    "actual_cli_startup": "PASS",
+    "components_command": "PASS",
+    "authentication_test_results": 16,
+    "failed": 0,
+    "skipped": 0,
+    "obsolete_hash_zero_panic": "NOT_REPRODUCED_AFTER_REVIEWED_VENDORED_PATCH"
+  },
+  "scan": {
+    "binary_targets": 23,
+    "embedded_java_dependencies": 2,
+    "raw_fixable_high_critical": 26,
+    "approved_tempo_corrections": 2,
+    "corrected_fixable_high_critical": 24,
+    "blocking_packages": [
+      {
+        "name": "golang.org/x/net",
+        "affected_binaries": 23,
+        "fixed": "0.62.0"
+      },
+      {
+        "name": "libbrotli",
+        "affected_os_entries": 1,
+        "fixed": "1.0.9-10.el9_8.1"
+      }
+    ],
+    "status": "FAIL_SCAN"
+  },
+  "runtime_compatibility": "SKIPPED_BY_FAILED_SCAN_NOT_PASS",
+  "source_scope": "This proves the earlier committed complete build and Collector startup; newer x/net/OS/UI source changes require their own validation.",
+  "evidence_sha256": {
+    "governance/evidence/security-20261108/ci-build/build.json": "dfc7c8b5238388b08c0a2fe38636ed96b957e92d5c9d89e9b49d90b3dc2e52fe",
+    "governance/evidence/security-20261108/ci-build/collector-version.txt": "0442fed53e6a8920fd38084d28acd3d15b73e3f34bc56ad902fac1eba467e180",
+    "governance/evidence/security-20261108/ci-build/collector-components.txt": "4824aa90250273627902fdb0f5631f8045d491ae2a9a8de7c11dad7ab29592e9",
+    "governance/evidence/security-20261108/ci-build/collector-buildinfo.txt": "d5af94d245c1f282f57f2c7ccbdc47d4a51ec9907f23295ae223465ade1d16ca",
+    "governance/evidence/security-20261108/ci-build/collector-auth-tests.jsonl": "8735f641e0d60d59bfe157b3627b5ce905e55c691e42ea69181b418b53742cb9",
+    "governance/evidence/security-20261108/ci-build/receipt.json": "fb9286f01597f92ed5f919a453af872815fd77b4c2d927f022aac520b5dff9c8",
+    "governance/evidence/security-20261108/ci-build/guard.json": "2e36ca71e9e5e3a9a197be6ec1ea56a2a86063837591cdafdab210e08fd7c653",
+    "governance/evidence/security-20261108/ci-build/unfiltered.json": "a6abe27177ddea3df1df9691afd11cc5f8669815b4763cb74721aa2511505ba3",
+    "governance/evidence/security-20261108/ci-build/corrected.json": "6f9e21597279f6788f66a5b1c916b0378308b1f485b9a6f94fec5b8b83efed59"
+  }
+}

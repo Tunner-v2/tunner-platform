@@ -1,0 +1,3102 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-009",
+  "result": "PASS",
+  "proposal_status": "UNAPPLIED_ROOT_REVIEW_CANDIDATE_NOT_NATIVE_GATE_RESULT",
+  "recorded_at": "2026-11-12T10:01:47.726Z",
+  "tested_commit_sha": "796d316bbc1be878f71d515e06be13d7a77b3c1d",
+  "inventory_sha256": "83e3013f34780aa22ceb0ce9aaee408e75661cf35aded91afe935a294b262296",
+  "owned_behavior_paths": [
+    "docs/contracts/ui-inventory.json",
+    "src/Modules/Identity/PasskeyEndpoints.cs",
+    "src/Modules/Identity/RecoveryCodeAccountView.cs",
+    "src/Modules/Identity/RecoveryCodeEndpoints.cs",
+    "src/Modules/Identity/RecoveryCodeExecution.cs",
+    "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs",
+    "src/Modules/Identity/StepUpApplication.cs",
+    "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+    "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs",
+    "web/apps/user/passkeys.api.ts",
+    "web/apps/user/passkeys.css",
+    "web/apps/user/passkeys.native.ts",
+    "web/apps/user/passkeys.routes.ts",
+    "web/apps/user/passkeys.tsx",
+    "web/apps/user/recovery-codes.api.ts",
+    "web/apps/user/recovery-codes.content.proposal.json",
+    "web/apps/user/recovery-codes.css",
+    "web/apps/user/recovery-codes.tsx",
+    "web/apps/user/recovery-codes.ui.tsx",
+    "web/apps/user/step-up.completion.ts",
+    "web/apps/user/step-up.css",
+    "web/apps/user/step-up.passkey.ts",
+    "web/apps/user/step-up.totp.tsx",
+    "web/apps/user/step-up.tsx",
+    "web/apps/user/totp.api.ts",
+    "web/apps/user/totp.code.tsx",
+    "web/apps/user/totp.content-keys.ts",
+    "web/apps/user/totp.css",
+    "web/apps/user/totp.mfa.tsx",
+    "web/apps/user/totp.picker.tsx",
+    "web/apps/user/totp.validation.ts",
+    "web/packages/ui/src/content.tsx",
+    "web/packages/ui/src/controls.tsx",
+    "web/packages/ui/src/dialog.tsx",
+    "web/packages/ui/src/forms.tsx"
+  ],
+  "items": [
+    {
+      "id": "U-AUTH-06",
+      "kind": "COMPONENT",
+      "pathname": null,
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "13:136"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "34:278"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "34:401"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "48:115"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "52:566"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/passkeys.tsx",
+        "web/apps/user/passkeys.api.ts",
+        "web/apps/user/recovery-codes.tsx",
+        "web/apps/user/recovery-codes.ui.tsx",
+        "web/apps/user/recovery-codes.api.ts",
+        "web/apps/user/recovery-codes.css",
+        "web/apps/user/recovery-codes.content.proposal.json",
+        "web/apps/user/step-up.completion.ts",
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.passkey.ts",
+        "web/apps/user/step-up.totp.tsx",
+        "web/packages/ui/src/dialog.tsx",
+        "web/packages/ui/src/controls.tsx",
+        "web/packages/ui/src/content.tsx",
+        "src/Modules/Identity/RecoveryCodeEndpoints.cs",
+        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs",
+        "src/Modules/Identity/RecoveryCodeAccountView.cs",
+        "src/Modules/Identity/RecoveryCodeExecution.cs"
+      ],
+      "result": "PASS",
+      "authority_refs": [
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "assessment_scope": "Current P2-009 integration of this exact inventory item; retained prior manual/render evidence remains at its original scope and actual SHA.",
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "NOT_APPLICABLE",
+          "reason": "This item is a display/command component with no editable fields or native constraint feedback. The authoritative current Password and TOTP proof forms are separately assessed in FORM-STEP-UP and FORM-STEP-UP-TOTP; field/error requirements are not silently inherited by this component.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "NOT_APPLICABLE",
+          "reason": "This item is a display/command component with no editable fields or native constraint feedback. The authoritative current Password and TOTP proof forms are separately assessed in FORM-STEP-UP and FORM-STEP-UP-TOTP; field/error requirements are not silently inherited by this component.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Independent native endpoint/proof/owner validation rejects bypassed or malformed commands; actual native62 plus qualified public contracts and actual live journeys cover the integrated recovery owner.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Safe server errors and original-operation uncertainty map to governed field/form or neutral result feedback; no existence leakage or redisclosure is introduced.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "The command-only recovery component clears volatile output/local URL on Close, pagehide, unmount and history; one optional requested download remains truthful requested-not-saved. Shared proof field focus/clearing is assessed on its owning form.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "This item is a display/command component with no editable fields or native constraint feedback. The authoritative current Password and TOTP proof forms are separately assessed in FORM-STEP-UP and FORM-STEP-UP-TOTP; field/error requirements are not silently inherited by this component.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current server policy, eligibility, published content and exact operation binding remain authoritative; prior Figma wording does not select password, factor or recovery policy.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Composite regression: actual c714 responsive public owner/consumer tests and retained item renders plus native62/current-source equivalence and six actual real-BFF journeys at default 1280. The live cases were not run at every responsive viewport.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "f8484eb1ace2a6a4489c595d0d92e2553a50c37722c51103a59d8e2572762002"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/source-witness.json",
+              "sha256": "c9222da89f5ef15c3880e1e3c61f99f602a98c3c21f9c682afcb62ec6ff75d14"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved item Figma references, retained item render comparison and current c714 public review support this scoped integration; applicable recorded Product Owner adaptations are preserved.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Existing approved shell/background/glow treatment is retained; recovery reuses the existing Security card and native dialog, with no replacement shell or omitted treatment.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Existing shared dialog, fields, buttons, content and tokens are reused. Recovery adds only the approved same-screen card/review/volatile result adaptations.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Applicable visual differences are limited to the existing explicit Product Owner grants linked below; this executing-AI review grants no new pattern or consent.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "FRD/native contracts govern current owner/proof/one-time delivery behavior; Figma controls presentation and the existing bounded grants resolve pictured adaptations without selecting production policy.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current item styling preserves approved Figma presentation and shared tokens; no TailAdmin default substitutes for it.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Representative responsive public cases and scoped retained renders cover the affected item. Recovery has six c714 focus captures, zero Axe violations and all 15 incomplete targets manually resolved; real-BFF proof is separately default 1280.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "This row links its inventory Figma/authority, original consent, retained reference/rendered screenshots, c714 item regression and current native/live evidence; no fresh render or new pixel comparison is claimed.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-1366x768.png",
+          "sha256": "9ebc43aeb388c1e3b74e2177c784c6208f88bc595657ea0bd322f79709623bd7",
+          "role": "ACTUAL_C714_RECOVERY_RENDER"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-320x480.png",
+          "sha256": "00d7fec5acb4ce11bef49f118ae890240e1a1cc90a4bef0edf4ef2de5a2f450e",
+          "role": "ACTUAL_C714_RECOVERY_RENDER"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-320x568.png",
+          "sha256": "24908874aa10fb52d552626d8d2b679ed8e349a68bfe994872b7b796f7bd3d97",
+          "role": "ACTUAL_C714_RECOVERY_RENDER"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-390x480.png",
+          "sha256": "f0f37cdba48ace78d964dbbeeda16802c772a7ae5b3bede0b0c0e4bf3641e483",
+          "role": "ACTUAL_C714_RECOVERY_RENDER"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-390x640.png",
+          "sha256": "5fbc3775f67d21fbc162def2bb95013086aaaa17c31b7ad156ea2fb6ec355113",
+          "role": "ACTUAL_C714_RECOVERY_RENDER"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-390x844.png",
+          "sha256": "32714761ccd1040f450b1365cd2ac49caf59df83167b685fabcf46d7825e64f5",
+          "role": "ACTUAL_C714_RECOVERY_RENDER"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/refinement/ui/pictures/download-ready-1440.png",
+          "sha256": "bd65e8348515b7b0e442fa84b69391274273de0cbb031ecb3597e2fb6824e7ac",
+          "role": "APPROVED_009_SCOPED_PICTURE"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/refinement/ui/pictures/download-390.png",
+          "sha256": "ff1c8ef1f2d257dd523d9ea2de43293a1784cfd829b3bf268b492f010179b148",
+          "role": "APPROVED_009_SCOPED_PICTURE"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+            "sha256": "4b24a9a648ef659bc8d430f10e6474fb11d70e1945712b41a0ea687567f0d698"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
+            "sha256": "69bb0a75f7a71e69b7c3dabc6cd7ecde428f3d5fae6649a87606c99124fe7eaf"
+          }
+        }
+      ],
+      "manual_review_basis": "Current source/evidence reconciliation reuses the original approved item comparisons and c714 focus review. No new render, physical-device run or fresh manual pixel inspection is asserted."
+    },
+    {
+      "id": "COMP-STEP-UP",
+      "kind": "COMPONENT",
+      "pathname": null,
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.css",
+        "web/packages/ui/src/dialog.tsx",
+        "web/packages/ui/src/forms.tsx",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpApplication.cs",
+        "web/apps/user/step-up.totp.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs",
+        "web/apps/user/recovery-codes.api.ts",
+        "web/apps/user/step-up.completion.ts",
+        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs",
+        "web/apps/user/step-up.passkey.ts"
+      ],
+      "result": "PASS",
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "assessment_scope": "Current P2-009 integration of this exact inventory item; retained prior manual/render evidence remains at its original scope and actual SHA.",
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Required, format and selection errors use the shared typed field/form states; current Password/TOTP and eligible-factor variants are exercised by their item-specific c714 consumer cases.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Shared governed React validation supplies accessible feedback independently of browser-native constraint bubbles; current affected consumer cases and contract43 remain passing.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Independent native endpoint/proof/owner validation rejects bypassed or malformed commands; actual native62 plus qualified public contracts and actual live journeys cover the integrated recovery owner.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Safe server errors and original-operation uncertainty map to governed field/form or neutral result feedback; no existence leakage or redisclosure is introduced.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Item-specific error clearing, accessible associations, source/code clearing, focus and duplicate/resubmit protection remain governed; recovery close/pagehide/history clears volatile output.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Retained item-specific rendered field/error states and approved field reference remain scoped inputs; current c714 source and consumer regression establish compatibility with this owner integration.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current server policy, eligibility, published content and exact operation binding remain authoritative; prior Figma wording does not select password, factor or recovery policy.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Composite regression: actual c714 responsive public owner/consumer tests and retained item renders plus native62/current-source equivalence and six actual real-BFF journeys at default 1280. The live cases were not run at every responsive viewport.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "f8484eb1ace2a6a4489c595d0d92e2553a50c37722c51103a59d8e2572762002"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/source-witness.json",
+              "sha256": "c9222da89f5ef15c3880e1e3c61f99f602a98c3c21f9c682afcb62ec6ff75d14"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved item Figma references, retained item render comparison and current c714 public review support this scoped integration; applicable recorded Product Owner adaptations are preserved.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Existing approved shell/background/glow treatment is retained; recovery reuses the existing Security card and native dialog, with no replacement shell or omitted treatment.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Existing shared dialog, fields, buttons, content and tokens are reused. Recovery adds only the approved same-screen card/review/volatile result adaptations.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Applicable visual differences are limited to the existing explicit Product Owner grants linked below; this executing-AI review grants no new pattern or consent.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "FRD/native contracts govern current owner/proof/one-time delivery behavior; Figma controls presentation and the existing bounded grants resolve pictured adaptations without selecting production policy.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current item styling preserves approved Figma presentation and shared tokens; no TailAdmin default substitutes for it.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Representative responsive public cases and scoped retained renders cover the affected item. Recovery has six c714 focus captures, zero Axe violations and all 15 incomplete targets manually resolved; real-BFF proof is separately default 1280.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "This row links its inventory Figma/authority, original consent, retained reference/rendered screenshots, c714 item regression and current native/live evidence; no fresh render or new pixel comparison is claimed.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1024.png",
+          "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962",
+          "role": "RETAINED_ORIGINAL_ITEM_RENDER_OR_REFERENCE"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/current-step-up/password-1440.png",
+          "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09",
+          "role": "RETAINED_ORIGINAL_ITEM_RENDER_OR_REFERENCE"
+        },
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-1440.png",
+          "sha256": "6133ee38b89d9ac66171b0fa135c49f449e27e9f2cb77d502a9cdb7d8144d540",
+          "role": "RETAINED_ORIGINAL_ITEM_RENDER_OR_REFERENCE"
+        },
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-768.png",
+          "sha256": "54bce18edfc806553effc37182e1aedd748ca92b88f3c41ce61e357383dd7078",
+          "role": "RETAINED_ORIGINAL_ITEM_RENDER_OR_REFERENCE"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+            "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+            "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+            "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+            "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+            "sha256": "4b24a9a648ef659bc8d430f10e6474fb11d70e1945712b41a0ea687567f0d698"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
+            "sha256": "69bb0a75f7a71e69b7c3dabc6cd7ecde428f3d5fae6649a87606c99124fe7eaf"
+          }
+        }
+      ],
+      "manual_review_basis": "Current source/evidence reconciliation reuses the original approved item comparisons and c714 focus review. No new render, physical-device run or fresh manual pixel inspection is asserted."
+    },
+    {
+      "id": "FORM-STEP-UP",
+      "kind": "FORM",
+      "pathname": null,
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:27"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.css",
+        "web/packages/ui/src/dialog.tsx",
+        "web/packages/ui/src/forms.tsx",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpApplication.cs",
+        "web/apps/user/recovery-codes.api.ts",
+        "web/apps/user/step-up.completion.ts",
+        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs"
+      ],
+      "result": "PASS",
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "assessment_scope": "Current P2-009 integration of this exact inventory item; retained prior manual/render evidence remains at its original scope and actual SHA.",
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Required, format and selection errors use the shared typed field/form states; current Password/TOTP and eligible-factor variants are exercised by their item-specific c714 consumer cases.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Shared governed React validation supplies accessible feedback independently of browser-native constraint bubbles; current affected consumer cases and contract43 remain passing.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Independent native endpoint/proof/owner validation rejects bypassed or malformed commands; actual native62 plus qualified public contracts and actual live journeys cover the integrated recovery owner.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Safe server errors and original-operation uncertainty map to governed field/form or neutral result feedback; no existence leakage or redisclosure is introduced.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Item-specific error clearing, accessible associations, source/code clearing, focus and duplicate/resubmit protection remain governed; recovery close/pagehide/history clears volatile output.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Retained item-specific rendered field/error states and approved field reference remain scoped inputs; current c714 source and consumer regression establish compatibility with this owner integration.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current server policy, eligibility, published content and exact operation binding remain authoritative; prior Figma wording does not select password, factor or recovery policy.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Composite regression: actual c714 responsive public owner/consumer tests and retained item renders plus native62/current-source equivalence and six actual real-BFF journeys at default 1280. The live cases were not run at every responsive viewport.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "f8484eb1ace2a6a4489c595d0d92e2553a50c37722c51103a59d8e2572762002"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/source-witness.json",
+              "sha256": "c9222da89f5ef15c3880e1e3c61f99f602a98c3c21f9c682afcb62ec6ff75d14"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved item Figma references, retained item render comparison and current c714 public review support this scoped integration; applicable recorded Product Owner adaptations are preserved.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Existing approved shell/background/glow treatment is retained; recovery reuses the existing Security card and native dialog, with no replacement shell or omitted treatment.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Existing shared dialog, fields, buttons, content and tokens are reused. Recovery adds only the approved same-screen card/review/volatile result adaptations.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Applicable visual differences are limited to the existing explicit Product Owner grants linked below; this executing-AI review grants no new pattern or consent.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "FRD/native contracts govern current owner/proof/one-time delivery behavior; Figma controls presentation and the existing bounded grants resolve pictured adaptations without selecting production policy.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current item styling preserves approved Figma presentation and shared tokens; no TailAdmin default substitutes for it.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Representative responsive public cases and scoped retained renders cover the affected item. Recovery has six c714 focus captures, zero Axe violations and all 15 incomplete targets manually resolved; real-BFF proof is separately default 1280.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "This row links its inventory Figma/authority, original consent, retained reference/rendered screenshots, c714 item regression and current native/live evidence; no fresh render or new pixel comparison is claimed.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/step-up/results.json",
+              "sha256": "fb445bf0e1b93e6332eb8fb2d518c4327c596fab9714aa66b77a174cc94edbf2"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/parent-ui-refresh/legacy/step-up/server-error-320.png",
+          "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e",
+          "role": "RETAINED_ORIGINAL_ITEM_RENDER_OR_REFERENCE"
+        },
+        {
+          "path": "governance/evidence/ui/AMD0009/figma-registration-validation-errors.png",
+          "sha256": "0b1e8d0a4516747f85501f828cb62dd7adbb938ce9f1244e34e5a1eb5db0d5fa",
+          "role": "RETAINED_ORIGINAL_ITEM_RENDER_OR_REFERENCE"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-006-VISUAL-CONSENT-20261108.json",
+            "sha256": "881ffda9f2b7431c9077922789aa585780022651d5a2c8a628365a85de5fc3b2"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+            "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+            "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+            "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+            "sha256": "4b24a9a648ef659bc8d430f10e6474fb11d70e1945712b41a0ea687567f0d698"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
+            "sha256": "69bb0a75f7a71e69b7c3dabc6cd7ecde428f3d5fae6649a87606c99124fe7eaf"
+          }
+        }
+      ],
+      "manual_review_basis": "Current source/evidence reconciliation reuses the original approved item comparisons and c714 focus review. No new render, physical-device run or fresh manual pixel inspection is asserted."
+    },
+    {
+      "id": "U-ACCT-SECURITY",
+      "kind": "SCREEN",
+      "pathname": "/account/security",
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "13:2"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/passkeys.tsx",
+        "web/apps/user/passkeys.css",
+        "web/apps/user/passkeys.api.ts",
+        "web/apps/user/passkeys.routes.ts",
+        "web/apps/user/passkeys.native.ts",
+        "web/apps/user/step-up.tsx",
+        "src/Modules/Identity/PasskeyEndpoints.cs",
+        "web/apps/user/recovery-codes.tsx",
+        "web/apps/user/recovery-codes.ui.tsx",
+        "web/apps/user/recovery-codes.api.ts",
+        "web/apps/user/recovery-codes.css",
+        "web/apps/user/recovery-codes.content.proposal.json",
+        "web/apps/user/step-up.completion.ts",
+        "web/apps/user/step-up.passkey.ts",
+        "web/apps/user/step-up.totp.tsx",
+        "web/packages/ui/src/dialog.tsx",
+        "web/packages/ui/src/controls.tsx",
+        "web/packages/ui/src/content.tsx",
+        "src/Modules/Identity/RecoveryCodeEndpoints.cs",
+        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs",
+        "src/Modules/Identity/RecoveryCodeAccountView.cs",
+        "src/Modules/Identity/RecoveryCodeExecution.cs"
+      ],
+      "result": "PASS",
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "assessment_scope": "Current P2-009 integration of this exact inventory item; retained prior manual/render evidence remains at its original scope and actual SHA.",
+      "checks": [
+        {
+          "id": "URL-001",
+          "result": "PASS",
+          "description": "Existing independent Security view uses canonical /account/security; current c714 Passkey consumer route cases and recovery integration retain the owning pathname.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys/results.json",
+              "sha256": "eac395551dd0e5ee3951f72605fa65b89d1a8734bdea381a6f8469332b5eb324"
+            }
+          ]
+        },
+        {
+          "id": "URL-002",
+          "result": "PASS",
+          "description": "Security full-screen navigation retains its pathname and guarded route implementation; recovery is an approved same-screen interaction, not a hash-only independent screen.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys/results.json",
+              "sha256": "eac395551dd0e5ee3951f72605fa65b89d1a8734bdea381a6f8469332b5eb324"
+            }
+          ]
+        },
+        {
+          "id": "URL-003",
+          "result": "PASS",
+          "description": "Current public recovery reload/Back/Forward/body-loss cases reconstruct safe status without fetching or regenerating codes; actual live journeys verify volatile clear and same-operation acknowledgement.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys/results.json",
+              "sha256": "eac395551dd0e5ee3951f72605fa65b89d1a8734bdea381a6f8469332b5eb324"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            }
+          ]
+        },
+        {
+          "id": "URL-004",
+          "result": "PASS",
+          "description": "Card, replacement review, shared proof and volatile modal remain same-screen state under /account/security, with safe cancellation, focus and no secrets in URL/storage.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys/results.json",
+              "sha256": "eac395551dd0e5ee3951f72605fa65b89d1a8734bdea381a6f8469332b5eb324"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            }
+          ]
+        },
+        {
+          "id": "URL-005",
+          "result": "PASS",
+          "description": "Native session/owner/proof/currentness checks and current public direct-entry/session cases guard Security commands; expired/revoked proof cannot deliver codes.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "URL-006",
+          "result": "NOT_APPLICABLE",
+          "reason": "This Account Security owner integration does not initiate Product-origin OAuth or add an OAuth redirect. Future Product-origin flow is outside this scope; unchanged authentication consumer regression is retained without claiming that untriggered flow.",
+          "authority_refs": [
+            "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+            "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+            "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md",
+            "governance/work-items/TUN-P2-014.yaml"
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved item Figma references, retained item render comparison and current c714 public review support this scoped integration; applicable recorded Product Owner adaptations are preserved.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys/results.json",
+              "sha256": "eac395551dd0e5ee3951f72605fa65b89d1a8734bdea381a6f8469332b5eb324"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Existing approved shell/background/glow treatment is retained; recovery reuses the existing Security card and native dialog, with no replacement shell or omitted treatment.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys/results.json",
+              "sha256": "eac395551dd0e5ee3951f72605fa65b89d1a8734bdea381a6f8469332b5eb324"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Existing shared dialog, fields, buttons, content and tokens are reused. Recovery adds only the approved same-screen card/review/volatile result adaptations.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys/results.json",
+              "sha256": "eac395551dd0e5ee3951f72605fa65b89d1a8734bdea381a6f8469332b5eb324"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Applicable visual differences are limited to the existing explicit Product Owner grants linked below; this executing-AI review grants no new pattern or consent.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys/results.json",
+              "sha256": "eac395551dd0e5ee3951f72605fa65b89d1a8734bdea381a6f8469332b5eb324"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "FRD/native contracts govern current owner/proof/one-time delivery behavior; Figma controls presentation and the existing bounded grants resolve pictured adaptations without selecting production policy.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys/results.json",
+              "sha256": "eac395551dd0e5ee3951f72605fa65b89d1a8734bdea381a6f8469332b5eb324"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current item styling preserves approved Figma presentation and shared tokens; no TailAdmin default substitutes for it.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys/results.json",
+              "sha256": "eac395551dd0e5ee3951f72605fa65b89d1a8734bdea381a6f8469332b5eb324"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Representative responsive public cases and scoped retained renders cover the affected item. Recovery has six c714 focus captures, zero Axe violations and all 15 incomplete targets manually resolved; real-BFF proof is separately default 1280.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys/results.json",
+              "sha256": "eac395551dd0e5ee3951f72605fa65b89d1a8734bdea381a6f8469332b5eb324"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "This row links its inventory Figma/authority, original consent, retained reference/rendered screenshots, c714 item regression and current native/live evidence; no fresh render or new pixel comparison is claimed.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/passkeys/results.json",
+              "sha256": "eac395551dd0e5ee3951f72605fa65b89d1a8734bdea381a6f8469332b5eb324"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+              "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-1366x768.png",
+          "sha256": "9ebc43aeb388c1e3b74e2177c784c6208f88bc595657ea0bd322f79709623bd7",
+          "role": "ACTUAL_C714_RECOVERY_RENDER"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-320x480.png",
+          "sha256": "00d7fec5acb4ce11bef49f118ae890240e1a1cc90a4bef0edf4ef2de5a2f450e",
+          "role": "ACTUAL_C714_RECOVERY_RENDER"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-320x568.png",
+          "sha256": "24908874aa10fb52d552626d8d2b679ed8e349a68bfe994872b7b796f7bd3d97",
+          "role": "ACTUAL_C714_RECOVERY_RENDER"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-390x480.png",
+          "sha256": "f0f37cdba48ace78d964dbbeeda16802c772a7ae5b3bede0b0c0e4bf3641e483",
+          "role": "ACTUAL_C714_RECOVERY_RENDER"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-390x640.png",
+          "sha256": "5fbc3775f67d21fbc162def2bb95013086aaaa17c31b7ad156ea2fb6ec355113",
+          "role": "ACTUAL_C714_RECOVERY_RENDER"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/rendered/requested-390x844.png",
+          "sha256": "32714761ccd1040f450b1365cd2ac49caf59df83167b685fabcf46d7825e64f5",
+          "role": "ACTUAL_C714_RECOVERY_RENDER"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/refinement/ui/pictures/download-ready-1440.png",
+          "sha256": "bd65e8348515b7b0e442fa84b69391274273de0cbb031ecb3597e2fb6824e7ac",
+          "role": "APPROVED_009_SCOPED_PICTURE"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/refinement/ui/pictures/download-390.png",
+          "sha256": "ff1c8ef1f2d257dd523d9ea2de43293a1784cfd829b3bf268b492f010179b148",
+          "role": "APPROVED_009_SCOPED_PICTURE"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/security/security-1440.png",
+          "sha256": "7839cb3df785986a733cdc135c5716be2fe40381c2234cea5cb1e1c0917b6834",
+          "role": "RETAINED_ORIGINAL_PARENT_RENDER"
+        },
+        {
+          "path": "governance/evidence/p2-recovery-20261109/passkey-proof-nav/ui/security/security-320.png",
+          "sha256": "c4e6e200d274c580bf49b4f5863dff8c2147762076fe9baf94e2f720bc174f04",
+          "role": "RETAINED_ORIGINAL_PARENT_RENDER"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-007-VISUAL-CONSENT-20261109.json",
+            "sha256": "c9415304746bb882a0c49a3b42e16c0e312882f6b48401b1d51666a18d775dfd"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+            "sha256": "4b24a9a648ef659bc8d430f10e6474fb11d70e1945712b41a0ea687567f0d698"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
+            "sha256": "69bb0a75f7a71e69b7c3dabc6cd7ecde428f3d5fae6649a87606c99124fe7eaf"
+          }
+        }
+      ],
+      "manual_review_basis": "Current source/evidence reconciliation reuses the original approved item comparisons and c714 focus review. No new render, physical-device run or fresh manual pixel inspection is asserted."
+    },
+    {
+      "id": "FORM-STEP-UP-TOTP",
+      "kind": "FORM",
+      "pathname": null,
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:28"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:35"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "83:287"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.totp.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs",
+        "web/apps/user/recovery-codes.api.ts",
+        "web/apps/user/step-up.completion.ts",
+        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs"
+      ],
+      "result": "PASS",
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "assessment_scope": "Current P2-009 integration of this exact inventory item; retained prior manual/render evidence remains at its original scope and actual SHA.",
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Required, format and selection errors use the shared typed field/form states; current Password/TOTP and eligible-factor variants are exercised by their item-specific c714 consumer cases.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Shared governed React validation supplies accessible feedback independently of browser-native constraint bubbles; current affected consumer cases and contract43 remain passing.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Independent native endpoint/proof/owner validation rejects bypassed or malformed commands; actual native62 plus qualified public contracts and actual live journeys cover the integrated recovery owner.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Safe server errors and original-operation uncertainty map to governed field/form or neutral result feedback; no existence leakage or redisclosure is introduced.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Item-specific error clearing, accessible associations, source/code clearing, focus and duplicate/resubmit protection remain governed; recovery close/pagehide/history clears volatile output.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Retained item-specific rendered field/error states and approved field reference remain scoped inputs; current c714 source and consumer regression establish compatibility with this owner integration.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current server policy, eligibility, published content and exact operation binding remain authoritative; prior Figma wording does not select password, factor or recovery policy.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Composite regression: actual c714 responsive public owner/consumer tests and retained item renders plus native62/current-source equivalence and six actual real-BFF journeys at default 1280. The live cases were not run at every responsive viewport.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "f8484eb1ace2a6a4489c595d0d92e2553a50c37722c51103a59d8e2572762002"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/source-witness.json",
+              "sha256": "c9222da89f5ef15c3880e1e3c61f99f602a98c3c21f9c682afcb62ec6ff75d14"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved item Figma references, retained item render comparison and current c714 public review support this scoped integration; applicable recorded Product Owner adaptations are preserved.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Existing approved shell/background/glow treatment is retained; recovery reuses the existing Security card and native dialog, with no replacement shell or omitted treatment.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Existing shared dialog, fields, buttons, content and tokens are reused. Recovery adds only the approved same-screen card/review/volatile result adaptations.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Applicable visual differences are limited to the existing explicit Product Owner grants linked below; this executing-AI review grants no new pattern or consent.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "FRD/native contracts govern current owner/proof/one-time delivery behavior; Figma controls presentation and the existing bounded grants resolve pictured adaptations without selecting production policy.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current item styling preserves approved Figma presentation and shared tokens; no TailAdmin default substitutes for it.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Representative responsive public cases and scoped retained renders cover the affected item. Recovery has six c714 focus captures, zero Axe violations and all 15 incomplete targets manually resolved; real-BFF proof is separately default 1280.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "This row links its inventory Figma/authority, original consent, retained reference/rendered screenshots, c714 item regression and current native/live evidence; no fresh render or new pixel comparison is claimed.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-1440.png",
+          "sha256": "6133ee38b89d9ac66171b0fa135c49f449e27e9f2cb77d502a9cdb7d8144d540",
+          "role": "RETAINED_ORIGINAL_ITEM_RENDER_OR_REFERENCE"
+        },
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-768.png",
+          "sha256": "54bce18edfc806553effc37182e1aedd748ca92b88f3c41ce61e357383dd7078",
+          "role": "RETAINED_ORIGINAL_ITEM_RENDER_OR_REFERENCE"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+            "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+            "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+            "sha256": "4b24a9a648ef659bc8d430f10e6474fb11d70e1945712b41a0ea687567f0d698"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
+            "sha256": "69bb0a75f7a71e69b7c3dabc6cd7ecde428f3d5fae6649a87606c99124fe7eaf"
+          }
+        }
+      ],
+      "manual_review_basis": "Current source/evidence reconciliation reuses the original approved item comparisons and c714 focus review. No new render, physical-device run or fresh manual pixel inspection is asserted."
+    },
+    {
+      "id": "COMP-STEP-UP-TOTP",
+      "kind": "COMPONENT",
+      "pathname": null,
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:28"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:35"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "70:1257"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/step-up.tsx",
+        "web/apps/user/step-up.totp.tsx",
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.validation.ts",
+        "web/apps/user/totp.content-keys.ts",
+        "web/apps/user/totp.code.tsx",
+        "web/apps/user/totp.css",
+        "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+        "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs",
+        "web/apps/user/recovery-codes.api.ts",
+        "web/apps/user/step-up.completion.ts",
+        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs"
+      ],
+      "result": "PASS",
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "assessment_scope": "Current P2-009 integration of this exact inventory item; retained prior manual/render evidence remains at its original scope and actual SHA.",
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Required, format and selection errors use the shared typed field/form states; current Password/TOTP and eligible-factor variants are exercised by their item-specific c714 consumer cases.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Shared governed React validation supplies accessible feedback independently of browser-native constraint bubbles; current affected consumer cases and contract43 remain passing.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Independent native endpoint/proof/owner validation rejects bypassed or malformed commands; actual native62 plus qualified public contracts and actual live journeys cover the integrated recovery owner.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Safe server errors and original-operation uncertainty map to governed field/form or neutral result feedback; no existence leakage or redisclosure is introduced.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Item-specific error clearing, accessible associations, source/code clearing, focus and duplicate/resubmit protection remain governed; recovery close/pagehide/history clears volatile output.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Retained item-specific rendered field/error states and approved field reference remain scoped inputs; current c714 source and consumer regression establish compatibility with this owner integration.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current server policy, eligibility, published content and exact operation binding remain authoritative; prior Figma wording does not select password, factor or recovery policy.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Composite regression: actual c714 responsive public owner/consumer tests and retained item renders plus native62/current-source equivalence and six actual real-BFF journeys at default 1280. The live cases were not run at every responsive viewport.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "f8484eb1ace2a6a4489c595d0d92e2553a50c37722c51103a59d8e2572762002"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/source-witness.json",
+              "sha256": "c9222da89f5ef15c3880e1e3c61f99f602a98c3c21f9c682afcb62ec6ff75d14"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved item Figma references, retained item render comparison and current c714 public review support this scoped integration; applicable recorded Product Owner adaptations are preserved.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Existing approved shell/background/glow treatment is retained; recovery reuses the existing Security card and native dialog, with no replacement shell or omitted treatment.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Existing shared dialog, fields, buttons, content and tokens are reused. Recovery adds only the approved same-screen card/review/volatile result adaptations.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Applicable visual differences are limited to the existing explicit Product Owner grants linked below; this executing-AI review grants no new pattern or consent.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "FRD/native contracts govern current owner/proof/one-time delivery behavior; Figma controls presentation and the existing bounded grants resolve pictured adaptations without selecting production policy.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current item styling preserves approved Figma presentation and shared tokens; no TailAdmin default substitutes for it.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Representative responsive public cases and scoped retained renders cover the affected item. Recovery has six c714 focus captures, zero Axe violations and all 15 incomplete targets manually resolved; real-BFF proof is separately default 1280.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "This row links its inventory Figma/authority, original consent, retained reference/rendered screenshots, c714 item regression and current native/live evidence; no fresh render or new pixel comparison is claimed.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-1440.png",
+          "sha256": "6133ee38b89d9ac66171b0fa135c49f449e27e9f2cb77d502a9cdb7d8144d540",
+          "role": "RETAINED_ORIGINAL_ITEM_RENDER_OR_REFERENCE"
+        },
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-code-768.png",
+          "sha256": "54bce18edfc806553effc37182e1aedd748ca92b88f3c41ce61e357383dd7078",
+          "role": "RETAINED_ORIGINAL_ITEM_RENDER_OR_REFERENCE"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+            "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+            "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+            "sha256": "4b24a9a648ef659bc8d430f10e6474fb11d70e1945712b41a0ea687567f0d698"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
+            "sha256": "69bb0a75f7a71e69b7c3dabc6cd7ecde428f3d5fae6649a87606c99124fe7eaf"
+          }
+        }
+      ],
+      "manual_review_basis": "Current source/evidence reconciliation reuses the original approved item comparisons and c714 focus review. No new render, physical-device run or fresh manual pixel inspection is asserted."
+    },
+    {
+      "id": "COMP-TOTP-FACTOR-PICKER",
+      "kind": "COMPONENT",
+      "pathname": null,
+      "figma_refs": [
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:28"
+        },
+        {
+          "file_key": "apNbwvAgdn1xIxYH1oiaSC",
+          "node_id": "98:35"
+        }
+      ],
+      "source_paths": [
+        "web/apps/user/totp.picker.tsx",
+        "web/apps/user/totp.mfa.tsx",
+        "web/apps/user/step-up.totp.tsx",
+        "web/apps/user/totp.api.ts",
+        "web/apps/user/totp.css",
+        "web/packages/ui/src/content.tsx",
+        "web/apps/user/recovery-codes.api.ts",
+        "web/apps/user/step-up.completion.ts",
+        "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs"
+      ],
+      "result": "PASS",
+      "authority_refs": [
+        "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+        "docs/authority/current/development/31_UI_UX_Screen_and_Control_Center_Requirements_Matrix.md",
+        "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+        "docs/authority/current/decisions/AMD-0009_URL_Addressable_Routing_and_Governed_Form_Validation.md"
+      ],
+      "assessment_scope": "Current P2-009 integration of this exact inventory item; retained prior manual/render evidence remains at its original scope and actual SHA.",
+      "checks": [
+        {
+          "id": "VAL-001",
+          "result": "PASS",
+          "description": "Required, format and selection errors use the shared typed field/form states; current Password/TOTP and eligible-factor variants are exercised by their item-specific c714 consumer cases.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-002",
+          "result": "PASS",
+          "description": "Shared governed React validation supplies accessible feedback independently of browser-native constraint bubbles; current affected consumer cases and contract43 remain passing.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-003",
+          "result": "PASS",
+          "description": "Independent native endpoint/proof/owner validation rejects bypassed or malformed commands; actual native62 plus qualified public contracts and actual live journeys cover the integrated recovery owner.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            }
+          ]
+        },
+        {
+          "id": "VAL-004",
+          "result": "PASS",
+          "description": "Safe server errors and original-operation uncertainty map to governed field/form or neutral result feedback; no existence leakage or redisclosure is introduced.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            }
+          ]
+        },
+        {
+          "id": "VAL-005",
+          "result": "PASS",
+          "description": "Item-specific error clearing, accessible associations, source/code clearing, focus and duplicate/resubmit protection remain governed; recovery close/pagehide/history clears volatile output.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            }
+          ]
+        },
+        {
+          "id": "VAL-006",
+          "result": "PASS",
+          "description": "Retained item-specific rendered field/error states and approved field reference remain scoped inputs; current c714 source and consumer regression establish compatibility with this owner integration.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            }
+          ]
+        },
+        {
+          "id": "VAL-007",
+          "result": "PASS",
+          "description": "Current server policy, eligibility, published content and exact operation binding remain authoritative; prior Figma wording does not select password, factor or recovery policy.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            }
+          ]
+        },
+        {
+          "id": "VAL-008",
+          "result": "PASS",
+          "description": "Composite regression: actual c714 responsive public owner/consumer tests and retained item renders plus native62/current-source equivalence and six actual real-BFF journeys at default 1280. The live cases were not run at every responsive viewport.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+              "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+              "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+              "sha256": "f8484eb1ace2a6a4489c595d0d92e2553a50c37722c51103a59d8e2572762002"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+              "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/source-witness.json",
+              "sha256": "c9222da89f5ef15c3880e1e3c61f99f602a98c3c21f9c682afcb62ec6ff75d14"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-001",
+          "result": "PASS",
+          "description": "Approved item Figma references, retained item render comparison and current c714 public review support this scoped integration; applicable recorded Product Owner adaptations are preserved.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-002",
+          "result": "PASS",
+          "description": "Existing approved shell/background/glow treatment is retained; recovery reuses the existing Security card and native dialog, with no replacement shell or omitted treatment.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-003",
+          "result": "PASS",
+          "description": "Existing shared dialog, fields, buttons, content and tokens are reused. Recovery adds only the approved same-screen card/review/volatile result adaptations.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-004",
+          "result": "PASS",
+          "description": "Applicable visual differences are limited to the existing explicit Product Owner grants linked below; this executing-AI review grants no new pattern or consent.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-005",
+          "result": "PASS",
+          "description": "FRD/native contracts govern current owner/proof/one-time delivery behavior; Figma controls presentation and the existing bounded grants resolve pictured adaptations without selecting production policy.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-006",
+          "result": "PASS",
+          "description": "Current item styling preserves approved Figma presentation and shared tokens; no TailAdmin default substitutes for it.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-007",
+          "result": "PASS",
+          "description": "Representative responsive public cases and scoped retained renders cover the affected item. Recovery has six c714 focus captures, zero Axe violations and all 15 incomplete targets manually resolved; real-BFF proof is separately default 1280.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        },
+        {
+          "id": "UX-FID-008",
+          "result": "PASS",
+          "description": "This row links its inventory Figma/authority, original consent, retained reference/rendered screenshots, c714 item regression and current native/live evidence; no fresh render or new pixel comparison is claimed.",
+          "evidence_refs": [
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/totp/results.json",
+              "sha256": "271e204d12dbed7fe5e47e56c454dac150d2edd630047c5b9e850abcaad0c5cc"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+              "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+            },
+            {
+              "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+              "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+            }
+          ]
+        }
+      ],
+      "screenshots": [
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-picker-1440.png",
+          "sha256": "f9e8affc65ce5f3ff5c755ddfb4e81c44bbd02cd2a4c1d8903e2ee50a4e6efc9",
+          "role": "RETAINED_ORIGINAL_ITEM_RENDER_OR_REFERENCE"
+        },
+        {
+          "path": "governance/evidence/p2-008-totp-20261110/production-ui/6e562db/review-r2/rendered/proof-picker-768.png",
+          "sha256": "6259891fd34865544d65596cec9dab29fcb7d3e3bfacd8927c24b309e2d6aae4",
+          "role": "RETAINED_ORIGINAL_ITEM_RENDER_OR_REFERENCE"
+        }
+      ],
+      "deviations": [
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-008-VISUAL-CONSENT.json",
+            "sha256": "d5a91c23c34ab6cd134648ab73867e9afce14c35f795f1a1eecdfe5d60040014"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-008-FACTOR-PICKER-CONSENT.json",
+            "sha256": "b6ce7663148cd555d69bd4f8081f4553dbcb114662e3523f2faab65bb3636d30"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT.json",
+            "sha256": "4b24a9a648ef659bc8d430f10e6474fb11d70e1945712b41a0ea687567f0d698"
+          }
+        },
+        {
+          "status": "PRODUCT_OWNER_APPROVED",
+          "description": "Existing recorded scoped adaptation only; no new visual approval or production policy is granted.",
+          "approval_evidence": {
+            "path": "governance/evidence/TUN-P2-009-VISUAL-CONSENT-L04.json",
+            "sha256": "69bb0a75f7a71e69b7c3dabc6cd7ecde428f3d5fae6649a87606c99124fe7eaf"
+          }
+        }
+      ],
+      "manual_review_basis": "Current source/evidence reconciliation reuses the original approved item comparisons and c714 focus review. No new render, physical-device run or fresh manual pixel inspection is asserted."
+    }
+  ],
+  "review_identity": "Executing AI applying the five repository role contracts; no independent human or Product acceptance is asserted.",
+  "evidence_summary": {
+    "public_ui": {
+      "actual_tested_commit_sha": "c71495cbcb1e0e6f8e1dd89c3f42c59b1ed834a6",
+      "recovery": 52,
+      "shared_consumers": 146,
+      "total": 198,
+      "contracts": 43,
+      "focus_captures": 6,
+      "refs": [
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/implementation-public-c71495c/evidence-index.json",
+          "sha256": "d45945c653fa560bac2f6f56b0e2c10c580e9e261c80dce66c0057206a2efe9e"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/consumer-refresh-c71495c/evidence-index.json",
+          "sha256": "f8484eb1ace2a6a4489c595d0d92e2553a50c37722c51103a59d8e2572762002"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/mobile-current-c71495c/scoped-defect-review.json",
+          "sha256": "b459cde839d68acfccdcad30170c52073671c687b91572745866b542a95b0b73"
+        },
+        {
+          "path": "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/root-review.json",
+          "sha256": "38154d7ce744b8c1d473897237852bbc2e370eea668589d256cf2178bda4c140"
+        }
+      ]
+    },
+    "current_qualification": {
+      "actual_tested_commit_sha": "796d316bbc1be878f71d515e06be13d7a77b3c1d",
+      "native_protocol": 17,
+      "native_resources": 6,
+      "browser_public": 37,
+      "browser_protocol": 12,
+      "browser_resources": 5,
+      "index": {
+        "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+        "sha256": "0922269aff687bf1e6544e5125e5d41ca8516f862b563c62d586fa54bee6292c"
+      }
+    },
+    "real_bff": {
+      "count": 6,
+      "viewport": "default 1280",
+      "actual_cases": [
+        {
+          "registration": "RECOVERY_GENERATE_PASSWORD_V1",
+          "actual_tested_commit_sha": "26270f830bb214a5df8ba143b62ecc21be0a286a",
+          "native_binding_sha256": "27d73fc7acf4c48bf92fb355a9e8bd9c68343a9d05ea19ef56f4147ed999368f",
+          "browser_binding_sha256": "6cf3745afa608d18fbe87e49585096e436ec91f7eef28c64a68301b4118abf20",
+          "receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/runtime-RECOVERY_GENERATE_PASSWORD_V1.json",
+          "sha256": "1e36d5fe5bdcaec4e0e1c28376f45819a686883783ecb7b32297960bdcbb16b0",
+          "passed": true
+        },
+        {
+          "registration": "RECOVERY_REPLACE_PASSWORD_V1",
+          "actual_tested_commit_sha": "26270f830bb214a5df8ba143b62ecc21be0a286a",
+          "native_binding_sha256": "27d73fc7acf4c48bf92fb355a9e8bd9c68343a9d05ea19ef56f4147ed999368f",
+          "browser_binding_sha256": "6cf3745afa608d18fbe87e49585096e436ec91f7eef28c64a68301b4118abf20",
+          "receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/runtime-RECOVERY_REPLACE_PASSWORD_V1.json",
+          "sha256": "15db0f3f35dacde7ec051f6d765c5a9cbb9d1b34091ec54e473088e1eeacef2a",
+          "passed": true
+        },
+        {
+          "registration": "RECOVERY_GENERATE_PASSKEY_V1",
+          "actual_tested_commit_sha": "26270f830bb214a5df8ba143b62ecc21be0a286a",
+          "native_binding_sha256": "27d73fc7acf4c48bf92fb355a9e8bd9c68343a9d05ea19ef56f4147ed999368f",
+          "browser_binding_sha256": "6cf3745afa608d18fbe87e49585096e436ec91f7eef28c64a68301b4118abf20",
+          "receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/runtime-RECOVERY_GENERATE_PASSKEY_V1.json",
+          "sha256": "6a82e8b0f7611398154cbf9ecb89e6b6755dd15a20577f41d3b2bebfb6304dda",
+          "passed": true
+        },
+        {
+          "registration": "RECOVERY_REPLACE_PASSKEY_V1",
+          "actual_tested_commit_sha": "f7d1cd19bb364ce576d0e672f2903b942c4859d9",
+          "native_binding_sha256": "222f7c7b8c46d54c3ccfa4a6fdd5e7d621fe6cbd61df69c03a5ef93540b00d00",
+          "browser_binding_sha256": "b5ed429401dc5db143fbb1cfa899e590c41d9952b86d05bb1f9137a5a88c19b1",
+          "receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/runtime-RECOVERY_REPLACE_PASSKEY_V1.json",
+          "sha256": "58a8b3bef9326169159cbcea5401c169b74e9401cd15846bb4219650b65208c5",
+          "passed": true
+        },
+        {
+          "registration": "RECOVERY_GENERATE_TOTP_V1",
+          "actual_tested_commit_sha": "796d316bbc1be878f71d515e06be13d7a77b3c1d",
+          "native_binding_sha256": "33fcb5438c1a13188099c883009f3183f0c4514f56d8ab0f51dd7754efe5137f",
+          "browser_binding_sha256": "aca2958558f461c198323516a04540901150faef4678cf9ed415b8e0e048b0f7",
+          "receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/runtime-RECOVERY_GENERATE_TOTP_V1.json",
+          "sha256": "03a0d881a2ee48f932b7e89c6e6d965e812562d8fa6ea08e6264104ced098d4f",
+          "passed": true
+        },
+        {
+          "registration": "RECOVERY_REPLACE_TOTP_V1",
+          "actual_tested_commit_sha": "796d316bbc1be878f71d515e06be13d7a77b3c1d",
+          "native_binding_sha256": "33fcb5438c1a13188099c883009f3183f0c4514f56d8ab0f51dd7754efe5137f",
+          "browser_binding_sha256": "aca2958558f461c198323516a04540901150faef4678cf9ed415b8e0e048b0f7",
+          "receipt": "governance/evidence/p2-009-recovery-20261111/closure-796d316/runtime-RECOVERY_REPLACE_TOTP_V1.json",
+          "sha256": "51d5275d2e76351659fdd7ca5aecb9722c0343a660174572cd5e862f8813e013",
+          "passed": true
+        }
+      ],
+      "composite_cross_device_boundary": "Responsive public/mock and retained item-render evidence is combined with native/current-source and six live-BFF cases. All-viewport real-BFF and physical-device coverage are not claimed."
+    },
+    "native_reuse": {
+      "actual_tested_commit_sha": "ad744fde52aa03404f3944c47ebb79070185e9f2",
+      "native_cases": 62,
+      "receipt": {
+        "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+        "sha256": "64a5907426512232686f4e09f99e7e476082ef3ee4b1f60a49c87bd0fbab50ed"
+      },
+      "source_equivalence": {
+        "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+        "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+      }
+    },
+    "historical_foundation_registration": {
+      "actual_invocation_sha": "eb1c16fd55a82470c7b2c756f017c51b8a00a30a",
+      "ui_carrier_sha": "6e562db102ce75d5ed478a15e2970ff55ab98fef",
+      "foundation": 16,
+      "registration": 24,
+      "current_compatibility_review": {
+        "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/parent-ui-compatibility-review-v2.json",
+        "sha256": "ab2da70c31aea3ecb42410b67c3cb5e6a2f4c8be3ca0b65bf124efef2c94e82a"
+      },
+      "source_witness": {
+        "path": "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/source-witness.json",
+        "sha256": "c9222da89f5ef15c3880e1e3c61f99f602a98c3c21f9c682afcb62ec6ff75d14"
+      },
+      "rerun_claimed": false
+    },
+    "portability": {
+      "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/portability-materialization.json",
+      "sha256": "8fb52db68f44b7d9ad8c618f9e32f895cd93a3e394a3e717d1478ffa37ec3fb2"
+    }
+  },
+  "source_currentness": {
+    "current_ui_web_path_count": 26,
+    "ui_actual_carrier_sha": "c71495cbcb1e0e6f8e1dd89c3f42c59b1ed834a6",
+    "all26_web_blobs_unchanged_to_tested_commit": true,
+    "owned_path_count": 35,
+    "all_owned_unchanged_after_tested_commit": true,
+    "backend_delta_since_c714": [
+      "src/Modules/Identity/RecoveryCodeExecution.cs"
+    ],
+    "backend_native_source_equivalence": {
+      "path": "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json",
+      "sha256": "72c5513f8d3e5af6ee8f95dd3b3ffed9fee666f90d42379fa0b9c9610962d300"
+    },
+    "note": "Do not interpret 26 web equivalence as equality of all 35 paths back to c714 or all broader runtime inputs."
+  },
+  "scope_limits": [
+    "Only these seven current inventory items and their P2-009 owner integration are assessed. Existing inventory planning/PENDING text is retained as historical implementation lineage, not edited by this evidence.",
+    "Original c714/public, ad744/native62, eb1/6e historical and split live-case test identities are preserved. Failed/interrupted attempts remain failures or unqualified attempts in the closure archive.",
+    "L01-L04 and prior applicable scoped consents support only recorded visual adaptations. TODO-TUN-P2-009-DESIGN001 remains open for owner-only Figma backfill; no external authority write occurred.",
+    "Requested download is not human-saved. No production format/capacity/session policy, production publication, Product/release acceptance or protected-main merge is approved.",
+    "Native governance UI check is still required after committing this metadata candidate."
+  ],
+  "required_cell_summary": {
+    "rows": 7,
+    "required_cells": 110,
+    "pass": 106,
+    "not_applicable": 4
+  }
+}

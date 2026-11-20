@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-013-UI-002",
+  "work_item_id": "TUN-P2-013",
+  "classification": "UI_FIDELITY_DEFECT",
+  "severity": "SEV-3",
+  "status": "RESOLVED",
+  "environment": "Strict-TLS Sessions browser journey at370c309, desktop1440 and mobile320",
+  "description": "Selected-session facts introduced a padded gray bordered card absent from Figma46:35 and the consented desktop/mobile confirmation. Restore plain facts and approved spacing; preserve workflow, wrapping and controls. Closure requires fresh renders and independent comparison.",
+  "expected_behavior_ref": "docs/authority/current/decisions/AMD-0008_Approved_Figma_Visual_Fidelity_and_Product_Owner_UX_Consent.md",
+  "evidence": [
+    "governance/evidence/TUN-P2-013-VISUAL-CONSENT.json",
+    "artifacts/p2-013-sessions-20261114/ui-review/approved-confirm.png",
+    "artifacts/p2-013-sessions-20261114/ui-review/proposal-desktop-confirm.png",
+    "artifacts/p2-013-sessions-20261114/browser-integration/live-usertrust-370c309/results.json",
+    "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/visual-review.json",
+    "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/fidelity6-4f09edb/results.json",
+    "governance/evidence/p2-013-sessions-20261114/browser-4f09edb/live1-4f09edb/results.json"
+  ],
+  "affected_versions": [
+    "370c309f7424613d0213aaf647ce18545f47a3ee"
+  ],
+  "created_at": "2026-11-14T14:24:00Z",
+  "updated_at": "2026-11-14T14:30:00Z"
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-11-11T03:14:50.347Z",
+  "primary_sources": [
+    {
+      "title": "Node.js v24.22.1 CLI: NODE_USE_SYSTEM_CA=1",
+      "url": "https://nodejs.org/download/release/v24.22.1/docs/api/cli.html#node_use_system_ca1",
+      "verified_online": true,
+      "section": "NODE_USE_SYSTEM_CA=1",
+      "finding": "This fixed option includes existing system-trusted certificate authorities in Node trust selection. The documentation records its environment-variable availability from24.6.0."
+    },
+    {
+      "title": "Node.js v24.22.1 CLI: --use-system-ca",
+      "url": "https://nodejs.org/download/release/v24.22.1/docs/api/cli.html#--use-system-ca",
+      "verified_online": true,
+      "section": "Windows certificate-store policy",
+      "finding": "Windows trust selection considers machine/user certificate stores and their TLS-server trust policy."
+    }
+  ],
+  "actual_trust_observation": {
+    "path": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/node-system-trust-proof.json",
+    "sha256": "241acc9e3c60a0a2487a39e8b1a6b0fba38659cc1ec90d8a4a4ddbe64b9cfd67",
+    "bytes": 329
+  },
+  "source_inspection": {
+    "helper_ref": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v4/run-reviewed-smoke.mjs",
+    "private_child_ref": "governance/evidence/p2-008-totp-20261110/parent-runtime-compatibility/eb9228c/legacy-host-smoke/v4/legacy-child.mjs",
+    "fixed_child_setting": "NODE_USE_SYSTEM_CA=1",
+    "private_browser_and_api_tls_validation_enabled": true,
+    "arbitrary_node_options_inherited": false,
+    "global_trust_modified": false,
+    "ca_or_private_key_exported": false,
+    "readiness_metadata_probe": "Separate existing reviewed pin boundary: rejectUnauthorized:false on this public status probe only, exact approved peer certificate hash required before reading status. This is not evidence of disabled browser/private-API TLS verification."
+  },
+  "boundary": "Documentation supports the fixed trust selection; actual trust/private API and browser outcomes come from separate retained runtime receipts. No global TLS-disabled claim is inferred."
+}

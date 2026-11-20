@@ -1,0 +1,30 @@
+{
+  "status": "PENDING_CONFIRMED_PRODUCTION_DEFECT_CORRECTION",
+  "defect_id": "DEF-TUN-P2-008-UI-005",
+  "authority": "Root-confirmed actual journey2 source diagnosis; governed defect and active RV006 links committed b49ba2b3db997055cca1cf6f4b8b2e25a002ab3b",
+  "finding": "An acknowledged cancellation already on the management pathname did not reload authoritative metadata. External factor retirement could therefore leave stale factor rows and action availability after cancellation.",
+  "source_path": "web/apps/user/totp.tsx",
+  "original_source_sha256": "d026cf17b25251d58641d21a52b18a4ec3d5467257a347b7bc96336086505066",
+  "previous_role_packet": "artifacts/p2-008-totp-20261110/current-ui-role-assessments-f5c143c/assessment-index.json",
+  "previous_role_packet_sha256": "c90ba4cb44008bd47b3b174c5dc2d9f7d297a1826464856f662393ed3719d7f4",
+  "previous_formal_candidate": "artifacts/p2-008-totp-20261110/final-ui-evidence-staging/proposal-index.json",
+  "previous_formal_candidate_sha256": "ff5869829a0fddb103f077b891fc6b2ba917c7334df9bf8615ae4faf4bb18cdf",
+  "interpretation": "Frozen prior no-additional-public-finding statements describe their pre-UI005 review only. They must not be used as a current clean finding or final acceptance. Prior 188 renders, 194 manual Axe resolutions and 40 route probes retain their original source and execution provenance.",
+  "role_conclusions": {
+    "ui_ux_engineer": "BLOCKED for management/review freshness and next-action availability until the scoped correction is committed and actual targeted regression passes.",
+    "frontend_engineer": "BLOCKED for same-path acknowledged-cancel refresh. Candidate preserves server authority, scope cancellation, read-only busy state and connected-trigger focus; static review is not execution proof.",
+    "tester_qa_engineer": "BLOCKED pending actual unchanged-production red, corrected-source green, existing35 TOTP cases and appropriate static/contracts checks. Preserve all prior failures.",
+    "end_user_ux_reviewer": "BLOCKED: stale rows after cancellation can prevent the user's next valid action. Do not require a reload as a workaround.",
+    "content_writer": "No copy or terminology delta proposed. Overall content/journey acceptance remains pending the blocking correction and existing privacy/final-integration conditions."
+  },
+  "test_only_patch": "artifacts/p2-008-totp-20261110/ui005-review/ui005-test-only.patch",
+  "test_only_patch_sha256": "2ea245ea255871eb4f606c7ab058bf9b997a48d315ea934d38dc8f1399df49d2",
+  "fix_only_patch": "artifacts/p2-008-totp-20261110/ui005-review/ui005-fix-only.patch",
+  "fix_only_patch_sha256": "5b37292a778f7e35b696e0113872d080b57996e25cb0a1ac6a08046ac2ad1092",
+  "visual_delta": "No JSX, CSS, markup, copy or approved visual variant change. Render reuse is conditional on exact final source-delta review plus actual affected composition and keyboard regression; historical source hashes must not be relabeled.",
+  "ui001": "OPEN",
+  "val008_uxfid008_final": "PENDING",
+  "whole_008_acceptance": "PENDING",
+  "live_execution_by_this_review": false,
+  "governed_source_or_evidence_mutated_by_this_proposal": false
+}

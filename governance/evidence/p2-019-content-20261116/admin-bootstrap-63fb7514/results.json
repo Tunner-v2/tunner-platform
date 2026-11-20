@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "source_sha": "63fb7514984c2d98eedf3557e0eb34439f2c7783",
+  "result": "PASS",
+  "provenance": "Observed extract from terminal Playwright list/json output, tool chunk 9f29f6, exit0. No rerun or invented combined report.",
+  "command": "pnpm exec playwright test --config playwright.browser-testing.config.ts --grep \"Synthetic Admin bootstrap preserves canonical\" --reporter=list,json --output ../artifacts/p2-019-content-20261116/admin-bootstrap-63fb7514/screenshots",
+  "stats": {
+    "startTime": "2026-11-17T19:22:21.426Z",
+    "duration": 41202.055,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "file": "web/tests/browser-testing/governed-content-flow.spec.ts",
+      "line": 117,
+      "title": "Synthetic Admin bootstrap preserves canonical keyboard history and tablet reflow without Content writes",
+      "status": "passed",
+      "duration": 8119,
+      "startTime": "2026-11-17T19:22:23.071Z",
+      "retry": 0,
+      "errors": []
+    }
+  ],
+  "asserted_scope": [
+    "1440/768/320 geometry and overflow",
+    "768 Axe accessibility",
+    "real stale-CSRF400 and restored buttons",
+    "keyboard skip link and Enter session204",
+    "canonical direct entry, refresh, Back and Forward",
+    "exactly2 actor POSTs, zero Content writes",
+    "empty query/localStorage/sessionStorage"
+  ],
+  "tls": "Certificate verification enabled; existing Windows system trust; no trust changes",
+  "boundaries": "Isolated local synthetic Content actors only. No production policy, workforce authentication, Identity settings activation or whole-item acceptance."
+}

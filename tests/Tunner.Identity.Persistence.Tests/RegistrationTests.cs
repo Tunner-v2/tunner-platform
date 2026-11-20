@@ -8,9 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
 using Tunner.Accounts;
 using Tunner.Database.Outbox;
+using Tunner.Database;
+using Tunner.Database.Audit;
+using Tunner.Database.DurableWork;
 using Tunner.Platform.Policies;
 using Xunit;
 
@@ -18,6 +22,7 @@ namespace Tunner.Identity.Persistence.Tests;
 
 public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassFixture<IdentityPostgresFixture>
 {
+    private static readonly string[] CommittedRegistrationEventTypes = ["AccountActivated", "AccountAgeEvaluated", "AccountRegistered", "RegistrationNotificationRequested", "VerifiedContactChanged"];
     private const string Password = "a very long unique test passphrase";
     private const string OtherPassword = "a different long unique test passphrase";
 
@@ -187,6 +192,175 @@ public sealed class RegistrationTests(IdentityPostgresFixture fixture) : IClassF
         Assert.DoesNotContain("example.test",JsonSerializer.Serialize(h.Notices.Messages.Single().Value));
         await h.Verify(caller,new(pending.OperationId,Guid.NewGuid(),1,await h.CodeFor(pending.OperationId)));
         Assert.False(await app.DispatchNotificationAsync(row.DeliveryId.Value));
+    }
+    [Fact]
+    public async Task DeferredVerificationCannotDispatchAfterProofMaterialIsInvalidated()
+    {
+        await using var h=await Harness.CreateAsync(fixture); var caller=Caller();
+        h.Notices.Unavailable=true; var pending=await h.Register(caller,Command());
+        var version=pending.Version;
+        for(var attempt=0;attempt<h.Policy.ProofAttempts;attempt++)
+            version=(await h.VerifyContact(caller,new(pending.OperationId,Guid.NewGuid(),version,"not-a-code"))).Version;
+        await using var db=h.Database.Context();
+        var row=await db.Set<RegistrationOperationRow>().AsNoTracking().SingleAsync();
+        Assert.Null(row.ProtectedCode); Assert.Null(row.ProtectedDigest);
+        Assert.True(row.ExpiresAt>h.Clock.GetUtcNow());
+        h.Notices.Unavailable=false;
+        Assert.False(await h.Application(db).DispatchNotificationAsync(row.DeliveryId!.Value));
+        Assert.Empty(h.Notices.Messages);
+    }
+    [Fact]
+    public async Task DeferredExistingAccountNoticeCanDispatchWithoutVerificationMaterial()
+    {
+        await using var h=await Harness.CreateAsync(fixture); var caller=Caller();
+        var pending=await h.Register(caller,Command());
+        await h.Verify(caller,new(pending.OperationId,Guid.NewGuid(),pending.Version,await h.CodeFor(pending.OperationId)));
+        h.Notices.Unavailable=true; var notice=await h.Register(Caller(),Command());
+        await using var db=h.Database.Context();
+        var row=await db.Set<RegistrationOperationRow>().AsNoTracking().SingleAsync(item=>item.OperationId==notice.OperationId);
+        Assert.Equal(h.Policy.ExistingAccountTemplateVersion,row.TemplateVersion); Assert.Null(row.ProtectedCode);
+        h.Notices.Unavailable=false;
+        Assert.True(await h.Application(db).DispatchNotificationAsync(row.DeliveryId!.Value));
+        Assert.Equal(h.Policy.ExistingAccountTemplateVersion,h.Notices.Messages[row.DeliveryId.Value].TemplateVersion);
+    }
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task DeferredVerificationRespectsCurrentPolicyWhileExistingAccountNoticesRemainSeparate(bool existingAccount)
+    {
+        await using var h=await Harness.CreateAsync(fixture); var caller=Caller();
+        if(existingAccount)
+        {
+            var initial=await h.Register(caller,Command());
+            await h.Verify(caller,new(initial.OperationId,Guid.NewGuid(),initial.Version,await h.CodeFor(initial.OperationId)));
+            h.Notices.Messages.Clear(); caller=Caller();
+        }
+        h.Notices.Unavailable=true; var pending=await h.Register(caller,Command());
+        var next=h.Policy with {Version="fixture-registration-next"};
+        var version=new RegistrationPolicyVersion(new(next.Version,"ACTIVE","REGISTRATION",
+            new EffectivePolicyInterval(h.Clock.GetUtcNow().AddMinutes(-1),true,null,false),null,["fixture-only-rollover-approval"]),next);
+        await using var db=h.Database.Context(); var app=h.Application(db,new RegistrationPolicyCatalog([version]));
+        var row=await db.Set<RegistrationOperationRow>().AsNoTracking().SingleAsync(x=>x.OperationId==pending.OperationId);
+        if(!existingAccount)
+        {
+            Assert.NotNull(row.ProtectedCode); Assert.NotNull(row.ProtectedDigest);
+            Assert.Equal("NOT_FOUND_OR_NOT_DISCLOSABLE",(await app.VerifyAsync(caller,
+                new(pending.OperationId,Guid.NewGuid(),pending.Version,await h.CodeFor(pending.OperationId)))).ErrorCode);
+        }
+        h.Notices.Unavailable=false;
+        Assert.Equal(existingAccount,await app.DispatchNotificationAsync(row.DeliveryId!.Value));
+        Assert.Equal(existingAccount?1:0,h.Notices.Messages.Count);
+    }
+
+    [Theory]
+    [InlineData("pending", true)]
+    [InlineData("invalidated", false)]
+    [InlineData("superseded", false)]
+    [InlineData("existing", true)]
+    public async Task PostCommitConsumerPreservesRegistrationDeliveryIdentityAndCurrentProofEligibility(string scenario, bool shouldQueue)
+    {
+        await using var h=await Harness.CreateAsync(fixture); var caller=Caller();
+        if(scenario=="existing")
+        {
+            var initial=await h.Register(caller,Command());
+            await h.Verify(caller,new(initial.OperationId,Guid.NewGuid(),initial.Version,await h.CodeFor(initial.OperationId)));
+            h.Notices.Messages.Clear(); caller=Caller();
+        }
+        h.Notices.Unavailable=true; var pending=await h.Register(caller,Command());
+        PendingOutboxMessage message;
+        await using(var db=h.Database.Context())
+            message=IdentityPostCommitProcessor.Project(await db.Set<OutboxMessage>().AsNoTracking()
+                .SingleAsync(x=>x.EventType=="RegistrationNotificationRequested" && x.OperationId=="OP-"+pending.OperationId.ToString("N")));
+        if(scenario=="invalidated")
+            for(var attempt=0;attempt<h.Policy.ProofAttempts;attempt++)
+                pending=await h.VerifyContact(caller,new(pending.OperationId,Guid.NewGuid(),pending.Version,"not-a-code"));
+        if(scenario=="superseded")
+        {
+            h.Clock.Advance(h.Policy.ResendCooldown);
+            await h.Resend(caller,new(pending.OperationId,Guid.NewGuid(),pending.Version));
+        }
+        h.Notices.Unavailable=false;
+        var identity=new RegistrationFactory<IdentityPersistenceDbContext>(h.Database.Context);
+        var platform=new RegistrationFactory<TunnerMigrationsDbContext>(()=>new(new DbContextOptionsBuilder<TunnerMigrationsDbContext>().UseNpgsql(h.Database.ConnectionString).Options));
+        await using var services=new ServiceCollection().AddScoped(_=>h.Database.Context())
+            .AddScoped(sp=>h.Application(sp.GetRequiredService<IdentityPersistenceDbContext>())).BuildServiceProvider();
+        var owner=new RegistrationPostCommitOwnerSource(identity);
+        var facts=Assert.IsType<IdentityPostCommitOwnerFacts>(await owner.ReadCommittedAsync(message,default));
+        Assert.Null(facts.ActorAccountId);
+        Assert.Equal(message.Subject,facts.References["deliveryReference"]);
+        var qualification=new RegistrationPostCommitFixtureContract(h.Clock);
+        var processor=new IdentityPostCommitProcessor(identity,platform,new EfConsumerInboxStore(platform),[owner],qualification,
+            new("fixture-registration-post-commit","fixture-generation",TimeSpan.FromMinutes(1)),h.Clock,
+            new RegistrationPostCommitNotificationDispatcher(identity,services.GetRequiredService<IServiceScopeFactory>()));
+        Assert.Equal(IdentityPostCommitOutcome.Completed,await processor.ProcessAsync(message));
+        Assert.Equal(IdentityPostCommitOutcome.Completed,await processor.ProcessAsync(message));
+        Assert.Equal(shouldQueue?1:0,h.Notices.Messages.Count);
+        if(shouldQueue) Assert.Equal(Guid.ParseExact(message.Subject,"N"),Assert.Single(h.Notices.Messages).Key);
+        await using var check=platform.CreateDbContext();
+        var audit=Assert.Single(await check.AuditEvents.ToListAsync()); audit.RequireIntegrity();
+        Assert.NotNull((await check.ConsumerInboxEntries.SingleAsync()).CompletedAtUtc);
+        Assert.DoesNotContain("applicant@example.test",audit.Envelope,StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("ProtectedCode",audit.Envelope,StringComparison.Ordinal);
+    }
+
+    private sealed class RegistrationFactory<T>(Func<T> create) : IDbContextFactory<T> where T:DbContext
+    {
+        public T CreateDbContext()=>create();
+        public Task<T> CreateDbContextAsync(CancellationToken cancellationToken=default)
+        {cancellationToken.ThrowIfCancellationRequested();return Task.FromResult(create());}
+    }
+    [Fact]
+    public async Task CompletedRegistrationAuditsEveryCommittedOwnerEventWithoutLeakingPersonalInformation()
+    {
+        await using var h=await Harness.CreateAsync(fixture); var caller=Caller();
+        var pending=await h.Register(caller,Command());
+        await h.Verify(caller,new(pending.OperationId,Guid.NewGuid(),pending.Version,await h.CodeFor(pending.OperationId)));
+        var identity=new RegistrationFactory<IdentityPersistenceDbContext>(h.Database.Context);
+        var platform=new RegistrationFactory<TunnerMigrationsDbContext>(()=>new(new DbContextOptionsBuilder<TunnerMigrationsDbContext>().UseNpgsql(h.Database.ConnectionString).Options));
+        await using var services=new ServiceCollection().AddScoped(_=>h.Database.Context())
+            .AddScoped(sp=>h.Application(sp.GetRequiredService<IdentityPersistenceDbContext>())).BuildServiceProvider();
+        var owner=new RegistrationPostCommitOwnerSource(identity);
+        var processor=new IdentityPostCommitProcessor(identity,platform,new EfConsumerInboxStore(platform),[owner],new RegistrationPostCommitFixtureContract(h.Clock),
+            new("fixture-registration-all-events","fixture-generation",TimeSpan.FromMinutes(1)),h.Clock,
+            new RegistrationPostCommitNotificationDispatcher(identity,services.GetRequiredService<IServiceScopeFactory>()));
+        await using var source=h.Database.Context();
+        var rows=await source.Set<OutboxMessage>().AsNoTracking().OrderBy(x=>x.OccurredAtUtc).ToArrayAsync();
+        Assert.Equal(CommittedRegistrationEventTypes,rows.Select(x=>x.EventType).Order(StringComparer.Ordinal));
+        foreach(var row in rows)
+        {
+            var message=IdentityPostCommitProcessor.Project(row);
+            Assert.True(owner.Owns(message));
+            Assert.False(new IdentitySecurityPostCommitOwnerSource(identity).Owns(message));
+            Assert.True(await owner.ReadCommittedAsync(message,default) is not null,"Missing committed owner: "+row.EventType);
+            var outcome=await processor.ProcessAsync(message);
+            Assert.True(outcome==IdentityPostCommitOutcome.Completed,row.EventType+": "+outcome);
+        }
+        await using var check=platform.CreateDbContext(); var audits=await check.AuditEvents.ToArrayAsync();
+        Assert.Equal(5,audits.Length); Assert.Equal(5,await check.ConsumerInboxEntries.CountAsync(x=>x.CompletedAtUtc!=null));
+        foreach(var audit in audits)
+        {
+            audit.RequireIntegrity();
+            foreach(var secret in new[]{"applicant@example.test",Password,"1990-01-01","DateOfBirth","ProtectedCode"})
+                Assert.DoesNotContain(secret,audit.Envelope,StringComparison.OrdinalIgnoreCase);
+        }
+        Assert.Single(h.Notices.Messages); // The earlier synchronous queue handoff is never repeated after registration completes.
+    }
+    private sealed class RegistrationPostCommitFixtureContract(TimeProvider clock):IIdentityPostCommitContractSource
+    {
+        public ValueTask<IdentityPostCommitQualification?> RequireCurrentAsync(IdentityPostCommitFacts facts,DateTimeOffset at,CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested(); var e=facts.Event; var owner=facts.Owner;
+            const string version="fixture-post-commit-contract",evidence="fixture-explicit-notification-qualification";
+            var audit=new AuditEvent(e.EventId,e.OccurredAtUtc,new AuditActor("fixture-registration-initiator","fixture-anonymous",[]),
+                "fixture-"+e.EventType,e.OperationId!,e.CorrelationId!,[new(e.Subject,e.ResourceVersion)],
+                "fixture-committed",e.DataClassification,owner.RetentionReference,e.EventId.ToString("N"),
+                policyVersionReferences:[version],evidenceReferences:[evidence]);
+            var notice=e.EventType=="RegistrationNotificationRequested"?new IdentitySecurityNotification(Guid.ParseExact(e.Subject,"N"),e.EventId,facts.Digest,version,
+                "fixture-account-notification",owner.References["templateVersion"],"fixture-content-version","en",owner.OwnerReference,
+                "fixture-registration-contact-safety","fixture-local-route",owner.ProcessingReference,owner.RetentionReference,evidence):null;
+            return ValueTask.FromResult<IdentityPostCommitQualification?>(new(e.EventId,facts.Digest,version,evidence,
+                new EffectivePolicyInterval(clock.GetUtcNow().AddDays(-1),true,null,false),audit,notice));
+        }
     }
     [Fact]
     public async Task PasswordPolicyCountsUnicodeCodePointsAndNoticeVersionsMustBeCurrent()

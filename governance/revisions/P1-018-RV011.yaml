@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "revision_id": "P1-018-RV011",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P1-018",
+  "parent_revision_id": "P1-018-RV010",
+  "parent_milestone_revision_id": null,
+  "title": "Preserve shared browser proof lifecycle for Sessions revocation",
+  "revision_type": "COMPATIBILITY",
+  "status": "CLOSED",
+  "reason": "P2-013 application revocation is qualified at075485b. Its browser increment needs narrow typed dispatch in historically owned StepUpBrowserEndpoints.cs before generic execution begins, preserving password/passkey/TOTP/federation continuations, fallback owners and terminal outcomes. Separate active recoveryRV009 and closedRV010 remain unchanged; no schema policy source-document or production change.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/17_Account_Identity_and_Session_FRD.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [
+    "docs/development/P2_013_SESSION_SCOPE.md"
+  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Protected original session selection reaches exact typed revocation before proof transaction; old owner and native continuation workflows remain valid; focused real HTTPS/security and browser evidence passes at committed source."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "full-stack-engineer",
+    "tester-qa-engineer",
+    "solution-architect",
+    "cyber-security-engineer",
+    "auditor",
+    "compliance-specialist",
+    "governance-engineer",
+    "ui-ux-engineer",
+    "frontend-engineer",
+    "end-user-ux-reviewer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P1-018-RV011-VALIDATION.json"
+  ],
+  "created_at": "2026-11-14T07:03:08.4486419-05:00",
+  "closed_at": "2026-11-14T14:42:55.5424221+00:00",
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+    "tested_commit_sha": "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b",
+    "work_item_commit_shas": [
+      "075485ba3c03073855f5b16ae1961f3e4110636e",
+      "7a6a69b4e806309eeb98396b8e5ccf9ca3de29d3",
+      "4f09edb8b6033c7ca1edcf8d7d227c26bfb8c15b"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json",
+      "%SystemDrive%/",
+      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-019-RV001",
+  "recorded_at": "2026-10-21T19:04:54.445Z",
+  "result": "PASS",
+  "source_commit_sha": "45c8fba6c60a905194d9937aa5d1181627ed6b76",
+  "executed_at_sha": "38b9a6e07a40a5be74064e492da74483008bed8d",
+  "assertions": {
+    "one_open_head_pr": true,
+    "existing_pr_number_preserved": 19,
+    "parent_base_preserved": true,
+    "draft_preserved": true,
+    "auto_merge_disabled": true,
+    "creation_workflow_success": true,
+    "external_authority_unchanged": true
+  },
+  "github": {
+    "prs": [
+      {
+        "number": 19,
+        "html_url": "https://github.com/Tunner-v2/tunner-platform/pull/19",
+        "draft": true,
+        "auto_merge": null,
+        "base": "codex/global-ui-compliance",
+        "sha": "38b9a6e07a40a5be74064e492da74483008bed8d"
+      }
+    ],
+    "runs": [
+      {
+        "id": 39658309189,
+        "name": "Automate PR Auto-Merge",
+        "status": "completed",
+        "conclusion": "skipped",
+        "html_url": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39658309189",
+        "head_sha": "38b9a6e07a40a5be74064e492da74483008bed8d"
+      },
+      {
+        "id": 39658297369,
+        "name": "Create Pull Request",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/Tunner-v2/tunner-platform/actions/runs/39658297369",
+        "head_sha": "38b9a6e07a40a5be74064e492da74483008bed8d"
+      }
+    ]
+  },
+  "app_test_source_sha": "100cccd26f34211810e6c2bcf2a72242f5872c22",
+  "boundary": "Live PR workflow success only. This does not assert that whole-application GitHub CI, UI acceptance, protected-main checks or release gates passed. No merge/deployment occurred."
+}

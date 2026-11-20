@@ -1,0 +1,98 @@
+[WebServer] (node:2144) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./totp.routes" without a file extension (apps/user/vite.config.ts:3:26). Add the file extension
+[WebServer]   - import "./recovery.routes" without a file extension (apps/user/vite.config.ts:4:31). Add the file extension
+[WebServer]   - import "./sessions.routes" without a file extension (apps/user/vite.config.ts:5:30). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 24 tests using 1 worker
+
+(node:14332) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\sessions\sessions.spec.ts:31:2 › Approved listing/detail pattern, truthful state and responsive layout at 1440 (3.4s)
+  ok  2 tests\sessions\sessions.spec.ts:31:2 › Approved listing/detail pattern, truthful state and responsive layout at 390 (2.9s)
+  ok  3 tests\sessions\sessions.spec.ts:42:1 › Load more uses one retained body cursor; double clicks do not issue duplicate requests (992ms)
+  ok  4 tests\sessions\sessions.spec.ts:47:1 › Direct detail entry/reload safely reselects through list; history preserves only current server-owned rows (1.3s)
+  ok  5 tests\sessions\sessions.spec.ts:52:1 › An actor/context change cannot display a retained detail row absent from the freshly authorized page (842ms)
+  ok  6 tests\sessions\sessions.spec.ts:57:2 › Pagination 404 clears stale rows and requires explicit refresh, without automatic retry (1.0s)
+  ok  7 tests\sessions\sessions.spec.ts:57:2 › Pagination 409 clears stale rows and requires explicit refresh, without automatic retry (953ms)
+  ok  8 tests\sessions\sessions.spec.ts:57:2 › Pagination 503 clears stale rows and requires explicit refresh, without automatic retry (900ms)
+  x   9 tests\sessions\sessions.spec.ts:63:1 › Current session detail retains ordinary Account-menu sign-out; lost response offers a read, never a fresh retry (994ms)
+(node:29864) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 10 tests\sessions\sessions.spec.ts:68:1 › Anonymous actor is redirected before data is requested (1.0s)
+  ok 11 tests\sessions\sessions.spec.ts:71:1 › Ordinary current-session sign-out uses only the existing operation and returns to sign in (1.0s)
+  ok 12 tests\sessions\sessions.spec.ts:74:1 › Published loading and empty response do not invent a current row, total or target action (806ms)
+  ok 13 tests\sessions\sessions.spec.ts:77:1 › Withdrawn publication fails closed and renders no session facts (733ms)
+  ok 14 tests\sessions\sessions.spec.ts:80:1 › A stale in-flight list response cannot restore data after navigation leaves its revision (1.0s)
+  ok 15 tests\sessions\sessions.spec.ts:86:1 › An initial list failure uses the current published retry state; withdrawn refreshed publication exposes no stale facts (958ms)
+  x  16 tests\sessions\sessions.spec.ts:91:1 › Navigation while ordinary sign-out is in flight becomes check-only UNKNOWN and never replays the POST (1.3s)
+(node:30624) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 17 tests\sessions\sessions.spec.ts:97:1 › Expired detail continuation discards selection and refresh returns to a fresh first page (1.8s)
+  ok 18 tests\sessions.api.test.tsx:9:1 › Exact safe DTO preserves long versions as strings and rejects private/unrecognized fields (74ms)
+  ok 19 tests\sessions.api.test.tsx:13:1 › Malformed, duplicate or inconsistent pages fail closed without making a selection (25ms)
+  ok 20 tests\sessions.api.test.tsx:16:1 › Every required key must be published with matching locale/provenance; draft copy is not bootstrap (185ms)
+  ok 21 tests\sessions.api.test.tsx:21:1 › Authenticated CSRF precedes published options and never uses anonymous authentication options (14ms)
+  ok 22 tests\sessions.api.test.tsx:25:1 › Continuation is only a POST body value, with no browser selector/budget/query or private error retention (5ms)
+  ok 23 tests\sessions.api.test.tsx:29:1 › HTTP failures use closed safe kinds and do not retain server/private problem content (21ms)
+  ok 24 tests\sessions.api.test.tsx:33:1 › Lost ordinary sign-out is not retried; checking status is a separate authenticated read (7ms)
+
+
+  1) tests\sessions\sessions.spec.ts:63:1 › Current session detail retains ordinary Account-menu sign-out; lost response offers a read, never a fresh retry 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "We could not confirm whether you signed out"
+    Error: strict mode violation: getByRole('alert') resolved to 2 elements:
+        1) <section role="alert" class="passkeys-card sessions-state-panel">…</section> aka locator('section')
+        2) <p role="alert" class="tn-form-error-summary">…</p> aka locator('p').filter({ hasText: 'We could not confirm whether' })
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByRole('alert')
+
+
+      63 | test('Current session detail retains ordinary Account-menu sign-out; lost response offers a read, never a fresh retry',async({page})=>{
+      64 |  const state=await setup(page,{lostSignOut:true});await page.goto(list);await page.getByRole('button',{name:'View current session'}).click();await expect(page.getByRole('heading',{name:'Session details'})).toBeVisible();await expect(page.getByText('CURRENT SESSION',{exact:true})).toBeVisible();
+    > 65 |  await page.getByRole('button',{name:'Account owner'}).click();await page.locator('#sessions-account-actions').getByRole('button',{name:'Sign out',exact:true}).click();await expect(page.getByRole('alert')).toContainText('We could not confirm whether you signed out');expect(state.signOuts).toBe(1);
+         |                                                                                                                                                                                                               ^
+      66 |  await page.getByRole('button',{name:'Check sign-in status'}).click();await expect(page.getByRole('heading',{name:'Session details'})).toBeVisible();expect(state.signOuts).toBe(1);await noStorageOrSelectors(page);
+      67 | });
+      68 | test('Anonymous actor is redirected before data is requested',async({page})=>{
+        at C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\web\tests\sessions\sessions.spec.ts:65:207
+
+    Error Context: test-results\runs\sessions\sessions-sessions-Current--e5c01--a-read-never-a-fresh-retry\error-context.md
+
+  2) tests\sessions\sessions.spec.ts:91:1 › Navigation while ordinary sign-out is in flight becomes check-only UNKNOWN and never replays the POST 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "We could not confirm whether you signed out"
+    Error: strict mode violation: getByRole('alert') resolved to 2 elements:
+        1) <section role="alert" class="passkeys-card sessions-state-panel">…</section> aka locator('section')
+        2) <p role="alert" class="tn-form-error-summary">…</p> aka locator('p').filter({ hasText: 'We could not confirm whether' })
+
+    Call log:
+      - Expect "toContainText" with timeout 5000ms
+      - waiting for getByRole('alert')
+
+
+      93 |  await page.route('**/authentication/sign-out',async route=>{state.signOuts++;await new Promise<void>(resolve=>{release=resolve;});return route.fulfill({json:{authenticated:false}}).catch(()=>{});});
+      94 |  await page.goto(list);await page.getByRole('button',{name:'View current session'}).click();await expect(page.getByRole('heading',{name:'Session details'})).toBeVisible();await page.getByRole('button',{name:'Account owner'}).click();await page.locator('#sessions-account-actions').getByRole('button',{name:'Sign out',exact:true}).click();await expect.poll(()=>state.signOuts).toBe(1);
+    > 95 |  await page.getByRole('link',{name:'Sessions & devices',exact:true}).click();await expect(page.getByRole('alert')).toContainText('We could not confirm whether you signed out');release?.();await expect(page.getByRole('button',{name:'Check sign-in status'})).toBeEnabled();await page.getByRole('button',{name:'Check sign-in status'}).click();await expect(page.getByRole('heading',{name:'Sessions & devices',exact:true})).toBeVisible();expect(state.signOuts).toBe(1);
+         |                                                                                                                    ^
+      96 | });
+      97 | test('Expired detail continuation discards selection and refresh returns to a fresh first page',async({page})=>{
+      98 |  const state=await setup(page);await page.goto(list);await page.getByRole('button',{name:'Load more'}).click();await expect(page.locator('[data-session-reference="'+expired+'"]')).toBeVisible();state.status=409;
+        at C:\Workspace\AI MCP\Enterprise Solution\TunnerPlatform.V2.0\web\tests\sessions\sessions.spec.ts:95:116
+
+    Error Context: test-results\runs\sessions\sessions-sessions-Navigati-16e47--and-never-replays-the-POST\error-context.md
+
+  2 failed
+    tests\sessions\sessions.spec.ts:63:1 › Current session detail retains ordinary Account-menu sign-out; lost response offers a read, never a fresh retry 
+    tests\sessions\sessions.spec.ts:91:1 › Navigation while ordinary sign-out is in flight becomes check-only UNKNOWN and never replays the POST 
+  22 passed (30.3s)

@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-004-UI001-RV012",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-004-UI001",
+  "parent_revision_id": "P2-004-UI001-RV011",
+  "parent_milestone_revision_id": null,
+  "title": "Qualify the confirmed shared CI test correction without changing historical acceptance",
+  "revision_type": "CORRECTIVE",
+  "status": "CLOSED",
+  "reason": "A complete all-owner scan of the current CI repairs identifies this historical source owner. Use the existing eligible P1-RV001-001 implementation and exact already executed focused tests; preserve original closure, application behavior and production/release boundaries. No additional test framework or duplicate qualification is requested.",
+  "authority_refs": [
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [
+    "web/tests/contracts.test.tsx",
+    "governance/evidence/P1-RV001-001-CI-FIX-VALIDATION-20261118.json",
+    "governance/evidence/P2-004-UI001-RV012-VALIDATION.json",
+    "governance/reviews/REV-P2-004-UI001-RV012-full-stack-engineer.yaml",
+    "governance/reviews/REV-P2-004-UI001-RV012-tester-qa-engineer.yaml"
+  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "The exact owned changed test has actual committed-source passing qualification and independent technical review; preserve ordered migration/data assertions or all shared route/form assertions as applicable."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "full-stack-engineer",
+    "tester-qa-engineer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P2-004-UI001-RV012-VALIDATION.json"
+  ],
+  "git_state": {
+    "repository_changed": true,
+    "tested_commit_sha": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
+    "validated_commit_sha": "bd3739d3a2cca24b1152d7d08ab3517a6351a324",
+    "work_item_commit_shas": [
+      "e9ed840054263dc7a015fd2dbfcb7eb9782afe02",
+      "bd3739d3a2cca24b1152d7d08ab3517a6351a324"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/",
+      "docs/project/",
+      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/",
+      "%SystemDrive%/",
+      ".vscode/",
+      "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode/"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  },
+  "created_at": "2026-11-18T13:48:04.5224406+00:00",
+  "closed_at": "2026-11-18T19:20:45.524Z",
+  "product_acceptance_required": false
+}

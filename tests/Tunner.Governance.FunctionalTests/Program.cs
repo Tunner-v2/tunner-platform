@@ -6,312 +6,369 @@ using System.Text.Json.Nodes;
 using Tunner.Governance;
 
 var failures = new List<string>();
-var repositoryRoot = FindRepositoryRoot();
-var fixtureRoot = Directory.CreateTempSubdirectory("tunner-governance-fixture-");
+DirectoryInfo? fixtureRoot = null;
 
 try
 {
-    RunRevisionChecks(repositoryRoot, failures);
-    RunRevisionCommittedProofChecks(repositoryRoot, failures);
-    CreateFixture(repositoryRoot, fixtureRoot);
-    InitializeGit(fixtureRoot);
-
-    var explicitRoot = RepositoryRootResolver.Resolve(fixtureRoot);
-    Expect(explicitRoot.FullName == fixtureRoot.FullName, "Explicit repository-root resolution must return the marked fixture root.", failures);
-    var nestedRoot = Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "src", "nested"));
-    var originalCurrentDirectory = Directory.GetCurrentDirectory();
-    var originalEnvironmentRoot = Environment.GetEnvironmentVariable("TUNNER_REPO_ROOT");
-    try
+    if (args.Contains("--self-test-startup-failure", StringComparer.Ordinal))
+        throw new IOException("Controlled harness startup reporting check");
+    var repositoryRoot = FindRepositoryRoot();
+    fixtureRoot = Directory.CreateTempSubdirectory("tunner-governance-fixture-");
+    if (args.Contains("--self-test-failure-reporting", StringComparer.Ordinal))
+        throw new InvalidOperationException("Controlled harness failure reporting check");
+    if (args.Contains("--validation-source-only", StringComparer.Ordinal))
     {
-        Directory.SetCurrentDirectory(nestedRoot.FullName);
-        var nestedResolved = RepositoryRootResolver.Resolve().FullName;
-        var gitRoot = new DirectoryInfo(RunGitOutput(fixtureRoot, "rev-parse", "--show-toplevel")).FullName;
-        Expect(nestedResolved == gitRoot, "Nested-directory resolution must return the marked Git fixture root, including Windows short-path aliases.", failures);
-        Environment.SetEnvironmentVariable("TUNNER_REPO_ROOT", fixtureRoot.FullName);
-        Expect(RepositoryRootResolver.Resolve().FullName == fixtureRoot.FullName, "Environment repository-root resolution must return the marked fixture root.", failures);
+        RunValidationSourceReadinessChecks(repositoryRoot, failures);
     }
-    finally
+    else if (args.Contains("--revision-committed-proof-only", StringComparer.Ordinal))
     {
-        Environment.SetEnvironmentVariable("TUNNER_REPO_ROOT", originalEnvironmentRoot);
-        Directory.SetCurrentDirectory(originalCurrentDirectory);
+        RunRevisionCommittedProofChecks(repositoryRoot, failures);
     }
-    Expect(RepositoryRootResolver.ToLogicalPath(fixtureRoot, fixtureRoot.FullName) == ".", "Repository root itself must serialize as a logical path.", failures);
-    Expect(RepositoryRootResolver.ToLogicalPath(fixtureRoot, Path.Combine(fixtureRoot.FullName, "governance", "work-items")) == "governance/work-items", "Nested paths must serialize with canonical separators.", failures);
-    var outsidePathRejected = false;
-    try { RepositoryRootResolver.ToLogicalPath(fixtureRoot, fixtureRoot.Parent!.FullName); } catch (InvalidOperationException) { outsidePathRejected = true; }
-    Expect(outsidePathRejected, "Logical path serialization must reject paths outside the repository root.", failures);
-
-    var authority = AuthorityApplication.Verify(fixtureRoot);
-    Expect(authority.ExitCode == 0, "A complete authority fixture must verify.", failures);
-    var registeredPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
-    var pristineBytes = File.ReadAllBytes(registeredPath);
-    var mutatedBytes = pristineBytes.ToArray(); mutatedBytes[0] ^= 1;
-    File.WriteAllBytes(registeredPath, mutatedBytes);
-    Expect(AuthorityApplication.Verify(fixtureRoot).ExitCode != 0, "A single-byte registered artifact mutation must fail.", failures);
-    File.WriteAllBytes(registeredPath, pristineBytes);
-    var activePath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "amendments", "AMD-TEST", "AMD-TEST_fixture.md");
-    var activeBytes = File.ReadAllBytes(activePath);
-    var activeMutation = activeBytes.ToArray(); activeMutation[0] ^= 1;
-    File.WriteAllBytes(activePath, activeMutation);
-    Expect(AuthorityApplication.Verify(fixtureRoot).ExitCode != 0, "Active authority single-byte mutation must fail.", failures);
-    File.WriteAllBytes(activePath, activeBytes);
-    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "unrelated.txt"), "unrelated changed work");
-    Expect(AuthorityApplication.Verify(fixtureRoot).ExitCode == 0, "Unrelated mutation must cause no false authority drift.", failures);
-
-    var validation = GovernanceApplication.Validate(fixtureRoot);
-    Expect(validation.ExitCode == 0, "A complete fixture must validate.", failures);
-    WriteWorkItem(fixtureRoot, "TUN-REOPEN", "REOPENED", "[]");
-    var reopenPath = Path.Combine(fixtureRoot.FullName, "governance", "reopens", "REOPEN-TUN-REOPEN-001.yaml");
-    Directory.CreateDirectory(Path.GetDirectoryName(reopenPath)!);
-    File.WriteAllText(reopenPath, """
-schema_version: 1
-reopen_id: REOPEN-TUN-REOPEN-001
-work_item_id: TUN-REOPEN
-previous_release: null
-reason: Current acceptance lifecycle correction
-detected_environment: FIXTURE
-classification: GOVERNANCE_DEFECT
-severity: SEV-2
-new_acceptance_criteria: [Preserve prior evidence]
-affected_versions: []
-evidence: []
-created_at: 2026-10-05T00:00:00Z
-""");
-    Expect(GovernanceApplication.CheckTransition(fixtureRoot, "TUN-REOPEN", "IN_PROGRESS").ExitCode == 0, "Approved active acceptance REOPENED work must resume with preserved causation.", failures);
-    File.Delete(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-REOPEN.yaml"));
-    File.Delete(reopenPath);
-    WriteWorkItem(fixtureRoot, "TUN-CONTRACT", "CONTRACT_REQUIRED", "[]");
-    Expect(GovernanceApplication.Validate(fixtureRoot).ExitCode == 1, "A missing-authority blocker must be rejected without a recorded Authority Resolution Pass.", failures);
-    File.Delete(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-CONTRACT.yaml"));
-
-    var status = GovernanceApplication.Status(fixtureRoot);
-    Expect(status.ExitCode == 0, "Status must be available for a valid fixture.", failures);
-
-    var next = GovernanceApplication.Next(fixtureRoot);
-    Expect(next.ExitCode == 0, "Next must be available for a valid fixture.", failures);
-    var nextPayload = (NextPayload)next.Payload;
-    Expect(nextPayload.Items.Single(item => item.WorkItemId == "TUN-LOCAL").Actionable, "LOCAL_VALIDATED dependency must permit local work.", failures);
-    Expect(!nextPayload.Items.Single(item => item.WorkItemId == "TUN-MERGED").Actionable, "MERGED_TO_MAIN dependency must block the dependent work.", failures);
-    Expect(!nextPayload.Items.Single(item => item.WorkItemId == "TUN-CHAIN").Actionable, "Configured local unmerged-chain limit must block further dependent chaining.", failures);
-    Expect(nextPayload.HumanIntegrationActions.SingleOrDefault(item => item.WorkItemId == "TUN-MERGED" && item.PrerequisiteWorkItemId == "TUN-001") is not null, "Merged-main dependency must surface a separate human integration action.", failures);
-
-    var sourcesCurrent = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-09-30", 14);
-    Expect(sourcesCurrent.ExitCode == 0, "Current registered source evidence must pass.", failures);
-    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "source-evidence.json"), File.ReadAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "source-evidence.json")).Replace("\r\n", "\n", StringComparison.Ordinal), new UTF8Encoding(false));
-    var sourcesLineEndingNormalized = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-09-30", 14);
-    Expect(sourcesLineEndingNormalized.ExitCode == 0, "Source evidence must retain its registered hash after newline normalization.", failures);
-    var sourcesStale = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-10-20", 14);
-    Expect(sourcesStale.ExitCode == 1, "Source evidence outside the explicit freshness window must fail.", failures);
-    File.AppendAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "source-evidence.json"), " ");
-    var sourcesTampered = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-09-30", 14);
-    Expect(sourcesTampered.ExitCode == 1, "Changed source evidence must fail hash integrity.", failures);
-    var contextOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "current"));
-    var contextBuild = ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput);
-    Expect(contextBuild.ExitCode == 0, "Context build must generate a bounded fixture pack.", failures);
-    var contextPayload = (ContextBuildPayload)contextBuild.Payload;
-    Expect(contextPayload.Included.Any(item => item.Path == "docs/authority/current-authority.json"), "Context build must include the current authority summary.", failures);
-    Expect(contextPayload.Included.Any(item => item.Path == "docs/authority/amendments/AMD-TEST/AMD-TEST_fixture.md" && item.Reason == "active authority amendment"), "Context build must include each active amendment declared by the verified authority index.", failures);
-    var contextCurrent = ContextApplication.Verify(fixtureRoot, contextOutput);
-    Expect(contextCurrent.ExitCode == 0, "A newly generated context pack must verify as current.", failures);
-    var unselectedGovernancePath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-TRANSITION.yaml");
-    File.AppendAllText(unselectedGovernancePath, "\n# unselected authoritative state changed");
-    Expect(ContextApplication.Verify(fixtureRoot, contextOutput).ExitCode != 0, "Unselected authoritative governance changes must invalidate derived project memory.", failures);
-    Expect(ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput).ExitCode == 0 && ContextApplication.Verify(fixtureRoot, contextOutput).ExitCode == 0, "Context build must regenerate stale durable state deterministically.", failures);
-    var durableState = Path.Combine(fixtureRoot.FullName, "docs", "project", "CURRENT_STATE.md");
-    File.AppendAllText(durableState, "\nContradictory fabricated state");
-    Expect(ContextApplication.Verify(fixtureRoot, contextOutput).ExitCode != 0, "Contradictory derived memory must be detected.", failures);
-    ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput);
-    Expect(!File.ReadAllText(durableState).Contains("Contradictory fabricated state", StringComparison.Ordinal), "Regeneration must replace stale derived conclusions using governance.", failures);
-    File.AppendAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-001.yaml"), "\n# Fixture source changed");
-    var contextStale = ContextApplication.Verify(fixtureRoot, contextOutput);
-    Expect(contextStale.ExitCode == 1, "Context verify must report a changed included source as stale.", failures);
-    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "authority"), "fixture authority reference" + Environment.NewLine);
-    File.Copy(Path.Combine(repositoryRoot.FullName, "AGENTS.md"), Path.Combine(fixtureRoot.FullName, "AGENTS.md"), true);
-    var fixtureSkillDirectory = Path.Combine(fixtureRoot.FullName, ".agent", "skills", "governance-engineer");
-    Directory.CreateDirectory(fixtureSkillDirectory);
-    File.Copy(Path.Combine(repositoryRoot.FullName, ".agent", "skills", "governance-engineer", "SKILL.md"), Path.Combine(fixtureSkillDirectory, "SKILL.md"), true);
-    var fixtureSourceDirectory = Path.Combine(fixtureRoot.FullName, "src", "Tunner.Governance");
-    Directory.CreateDirectory(fixtureSourceDirectory);
-    File.Copy(Path.Combine(repositoryRoot.FullName, "src", "Tunner.Governance", "AdaptiveContextApplication.cs"), Path.Combine(fixtureSourceDirectory, "AdaptiveContextApplication.cs"), true);
-    var adaptiveCoreOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "adaptive-core"));
-    var adaptiveCore = AdaptiveContextApplication.Build(fixtureRoot, "TUN-001", adaptiveCoreOutput, new AdaptiveContextRequest("CORE", null, "FULL"));
-    Expect(adaptiveCore.ExitCode == 0 && ((ContextBuildPayload)adaptiveCore.Payload).Included.All(item => item.Reason is "repository entry contract" or "current authority summary" or "selected work item" or "explicit authority reference" or "activated role skill" or "historical milestone state"), "CORE context must retain only mandatory context for the fixture.", failures);
-    var adaptiveBudget = AdaptiveContextApplication.Build(fixtureRoot, "TUN-001", new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "adaptive-budget")), new AdaptiveContextRequest("TASK", 1, "REPOSITORY_READ"));
-    Expect(adaptiveBudget.ExitCode == 1 && ((ContextBuildPayload)adaptiveBudget.Payload).Outcome == "CONTEXT_BUDGET_INSUFFICIENT", "Context must fail closed when the token budget cannot contain mandatory authority.", failures);
-    var adaptiveEscalation = AdaptiveContextApplication.Escalate(fixtureRoot, "TUN-001", "TASK", "module dependency is missing");
-    Expect(adaptiveEscalation.ExitCode == 0 && ((AdaptiveEscalationPayload)adaptiveEscalation.Payload).NextMode == "EXPANDED", "Insufficient context must return controlled escalation instead of implicitly loading sources.", failures);
-    var adaptiveFullOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "adaptive-full"));
-    var adaptiveFull = AdaptiveContextApplication.Build(fixtureRoot, "TUN-001", adaptiveFullOutput, new AdaptiveContextRequest("FULL_AUDIT", null, "FULL"));
-    Expect(adaptiveFull.ExitCode == 0 && File.Exists(Path.Combine(fixtureRoot.FullName, "artifacts", "context-index", "index.json")), "FULL_AUDIT must create a disposable repository index rather than a prompt dump.", failures);
-    Expect(AdaptiveContextApplication.Verify(fixtureRoot, adaptiveFullOutput).ExitCode == 0, "Fresh FULL_AUDIT context must verify.", failures);
-    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "unrelated-context-source.txt"), "changed" + Environment.NewLine);
-    Expect(AdaptiveContextApplication.Verify(fixtureRoot, adaptiveFullOutput).ExitCode == 1, "FULL_AUDIT index must become stale when an indexed repository source changes.", failures);
-
-    foreach (var path in Directory.EnumerateFiles(fixtureRoot.FullName, "*", SearchOption.AllDirectories).Select(x => Path.GetRelativePath(fixtureRoot.FullName, x).Replace('\\', '/')).Where(x => !x.StartsWith(".git/", StringComparison.Ordinal) && !x.StartsWith("artifacts/", StringComparison.Ordinal)))
-        RunGit(fixtureRoot, "add", "--", path);
-    RunGit(fixtureRoot, "commit", "--quiet", "-m", "fixture pre-evidence state");
-    var evidenceInput = Path.Combine(fixtureRoot.FullName, "governance", "evidence", "evidence-input.json");
-    File.WriteAllText(evidenceInput, "{\"result\":\"pass\"}" + Environment.NewLine);
-    RunGit(fixtureRoot, "add", "governance/evidence/evidence-input.json");
-    RunGit(fixtureRoot, "commit", "--quiet", "-m", "fixture evidence input");
-    var firstManifestPath = new FileInfo(Path.Combine(fixtureRoot.FullName, "artifacts", "evidence", "first.json"));
-    var evidence = EvidenceApplication.Generate(
-        fixtureRoot,
-        "TUN-001",
-        firstManifestPath,
-        ["governance\\work-items\\TUN-001.yaml"],
-        ["governance/evidence/evidence-input.json"],
-        ["governance/evidence/evidence-input.json"],
-        ["governance/evidence/evidence-input.json"]);
-    Expect(evidence.ExitCode == 0, "Evidence generation must accept bounded local references.", failures);
-    var generatedManifest = JsonSerializer.Deserialize<EvidenceManifest>(File.ReadAllText(firstManifestPath.FullName));
-    Expect(generatedManifest is not null && generatedManifest.ScopeId == "TUN-001" && generatedManifest.CommitSha.Length == 40, "Evidence manifest must record exact work-item and Git identity.", failures);
-    Expect(generatedManifest is not null && generatedManifest.WorkingTreeState == "CLEAN" && generatedManifest.Builds.Count == 1 && generatedManifest.Tests.Count == 1 && generatedManifest.SecurityScans.Count == 1 && generatedManifest.Artifacts.Count == 1, "Evidence manifest must record all required evidence categories without duplicate content.", failures);
-    var overwriteEvidence = EvidenceApplication.Generate(fixtureRoot, "TUN-001", firstManifestPath, [], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"]);
-    Expect(overwriteEvidence.ExitCode == 2, "Evidence generation must reject an existing output path.", failures);
-    var secondManifestPath = new FileInfo(Path.Combine(fixtureRoot.FullName, "artifacts", "evidence", "second.json"));
-    var secondEvidence = EvidenceApplication.Generate(
-        fixtureRoot,
-        "TUN-001",
-        secondManifestPath,
-        [],
-        ["governance/evidence/evidence-input.json"],
-        ["governance/evidence/evidence-input.json"],
-        ["governance/evidence/evidence-input.json"]);
-    Expect(secondEvidence.ExitCode == 0 && File.ReadAllText(firstManifestPath.FullName) == File.ReadAllText(secondManifestPath.FullName), "Identical inputs must produce byte-identical manifests.", failures);
-    var escapedOutput = new FileInfo(Path.Combine(fixtureRoot.Parent!.FullName, "escaped-manifest.json"));
-    var escapedEvidence = EvidenceApplication.Generate(fixtureRoot, "TUN-001", escapedOutput, [], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"]);
-    Expect(escapedEvidence.ExitCode == 2 && !escapedOutput.Exists, "Evidence generation must reject output paths outside the repository.", failures);
-    var secretLikeFileName = string.Concat("gh", "p_", "abcdefghijklmnopqrstuvwxyz1234.txt");
-    var secretNamedInput = Path.Combine(fixtureRoot.FullName, "governance", "evidence", secretLikeFileName);
-    File.WriteAllText(secretNamedInput, "fixture" + Environment.NewLine);
-    var secretOutput = new FileInfo(Path.Combine(fixtureRoot.FullName, "artifacts", "evidence", "secret.json"));
-    var secretEvidence = EvidenceApplication.Generate(fixtureRoot, "TUN-001", secretOutput, [$"governance/evidence/{secretLikeFileName}"], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"]);
-    Expect(secretEvidence.ExitCode == 2 && !secretOutput.Exists, "Evidence generation must reject a manifest that would expose a secret-shaped value.", failures);
-    var gate = GovernanceApplication.CheckGate(fixtureRoot, "TUN-TRANSITION");
-    Expect(gate.ExitCode == 1, "Gate check must reject missing evidence and role-review evidence.", failures);
-
-    var transition = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-TRANSITION", "DONE");
-    Expect(transition.ExitCode == 1, "Lifecycle check must reject DRAFT directly to DONE.", failures);
-    var normalValidationTransition = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-001", "PRODUCT_ACCEPTANCE");
-    Expect(normalValidationTransition.ExitCode == 0, "Lifecycle check must retain the declared Product Acceptance path when no technical-only exception is recorded.", failures);
-    var normalValidationCompletion = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-001", "DONE");
-    Expect(normalValidationCompletion.ExitCode == 1, "Lifecycle check must not permit direct completion without the explicit technical-only exception.", failures);
-    var technicalOnlyCompletion = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-TECHNICAL", "DONE");
-    Expect(technicalOnlyCompletion.ExitCode == 0 && ((TransitionPayload)technicalOnlyCompletion.Payload).Reason.Contains("explicitly not required", StringComparison.Ordinal), "Lifecycle check must permit direct technical-only completion only when Product Acceptance is explicitly not required.", failures);
-
-    WriteWorkItem(fixtureRoot, "TUN-P1-COMMIT", "VALIDATION", "[]", false);
-    var p1CommitPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-P1-COMMIT.yaml");
-    File.WriteAllText(p1CommitPath, File.ReadAllText(p1CommitPath).Replace("milestone_id: MVP", "milestone_id: P1", StringComparison.Ordinal).Replace("git_state: {repository_changed: false, validated_commit_sha: null, tested_commit_sha: null, work_item_commit_shas: [], closure_commit_sha: null, remaining_uncommitted_paths: [], remaining_uncommitted_classification: NONE}", "", StringComparison.Ordinal));
-    var p1CandidateSha = PrepareCommittedFixture(fixtureRoot, "TUN-P1-COMMIT");
-    var p1CompletionWithoutState = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE");
-    Expect(p1CompletionWithoutState.ExitCode == 1 && ((TransitionPayload)p1CompletionWithoutState.Payload).Reason.Contains("committed-state readiness", StringComparison.Ordinal), "P1 completion must reject repository-changing work that lacks committed-state evidence.", failures);
-    File.AppendAllText(p1CommitPath, $"{Environment.NewLine}git_state:{Environment.NewLine}  repository_changed: true{Environment.NewLine}  validated_commit_sha: {p1CandidateSha}{Environment.NewLine}  tested_commit_sha: {p1CandidateSha}{Environment.NewLine}  work_item_commit_shas: [{p1CandidateSha}]{Environment.NewLine}  closure_commit_sha: null{Environment.NewLine}  remaining_uncommitted_paths: []{Environment.NewLine}  remaining_uncommitted_classification: NONE{Environment.NewLine}");
-    var p1CompletionWithState = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE");
-    if (p1CompletionWithState.ExitCode != 0) Console.Error.WriteLine(GovernanceApplication.Serialize(p1CompletionWithState));
-    Expect(p1CompletionWithState.ExitCode == 0, "P1 completion must accept a valid committed validation candidate while allowing a later metadata closure commit.", failures);
-    var p1ProofPath = Path.Combine(fixtureRoot.FullName, "governance", "evidence", "TUN-P1-COMMIT-proof.json");
-    var savedProof = File.ReadAllText(p1ProofPath);
-    File.Delete(p1ProofPath);
-    Expect(GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE").ExitCode != 0, "A resolvable SHA alone must not replace scope-bound owned-file evidence.", failures);
-    File.WriteAllText(p1ProofPath, savedProof);
-    var ownedPath = Path.Combine(fixtureRoot.FullName, "docs", "TUN-P1-COMMIT-behavior.txt");
-    File.AppendAllText(ownedPath, "changed after validation");
-    Expect(GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE").ExitCode != 0, "Ordinary work must reject owned behavior changed after its validated SHA.", failures);
-    File.WriteAllText(ownedPath, "fixture behavior");
-    var futureText = File.ReadAllText(p1CommitPath);
-    File.WriteAllText(p1CommitPath, futureText.Replace("milestone_id: P1", "milestone_id: P2", StringComparison.Ordinal));
-    Expect(GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE").ExitCode == 0, "Valid committed evidence applies consistently to a later milestone.", failures);
-    File.WriteAllText(p1CommitPath, futureText);
-
-    WriteWorkItem(fixtureRoot, "TUN-P1-UPSTREAM", "DONE", "[]");
-    WriteWorkItem(fixtureRoot, "TUN-P1-DOWNSTREAM", "READY", "[TUN-P1-UPSTREAM]");
-    var p1UpstreamPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-P1-UPSTREAM.yaml");
-    var p1DownstreamPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-P1-DOWNSTREAM.yaml");
-    File.WriteAllText(p1UpstreamPath, File.ReadAllText(p1UpstreamPath).Replace("milestone_id: MVP", "milestone_id: P1", StringComparison.Ordinal).Replace("git_state: {repository_changed: false, validated_commit_sha: null, tested_commit_sha: null, work_item_commit_shas: [], closure_commit_sha: null, remaining_uncommitted_paths: [], remaining_uncommitted_classification: NONE}", "", StringComparison.Ordinal));
-    File.WriteAllText(p1DownstreamPath, File.ReadAllText(p1DownstreamPath).Replace("milestone_id: MVP", "milestone_id: P1", StringComparison.Ordinal));
-    var p1DependencyCandidateSha = PrepareCommittedFixture(fixtureRoot, "TUN-P1-UPSTREAM");
-    Expect(((GatePayload)GovernanceApplication.CheckGate(fixtureRoot, "TUN-P1-UPSTREAM").Payload).Failures.Any(x => x.Contains("git_state is absent", StringComparison.Ordinal)), "Own-item gates must reject the same missing committed state as dependency gates.", failures);
-    var p1DownstreamBeforeEvidence = (NextPayload)GovernanceApplication.Next(fixtureRoot).Payload;
-    Expect(!p1DownstreamBeforeEvidence.Items.Single(item => item.WorkItemId == "TUN-P1-DOWNSTREAM").Actionable, "A P1 downstream item must remain ineligible while its DONE prerequisite lacks committed-state evidence.", failures);
-    File.AppendAllText(p1UpstreamPath, $"{Environment.NewLine}git_state:{Environment.NewLine}  repository_changed: true{Environment.NewLine}  validated_commit_sha: {p1DependencyCandidateSha}{Environment.NewLine}  tested_commit_sha: {p1DependencyCandidateSha}{Environment.NewLine}  work_item_commit_shas: [{p1DependencyCandidateSha}]{Environment.NewLine}  closure_commit_sha: null{Environment.NewLine}  remaining_uncommitted_paths: []{Environment.NewLine}  remaining_uncommitted_classification: NONE{Environment.NewLine}");
-    var p1DownstreamAfterEvidence = (NextPayload)GovernanceApplication.Next(fixtureRoot).Payload;
-    Expect(p1DownstreamAfterEvidence.Items.Single(item => item.WorkItemId == "TUN-P1-DOWNSTREAM").Actionable, "A P1 downstream item may become eligible when its DONE prerequisite has valid committed-state evidence.", failures);
-
-    var milestoneClose = GovernanceApplication.CheckMilestoneClose(fixtureRoot, "MVP");
-    RunGit(fixtureRoot, "add", ".");
-    RunGit(fixtureRoot, "commit", "-m", "Anchor synthetic milestone review fixture");
-    var snapshot = JsonSerializer.SerializeToNode(GovernanceApplication.MilestoneReviewSnapshot(fixtureRoot, "MVP").Payload)!;
-    var milestoneReviewPath = Path.Combine(fixtureRoot.FullName, "governance", "evidence", "MVP-MILESTONE-ROLE-REVIEWS.json");
-    File.WriteAllText(milestoneReviewPath, JsonSerializer.Serialize(new {
-        scope_type = "MILESTONE", scope_id = "MVP", status = "PASS",
-        reviewed_commit_sha = snapshot["ReviewedCommitSha"]!.GetValue<string>(),
-        reviewed_scope_sha256 = snapshot["ReviewedScopeSha256"]!.GetValue<string>(),
-        reviews = new[] { new { role = "auditor", conclusion = "PASS" } }
-    }));
-    Expect(!((MilestoneClosePayload)GovernanceApplication.CheckMilestoneClose(fixtureRoot, "MVP").Payload).Failures.Any(x => x.Contains("reviews lack current committed scope binding", StringComparison.Ordinal)), "Fresh milestone review binding is accepted independently of other unfinished work.", failures);
-    var bindingScope = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-001.yaml");
-    var savedBindingScope = File.ReadAllText(bindingScope);
-    File.AppendAllText(bindingScope, "\n# changed review scope\n");
-    Expect(((MilestoneClosePayload)GovernanceApplication.CheckMilestoneClose(fixtureRoot, "MVP").Payload).Failures.Any(x => x.Contains("reviews lack current committed scope binding", StringComparison.Ordinal)), "Changed milestone scope must invalidate old PASS reviews.", failures);
-    File.WriteAllText(bindingScope, savedBindingScope);
-    Expect(milestoneClose.ExitCode == 1 && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("work item is not DONE", StringComparison.Ordinal)) && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("milestone role-review evidence missing", StringComparison.Ordinal)), "Milestone close-check must refuse incomplete work and missing milestone reviews.", failures);
-
-    var milestoneTransition = GovernanceApplication.CheckMilestoneTransition(fixtureRoot, "MVP", "VALIDATION");
-    if (milestoneTransition.ExitCode != 0) Console.Error.WriteLine(GovernanceApplication.Serialize(milestoneTransition));
-    Expect(milestoneTransition.ExitCode == 0 && ((MilestoneTransitionPayload)milestoneTransition.Payload).Outcome == "ALLOWED", "Milestone lifecycle check must allow the next declared normal state.", failures);
-
-    var rolePolicyPath = Path.Combine(fixtureRoot.FullName, "governance", "policies", "role-activation-policy.yaml");
-    File.Copy(Path.Combine(repositoryRoot.FullName, "governance", "policies", "role-activation-policy.yaml"), rolePolicyPath, true);
-    WriteRoleMatrixWorkItem(fixtureRoot, "[full-stack-engineer, tester-qa-engineer, governance-engineer]");
-    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "TUN-P0-027-ROLE-REVIEWS.json"), "{\"schema_version\":1}" + Environment.NewLine);
-    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "role-matrix-ready.json"), "{\"result\":\"PASS\"}" + Environment.NewLine);
-    var roleMissing = GovernanceApplication.CheckGate(fixtureRoot, "TUN-P0-027");
-    Expect(roleMissing.ExitCode == 1 && ((GatePayload)roleMissing.Payload).Failures.Any(item => item.Contains("mandatory role is not activated: auditor", StringComparison.Ordinal)), "Gate must reject a calculated mandatory role omitted from activation.", failures);
-
-    WriteRoleMatrixWorkItem(fixtureRoot, "[full-stack-engineer, tester-qa-engineer, governance-engineer, auditor]");
-    foreach (var role in new[] { "full-stack-engineer", "tester-qa-engineer", "governance-engineer", "auditor" })
+    else if (args.Contains("--ui-evidence-only", StringComparer.Ordinal))
     {
-        WriteStructuredReview(fixtureRoot, role, "PASS", "[]");
+        RunGlobalUiEvidenceChecks(repositoryRoot, failures);
     }
+    else if (!args.Contains("--self-test-cleanup-failure", StringComparer.Ordinal))
+    {
+        RunHarnessFailureReportingCheck(failures);
+        RunGlobalUiEvidenceChecks(repositoryRoot, failures);
+        RunMilestoneRevisionReviewChecks(repositoryRoot, failures);
+        RunRevisionChecks(repositoryRoot, failures);
+        RunRevisionCommittedProofChecks(repositoryRoot, failures);
+        RunValidationSourceReadinessChecks(repositoryRoot, failures);
+        CreateFixture(repositoryRoot, fixtureRoot);
+        InitializeGit(fixtureRoot);
 
-    var roleReady = GovernanceApplication.CheckGate(fixtureRoot, "TUN-P0-027");
-    if (roleReady.ExitCode != 0) Console.Error.WriteLine(GovernanceApplication.Serialize(roleReady));
-    Expect(roleReady.ExitCode == 0, "Gate must accept complete passing structured reviews for every calculated role.", failures);
-    WriteStructuredReview(fixtureRoot, "auditor", "BLOCKED", "[audit evidence is incomplete]");
-    var roleBlocked = GovernanceApplication.CheckGate(fixtureRoot, "TUN-P0-027");
-    Expect(roleBlocked.ExitCode == 1 && ((GatePayload)roleBlocked.Payload).Failures.Any(item => item.Contains("mandatory role review did not pass: auditor", StringComparison.Ordinal)), "A blocking specialist review must block only its affected work-item gate.", failures);
+        var explicitRoot = RepositoryRootResolver.Resolve(fixtureRoot);
+        Expect(explicitRoot.FullName == fixtureRoot.FullName, "Explicit repository-root resolution must return the marked fixture root.", failures);
+        var nestedRoot = Directory.CreateDirectory(Path.Combine(fixtureRoot.FullName, "src", "nested"));
+        var originalCurrentDirectory = Directory.GetCurrentDirectory();
+        var originalEnvironmentRoot = Environment.GetEnvironmentVariable("TUNNER_REPO_ROOT");
+        try
+        {
+            Directory.SetCurrentDirectory(nestedRoot.FullName);
+            var nestedResolved = RepositoryRootResolver.Resolve().FullName;
+            var gitRoot = new DirectoryInfo(RunGitOutput(fixtureRoot, "rev-parse", "--show-toplevel")).FullName;
+            Expect(nestedResolved == gitRoot, "Nested-directory resolution must return the marked Git fixture root, including Windows short-path aliases.", failures);
+            Environment.SetEnvironmentVariable("TUNNER_REPO_ROOT", fixtureRoot.FullName);
+            Expect(RepositoryRootResolver.Resolve().FullName == fixtureRoot.FullName, "Environment repository-root resolution must return the marked fixture root.", failures);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("TUNNER_REPO_ROOT", originalEnvironmentRoot);
+            Directory.SetCurrentDirectory(originalCurrentDirectory);
+        }
+        Expect(RepositoryRootResolver.ToLogicalPath(fixtureRoot, fixtureRoot.FullName) == ".", "Repository root itself must serialize as a logical path.", failures);
+        Expect(RepositoryRootResolver.ToLogicalPath(fixtureRoot, Path.Combine(fixtureRoot.FullName, "governance", "work-items")) == "governance/work-items", "Nested paths must serialize with canonical separators.", failures);
+        var outsidePathRejected = false;
+        try { RepositoryRootResolver.ToLogicalPath(fixtureRoot, fixtureRoot.Parent!.FullName); } catch (InvalidOperationException) { outsidePathRejected = true; }
+        Expect(outsidePathRejected, "Logical path serialization must reject paths outside the repository root.", failures);
 
-    WriteOrchestratorWorkItem(fixtureRoot);
-    var orchestratorStart = OrchestratorApplication.Start(fixtureRoot, "TUN-ORCH");
-    Expect(orchestratorStart.ExitCode == 0 && ((OrchestratorPayload)orchestratorStart.Payload).Outcome == "ELIGIBLE", "Orchestrator must accept an eligible in-progress work item without mutating it.", failures);
-    var orchestratorRun = OrchestratorApplication.Run(fixtureRoot, "TUN-ORCH");
-    Expect(orchestratorRun.ExitCode == 0 && ((OrchestratorPayload)orchestratorRun.Payload).Outcome == "PLAN_READY", "Orchestrator run must return a plan instead of executing Product operations.", failures);
-    var orchestratorPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-ORCH.yaml");
-    File.WriteAllText(orchestratorPath, File.ReadAllText(orchestratorPath).Replace("status: IN_PROGRESS", "status: CODE_REVIEW"));
-    var orchestratorReviewState = OrchestratorApplication.Start(fixtureRoot, "TUN-ORCH");
-    Expect(orchestratorReviewState.ExitCode == 0, "Orchestrator must permit governed review-state validation work.", failures);
-    var orchestratorRefused = OrchestratorApplication.Start(fixtureRoot, "TUN-TRANSITION");
-    Expect(orchestratorRefused.ExitCode == 1 && ((OrchestratorPayload)orchestratorRefused.Payload).Outcome == "LIFECYCLE_REFUSED", "Orchestrator must refuse a non-ready lifecycle state.", failures);
-    var authorityMirrorPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
-    File.AppendAllText(authorityMirrorPath, "tampered");
-    var authorityTampered = AuthorityApplication.Verify(fixtureRoot);
-    Expect(authorityTampered.ExitCode == 1, "Authority verify must reject changed authority bytes.", failures);
-    var validationBlocked = GovernanceApplication.Validate(fixtureRoot);
-    Expect(validationBlocked.ExitCode == 1, "Governance validation must block when authority verification fails.", failures);
-    var nextBlocked = GovernanceApplication.Next(fixtureRoot);
-    Expect(nextBlocked.ExitCode == 1 && ((NextPayload)nextBlocked.Payload).Items.All(item => !item.Actionable), "Governance next must block execution when authority verification fails.", failures);
-    var gateBlocked = GovernanceApplication.CheckGate(fixtureRoot, "TUN-001");
-    Expect(gateBlocked.ExitCode == 1, "Governance gates must block when authority verification fails.", failures);
-    var contextBlocked = ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput);
-    Expect(contextBlocked.ExitCode == 1, "Context build must block when authority verification fails.", failures);
-    File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "malformed.yaml"), "schema_version: [");
-    var malformed = GovernanceApplication.Validate(fixtureRoot);
-    Expect(malformed.ExitCode == 1, "Validation must reject malformed YAML.", failures);
+        var authority = AuthorityApplication.Verify(fixtureRoot);
+        Expect(authority.ExitCode == 0, "A complete authority fixture must verify.", failures);
+        var registeredPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
+        var pristineBytes = File.ReadAllBytes(registeredPath);
+        var mutatedBytes = pristineBytes.ToArray(); mutatedBytes[0] ^= 1;
+        File.WriteAllBytes(registeredPath, mutatedBytes);
+        Expect(AuthorityApplication.Verify(fixtureRoot).ExitCode != 0, "A single-byte registered artifact mutation must fail.", failures);
+        File.WriteAllBytes(registeredPath, pristineBytes);
+        var activePath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "amendments", "AMD-TEST", "AMD-TEST_fixture.md");
+        var activeBytes = File.ReadAllBytes(activePath);
+        var activeMutation = activeBytes.ToArray(); activeMutation[0] ^= 1;
+        File.WriteAllBytes(activePath, activeMutation);
+        Expect(AuthorityApplication.Verify(fixtureRoot).ExitCode != 0, "Active authority single-byte mutation must fail.", failures);
+        File.WriteAllBytes(activePath, activeBytes);
+        File.WriteAllText(Path.Combine(fixtureRoot.FullName, "unrelated.txt"), "unrelated changed work");
+        Expect(AuthorityApplication.Verify(fixtureRoot).ExitCode == 0, "Unrelated mutation must cause no false authority drift.", failures);
+
+        var validation = GovernanceApplication.Validate(fixtureRoot);
+        Expect(validation.ExitCode == 0, "A complete fixture must validate.", failures);
+        WriteWorkItem(fixtureRoot, "TUN-REOPEN", "REOPENED", "[]");
+        var reopenPath = Path.Combine(fixtureRoot.FullName, "governance", "reopens", "REOPEN-TUN-REOPEN-001.yaml");
+        Directory.CreateDirectory(Path.GetDirectoryName(reopenPath)!);
+        File.WriteAllText(reopenPath, """
+    schema_version: 1
+    reopen_id: REOPEN-TUN-REOPEN-001
+    work_item_id: TUN-REOPEN
+    previous_release: null
+    reason: Current acceptance lifecycle correction
+    detected_environment: FIXTURE
+    classification: GOVERNANCE_DEFECT
+    severity: SEV-2
+    new_acceptance_criteria: [Preserve prior evidence]
+    affected_versions: []
+    evidence: []
+    created_at: 2026-10-05T00:00:00Z
+    """);
+        Expect(GovernanceApplication.CheckTransition(fixtureRoot, "TUN-REOPEN", "IN_PROGRESS").ExitCode == 0, "Approved active acceptance REOPENED work must resume with preserved causation.", failures);
+        File.Delete(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-REOPEN.yaml"));
+        File.Delete(reopenPath);
+        WriteWorkItem(fixtureRoot, "TUN-CONTRACT", "CONTRACT_REQUIRED", "[]");
+        Expect(GovernanceApplication.Validate(fixtureRoot).ExitCode == 1, "A missing-authority blocker must be rejected without a recorded Authority Resolution Pass.", failures);
+        File.Delete(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-CONTRACT.yaml"));
+
+        var status = GovernanceApplication.Status(fixtureRoot);
+        Expect(status.ExitCode == 0, "Status must be available for a valid fixture.", failures);
+
+        var next = GovernanceApplication.Next(fixtureRoot);
+        Expect(next.ExitCode == 0, "Next must be available for a valid fixture.", failures);
+        var nextPayload = (NextPayload)next.Payload;
+        ExpectScopedNextMatches(fixtureRoot, next, failures);
+        Expect(nextPayload.Items.Single(item => item.WorkItemId == "TUN-LOCAL").Actionable, "LOCAL_VALIDATED dependency must permit local work.", failures);
+        Expect(!nextPayload.Items.Single(item => item.WorkItemId == "TUN-MERGED").Actionable, "MERGED_TO_MAIN dependency must block the dependent work.", failures);
+        Expect(!nextPayload.Items.Single(item => item.WorkItemId == "TUN-CHAIN").Actionable, "Configured local unmerged-chain limit must block further dependent chaining.", failures);
+        Expect(nextPayload.HumanIntegrationActions.SingleOrDefault(item => item.WorkItemId == "TUN-MERGED" && item.PrerequisiteWorkItemId == "TUN-001") is not null, "Merged-main dependency must surface a separate human integration action.", failures);
+
+        var sourcesCurrent = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-09-30", 14);
+        Expect(sourcesCurrent.ExitCode == 0, "Current registered source evidence must pass.", failures);
+        File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "source-evidence.json"), File.ReadAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "source-evidence.json")).Replace("\r\n", "\n", StringComparison.Ordinal), new UTF8Encoding(false));
+        var sourcesLineEndingNormalized = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-09-30", 14);
+        Expect(sourcesLineEndingNormalized.ExitCode == 0, "Source evidence must retain its registered hash after newline normalization.", failures);
+        var sourcesStale = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-10-20", 14);
+        Expect(sourcesStale.ExitCode == 1, "Source evidence outside the explicit freshness window must fail.", failures);
+        File.AppendAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "source-evidence.json"), " ");
+        var sourcesTampered = SourceRegistryApplication.Check(fixtureRoot, "TUN-001", "2026-09-30", 14);
+        Expect(sourcesTampered.ExitCode == 1, "Changed source evidence must fail hash integrity.", failures);
+        var contextOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "current"));
+        var contextBuild = ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput);
+        Expect(contextBuild.ExitCode == 0, "Context build must generate a bounded fixture pack.", failures);
+        var contextPayload = (ContextBuildPayload)contextBuild.Payload;
+        Expect(contextPayload.Included.Any(item => item.Path == "docs/authority/current-authority.json"), "Context build must include the current authority summary.", failures);
+        Expect(contextPayload.Included.Any(item => item.Path == "docs/authority/amendments/AMD-TEST/AMD-TEST_fixture.md" && item.Reason == "active authority amendment"), "Context build must include each active amendment declared by the verified authority index.", failures);
+        var contextCurrent = ContextApplication.Verify(fixtureRoot, contextOutput);
+        Expect(contextCurrent.ExitCode == 0, "A newly generated context pack must verify as current.", failures);
+        var unselectedGovernancePath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-TRANSITION.yaml");
+        File.AppendAllText(unselectedGovernancePath, "\n# unselected authoritative state changed");
+        Expect(ContextApplication.Verify(fixtureRoot, contextOutput).ExitCode != 0, "Unselected authoritative governance changes must invalidate derived project memory.", failures);
+        Expect(ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput).ExitCode == 0 && ContextApplication.Verify(fixtureRoot, contextOutput).ExitCode == 0, "Context build must regenerate stale durable state deterministically.", failures);
+        var durableState = Path.Combine(fixtureRoot.FullName, "docs", "project", "CURRENT_STATE.md");
+        File.AppendAllText(durableState, "\nContradictory fabricated state");
+        Expect(ContextApplication.Verify(fixtureRoot, contextOutput).ExitCode != 0, "Contradictory derived memory must be detected.", failures);
+        ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput);
+        Expect(!File.ReadAllText(durableState).Contains("Contradictory fabricated state", StringComparison.Ordinal), "Regeneration must replace stale derived conclusions using governance.", failures);
+        File.AppendAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-001.yaml"), "\n# Fixture source changed");
+        var contextStale = ContextApplication.Verify(fixtureRoot, contextOutput);
+        Expect(contextStale.ExitCode == 1, "Context verify must report a changed included source as stale.", failures);
+        File.WriteAllText(Path.Combine(fixtureRoot.FullName, "authority"), "fixture authority reference" + Environment.NewLine);
+        File.Copy(Path.Combine(repositoryRoot.FullName, "AGENTS.md"), Path.Combine(fixtureRoot.FullName, "AGENTS.md"), true);
+        var fixtureSkillDirectory = Path.Combine(fixtureRoot.FullName, ".agent", "skills", "governance-engineer");
+        Directory.CreateDirectory(fixtureSkillDirectory);
+        File.Copy(Path.Combine(repositoryRoot.FullName, ".agent", "skills", "governance-engineer", "SKILL.md"), Path.Combine(fixtureSkillDirectory, "SKILL.md"), true);
+        var fixtureSourceDirectory = Path.Combine(fixtureRoot.FullName, "src", "Tunner.Governance");
+        Directory.CreateDirectory(fixtureSourceDirectory);
+        File.Copy(Path.Combine(repositoryRoot.FullName, "src", "Tunner.Governance", "AdaptiveContextApplication.cs"), Path.Combine(fixtureSourceDirectory, "AdaptiveContextApplication.cs"), true);
+        var adaptiveCoreOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "adaptive-core"));
+        var adaptiveCore = AdaptiveContextApplication.Build(fixtureRoot, "TUN-001", adaptiveCoreOutput, new AdaptiveContextRequest("CORE", null, "FULL"));
+        Expect(adaptiveCore.ExitCode == 0 && ((ContextBuildPayload)adaptiveCore.Payload).Included.All(item => item.Reason is "repository entry contract" or "current authority summary" or "selected work item" or "explicit authority reference" or "activated role skill" or "historical milestone state"), "CORE context must retain only mandatory context for the fixture.", failures);
+        var adaptiveBudget = AdaptiveContextApplication.Build(fixtureRoot, "TUN-001", new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "adaptive-budget")), new AdaptiveContextRequest("TASK", 1, "REPOSITORY_READ"));
+        Expect(adaptiveBudget.ExitCode == 1 && ((ContextBuildPayload)adaptiveBudget.Payload).Outcome == "CONTEXT_BUDGET_INSUFFICIENT", "Context must fail closed when the token budget cannot contain mandatory authority.", failures);
+        var adaptiveEscalation = AdaptiveContextApplication.Escalate(fixtureRoot, "TUN-001", "TASK", "module dependency is missing");
+        Expect(adaptiveEscalation.ExitCode == 0 && ((AdaptiveEscalationPayload)adaptiveEscalation.Payload).NextMode == "EXPANDED", "Insufficient context must return controlled escalation instead of implicitly loading sources.", failures);
+        var adaptiveFullOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "docs", "context", "adaptive-full"));
+        var adaptiveFull = AdaptiveContextApplication.Build(fixtureRoot, "TUN-001", adaptiveFullOutput, new AdaptiveContextRequest("FULL_AUDIT", null, "FULL"));
+        Expect(adaptiveFull.ExitCode == 0 && File.Exists(Path.Combine(fixtureRoot.FullName, "artifacts", "context-index", "index.json")), "FULL_AUDIT must create a disposable repository index rather than a prompt dump.", failures);
+        Expect(AdaptiveContextApplication.Verify(fixtureRoot, adaptiveFullOutput).ExitCode == 0, "Fresh FULL_AUDIT context must verify.", failures);
+        File.WriteAllText(Path.Combine(fixtureRoot.FullName, "unrelated-context-source.txt"), "changed" + Environment.NewLine);
+        Expect(AdaptiveContextApplication.Verify(fixtureRoot, adaptiveFullOutput).ExitCode == 1, "FULL_AUDIT index must become stale when an indexed repository source changes.", failures);
+
+        foreach (var path in Directory.EnumerateFiles(fixtureRoot.FullName, "*", SearchOption.AllDirectories).Select(x => Path.GetRelativePath(fixtureRoot.FullName, x).Replace('\\', '/')).Where(x => !x.StartsWith(".git/", StringComparison.Ordinal) && !x.StartsWith("artifacts/", StringComparison.Ordinal)))
+            RunGit(fixtureRoot, "add", "--", path);
+        RunGit(fixtureRoot, "commit", "--quiet", "-m", "fixture pre-evidence state");
+        var evidenceInput = Path.Combine(fixtureRoot.FullName, "governance", "evidence", "evidence-input.json");
+        File.WriteAllText(evidenceInput, "{\"result\":\"pass\"}" + Environment.NewLine);
+        RunGit(fixtureRoot, "add", "governance/evidence/evidence-input.json");
+        RunGit(fixtureRoot, "commit", "--quiet", "-m", "fixture evidence input");
+        var firstManifestPath = new FileInfo(Path.Combine(fixtureRoot.FullName, "artifacts", "evidence", "first.json"));
+        var evidence = EvidenceApplication.Generate(
+            fixtureRoot,
+            "TUN-001",
+            firstManifestPath,
+            ["governance\\work-items\\TUN-001.yaml"],
+            ["governance/evidence/evidence-input.json"],
+            ["governance/evidence/evidence-input.json"],
+            ["governance/evidence/evidence-input.json"]);
+        Expect(evidence.ExitCode == 0, "Evidence generation must accept bounded local references.", failures);
+        var generatedManifest = JsonSerializer.Deserialize<EvidenceManifest>(File.ReadAllText(firstManifestPath.FullName));
+        Expect(generatedManifest is not null && generatedManifest.ScopeId == "TUN-001" && generatedManifest.CommitSha.Length == 40, "Evidence manifest must record exact work-item and Git identity.", failures);
+        Expect(generatedManifest is not null && generatedManifest.WorkingTreeState == "CLEAN" && generatedManifest.Builds.Count == 1 && generatedManifest.Tests.Count == 1 && generatedManifest.SecurityScans.Count == 1 && generatedManifest.Artifacts.Count == 1, "Evidence manifest must record all required evidence categories without duplicate content.", failures);
+        var overwriteEvidence = EvidenceApplication.Generate(fixtureRoot, "TUN-001", firstManifestPath, [], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"]);
+        Expect(overwriteEvidence.ExitCode == 2, "Evidence generation must reject an existing output path.", failures);
+        var secondManifestPath = new FileInfo(Path.Combine(fixtureRoot.FullName, "artifacts", "evidence", "second.json"));
+        var secondEvidence = EvidenceApplication.Generate(
+            fixtureRoot,
+            "TUN-001",
+            secondManifestPath,
+            [],
+            ["governance/evidence/evidence-input.json"],
+            ["governance/evidence/evidence-input.json"],
+            ["governance/evidence/evidence-input.json"]);
+        Expect(secondEvidence.ExitCode == 0 && File.ReadAllText(firstManifestPath.FullName) == File.ReadAllText(secondManifestPath.FullName), "Identical inputs must produce byte-identical manifests.", failures);
+        var escapedOutput = new FileInfo(Path.Combine(fixtureRoot.Parent!.FullName, "escaped-manifest.json"));
+        var escapedEvidence = EvidenceApplication.Generate(fixtureRoot, "TUN-001", escapedOutput, [], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"]);
+        Expect(escapedEvidence.ExitCode == 2 && !escapedOutput.Exists, "Evidence generation must reject output paths outside the repository.", failures);
+        var secretLikeFileName = string.Concat("gh", "p_", "abcdefghijklmnopqrstuvwxyz1234.txt");
+        var secretNamedInput = Path.Combine(fixtureRoot.FullName, "governance", "evidence", secretLikeFileName);
+        File.WriteAllText(secretNamedInput, "fixture" + Environment.NewLine);
+        var secretOutput = new FileInfo(Path.Combine(fixtureRoot.FullName, "artifacts", "evidence", "secret.json"));
+        var secretEvidence = EvidenceApplication.Generate(fixtureRoot, "TUN-001", secretOutput, [$"governance/evidence/{secretLikeFileName}"], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"], ["governance/evidence/evidence-input.json"]);
+        Expect(secretEvidence.ExitCode == 2 && !secretOutput.Exists, "Evidence generation must reject a manifest that would expose a secret-shaped value.", failures);
+        var gate = GovernanceApplication.CheckGate(fixtureRoot, "TUN-TRANSITION");
+        Expect(gate.ExitCode == 1, "Gate check must reject missing evidence and role-review evidence.", failures);
+
+        var transition = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-TRANSITION", "DONE");
+        Expect(transition.ExitCode == 1, "Lifecycle check must reject DRAFT directly to DONE.", failures);
+        var normalValidationTransition = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-001", "PRODUCT_ACCEPTANCE");
+        Expect(normalValidationTransition.ExitCode == 0, "Lifecycle check must retain the declared Product Acceptance path when no technical-only exception is recorded.", failures);
+        var normalValidationCompletion = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-001", "DONE");
+        Expect(normalValidationCompletion.ExitCode == 1, "Lifecycle check must not permit direct completion without the explicit technical-only exception.", failures);
+        var technicalOnlyCompletion = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-TECHNICAL", "DONE");
+        Expect(technicalOnlyCompletion.ExitCode == 0 && ((TransitionPayload)technicalOnlyCompletion.Payload).Reason.Contains("explicitly not required", StringComparison.Ordinal), "Lifecycle check must permit direct technical-only completion only when Product Acceptance is explicitly not required.", failures);
+
+        WriteWorkItem(fixtureRoot, "TUN-P1-COMMIT", "VALIDATION", "[]", false);
+        var p1CommitPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-P1-COMMIT.yaml");
+        File.WriteAllText(p1CommitPath, File.ReadAllText(p1CommitPath).Replace("milestone_id: MVP", "milestone_id: P1", StringComparison.Ordinal).Replace("git_state: {repository_changed: false, validated_commit_sha: null, tested_commit_sha: null, work_item_commit_shas: [], closure_commit_sha: null, remaining_uncommitted_paths: [], remaining_uncommitted_classification: NONE}", "", StringComparison.Ordinal));
+        var p1CandidateSha = PrepareCommittedFixture(fixtureRoot, "TUN-P1-COMMIT");
+        var p1CompletionWithoutState = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE");
+        Expect(p1CompletionWithoutState.ExitCode == 1 && ((TransitionPayload)p1CompletionWithoutState.Payload).Reason.Contains("committed-state readiness", StringComparison.Ordinal), "P1 completion must reject repository-changing work that lacks committed-state evidence.", failures);
+        File.AppendAllText(p1CommitPath, $"{Environment.NewLine}git_state:{Environment.NewLine}  repository_changed: true{Environment.NewLine}  validated_commit_sha: {p1CandidateSha}{Environment.NewLine}  tested_commit_sha: {p1CandidateSha}{Environment.NewLine}  work_item_commit_shas: [{p1CandidateSha}]{Environment.NewLine}  closure_commit_sha: null{Environment.NewLine}  remaining_uncommitted_paths: []{Environment.NewLine}  remaining_uncommitted_classification: NONE{Environment.NewLine}");
+        var p1CompletionWithState = GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE");
+        if (p1CompletionWithState.ExitCode != 0) Console.Error.WriteLine(GovernanceApplication.Serialize(p1CompletionWithState));
+        Expect(p1CompletionWithState.ExitCode == 0, "P1 completion must accept a valid committed validation candidate while allowing a later metadata closure commit.", failures);
+        var p1ProofPath = Path.Combine(fixtureRoot.FullName, "governance", "evidence", "TUN-P1-COMMIT-proof.json");
+        var savedProof = File.ReadAllText(p1ProofPath);
+        File.Delete(p1ProofPath);
+        Expect(GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE").ExitCode != 0, "A resolvable SHA alone must not replace scope-bound owned-file evidence.", failures);
+        File.WriteAllText(p1ProofPath, savedProof);
+        var ownedPath = Path.Combine(fixtureRoot.FullName, "docs", "TUN-P1-COMMIT-behavior.txt");
+        File.AppendAllText(ownedPath, "changed after validation");
+        Expect(GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE").ExitCode != 0, "Ordinary work must reject owned behavior changed after its validated SHA.", failures);
+        File.WriteAllText(ownedPath, "fixture behavior");
+        var futureText = File.ReadAllText(p1CommitPath);
+        File.WriteAllText(p1CommitPath, futureText.Replace("milestone_id: P1", "milestone_id: P2", StringComparison.Ordinal));
+        Expect(GovernanceApplication.CheckTransition(fixtureRoot, "TUN-P1-COMMIT", "DONE").ExitCode == 0, "Valid committed evidence applies consistently to a later milestone.", failures);
+        File.WriteAllText(p1CommitPath, futureText);
+
+        WriteWorkItem(fixtureRoot, "TUN-P1-UPSTREAM", "DONE", "[]");
+        WriteWorkItem(fixtureRoot, "TUN-P1-DOWNSTREAM", "READY", "[TUN-P1-UPSTREAM]");
+        var p1UpstreamPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-P1-UPSTREAM.yaml");
+        var p1DownstreamPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-P1-DOWNSTREAM.yaml");
+        File.WriteAllText(p1UpstreamPath, File.ReadAllText(p1UpstreamPath).Replace("milestone_id: MVP", "milestone_id: P1", StringComparison.Ordinal).Replace("git_state: {repository_changed: false, validated_commit_sha: null, tested_commit_sha: null, work_item_commit_shas: [], closure_commit_sha: null, remaining_uncommitted_paths: [], remaining_uncommitted_classification: NONE}", "", StringComparison.Ordinal));
+        File.WriteAllText(p1DownstreamPath, File.ReadAllText(p1DownstreamPath).Replace("milestone_id: MVP", "milestone_id: P1", StringComparison.Ordinal));
+        var p1DependencyCandidateSha = PrepareCommittedFixture(fixtureRoot, "TUN-P1-UPSTREAM");
+        Expect(((GatePayload)GovernanceApplication.CheckGate(fixtureRoot, "TUN-P1-UPSTREAM").Payload).Failures.Any(x => x.Contains("git_state is absent", StringComparison.Ordinal)), "Own-item gates must reject the same missing committed state as dependency gates.", failures);
+        var p1DownstreamBeforeEvidence = (NextPayload)GovernanceApplication.Next(fixtureRoot).Payload;
+        Expect(!p1DownstreamBeforeEvidence.Items.Single(item => item.WorkItemId == "TUN-P1-DOWNSTREAM").Actionable, "A P1 downstream item must remain ineligible while its DONE prerequisite lacks committed-state evidence.", failures);
+        File.AppendAllText(p1UpstreamPath, $"{Environment.NewLine}git_state:{Environment.NewLine}  repository_changed: true{Environment.NewLine}  validated_commit_sha: {p1DependencyCandidateSha}{Environment.NewLine}  tested_commit_sha: {p1DependencyCandidateSha}{Environment.NewLine}  work_item_commit_shas: [{p1DependencyCandidateSha}]{Environment.NewLine}  closure_commit_sha: null{Environment.NewLine}  remaining_uncommitted_paths: []{Environment.NewLine}  remaining_uncommitted_classification: NONE{Environment.NewLine}");
+        var p1DownstreamAfterEvidence = (NextPayload)GovernanceApplication.Next(fixtureRoot).Payload;
+        Expect(p1DownstreamAfterEvidence.Items.Single(item => item.WorkItemId == "TUN-P1-DOWNSTREAM").Actionable, "A P1 downstream item may become eligible when its DONE prerequisite has valid committed-state evidence.", failures);
+
+        var milestoneClose = GovernanceApplication.CheckMilestoneClose(fixtureRoot, "MVP");
+        RunGit(fixtureRoot, "add", ".");
+        RunGit(fixtureRoot, "commit", "-m", "Anchor synthetic milestone review fixture");
+        var snapshot = JsonSerializer.SerializeToNode(GovernanceApplication.MilestoneReviewSnapshot(fixtureRoot, "MVP").Payload)!;
+        var milestoneReviewPath = Path.Combine(fixtureRoot.FullName, "governance", "evidence", "MVP-MILESTONE-ROLE-REVIEWS.json");
+        File.WriteAllText(milestoneReviewPath, JsonSerializer.Serialize(new {
+            scope_type = "MILESTONE", scope_id = "MVP", status = "PASS",
+            reviewed_commit_sha = snapshot["ReviewedCommitSha"]!.GetValue<string>(),
+            reviewed_scope_sha256 = snapshot["ReviewedScopeSha256"]!.GetValue<string>(),
+            reviews = new[] { new { role = "auditor", conclusion = "PASS" } }
+        }));
+        Expect(!((MilestoneClosePayload)GovernanceApplication.CheckMilestoneClose(fixtureRoot, "MVP").Payload).Failures.Any(x => x.Contains("reviews lack current committed scope binding", StringComparison.Ordinal)), "Fresh milestone review binding is accepted independently of other unfinished work.", failures);
+        var bindingScope = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-001.yaml");
+        var savedBindingScope = File.ReadAllText(bindingScope);
+        File.AppendAllText(bindingScope, "\n# changed review scope\n");
+        Expect(((MilestoneClosePayload)GovernanceApplication.CheckMilestoneClose(fixtureRoot, "MVP").Payload).Failures.Any(x => x.Contains("reviews lack current committed scope binding", StringComparison.Ordinal)), "Changed milestone scope must invalidate old PASS reviews.", failures);
+        File.WriteAllText(bindingScope, savedBindingScope);
+        Expect(milestoneClose.ExitCode == 1 && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("work item is not DONE", StringComparison.Ordinal)) && ((MilestoneClosePayload)milestoneClose.Payload).Failures.Any(item => item.Contains("milestone role-review evidence missing", StringComparison.Ordinal)), "Milestone close-check must refuse incomplete work and missing milestone reviews.", failures);
+
+        var milestoneTransition = GovernanceApplication.CheckMilestoneTransition(fixtureRoot, "MVP", "VALIDATION");
+        if (milestoneTransition.ExitCode != 0) Console.Error.WriteLine(GovernanceApplication.Serialize(milestoneTransition));
+        Expect(milestoneTransition.ExitCode == 0 && ((MilestoneTransitionPayload)milestoneTransition.Payload).Outcome == "ALLOWED", "Milestone lifecycle check must allow the next declared normal state.", failures);
+
+        var rolePolicyPath = Path.Combine(fixtureRoot.FullName, "governance", "policies", "role-activation-policy.yaml");
+        File.Copy(Path.Combine(repositoryRoot.FullName, "governance", "policies", "role-activation-policy.yaml"), rolePolicyPath, true);
+        WriteRoleMatrixWorkItem(fixtureRoot, "[full-stack-engineer, tester-qa-engineer, governance-engineer]");
+        File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "TUN-P0-027-ROLE-REVIEWS.json"), "{\"schema_version\":1}" + Environment.NewLine);
+        File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "evidence", "role-matrix-ready.json"), "{\"result\":\"PASS\"}" + Environment.NewLine);
+        var roleMissing = GovernanceApplication.CheckGate(fixtureRoot, "TUN-P0-027");
+        Expect(roleMissing.ExitCode == 1 && ((GatePayload)roleMissing.Payload).Failures.Any(item => item.Contains("mandatory role is not activated: auditor", StringComparison.Ordinal)), "Gate must reject a calculated mandatory role omitted from activation.", failures);
+
+        WriteRoleMatrixWorkItem(fixtureRoot, "[full-stack-engineer, tester-qa-engineer, governance-engineer, auditor]");
+        foreach (var role in new[] { "full-stack-engineer", "tester-qa-engineer", "governance-engineer", "auditor" })
+        {
+            WriteStructuredReview(fixtureRoot, role, "PASS", "[]");
+        }
+
+        var roleReady = GovernanceApplication.CheckGate(fixtureRoot, "TUN-P0-027");
+        if (roleReady.ExitCode != 0) Console.Error.WriteLine(GovernanceApplication.Serialize(roleReady));
+        Expect(roleReady.ExitCode == 0, "Gate must accept complete passing structured reviews for every calculated role.", failures);
+        WriteStructuredReview(fixtureRoot, "auditor", "BLOCKED", "[audit evidence is incomplete]");
+        var roleBlocked = GovernanceApplication.CheckGate(fixtureRoot, "TUN-P0-027");
+        Expect(roleBlocked.ExitCode == 1 && ((GatePayload)roleBlocked.Payload).Failures.Any(item => item.Contains("mandatory role review did not pass: auditor", StringComparison.Ordinal)), "A blocking specialist review must block only its affected work-item gate.", failures);
+
+        WriteOrchestratorWorkItem(fixtureRoot);
+        var globalOrchestratorNext = GovernanceApplication.Next(fixtureRoot);
+        ExpectScopedNextMatches(fixtureRoot, globalOrchestratorNext, failures);
+        var expectedOrchestratorNext = ((NextPayload)globalOrchestratorNext.Payload).Items.Single(item => item.WorkItemId == "TUN-ORCH");
+        var scopedContextOutput = new DirectoryInfo(Path.Combine(fixtureRoot.FullName, "artifacts", "scoped-orchestrator-context"));
+        var scopedContext = ContextApplication.Build(fixtureRoot, "TUN-ORCH", scopedContextOutput);
+        Expect(scopedContext.ExitCode == 0 && File.ReadAllText(Path.Combine(scopedContextOutput.FullName, "project", "CURRENT_STATE.md"))
+            .Contains("Exact next governed action: TUN-ORCH: " + expectedOrchestratorNext.Reason, StringComparison.Ordinal),
+            "Bounded context must retain the exact governed recommendation for an eligible selected scope.", failures);
+        var unknownScoped = GovernanceApplication.Next(fixtureRoot, "TUN-NOT-PRESENT");
+        Expect(unknownScoped.ExitCode != 0 && ((NextPayload)unknownScoped.Payload).Items.Count == 0, "Unknown scopes must not broaden to global selection.", failures);
+        var blankScopedRefused = false;
+        try { _ = GovernanceApplication.Next(fixtureRoot, " "); }
+        catch (ArgumentException) { blankScopedRefused = true; }
+        Expect(blankScopedRefused, "Blank scoped admission must be refused rather than selecting global work.", failures);
+        var orchestratorStart = OrchestratorApplication.Start(fixtureRoot, "TUN-ORCH");
+        Expect(orchestratorStart.ExitCode == 0 && ((OrchestratorPayload)orchestratorStart.Payload).Outcome == "ELIGIBLE", "Orchestrator must accept an eligible in-progress work item without mutating it.", failures);
+        var orchestratorRun = OrchestratorApplication.Run(fixtureRoot, "TUN-ORCH");
+        Expect(orchestratorRun.ExitCode == 0 && ((OrchestratorPayload)orchestratorRun.Payload).Outcome == "PLAN_READY", "Orchestrator run must return a plan instead of executing Product operations.", failures);
+        var orchestratorPath = Path.Combine(fixtureRoot.FullName, "governance", "work-items", "TUN-ORCH.yaml");
+        File.WriteAllText(orchestratorPath, File.ReadAllText(orchestratorPath).Replace("status: IN_PROGRESS", "status: CODE_REVIEW"));
+        var orchestratorReviewState = OrchestratorApplication.Start(fixtureRoot, "TUN-ORCH");
+        Expect(orchestratorReviewState.ExitCode == 0, "Orchestrator must permit governed review-state validation work.", failures);
+        var orchestratorRefused = OrchestratorApplication.Start(fixtureRoot, "TUN-TRANSITION");
+        Expect(orchestratorRefused.ExitCode == 1 && ((OrchestratorPayload)orchestratorRefused.Payload).Outcome == "LIFECYCLE_REFUSED", "Orchestrator must refuse a non-ready lifecycle state.", failures);
+        var authorityMirrorPath = Path.Combine(fixtureRoot.FullName, "docs", "authority", "mirror.txt");
+        var scopedAuthorityOriginal = File.ReadAllBytes(authorityMirrorPath);
+        File.AppendAllText(authorityMirrorPath, "tampered");
+        var authorityTampered = AuthorityApplication.Verify(fixtureRoot);
+        Expect(authorityTampered.ExitCode == 1, "Authority verify must reject changed authority bytes.", failures);
+        var validationBlocked = GovernanceApplication.Validate(fixtureRoot);
+        Expect(validationBlocked.ExitCode == 1, "Governance validation must block when authority verification fails.", failures);
+        var nextBlocked = GovernanceApplication.Next(fixtureRoot);
+        ExpectScopedNextMatches(fixtureRoot, nextBlocked, failures);
+        Expect(nextBlocked.ExitCode == 1 && ((NextPayload)nextBlocked.Payload).Items.All(item => !item.Actionable), "Governance next must block execution when authority verification fails.", failures);
+        var gateBlocked = GovernanceApplication.CheckGate(fixtureRoot, "TUN-001");
+        Expect(gateBlocked.ExitCode == 1, "Governance gates must block when authority verification fails.", failures);
+        var contextBlocked = ContextApplication.Build(fixtureRoot, "TUN-001", contextOutput);
+        Expect(contextBlocked.ExitCode == 1, "Context build must block when authority verification fails.", failures);
+        File.WriteAllText(Path.Combine(fixtureRoot.FullName, "governance", "work-items", "malformed.yaml"), "schema_version: [");
+        var malformed = GovernanceApplication.Validate(fixtureRoot);
+        Expect(malformed.ExitCode == 1, "Validation must reject malformed YAML.", failures);
+        File.WriteAllBytes(authorityMirrorPath, scopedAuthorityOriginal);
+        var scopedMalformed = GovernanceApplication.Next(fixtureRoot, "TUN-ORCH");
+        Expect(AuthorityApplication.Verify(fixtureRoot).ExitCode == 0 && scopedMalformed.ExitCode != 0 &&
+            !((NextPayload)scopedMalformed.Payload).Items.Single(item => item.WorkItemId == "TUN-ORCH").Actionable,
+            "Unrelated malformed governance must block scoped admission even when authority is valid.", failures);
+    }
+}
+catch (Exception error) when (error is not OutOfMemoryException)
+{
+    failures.Add("FAIL: unexpected governance harness error: " + error);
 }
 finally
 {
-    DeleteFixture(fixtureRoot);
+    try
+    {
+        CleanupHarnessFixture(fixtureRoot, args.Contains("--self-test-cleanup-failure", StringComparer.Ordinal));
+    }
+    catch (Exception error) when (error is IOException or UnauthorizedAccessException)
+    {
+        failures.Add("FAIL: governance fixture cleanup: " + error);
+    }
 }
 
 if (failures.Count > 0)
@@ -326,6 +383,28 @@ if (failures.Count > 0)
 
 Console.WriteLine("PASS: Tunner.Governance functional checks");
 return 0;
+
+static void CleanupHarnessFixture(DirectoryInfo? fixture, bool testFailure)
+{
+    if (fixture is not null) DeleteFixture(fixture);
+    if (testFailure) throw new IOException("Controlled harness cleanup reporting check");
+}
+
+static void ExpectScopedNextMatches(DirectoryInfo repository, CommandResult globalResult, ICollection<string> failures)
+{
+    var global = (NextPayload)globalResult.Payload;
+    foreach (var expected in global.Items)
+    {
+        var actualResult = GovernanceApplication.Next(repository, expected.WorkItemId);
+        var actual = (NextPayload)actualResult.Payload;
+        Expect(actualResult.ExitCode == globalResult.ExitCode && actual.Items.Count == 1 && Equals(actual.Items[0], expected),
+            "Scoped eligibility must equal the global projection for " + expected.WorkItemId, failures);
+        Expect(JsonSerializer.Serialize(actual.Diagnostics) == JsonSerializer.Serialize(global.Diagnostics),
+            "Scoped eligibility must preserve all global diagnostics for " + expected.WorkItemId, failures);
+        Expect(JsonSerializer.Serialize(actual.HumanIntegrationActions) == JsonSerializer.Serialize(global.HumanIntegrationActions.Where(item => item.WorkItemId == expected.WorkItemId).ToArray()),
+            "Scoped eligibility must preserve selected integration gates for " + expected.WorkItemId, failures);
+    }
+}
 
 static void Expect(bool condition, string message, ICollection<string> failures)
 {
@@ -575,6 +654,14 @@ milestone_id: P0
 sprint_id: null
 title: Role matrix fixture
 status: VALIDATION
+git_state:
+  repository_changed: false
+  validated_commit_sha: null
+  tested_commit_sha: null
+  work_item_commit_shas: []
+  closure_commit_sha: null
+  remaining_uncommitted_paths: []
+  remaining_uncommitted_classification: NONE
 type: GOVERNANCE_TOOLING
 authority_refs: [authority]
 flow_refs: []
@@ -755,7 +842,7 @@ static void RunRevisionChecks(DirectoryInfo repositoryRoot, ICollection<string> 
         Check(RevisionApplication.CloseCheck(fixture, "P0-004-RV001").ExitCode != 0, "closure refuses incomplete children, validation, and committed evidence");
         var proofPath = Path.Combine(fixture.FullName, "governance", "evidence", "revision-proof.json");
         string[] ownedBehaviorPaths = ["docs/authority/current-authority.json"];
-        File.WriteAllText(proofPath, JsonSerializer.Serialize(new { scope_id = "P0-999-RV999", result = "PENDING", owned_behavior_paths = ownedBehaviorPaths }));
+        File.WriteAllText(proofPath, JsonSerializer.Serialize(new { scope_id = "P0-999-RV999", validation_kind = "COMMITTED", result = "PENDING", owned_behavior_paths = ownedBehaviorPaths }));
         EditRevision(importedPath, "status", "VALIDATION");
         EditRevision(importedPath, "product_acceptance_required", false);
         EditRevision(importedPath, "evidence_refs", proofRefs);
@@ -790,7 +877,16 @@ static void RunRevisionChecks(DirectoryInfo repositoryRoot, ICollection<string> 
         Check(RevisionApplication.CheckTransition(fixture, "P0-999-RV999", "ACTIVE").ExitCode != 0, "closed Revision cannot be reopened");
         var closed = File.ReadAllText(importedPath);
         EditRevision(importedPath, "reason", "rewritten history");
-        Check(GovernanceApplication.Validate(fixture).ExitCode != 0, "closed Revision evidence/history cannot be silently edited");
+        var changedHistory = GovernanceApplication.Validate(fixture);
+        var changedDiagnostics = ((ValidationPayload)changedHistory.Payload).Diagnostics;
+        Check(changedHistory.ExitCode != 0, "closed Revision evidence/history cannot be silently edited");
+        Check(changedDiagnostics.Any(x => x.Message == "closed Revision history is immutable; later work requires a new Revision"),
+            "comparison diagnostics preserve the original immutable-history refusal");
+        Check(changedDiagnostics.Any(x => System.Text.RegularExpressions.Regex.IsMatch(x.Message,
+                @"^closed Revision comparison diagnostic: committed_sha256=[a-f0-9]{64}; current_sha256=[a-f0-9]{64}; comparison=semantic-difference; path=\$\.reason; kinds=String/String$", System.Text.RegularExpressions.RegexOptions.CultureInvariant)),
+            "closed history mismatch identifies only the reason property kinds and comparison hashes");
+        Check(changedDiagnostics.All(x => !x.Message.Contains("rewritten history", StringComparison.Ordinal)),
+            "closed history comparison diagnostics never emit the changed marker value");
         File.WriteAllText(importedPath, closed);
         File.Delete(importedPath);
         Check(GovernanceApplication.Validate(fixture).ExitCode != 0, "committed Revision deletion is rejected");
@@ -854,9 +950,11 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
         var originalProofBytes = File.ReadAllBytes(Path.Combine(fixture.FullName, originalProof));
         Check(AuditCommittedFixture(fixture), "original completed scope passes before revision");
 
-        string Candidate(string[] owned, string value)
+        string[] auditorRoles = ["auditor"];
+        string[] fixtureAuthorityReferences = ["docs/authority/mirror.txt"];
+        string Candidate(string[] owned, string value, string scope = originalId)
         {
-            var created = RevisionApplication.Create(fixture, new(originalId, "CORRECTIVE", "Fixture revision",
+            var created = RevisionApplication.Create(fixture, new(scope, "CORRECTIVE", "Fixture revision",
                 "Later validated behavior", "NON_BLOCKING", [], [], [], ["exact committed proof"]));
             if (created.ExitCode != 0) throw new InvalidOperationException(GovernanceApplication.Serialize(created));
             var id = ((RevisionOperationPayload)created.Payload).RevisionId;
@@ -865,12 +963,24 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
             EditRevision(revisionFile, "status", "VALIDATION");
             EditRevision(revisionFile, "product_acceptance_required", false);
             EditRevision(revisionFile, "evidence_refs", new[] { proof });
+            EditRevision(revisionFile, "required_roles", auditorRoles);
+            var reviewEvidence = "governance/evidence/" + id + "-role-proof.json";
+            var review = "governance/reviews/" + id + "-auditor.yaml";
+            File.WriteAllText(Path.Combine(fixture.FullName, reviewEvidence), "{}");
+            File.WriteAllText(Path.Combine(fixture.FullName, review), JsonSerializer.Serialize(new
+            {
+                schema_version = 1, review_id = "REV-" + id + "-auditor", work_item_id = id, role = "auditor", status = "PASS", result = "PASS",
+                reviewed_at = "2026-10-17T00:00:00Z", skill_id = "auditor", skill_version = "1.0.0", skill_hash = new string('a', 64),
+                authority_refs = fixtureAuthorityReferences, context_artifacts = new[] { "governance/revisions/" + id + ".yaml" },
+                evidence_refs = new[] { reviewEvidence }, findings = Array.Empty<string>(), blocking_findings = Array.Empty<string>(),
+                required_actions = Array.Empty<string>(), context_expansion_requested = false
+            }));
             foreach (var path in owned) File.WriteAllText(Path.Combine(fixture.FullName, path), value);
             File.WriteAllText(Path.Combine(fixture.FullName, proof), JsonSerializer.Serialize(new
             {
                 scope_id = id, validation_kind = "COMMITTED", owned_behavior_paths = owned
             }));
-            RunGit(fixture, ["add", "--", "governance/revisions/" + id + ".yaml", proof, .. owned]);
+            RunGit(fixture, ["add", "--", "governance/revisions/" + id + ".yaml", proof, review, reviewEvidence, .. owned]);
             RunGit(fixture, "commit", "--quiet", "-m", "Revision validation candidate");
             var sha = RunGitOutput(fixture, "rev-parse", "HEAD");
             EditRevision(revisionFile, "git_state", State(sha));
@@ -893,8 +1003,36 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
         Close(first, false);
         Check(!AuditCommittedFixture(fixture), "uncommitted CLOSED status cannot waive original proof");
         Check(RevisionApplication.CloseCheck(fixture, first).ExitCode == 0, "fixture revision has complete native closure proof");
+        const string utf8Reason = "Later validated behavior – UTF-8 proof";
+        var utf8RevisionRelativePath = "governance/revisions/" + first + ".yaml";
+        var utf8RevisionPath = Path.Combine(fixture.FullName, utf8RevisionRelativePath);
+        EditRevision(utf8RevisionPath, "reason", utf8Reason);
+        // Keep the fixture's actual tracked UTF-8 byte sequence, rather than an ASCII Unicode escape.
+        File.WriteAllText(utf8RevisionPath, File.ReadAllText(utf8RevisionPath).Replace("\\u2013", "\u2013", StringComparison.Ordinal));
         Close(first, true);
         Check(AuditCommittedFixture(fixture), "committed closed revision supplies current owned-path proof");
+        var utf8RevisionBytes = File.ReadAllBytes(utf8RevisionPath);
+        var originalOutputEncoding = Console.OutputEncoding;
+        try
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            Console.OutputEncoding = Encoding.GetEncoding(437);
+            Check(File.ReadAllText(utf8RevisionPath).Contains('\u2013') &&
+                ReadYamlScalar(CommittedEvidenceApplication.Git(fixture, "show", "HEAD:" + utf8RevisionRelativePath), "reason") == utf8Reason,
+                "committed Git reads preserve literal UTF-8 metadata under a CP437 console");
+            Check(RevisionApplication.CloseCheck(fixture, first).ExitCode == 0 && AuditCommittedFixture(fixture),
+                "byte-identical closed UTF-8 history remains valid under a CP437 console");
+            EditRevision(utf8RevisionPath, "reason", "Changed closed UTF-8 proof");
+            var changedUtf8 = RevisionApplication.CloseCheck(fixture, first);
+            Check(changedUtf8.ExitCode != 0 && ((RevisionOperationPayload)changedUtf8.Payload).Findings.Any(x =>
+                    x == "closed Revision history is immutable; later work requires a new Revision"),
+                "UTF-8 decoding still refuses a genuine closed-history change under a CP437 console");
+        }
+        finally
+        {
+            try { Console.OutputEncoding = originalOutputEncoding; }
+            finally { File.WriteAllBytes(utf8RevisionPath, utf8RevisionBytes); }
+        }
         var firstProofPath = Path.Combine(fixture.FullName, "governance/evidence/" + first + "-proof.json");
         var firstProofBytes = File.ReadAllBytes(firstProofPath);
         File.WriteAllText(firstProofPath, File.ReadAllText(firstProofPath).Replace("\"PASS\"", "\"FAIL\"", StringComparison.Ordinal));
@@ -918,8 +1056,156 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
         Close(second, true);
         Check(AuditCommittedFixture(fixture), "later path owner and unchanged prior-owner paths compose");
         Check(RevisionApplication.CloseCheck(fixture, first).ExitCode == 0, "prior revision proof resolves strictly later ownership without recursion to itself");
+        var firstRevisionPath = Path.Combine(fixture.FullName, "governance", "revisions", first + ".yaml");
+        var secondRevisionPath = Path.Combine(fixture.FullName, "governance", "revisions", second + ".yaml");
+        var secondRevisionBytes = File.ReadAllBytes(secondRevisionPath);
+        var schemaPath = Path.Combine(fixture.FullName, "governance/schemas/v1/governance-record.schema.json");
+        var schemaBytes = File.ReadAllBytes(schemaPath);
+        Check(((ValidationPayload)GovernanceApplication.Validate(fixture).Payload).IsValid, "schema-hoist fixture begins with valid records");
+        try
+        {
+            EditRevision(secondRevisionPath, "git_state", State("not-a-sha"));
+            var validation = (ValidationPayload)GovernanceApplication.Validate(fixture).Payload;
+            Check(!validation.IsValid && validation.Diagnostics.Any(x => x.Code == "GOV_GIT_STATE_SCHEMA" && x.File == secondRevisionPath) &&
+                !validation.Diagnostics.Any(x => x.Code == "GOV_GIT_STATE_SCHEMA" && x.File == firstRevisionPath),
+                "reusing a gitState schema still evaluates a later invalid state after a valid first state");
+        }
+        finally { File.WriteAllBytes(secondRevisionPath, secondRevisionBytes); }
+        try
+        {
+            EditRevision(secondRevisionPath, "revision_type", "NOT_A_REVISION_TYPE");
+            var validation = (ValidationPayload)GovernanceApplication.Validate(fixture).Payload;
+            Check(!validation.IsValid && validation.Diagnostics.Any(x => x.Code == "GOV_REVISION_INVALID" && x.File == secondRevisionPath &&
+                x.Message.Contains("executable JSON Schema", StringComparison.Ordinal)) &&
+                !validation.Diagnostics.Any(x => x.Code == "GOV_REVISION_INVALID" && x.File == firstRevisionPath),
+                "reusing a Revision schema still evaluates a later invalid Revision after a valid first Revision");
+        }
+        finally { File.WriteAllBytes(secondRevisionPath, secondRevisionBytes); }
+        try
+        {
+            var library = JsonNode.Parse(File.ReadAllText(schemaPath))!;
+            library["$defs"]!["gitState"]!["properties"]!["repository_changed"]!["type"] = "string";
+            File.WriteAllText(schemaPath, library.ToJsonString());
+            var validation = (ValidationPayload)GovernanceApplication.Validate(fixture).Payload;
+            Check(!validation.IsValid && validation.Diagnostics.Any(x => x.Code == "GOV_GIT_STATE_SCHEMA"),
+                "a fresh Validate invocation observes an edited gitState schema rather than a prior compiled schema");
+        }
+        finally { File.WriteAllBytes(schemaPath, schemaBytes); }
+        try
+        {
+            var library = JsonNode.Parse(File.ReadAllText(schemaPath))!;
+            library["$defs"]!["revision"]!["properties"]!["revision_type"]!["enum"] = new JsonArray("NOT_A_REVISION_TYPE");
+            File.WriteAllText(schemaPath, library.ToJsonString());
+            var validation = (ValidationPayload)GovernanceApplication.Validate(fixture).Payload;
+            Check(!validation.IsValid && validation.Diagnostics.Any(x => x.Code == "GOV_REVISION_INVALID" &&
+                x.Message.Contains("executable JSON Schema", StringComparison.Ordinal)),
+                "a fresh diagnostics invocation observes an edited Revision schema rather than a prior compiled schema");
+        }
+        finally { File.WriteAllBytes(schemaPath, schemaBytes); }
+        try
+        {
+            File.Delete(schemaPath);
+            var rejected = false;
+            try { rejected = !((ValidationPayload)GovernanceApplication.Validate(fixture).Payload).IsValid; }
+            catch (IOException) { rejected = true; } // Existing missing-library behavior may refuse or throw; neither may reuse a prior PASS.
+            Check(rejected, "a fresh Validate invocation cannot reuse schemas after their source library is removed");
+        }
+        finally { File.WriteAllBytes(schemaPath, schemaBytes); }
+        Check(((ValidationPayload)GovernanceApplication.Validate(fixture).Payload).IsValid, "restoring exact schema and record bytes restores valid evaluation");
+        var validationAssessment = new CommittedProofAssessment(fixture);
+        var initialValidation = GovernanceApplication.Validate(fixture, validationAssessment);
+        var validationComputations = validationAssessment.ImmutableGitComputations;
+        var repeatedValidation = GovernanceApplication.Validate(fixture, validationAssessment);
+        Check(initialValidation.ExitCode == 0 && validationComputations > 0 &&
+            validationAssessment.ImmutableGitComputations == validationComputations &&
+            GovernanceApplication.Serialize(repeatedValidation) == GovernanceApplication.Serialize(initialValidation) &&
+            GovernanceApplication.Serialize(repeatedValidation) == GovernanceApplication.Serialize(GovernanceApplication.Validate(fixture)),
+            "same assessment reuses committed history objects with identical repeated and fresh validation output");
+        try
+        {
+            EditRevision(secondRevisionPath, "reason", "Changed live history after cached validation");
+            var validation = (ValidationPayload)GovernanceApplication.Validate(fixture, validationAssessment).Payload;
+            Check(!validation.IsValid && validation.Diagnostics.Any(x => x.File == secondRevisionPath &&
+                x.Message == "closed Revision history is immutable; later work requires a new Revision"),
+                "same assessment compares cached committed history against changed live Revision bytes");
+        }
+        finally { File.WriteAllBytes(secondRevisionPath, secondRevisionBytes); }
+        try
+        {
+            File.Delete(secondRevisionPath);
+            var validation = (ValidationPayload)GovernanceApplication.Validate(fixture, validationAssessment).Payload;
+            Check(!validation.IsValid && validation.Diagnostics.Any(x => x.Code == "GOV_REVISION_HISTORY_DELETED"),
+                "same assessment still rejects a deleted tracked Revision after committed history was cached");
+        }
+        finally { File.WriteAllBytes(secondRevisionPath, secondRevisionBytes); }
+        try
+        {
+            var library = JsonNode.Parse(File.ReadAllText(schemaPath))!;
+            library["$defs"]!["gitState"]!["properties"]!["repository_changed"]!["type"] = "string";
+            File.WriteAllText(schemaPath, library.ToJsonString());
+            var validation = (ValidationPayload)GovernanceApplication.Validate(fixture, validationAssessment).Payload;
+            Check(!validation.IsValid && validation.Diagnostics.Any(x => x.Code == "GOV_GIT_STATE_SCHEMA"),
+                "same assessment rereads edited schema bytes rather than reusing validation acceptance");
+        }
+        finally { File.WriteAllBytes(schemaPath, schemaBytes); }
+        var priorHead = RunGitOutput(fixture, "rev-parse", "HEAD");
+        const string headAdvancePath = "docs/validation-head-advance.txt";
+        File.WriteAllText(Path.Combine(fixture.FullName, headAdvancePath), "Unrelated fixture commit; closed history is unchanged.");
+        RunGit(fixture, "add", "--", headAdvancePath);
+        RunGit(fixture, "commit", "--quiet", "-m", "Advance immutable history baseline fixture");
+        var beforeHeadAdvance = validationAssessment.ImmutableGitComputations;
+        var advancedValidation = GovernanceApplication.Validate(fixture, validationAssessment);
+        Check(advancedValidation.ExitCode == 0 && priorHead != RunGitOutput(fixture, "rev-parse", "HEAD") &&
+            validationAssessment.ImmutableGitComputations > beforeHeadAdvance,
+            "same assessment resolves advanced HEAD and reads its distinct committed history objects");
+        var advancedComputations = validationAssessment.ImmutableGitComputations;
+        Check(GovernanceApplication.Serialize(GovernanceApplication.Validate(fixture, validationAssessment)) ==
+            GovernanceApplication.Serialize(advancedValidation) && validationAssessment.ImmutableGitComputations == advancedComputations,
+            "unchanged advanced HEAD reuses immutable objects while validation runs again");
+        var assessment = new CommittedProofAssessment(fixture);
+        var originalRecord = GovernanceApplication.LoadRecords(fixture, []).Single(record => record.Identifier == originalId);
+        Check(CommitReadinessApplication.Check(fixture, originalRecord, null, assessment).Count == 0,
+            "assessment retains complete three-path/two-Revision live closure proof");
+        var immutableComputations = assessment.ImmutableGitComputations;
+        var repeated = RevisionApplication.CloseCheck(fixture, first, assessment);
+        Check(immutableComputations > 0 && repeated.ExitCode == 0 && assessment.ImmutableGitComputations == immutableComputations &&
+            GovernanceApplication.Serialize(repeated) == GovernanceApplication.Serialize(RevisionApplication.CloseCheck(fixture, first)),
+            "repeated nested closure reuses immutable Git reads with identical fresh public output");
+        var roleEvidencePath = Path.Combine(fixture.FullName, "governance/evidence/" + first + "-role-proof.json");
+        var roleEvidenceBytes = File.ReadAllBytes(roleEvidencePath);
+        File.Delete(roleEvidencePath);
+        try
+        {
+            var withdrawn = RevisionApplication.CloseCheck(fixture, first, assessment);
+            Check(withdrawn.ExitCode != 0 && ((RevisionOperationPayload)withdrawn.Payload).Findings.Any(finding => finding.Contains("role review", StringComparison.Ordinal)),
+                "same assessment rejects withdrawn required-role evidence outside direct Revision evidence");
+            Check(RevisionApplication.CloseCheck(fixture, first).ExitCode != 0,
+                "fresh public assessment also rejects withdrawn required-role evidence");
+            Check(CommitReadinessApplication.Check(fixture, originalRecord, null, assessment).Any(finding =>
+                    finding.Contains("closed Revision proof is invalid for owned behavior: " + first, StringComparison.Ordinal) &&
+                    finding.Contains("role review", StringComparison.Ordinal)),
+                "effective ownership reports the nested closure refusal instead of hiding its cause");
+        }
+        finally { File.WriteAllBytes(roleEvidencePath, roleEvidenceBytes); }
+        var changedProof = File.ReadAllBytes(firstProofPath);
+        File.WriteAllText(firstProofPath, File.ReadAllText(firstProofPath).Replace("\"PASS\"", "\"FAIL\"", StringComparison.Ordinal));
+        Check(RevisionApplication.CloseCheck(fixture, first, assessment).ExitCode != 0,
+            "same assessment reruns changed direct evidence controls");
+        File.WriteAllBytes(firstProofPath, changedProof);
+        File.Delete(firstProofPath);
+        try { Check(RevisionApplication.CloseCheck(fixture, first, assessment).ExitCode != 0,
+            "same assessment reruns missing direct evidence controls"); }
+        finally { File.WriteAllBytes(firstProofPath, changedProof); }
+        var cycle = new CommittedProofAssessment(fixture);
+        var cyclic = cycle.CloseCheck(fixture, first, () => cycle.CloseCheck(fixture, first,
+            () => throw new InvalidOperationException("Cyclic proof must not recurse into another computation.")));
+        Check(cyclic.ExitCode != 0 && ((RevisionOperationPayload)cyclic.Payload).Findings.Any(finding => finding.Contains("cyclic", StringComparison.Ordinal)),
+            "in-progress closure is refused rather than accepted");
         File.WriteAllText(Path.Combine(fixture.FullName, originalPaths[0]), "original");
         Check(!AuditCommittedFixture(fixture), "unvalidated rollback cannot fall back to original or earlier revision proof");
+        Check(RevisionApplication.CloseCheck(fixture, second, assessment).ExitCode != 0 &&
+            RevisionApplication.CloseCheck(fixture, second).ExitCode != 0,
+            "same and fresh assessments independently rerun changed current owned-source checks");
         File.WriteAllText(Path.Combine(fixture.FullName, originalPaths[0]), "revision-two");
         File.WriteAllText(Path.Combine(fixture.FullName, originalPaths[2]), "unclaimed-drift");
         Check(!AuditCommittedFixture(fixture), "an unclaimed original path still requires original proof");
@@ -929,11 +1215,295 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
         Check(File.ReadAllBytes(workFile).SequenceEqual(originalWorkBytes) &&
             File.ReadAllBytes(Path.Combine(fixture.FullName, originalProof)).SequenceEqual(originalProofBytes),
             "original completion record and evidence remain byte-identical");
+        var parent = Candidate(secondPaths, "child-parent");
+        var createdChild = RevisionApplication.CreateChild(fixture, parent, "Committed child source proof");
+        if (createdChild.ExitCode != 0) throw new InvalidOperationException(GovernanceApplication.Serialize(createdChild));
+        var childId = ((RevisionOperationPayload)createdChild.Payload).RevisionId;
+        var childWork = "governance/work-items/" + childId + ".yaml";
+        var childFile = Path.Combine(fixture.FullName, childWork);
+        var childProof = "governance/evidence/" + childId + "-proof.json";
+        var childRoleProof = "governance/evidence/" + childId + "-ROLE-REVIEWS.json";
+        var childPath = originalPaths[0];
+        // Reuse the existing legacy synthetic work-item fixture; this case isolates committed source lineage.
+        WriteWorkItem(fixture, childId, "DONE", "[]", false);
+        EditRevision(childFile, "revision_ref", parent);
+        EditRevision(childFile, "authority_refs", fixtureAuthorityReferences);
+        EditRevision(childFile, "required_evidence", new[] { childProof });
+        File.WriteAllText(Path.Combine(fixture.FullName, childRoleProof), "{}");
+        File.WriteAllText(Path.Combine(fixture.FullName, childProof), JsonSerializer.Serialize(new
+        {
+            scope_id = childId, validation_kind = "COMMITTED", owned_behavior_paths = secondPaths
+        }));
+        RunGit(fixture, "add", "--", "governance/revisions/" + parent + ".yaml",
+            "governance/evidence/" + parent + "-proof.json", childWork, childProof, childRoleProof);
+        RunGit(fixture, "commit", "--quiet", "-m", "Committed revision child candidate");
+        var childSha = RunGitOutput(fixture, "rev-parse", "HEAD");
+        EditRevision(childFile, "git_state", State(childSha));
+        Proof(childProof, childId, childSha, secondPaths);
+        RunGit(fixture, "add", "--", childWork, childProof);
+        RunGit(fixture, "commit", "--quiet", "-m", "Committed revision child completion");
+        Close(parent, true);
+        var parentFile = Path.Combine(fixture.FullName, "governance/revisions/" + parent + ".yaml");
+        var parentBytes = File.ReadAllBytes(parentFile);
+        var childBytes = File.ReadAllBytes(childFile);
+        var childProofBytes = File.ReadAllBytes(Path.Combine(fixture.FullName, childProof));
+        GovernanceRecord ChildRecord() => GovernanceApplication.LoadRecords(fixture, []).Single(record => record.Identifier == childId);
+        bool ChildReady() => CommitReadinessApplication.Check(fixture, ChildRecord()).Count == 0;
+        (string? Sha, string? Failure) ChildResolution()
+        {
+            var resolver = new RevisionCommittedProofResolver(fixture, ChildRecord(), new CommittedProofAssessment(fixture));
+            var sha = resolver.Resolve(childPath, out var failure);
+            return (sha, failure);
+        }
+        Check(ChildReady() && RevisionApplication.CloseCheck(fixture, parent).ExitCode == 0,
+            "committed completed child and owning closed Revision begin with valid proof");
+        Check(ChildResolution() == (null, null), "child never substitutes its own parent or earlier root Revision proof");
+        File.WriteAllText(Path.Combine(fixture.FullName, childPath), "revision-two");
+        RunGit(fixture, "add", "--", childPath);
+        RunGit(fixture, "commit", "--quiet", "-m", "Changed child source matching older root proof");
+        Check(!ChildReady() && ChildResolution() == (null, null), "older root ownership cannot waive changed child source");
+
+        const string foreignId = "TUN-P1-023";
+        var foreignWork = "governance/work-items/" + foreignId + ".yaml";
+        WriteWorkItem(fixture, foreignId, "DONE", "[]", false);
+        EditRevision(Path.Combine(fixture.FullName, foreignWork), "authority_refs", fixtureAuthorityReferences);
+        EditRevision(Path.Combine(fixture.FullName, foreignWork), "required_evidence", Array.Empty<string>());
+        RunGit(fixture, "add", "--", foreignWork);
+        RunGit(fixture, "commit", "--quiet", "-m", "Unrelated completed fixture owner");
+        var foreign = Candidate(secondPaths, "foreign-child-claim", foreignId);
+        Close(foreign, true);
+        Check(RevisionApplication.CloseCheck(fixture, foreign).ExitCode == 0 && !ChildReady() && ChildResolution() == (null, null),
+            "valid committed CLOSED ownership from a foreign root cannot cover the child");
+        var later = Candidate(secondPaths, "child-current");
+        var laterFile = Path.Combine(fixture.FullName, "governance/revisions/" + later + ".yaml");
+        EditRevision(laterFile, "status", "ACTIVE");
+        RunGit(fixture, "add", "--", "governance/revisions/" + later + ".yaml", "governance/evidence/" + later + "-proof.json");
+        RunGit(fixture, "commit", "--quiet", "-m", "Committed active child compatibility claim");
+        Check(!ChildReady() && ChildResolution() == (null, null), "ACTIVE later-root ownership cannot waive the child proof");
+        Close(later, false);
+        Check(!ChildReady(), "uncommitted CLOSED later-root ownership cannot waive the child proof");
+        Close(later, true);
+        var laterState = CommitReadinessApplication.Read(GovernanceApplication.LoadRecords(fixture, []).Single(record => record.Identifier == later));
+        Check(ChildReady() && ChildResolution() == (laterState!.ValidatedCommitSha, null) &&
+            RevisionApplication.CloseCheck(fixture, parent).ExitCode == 0,
+            "a valid strictly later committed CLOSED root Revision restores child and parent proof without self recursion");
+        var missingOriginalLink = ChildRecord();
+        var missingLinkState = (YamlDotNet.RepresentationModel.YamlMappingNode)missingOriginalLink.Fields["git_state"];
+        missingLinkState.Children[new YamlDotNet.RepresentationModel.YamlScalarNode("validated_commit_sha")] =
+            new YamlDotNet.RepresentationModel.YamlScalarNode(originalSha);
+        var missingLinkResolver = new RevisionCommittedProofResolver(fixture, missingOriginalLink, new CommittedProofAssessment(fixture));
+        Check(missingLinkResolver.Resolve(childPath, out var missingLinkFailure) is null && missingLinkFailure is null,
+            "a committed live child link cannot substitute for its missing original validated binding");
+        try
+        {
+            EditRevision(childFile, "title", "Uncommitted child metadata with unchanged owner");
+            Check(ChildResolution() == (null, null), "uncommitted child metadata cannot select root proof even with its original owner link");
+        }
+        finally { File.WriteAllBytes(childFile, childBytes); }
+        try
+        {
+            EditRevision(childFile, "revision_ref", foreign);
+            Check(!ChildReady() && ChildResolution() == (null, null), "uncommitted foreign child linkage cannot select root proof");
+        }
+        finally { File.WriteAllBytes(childFile, childBytes); }
+        try
+        {
+            EditRevision(parentFile, "reason", "Uncommitted owning Revision link");
+            Check(!ChildReady() && ChildResolution() == (null, null), "uncommitted owning Revision cannot supply child lineage");
+        }
+        finally { File.WriteAllBytes(parentFile, parentBytes); }
+        try
+        {
+            EditRevision(parentFile, "work_items", Array.Empty<string>());
+            Check(!ChildReady() && ChildResolution() == (null, null), "owning Revision must actually list the child");
+        }
+        finally { File.WriteAllBytes(parentFile, parentBytes); }
+        try
+        {
+            EditRevision(parentFile, "work_items", Array.Empty<string>());
+            RunGit(fixture, "add", "--", "governance/revisions/" + parent + ".yaml");
+            RunGit(fixture, "commit", "--quiet", "-m", "Committed fixture parent without child membership");
+            Check(ChildResolution() == (null, null), "committed current owning Revision must actually list the child");
+        }
+        finally
+        {
+            File.WriteAllBytes(parentFile, parentBytes);
+            RunGit(fixture, "add", "--", "governance/revisions/" + parent + ".yaml");
+            RunGit(fixture, "commit", "--quiet", "-m", "Restore exact committed fixture parent membership");
+        }
+        Check(ChildReady() && ChildResolution() == (laterState!.ValidatedCommitSha, null),
+            "restoring exact committed parent bytes restores healthy later-root child proof");
+        File.WriteAllText(Path.Combine(fixture.FullName, childPath), "uncommitted child drift");
+        Check(!ChildReady(), "later-root child coverage still rejects changed working source");
+        File.WriteAllText(Path.Combine(fixture.FullName, childPath), "child-current");
+        Check(ChildReady() && File.ReadAllBytes(parentFile).SequenceEqual(parentBytes) &&
+            File.ReadAllBytes(childFile).SequenceEqual(childBytes) &&
+            File.ReadAllBytes(Path.Combine(fixture.FullName, childProof)).SequenceEqual(childProofBytes),
+            "current child coverage preserves the exact closed parent and original child state and evidence");
+
         string[] missingClassification = [];
         var invalid = Candidate(missingClassification, "unused");
         Close(invalid, true);
         Check(!AuditCommittedFixture(fixture), "a later committed CLOSED claim with empty ownership cannot fall back to older proof");
         Console.WriteLine($"PASS: {assertions} closed-revision committed ownership checks");
+    }
+    finally { DeleteFixture(fixture); }
+}
+
+
+static void RunValidationSourceReadinessChecks(DirectoryInfo repositoryRoot, ICollection<string> failures)
+{
+    var fixture = Directory.CreateTempSubdirectory("tunner-governance-validation-source-fixture-");
+    var assertions = 0;
+    var previousFailures = failures.Count;
+    void Check(bool condition, string message) { assertions++; Expect(condition, "VALIDATION source readiness: " + message, failures); }
+    try
+    {
+        CreateFixture(repositoryRoot, fixture);
+        const string noChangeState = "git_state: {repository_changed: false, validated_commit_sha: null, tested_commit_sha: null, work_item_commit_shas: [], closure_commit_sha: null, remaining_uncommitted_paths: [], remaining_uncommitted_classification: NONE}";
+        const string id = "TUN-001";
+        var upstream = Path.Combine(fixture.FullName, "governance/work-items/TUN-001.yaml");
+        var proofPath = Path.Combine(fixture.FullName, "governance/evidence/TUN-001-proof.json");
+        const string behavior = "docs/TUN-001-behavior.txt";
+        File.WriteAllText(upstream, File.ReadAllText(upstream).Replace(noChangeState, "", StringComparison.Ordinal));
+        InitializeGit(fixture);
+        bool DownstreamReady() => ((NextPayload)GovernanceApplication.Next(fixture).Payload).Items.Single(x => x.WorkItemId == "TUN-LOCAL").Actionable;
+        IReadOnlyList<string> OwnFailures() => ((GatePayload)GovernanceApplication.CheckGate(fixture, id).Payload).Failures;
+        void State(string sha, string[] unrelated) => EditRevision(upstream, "git_state", new
+        {
+            repository_changed = true, validated_commit_sha = sha, tested_commit_sha = sha,
+            work_item_commit_shas = new[] { sha }, closure_commit_sha = (string?)null,
+            remaining_uncommitted_paths = unrelated,
+            remaining_uncommitted_classification = unrelated.Length == 0 ? "NONE" : "PREEXISTING_UNRELATED"
+        });
+        void Proof(string sha, string scope = id) => File.WriteAllText(proofPath, JsonSerializer.Serialize(new
+        {
+            scope_id = scope, validation_kind = "COMMITTED", validated_commit_sha = sha,
+            tested_commit_sha = sha, result = "PASS", owned_behavior_paths = new[] { behavior }
+        }));
+        void Reject(string scenario, string? expectedNestedFailure = null)
+        {
+            var downstream = ((NextPayload)GovernanceApplication.Next(fixture).Payload).Items.Single(x => x.WorkItemId == "TUN-LOCAL");
+            Check(!downstream.Actionable, scenario + " must block the LOCAL_VALIDATED consumer");
+            Check(!AuditCommittedFixture(fixture), scenario + " must be included in committed readiness audit");
+            if (expectedNestedFailure is not null)
+                Check(downstream.Reason.Contains("prerequisite 'TUN-001' lacks valid committed-state readiness evidence", StringComparison.Ordinal) &&
+                    downstream.Reason.Contains("prerequisite 'TUN-001' committed-state proof: " + expectedNestedFailure, StringComparison.Ordinal),
+                    scenario + " retains the generic refusal and identifies the exact nested source failure");
+        }
+        Reject("missing git_state on a VALIDATION prerequisite");
+        Check(OwnFailures().Any(x => x.Contains("git_state is absent", StringComparison.Ordinal)), "final gate must refuse missing source state even before DONE");
+
+        var candidate = PrepareCommittedFixture(fixture, id);
+        State(candidate, []);
+        RunGit(fixture, "add", "--", "governance/work-items/TUN-001.yaml", "governance/evidence/TUN-001-proof.json");
+        RunGit(fixture, "commit", "--quiet", "-m", "Current validated source proof");
+        Check(DownstreamReady(), "matching current committed candidate must permit local consumption");
+        Check(AuditCommittedFixture(fixture), "matching current proof must pass audit");
+
+        // Correct mutable PASS metadata cannot repair the classification recorded in an older Git candidate.
+        foreach (var mismatch in new[] { "missing-kind", "unsupported-kind", "wrong-scope" })
+        {
+            var snapshot = JsonSerializer.SerializeToNode(new { scope_id = mismatch == "wrong-scope" ? "TUN-OTHER" : id,
+                result = "PENDING", owned_behavior_paths = new[] { behavior } })!;
+            if (mismatch != "missing-kind") snapshot["validation_kind"] = mismatch == "unsupported-kind" ? "HISTORICAL" : "COMMITTED";
+            File.WriteAllText(proofPath, snapshot.ToJsonString());
+            RunGit(fixture, "add", "--", "governance/evidence/TUN-001-proof.json");
+            RunGit(fixture, "commit", "--quiet", "-m", "Candidate classification regression " + mismatch);
+            var invalidCandidate = RunGitOutput(fixture, "rev-parse", "HEAD");
+            State(invalidCandidate, []); Proof(invalidCandidate);
+            Reject("correct mutable PASS over " + mismatch + " committed candidate");
+            Check(OwnFailures().Any(x => x.Contains("validation candidate evidence", StringComparison.Ordinal)),
+                mismatch + " must be rejected by exact committed-candidate classification");
+        }
+        File.WriteAllText(proofPath, JsonSerializer.Serialize(new { scope_id = id, validation_kind = "COMMITTED",
+            result = "PENDING", owned_behavior_paths = new[] { behavior } }));
+        RunGit(fixture, "add", "--", "governance/evidence/TUN-001-proof.json");
+        RunGit(fixture, "commit", "--quiet", "-m", "New correctly scoped committed validation candidate");
+        candidate = RunGitOutput(fixture, "rev-parse", "HEAD");
+        State(candidate, []); Proof(candidate);
+        Check(DownstreamReady() && AuditCommittedFixture(fixture), "only a new correctly classified committed candidate restores source readiness");
+        Check(!OwnFailures().Any(x => x.Contains("committed", StringComparison.Ordinal) || x.Contains("owned behavior", StringComparison.Ordinal)), "matching source proof must satisfy own source gate");
+
+        // A second prerequisite cannot borrow another record's result merely because it names the same SHA/proof file.
+        WriteWorkItem(fixture, "TUN-ALIAS", "VALIDATION", "[]", false);
+        WriteWorkItem(fixture, "TUN-ALIAS-CONSUMER", "READY", "[TUN-ALIAS]");
+        var aliasPath = Path.Combine(fixture.FullName, "governance/work-items/TUN-ALIAS.yaml");
+        var aliasConsumerPath = Path.Combine(fixture.FullName, "governance/work-items/TUN-ALIAS-CONSUMER.yaml");
+        var aliasDependency = Path.Combine(fixture.FullName, "governance/dependencies/DEP-ALIAS.yaml");
+        string[] aliasEvidence = ["governance/evidence/TUN-001-proof.json"];
+        EditRevision(aliasPath, "required_evidence", aliasEvidence);
+        EditRevision(aliasPath, "git_state", new
+        {
+            repository_changed = true, validated_commit_sha = candidate, tested_commit_sha = candidate,
+            work_item_commit_shas = new[] { candidate }, closure_commit_sha = (string?)null,
+            remaining_uncommitted_paths = Array.Empty<string>(), remaining_uncommitted_classification = "PREEXISTING_UNRELATED"
+        });
+        File.WriteAllText(aliasDependency, """
+            schema_version: 1
+            dependency_id: DEP-ALIAS
+            work_item_id: TUN-ALIAS-CONSUMER
+            prerequisite_work_item_id: TUN-ALIAS
+            required_readiness: LOCAL_VALIDATED
+            reason: Distinct source identity must not borrow cached proof
+            status: ACTIVE
+            evidence_refs: []
+            created_at: 2026-11-09T00:00:00Z
+            updated_at: 2026-11-09T00:00:00Z
+            """);
+        var scopedProofResults = (NextPayload)GovernanceApplication.Next(fixture).Payload;
+        Check(scopedProofResults.Items.Single(x => x.WorkItemId == "TUN-LOCAL").Actionable, "a bad alias must not poison another prerequisite with valid proof");
+        Check(!scopedProofResults.Items.Single(x => x.WorkItemId == "TUN-ALIAS-CONSUMER").Actionable, "another source identity at the same SHA must not borrow valid proof");
+        Check(scopedProofResults.Items.Single(x => x.WorkItemId == "TUN-ALIAS-CONSUMER").Reason.Contains("lacks valid committed-state", StringComparison.Ordinal), "every consumer retains its own source failure reason");
+        File.Delete(aliasPath);
+        File.Delete(aliasConsumerPath);
+        File.Delete(aliasDependency);
+
+        File.WriteAllText(Path.Combine(fixture.FullName, "unrelated-user.txt"), "preserve unrelated work");
+        State(candidate, ["unrelated-user.txt"]);
+        RunGit(fixture, "add", "--", "governance/work-items/TUN-001.yaml");
+        RunGit(fixture, "commit", "--quiet", "-m", "Classify unrelated fixture dirt");
+        Check(DownstreamReady() && AuditCommittedFixture(fixture), "classified unrelated dirt must not block valid local work");
+        Check(File.ReadAllText(Path.Combine(fixture.FullName, "unrelated-user.txt")) == "preserve unrelated work", "checks must not alter unrelated work");
+
+        File.AppendAllText(Path.Combine(fixture.FullName, behavior), "\nchanged behavior");
+        Reject("uncommitted owned behavior after validation", "owned behavior changed after validated SHA: " + behavior);
+        Check(OwnFailures().Any(x => x.Contains("owned behavior changed", StringComparison.Ordinal)), "own final gate must detect dirty source");
+        RunGit(fixture, "add", "--", behavior);
+        RunGit(fixture, "commit", "--quiet", "-m", "Later unvalidated owned behavior");
+        Reject("committed but unvalidated owned behavior", "owned behavior changed after validated SHA: " + behavior);
+
+        var current = RunGitOutput(fixture, "rev-parse", "HEAD");
+        State(current, ["unrelated-user.txt"]);
+        Proof(current);
+        RunGit(fixture, "add", "--", "governance/work-items/TUN-001.yaml", "governance/evidence/TUN-001-proof.json");
+        RunGit(fixture, "commit", "--quiet", "-m", "Revalidate later behavior");
+        var repaired = ((NextPayload)GovernanceApplication.Next(fixture).Payload).Items.Single(x => x.WorkItemId == "TUN-LOCAL");
+        Check(repaired.Actionable && AuditCommittedFixture(fixture), "new exact committed candidate must restore readiness");
+        Check(!repaired.Reason.Contains("committed-state proof:", StringComparison.Ordinal), "repaired proof must not retain nested failure diagnostics");
+        var validProof = File.ReadAllText(proofPath);
+        Proof(current, "TUN-OTHER");
+        Reject("wrong-scope proof");
+        Proof(candidate);
+        Reject("proof SHA disagreeing with source state");
+        File.WriteAllText(proofPath, validProof);
+        var emptyProof = JsonNode.Parse(validProof)!;
+        emptyProof["owned_behavior_paths"] = new JsonArray();
+        File.WriteAllText(proofPath, emptyProof.ToJsonString());
+        Reject("empty or changed candidate ownership");
+        File.WriteAllText(proofPath, validProof);
+        File.Delete(proofPath);
+        Reject("missing proof envelope");
+        File.WriteAllText(proofPath, validProof);
+        Check(DownstreamReady() && AuditCommittedFixture(fixture), "restoring exact proof must restore readiness without absorbing unrelated dirt");
+
+        var downstream = Path.Combine(fixture.FullName, "governance/work-items/TUN-LOCAL.yaml");
+        var dependency = Path.Combine(fixture.FullName, "governance/dependencies/DEP-LOCAL.yaml");
+        File.WriteAllText(downstream, File.ReadAllText(downstream).Replace("[TUN-001]", "[TUN-TECHNICAL]", StringComparison.Ordinal));
+        File.WriteAllText(dependency, File.ReadAllText(dependency).Replace("prerequisite_work_item_id: TUN-001", "prerequisite_work_item_id: TUN-TECHNICAL", StringComparison.Ordinal));
+        Check(DownstreamReady(), "explicit repository_changed false work must retain valid no-change local readiness");
+        Check(!((NextPayload)GovernanceApplication.Next(fixture).Payload).Items.Single(x => x.WorkItemId == "TUN-MERGED").Actionable, "local source proof must not satisfy MERGED_TO_MAIN");
+        Console.WriteLine($"{(failures.Count == previousFailures ? "PASS" : "FAIL")}: {assertions} effective VALIDATION source-readiness checks");
     }
     finally { DeleteFixture(fixture); }
 }
@@ -1076,4 +1646,337 @@ static void CopyDirectory(DirectoryInfo source, DirectoryInfo destination)
     {
         CopyDirectory(directory, new DirectoryInfo(Path.Combine(destination.FullName, directory.Name)));
     }
+}
+
+static void RunGlobalUiEvidenceChecks(DirectoryInfo repositoryRoot, ICollection<string> failures)
+{
+    var fixture = Directory.CreateTempSubdirectory("tunner-governance-ui-evidence-fixture-");
+    var checks = 0;
+    var retainFixture = false;
+    void Check(bool value, string message) { checks++; Expect(value, "Global UI evidence: " + message, failures); }
+    try
+    {
+        CreateFixture(repositoryRoot, fixture);
+        string[] fixtureAuthorityRefs = ["docs/authority/mirror.txt"];
+        string[] fixtureAcceptance = ["Synthetic current UI proof"];
+        string[] fixtureRoles = ["governance-engineer"];
+        string[] fixtureImageRefs = ["governance/evidence/fixture-render.png"];
+        string[] fixtureVersions = ["fixture"];
+        var app = Directory.CreateDirectory(Path.Combine(fixture.FullName, "web/apps/fixture"));
+        var source = Path.Combine(app.FullName, "main.tsx");
+        File.WriteAllText(source, "export const fixture = 1;\n");
+        Directory.CreateDirectory(Path.Combine(fixture.FullName, "docs/contracts"));
+        var inventoryPath = Path.Combine(fixture.FullName, UiComplianceApplication.InventoryPath);
+        var imagePath = Path.Combine(fixture.FullName, "governance/evidence/fixture-render.png");
+        File.Copy(Path.Combine(repositoryRoot.FullName, "governance/evidence/ui/AMD0008/approved-reference-register.png"), imagePath);
+        object Item(string id, string kind, string path, string status = "IMPLEMENTED") => new
+        {
+            id, kind, status, app = "fixture", module = "fixture", pathname = path, runtime_pathname = path, guard = "server-authorized workflow",
+            owner_scopes = new[] { "WORK-UI" }, authority_refs = fixtureAuthorityRefs,
+            figma_refs = new[] { "synthetic gate fixture reference" }, source_paths = new[] { "web/apps/fixture" }
+        };
+        var inventory = JsonSerializer.SerializeToNode(new
+        {
+            schema_version = 1, apps = new[] { new { id = "fixture", status = "IMPLEMENTED", source_root = "web/apps/fixture" } },
+            items = new[] { Item("SCREEN-A", "SCREEN", "/alpha"), Item("SCREEN-B", "SCREEN", "/beta"), Item("FORM-B", "FORM", "/beta"), Item("FUTURE", "SCREEN", "", "PLANNED") }
+        })!;
+        File.WriteAllText(inventoryPath, inventory.ToJsonString());
+        var resolutionWorkPath = Path.Combine(fixture.FullName, "governance/work-items/WORK-UI.yaml");
+        const string resolutionProofRef = "governance/evidence/WORK-UI-UI-COMPLIANCE.json";
+        const string resolutionValidationRef = "governance/evidence/WORK-UI-VALIDATION.json";
+        var resolutionOwned = new[] { "web/apps/fixture/main.tsx", UiComplianceApplication.InventoryPath };
+        var resolutionWork = JsonSerializer.SerializeToNode(new
+        {
+            schema_version = 1, work_item_id = "WORK-UI", milestone_id = "MVP", sprint_id = (string?)null,
+            title = "Synthetic resolved UI lifecycle fixture", status = "UI_REQUIRED", type = "GOVERNANCE_TOOLING",
+            authority_refs = fixtureAuthorityRefs, flow_refs = Array.Empty<string>(), contract_refs = Array.Empty<string>(), decision_refs = Array.Empty<string>(),
+            acceptance_criteria = fixtureAcceptance, prerequisites = Array.Empty<string>(), blockers = Array.Empty<string>(),
+            impact = new { architecture = false, ui = true, sdk = false, financial = false, compliance = false, security = false, devops = false, support = false },
+            activated_roles = fixtureRoles, required_tests = Array.Empty<string>(),
+            required_evidence = new[] { resolutionValidationRef, resolutionProofRef, "governance/evidence/WORK-UI-ROLE-REVIEWS.json" },
+            ui_evidence_ref = resolutionProofRef, context_policy = "TASK", todos = Array.Empty<string>(), defects = Array.Empty<string>(),
+            authority_resolution = new { schema_version = 1, outcome = "RESOLVED_EXISTING_AUTHORITY", reviewed_authority_refs = fixtureAuthorityRefs,
+                unresolved_question = "None in this synthetic fixture", conclusion = "Synthetic existing approved visual authority", conditional_trigger_absent = false, reviewed_at = "2026-09-30T00:00:00-04:00" },
+            created_at = "2026-09-30T00:00:00-04:00", updated_at = "2026-09-30T00:00:00-04:00"
+        })!;
+        File.WriteAllText(resolutionWorkPath, resolutionWork.ToJsonString());
+        var resolutionValidation = JsonSerializer.SerializeToNode(new { scope_id = "WORK-UI", validation_kind = "COMMITTED", result = "PENDING", owned_behavior_paths = resolutionOwned })!;
+        File.WriteAllText(Path.Combine(fixture.FullName, resolutionValidationRef), resolutionValidation.ToJsonString());
+        File.WriteAllText(Path.Combine(fixture.FullName, "governance/evidence/WORK-UI-ROLE-REVIEWS.json"), "{}"); // Explicit legacy synthetic fixture; current mandatory-role behavior is covered separately.
+        InitializeGit(fixture);
+        var sha = RunGitOutput(fixture, "rev-parse", "HEAD");
+        object Reference() => new { path = "governance/evidence/fixture-render.png", sha256 = HashFile(imagePath) };
+        object Row(string id, bool form) => new
+        {
+            id, checks = (form ? UiComplianceApplication.ValidationChecks : UiComplianceApplication.UrlChecks).Concat(UiComplianceApplication.FidelityChecks)
+                .Select(id => new { id, result = "PASS", evidence_refs = new[] { Reference() } }),
+            screenshots = new[] { Reference(), Reference() }, deviations = Array.Empty<object>()
+        };
+        var proof = JsonSerializer.SerializeToNode(new
+        {
+            scope_id = "GLOBAL_UI", result = "PASS", tested_commit_sha = sha, inventory_sha256 = HashFile(inventoryPath),
+            owned_behavior_paths = new[] { "web/apps/fixture/main.tsx", UiComplianceApplication.InventoryPath },
+            items = new[] { Row("SCREEN-A", false), Row("SCREEN-B", false), Row("FORM-B", true) }
+        })!;
+        var proofPath = Path.Combine(fixture.FullName, "governance/evidence/GLOBAL-UI-COMPLIANCE.json");
+        File.WriteAllText(proofPath, proof.ToJsonString());
+        RunGit(fixture, "add", "--", "governance/evidence/GLOBAL-UI-COMPLIANCE.json");
+        RunGit(fixture, "commit", "--quiet", "-m", "Synthetic UI evidence envelope");
+        UiCompliancePayload Run() => (UiCompliancePayload)UiComplianceApplication.Check(fixture).Payload;
+        void WriteProof(JsonNode value) => File.WriteAllText(proofPath, value.ToJsonString());
+        void Reset() { WriteProof(proof); File.WriteAllText(inventoryPath, inventory.ToJsonString()); File.WriteAllText(source, "export const fixture = 1;\n"); }
+        bool Has(string text) => Run().Failures.Any(x => x.Contains(text, StringComparison.Ordinal));
+        Check(Run().Outcome == "PASS" && Run().CoveredItems.Count == 3, "each live route/form passes independently; unimplemented future screen is not claimed");
+        var changed = proof.DeepClone(); changed["items"]!.AsArray().RemoveAt(2); WriteProof(changed);
+        Check(Has("missing for applicable item: FORM-B"), "one route passing cannot approve another form"); Reset();
+        changed = proof.DeepClone(); var validation = changed["items"]![2]!["checks"]!.AsArray(); validation.Remove(validation.Single(x => x!["id"]!.GetValue<string>() == "VAL-003")); WriteProof(changed);
+        Check(Has("missing or duplicate VAL-003"), "backend validation evidence is mandatory per form"); Reset();
+        changed = proof.DeepClone(); changed["items"]![1]!["checks"]![2]!["result"] = "FAIL"; WriteProof(changed);
+        Check(Has("URL-003 is not PASS"), "failed history/refresh acceptance blocks the affected route"); Reset();
+        changed = proof.DeepClone(); var exclusion = changed["items"]![0]!["checks"]![3]!; exclusion["result"] = "NOT_APPLICABLE"; exclusion["reason"] = ""; exclusion["authority_refs"] = new JsonArray(); WriteProof(changed);
+        Check(Has("unsupported exclusion"), "unjustified not-applicable labels cannot waive tests"); Reset();
+        changed = proof.DeepClone(); changed["items"]![0]!["screenshots"]![0]!["sha256"] = new string('0', 64); WriteProof(changed);
+        Check(Has("hash mismatch"), "stale visual evidence is rejected"); Reset();
+        changed = proof.DeepClone(); changed["items"]![0]!["deviations"]!.AsArray().Add(JsonSerializer.SerializeToNode(new { status = "AI_APPROVED", approval_evidence = Reference() })); WriteProof(changed);
+        Check(Has("not Product Owner approved"), "AI cannot approve a material visual deviation"); Reset();
+        var invChanged = inventory.DeepClone(); invChanged["items"]![0]!["figma_refs"] = new JsonArray(); File.WriteAllText(inventoryPath, invChanged.ToJsonString());
+        Check(Has("UI_REQUIRED"), "missing approved visual authority blocks acceptance"); Reset();
+        invChanged = inventory.DeepClone(); invChanged["items"]![1]!["runtime_pathname"] = "/alpha"; File.WriteAllText(inventoryPath, invChanged.ToJsonString());
+        Check(Has("UI_ROUTING_DEFECT"), "component swaps under a stale URL fail"); Reset();
+        File.AppendAllText(source, "export const changed = true;\n"); Check(Has("behavior changed after"), "owned source changes invalidate prior tested SHA"); Reset();
+        var newSource = Path.Combine(app.FullName, "unregistered.tsx"); File.WriteAllText(newSource, "export const another = 1;");
+        Check(Has("omits an applicable registered file"), "new untracked UI source cannot escape the evidence source set"); File.Delete(newSource);
+        var otherApp = Directory.CreateDirectory(Path.Combine(fixture.FullName, "web/apps/missing")); File.WriteAllText(Path.Combine(otherApp.FullName, "main.tsx"), "export const app = true;");
+        Check(Has("application is absent"), "each new app must enter the global inventory"); File.Delete(Path.Combine(otherApp.FullName, "main.tsx")); Directory.Delete(otherApp.FullName);
+        changed = proof.DeepClone(); changed["tested_commit_sha"] = new string('0', 40); WriteProof(changed);
+        Check(Has("tested committed ancestor"), "invented commit identity is refused"); Reset();
+        changed = proof.DeepClone(); changed["items"]![0]!["screenshots"]![0]!["path"] = "../outside.png"; WriteProof(changed);
+        Check(Has("malformed"), "evidence paths cannot escape the checkout"); Reset();
+        changed = proof.DeepClone(); changed["scope_id"] = "ANOTHER-SCOPE"; WriteProof(changed);
+        Check(Has("requested scope"), "one work scope cannot silently substitute for another"); Reset();
+        Check(Run().Outcome == "PASS", "negative checks restore the original valid fixture without weakening a gate");
+        var resolutionChecks = 0;
+        void ResolutionCheck(bool value, string message) { resolutionChecks++; Expect(value, "Resolved UI_REQUIRED lifecycle: " + message, failures); }
+        resolutionWork["git_state"] = JsonSerializer.SerializeToNode(new { repository_changed = true, validated_commit_sha = sha, tested_commit_sha = sha,
+            work_item_commit_shas = new[] { sha }, closure_commit_sha = (string?)null, remaining_uncommitted_paths = Array.Empty<string>(), remaining_uncommitted_classification = "NONE" });
+        resolutionValidation["result"] = "PASS"; resolutionValidation["tested_commit_sha"] = sha; resolutionValidation["validated_commit_sha"] = sha;
+        var scopedProof = proof.DeepClone(); scopedProof["scope_id"] = "WORK-UI";
+        File.WriteAllText(Path.Combine(fixture.FullName, resolutionValidationRef), resolutionValidation.ToJsonString());
+        File.WriteAllText(Path.Combine(fixture.FullName, resolutionProofRef), scopedProof.ToJsonString());
+        void WriteResolutionWork(JsonNode value) => File.WriteAllText(resolutionWorkPath, value.ToJsonString());
+        WriteResolutionWork(resolutionWork);
+        RunGit(fixture, "add", "--", "governance/work-items/WORK-UI.yaml", resolutionValidationRef, resolutionProofRef);
+        RunGit(fixture, "commit", "--quiet", "-m", "Synthetic committed UI resolution");
+        TransitionPayload Transition(string destination = "REFINEMENT") => (TransitionPayload)GovernanceApplication.CheckTransition(fixture, "WORK-UI", destination).Payload;
+        ResolutionCheck(((GatePayload)GovernanceApplication.CheckGate(fixture, "WORK-UI").Payload).Outcome == "READY", "fixture has real passing committed work and scope-bound UI gates");
+        ResolutionCheck(Transition().Outcome == "ALLOWED", "resolved validated UI work may return to refinement");
+        ResolutionCheck(Transition("DONE").Outcome != "ALLOWED", "no direct completion or normal-state skipping");
+        var changedWork = resolutionWork.DeepClone(); changedWork["status"] = "BLOCKED"; WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome != "ALLOWED", "other side states retain their existing refusal"); WriteResolutionWork(resolutionWork);
+        changedWork = resolutionWork.DeepClone(); changedWork["blockers"] = new JsonArray("unresolved fixture blocker"); WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome == "REJECTED", "ordinary work blockers still reject unblocking"); WriteResolutionWork(resolutionWork);
+        changedWork = resolutionWork.DeepClone(); changedWork.AsObject().Remove("authority_resolution"); WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome == "REJECTED", "recorded authority resolution is required"); WriteResolutionWork(resolutionWork);
+        changedWork = resolutionWork.DeepClone(); changedWork.AsObject().Remove("ui_evidence_ref"); WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome == "REJECTED", "a legacy or unrelated PASS cannot replace scope-bound UI proof"); WriteResolutionWork(resolutionWork);
+        changedWork = resolutionWork.DeepClone(); changedWork["git_state"]!["repository_changed"] = false; WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome == "REJECTED", "repository-changing committed validation is mandatory"); WriteResolutionWork(resolutionWork);
+        File.AppendAllText(source, "export const stale = true;\n");
+        ResolutionCheck(Transition().Outcome == "REJECTED", "stale owned source blocks the side-state exit"); File.WriteAllText(source, "export const fixture = 1;\n");
+        var dirtyProof = scopedProof.DeepClone(); dirtyProof["result"] = "FAIL"; File.WriteAllText(Path.Combine(fixture.FullName, resolutionProofRef), dirtyProof.ToJsonString());
+        ResolutionCheck(Transition().Outcome == "REJECTED", "failed or uncommitted UI proof is refused"); File.WriteAllText(Path.Combine(fixture.FullName, resolutionProofRef), scopedProof.ToJsonString());
+        Directory.CreateDirectory(Path.Combine(fixture.FullName, "governance/todos"));
+        var todoPath = Path.Combine(fixture.FullName, "governance/todos/TODO-UI-FIXTURE.yaml");
+        var todo = JsonSerializer.SerializeToNode(new { schema_version = 1, id = "TODO-UI-FIXTURE", work_item_id = "WORK-UI", title = "Synthetic tracked UI blocker", status = "OPEN", priority = "P2", owner_role = "governance-engineer", prerequisites = Array.Empty<string>(), acceptance_condition = "Synthetic resolved state", created_at = "2026-09-30T00:00:00-04:00", updated_at = "2026-09-30T00:00:00-04:00" })!;
+        File.WriteAllText(todoPath, todo.ToJsonString());
+        changedWork = resolutionWork.DeepClone(); changedWork["todos"] = new JsonArray("TODO-UI-FIXTURE"); WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome == "REJECTED", "an open linked TODO cannot be ignored");
+        todo["status"] = "DONE"; File.WriteAllText(todoPath, todo.ToJsonString());
+        ResolutionCheck(Transition().Outcome == "ALLOWED", "a resolved linked TODO permits the otherwise valid exit");
+        changedWork["todos"] = new JsonArray("TODO-DOES-NOT-EXIST"); WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome == "REJECTED", "missing linked records fail closed");
+        Directory.CreateDirectory(Path.Combine(fixture.FullName, "governance/defects"));
+        var defectPath = Path.Combine(fixture.FullName, "governance/defects/DEF-UI-FIXTURE.yaml");
+        var defect = JsonSerializer.SerializeToNode(new { schema_version = 1, defect_id = "DEF-UI-FIXTURE", work_item_id = "WORK-UI", classification = "UI_REQUIRED", severity = "SEV-3", status = "OPEN", environment = "synthetic fixture", description = "Synthetic unresolved design defect", expected_behavior_ref = "docs/authority/mirror.txt", evidence = fixtureImageRefs, affected_versions = fixtureVersions, created_at = "2026-09-30T00:00:00-04:00", updated_at = "2026-09-30T00:00:00-04:00" })!;
+        File.WriteAllText(defectPath, defect.ToJsonString());
+        changedWork = resolutionWork.DeepClone(); changedWork["defects"] = new JsonArray("DEF-UI-FIXTURE"); WriteResolutionWork(changedWork);
+        ResolutionCheck(Transition().Outcome == "REJECTED", "open design defects still block acceptance");
+        defect["status"] = "CLOSED"; File.WriteAllText(defectPath, defect.ToJsonString());
+        ResolutionCheck(Transition().Outcome == "ALLOWED", "closed tracked defects restore the original guarded positive path");
+        // The isolated browser tool is an exact TEST_FIXTURE source, never a general tools/ source root.
+        const string toolSource = "tools/browser-testing/BrowserTestGovernedContent.cs";
+        var toolFile = Path.Combine(fixture.FullName, toolSource);
+        Directory.CreateDirectory(Path.GetDirectoryName(toolFile)!); File.WriteAllText(toolFile, "// Synthetic tool UI source\n");
+        var toolInventory = inventory.DeepClone();
+        var toolItem = JsonSerializer.SerializeToNode(Item("SCREEN-TOOL", "SCREEN", "/browser-testing/admin", "TEST_FIXTURE"))!;
+        toolItem["source_paths"] = new JsonArray(toolSource); toolInventory["items"]!.AsArray().Add(toolItem);
+        var savedInventory = File.ReadAllBytes(inventoryPath); var savedProof = File.ReadAllBytes(proofPath);
+        try
+        {
+            File.WriteAllText(inventoryPath, toolInventory.ToJsonString());
+            RunGit(fixture, "add", "--", toolSource, UiComplianceApplication.InventoryPath);
+            RunGit(fixture, "commit", "--quiet", "-m", "Synthetic exact tool UI source registration");
+            var toolProof = proof.DeepClone(); toolProof["tested_commit_sha"] = RunGitOutput(fixture, "rev-parse", "HEAD");
+            toolProof["inventory_sha256"] = HashFile(inventoryPath);
+            toolProof["owned_behavior_paths"]!.AsArray().Add(toolSource); toolProof["items"]!.AsArray().Add(JsonSerializer.SerializeToNode(Row("SCREEN-TOOL", false)));
+            WriteProof(toolProof); RunGit(fixture, "add", "--", "governance/evidence/GLOBAL-UI-COMPLIANCE.json");
+            RunGit(fixture, "commit", "--quiet", "-m", "Synthetic committed tool UI evidence");
+            var admitted = Run();
+            Check(admitted.Outcome == "PASS" && admitted.CoveredItems.Contains("SCREEN-TOOL", StringComparer.Ordinal), "exact regular tool file is accepted with committed TEST_FIXTURE evidence");
+            var badInventory = toolInventory.DeepClone(); badInventory["items"]!.AsArray().Last()!["status"] = "IMPLEMENTED";
+            File.WriteAllText(inventoryPath, badInventory.ToJsonString());
+            Check(Has("requires TEST_FIXTURE"), "tool source cannot be claimed as an implemented production surface");
+            string[] forbiddenToolSources = ["tools/browser-testing/Sibling.cs", "tools/browser-testing", "tools/other.cs"];
+            foreach (var forbidden in forbiddenToolSources)
+            {
+                badInventory = toolInventory.DeepClone(); badInventory["items"]!.AsArray().Last()!["source_paths"] = new JsonArray(forbidden);
+                File.WriteAllText(inventoryPath, badInventory.ToJsonString());
+                Check(Has("UI source path is invalid"), "tool siblings, directories and unrelated tools are not allowlisted: " + forbidden);
+            }
+            File.WriteAllText(inventoryPath, toolInventory.ToJsonString());
+            var unowned = toolProof.DeepClone(); var ownership = unowned["owned_behavior_paths"]!.AsArray();
+            ownership.Remove(ownership.Single(node => node!.GetValue<string>() == toolSource)); WriteProof(unowned);
+            Check(Has("omits an applicable registered file"), "exact tool source must be included in tested source ownership"); WriteProof(toolProof);
+            var toolBytes = File.ReadAllBytes(toolFile);
+            File.Delete(toolFile);
+            try { Check(Has("regular non-reparse file"), "missing exact tool source is rejected"); }
+            finally { File.WriteAllBytes(toolFile, toolBytes); }
+            File.Delete(toolFile); Directory.CreateDirectory(toolFile);
+            try { Check(Has("regular non-reparse file"), "a directory masquerading as the exact tool filename is rejected"); }
+            finally { Directory.Delete(toolFile, false); File.WriteAllBytes(toolFile, toolBytes); }
+            File.AppendAllText(toolFile, "// Changed after tested SHA\n");
+            try { Check(Has("behavior changed after"), "exact tool changes after tested SHA invalidate acceptance"); }
+            finally { File.WriteAllBytes(toolFile, toolBytes); }
+            // Junction targets stay in the same owned fixture; creation never requires a system privilege change.
+            string[] linkedParents = ["tools/browser-testing", "tools"];
+            foreach (var parent in linkedParents)
+            {
+                var link = Path.Combine(fixture.FullName, parent); var target = Path.Combine(fixture.FullName, "owned-ui-junction-target");
+                var boundary = Path.GetFullPath(fixture.FullName).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
+                if (!Path.GetFullPath(link).StartsWith(boundary, StringComparison.OrdinalIgnoreCase) || !Path.GetFullPath(target).StartsWith(boundary, StringComparison.OrdinalIgnoreCase)) throw new InvalidOperationException("UI junction targets must remain in the owned fixture.");
+                Directory.Move(link, target);
+                try
+                {
+                    if (OperatingSystem.IsWindows())
+                    {
+                        var start = new ProcessStartInfo("powershell.exe") { UseShellExecute = false, CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden };
+                        foreach (var argument in new[] { "-NoProfile", "-NonInteractive", "-Command", "New-Item -ItemType Junction -Path '" + link.Replace("'", "''", StringComparison.Ordinal) + "' -Target '" + target.Replace("'", "''", StringComparison.Ordinal) + "' -ErrorAction Stop | Out-Null" }) start.ArgumentList.Add(argument);
+                        using var process = Process.Start(start) ?? throw new InvalidOperationException("Cannot create owned UI fixture junction.");
+                        var terminal = false;
+                        try
+                        {
+                            if (!(terminal = process.WaitForExit(10000)))
+                            {
+                                process.Kill(true);
+                                terminal = process.WaitForExit(10000);
+                                throw new InvalidOperationException(terminal ? "Owned UI fixture junction creation timed out." : "Owned UI fixture junction process exit is unconfirmed.");
+                            }
+                            if (process.ExitCode != 0) throw new InvalidOperationException("Owned UI fixture junction creation failed; reparse check was not executed.");
+                        }
+                        finally
+                        {
+                            if (!terminal)
+                            {
+                                retainFixture = true;
+                                Console.Error.WriteLine($"UI junction process {process.Id} is not confirmed terminal; owned fixture retained without cleanup: {fixture.FullName}");
+                            }
+                        }
+                    }
+                    else Directory.CreateSymbolicLink(link, target);
+                    Check(Has("regular non-reparse file"), "reparse parent below the repository cannot redirect the allowed tool file: " + parent);
+                }
+                finally
+                {
+                    if (!retainFixture)
+                    {
+                        if (Directory.Exists(link)) Directory.Delete(link, false);
+                        Directory.Move(target, link);
+                    }
+                }
+            }
+            Check(Run().Outcome == "PASS", "restored regular tool source retains its complete committed fixture evidence");
+        }
+        finally { if (!retainFixture) { File.WriteAllBytes(inventoryPath, savedInventory); File.WriteAllBytes(proofPath, savedProof); } }
+        Console.WriteLine($"Resolved UI_REQUIRED lifecycle checks: {resolutionChecks}");
+    }
+    finally { if (!retainFixture) DeleteFixture(fixture); }
+    Console.WriteLine($"Global UI evidence gate checks: {checks}");
+}
+
+static void RunMilestoneRevisionReviewChecks(DirectoryInfo repositoryRoot, ICollection<string> failures)
+{
+    var fixture = Directory.CreateTempSubdirectory("tunner-governance-milestone-review-fixture-");
+    var checks = 0;
+    string[] auditorRoles = ["auditor"];
+    string[] mirrorAuthority = ["docs/authority/mirror.txt"];
+    void Check(bool value, string message) { checks++; Expect(value, "Milestone Revision review: " + message, failures); }
+    try
+    {
+        CreateFixture(repositoryRoot, fixture);
+        File.Copy(Path.Combine(repositoryRoot.FullName, "governance/policies/lifecycle-policy.yaml"), Path.Combine(fixture.FullName, "governance/policies/lifecycle-policy.yaml"), true);
+        var milestonePath = Path.Combine(fixture.FullName, "governance/milestones/MVP.yaml");
+        File.WriteAllText(milestonePath, File.ReadAllText(milestonePath).Replace("status: ACTIVE", "status: CLOSED", StringComparison.Ordinal));
+        var historical = Path.Combine(fixture.FullName, "governance/evidence/MVP-MILESTONE-ROLE-REVIEWS.json");
+        File.WriteAllText(historical, JsonSerializer.Serialize(new { scope_type = "MILESTONE", scope_id = "MVP", status = "PASS", reviews = new[] { new { role = "auditor", conclusion = "PASS" } } }));
+        var originalBytes = File.ReadAllBytes(historical);
+        InitializeGit(fixture);
+        bool Bound() => !((MilestoneClosePayload)GovernanceApplication.CheckMilestoneClose(fixture, "MVP").Payload).Failures.Any(x => x.Contains("reviews lack current committed scope binding", StringComparison.Ordinal));
+        Check(!Bound(), "historical unbound PASS alone does not satisfy current readiness");
+        var created = RevisionApplication.Create(fixture, new("MVP", "HARDENING", "Current milestone review", "Preserve historical review and add current proof", "NON_BLOCKING", [], ["docs/authority/mirror.txt"], [], ["current committed review"]));
+        var id = ((RevisionOperationPayload)created.Payload).RevisionId;
+        if (created.ExitCode != 0) throw new InvalidOperationException(GovernanceApplication.Serialize(created));
+        var recordPath = "governance/revisions/" + id + ".yaml";
+        var record = Path.Combine(fixture.FullName, recordPath);
+        var proofPath = "governance/evidence/" + id + "-proof.json";
+        var reviewPath = "governance/evidence/" + id + "-MILESTONE-ROLE-REVIEWS.json";
+        const string sourcePath = "docs/current-review-scope.txt";
+        File.WriteAllText(Path.Combine(fixture.FullName, sourcePath), "current scope");
+        EditRevision(record, "status", "VALIDATION"); EditRevision(record, "product_acceptance_required", false);
+        EditRevision(record, "required_roles", auditorRoles); EditRevision(record, "evidence_refs", new[] { proofPath, reviewPath });
+        File.WriteAllText(Path.Combine(fixture.FullName, proofPath), JsonSerializer.Serialize(new { scope_id = id, validation_kind = "COMMITTED", owned_behavior_paths = new[] { sourcePath } }));
+        File.WriteAllText(Path.Combine(fixture.FullName, reviewPath), "{}");
+        var specialist = "governance/reviews/REV-" + id + "-auditor.yaml";
+        File.WriteAllText(Path.Combine(fixture.FullName, specialist), JsonSerializer.Serialize(new { schema_version = 1, review_id = "REV-" + id + "-auditor", work_item_id = id, role = "auditor", status = "PASS", result = "PASS", reviewed_at = "2026-10-17T00:00:00Z", skill_id = "auditor", skill_version = "1.0.0", skill_hash = new string('a', 64), authority_refs = mirrorAuthority, context_artifacts = new[] { recordPath }, evidence_refs = new[] { proofPath }, findings = Array.Empty<string>(), blocking_findings = Array.Empty<string>(), required_actions = Array.Empty<string>(), context_expansion_requested = false }));
+        RunGit(fixture, "add", "--", recordPath, proofPath, reviewPath, sourcePath, specialist); RunGit(fixture, "commit", "--quiet", "-m", "Revision review source candidate");
+        var sha = RunGitOutput(fixture, "rev-parse", "HEAD");
+        var snapshot = JsonSerializer.SerializeToNode(GovernanceApplication.MilestoneReviewSnapshot(fixture, "MVP").Payload)!;
+        File.WriteAllText(Path.Combine(fixture.FullName, reviewPath), JsonSerializer.Serialize(new { scope_type = "MILESTONE", scope_id = "MVP", status = "PASS", revision_ref = id, reviewed_commit_sha = sha, reviewed_scope_sha256 = snapshot["ReviewedScopeSha256"]!.GetValue<string>(), reviews = new[] { new { role = "auditor", conclusion = "PASS" } } }));
+        File.WriteAllText(Path.Combine(fixture.FullName, proofPath), JsonSerializer.Serialize(new { scope_id = id, validation_kind = "COMMITTED", result = "PASS", tested_commit_sha = sha, validated_commit_sha = sha, owned_behavior_paths = new[] { sourcePath } }));
+        EditRevision(record, "git_state", new { repository_changed = true, validated_commit_sha = sha, tested_commit_sha = sha, work_item_commit_shas = new[] { sha }, closure_commit_sha = (string?)null, remaining_uncommitted_paths = Array.Empty<string>(), remaining_uncommitted_classification = "NONE" });
+        Check(!Bound(), "an open Revision cannot replace historical review binding");
+        EditRevision(record, "status", "CLOSED"); EditRevision(record, "closed_at", "2026-10-17T01:00:00Z");
+        Check(!Bound(), "uncommitted closure/evidence cannot waive the current binding");
+        RunGit(fixture, "add", "--", recordPath, proofPath, reviewPath); RunGit(fixture, "commit", "--quiet", "-m", "Committed technical Revision review");
+        var closed = RevisionApplication.CloseCheck(fixture, id);
+        if (closed.ExitCode != 0) Console.Error.WriteLine(GovernanceApplication.Serialize(closed));
+        Check(closed.ExitCode == 0 && Bound(), "fully validated committed closed Revision supplies current milestone proof");
+        EditRevision(record, "evidence_refs", new[] { proofPath, reviewPath, "governance/evidence/duplicate-MILESTONE-ROLE-REVIEWS.json" });
+        RunGit(fixture, "add", "--", recordPath); RunGit(fixture, "commit", "--quiet", "-m", "Reject ambiguous milestone reviews");
+        Check(!Bound(), "multiple claimed milestone reviews fail closed without an exception");
+        EditRevision(record, "evidence_refs", new[] { proofPath, reviewPath });
+        RunGit(fixture, "add", "--", recordPath); RunGit(fixture, "commit", "--quiet", "-m", "Restore singular milestone review");
+        var reviewFile = Path.Combine(fixture.FullName, reviewPath); var saved = File.ReadAllBytes(reviewFile);
+        File.AppendAllText(reviewFile, " "); Check(!Bound(), "dirty replacement review is refused"); File.WriteAllBytes(reviewFile, saved);
+        var binding = Path.Combine(fixture.FullName, "governance/work-items/TUN-001.yaml"); var savedBinding = File.ReadAllText(binding);
+        File.AppendAllText(binding, "\n# scope changed\n"); Check(!Bound(), "a scope change invalidates the replacement review too"); File.WriteAllText(binding, savedBinding);
+        File.AppendAllText(historical, " "); Check(!Bound(), "historical review tampering is never concealed by a new receipt"); File.WriteAllBytes(historical, originalBytes);
+        Check(Bound() && File.ReadAllBytes(historical).SequenceEqual(originalBytes), "historical receipt stays byte-identical after all negative checks");
+    }
+    finally { DeleteFixture(fixture); }
+    Console.WriteLine($"Milestone Revision review checks: {checks}");
+}
+
+static void RunHarnessFailureReportingCheck(ICollection<string> failures)
+{
+    var start = new ProcessStartInfo("dotnet") { RedirectStandardOutput = true, RedirectStandardError = true, UseShellExecute = false, CreateNoWindow = true };
+    start.ArgumentList.Add(typeof(Program).Assembly.Location);
+    start.ArgumentList.Add("--self-test-failure-reporting");
+    using var process = Process.Start(start) ?? throw new InvalidOperationException("Cannot start harness reporting check");
+    var stdout = process.StandardOutput.ReadToEnd();
+    var stderr = process.StandardError.ReadToEnd();
+    process.WaitForExit();
+    Expect(process.ExitCode == 1 && stderr.Contains("Controlled harness failure reporting check", StringComparison.Ordinal) &&
+        !stderr.Contains("Unhandled exception.", StringComparison.Ordinal) && !stdout.Contains("PASS:", StringComparison.Ordinal),
+        "Unexpected harness errors must return exit 1 with diagnostics rather than an unhandled Windows application error.", failures);
+    Console.WriteLine("Harness failure reporting checks: 1");
 }

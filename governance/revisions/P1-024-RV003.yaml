@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "revision_id": "P1-024-RV003",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P1-024",
+  "parent_revision_id": "P1-024-RV002",
+  "parent_milestone_revision_id": null,
+  "title": "Reuse versioned OpenBao credential transport for TOTP",
+  "revision_type": "COMPATIBILITY",
+  "status": "CLOSED",
+  "reason": "P2-008 needs immutable owner-bound credential versions while preserving the closed installer and engineering-reference behavior; additive shared transport avoids duplicate provider mechanics.",
+  "authority_refs": [
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [
+    "docs/development/P2_008_TOTP_SCOPE.md",
+    "governance/evidence/TUN-P2-008-AUTHORITY-RESOLUTION.json"
+  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Preserve existing engineering reference, installer, scoped-token, redirect-denial and safe-error behavior; add only version-bound credential provider mechanics and meaningful regressions, with committed source and final security review. Current security/environment authority is resolved in P2-008 authority evidence; no baseline semantics replace it.",
+    "Reuse the existing loopback bounded-child vault bootstrap for finite synthetic TOTP test instances, preserving R2 semantics and requiring no-secret/no-pull/loopback/verified-cleanup regressions; never create production bootstrap configuration."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "project-manager",
+    "governance-engineer",
+    "full-stack-engineer",
+    "solution-architect",
+    "tester-qa-engineer",
+    "cyber-security-engineer",
+    "devops-engineer",
+    "rd-engineer",
+    "auditor",
+    "compliance-specialist"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P1-024-RV003-SCOPE.json",
+    "governance/evidence/TUN-P2-008-STARTUP-REVIEWS.json",
+    "governance/evidence/P1-024-RV003-VALIDATION.json",
+    "governance/evidence/P1-024-RV003-ROLE-REVIEWS.json",
+    "governance/evidence/p2-008-totp-20261110/final-integration/947f8b0/execution-index.json",
+    "governance/evidence/p2-008-totp-20261110/final-carrier/337b196/execution-index.json",
+    "governance/evidence/p2-008-totp-20261110/final-closure/337b196/rv003-close-aligned.json",
+    "governance/evidence/p2-008-totp-20261110/final-closure/337b196/rv003-to-closed-check.json"
+  ],
+  "created_at": "2026-11-10T16:22:14.3349044+00:00",
+  "closed_at": "2026-11-11T06:32:07.796Z",
+  "product_acceptance_required": false,
+  "git_state": {
+    "repository_changed": true,
+    "validated_commit_sha": "337b1967c1581212141a0cc4299731fa79d0ea6d",
+    "tested_commit_sha": "337b1967c1581212141a0cc4299731fa79d0ea6d",
+    "work_item_commit_shas": [
+      "4467fd42112bcff579ca28eaa024245da77b799b",
+      "19617c5a2d15466ddc05260b05004506c7cde3f3",
+      "947f8b090b4f74a474a71e47badcb595424bd734",
+      "2b15d5cffc306f44797c237b50894c85586013d9",
+      "337b1967c1581212141a0cc4299731fa79d0ea6d"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/HANDOFF.md",
+      "docs/context/current/adaptive-selection.json",
+      "docs/context/current/authority.md",
+      "docs/context/current/contracts.md",
+      "docs/context/current/git-changes.md",
+      "docs/context/current/manifest.json",
+      "docs/context/current/relevant-flows.md",
+      "docs/context/current/summary.md",
+      "docs/context/current/tests.md",
+      "docs/project/CURRENT_STATE.md",
+      "docs/project/HANDOFF.md",
+      "docs/project/PROJECT_CONTEXT.md",
+      ".vscode/settings.json",
+      "%SystemDrive%/"
+    ],
+    "remaining_uncommitted_classification": "UNRELATED_ACTIVE_WORK"
+  }
+}

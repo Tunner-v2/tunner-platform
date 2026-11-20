@@ -4,7 +4,7 @@
   "milestone_id": "P2",
   "sprint_id": null,
   "title": "OpenIddict Product authorization and revocation contracts",
-  "status": "BACKLOG",
+  "status": "DONE",
   "type": "FEATURE",
   "authority_refs": [
     "docs/authority/current-authority.json",
@@ -24,7 +24,8 @@
     "docs/authority/current/development/34_Architecture_to_Development_Traceability_Matrix.md"
   ],
   "contract_refs": [
-    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md"
+    "docs/authority/current/development/32_Domain_API_Event_Data_and_Policy_Contract_Catalog.md",
+    "docs/contracts/product-authorization-contract.md"
   ],
   "decision_refs": [
     "ADR-0006",
@@ -44,7 +45,7 @@
   "blockers": [],
   "impact": {
     "architecture": true,
-    "ui": false,
+    "ui": true,
     "sdk": false,
     "financial": false,
     "compliance": false,
@@ -61,7 +62,11 @@
     "cyber-security-engineer",
     "auditor",
     "sdk-engineer",
-    "rd-engineer"
+    "rd-engineer",
+    "ui-ux-engineer",
+    "frontend-engineer",
+    "end-user-ux-reviewer",
+    "content-writer"
   ],
   "required_tests": [
     "redirect/client/environment/PKCE/audience/scope rejection",
@@ -71,9 +76,11 @@
   "required_evidence": [
     "governance/evidence/TUN-P2-014-VALIDATION.json"
   ],
+  "ui_evidence_ref": "governance/evidence/TUN-P2-014-UI-COMPLIANCE.json",
   "context_policy": "TASK",
   "todos": [],
   "defects": [],
   "created_at": "2026-10-16T17:48:49.296Z",
-  "updated_at": "2026-10-16T17:48:49.296Z"
+  "updated_at": "2026-11-15T12:53:16Z",
+  "git_state": {"repository_changed":true,"validated_commit_sha":"98807ebe4bb7cb4e74b1aecf938a9edb8c243475","tested_commit_sha":"98807ebe4bb7cb4e74b1aecf938a9edb8c243475","work_item_commit_shas":["a4bd89fd46588c20eed7bfc25d13c0aa536859a4","ac80a710cc5183a0973fc3c6a01d91f68fabffef","e45e31f6ab8a6462aceef9dfe7bf3e2be36cf15c","7925bd14d2c09fa45ff610de2b0a108db9bfc8f7","98807ebe4bb7cb4e74b1aecf938a9edb8c243475"],"closure_commit_sha":null,"remaining_uncommitted_paths":["docs/context/current","docs/project",".vscode/settings.json","governance/evidence/p2-009-recovery-20261111/public-integration-c71495c"],"remaining_uncommitted_classification":"PREEXISTING_UNRELATED"}
 }

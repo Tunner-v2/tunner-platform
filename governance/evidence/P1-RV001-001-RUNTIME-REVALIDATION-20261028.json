@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "scope_id": "P1-RV001-001",
+  "result": "PASS_THREE_RUNTIME_IMAGES_LGTM_OPEN",
+  "build_source_commit": "401509b30d4c0c1ea49768809518335a89918c5a",
+  "browser_tested_commit": "f132e0fbf5322650d2cdcb3f7cacb78e659cfded",
+  "recorded_at": "2026-10-28T18:54:02.926Z",
+  "images": [
+    {
+      "component": "postgres",
+      "image": "tunner-security/postgres:18.6-r1",
+      "image_id": "sha256:c6b98a0107d697365d79ce93ceadb6c2f1e85bf0673aa2dae1c3bfae564a381c",
+      "commit": "401509b30d4c0c1ea49768809518335a89918c5a",
+      "recipeDirty": false,
+      "findings": 0,
+      "targets": 2
+    },
+    {
+      "component": "openbao",
+      "image": "tunner-security/openbao:2.7.1-r2",
+      "image_id": "sha256:c4fbeccf6bab0a58b239bc0a1e6ce4e8e106675388456ea3c181de58fbb697c0",
+      "commit": "401509b30d4c0c1ea49768809518335a89918c5a",
+      "recipeDirty": false,
+      "findings": 0,
+      "targets": 2
+    },
+    {
+      "component": "mailpit",
+      "image": "tunner-security/mailpit:1.31.6-r1",
+      "image_id": "sha256:09a4d89d97f9f2380c349f809bf8dfb4214e62246cd97146721ff3eadb644931",
+      "commit": "401509b30d4c0c1ea49768809518335a89918c5a",
+      "recipeDirty": false,
+      "findings": 0,
+      "targets": 2
+    }
+  ],
+  "compatibility": {
+    "postgres": 8,
+    "openbao": 8,
+    "mailpit": 5,
+    "failed": 0
+  },
+  "real_browser": {
+    "passed": 3,
+    "failed": 0
+  },
+  "starter_safety": {
+    "passed": 7,
+    "failed": 0
+  },
+  "ci_enforcement": {
+    "passed": 27,
+    "failed": 0
+  },
+  "scan_policy": {
+    "severity": [
+      "HIGH",
+      "CRITICAL"
+    ],
+    "ignore_unfixed": true,
+    "fail_closed": true
+  },
+  "upstream_go_jose": {
+    "version": "4.1.6",
+    "passed": 522,
+    "failed": 0,
+    "mode": "CGO_ENABLED=0 matches maintained OpenBao build; initial cgo executable-format failure retained separately"
+  },
+  "receipts": [
+    {
+      "raw_ref": "artifacts/security-followup-20261028/browser-maintained-real-tests.log",
+      "raw_sha256": "ab7affe061071006267f73d8a6f4b2d8662db7549ec645c7994676390fbdc240",
+      "portable_ref": "governance/evidence/security-20261028/real-browser.log",
+      "portable_sha256": "4a8aca5171a619444060469777c89867d0cdcecdcaf66612543966da9277ef5d"
+    },
+    {
+      "raw_ref": "artifacts/security-followup-20261028/browser-maintained-safety.log",
+      "raw_sha256": "7f4f378b03d58b1588d49b924bc04b2617376fd9a4c74ed31464d9ca71e79938",
+      "portable_ref": "governance/evidence/security-20261028/starter-safety.log",
+      "portable_sha256": "144e30bf64f23d3bf65b5c8d3b5e1d1d3a0647836aa6559eb7bce8fa689cf7c9"
+    },
+    {
+      "raw_ref": "artifacts/security-followup-20261028/browser-maintained-restart.log",
+      "raw_sha256": "e2641e2da75379c838dd38344e0b97440049dacfbc8f3de21e73bfb22cc5932a",
+      "portable_ref": "governance/evidence/security-20261028/starter.log",
+      "portable_sha256": "07244a36364b9e04feef4e7ada22a37b7a7e860e3be8eca6ab101e7fea9c44e3"
+    },
+    {
+      "raw_ref": "artifacts/security-followup-20261028/runtime-source-checks.log",
+      "raw_sha256": "6b41002cb564132ed76ef6009b594410137c363337dc7052dca125d5a179561d",
+      "portable_ref": "governance/evidence/security-20261028/source-checks.log",
+      "portable_sha256": "aabc34177d475ae0db978b0e31c056fe9330d35e6b21365ca5c02fd013e63682"
+    }
+  ],
+  "lgtm": {
+    "result": "UNRESOLVED",
+    "findings": 87,
+    "source": "artifacts/security-followup-20261028/lgtm-0.38.1-scan.json",
+    "signing_scope": "Approved dev/test implementation only; runtime acceptance not granted"
+  },
+  "publication": false,
+  "release": false
+}

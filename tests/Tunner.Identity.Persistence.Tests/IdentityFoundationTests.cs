@@ -135,11 +135,23 @@ public sealed class IdentityFoundationTests(IdentityPostgresFixture fixture) : I
         Assert.Empty(await context.Database.GetAppliedMigrationsAsync());
         await context.Database.MigrateAsync();
         Assert.False(context.Database.HasPendingModelChanges());
-        context.Accounts.Add(Row());await context.SaveChangesAsync();
-        var appliedBefore=await context.Database.GetAppliedMigrationsAsync();
-        await Assert.ThrowsAsync<PostgresException>(()=>context.GetService<IMigrator>().MigrateAsync(Migration.InitialDatabase));
+        var account=Row();context.Accounts.Add(account);await context.SaveChangesAsync();
+        var appliedBefore=(await context.Database.GetAppliedMigrationsAsync()).ToArray();
+        Assert.Equal(context.Database.GetMigrations(),appliedBefore);
+        var guardedIndex=Array.IndexOf(appliedBefore,"20261112175254_P2FederatedRegistration");
+        Assert.True(guardedIndex>=0);
+        var rejected=await Assert.ThrowsAsync<PostgresException>(()=>context.GetService<IMigrator>().MigrateAsync(Migration.InitialDatabase));
+        Assert.Equal("23514",rejected.SqlState);
         Assert.Equal(1,await context.Accounts.CountAsync());
+        Assert.Equal(account.AccountId,(await context.Accounts.AsNoTracking().SingleAsync()).AccountId);
+        // Later empty-owner downgrades commit before this populated-data guard refuses further changes.
+        Assert.Equal(appliedBefore.Take(guardedIndex+1),await context.Database.GetAppliedMigrationsAsync());
+        Assert.False(await context.Set<OutboxMessage>().AnyAsync());
+        await context.Database.MigrateAsync();
         Assert.Equal(appliedBefore,await context.Database.GetAppliedMigrationsAsync());
+        Assert.False(context.Database.HasPendingModelChanges());
+        Assert.Equal(1,await context.Accounts.CountAsync());
+        Assert.Equal(account.AccountId,(await context.Accounts.AsNoTracking().SingleAsync()).AccountId);
         Assert.False(await context.Set<OutboxMessage>().AnyAsync());
     }
 

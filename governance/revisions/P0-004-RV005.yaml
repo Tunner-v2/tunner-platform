@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "revision_id": "P0-004-RV005",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P0-004",
+  "parent_revision_id": "P0-004-RV004",
+  "parent_milestone_revision_id": null,
+  "title": "Bound work-item admission to the requested governed scope",
+  "revision_type": "PERFORMANCE",
+  "status": "CLOSED",
+  "reason": "Observed one-item P2-016 admission exceeding40minutes and about4GB while full Next evaluates unrelated work and revision queues. Reuse the identical authority, schema, dependency, blocker, role and integration checks for the selected work item; preserve global next output and all lifecycle/security rules. No Product semantics or P0 gate change.",
+  "authority_refs": [
+    "docs/authority/baselines/1.6.0/04_Governance_and_Context_Tooling_Specification.md",
+    "docs/authority/baselines/1.6.0/12_AI_Development_Protocol_Context_and_Project_Memory.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Scoped admission matches the selected global result for valid, blocked, malformed and tampered cases; global next remains unchanged; no dependency, authority, role or integration rule is bypassed."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": ["governance-engineer", "tester-qa-engineer", "cyber-security-engineer", "auditor"],
+  "evidence_refs": ["governance/evidence/P0-004-RV005-VALIDATION.json"],
+  "product_acceptance_required": false,
+  "created_at": "2026-11-15T23:55:51.1391238\u002B00:00",
+  "closed_at": "2026-11-16T04:17:06Z",
+  "git_state": {"repository_changed":true,"tested_commit_sha":"58023be5299d024cf2ae0bf05bbcbda2f1384e26","validated_commit_sha":"58023be5299d024cf2ae0bf05bbcbda2f1384e26","work_item_commit_shas":["98807ebe4bb7cb4e74b1aecf938a9edb8c243475","58023be5299d024cf2ae0bf05bbcbda2f1384e26"],"closure_commit_sha":null,"remaining_uncommitted_paths":["docs/context/current","docs/project",".vscode/settings.json","governance/evidence/p2-009-recovery-20261111/public-integration-c71495c"],"remaining_uncommitted_classification":"PREEXISTING_UNRELATED"}
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "scope_ids": ["TUN-P2-004", "TUN-P2-005", "TUN-P2-006", "TUN-P2-007", "TUN-P2-008"],
+  "result": "ACCEPTED_BY_AUTHORIZED_PRODUCT_OWNER",
+  "recorded_at_utc": "2026-11-18T02:34:14Z",
+  "actor": "Requesting user acting as authorized Product Owner",
+  "provenance": "Explicit answer to the consolidated scoped Product acceptance question in this chat; Product Owner authority was established earlier in the session.",
+  "source_question_call_id": "call_698deefdac924bf78d1c6f12656d1b90",
+  "selected_answer": "Accept these five scoped foundations",
+  "accepted_scope": {
+    "TUN-P2-004": "Registration, verified contact and Personal Information under AMD-0007.",
+    "TUN-P2-005": "Password authentication, sign-out and server-managed BFF sessions.",
+    "TUN-P2-006": "Versioned assurance and operation-bound fresh step-up.",
+    "TUN-P2-007": "Passkey enrollment, authentication, fresh proof and revocation.",
+    "TUN-P2-008": "TOTP enrollment, verification, disable/reset, fresh proof and policy-required login MFA."
+  },
+  "engineering_gate_refs": [
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/feature-readiness/TUN-P2-004-ready.json",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/feature-readiness/TUN-P2-005-ready.json",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/feature-readiness/TUN-P2-006-ready.json",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/feature-readiness/TUN-P2-007-ready.json",
+    "governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/feature-readiness/TUN-P2-008-ready.json"
+  ],
+  "evidence_provenance": "Original per-feature gate identities and actual checked SHAs remain in their receipts; no new aggregate test run is implied. Current P004 shared-UI8 and P007/P008 shared UI qualification are separately preserved in the fix-462e269a/scoped-ui receipts.",
+  "completion": {"state":"DONE","basis":"Genuine scoped Product acceptance plus five actual native DONE transition checks returning ALLOWED; preceding per-feature READY and scoped shared-source/UI qualifications retained.","native_transition_receipt_directory":"governance/evidence/p2-019-content-20261116/open-foundation-currentness-5b8f13b1/fix-462e269a/feature-readiness","next_action":"Finish remaining closed-owner source compatibility for Recovery, Federation and Devices, then execute the two prepared Recovery keyboard tests and the mandatory global UI gate. Private HOST defect and full-runtime diagnostic requirements remain open."},
+  "lifecycle_boundary": "These five scoped foundations are completed. Whole-P2 acceptance, remaining integration/CI, production activation, protected-main merge and release remain separate.",
+  "not_authorized": ["Whole-P2 completion", "Production settings or activation", "Protected-main merge", "Release", "Edits to Figma, FigJam or Google Drive authority"]
+}

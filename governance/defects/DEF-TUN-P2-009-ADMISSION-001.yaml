@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-009-ADMISSION-001",
+  "work_item_id": "TUN-P2-009",
+  "classification": "SECURITY_DEFECT",
+  "severity": "SEV-2",
+  "status": "RESOLVED",
+  "environment": "Executed finite native62 at ad744fde52aa03404f3944c47ebb79070185e9f2; production src unchanged through candidate796d316bbc1be878f71d515e06be13d7a77b3c1d as recorded in the source-equivalence witness. Historical affected versions are retained; no production exploit or deployed-policy claim.",
+  "description": "Historical finding (recorded 2026-11-11T12:30:29.771Z; original pending wording retained as history): Generate/Replace captures the owner mutation admission before later awaited shared authentication/continuation checks. Its final witness re-resolves global recovery policy and publication but checks only the old admission interval. A separately withdrawn/superseded owner decision can therefore pass with unchanged global policy/rows. Existing current-execution authority requires final resolution of that same typed owner source from immutable original pre-mutation facts and full Allowed/binding/policy/evidence/target/interval comparison at decisionAt. No irrevocability guarantee exists; no new Product decision is required. Fix and post-apply drift/rollback/disposal regressions remain pending. Resolution verified 2026-11-12T09:47:11.800Z: The final witness now calls the same typed admissions.RequireCurrent from immutable original pre-mutation facts at the final decision time and compares Allowed, account/version/kind/facts, policy/evidence, exact retirement plan and effective interval, while retaining all existing currentness/transaction checks. Native62 actually passed seven owner-currentness cases (ADMISSION_WITHDRAWAL/POLICY/EVIDENCE/TARGET/INTERVAL/MISSING/UNCHANGED) plus distinct TRANSACTION_ADMISSION; missing/drifted admission fails closed and unchanged admission succeeds. No Product semantics or fallback authority was added.",
+  "expected_behavior_ref": "docs/contracts/operation-step-up-contract.md",
+  "evidence": [
+    "governance/evidence/TUN-P2-009-ADMISSION-CURRENTNESS-AUDIT.json",
+    "docs/development/P2_009_RECOVERY_CODES_SCOPE.md",
+    "governance/evidence/TUN-P2-009-SHARED-INTEGRATION-AUTHORIZATION.json",
+    "src/Modules/Identity/RecoveryCodeAdmission.cs",
+    "src/Modules/Identity/RecoveryCodeExecution.cs",
+    "tests/Tunner.Identity.Persistence.Tests/RecoveryCodePrivateIntegrationTests.cs",
+    "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62.json",
+    "governance/evidence/p2-009-recovery-20261111/parent-readiness-ad744fd/native-private62-summary.json",
+    "governance/evidence/p2-009-recovery-20261111/closure-796d316/evidence-index.json",
+    "governance/evidence/p2-009-recovery-20261111/closure-796d316/source-equivalence-witness.json"
+  ],
+  "affected_versions": [
+    "b3eb4ac8cb72dad932b36898ab8c46e70806bf85",
+    "29b8d113612a85f5053e25f2845293a486d1af4a"
+  ],
+  "created_at": "2026-11-11T12:30:29.771Z",
+  "updated_at": "2026-11-12T09:47:11.800Z"
+}

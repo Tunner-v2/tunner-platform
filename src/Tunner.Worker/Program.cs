@@ -8,12 +8,17 @@ namespace Tunner.Worker;
 public static class TunnerWorkerHost
 {
     public static IHost CreateHost(string[] args)
+        => CreateHost(args, null);
+
+    /// <summary>Explicit environment-owned module composition; the ordinary entry point selects no background work.</summary>
+    public static IHost CreateHost(string[] args, Action<HostApplicationBuilder>? configure)
     {
         ArgumentNullException.ThrowIfNull(args);
 
         var builder = Host.CreateApplicationBuilder(args);
         builder.Services.AddTunnerObservability();
         builder.Services.AddTunnerModules();
+        configure?.Invoke(builder);
         return builder.Build();
     }
 }

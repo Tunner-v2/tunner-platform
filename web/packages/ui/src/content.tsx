@@ -28,9 +28,15 @@ export function usePublishedContent(key: string): Readonly<PublishedContent> {
 export function contentProvenance(value: Readonly<PublishedContent>) {
   return { 'data-content-key': value.key, 'data-content-variant': value.variantRef, 'data-content-version': value.versionRef, 'data-content-publication': value.publicationRef, lang: value.locale };
 }
-export function ContentText({ contentKey }: { contentKey: string }) {
+export function ContentText({ contentKey, values }: { contentKey: string; values?: Readonly<Record<string,string>> }) {
   const value = usePublishedContent(contentKey);
-  return <span {...contentProvenance(value)}>{value.text}</span>;
+  let text=value.text;
+  if(values){
+    const used=new Set<string>();
+    text=text.replace(/\{([A-Za-z][A-Za-z0-9]*)\}/g,(_token,name:string)=>{const replacement=values[name];if(typeof replacement!=='string'||replacement.length>512)throw new Error('Published content variables are incomplete');used.add(name);return replacement;});
+    if(Object.keys(values).some(key=>!used.has(key)))throw new Error('Published content variables do not match the template');
+  }
+  return <span {...contentProvenance(value)}>{text}</span>;
 }
 
 /** Deterministic technical fallback only: required domain/legal content never falls back to an invented publication. */

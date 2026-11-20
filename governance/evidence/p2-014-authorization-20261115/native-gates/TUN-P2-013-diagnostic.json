@@ -1,0 +1,30 @@
+{
+  "ExitCode": 1,
+  "Command": "gate check",
+  "Payload": {
+    "WorkItemId": "TUN-P2-013",
+    "Outcome": "NOT_READY",
+    "Failures": [
+      "prerequisite \u0027TUN-P2-003\u0027 lacks valid committed-state readiness evidence",
+      "owned behavior changed after validated SHA: web/apps/user/vite.config.ts",
+      "owned behavior changed after validated SHA: docs/contracts/ui-inventory.json",
+      "owned behavior changed after validated SHA: src/Modules/Identity/StepUpApplication.cs",
+      "owned behavior changed after validated SHA: src/Modules/Identity/StepUpBrowserEndpoints.cs"
+    ],
+    "Satisfied": [
+      "evidence exists: governance/evidence/TUN-P2-013-VALIDATION.json",
+      "role review evidence exists",
+      "mandatory role review passed: auditor",
+      "mandatory role review passed: compliance-specialist",
+      "mandatory role review passed: content-writer",
+      "mandatory role review passed: cyber-security-engineer",
+      "mandatory role review passed: end-user-ux-reviewer",
+      "mandatory role review passed: frontend-engineer",
+      "mandatory role review passed: full-stack-engineer",
+      "mandatory role review passed: sdk-engineer",
+      "mandatory role review passed: solution-architect",
+      "mandatory role review passed: tester-qa-engineer",
+      "mandatory role review passed: ui-ux-engineer"
+    ]
+  }
+}

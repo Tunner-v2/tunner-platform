@@ -1,0 +1,264 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.authentication.config.ts",
+      "tests/authentication/federation.spec.ts",
+      "--grep",
+      "V01 focused",
+      "--output",
+      "../artifacts/p2-010-federation-20261112/sign-in-5fc094e-ui-focused/runs",
+      "--reporter",
+      "line,json"
+    ],
+    "configFile": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\playwright.authentication.config.ts",
+    "rootDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/authentication",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/artifacts/p2-010-federation-20261112/sign-in-5fc094e-ui-focused/runs",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/authentication",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "line"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config apps/user/vite.config.ts",
+      "url": "http://127.0.0.1:5189/registration/",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "federation.spec.ts",
+      "file": "federation.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "V01 focused canonical reload and Back Forward restore only the original pending federation context",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3131,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T15:10:15.146Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-39f5455657f97c8e1dcc",
+          "file": "federation.spec.ts",
+          "line": 109,
+          "column": 1
+        },
+        {
+          "title": "V01 focused UNKNOWN feedback and keyboard controls at desktop and narrow mobile",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3229,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T15:10:18.787Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "federation-unknown-1440",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\sign-in-5fc094e-ui-focused\\runs\\federation-V01-focused-UNK-79761-t-desktop-and-narrow-mobile\\attachments\\federation-unknown-1440-d589813c9ff5e377a0c07e687685abe03d615c4a.png"
+                    },
+                    {
+                      "name": "federation-unknown-320",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\sign-in-5fc094e-ui-focused\\runs\\federation-V01-focused-UNK-79761-t-desktop-and-narrow-mobile\\attachments\\federation-unknown-320-857543d035529a1bb4e5c1d3e446ec9b16c1f484.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-0904a8bf2f98938855ed",
+          "file": "federation.spec.ts",
+          "line": 130,
+          "column": 63
+        },
+        {
+          "title": "V01 focused REJECTED feedback and keyboard controls at desktop and narrow mobile",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3037,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T15:10:22.042Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "federation-rejected-1440",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\sign-in-5fc094e-ui-focused\\runs\\federation-V01-focused-REJ-4cc6b-t-desktop-and-narrow-mobile\\attachments\\federation-rejected-1440-04c634cf34d5a41684c1298254645132efebb1da.png"
+                    },
+                    {
+                      "name": "federation-rejected-320",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\sign-in-5fc094e-ui-focused\\runs\\federation-V01-focused-REJ-4cc6b-t-desktop-and-narrow-mobile\\attachments\\federation-rejected-320-cc24aeb99feacf5924015497e76dd2c5a7c5bb26.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-f3b795aa81ebed8ac7b2",
+          "file": "federation.spec.ts",
+          "line": 130,
+          "column": 63
+        },
+        {
+          "title": "V01 focused EXPIRED feedback and keyboard controls at desktop and narrow mobile",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3011,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-12T15:10:25.102Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "federation-expired-1440",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\sign-in-5fc094e-ui-focused\\runs\\federation-V01-focused-EXP-996e5-t-desktop-and-narrow-mobile\\attachments\\federation-expired-1440-e379c78f58d6722c0d929f043eeae5124190662d.png"
+                    },
+                    {
+                      "name": "federation-expired-320",
+                      "contentType": "image/png",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\artifacts\\p2-010-federation-20261112\\sign-in-5fc094e-ui-focused\\runs\\federation-V01-focused-EXP-996e5-t-desktop-and-narrow-mobile\\attachments\\federation-expired-320-9272fb83a028cae045059ae5cce752c7a12ea028.png"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "3b0c6a39da995ae2526f-518ce7d373eec82b1e03",
+          "file": "federation.spec.ts",
+          "line": 130,
+          "column": 63
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-12T15:10:13.023Z",
+    "duration": 15730.024999999998,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

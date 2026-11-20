@@ -4,28 +4,46 @@
 > **Applies to:** Locked Documentation Baseline 1.6.0
 
 
+
+
 # 36 — P0 Repository Bootstrap, Governance, Context & Orchestration Implementation Specification
+
+
 
 
 ## 1. Purpose
 
 
+
+
 Make P0 executable without requiring a developer or AI agent to invent repository layout, governance-tool boundaries, project-memory behavior, context strategy, orchestration control or GitHub-link handling.
+
+
 
 
 P0 builds the development control plane. It does **not** implement Tunner product/business features.
 
 
+
+
 ## 2. Bootstrap premise
+
+
 
 
 At P0 start there may be **no GitHub repository, GitHub Actions URL, branch history, generated context pack or governance state yet**. This is expected.
 
 
+
+
 Their absence before repository bootstrap is **not a blocker**.
 
 
+
+
 P0 creates them and immediately registers the resulting canonical identifiers/URLs in:
+
+
 
 
 - `13_RD_Source_Register.md`;
@@ -34,10 +52,16 @@ P0 creates them and immediately registers the resulting canonical identifiers/UR
 - release/evidence manifests where applicable.
 
 
+
+
 No placeholder/fabricated URL is permitted.
 
 
+
+
 ## 3. Initial repository structure
+
+
 
 
 ```text
@@ -52,9 +76,13 @@ No placeholder/fabricated URL is permitted.
   .gitignore
 
 
+
+
   .agent/
     AGENTS.md
     skills/
+
+
 
 
   docs/
@@ -68,6 +96,8 @@ No placeholder/fabricated URL is permitted.
       HANDOFF.md
     context/
       current/
+
+
 
 
   governance/
@@ -85,6 +115,8 @@ No placeholder/fabricated URL is permitted.
     policies/
 
 
+
+
   tools/
     Tunner.Tooling.sln
     src/
@@ -97,6 +129,8 @@ No placeholder/fabricated URL is permitted.
     tests/
 
 
+
+
   src/                 # product solution placeholder only until authorized plane
   tests/               # product test roots/placeholders as required
   scripts/
@@ -107,10 +141,16 @@ No placeholder/fabricated URL is permitted.
 ```
 
 
+
+
 Production application projects must not depend on governance-tool assemblies.
 
 
+
+
 ## 4. Repository creation sequence
+
+
 
 
 1. create deterministic local repository structure;
@@ -125,16 +165,26 @@ Production application projects must not depend on governance-tool assemblies.
 10. run governance/document/link validation.
 
 
+
+
 Until steps 4/8 occur, the resource register records those resources as `BOOTSTRAP_GENERATED / NOT_YET_CREATED`, never as unresolved architecture.
+
+
 
 
 ## 4A. Authority import and execution mirror
 
 
+
+
 P0 imports the exact approved authority package before normal work execution.
 
 
+
+
 Repository layout:
+
+
 
 
 ```text
@@ -154,10 +204,16 @@ docs/authority/
 ```
 
 
+
+
 The repository mirror must preserve content hashes and source IDs/URLs. It is an execution mirror, not a license for local semantic edits.
 
 
+
+
 Commands:
+
+
 
 
 ```text
@@ -168,19 +224,31 @@ tunner authority diff
 ```
 
 
+
+
 `tunner context build`, `tunner work start` and orchestrated implementation require a valid authority status.
+
+
 
 
 If Drive is temporarily unavailable after a verified immutable import, the recorded mirror may remain usable under policy. New or changed authority cannot be assumed; it must be explicitly imported/verified when available.
 
 
+
+
 ## 4B. Bootstrap governance mode before self-hosting
+
+
 
 
 A governance tool cannot enforce commits that predate its own implementation. P0 therefore uses a narrowly-scoped bootstrap governance mode.
 
 
+
+
 Bootstrap phases:
+
+
 
 
 ```text
@@ -193,7 +261,11 @@ B0 — Authority/repository bootstrap
 ```
 
 
+
+
 Before B3:
+
+
 
 
 - only P0 control-plane/bootstrap work is permitted;
@@ -204,7 +276,11 @@ Before B3:
 - bootstrap commits carry a machine-detectable `Bootstrap-Governance: true` trailer or equivalent governed metadata.
 
 
+
+
 At B3, the newly functional `tunner-governance` must:
+
+
 
 
 1. import all bootstrap work records;
@@ -215,16 +291,26 @@ At B3, the newly functional `tunner-governance` must:
 6. produce a signed/hashed self-hosting cutover evidence record.
 
 
+
+
 The project cannot claim governance self-hosting or proceed toward P1–P8 until this replay passes.
+
+
 
 
 There is no permanent “bootstrap bypass.” The exception ends at B3 and is limited to creating the control plane itself.
 
 
+
+
 ## 5. Governance-tool architecture
 
 
+
+
 One .NET 10 / C# 14 tooling solution hosts separate libraries/commands:
+
+
 
 
 ```text
@@ -237,19 +323,31 @@ Tunner.Cli
 ```
 
 
+
+
 The user-facing command is `tunner`; implementation libraries remain separable/testable.
+
+
 
 
 Baseline libraries are governed by document 04 and refreshed at implementation time.
 
 
+
+
 ## 6. Governance state
+
+
 
 
 Authoritative governance records are text-based, diffable and schema-validated. Generated indexes/caches are disposable.
 
 
+
+
 Minimum schema objects:
+
+
 
 
 - milestone;
@@ -270,13 +368,21 @@ Minimum schema objects:
 - handoff.
 
 
+
+
 Every object has immutable ID and `schema_version`.
+
+
 
 
 ## 7. Work-item impact classification
 
 
+
+
 Before execution, governance derives impact flags:
+
+
 
 
 ```text
@@ -299,19 +405,31 @@ release
 ```
 
 
+
+
 Impact flags determine mandatory skills, tests, evidence and context expansion.
+
+
 
 
 Manual impact overrides require a recorded reason and cannot suppress a mandatory specialist without policy authorization.
 
 
+
+
 ## 8. Context index
+
+
 
 
 The context engine indexes metadata rather than treating embeddings as authority.
 
 
+
+
 Minimum artifact metadata:
+
+
 
 
 ```text
@@ -340,7 +458,11 @@ summary_hash
 ```
 
 
+
+
 Initial retrieval order:
+
+
 
 
 1. explicit work-item/authority links;
@@ -351,13 +473,21 @@ Initial retrieval order:
 6. governed repository-wide scan.
 
 
+
+
 A paid vector/embedding service is not required for P0.
+
+
 
 
 ## 9. Access scope versus prompt scope
 
 
+
+
 Access and prompt injection are distinct:
+
+
 
 
 ```yaml
@@ -366,19 +496,31 @@ context_mode: CORE | TASK | EXPANDED | FULL_AUDIT
 ```
 
 
+
+
 Auditor, QA, Cyber Security, Solution Architect and other authorized roles may receive `repository_access: FULL` while `context_mode` starts `TASK` or `EXPANDED`.
+
+
 
 
 `FULL_AUDIT` permits repository-wide discovery and partitioned retrieval. It does not require sending every file in one request.
 
 
+
+
 ## 10. Context budget policy
+
+
 
 
 Context/token budgets are operational configuration and can vary by model/provider/work class.
 
 
+
+
 The policy must preserve priority:
+
+
 
 
 1. governing authority;
@@ -390,13 +532,21 @@ The policy must preserve priority:
 7. supporting history/research.
 
 
+
+
 If the budget cannot contain mandatory authority, the engine returns `CONTEXT_BUDGET_INSUFFICIENT`; it must not silently drop required authority.
+
+
 
 
 ## 11. Context freshness
 
 
+
+
 Every generated context/summary records:
+
+
 
 
 - source path/artifact ID;
@@ -409,37 +559,61 @@ Every generated context/summary records:
 - summary hash.
 
 
+
+
 Source hash change marks derived context `STALE`.
+
+
 
 
 Stale context cannot satisfy a governance gate.
 
 
+
+
 ## 12. Escalation
+
+
 
 
 Agents may return:
 
 
+
+
 `INSUFFICIENT_CONTEXT`
+
+
 
 
 Governed escalation proceeds:
 
 
+
+
 `TASK dependency → module/domain → cross-domain → FULL_AUDIT`.
+
+
 
 
 Each expansion records why it occurred and what was added.
 
 
+
+
 ## 13. Orchestration contract
+
+
 
 
 `tunner-orchestrator` is never an authority.
 
 
+
+
 Execution:
+
+
 
 
 ```text
@@ -457,13 +631,21 @@ governance eligibility
 ```
 
 
+
+
 It may parallelize independent checks. It cannot bypass a gate or mark work/release complete.
+
+
 
 
 ## 14. Project memory
 
 
+
+
 Persistent state is repository-native:
+
+
 
 
 - stable project facts → `PROJECT_CONTEXT.md`;
@@ -473,19 +655,31 @@ Persistent state is repository-native:
 - transfer state → `HANDOFF.md`.
 
 
+
+
 Generated summaries are derived state and never override authority.
+
+
 
 
 No critical fact may exist only in chat.
 
 
+
+
 ## 15. TODO policy
+
+
 
 
 No free-floating critical TODO.
 
 
+
+
 Every TODO record contains:
+
+
 
 
 ```yaml
@@ -502,16 +696,26 @@ updated_at:
 ```
 
 
+
+
 Code TODO comments reference a governed ID.
+
+
 
 
 ## 16. GitHub and CI bootstrap
 
 
+
+
 Before the remote exists, P0 validates local policy/config/templates.
 
 
+
+
 After repository creation:
+
+
 
 
 - protect `main`;
@@ -526,16 +730,26 @@ After repository creation:
 - record actual repository and workflow links in the resource register.
 
 
+
+
 GitHub Issues/PRs are execution surfaces; repository governance records remain work-state authority.
+
+
 
 
 ## 17. P0/feature boundary
 
 
+
+
 P0 may create placeholders required to prove build/test/governance wiring. It must not implement Product business behavior.
 
 
+
+
 The following belong after the P0 gate:
+
+
 
 
 - production User/Admin application feature scaffolding beyond minimum pipeline proof;
@@ -547,13 +761,21 @@ The following belong after the P0 gate:
 - Product APIs/SDK functionality beyond governance/contract pipeline proof.
 
 
+
+
 Their already-approved designs remain valid; only execution timing moves to their owning planes.
+
+
 
 
 ## 18. Minimum P0 enablement gate
 
 
+
+
 P1–P8 remain blocked until machine-readable evidence proves:
+
+
 
 
 1. repository authority mirror imports baseline 1.6.0 + all active approved amendments and passes provenance/hash verification;
@@ -573,22 +795,42 @@ P1–P8 remain blocked until machine-readable evidence proves:
 15. exact next authorized work is produced by governance.
 
 
+
+
 ## 18A. Design-fidelity governance/evidence capability — AMD-0008
+
+
 
 
 Global change authority: https://drive.google.com/file/d/1DErZZpc3rIwzfpADnDzD9a361draTuhW/view. As the P0 governance/control-plane contract is implemented or revised, support UX work-item fields `figma_file/node/version`, approved screen ID, relevant FRD/flow, referenced component/tokens/assets, expected viewports/states, visual screenshots/diff, `UI_FIDELITY_DEFECT` history, proposed design deviations, owner approval evidence, and `UI_VISUAL_APPROVAL` gate result. Relevant specialist skill contracts must be active for UI work.
 
 
+
+
 AI may generate a proposed missing-screen design but cannot mark it approved. Unapproved material deviations and missing approved visual elements (including gradients/glows/page backgrounds, field styling and complete composition) block acceptance of affected production UI. This addition does not convert UX work into P0 product feature implementation; P0 implements enabling governance contracts while actual screen work remains governed by the original P0/P1–P8 authorization boundaries.
+
+
+
+
+## 18B. Global validation and URL governance — AMD-0009
+
+
+AMD-0009 (https://drive.google.com/file/d/1VeaNofocTrsbXwdePg8VSVuembRQxr7A/view) applies across **all Tunner-owned current and future screens/forms**, not registration alone. Governance and evidence models must map each full-screen route to pathname, screen ID, Figma/FRD, authorization, reload/history/deep-link tests; map each form to shared approved Figma-derived validation components, applicable domain validator/backend checks and field/summary error states. Enforce `URL-001..006` and `VAL-001..008` for each affected screen/form; registration pass does not waive another form's gate. New material Figma visual variations require Product Owner approval under AMD-0008. P0/P1 scope boundaries unchanged.
 
 
 ## 19. Fresh-agent acceptance scenario
 
 
+
+
 A new agent with no conversation history receives repository access.
 
 
+
+
 Expected:
+
+
 
 
 1. reads root agent contract;
@@ -603,13 +845,21 @@ Expected:
 10. can expand context to FULL_AUDIT when assigned an authorized audit.
 
 
+
+
 PASS evidence is required before P0 feature enablement.
+
+
 
 
 ## 20. Cost/quality telemetry
 
 
+
+
 Where provider/runtime telemetry permits, record:
+
+
 
 
 - context mode;
@@ -622,10 +872,16 @@ Where provider/runtime telemetry permits, record:
 - gate result.
 
 
+
+
 Telemetry is used to optimize retrieval policy and cost, never to omit mandatory authority.
 
 
+
+
 ## 21. Acceptance tests
+
+
 
 
 | ID | Scenario | Expected |
@@ -646,25 +902,41 @@ Telemetry is used to optimize retrieval policy and cost, never to omit mandatory
 | P0-GOV-014 | bootstrap mode attempts Product feature work | blocked; bootstrap exception is control-plane-only |
 
 
+
+
 ## 22. Non-blocking PR approval implementation contract
+
+
 
 
 P0 governance tooling must implement the distinction between local validation readiness and protected-main integration readiness so human PR approval does not become an unnecessary global development synchronization point.
 
 
+
+
 ### 22.1 Separate work and PR states
+
+
 
 
 Work-item execution state and pull-request integration state are separate records. A work item may be `READY_FOR_MERGE` while its PR is `APPROVAL_PENDING`.
 
 
+
+
 A pending approval remains visible as an integration action but is not automatically a work-item blocker.
+
+
 
 
 ### 22.2 Typed dependency readiness
 
 
+
+
 Dependency records must declare the minimum state required from the prerequisite:
+
+
 
 
 ```yaml
@@ -673,7 +945,11 @@ required_readiness: LOCAL_VALIDATED
 ```
 
 
+
+
 or:
+
+
 
 
 ```yaml
@@ -682,13 +958,21 @@ required_readiness: MERGED_TO_MAIN
 ```
 
 
+
+
 The default must not silently escalate to `MERGED_TO_MAIN`. The work-item/backlog authority or governance policy must resolve the required readiness explicitly/deterministically.
+
+
 
 
 ### 22.3 `tunner governance next`
 
 
+
+
 While one or more PRs are `APPROVAL_PENDING`, `next` must calculate and expose:
+
+
 
 
 - independent agent-executable work;
@@ -699,25 +983,41 @@ While one or more PRs are `APPROVAL_PENDING`, `next` must calculate and expose:
 - concurrency/dependent-chain limits and their reason when reached.
 
 
+
+
 The agent should request human interaction only when no higher-priority governance-eligible agent work remains or when the human gate itself is the required next action for the affected scope.
+
+
 
 
 ### 22.4 Reviewability and concurrency
 
 
+
+
 The policy must prevent unlimited unmerged dependent chains. Configure limits by governance policy (for example maximum open dependent chain or maximum concurrent unmerged work) rather than hard-coding a universal number in application logic.
+
+
 
 
 Independent work may continue even when a dependent-chain limit has been reached.
 
 
+
+
 ### 22.5 Committed-state local readiness
+
+
 
 
 `LOCAL_VALIDATED` is a committed-state readiness marker, not a dirty-worktree marker.
 
 
+
+
 Governance tooling established in P0 must require, for repository-changing work:
+
+
 
 
 ```yaml
@@ -732,7 +1032,11 @@ git_state:
 ```
 
 
+
+
 Semantics:
+
+
 
 
 - `validated_commit_sha` identifies the source state that passed required final gates;
@@ -745,10 +1049,16 @@ Semantics:
 - `repository_changed: false` is valid for evaluation/no-op items and does not require a synthetic commit.
 
 
+
+
 This requirement applies to all later planes through AMD-0002's global applicability.
 
 
+
+
 ### 22.6 P0 acceptance additions
+
+
 
 
 | ID | Scenario | Expected |
@@ -766,19 +1076,33 @@ This requirement applies to all later planes through AMD-0002's global applicabi
 
 
 
+
+
+
+
 ## Location-independent repository root and path contract
+
+
 
 
 P0 must establish one shared location-independent path contract before downstream tools depend on repository paths.
 
 
+
+
 ### Root marker and discovery
+
+
 
 
 The repository root contains `.tunner-root`.
 
 
+
+
 Resolution order:
+
+
 
 
 1. explicit validated `--repo-root`;
@@ -788,13 +1112,21 @@ Resolution order:
 5. fail clearly if no unique root is found.
 
 
+
+
 The current working directory is never itself proof of repository root.
+
+
 
 
 ### Persisted path format
 
 
+
+
 Repository-internal paths stored in YAML/JSON/Markdown/evidence/context/indexes use root-relative logical paths with `/` separators, for example:
+
+
 
 
 ```text
@@ -804,19 +1136,31 @@ tools/src/Tunner.Context/
 ```
 
 
+
+
 Do not persist the host checkout prefix.
+
+
 
 
 ### Runtime absolute paths
 
 
+
+
 A tool may resolve an absolute path in memory to access the filesystem. That absolute path is ephemeral runtime state. When an artifact is within the repository, persisted references are converted back to repository-relative form.
+
+
 
 
 External filesystem locations are allowed only when explicitly configured/authorized as external runtime resources. They must not redefine repository structure or authority.
 
 
+
+
 ### Portable execution
+
+
 
 
 - PowerShell/shell scripts locate the repository via the shared resolver, not caller CWD.
@@ -826,10 +1170,16 @@ External filesystem locations are allowed only when explicitly configured/author
 - Test/evidence output uses relative source/artifact paths wherever the referenced item is in-repository.
 
 
+
+
 ### Portability gate
 
 
+
+
 P0 cannot close until:
+
+
 
 
 1. the repository is copied/cloned/moved to a different parent location;
@@ -839,7 +1189,11 @@ P0 cannot close until:
 5. path validation finds no unapproved machine-specific absolute repository path.
 
 
+
+
 Additional acceptance tests:
+
+
 
 
 | ID | Scenario | Expected |
@@ -852,13 +1206,23 @@ Additional acceptance tests:
 
 
 
+
+
+
+
 ## 23. Post-closure Revision governance implementation contract
+
+
 
 
 The P0 governance control plane must support post-closure Revision (`RV`) lineage so later maintenance does not require overwriting or repeatedly reopening historically closed work.
 
 
+
+
 Repository state includes a diffable location such as:
+
+
 
 
 ```text
@@ -866,10 +1230,16 @@ governance/revisions/
 ```
 
 
+
+
 The exact folder may follow the established governance layout, but Revision records must remain repository-native, schema-validated and auditable.
 
 
+
+
 Minimum implementation requirements:
+
+
 
 
 1. schema validation for the Revision record defined by document 04;
@@ -885,13 +1255,21 @@ Minimum implementation requirements:
 11. clean fresh-agent recovery of Revision state without chat history.
 
 
+
+
 Revision child work uses the existing governed work-item machinery and carries `revision_ref` back to its owning Revision.
+
+
 
 
 A closed original item is not mutated merely to indicate current Revision activity. Effective health is computed from original closure + applicable active/latest Revision state.
 
 
+
+
 P0 acceptance additions:
+
+
 
 
 | ID | Scenario | Expected |

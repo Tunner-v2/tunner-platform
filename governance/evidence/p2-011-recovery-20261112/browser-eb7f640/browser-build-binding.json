@@ -1,0 +1,3377 @@
+{
+  "schema_version": 1,
+  "source_commit_sha": "eb7f640567923ba3f51f95a2441a55b1d5b44dee",
+  "source_inputs": [
+    {
+      "path": ".editorconfig",
+      "sha256": "06711c6d1789b0921f9134beb1fb3f782a317710aa7367c8b2deb721af531eb4",
+      "git_blob": "f81a5da0bae3515a7635520df8130f440c0635f0"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "57497bc4258a2b2214914209b1123b7170b47ad8ccf5e5b06362b1cb1c23ea73",
+      "git_blob": "62b1c0a05255c3c6f25c93b898d7f33fd46bdbcb"
+    },
+    {
+      "path": "Directory.Build.props",
+      "sha256": "d2c60e4dc287b5c9095093d601dfe5790dfebc128044825e05e4126e7d580c4c",
+      "git_blob": "ccc1679ea4a5b14c8219599c4ad5a4d047b89aa0"
+    },
+    {
+      "path": "Directory.Packages.props",
+      "sha256": "5e9dd542890525e9814b7401c0595f1218d957a09202d8f68fb256f7c37dca6a",
+      "git_blob": "8c0eabb08b7740380a61bd546fb23cc6c258237e"
+    },
+    {
+      "path": "Tunner.Platform.slnx",
+      "sha256": "31650e363a1a887547b7c06bde6341afc05dc8dc83c2f2ad3a2402caeb886251",
+      "git_blob": "4639ea94294035daf121f82c73415beaaa1eafb0"
+    },
+    {
+      "path": "global.json",
+      "sha256": "d303cb1266b0a3a0fadab5cc73ade7c75e3cbcbb09b336a6de9418ece4448090",
+      "git_blob": "6916a33774630d06b6925a2350f0dcd11f276f9b"
+    },
+    {
+      "path": "src/Modules/Accounts/AccountAgeCapabilities.cs",
+      "sha256": "588f59dd3e671fe9287e808d5af6d60dbbfe1016ad4539450087091c64f5f67b",
+      "git_blob": "825194aff7d865e8555b2978eb293ec7e61580c8"
+    },
+    {
+      "path": "src/Modules/Accounts/AccountSnapshot.cs",
+      "sha256": "ae2332ae9bf7a4a176a0da85c4a68247bf382013992e0ee8949798f6f91dfb66",
+      "git_blob": "7203863419fe4501ca57e9570f12c15205bfc200"
+    },
+    {
+      "path": "src/Modules/Accounts/AgeEligibilityEvaluator.cs",
+      "sha256": "16634bc2d602406b49d26294b232e459e681597dc9b16945fb72f6c7a995e316",
+      "git_blob": "8934aa549cb523993c3d12ce293454c067231a46"
+    },
+    {
+      "path": "src/Modules/Accounts/Tunner.Accounts.csproj",
+      "sha256": "e6fcb8e1e93a724d47a829cffd19d47840a5eb088e9ace43f3a34bbaf1524b07",
+      "git_blob": "6b512ec9245ec39fc1b7b533a704aa5d6434ca52"
+    },
+    {
+      "path": "src/Modules/Identity/AccountPersonalInformationApplication.cs",
+      "sha256": "568c9e0c58462de7b004b40965b36c8e0aefa2f4023b1c88342bb548c8dd883b",
+      "git_blob": "fe72ff5cecebb539b0f82d6ad8b4fe80bb5c48c6"
+    },
+    {
+      "path": "src/Modules/Identity/AccountPersonalInformationContracts.cs",
+      "sha256": "bd6345a4cb584289f1b2eb1660d5d9367355118b089ae8fdac322da2b549a16e",
+      "git_blob": "1906c3ac7c63cbf0a966c4500f200c521fb6c497"
+    },
+    {
+      "path": "src/Modules/Identity/AccountPersonalInformationRows.cs",
+      "sha256": "cb0e74cbff0bd05550f1e19dfd2aa06805c567e18fb40efdfa1339d5ff455295",
+      "git_blob": "c6c1d3c9796f26202d41e2440f537ab3cc8b034d"
+    },
+    {
+      "path": "src/Modules/Identity/AssemblyInfo.cs",
+      "sha256": "5000be29372650e883a39aeeec1a1e4809608dd2e2fa528486fb329ece23b4c0",
+      "git_blob": "763d20e370042cf8e1ffb41751ff0ceba59b43c4"
+    },
+    {
+      "path": "src/Modules/Identity/AssurancePolicy.cs",
+      "sha256": "ee14ebf75195298efc0045b38706a351e8b0e3411d9779fc527e4eae4a051d8d",
+      "git_blob": "8d3a48477e8b09afe213c2d4e6def24e8e568e68"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationApplication.cs",
+      "sha256": "cdfbf88b4a820a20641483882ee95e6be2a856c7acfef95701d655ce91166018",
+      "git_blob": "fefa7a27677a188a7cd2cb57ad6eb8eddf7d2cf8"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationContracts.cs",
+      "sha256": "57773b68f8b41c2dcef18ff3ab0f74ff5b9d91c93da5c1dbcbfbdd8347729bf3",
+      "git_blob": "c85c1e2597b0b3bdfe89d65e621753415b8d45b4"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "sha256": "d1bf32acde5da2c09de84003eb55e3046d6bd1f09cb371d3c638f752cc6be853",
+      "git_blob": "58cd7506d128aaa6ab6f4e05e3a6a106ad32a021"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationMigrationSql.cs",
+      "sha256": "7eb75270edf3f77ab65666b1615f2e32fe6f06d72cb9e738fb717c2e79ffd530",
+      "git_blob": "f10b32dca51c6936d428c05851d7641b30a6edea"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationPresentation.cs",
+      "sha256": "9c04b451b64d4ed350036350e7802daf1ef0d386e170a0cab1c65645c67eb765",
+      "git_blob": "c4528022bc07c204e328c3ff9c3da37620773ffb"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationRecoveryCase.cs",
+      "sha256": "f35c03e95cdc4d9096baaea2ed7e967fce9219d163cf5e52554220fbcc9e0408",
+      "git_blob": "a590ec8c572e732873779e242af2109c0ee385c7"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationRows.cs",
+      "sha256": "16856a070153fcfc44c5784108c6121075877d596ef771a0182e15f5ea2a5225",
+      "git_blob": "26a198bc2f5cc8dfe729240fbdb442b6bf1a8ded"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAttemptApplication.cs",
+      "sha256": "40c52f51412e2601fcb890da620c8d4c7d99982326818d05d059e8f5a0755d9b",
+      "git_blob": "3ca7597525e53de56fd15753bfeb7a9bc8056a0a"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAttemptBinding.cs",
+      "sha256": "cdacfffb6e1b8f0822cc063d7ae955ba09fdbdac23e7357a7672afecf41bc7a0",
+      "git_blob": "f5e5ffe4b4dc0d6b8207d07969c7962c2405de6e"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAttemptMigrationSql.cs",
+      "sha256": "ca8717c50ecdc08bece3cd46d3cde26963cb76601de87d8533432b85090cd4cb",
+      "git_blob": "9e94bb25b1ca93c3b59d7135ddacfbd850a07ec7"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAttemptOperationProof.cs",
+      "sha256": "cef6e8d812803e3b1ca6dbfdd63a71ce877b5b171d43b037ca2e37d1d5a01385",
+      "git_blob": "413ddedcbe116c69c0da6ce79aa4af530b1161cf"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAttemptRegistrationIntake.cs",
+      "sha256": "31441ef715abf459d879525047e843073d132746f821c35449d475eed6e01f30",
+      "git_blob": "6e319210cd771a25a2d5d639b2033a7eb2896deb"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAttemptRows.cs",
+      "sha256": "6ad434280103c1946c01d855da94423a2b662c4c7ffa54f94b7bdfa3aaf94216",
+      "git_blob": "87353041b63e14e28fa2e3ca391286301b961d2c"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAuthentication.cs",
+      "sha256": "282fa4499720fdae714f55634970d8e4ba26eb1ec4c91b2d9c4d1cd0bf626dc8",
+      "git_blob": "f36dae975361c1a72d0b7187275cd62b0f57a972"
+    },
+    {
+      "path": "src/Modules/Identity/FederationBrowserService.cs",
+      "sha256": "454fe354ce246577c175f2d4d32b463b7d692762c270887c389f4eb2ae2fa27f",
+      "git_blob": "d46ab3d45052e28512d777dae723c72dcf00770a"
+    },
+    {
+      "path": "src/Modules/Identity/FederationContracts.cs",
+      "sha256": "e3c2f71c7af6a42f2714f7468f813fc8e43a9058a3496fceea41f34dc893d474",
+      "git_blob": "0a486ed688e3e9874b5077df7b8762e1b8563f28"
+    },
+    {
+      "path": "src/Modules/Identity/FederationFreshAuthentication.cs",
+      "sha256": "7cce1bf69b77252947d47f857bb47fc96fb38eec78ef2e36344b9e1b6e48b021",
+      "git_blob": "94dc02d04a2565bac542ff2cf6752a8bf6fc21e7"
+    },
+    {
+      "path": "src/Modules/Identity/FederationIdentityBinding.cs",
+      "sha256": "a7da4f3390e5275b2052c70c58a266964cb75b6ca1c06f8c8efd0887e03932ee",
+      "git_blob": "9cc598a781314b54a8da6c63eb624b163995ef9e"
+    },
+    {
+      "path": "src/Modules/Identity/FederationLinkApplication.cs",
+      "sha256": "b9017323e9fce73548e5a6c6d5a9c7fb79f79297dfc41e90faec776939d60dad",
+      "git_blob": "1a871472e396b65faa1c0b2096550509c1edd790"
+    },
+    {
+      "path": "src/Modules/Identity/FederationLinkBrowserService.cs",
+      "sha256": "34377f6f9dd72d64c8797c58eaade763e471c3fcffb35b372016667da4f3ea1f",
+      "git_blob": "2f56ba431a2520540e44497fa0eb251cb10bf801"
+    },
+    {
+      "path": "src/Modules/Identity/FederationLinkLifecycle.cs",
+      "sha256": "5b945fa7cc5c023ac4e141923ffed5e9665af1e3d9542959afeed3583f5db365",
+      "git_blob": "e3309209f8435cd639ba404aa7c179fb793d57ed"
+    },
+    {
+      "path": "src/Modules/Identity/FederationLinkManagementContracts.cs",
+      "sha256": "a32db12f9048c1d9c606ecabe8a0b8c8df7b223d32b185f5047048823eb3fcf1",
+      "git_blob": "a471ec5a9c944063a9fff18f3230fb985c1207b7"
+    },
+    {
+      "path": "src/Modules/Identity/FederationLinkManagementMigrationSql.cs",
+      "sha256": "a4bf86efa3303745814ab430fbf202d085c94fe34fe9035ff5d8c8a217af4512",
+      "git_blob": "86bd9b86a9424322a77212b09adc1ade5b8e571d"
+    },
+    {
+      "path": "src/Modules/Identity/FederationLinkOperationRows.cs",
+      "sha256": "b737458263488c977626d7da99db2996e3ad8545fce8943149b7a5904ba27a4f",
+      "git_blob": "51c48ceb0e75a059d5d5728f6e077112726745e9"
+    },
+    {
+      "path": "src/Modules/Identity/FederationOperationProofAuthentication.cs",
+      "sha256": "616ec1211d929619be9ac404f626a21142a798bb7d8a92f7d5563e477319ef23",
+      "git_blob": "b4b29ee61aa9324e1bb73ff19243f2c188a3b380"
+    },
+    {
+      "path": "src/Modules/Identity/FederationOperationProofBrowserService.cs",
+      "sha256": "858007d79e7cf4b69cbf229c01e5fd77ec63a0b955cb49d616b16cff7aea9219",
+      "git_blob": "9b95ee802b371422945457ef52f2e5d8f0b3190a"
+    },
+    {
+      "path": "src/Modules/Identity/FederationRegistration.cs",
+      "sha256": "a80f93073780e04c796521a2d97126c5dbc7233f659388e003a78e453af75c43",
+      "git_blob": "b9c2bbb9aa6ec724b6f6b00ce76f96e182ebd9c8"
+    },
+    {
+      "path": "src/Modules/Identity/FederationSessionEffects.cs",
+      "sha256": "0c9f96344d00444bb59599bc1fe78e2fa688f8d529efbfbf8fa9778a921c19c0",
+      "git_blob": "878eb0ead73641fc2f3a3e9f51f419a121f3afed"
+    },
+    {
+      "path": "src/Modules/Identity/FederationSessionEffectsMigrationSql.cs",
+      "sha256": "d421a591ac9f7542e3c18e0395f11f9640d1ac5713110e80bc3744432f122465",
+      "git_blob": "bccaeae8b4d48692c9af110be5a9e7fea022c739"
+    },
+    {
+      "path": "src/Modules/Identity/FederationSessionMigrationSql.cs",
+      "sha256": "4937eeca5337c09ee29e8cf72738379245228fd87c4d9a9071e4b0eb6f4a8d9a",
+      "git_blob": "c882fae59b7cab314810ea484367468f7426a2d4"
+    },
+    {
+      "path": "src/Modules/Identity/FederationStepUpOwner.cs",
+      "sha256": "e47521e6149aaffca2316b24e13a3009c2999076109bd44bd987cc0adf37f824",
+      "git_blob": "a7e5fd6331783585843d83922857b5f8bd276825"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityContactChallenge.cs",
+      "sha256": "e3d303bd06a8d16b98bedf450c0eb0a2f5ba982b8cae3ff9180000dea671dbd8",
+      "git_blob": "50fec81e6011ff862e4000c5b1d48e5761b0d29d"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityEmail.cs",
+      "sha256": "5a68a661d78ddbc0b37216eaf9ab21afe1ca4229016c93d9dc6f716f7b59c118",
+      "git_blob": "987737059106ea417b876e745f617cb5f585ea97"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityJsonCommand.cs",
+      "sha256": "f836a2046c1c264061919b20560f96c19276c7c27b71219eddb041f31726dbe9",
+      "git_blob": "76cb994ecd8b995baef569978f5d0e8c95efcc81"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityMigrationSql.cs",
+      "sha256": "e11911449e22c38a41b2e02caaca0574223e59c5204fb629c95d54ea1906ff65",
+      "git_blob": "6c2b6ffe0ff13f5beed1cfdb404dc4b76e2cd6c2"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityModelConfiguration.cs",
+      "sha256": "0a48d576beeeb8246f4b7568538b49aee9caee122fe993c614e2dd2cd422717b",
+      "git_blob": "136e0812c486a5f5702fbdc251bb8a368c64a9db"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+      "sha256": "0610ed963eb5639e483a1d9ac200ba3449b3bd3ddf29e2884f1efb232006f95a",
+      "git_blob": "6402662b0bec0ed58df2d8ecfdd669ec8c02ae5d"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityPersistenceDbContextFactory.cs",
+      "sha256": "29983cdca9f75670503ee87a42b11434ee67523fe587bed4e5f12085eb17e60c",
+      "git_blob": "8cbdbd2b03c8eb571cc3cf4cc8aebeb6e123faed"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityPersistenceRegistration.cs",
+      "sha256": "e9be038a7de7c8a72531c238aacd696d51e197fd042890d4781bb578516de8d6",
+      "git_blob": "5c8699e94286a0dc86596065c4a2bebdcaed5203"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityPersistenceTime.cs",
+      "sha256": "c70e137c261cfe043bee5d66f114b86484c576c2f3a6e35185cffc43ee4422df",
+      "git_blob": "20a280b63bfbc3d6c7afa70054908daed3e55c6a"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityRows.cs",
+      "sha256": "c8116114901817fac6c4695663b22a2ad51d6f5a6fff06b2527be97641730528",
+      "git_blob": "1c6479d37f16e27ce9c7b18a9b3386f1e1b41046"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityWebAssets.cs",
+      "sha256": "5e2ffcb4f61fe5a3afa875a8858b77d56470bd943efe2858c0e5e1235d172446",
+      "git_blob": "399e054f1b7d9f2373e4c4fb35b3ac2187c5619c"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.Designer.cs",
+      "sha256": "5decafcdbe27fe59496f81db17283de4f1c76720bfe6661a67e8826f73135a7c",
+      "git_blob": "815115986f5ba0bcef9a7f084aa7264a6e489dca"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261016200608_P2IdentityFoundation.cs",
+      "sha256": "55337209f1849217ce0991656c0a84d398414a43e4cdfb070a484fab626aecea",
+      "git_blob": "00afccea52471eb26f68600ee364b4f33ace37be"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261016211325_P2Registration.Designer.cs",
+      "sha256": "382f305309c64e69959b1ceed09300259c66ad79a44046ff13cba9537ad7be44",
+      "git_blob": "8a00592fbab05ff82e78ee7246a6193c5693c4cd"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261016211325_P2Registration.cs",
+      "sha256": "f47527cb9e389ef8d903bd4be63859bb6b0267c9318a4518496f10a531357715",
+      "git_blob": "ca51982e23496720ee776de2073e42d5350043ac"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.Designer.cs",
+      "sha256": "24cff7ed74b7f56cb36c2df4fb7494b4f1e5dd518319c089cdc89847bbe6c5be",
+      "git_blob": "4b46874ac0b44515f0c3d332a91a213669c04fb9"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261017194133_Pdr0011AccountAgePolicy.cs",
+      "sha256": "9109eaf89024aafffb07fb16f9f3c3fee2b0a506440f062505cc46def92d4f24",
+      "git_blob": "c4db120eebb9b88506b1fceffa7bda860e824898"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261017195227_Pdr0011RegistrationOnboarding.Designer.cs",
+      "sha256": "fd3ae1ea1fa6f9f2d91ba766eda3f42a7f076e3088572ad95f2a21dd98320acb",
+      "git_blob": "fb4e389a0f4e46967a453f37d2e7892262968a1f"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261017195227_Pdr0011RegistrationOnboarding.cs",
+      "sha256": "9681019ab9a019b9014533e9637dfcc112bf8e082a31ac189495436f70afa452",
+      "git_blob": "c67d4295a8419e8224eaab93274edd96e5dfc33f"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261021174404_P2PasswordSessions.Designer.cs",
+      "sha256": "e75449dc139f6b0672610644b9f23edb603288ce0cb10053a06aaffd010883b5",
+      "git_blob": "80075b64adc2408cd97c8c34f914bc95cc5dd302"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261021174404_P2PasswordSessions.cs",
+      "sha256": "c5dbf95fe682c2f7f5133cd6fa46c5f6f4c8d95d9fb763fc5a2966a1e712e387",
+      "git_blob": "ddd668443fd463666624f9cf9c211da8ffafbc87"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261109033631_P2OperationStepUpProofs.Designer.cs",
+      "sha256": "5acec5f14958647b002f0a894aa67bb260820232ce096611b53cd3c58b37d398",
+      "git_blob": "ef28bb63969cc7c8e24ff2c30815b5667f109c4c"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261109033631_P2OperationStepUpProofs.cs",
+      "sha256": "3b558b2ee829dab335545923a1eb598bbb722ef8d4e04ab9bc5cf85b90a472a2",
+      "git_blob": "45ad8ec9b8f0302c65ff31f2d2ed4785ec158c06"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261109164622_P2PasskeyCeremonies.Designer.cs",
+      "sha256": "707e0ac4930fa99bfe91946f831332c6287672bb6ed0fd8981437db9b6e3e69a",
+      "git_blob": "6a395c4fa48a583cb310e5644da16ca4cd68ca3b"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261109164622_P2PasskeyCeremonies.cs",
+      "sha256": "dbb0acb15684b66800cec4eb77e53743732d22b06f78b778c2ea553b24134b3d",
+      "git_blob": "d7e750e282a34129cebe11bf2834f752f424d185"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261110092326_P2PasskeyOperationProofs.Designer.cs",
+      "sha256": "460ddc2be1f4b976e0ffee7ba069f5f2ac18f094ea2fd94520985019983f22c3",
+      "git_blob": "fc6e018208cbc977d5301f76e202dc7773b7ab5c"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261110092326_P2PasskeyOperationProofs.cs",
+      "sha256": "ec39f0b007f19834510600e7da6b483093e804e3ae5bfb5fbb9af451120fc103",
+      "git_blob": "d3df2383c0eb612b106a1a74f45a44444faedb23"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261110164421_P2TotpLifecycle.Designer.cs",
+      "sha256": "ee45c1fdf2a0c1135e3df491a3848d9a354cfed8d8e1f9ede14496a723c09399",
+      "git_blob": "e20362a6997ac47a30b4c434907437e7277630f7"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261110164421_P2TotpLifecycle.cs",
+      "sha256": "fef2c040491e69026669b0e81f05805a54818137a54c0cb48311019ab93429bd",
+      "git_blob": "4d37cb15ff963c78c6b9f820352ce0610ce00992"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261111104346_P2RecoveryCodes.Designer.cs",
+      "sha256": "3b7f939474ac206634bb37ec1ebaa752af1b50278870f38440d81cfd1af17114",
+      "git_blob": "fd3dd2325fa36d277fa97187b0c8f5ba5b98b946"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261111104346_P2RecoveryCodes.cs",
+      "sha256": "ab19f0977da37700eefd536ef9ffa87f1076d5841237548dee8285521f2d756a",
+      "git_blob": "fee389e341fcbddf25647846f0176e067118e451"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261112145042_P2FederationSignIn.Designer.cs",
+      "sha256": "241dd2784eb0b86997db6f84da24e7619dc97faf34c097d1d5e3a59cc082d485",
+      "git_blob": "b4e2c7c835f88f9f95bc4211fd1ed77adcbefffd"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261112145042_P2FederationSignIn.cs",
+      "sha256": "e43c3a31db296a2d51b417a89a9a57783c5e62a6a3b55a44aecc310549fc1b5e",
+      "git_blob": "a29d6827f918096d05a77e5f89bf50fe5293fad6"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261112162142_P2FederationManagementAndProofs.Designer.cs",
+      "sha256": "f6074ee2c54df099b2fe7222319f325bfa0a541293701265f6a0a18b3ea4cd2a",
+      "git_blob": "3d82f3e105ee383bb986ef3fa04f9beb28b145ed"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261112162142_P2FederationManagementAndProofs.cs",
+      "sha256": "ec37a69973a593961607f3fa47af07dbc891034ea50043e853016fc78b491fd0",
+      "git_blob": "3df5dfa562b98731bd0b49a0dc75e8149df2f2ad"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261112175254_P2FederatedRegistration.Designer.cs",
+      "sha256": "1547389ad3deb494f50ee217129b36655a7cb3279ec7173bf301faa87218fd62",
+      "git_blob": "e9b707cc0a2f3fc48e509502b0595303cd25cabb"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261112175254_P2FederatedRegistration.cs",
+      "sha256": "bf5858d6193821a87a8ec965c7f65a9f452e7427d1a20e7b092077e9c3bcc5de",
+      "git_blob": "d22b92cd8fc85936a32318c5c06798f63e2510d5"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261112222758_P2AccountRecoveryCase.Designer.cs",
+      "sha256": "79a0279db1f117b7a1569d123f00362cf7ca3320d6e593e22a3402638a3b5911",
+      "git_blob": "73b500ad5391a53b49118c00da2a9a09fb34ce32"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261112222758_P2AccountRecoveryCase.cs",
+      "sha256": "0e8e4abcee03aa1db860c2dd0cc20eb0dd99a2f6f966ff140385c23f2024a28b",
+      "git_blob": "a54133e2474a64db58eb1229432faa7c6981a923"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261113000411_P2RecoveryPasswordRepair.Designer.cs",
+      "sha256": "b09d36675353615030709397d8bc02a5bc536c282117f320467b851a5a16de28",
+      "git_blob": "2cfbb5bfce605113837d293fd3650478b1839152"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261113000411_P2RecoveryPasswordRepair.cs",
+      "sha256": "7f683fc22586a9e8bb7cbbd93adce4db7518ade7d1832ebbcd2a717b4d5c9e83",
+      "git_blob": "285df8098f54b18b0197d73c76ddd5f2857a9d6b"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261113084206_P2RecoveryPasskeyRepair.Designer.cs",
+      "sha256": "bac945b74a39e4b9bc9393f82ac0744c49907678e251b82b58683cde308ce18e",
+      "git_blob": "6200f5665b677d47d9a63ef15275961311cd5bde"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261113084206_P2RecoveryPasskeyRepair.cs",
+      "sha256": "c115dd1c5f965ed0674bca2800148d43ee2596e969bac03374c2b24a8880de26",
+      "git_blob": "0b8a8a1568163e2292b81885d8abef630c047756"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261113102314_P2RecoveryPasskeyGuardDispatch.Designer.cs",
+      "sha256": "0d78748bbbf9f65a437c3dd80620e52a40cb36191145a63ea2a2418303c62752",
+      "git_blob": "8464ed1ac5483a5de306ba113d2144becfe75a0b"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261113102314_P2RecoveryPasskeyGuardDispatch.cs",
+      "sha256": "3cb8d792f862c9727409fa6fc27b741e8e3e3b4519d354dc726856e737c1299d",
+      "git_blob": "c13dc7ea1a4af45240ebb2e6ee11ad6fccd596d5"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261113110617_P2RecoveryContactRiskRepair.Designer.cs",
+      "sha256": "c22871c3a7afa08b7eaed3b5d5d4eb82dea412a6f6599154fdd38ceba4b35bdb",
+      "git_blob": "b6995f82f8050b2f0cfdf9c4723e088c16079bd7"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261113110617_P2RecoveryContactRiskRepair.cs",
+      "sha256": "c577fa7df8cc14f74676c1cd35d2c4694c793fd10314e3882b3b2f06bc9eea70",
+      "git_blob": "cc31f73e0e20a21595c78137e7c1a161cb1183b3"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261113145013_P2RecoveryGovernedReviewRepair.Designer.cs",
+      "sha256": "3e2b90e5b5b3a5af42ded3b2194456577324aafcdbc1eae0af0570876c38fe57",
+      "git_blob": "79ee90b9118f9288595be8867675b8d673e20b53"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261113145013_P2RecoveryGovernedReviewRepair.cs",
+      "sha256": "9f5ad9c93c2588ba15a73d5090ac03d7cbd8ac038bffb015b8655d660c5b0de1",
+      "git_blob": "e28d022decc49bc1e1c60ea8b3f242195db0ed88"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+      "sha256": "218a3f565577d2d1cd79427fbcf9579fe43dd08134c275810dbaaec5100ddd32",
+      "git_blob": "764e85fd0679ffa621f2e4b05cada2571f11c7b3"
+    },
+    {
+      "path": "src/Modules/Identity/OpenBaoTotpSeedStore.cs",
+      "sha256": "7480a7e660e581c8010ba40c00a7ba747ce64cf45ddc37431ca39eb476f54e86",
+      "git_blob": "787c39683a7b4fe426a4a0148c8e4a09db19a6cc"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyApplication.cs",
+      "sha256": "44fa23b30991386ce470ed31718da57189a8c9418f50d95bfc0a8a79d79542a4",
+      "git_blob": "dbcbfcf31fb5c9c45455a2e549e5f42e6b6d25c0"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyContracts.cs",
+      "sha256": "8fc296902cb4d627547c4224351726c013836c76acaf82dc2dc485b3e6c0d9b1",
+      "git_blob": "84d34da9071fedf238760904748704468e6b5f7f"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyEndpoints.cs",
+      "sha256": "fe08d98f7b68b945cb1ae5433ad302e774c89c18e8bf72890dae3ddc27167dec",
+      "git_blob": "cf7a37dc618d5abde4c2647ec49302f498898a74"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyMigrationSql.cs",
+      "sha256": "0c0aca130eab08a1dd170964e287381fcb93e5f25fb22872ab73cb1a9becad1d",
+      "git_blob": "2b4696d13a9a5eff2382a3d74357426b89ea1d5c"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyOperationProofApplication.cs",
+      "sha256": "8eb158758c2fd42126ba8e7ff7f50782bc2db6e07c434f8426021e0f2aa070c5",
+      "git_blob": "e88da439bb9ede58996e65d5cbe65066b0a99f6b"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyOperationProofMigrationSql.cs",
+      "sha256": "4d109c899523686a8053c069504b1f18d0315eda33eae51df7a777a59056eb97",
+      "git_blob": "4ed0aa92d32e3fe9696053a436e1a270189cde9a"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyRecoveryApplication.cs",
+      "sha256": "8845f16f215fae9ade961eb13dae47cfbbac8325dfa2313c0e1304ad072e6977",
+      "git_blob": "75ad4fdc0f091d6fdd912ff269c3d6e6c9ef25d1"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyRows.cs",
+      "sha256": "e852fd4ca25a5d18ac2652ed4bcaff69350bbeb69460d0239d5c8e7fcde55058",
+      "git_blob": "6f05d5865f375c338d6c648812d7a9ce5703650c"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeySignInRecovery.cs",
+      "sha256": "d696450803652a8a12fb3992cca81b23d24ad72a0b3867f79802f2910c5f0d6b",
+      "git_blob": "65ac0dbaf17bac8c60c57729a72ea883c83ed397"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryBrowserService.cs",
+      "sha256": "9cb025a3aa51a21b8868793bef2aebf374af256645aed8dbec7128acd1257fd2",
+      "git_blob": "86070f359db6097e3c92013924312f554705e7ce"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCaseApplication.cs",
+      "sha256": "e21b1def517f151f9be015ef32e245fb0cddf504c048f370e164072fc794e713",
+      "git_blob": "dbb88ef8c55c794c82816f2921a509d17791792d"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCaseCodeOwner.cs",
+      "sha256": "38fc62ebeebd413219e341133cbac081286ddb7566409c679de71745b9c5f238",
+      "git_blob": "511f706c9d5e31793945a78e555d61b7fec902c2"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCaseContracts.cs",
+      "sha256": "18f89dcd315aa3ffa6aa6b2ce7f88f615269ad4777138ed92963714ed9102037",
+      "git_blob": "0cd3e0bc1f3347ddf54e3be448b6dc91279fa8ed"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCaseMigrationSql.cs",
+      "sha256": "16c1c244efcce668f573be64263490a6bb34f509471438fc1e61029d2bdc63c8",
+      "git_blob": "b480ee3439ababa8005963cc5bf457b3240767fb"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCaseRows.cs",
+      "sha256": "94e280f12365b6ba6dc41fa9764fbe45ac18e72bad8c089351e46a7151792e79",
+      "git_blob": "0ba35aded4574c160b7f55dd937aef6b2e2f1ade"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeAccountView.cs",
+      "sha256": "d72c4556260d6fca9883634a7c8c692d2cfd3697adf75c64974f7a39a01c8b76",
+      "git_blob": "1b2887f63ce8ac14ddd1aa40e55bdf5f39c4f1ce"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeAdmission.cs",
+      "sha256": "67d32d0d1610be303b5ad472b8ee521d9999ad5360a6c24757dfacfcf9ac1c62",
+      "git_blob": "fa6409601e57f117cb818315e8bf21f87b8e84a1"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeApplication.cs",
+      "sha256": "395cb329a4cef688d8bbddd2981a15a736caaacbb5330c21adca6d971685e23c",
+      "git_blob": "2d90089433bef2651a333d132ea75ffb6492d72c"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeConsumption.cs",
+      "sha256": "de9d05ee3d10913bfd25ad41940bcea735a73a60e3f7bd64293f9765900961f8",
+      "git_blob": "7e0f6016a91b197c3e95eae8b78c65399b70f001"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeContracts.cs",
+      "sha256": "73d98bf3208a64843afa2738c75aca921e491e549f63352bb481685e1d712c54",
+      "git_blob": "26c11133df5ecb1492c6a0dbf76614dfcc86bc32"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeEndpoints.cs",
+      "sha256": "0fb983f05069d2e4d6cd60a2de2bb6e00af21a2f16f87e0042ebd664488ab346",
+      "git_blob": "c7fea93e599ec75f4ef74c169fae9980edc97089"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeExecution.cs",
+      "sha256": "f2646159db4c24554d7a6b701a9fc286ed6a1962fc4ae31e8fe54a6f053a2ed6",
+      "git_blob": "f2c2d141507675aa41300727ed7d5f4ce986c642"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeMigrationSql.cs",
+      "sha256": "2043ae3cc7c93bed95ab892f52d6fa957d184e7f4830c0c866aae3a3dfea772f",
+      "git_blob": "01a7e01a7944ffcb903ee716a24e7c62d8dc3087"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeNative.cs",
+      "sha256": "171a58f32c6d997f74736523a84293dc4663b37194d3e7dd7cd6ee8fc676b7e2",
+      "git_blob": "2a8d67f1e4394ee16fa9ab31f8cfcb92c4a02dde"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodePolicy.cs",
+      "sha256": "107dc44c81cbe1bfc8521e18daf06341248e34ac8c8965f6cad813ce19bbd365",
+      "git_blob": "3dc2c64c475bd65cee20115c20c98bc688194700"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeProofCompletedResult.cs",
+      "sha256": "5057cd4c9dea10a10f8ed7324c5bf5f32dccf94cd10d54d44748bf1b39db75b6",
+      "git_blob": "d8e60b844b72754db7bd4b9f2488eed5d830a2ad"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeRows.cs",
+      "sha256": "d54b7e165b430177502070a94b3b3b79012872316b774c776efcd428a7c63735",
+      "git_blob": "0fa21455fc86187b12f31f346287ed4dca274862"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryContactApplication.cs",
+      "sha256": "1b0bd7ad86aad49badf64088b353765a9923e557f5089eef958027875f6e4ce3",
+      "git_blob": "b8c71eec52c12c7f7de62c0e3f293a81e19e2dd4"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryContactContracts.cs",
+      "sha256": "a9d6f36ea8cfe32dccac97e014158dc0fc5cf78076c0c10d5a1cd57251079c60",
+      "git_blob": "adb6ad4f22d21201ac6fe3fd85d5487c8b148807"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryContactExecution.cs",
+      "sha256": "f4e30d0f1cbcec9001b928a77d65b4134a587fa127a392a6b059e919898a56c7",
+      "git_blob": "ad81e482274df3374973304f779aee2e6e5ef8e0"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryContactMigrationSql.cs",
+      "sha256": "81e43c48f3c36e4c8462022b8321e55714145a9636214ee622326d5acfee66be",
+      "git_blob": "bfdf418ff631f26f044c4eadd3bb68d2e222b6ab"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryContactRows.cs",
+      "sha256": "5cbcac52c61e82b35c317bbb6d1ea380e93ed9b657a4aa4f9b1062b0492a7c73",
+      "git_blob": "40b398d5b4e6d96e56a13fb3a1b60cc12591bce3"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryEndpoints.cs",
+      "sha256": "41376b68f32a6a752a392008514071aac8d916acc90199ff1aa8f7ee4e73bedf",
+      "git_blob": "1e0c26d5011ab86b585b1847fa34482759649a30"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryEntryRows.cs",
+      "sha256": "1e4679e02cbe7f76faa400fa730ac78d8f0740fd244d96578baa3be0f3f63a0d",
+      "git_blob": "3d353ac39b6f21a7914b8299417f29540c6666ad"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryGovernedApplication.cs",
+      "sha256": "3e0973e2e827e119b8230ff00c10c9d1c91a4faf2e2f5a87ba550a93e9f13963",
+      "git_blob": "421b00285b5d37d92cc31f5d85a502bad073e63b"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryGovernedContracts.cs",
+      "sha256": "d5c2428b9291579c8ca907ecc103dd0bcaf7630045c8fa5a322d1633ed65458f",
+      "git_blob": "9c08ad7403f0a5100dc03264586488fe4abe95c5"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryGovernedMigrationSql.cs",
+      "sha256": "fb7e5d3a70c3027e76849f59a9ba7badc3ca3d80600413b4a3cbed6acd13f43c",
+      "git_blob": "0b4a4fe290c4a9cc66924d07edb0a06676cba798"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryPasskeyContracts.cs",
+      "sha256": "8f9a3ed3ddaa5a5af1a6808db41533fe3137af177fefe9eeb6e7ae036c1f2604",
+      "git_blob": "a0bb2a51a1762a3aa80392cb068beb07c4a63047"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryPasskeyMigrationSql.cs",
+      "sha256": "a5cb70c578ce3225a573ab71b996be412ac00eff918ad7677c9617d3be5f371e",
+      "git_blob": "1ff040ad1279f1d4002f0675406aa60a86a3c046"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryPasswordApplication.cs",
+      "sha256": "0b403dd641b1cccae69d1d253da0e2aa827c40612179e81b2dd33613bc74b7a7",
+      "git_blob": "78930fc47913b5f3e8796f17c564db192f3558ce"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryPasswordCodeOwner.cs",
+      "sha256": "8706a2a6afb424dabbfd905be585ac842a3f21f980e667430003b340da12f52b",
+      "git_blob": "ba3bea15d32aa6719f1d9c09154e8b62c21212f3"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryPasswordContracts.cs",
+      "sha256": "da50d0c3827e2abdba134f488f4d2fa2f4926b9e2e91443d252f3efb45e09f4a",
+      "git_blob": "9da22f3d750cb409331ddbc79e6571a3c0cd04ba"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryPasswordMigrationSql.cs",
+      "sha256": "c87786d961ffb04de5005989a4c1fbe121740e6b6a695e4a259aaf230bfc6bec",
+      "git_blob": "7b087a28f0c3350dab1446bd2d82675cf7f5def7"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryPasswordPasskeyApplication.cs",
+      "sha256": "54e7adc91a436f7418a9160e51d9402fee7a7208da821c416b95cbeefcd37028",
+      "git_blob": "8390f71f1c092ed61ccb0f5ddcc56dea22af8aaa"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryPasswordPresentation.cs",
+      "sha256": "f95677039609786bf81a002c23cef76ced0d16872fc10bbeccdbe9b2f0762e86",
+      "git_blob": "645d4155293d2565f1db5658c055e96d14070c42"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationApplication.cs",
+      "sha256": "8ececbfe990a71be4f081823bc61b73dabdd63192157518a18240ee4d41ebd1d",
+      "git_blob": "efd45b903bf8fd6846e57a375099ed16d0dd0cea"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationContracts.cs",
+      "sha256": "74178674eeb10b05be6201fed14ff92fb05c69b2b955f44f586c4cd4f74afac9",
+      "git_blob": "bb7309120bb6ec3fe45885a66e5451e020ce64b6"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationEndpoints.cs",
+      "sha256": "68c22f09729744d862c2b90cdba2302c26242ce4df5b449243fd04727601d004",
+      "git_blob": "d42b5ed0465445cf0cf7479209a991d07a04cf8d"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationFederationIntake.cs",
+      "sha256": "cbc6344500b1e9765c69f7e71d7d5b23228962dbcf92a26d489bac8b9397ec76",
+      "git_blob": "fadfae309b86e17e65cc91191b0a9a43035da5e5"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationFederationMigrationSql.cs",
+      "sha256": "3e3817ee8c56781387c3e96c06e377354808d6d74f57a39da49bf255a38793d3",
+      "git_blob": "506af2f88078cfa45b1b0547bc50dbe4abfb992c"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationPersonalInformation.cs",
+      "sha256": "4e998660fcfeb8d590782b5c09a8f29608f6c325294b449fb55923096f499aaa",
+      "git_blob": "48fea3428896d06b2cd0899292a0b6223f7caf4f"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationRows.cs",
+      "sha256": "f8ebe0b415359615e843126bf6554617b458bb0cf38cda3c5ec16ba8ba3e38c6",
+      "git_blob": "59b8ab5c105560cc4246f0d64e5b605bce9d1b53"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationWebContracts.cs",
+      "sha256": "1c385b8fcac72eb86a8a8ce09e4da11808fbc1de777a81b32992a7e0888c3f52",
+      "git_blob": "2d5abf765da9b51c735ff496140f9cd0c9c66ab0"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpApplication.cs",
+      "sha256": "cea24a73088c2343d9b23903a35aaadce955c44e9532838553060ce189e3a29e",
+      "git_blob": "31bc9f1b948df30c89dc2e6fdca674c3308de263"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpBrowserContracts.cs",
+      "sha256": "9d9f14bb7fcb573f769dca1949eda222c947b3c3f510a146ae44ad7a5e344933",
+      "git_blob": "48030967eace07ffe281900766864ad0bd627cf8"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+      "sha256": "5af0f67f3a9e237c941629a06660ab67f45df90e69addef4443fedf6dcbb955b",
+      "git_blob": "ac4ff1fed9b8feab858abd64fc0ccbbbede611ff"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpContracts.cs",
+      "sha256": "bb0c0dd703c46dc9f4d9d85232b6ea5d38f034b56f110d66bec1dc644f39b4af",
+      "git_blob": "c892972532dad6f1f8e0881dada2b0711a08d2ad"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpFederationBrowserEndpoints.cs",
+      "sha256": "e7fdb8b44a59c48c6e5536c5078f84f56d751bea38e7b120c48dbbfc78fea0d3",
+      "git_blob": "8f598c28f3b83760324047a00840b760fd9833d9"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpOutcomes.cs",
+      "sha256": "3a277947ef9ab2e3cd6a80276d303af3c12f6db36f2a413df9b501a1ab01f14c",
+      "git_blob": "b46caf8b90b6fa53df0265b08950bba5105bf73e"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpPasskeyBrowserEndpoints.cs",
+      "sha256": "b4f78f3d90801418ef5d2245696a9902a97654f83950e5e3bd4dfa70f6c801f0",
+      "git_blob": "0fd852523b30f59337ed5aafc685aaa23f1e3881"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpRows.cs",
+      "sha256": "48220adbe97dabd41ef7d4d863504c647328dfd85f00777d3dfd36190e1d6d75",
+      "git_blob": "ae05b409a3d6464039e91da3e7163680a3d859cc"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpTotpBrowserEndpoints.cs",
+      "sha256": "7e33cae39f2b0bac7dc4a63de5471275a97b57eb55e2b8589f22a788690b0175",
+      "git_blob": "39d6cd455e2cca0ede757098d723d1c534a2f2c1"
+    },
+    {
+      "path": "src/Modules/Identity/TotpApplication.cs",
+      "sha256": "d212dfa6ce4c9050fb857b72343b89073911bc88c9ff218e63215f441a5100cb",
+      "git_blob": "2ad4928ff62a33f614969a57df9c5217eb5163fc"
+    },
+    {
+      "path": "src/Modules/Identity/TotpAuthenticationAuthority.cs",
+      "sha256": "2be233840714856bed20cd42936a770bffdd79cd3363e492b0359c6f2333ab74",
+      "git_blob": "efe0d148f50c68df8046bad5123f32a78d8ebffd"
+    },
+    {
+      "path": "src/Modules/Identity/TotpContracts.cs",
+      "sha256": "f74317d5b2543609048f4391ad07e1e788e1775d84fd3c6963e9a55a698730f3",
+      "git_blob": "838b36873334210f503eba3de1ed266f7816c89e"
+    },
+    {
+      "path": "src/Modules/Identity/TotpEndpoints.cs",
+      "sha256": "9746e7dd21be56edd7a596e4c050afe254185169d337060e5da917c13eed6b66",
+      "git_blob": "b641eaa0521eb1e46f71b93d84d829c75d3e7972"
+    },
+    {
+      "path": "src/Modules/Identity/TotpMigrationSql.cs",
+      "sha256": "da4b8a4f891037ec864614acf3548aa10f5f52568af6626ce19c8c7387958edc",
+      "git_blob": "3ba8c8ed32531e9c86c8b76394b32b077a7c1341"
+    },
+    {
+      "path": "src/Modules/Identity/TotpNativeVerifier.cs",
+      "sha256": "a55332e5bc5b2b43305215bbaf4ea4565ac67f4f1eaf6c6087afc43429b96fe6",
+      "git_blob": "19683f384c698453db529f96a9e1081e42fd946a"
+    },
+    {
+      "path": "src/Modules/Identity/TotpOperationProof.cs",
+      "sha256": "809680ff5410f3b944d8d73016c5cecf21996dd1e16bfd0e33d33a1c7e73d1c6",
+      "git_blob": "c1af44bf55777e21c6f97118bf5fdea5a9eb631c"
+    },
+    {
+      "path": "src/Modules/Identity/TotpPrimaryMfa.cs",
+      "sha256": "3d197a7cf0f9f80f8b2c6fc396c41edc3b64a730c6b2afbbdaf824b4b0c64596",
+      "git_blob": "af71651b11be4940e12e4eeeff8e7f10d7614d02"
+    },
+    {
+      "path": "src/Modules/Identity/TotpRows.cs",
+      "sha256": "c3ff4e8f4544b56d54b90bad89f4a5e9239e82d02a445f787fda62eb2baf414f",
+      "git_blob": "ba3c3cadb6524630e9a9e0a465faf80afaad6e6f"
+    },
+    {
+      "path": "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+      "sha256": "52a7934a2605814df946518253469e9f44a344e9e1bb2b6a60b4d669ba41aa07",
+      "git_blob": "bb3d6b333b26b08e3d128b329287acec92278a3c"
+    },
+    {
+      "path": "src/Tunner.Admin.Bff/Program.cs",
+      "sha256": "c7a753043fe5c37fe8863af58fa504d98258cbe919ba5270b7805b32cbfea047",
+      "git_blob": "d639087ee55d11b436bb3db70c5b9cfb9f3eb20a"
+    },
+    {
+      "path": "src/Tunner.Admin.Bff/Tunner.Admin.Bff.csproj",
+      "sha256": "4e667989aa832276b86be3889cd9fee00eca20a3596332f46abdc9181e80a11c",
+      "git_blob": "3678ee99b5bafa60e1205997814748f786e8d342"
+    },
+    {
+      "path": "src/Tunner.Api/Program.cs",
+      "sha256": "39acff02f1b13c1c9d04948157f2f6f3e07a31228a42c9e999a4f4fca5dbc3f9",
+      "git_blob": "f29cb3b52e8083f2640527b6a0e59e3bf663ce06"
+    },
+    {
+      "path": "src/Tunner.Api/Tunner.Api.csproj",
+      "sha256": "2db75995cd1f9f0be586332fcdd4032490322174fd131800d81421a073a7251f",
+      "git_blob": "4c071c2b0076302272dbc8e56899a4dd0bb35c5c"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Migrations/20260930173000_P0MigrationFoundation.cs",
+      "sha256": "c676e628e7df31a38a7aa14c30228dc2047d61cbfb2cc51670c40c057b3f66c3",
+      "git_blob": "808e605f2c8a5c048569bbee44f85565db87d128"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Migrations/20261001230000_P1TransactionalOutbox.cs",
+      "sha256": "a7875b9ea2d9b2e93086aaefedb26319d0303892eec65c220b55a1018b70ff7a",
+      "git_blob": "63c550c09a6b2216969b243ac9711b75a141c6ba"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Migrations/20261002190000_P1DurableWorkInbox.cs",
+      "sha256": "a9edcc535051b1b049a53669016429cb0c9ef6276cc6699de28b5e331abcddb7",
+      "git_blob": "985dbf01a3ab74217b51ec6b9bfb0cf56b5199b1"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Migrations/20261005220000_P1AuditAppend.cs",
+      "sha256": "b424691a2eeda64c17029af1c7015ebc9e613831bf4e31d120cb0a4f7c11f20a",
+      "git_blob": "011037288fbb5d60878a01cddbdbf9d0c920d944"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Migrations/TunnerMigrationsDbContextModelSnapshot.cs",
+      "sha256": "23954f6e5e6fb63e75fc6cbe2d02153330c4fd4c00d34c1a7645755fb80ffeaa",
+      "git_blob": "1fe5f626310250dcbfa81c86dec136693ce18699"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/Tunner.Database.Migrations.csproj",
+      "sha256": "fa92b2a8c7e00220a45e6fe0245c0d9ece0c5a9da71ef4154ea20953d5899c0b",
+      "git_blob": "153b699c4c165b72dd3a412cdffa766817429722"
+    },
+    {
+      "path": "src/Tunner.Database.Migrations/TunnerMigrationsDbContextFactory.cs",
+      "sha256": "a01e6903b55bbf60af33946cac4952221653166c7e2260c182cfb46b410972ff",
+      "git_blob": "618c888ce49ed573da209b474a6d046befda59c4"
+    },
+    {
+      "path": "src/Tunner.Database/Audit/AuditEvent.cs",
+      "sha256": "b812cf9217fddb833df4795ffafc2e967c24735a41abfcf81b14dfdaaad61458",
+      "git_blob": "98519c74b180b7c3a85866edec317df36cb31164"
+    },
+    {
+      "path": "src/Tunner.Database/Audit/AuditEventRecord.cs",
+      "sha256": "234aabe0039a8d1872ac8bb8deafc17c838e5c1aa09c375cce234668fda790db",
+      "git_blob": "8ecdf6d319d91107cf7c23116fc637a3c0ad6d75"
+    },
+    {
+      "path": "src/Tunner.Database/Audit/AuditModelConfiguration.cs",
+      "sha256": "c83521d9981e4ce8787621c31539efa2c9f524e1f118fdb64e407fe3b225905b",
+      "git_blob": "2cc6e7f8753b7ee994283e3c78025e6388d52cd2"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/ClaimedDurableWork.cs",
+      "sha256": "c596c1346f02b6628599336ef4655f3e26b5a6a4848f04d66fe204072bae18b5",
+      "git_blob": "ab367890d8097411c8d69fdfa96b7f524f2cc2e9"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/ConsumerInboxEntry.cs",
+      "sha256": "7d8a346a8ebe74730731cd09107bbb9092f9fa426b619c99610e8c252ae1b498",
+      "git_blob": "79b8e6f4cfa24c8ff4d66a95ffafe6de8fa4486c"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/DurableWorkItem.cs",
+      "sha256": "34a53f4bbbc101089deeff184bbc6ca8c81f858e9b5358e1fcda7c5009c47ec4",
+      "git_blob": "d7dce94609a19d09f92964fc3b8af66996a2f8af"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/DurableWorkModelConfiguration.cs",
+      "sha256": "640e047f84977cd3eff9cebcf5bf524b422948ff6ee5062193efa6c77e477bda",
+      "git_blob": "f3673fbf3ba0eaaea86f0db23106f363fe1fc84d"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/EfConsumerInboxStore.cs",
+      "sha256": "a7ba815055f9ea3fbf0da5f06ed845c0b21159440afdaa76532e45ff0d0be066",
+      "git_blob": "2dd7df22941e51834739fc9ed2778d08b305125e"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/EfDurableWorkStore.cs",
+      "sha256": "bcf40c574d74c4af5451d0efafded12bb1c281ca8fe549be88d4d642c64cb14c",
+      "git_blob": "c6bedf1be964d982cdd543d28d1be1ea45798771"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/IConsumerInboxStore.cs",
+      "sha256": "5af44af81b01eca6a95bbb5f3c83295d055faeaca6066afbd3d8c8f2b3aed613",
+      "git_blob": "03284f10f3aef3c41b8ff7b8f9eb01a6af6b5c63"
+    },
+    {
+      "path": "src/Tunner.Database/DurableWork/IDurableWorkStore.cs",
+      "sha256": "6e43aff193d40f090ae20ee154916e9b37f401685abf5ec05e03aa9239106914",
+      "git_blob": "c5aece51775ca95750b572254df497dee6583dc5"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/EfOutboxDispatchStore.cs",
+      "sha256": "e6183e09375210c8f8d87d1f0fa8b0c3c565d48d5407efa1395df624349ccfa7",
+      "git_blob": "b6832d2926dc8a7fa56e384f33e2517590d37c32"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/EfTransactionalOutbox.cs",
+      "sha256": "9c3eb2c1e148229f86957a3376b43eea9f3a566c51259c129905a48e451a3c27",
+      "git_blob": "7acd36ace35f5b64ef7e492e17926ac2f2bc9c29"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/IOutboxDispatchStore.cs",
+      "sha256": "7ec2bc96e7637ca0791e36dc0d1ac9d155d6f5e6750a4e6839b6236cc1d1c7dd",
+      "git_blob": "ab0948fa8c07fd5b42646a4289d4911203808549"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/ITransactionalOutbox.cs",
+      "sha256": "5d21d7b890792d1b1acaaa8e7dbd10d74710dfa44288515bc5383add7aaaa372",
+      "git_blob": "8d1473fe194b3fec35283b03eebd653b9567fb74"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/ITransactionalOutboxContext.cs",
+      "sha256": "fdd1df604a65d89a947ad3201afa60e978bd5019766a99782cb268bcc7228a6f",
+      "git_blob": "7cf1ddd669855d692852c7331299b6ac4bf5c0a4"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/OutboxMessage.cs",
+      "sha256": "276a30245a1579a3cd407f7fd4469a8533db9fe0cc520de177267a0bd6212f0e",
+      "git_blob": "89669144909a5cdc865c8c3f273d617cf7dc9b5e"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/OutboxModelConfiguration.cs",
+      "sha256": "1da1d634da44a2c31d232785b71a9bb3e3179003cf86493f4a5680865c2f68d8",
+      "git_blob": "b3dd98e6aaffb3d129649a056ea282bea8d30879"
+    },
+    {
+      "path": "src/Tunner.Database/Outbox/PendingOutboxMessage.cs",
+      "sha256": "d3f7d9dfa777e17390ff101eb814fd94b0fabbd26a532a3fca31043f9449e1d0",
+      "git_blob": "a3cb63a07fcfbe9e2931583c35bfd3f2af2cc024"
+    },
+    {
+      "path": "src/Tunner.Database/Tunner.Database.csproj",
+      "sha256": "4ffb2375e571a611d8f54f7da69c55f019890d1fe5e3eeb4eb03bc593b196221",
+      "git_blob": "d396f2c9e75eb9c6e7d3b37e0048e6a65d7c0fa0"
+    },
+    {
+      "path": "src/Tunner.Database/TunnerMigrationsDbContext.cs",
+      "sha256": "c8a0efe7993e63799606d200c9e547f16614208aa3252dc1a2b420766c70b8f6",
+      "git_blob": "c8bf369e08c82a9e15403e3457168615f48447d2"
+    },
+    {
+      "path": "src/Tunner.Governance/AdaptiveContextApplication.cs",
+      "sha256": "01c870311e3431f6cc3aec773a70d437f5e266edd3458693ca292b684d0b6ef7",
+      "git_blob": "41c4e43ec142e5d5dd6d2f0307b85cf01fe38dc4"
+    },
+    {
+      "path": "src/Tunner.Governance/AuthorityApplication.cs",
+      "sha256": "a1805a7b2a47a3b14db247afc46adacd181dc3e08a7d258518f2dcfb8e1ecff0",
+      "git_blob": "4afb75da2ed81f1aa2d9ba7afc51f5ab1b1156be"
+    },
+    {
+      "path": "src/Tunner.Governance/BootstrapApplication.cs",
+      "sha256": "1e1d8e4bc039cbb4e2d33c818183955d1c47e7648889958761f981e03ca0079a",
+      "git_blob": "b59f7b29dd22d5184a7f95a38fe76313a4295942"
+    },
+    {
+      "path": "src/Tunner.Governance/CommitReadinessApplication.cs",
+      "sha256": "13610cb7bdc24f2a94f9956f2edf3ed3348b59e547a64d65b65502ac8e8e3d26",
+      "git_blob": "1fba68255f8b17f450fcc9e3a826f5205eb7f65d"
+    },
+    {
+      "path": "src/Tunner.Governance/CommittedEvidenceApplication.cs",
+      "sha256": "0b707f767c707f6082753fe5e13621f9a29170d32d1aead7aa8a04511ee0a7b1",
+      "git_blob": "1cd53b9dfe4362be972595bacd628b52d0c4f991"
+    },
+    {
+      "path": "src/Tunner.Governance/ContextApplication.cs",
+      "sha256": "206e43eeb019b0ce786a2f5edbdad0beb7d5680f8f0aa392844e1862972d8e6c",
+      "git_blob": "954ceeeab455c4deac7077e2a2c737759ec5d912"
+    },
+    {
+      "path": "src/Tunner.Governance/ContextTelemetryApplication.cs",
+      "sha256": "eda77279e464c0724e80bb7e031f1b1a042cbec7bbeffe9d7fd1a44cc6a8a309",
+      "git_blob": "9d4bbc6285ec03566ded8dfa2357555ff2d10266"
+    },
+    {
+      "path": "src/Tunner.Governance/EvidenceApplication.cs",
+      "sha256": "042047c346480a86a29f7e094c8e0218851dfeb412b0aaa736df31674e0e20bf",
+      "git_blob": "913f2f16f7ada8b106a3dfdf1d3c01b2e4720eb8"
+    },
+    {
+      "path": "src/Tunner.Governance/GovernanceApplication.cs",
+      "sha256": "cc6a8336a8744f0127a23d22b9c356c72a270d20ffe895938b9d6aa093aaf509",
+      "git_blob": "c177b31527683c373878dac106a0fe0533821dfe"
+    },
+    {
+      "path": "src/Tunner.Governance/MilestoneReviewRevalidation.cs",
+      "sha256": "f4859d063b7f9c8eaf68448d7bc124d6cc47226375bf68f851d4183927dad6e5",
+      "git_blob": "5a4139c3ccca08abc53e9d6a13e8a912dbb88aa0"
+    },
+    {
+      "path": "src/Tunner.Governance/OrchestratorApplication.cs",
+      "sha256": "52464683922b4880db91144f8fd678c69ec49ad4dc79e8a03e3dc764a190505c",
+      "git_blob": "593318e7d479d5ffe2004b78851fc7128a654d63"
+    },
+    {
+      "path": "src/Tunner.Governance/Program.cs",
+      "sha256": "d76e277b5dc7b20800d171cdf32c55058b4e5c32cc676aa82c12d63f8c8dba6b",
+      "git_blob": "08a414b917bb3e5d580c08b1dcaacd2741a33770"
+    },
+    {
+      "path": "src/Tunner.Governance/README.md",
+      "sha256": "e39c19204901485648163f874fca4ed8649275b5e439ed6c03570f5c72ddec1b",
+      "git_blob": "cbb391fb2d4dea751140fdb008d65581265fefd4"
+    },
+    {
+      "path": "src/Tunner.Governance/RepositoryRootResolver.cs",
+      "sha256": "2891022250a499cd23ba906be91fd6495fbcf8e8d08cd5565a37fa9d76e1262d",
+      "git_blob": "576c371c136dd90b88d35c14ac3b24696c20368f"
+    },
+    {
+      "path": "src/Tunner.Governance/RevisionApplication.cs",
+      "sha256": "c42a213c27937eee9f8920692d80f34f8fffcdad4025ec26153467e0fd725bf7",
+      "git_blob": "c487afc0bd0dae71b75dd7908b369915e3d8593a"
+    },
+    {
+      "path": "src/Tunner.Governance/RevisionCommittedProofResolver.cs",
+      "sha256": "5ff3f9908a49e8c57ebc3310a52e2b3a4ff8d1fb0d0868a603dcf8aaa33970f1",
+      "git_blob": "81127550704a019fddff5e2741db1a1b88cf6657"
+    },
+    {
+      "path": "src/Tunner.Governance/RoleActivationApplication.cs",
+      "sha256": "e264ed3f373a3a98775b40c67344a2918559062c19d44f569eb85f239161daf2",
+      "git_blob": "012a1d7de8ebdb840ea78323b928bfa79a4aef41"
+    },
+    {
+      "path": "src/Tunner.Governance/SourceRegistryApplication.cs",
+      "sha256": "d2439d830691f04cee48ab83b7b6ff60ac40d99ffacd9ee8d5be6b3d8f70762d",
+      "git_blob": "8488761c27b6c42e5ad2c42d46b6d580a868fff3"
+    },
+    {
+      "path": "src/Tunner.Governance/SupplementalAuthorityMirrors.cs",
+      "sha256": "188a2f995a542c1d2877bdadb0860e44aa4a183a1876c7bc50c0bc9677d0c076",
+      "git_blob": "cd418ef4becd202624a2ac43a6f5a2bbc2ac3f80"
+    },
+    {
+      "path": "src/Tunner.Governance/Tunner.Governance.csproj",
+      "sha256": "00b2483929f3cedaa0287bab38dfea4500ef8d3f535ab6e467c9d01d4eb56b38",
+      "git_blob": "03bcce0daefb74a99a5f290311e1faf173c240ec"
+    },
+    {
+      "path": "src/Tunner.Governance/UiComplianceApplication.cs",
+      "sha256": "73f79e829484d906726efee1cd5763c94b3b61de8910acb699f04845a3b143c6",
+      "git_blob": "0ed1436dcbc89760b37a2ec396bdd0e7208914f5"
+    },
+    {
+      "path": "src/Tunner.Installer/ConfiguredR2Storage.cs",
+      "sha256": "beafd4520939e33c45b3a2aba7315ce58d03d486b0075764ff3a0e79daf4355d",
+      "git_blob": "40f22fedde86465981301b5004730c24482093c0"
+    },
+    {
+      "path": "src/Tunner.Installer/LocalOpenBaoCredentialScope.cs",
+      "sha256": "df7f87a548143ba0a9e19f686b415ea9942a14df08613e34dcc2c7e9009fe60d",
+      "git_blob": "565600c714eda3e94db3835ea266581cc241eb07"
+    },
+    {
+      "path": "src/Tunner.Installer/LocalOpenBaoSession.cs",
+      "sha256": "416cbf0324e7f6c7f0c3f745ccc5726e25ff92d34b25d80bc5f24803e47083bd",
+      "git_blob": "5c217515ed18657e43840f54ffc6c3ca6172f41c"
+    },
+    {
+      "path": "src/Tunner.Installer/LocalR2Setup.cs",
+      "sha256": "21c3efea4ee6d0ac235eafe991e734f5d2a88416f65d2135967ade1ff91c413e",
+      "git_blob": "79c964df0e170863528f7d04b1aca8df632bab75"
+    },
+    {
+      "path": "src/Tunner.Installer/Program.cs",
+      "sha256": "4563b2df69fc54fbd6a6d623d758847fff43b084147c79353aebe6c19dc4b0e9",
+      "git_blob": "2d776afc813d9762800670ea9783b166f090ce56"
+    },
+    {
+      "path": "src/Tunner.Installer/R2ContractProbe.cs",
+      "sha256": "2cff3caf57fccaf0723348a7dd706baee5b2364630d6d5d16981fe34c836dc02",
+      "git_blob": "3c29362a46e4e19f87559c3cc0c5cbb318d884f8"
+    },
+    {
+      "path": "src/Tunner.Installer/R2ExecutionReceipt.cs",
+      "sha256": "aa5f8e24a3fd190d4cf4a11344eaa785e81022ce5e6529ce6370e170935415aa",
+      "git_blob": "345c29daa43169d04146640d60ea42eccf7e6d07"
+    },
+    {
+      "path": "src/Tunner.Installer/R2InstallationProfile.cs",
+      "sha256": "0386ccbf451301039e0caf4a9ef54302aea5014ca8621d0507a5ec7b6ffda3d5",
+      "git_blob": "07af5567a779083ca859f072fc38907b68af43c6"
+    },
+    {
+      "path": "src/Tunner.Installer/Tunner.Installer.csproj",
+      "sha256": "70a8fa894988662296299b71a12abf1c454cecdbe6cbb2b4ee25567646593e21",
+      "git_blob": "59909eaf1cfabe5bf9e073b0f6b25741298c2196"
+    },
+    {
+      "path": "src/Tunner.Observability/TelemetryAttributePolicy.cs",
+      "sha256": "7c83becc9ae15164b7c54d7ae6878511716e48c078dbdabdf699ec5a03ca1910",
+      "git_blob": "d7be4e4948c66b288f62bca23107c1434ca342de"
+    },
+    {
+      "path": "src/Tunner.Observability/Tunner.Observability.csproj",
+      "sha256": "50c0a3ee5821f317b35935fcc3cb2adfed61878fd62b4691c1f4660e34dcc80e",
+      "git_blob": "d5f149975a0f50656fa36b0a465c6456077234eb"
+    },
+    {
+      "path": "src/Tunner.Observability/TunnerObservabilityOptions.cs",
+      "sha256": "da59987cdb6bfc17cd8441f4648cc18d3a28f32459c8793e262ef24bf2a06242",
+      "git_blob": "d681af89c0a8838f344fa4d0a254f4806960d34b"
+    },
+    {
+      "path": "src/Tunner.Observability/TunnerObservabilityServiceCollectionExtensions.cs",
+      "sha256": "d63e8fa8faaf95b22df3cb5ffbe9cc67aca8db07363de7e764fbc9e4cd940ccd",
+      "git_blob": "0742e4e44ec359e11b44c69aff2ff77dad9fa038"
+    },
+    {
+      "path": "src/Tunner.Observability/TunnerTelemetry.cs",
+      "sha256": "f42e407fe38f1fedef894c2f5c4fdbd18c645f6cf6547fa5378d3152a09bf79c",
+      "git_blob": "eb726c80b74c491a47c20051c9dae3d29f2e8300"
+    },
+    {
+      "path": "src/Tunner.Observability/TunnerTelemetryProcessors.cs",
+      "sha256": "eb7362dd95da6947bc818d27fb37cd77b199181f76fb9f2fdce5bb0e1c3f119c",
+      "git_blob": "9dfe34ee345d62a0887ec40fc2e9a8d4ff434977"
+    },
+    {
+      "path": "src/Tunner.Observability/TunnerTelemetryScope.cs",
+      "sha256": "9f793b0be7ad458832df87072efefb48248e1cbfa68495cdaba06ec78a8762da",
+      "git_blob": "1f9c2d74ad3e8bd969f958a879e0b623e522925d"
+    },
+    {
+      "path": "src/Tunner.Platform/Bff/BffBoundaryProfile.cs",
+      "sha256": "ca6b14c3f16e8c990b47377e7f86938d5ee974a8dc23f4dc6ace64031923fdb7",
+      "git_blob": "2ab64e44736568c6ea9befef930930a05cb6bbf0"
+    },
+    {
+      "path": "src/Tunner.Platform/Bff/BffProtocolCallback.cs",
+      "sha256": "97515a6d18c048b480630d3c10f31bffba1f052da339162c71d81151f4832e6d",
+      "git_blob": "d8ea8949bdb0f34374f080fbcc793706256cffcc"
+    },
+    {
+      "path": "src/Tunner.Platform/Bff/TunnerBffFoundation.cs",
+      "sha256": "f04a36893a028745e50c5135590181b300f5c1c9d9b6bb48d816e78cdca00cd9",
+      "git_blob": "90671ec1987a5db2c9b7037fda56449a91218636"
+    },
+    {
+      "path": "src/Tunner.Platform/Bff/UnavailableBffTicketStore.cs",
+      "sha256": "4ed7f94ae34db23d3327e9dc4800012c3e91e9c2208bef54f9ad3165ce83805d",
+      "git_blob": "95e6590dbd13229b595d4a872b07795a2749666d"
+    },
+    {
+      "path": "src/Tunner.Platform/Configuration/EngineeringEnvironmentConfiguration.cs",
+      "sha256": "7c95475a9ad84d865b52f8fc627fedcc1726368103240bdc7c9d49be6821fcbc",
+      "git_blob": "2095223127769804078b76eb704ec31094fccfe2"
+    },
+    {
+      "path": "src/Tunner.Platform/Configuration/EngineeringEnvironmentModule.cs",
+      "sha256": "3be3ba591393502aae3515efc6e3db24ac55c18430e949ee31ea8df5f0b60f20",
+      "git_blob": "3d6fca1fc7b62bdbfe42dfff9e6707726a87a6dc"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/IObjectStorage.cs",
+      "sha256": "a49ea8ea8bf9a58c8a0c9e3ba6f4d4f5450e183c431b1914aa6befb69058f1a5",
+      "git_blob": "75178b8bc29ec65363c0e4319967f807cc30cee1"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/ObjectStorageAddress.cs",
+      "sha256": "ce787cc9609e7f2883f93a80250cfa0b5f96edd91fb6bfbea67b71797d9d641f",
+      "git_blob": "d64c94a9c39a0842a8ca88023c1d9f2f5f359c2c"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/ObjectStorageReadResult.cs",
+      "sha256": "7684189a569ede5abc3b3cf810fc09f8679df87d6f824a72e56f67fa879a10c2",
+      "git_blob": "b8213f3d9f4c2d9146f03b2819b41a3f824aa3f2"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/ObjectStorageWriteRequest.cs",
+      "sha256": "1c679fbd62e6eb231397d9ebbdeb16020250a4302db781bc28edcf4ee70b4bde",
+      "git_blob": "7c664ae04c6e075f89f49f0a18fff3734736ddc1"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/R2/AwsR2S3Client.cs",
+      "sha256": "2837fa8e954d0473cadc50a616b1a799454b859dd03f67229e287f6d8fcd03b1",
+      "git_blob": "9f45d8a8311ad345e2f3aba60c53213f633821f8"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/R2/IR2S3Client.cs",
+      "sha256": "9f2b312feb3e7d368a9e0f684dbf487355a78e59fab5f0849d8d7183c20f8e13",
+      "git_blob": "ef3ca8e502b5b0cf62b628c561c54c66b9176316"
+    },
+    {
+      "path": "src/Tunner.Platform/ObjectStorage/R2/R2ObjectStorage.cs",
+      "sha256": "4f26ee1a14c33a662967a97d782bf083dd234623ec4e6773d13ef8a6b573de59",
+      "git_blob": "c27d9b0e639dd11b72aad2eaa71fbf807aa92db6"
+    },
+    {
+      "path": "src/Tunner.Platform/Operations/TechnicalCommandPrimitives.cs",
+      "sha256": "1f1b820d216e22dd12e2d268051ab962afc1b5533742463e6d47c6f9dbdfe3ba",
+      "git_blob": "aa0a60124d445126099a19a37724d7ac43fcd888"
+    },
+    {
+      "path": "src/Tunner.Platform/Operations/TechnicalProblemDetails.cs",
+      "sha256": "aae4edaf953ebb3626c4a51ea6fc76204eb4d14ca26eb6f59db274258d0f9129",
+      "git_blob": "1cd7ef6f972234c74748f1532dde476291cfa9b9"
+    },
+    {
+      "path": "src/Tunner.Platform/Policies/EffectivePolicyVersionResolver.cs",
+      "sha256": "ad46a28d058e8d18c718d8529eaef006e72d570bd0e84f0c619b4ac8d947f6d0",
+      "git_blob": "1e64f27f88ccfd9ab411667be3bef25434fbc02d"
+    },
+    {
+      "path": "src/Tunner.Platform/Providers/ProviderCorrelationBoundary.cs",
+      "sha256": "5c2ec1b9108e1e00a059f1c62445c262cf496cb396ccd55aa513bec091ad4ed6",
+      "git_blob": "9f4a422b95153bf2244c6b2606dbdef022f02430"
+    },
+    {
+      "path": "src/Tunner.Platform/Realtime/RealtimeAudience.cs",
+      "sha256": "da6eb307aa47b34ed93261c6267af4b1043bb3b3deed86918da7f532ea310759",
+      "git_blob": "f0eef81196977104592cfd55ff1580781da9b387"
+    },
+    {
+      "path": "src/Tunner.Platform/Realtime/RealtimeResynchronizationHint.cs",
+      "sha256": "b92cebd844b9b300f1714f98f9b334bdf91e52b1a958e8c95cc775dd8ff37fb9",
+      "git_blob": "32244a82311e9f82d63124c93ad4197029a82deb"
+    },
+    {
+      "path": "src/Tunner.Platform/Realtime/TunnerRealtimeHub.cs",
+      "sha256": "6a283f1f95bc941a36a397a5dc4f29ba06051f07d99f4f2d99a66cfc10fc4591",
+      "git_blob": "1c30147f266fdeb7a9e0b81b4634afdcf89c2fdc"
+    },
+    {
+      "path": "src/Tunner.Platform/Realtime/TunnerRealtimeServiceCollectionExtensions.cs",
+      "sha256": "11f7086d391df5adbe0e2b7a24a9c8e6f5b6ed969105d9fef7cd124c6996a786",
+      "git_blob": "7550040cc190080c86c8f4b37f377ef0279ad7bf"
+    },
+    {
+      "path": "src/Tunner.Platform/Redis/IEphemeralCache.cs",
+      "sha256": "5de043f856d91f67b8c0995b35b0745d2b88037302e96d29cfd34d9fe8a1a4dd",
+      "git_blob": "642293fc0cc9582f371ef624909a70402bd4f1ff"
+    },
+    {
+      "path": "src/Tunner.Platform/Redis/IEphemeralCoordination.cs",
+      "sha256": "9b6f2575f294215f6a78811e0bf7b514e8151d810cc6b13777b702986f5c6fca",
+      "git_blob": "12b555c4b164c4d7cd4805681022de18e4f94eb5"
+    },
+    {
+      "path": "src/Tunner.Platform/Redis/RedisEphemeralStore.cs",
+      "sha256": "8e082dd4dfee337c22b6eff96624d10cbce852e26cb61293f356c1cf471d6d49",
+      "git_blob": "57e3fcc2b5bbe3942b7f0dac2ddddc7c5b614666"
+    },
+    {
+      "path": "src/Tunner.Platform/Secrets/AssemblyInfo.cs",
+      "sha256": "604bcfffe8e2e45e27d1c2a6ed3e9e9e4fa2466e39ee2c9942a5f5524e03d056",
+      "git_blob": "28937310fa25b8dd259923427be7543f70cc06dd"
+    },
+    {
+      "path": "src/Tunner.Platform/Secrets/CredentialSecretReference.cs",
+      "sha256": "700666e9d953a521c90577e3a60803c5ea495640087f5bc870296649a2d6f03d",
+      "git_blob": "ac803867c86323dbd5a9cd0d4911c543f610cb8a"
+    },
+    {
+      "path": "src/Tunner.Platform/Secrets/ISecretStore.cs",
+      "sha256": "2aeabffd77cf83960265b7bdbc474d9a6f42a1b80b62fd2f28fab522ccbc7cdf",
+      "git_blob": "35a0d9a41111c0cc976859aad9810104a09f6470"
+    },
+    {
+      "path": "src/Tunner.Platform/Secrets/OpenBaoSecretStore.cs",
+      "sha256": "9ce3b669ccd7926da9419f3e9dda76441ba616853c15120cd7c5399951774f68",
+      "git_blob": "e48e74811bfbc225ecfcc3d31768cefcba5678ff"
+    },
+    {
+      "path": "src/Tunner.Platform/Tunner.Platform.csproj",
+      "sha256": "ab0a346df25b7ff895932bc973fc3c1176843ffaedb04c9a56a6d99290b517f9",
+      "git_blob": "54a374c22b7a6fd661e708dc4aa30bef557feb31"
+    },
+    {
+      "path": "src/Tunner.Platform/TunnerModuleRegistration.cs",
+      "sha256": "f2a79520d450769c337aadb99113af882ed90c71468fc68d77f86ca62b819245",
+      "git_blob": "a5175bea9aa36ea91a98f7af6fdaa00c969fca65"
+    },
+    {
+      "path": "src/Tunner.Testing/PlaywrightSkeleton.cs",
+      "sha256": "052f34590c5b701f97da5659609535ec2be95e7c243ef1ffbfac5f44a1dfe884",
+      "git_blob": "1d94fed4818b9729e7b82a6346dc0fedfc4ebc6a"
+    },
+    {
+      "path": "src/Tunner.Testing/TestHarnessProfiles.cs",
+      "sha256": "86060d7e00f869f6109783c5b68e688e1fcbeb2b5374f4ea7bbed4b0baec901d",
+      "git_blob": "d3b983f555e3e72274d72050f280c17f0262934d"
+    },
+    {
+      "path": "src/Tunner.Testing/TestcontainersBaseline.cs",
+      "sha256": "5c4b41de0ab38d4adc2fe3aa8a70b3a4276765a6e06c869a8cb3097dade4bd95",
+      "git_blob": "317ab71179044658c1574f51d4feb86b77720e18"
+    },
+    {
+      "path": "src/Tunner.Testing/Tunner.Testing.csproj",
+      "sha256": "49e3582f146d8f403c31e275685d54211e162cc302c7f675a818e5fdd61b0c01",
+      "git_blob": "a14a23b06c322336cca5148e2d9886e615f26502"
+    },
+    {
+      "path": "src/Tunner.User.Bff/AssemblyInfo.cs",
+      "sha256": "57c1f2c2bdcc3c56c68cb04d1417c18b179537447168824c21e111d4fd8ef84b",
+      "git_blob": "763d20e370042cf8e1ffb41751ff0ceba59b43c4"
+    },
+    {
+      "path": "src/Tunner.User.Bff/FederationManagementBffEndpoints.cs",
+      "sha256": "be713452db8e4e0f21a0b27bc7cbde73080edb95accac0e84696cf1cd21039f7",
+      "git_blob": "a398627335bfb007419cd4214a07ac5dc240edd8"
+    },
+    {
+      "path": "src/Tunner.User.Bff/FederationOidcEndpoints.cs",
+      "sha256": "28148fe61ef049cb1a6f5637399689a4ee8bd5acd552c7923674576936dba92f",
+      "git_blob": "70159a475af7cd146f64a4ef011987aefb375548"
+    },
+    {
+      "path": "src/Tunner.User.Bff/FederationOidcRegistration.cs",
+      "sha256": "e09c14481a44f9b1270d195048923d6cd9bcc324ca012cbcc27a2e0e62729592",
+      "git_blob": "2ffd452b82bf518d284bb0de23e3658e34c8d691"
+    },
+    {
+      "path": "src/Tunner.User.Bff/FederationOidcTransport.cs",
+      "sha256": "f0553abd0410f8cd9b28f66bd69b988ae87aca9b940786942d0e6a0f2e4a1034",
+      "git_blob": "02208cd344d1d1c99733463c58a49149117d0702"
+    },
+    {
+      "path": "src/Tunner.User.Bff/Program.cs",
+      "sha256": "b3062397aca152f8ef1d81740a31915cc2228b639f10b1b9ddb2cc60d4964b86",
+      "git_blob": "80740e9ca49eb40618aa6069ea2626bec8f7bcbd"
+    },
+    {
+      "path": "src/Tunner.User.Bff/Tunner.User.Bff.csproj",
+      "sha256": "0f0e2cd9dd53c56c6db5277f3fa4ce23e7dc5b1da12d24a8928a597982960a32",
+      "git_blob": "4bdfcdff1f3f7e5fa7ac4bf8636247b5e95555b9"
+    },
+    {
+      "path": "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+      "sha256": "4bee6cfbde3caea7f06e15a83fb8fd1373380fa62c5f5962eb0fb06a53fad6b0",
+      "git_blob": "a303e0352da5588de5a12f2e090783d3ca93fcf1"
+    },
+    {
+      "path": "src/Tunner.Worker/Messaging/IConfirmedOutboxPublisher.cs",
+      "sha256": "3e7e50cccffb611acfa86d3c238dda19c8aa6e80a1eed2e43cb0c589d9a68740",
+      "git_blob": "ce17c5a5211e634f230a03106b2104e185906bbe"
+    },
+    {
+      "path": "src/Tunner.Worker/Messaging/OutboxDispatchCoordinator.cs",
+      "sha256": "4561dfa554d69df66c9ea4d367367d84a40b90dc571b0f553a61c97f76d109e4",
+      "git_blob": "37ca385692d25f81fee1260e96d718336f74016b"
+    },
+    {
+      "path": "src/Tunner.Worker/Messaging/RabbitMqConfirmedOutboxPublisher.cs",
+      "sha256": "672d8b17dfac77c910f7d7e0660d49d708fd24c542a722e1af4cdeec581a0d9b",
+      "git_blob": "fdc69ec14132481a2c7a6a7f36540b25163510db"
+    },
+    {
+      "path": "src/Tunner.Worker/Program.cs",
+      "sha256": "7ee6cb24bb1260ea37a75a7211f16292f36a37e70211e6b81000d10025bd3466",
+      "git_blob": "753238edbe368f8bd99a351578669638f824c0ab"
+    },
+    {
+      "path": "src/Tunner.Worker/Tunner.Worker.csproj",
+      "sha256": "0e8a81536df4e7e0f75000066558ace8900cec8b6fbd7bd69b53513bb7beaa88",
+      "git_blob": "cf38f8ecd2d95a96381bee9c93f7665e138a7a8c"
+    },
+    {
+      "path": "tests/Shared/NativeTotpCodeFixture.cs",
+      "sha256": "e747ac0bbd93a6bb72171b9c394e89cc29669cee160c911f2da45f63fe5ee222",
+      "git_blob": "b239703dbd00e49fbb291ce9e4dd24782f3a353f"
+    },
+    {
+      "path": "tests/Shared/OpenBao/DisposableOpenBaoFixture.cs",
+      "sha256": "6124192a103273002c9bfac58b759e7de3f823da0866740688be79c9437e0009",
+      "git_blob": "5dcdc9ccbdc8ae795f38a5413dcbf09b1e207dc0"
+    },
+    {
+      "path": "tests/Shared/OpenBao/README.md",
+      "sha256": "21d32924e8c79f9b5cc8ff40af58c91c2baf4e607c7830a4eb2448d331a80dd0",
+      "git_blob": "0668c052842818ecfe6e9b6932629d8c0626de11"
+    },
+    {
+      "path": "tests/Shared/RecoveryCodeFixtureOwnershipChannel.cs",
+      "sha256": "62a8c13594e275712122c0b9607be50162c7996028ca8dc4819c865668fa38f0",
+      "git_blob": "0bd031c2581dcaad12cb6173ef165f91c7d3eef3"
+    },
+    {
+      "path": "tests/Shared/RecoveryCodeOwnedDockerFixture.cs",
+      "sha256": "10e4e48a5976b0254c2d464312a7a5d525e56c856aa0e9ffccc33b55adf6689a",
+      "git_blob": "5ad365bb132b0021ca15cff085c60465060bd64b"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AssurancePolicyTests.cs",
+      "sha256": "232d6f2ba7292b8478364077d8b36ac9196345f66bfadda5b8e3d9d66787dd11",
+      "git_blob": "100196674a682605e438161dc3d308803dd0d648"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationOutcomeTests.cs",
+      "sha256": "741a639c516a8208eb0313b797f3fe89207e331ef88882206891bf238e532e9a",
+      "git_blob": "289c15bcd68d2ad43d59d935a4b4af6f93839d6d"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationPolicyTests.cs",
+      "sha256": "60db736093c21e4057ef61c3c373ae0202ab7672fc608ac2eb76e3b1efc3c282",
+      "git_blob": "0d6c74b83a76ff7b99642d48b9e00c8025f2317b"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+      "sha256": "6392c6ba1c7f457689b87278504504ca16ec676dec78c808c49523bf6cde2143",
+      "git_blob": "67ec8ae59787ab4f24406f357c3b620b6d31b44e"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationTests.cs",
+      "sha256": "ca69d6df831d5d866bda8fffc522733b6afc53fdb8e334224919d3282e5b699a",
+      "git_blob": "3629b30ce6dfede48e7849d7e0428cace21a3e37"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationAttemptBindingTests.cs",
+      "sha256": "0ec803e8b04bdee54e41056439582b5dccebb856aa3375d5af63e8cd71ab7c65",
+      "git_blob": "0f43e4634acc2aa7181b678951c12c878387a674"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationBffPrivateIntegrationTests.cs",
+      "sha256": "2c805ebc02e2167df85f8b3483c54774e755d979644abd30b2aef3d41e68f5f2",
+      "git_blob": "ae69de9a421f17692bb07b26a27b2051ba45198e"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationFreshAuthenticationTests.cs",
+      "sha256": "2333565d20e9560467ef0fc07597868945c2f14703f91d0f45bf3133b868db12",
+      "git_blob": "9940604b62daf194a0248e826f43a2b3efdc9007"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationIdentityBindingTests.cs",
+      "sha256": "4d19cd03f3426af8e2c620a61c9d92ff8fa465da786d3d578dba27d34173d3e4",
+      "git_blob": "d265bba630c66fe325f72023e02ec8e902d562b0"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationIdentityPersistenceTests.cs",
+      "sha256": "f65e8b913707368b42fdf29a9497c9f5d161e6e079912acbd682384fafe32327",
+      "git_blob": "5b5006c79a9d10d58d9b840aee7f597a694d8819"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationManagementPrivateIntegrationTests.cs",
+      "sha256": "c9c7b325e40ec00e5bc2d28025c8d48257b275b27a842787238a88e7d0360b95",
+      "git_blob": "57eeb0d1acdfdca59861cf51c62456e941e1b018"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationOidcNativeProtocolTests.cs",
+      "sha256": "5334f60b6287a6b48ef0c7e00186fc8a333826a7bd7b9a9decb9ee1ce7afe965",
+      "git_blob": "a54494e69936918c7dd6c54619eab13892e653d0"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationOidcTransportTests.cs",
+      "sha256": "b07a70d1abf7e8512fdfcf299fafb8741fe3375ef1cd2703aa8d7249c96d6c15",
+      "git_blob": "90e916db5e00028f5e406b0d01cc0da9433d5a13"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationPrivateIntegrationTests.cs",
+      "sha256": "68d377644548ac940da5125f31042782eae939efb5e1ce875c73e5fd6a6a7c76",
+      "git_blob": "f3d0114cedc73bd74cbff3d3d63b53f69601c7c4"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationSessionModelTests.cs",
+      "sha256": "e46c3b2761be6e32489639711a53854057846d74661f9ce34abf43f49226d6cf",
+      "git_blob": "616dba7b2738bc6dfcb09c9bb8284e78f83b4d62"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationSqlIntegrityTests.cs",
+      "sha256": "bdc9b1085337dddfaac15aeca152117eeddb563fc58766cb8950c29f04a59df1",
+      "git_blob": "b14cac0a13e17b05d8e545958944a0d403147233"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FixtureAccountAgePolicies.cs",
+      "sha256": "df7ba4628f03d3e4be1fdc197fb641016a159dc261d65fb5c714acda734c5010",
+      "git_blob": "c6b083354a2a1ac241bc2913ca7c9052f70b6559"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/IdentityFoundationTests.cs",
+      "sha256": "61ef1535e6c0c8d7239c801216e631e0e5f123b5e8aa04f83d64e9f911cb8db5",
+      "git_blob": "cad9e4401cfd49f801e688bad07d4897f47089e4"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/IdentityPostgresFixture.cs",
+      "sha256": "914d6608b865f8b6b018204b592c58a551f0de5116b133d83b128ae58608e170",
+      "git_blob": "a3cd9ebefff115bfb0956e41acd72e3cad1d07a6"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyAuthenticator.cs",
+      "sha256": "c2a8553d605045f56b2630ebc01e13d04596490237acf134bc83b05eb0f6ae5e",
+      "git_blob": "d5cfc9473c270c2c3d29dbbabdc92c6fb976f11f"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyMigrationTests.cs",
+      "sha256": "710f6cc7ec63109b3d06de7ef0dddd9feee961e48121806339f782454170f765",
+      "git_blob": "3d7b01a2e62811ad04b0c902c0e7eeca2b21102f"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyOperationProofTests.cs",
+      "sha256": "4d6b2ab37c0e3f83aa9d0b3f6b99207f41ffbeb8461a8840ee1ed84958e04112",
+      "git_blob": "b93c04c601e7d46aff1504cd7d6d8b1de173431e"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyProofFreshnessTests.cs",
+      "sha256": "bf09515fbf3f890a42e804c9d6c4d911e5c6057037d9a96c77c31d1c05cbe00d",
+      "git_blob": "3a9d44af2fd5f74438fb08f8357dddf6b4364ab3"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyRecoveryTests.cs",
+      "sha256": "80f5973fd07cb5f546e066cf553d8023abd03cdea4cbb23a064aacea6f27a780",
+      "git_blob": "00a1ee2d9d74a2c93902d1dbe25a78fc28bd5046"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyTests.cs",
+      "sha256": "2fac36b4c69b04c363dd80ca3983dd6aa58f6b3676d3e83eef4b5408145b0b66",
+      "git_blob": "139e57c2d68d867802fcc8980f1a120e6348c4b4"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/PasskeyUsageMigrationTests.cs",
+      "sha256": "b1c5b31e3a885d8f1895708b8a4087e23fc1e6f8c6475d49787100c48e13b537",
+      "git_blob": "b4b81492c9d79e1ae5c590992ef05ff6ca1c72ee"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryCasePrivateIntegrationTests.cs",
+      "sha256": "14bda163f62f01a2ef543e18e4c65b8305068e21536bf0455c0a917a4a69f862",
+      "git_blob": "361bf22d08d5f2b29b5234e2de5633f8eaff0668"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeExecution.cs",
+      "sha256": "d134ffc87b7ef91bb06de24091ddb3f5fb19f1a3a27e3d366c6026ae0afc3b9d",
+      "git_blob": "3e64fcc66c93fa8d815c8d0c1c8508e451287061"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeProtocol.cs",
+      "sha256": "9aa798aa4f54c20df33c5fcc7b112be5f1e7ec51fac7b965648ecd021769d5db",
+      "git_blob": "01d08c640f00766e5c57a5c7ec2c70b3e25adc12"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeModelTests.cs",
+      "sha256": "9f6d1f11258990323b7d2e0b6c0b7265cf91242cc8d7dbf33e7179f21f105dfd",
+      "git_blob": "9e46e2b70f7fb396ccc0710ffb17633d9ce98f0b"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeNativeTests.cs",
+      "sha256": "44e2b64f5fe2638f0f05600b65cd621f5f9a791436bb603ec8bf387cb6fe3b1f",
+      "git_blob": "ee97c4f543226b53f9e8537b6ab731d14b9a67ff"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryCodePrivateIntegrationTests.cs",
+      "sha256": "1f6a23fc8f3b79c110df221018fe6a1f6cd27b6191a05fb940ec6f8722f3c43a",
+      "git_blob": "9fbcd81253f015244f30cc6b4829015ec60d5f7c"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeResponseTests.cs",
+      "sha256": "cfa701db3ed2b38431ba9175307c91ecabe11758a84456c8c15261710a9eb7dc",
+      "git_blob": "1ffb89054950e7be6581b5219cf12d5a71aa704b"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeSqlIntegrityTests.cs",
+      "sha256": "a231f208ee3f3d749a3fff62816e0d23d0e17875a81d9bdb8045196e43616d49",
+      "git_blob": "e677c7596af201d256598dbfabdb089df103afcf"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryContactRepairPrivateIntegrationTests.cs",
+      "sha256": "1b8105e3ce15c9e537b677fde3adeb7489c773997c492326f04e0c85f6361621",
+      "git_blob": "bb876ddeac211cd423276926bd19ae6166fb9ca1"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryGovernedRepairPrivateIntegrationTests.cs",
+      "sha256": "a18c5eaead6a81261a1bfab75d0db655d32294ad816d40c2e746be415a1a77f6",
+      "git_blob": "7962998b8d1e87c49579285cf9f1adeb566b3161"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryPasskeyRepairPrivateIntegrationTests.cs",
+      "sha256": "8ff4187550ba6a4f2b7cbed4b8e645f1d7391b389ec1dcee84cc2977ca8e4dd1",
+      "git_blob": "2008787b2eb3a0e8d9d521afce5009e49ac33c44"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryPasswordRepairPrivateIntegrationTests.cs",
+      "sha256": "e2f96bfd8ababe1fafd7ba7421599bfceda041226a8256ad9cd68ce45c553283",
+      "git_blob": "133cbe91c83cb2102eab25722a82a7283d16558c"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RegistrationBffTests.cs",
+      "sha256": "9c172519187ea2000f80bd5a5da18e2201acd4a8f99aaf07261bd93abd2e57be",
+      "git_blob": "36af9ac50b570112aa5640bddc48bfe6d575e465"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RegistrationTests.cs",
+      "sha256": "50d8b66c5243fc923d67283580c3db666450fc4ba6379a79dc693f884499f44a",
+      "git_blob": "6a025fc18da3145e237cdd3263efb8ea084cba73"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/StepUpBrowserTests.cs",
+      "sha256": "f96d0bcb9d33a3321eaa957ddd16b238b27c00803d7e05352e44e34e2d6c1702",
+      "git_blob": "ee095cc6325ff41429e41948a0a888a131a92401"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/StepUpTests.cs",
+      "sha256": "d553b172790d000dcc58a1d576b8fec86d22a8f53dd667c5603918878570ec20",
+      "git_blob": "5eacab77e231765fe4e1215577ea201be731991c"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpCompositeTerminationTests.cs",
+      "sha256": "80d1cb9eb013c68369c8d93781ade25347305a03bb643b8bd2522ff7b3ef0b8b",
+      "git_blob": "35c6322e974079b72f1f21bfde6814f3033f2516"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpFinalBoundaryTests.cs",
+      "sha256": "c61b293691368b372baf46bd49bb76f4442f098b39f1db866e92ff615369ecf1",
+      "git_blob": "537f5c895bf77f5258a91ac4a5a461bdef5aeda9"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpOpenBaoIntegrationTests.cs",
+      "sha256": "dbd5dd1b88ab2bfa41d9cfb48e6aee09725be2b757a0deec3bcec3fcf9c7340c",
+      "git_blob": "670eb8e1e4d18aa7159b601aca50dbdb787fbf1c"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpPasskeyMfaTests.cs",
+      "sha256": "3ec4da684e2257197ed4a78f0716795d07171c99133861d9854072ed14877b8b",
+      "git_blob": "22e59761790610ca1a96288d85bd6d9a4d718742"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpProofContinuationTests.cs",
+      "sha256": "3da7b6f327078ab08dc855ad08c1a84d6e3db80a3e55c782dcaefd780c463028",
+      "git_blob": "65f80f274372d4f44a45d32e24ba9426b004f87f"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpReplayTests.cs",
+      "sha256": "aff41e982b4a90f14e0315f5eda6cd6ba2e289d02349dde3965a4cbe2bfe1150",
+      "git_blob": "3fba09a7bc020b3ec16b5eb51a0c74e5be70a8ca"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/TotpTests.cs",
+      "sha256": "282c595b6b73e86774432e8fcdfeb6a0ea99fa246c308452ec7718b759882a81",
+      "git_blob": "b230e608ddd6a866e37b232c00cb51e5718c61fb"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+      "sha256": "8568d975f2357e3f55d8db176c99057a5aa32cebcb347abf1adc3478fb8e8aee",
+      "git_blob": "e79c50b30eda57065fd5ad9a20beced10170da72"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestHost.cs",
+      "sha256": "edd854f3eadb58dba941dac53d6d3583dafdcf06924a61a3e123e49ff371500d",
+      "git_blob": "08a4da43fb49f2131484177b7d60437608823578"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestPasskeys.cs",
+      "sha256": "a6c7927ea226dcdeefced4af7f7107c67329951cd1a3e463ead7ee2f5a1f7eb9",
+      "git_blob": "e9b77712c3c09ab73a6cd3f6d02fed442157345f"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestRecoveryCase.cs",
+      "sha256": "c1d37d40e235130dfd46b187ad6482dbf86a31ea9ea305b2750f888b093553d5",
+      "git_blob": "68fc8804b8c604f50ed022dcee655b2bc4631c09"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestRecoveryCodes.cs",
+      "sha256": "64704bc09b2afbef1ef3dd5036c9f5428fc03923be0d294ac86f7e98978b9edb",
+      "git_blob": "4d0faa1c4bea408e560907587a5b94c45889ce41"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestStepUp.cs",
+      "sha256": "9b0ee963c088af8c3cbb624c000288368120272de03a17bb62f1579308b8b1d3",
+      "git_blob": "997320b2a7aa8927f8f9abe718e5081facc2039b"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestTotp.cs",
+      "sha256": "57626ea45b1eb1ce4a4bddbd3e07fb7cc0bceb520b14accdd20e39e11376a065",
+      "git_blob": "fd8b89731644e0f54269fba9ccaa0adf0af1331b"
+    },
+    {
+      "path": "tools/browser-testing/BrowserTestTotpOracle.cs",
+      "sha256": "a9a47790c3a6a625c5ccb3f21737cb861498daa7cab64b5db8f30662cee0c8e5",
+      "git_blob": "7c8cc6a4bb3950c2f748087eff86f5777a40baac"
+    },
+    {
+      "path": "tools/browser-testing/FiniteRecoveryCoordinator.cs",
+      "sha256": "1e9e46971614093847fda76a9ddde7a1c5b7228b5fd40d09589da3533301b24e",
+      "git_blob": "91c9094aee477893b22cbc64b1a2854376983626"
+    },
+    {
+      "path": "tools/browser-testing/FiniteTotpBuildBinding.cs",
+      "sha256": "5e0efc67336eaaccadace3c0415923ad4e7d4f4a199d07e2b6ff581c3f7e7391",
+      "git_blob": "aa1cd0b601a3f72cc9c635ce20fe2e3d609ccd11"
+    },
+    {
+      "path": "tools/browser-testing/FiniteTotpCoordinator.cs",
+      "sha256": "5aa7674c70e3922d7798c304328b2fd2f9fd0ab0e4e7d251d5abb1f4b0a9fcee",
+      "git_blob": "2c151343e0514d22c21678c733b4ab65c6c21df1"
+    },
+    {
+      "path": "tools/browser-testing/FiniteTotpResources.cs",
+      "sha256": "1d6e79715cbd9a737f427953ed17da0bad3a0c2384afe268f25a0752711e49e2",
+      "git_blob": "b5450dbff82ace761f31db5dfabd5d0873c57f10"
+    },
+    {
+      "path": "tools/browser-testing/Program.cs",
+      "sha256": "9a25ae1d1fb6c3305aa5f787340b82072814f3863b93584712153b22725fae29",
+      "git_blob": "cabea4ef96fdacd1538a6f136d5a618583438855"
+    },
+    {
+      "path": "tools/browser-testing/Tunner.BrowserTesting.csproj",
+      "sha256": "6c40b57df49e22bdeae500a9defc4408cb2b28e945bca329df28a2bb4d8c7cf4",
+      "git_blob": "1b8d1b036c4506fdf495b8ea7b545b2a673bb07e"
+    },
+    {
+      "path": "tools/dev/new-tunner-totp-build-binding.mjs",
+      "sha256": "4e9f1669a9cae4251352fdc8b05ffb8913d69e39efe64d905745fc5aed1d8e14",
+      "git_blob": "2ec1a6f2396fcbaf3f62a2952040434608b663b4"
+    },
+    {
+      "path": "tools/recovery-native-testing/Program.cs",
+      "sha256": "12ef87e177fd69c2ffec956790ac22248a27f8b6c2e596191e595228bd086098",
+      "git_blob": "182095c112fe4f7d661095f4178ab54a7654dc9b"
+    },
+    {
+      "path": "tools/recovery-native-testing/Tunner.Recovery.NativeTesting.csproj",
+      "sha256": "ddf8a128128fd03ddcf8323e8d82a8e5bdd51a7330d1dfe589536e078bbc6585",
+      "git_blob": "e300ed1d5c304787b39b93a2a4308b0c451753fe"
+    },
+    {
+      "path": "tools/recovery-native-testing/cases.json",
+      "sha256": "3eab345185f6bda075224e464f430a34fea2720440c3c7dfc0627cbe19bb8d58",
+      "git_blob": "e0d3a6c9c7dd5df0a686b6a7acb250cb1a2e728f"
+    },
+    {
+      "path": "tools/recovery-native-testing/controller.mjs",
+      "sha256": "d1b82dff85dbeaeee97277e7909952087b14dd6d9263bc19e4e9738f58c3192e",
+      "git_blob": "ccbca3e963640942fbd4c95cccf6af8b990b7d78"
+    },
+    {
+      "path": "tools/recovery-native-testing/qualify-browser.mjs",
+      "sha256": "3d8a0117c366fbc69192490501f1213b302ae79e62f0c9a68a308ea4f996b92f",
+      "git_blob": "a9c1918106485fc2c66830f7a9eaf03faf87e7f9"
+    },
+    {
+      "path": "tools/recovery-native-testing/qualify-protocol.mjs",
+      "sha256": "6ce3a36ef2cb19309202cb81442b5177a139a28b5c1e3fd3d649d3f6d582ae58",
+      "git_blob": "e8a6f1dfa9c6ab666ecb2aaf1e80daab70db50b4"
+    },
+    {
+      "path": "tools/recovery-native-testing/qualify-resources.mjs",
+      "sha256": "3cfd31aca2a6e317543b1b88b9b80e08acdaad76c93e73bad24f997bc5ebe4d0",
+      "git_blob": "18112f36ab07843044042473d36c44c109a0148e"
+    },
+    {
+      "path": "web/apps/user/authentication.content.proposal.json",
+      "sha256": "76f3cd2481cd8e6616120be4f4112bbb342572eb5c341b4a2a98275eda89eace",
+      "git_blob": "c011f8939f3862e2a5d9800ea0837cb2c029ae66"
+    },
+    {
+      "path": "web/apps/user/authentication.css",
+      "sha256": "fd4a302ebea4b463bda9186f30297a8303a6b5d3d7b8f70cae54304b78fa4512",
+      "git_blob": "3273d1c1cc446cb12e076724a03c22c1f789685b"
+    },
+    {
+      "path": "web/apps/user/authentication.html",
+      "sha256": "a0891814bbd3b039d80ecdaffd8439a3d3d0a71bfad6352c9bfeaf9251c80c5f",
+      "git_blob": "722e85c784e57a7a58291ee663da5fe0f941fd01"
+    },
+    {
+      "path": "web/apps/user/authentication.routes.ts",
+      "sha256": "54d191d6325ed6f1c08ca8452ae91066e7e9aad47e73f1c7bd016b23e6f157a4",
+      "git_blob": "d260a48dd3ca56d31ee46d71b9bf309382286fc8"
+    },
+    {
+      "path": "web/apps/user/authentication.tsx",
+      "sha256": "5f572043aaa4a2a0d91892d2cbf1140b6a8cbaddef52f937112fe17b7e636716",
+      "git_blob": "edd765ec2447c31f9e482c8d3aa4dab7908df9af"
+    },
+    {
+      "path": "web/apps/user/authentication.validation.ts",
+      "sha256": "be9733137efd4acff22401b8a410ce8f78f71b4f945b3cabc86fa15ae64e228b",
+      "git_blob": "eb022c851bb4747683a5f40b75d23a33b4f6e9f1"
+    },
+    {
+      "path": "web/apps/user/content.proposal.json",
+      "sha256": "c13b93e2063e0919f40e4abf3052c7ea3bb62a59b9ce15913b69768976009d8a",
+      "git_blob": "b7a4a4bb8bbef6c2044c864b4ddc8ec6b74d4036"
+    },
+    {
+      "path": "web/apps/user/federation.api.ts",
+      "sha256": "9ee3b75d1decf850df4269e463a9f09c6309d9be369cd1a743f7a0ea9606500e",
+      "git_blob": "5ca3b35b0701a2cfdf7aee1ae078db63c4082f0d"
+    },
+    {
+      "path": "web/apps/user/federation.management.api.ts",
+      "sha256": "dda899f5827f97414c70ce979da57432250183b2380a6cde2e907a2cefb95970",
+      "git_blob": "d16b85e347ec67c50df2fbf266ca4e547aff17eb"
+    },
+    {
+      "path": "web/apps/user/federation.management.tsx",
+      "sha256": "b135c1d0684542205c16147f5568c6e63188126f810ca671b9000f0649f977e1",
+      "git_blob": "cfb63d95482be6bacaaf2efc89a299fc3e058434"
+    },
+    {
+      "path": "web/apps/user/federation.sign-in.tsx",
+      "sha256": "f0899254d0d0122d9f42786150bdeafe1096f9c26221998f6a787a841b0dbe99",
+      "git_blob": "2c515dec291f081c669338476819d98c1676e97e"
+    },
+    {
+      "path": "web/apps/user/index.html",
+      "sha256": "6f45c0e1bd0cfcbdf5ad6b053ac02552bfb7011c169d66d5b24e3db7f02c443f",
+      "git_blob": "ade197bb8f59d56dc8205811f66c03680a368f57"
+    },
+    {
+      "path": "web/apps/user/main.tsx",
+      "sha256": "4299b574abbe5ee175551a609750c97d078da83e9078db6ae09c51ac718c666f",
+      "git_blob": "5640b22385912d6ed6e769048770c4f714ff489b"
+    },
+    {
+      "path": "web/apps/user/package.json",
+      "sha256": "9b421209901dd2e21128a571c8aca8e93887c4acfb9dd9da47d4650de23871b2",
+      "git_blob": "068e2b0d3b0cdb17d1c48c340de21031bbb14085"
+    },
+    {
+      "path": "web/apps/user/passkeys.api.ts",
+      "sha256": "7d21b6fc9cc8917294a30451d5e552b65c731ac68139bee9018c60d7900372ad",
+      "git_blob": "835b283e271c438f8cc2525e47e295fb48bc057f"
+    },
+    {
+      "path": "web/apps/user/passkeys.content-keys.ts",
+      "sha256": "7f46d87e9a91a1f09c99965fc64648c058dcff38509a59313e93905fd502f1bf",
+      "git_blob": "6e99a2e50be9e9ec9a0e1c52cc2e5e30b5390a79"
+    },
+    {
+      "path": "web/apps/user/passkeys.content.proposal.json",
+      "sha256": "f1f68961f48d38a2ec787298db6d6b492c75d9e4822bd08ce27a34a3dbb50a51",
+      "git_blob": "8e95a1ea93e282fb3794a5023ec048e9abdabfc1"
+    },
+    {
+      "path": "web/apps/user/passkeys.css",
+      "sha256": "72876ac0e8aa88f68acb6010c438d99393261591e64451c243c70317b2e84ce5",
+      "git_blob": "51bb1a2d1f07e61d0fbb6e82ad3d8aee808b9055"
+    },
+    {
+      "path": "web/apps/user/passkeys.html",
+      "sha256": "b4c650f83f9839c963061f8a017432bcd7973662cf5edc569c9a5a509a0bad8d",
+      "git_blob": "40f8eb3832a7a22faaeb31fe503feeeb601c6b25"
+    },
+    {
+      "path": "web/apps/user/passkeys.native.ts",
+      "sha256": "920ac10073374a890b1209e1839d2c50027bc8a80eb76dacf0f1da0af702230e",
+      "git_blob": "2c1c8232cc1ab6e5c45d8db4bbf7a6d4a6361000"
+    },
+    {
+      "path": "web/apps/user/passkeys.routes.ts",
+      "sha256": "7f9f01d27bb5500036c504e4b452959936140a1296af144334b604a9d2087ead",
+      "git_blob": "2006461c5b4fda742d1d75302aa153c59566c1cf"
+    },
+    {
+      "path": "web/apps/user/passkeys.sign-in.tsx",
+      "sha256": "79e37f9b12072c1ac593a870acf7f40116ff30bd69c34ebb298b79839fa6d8c4",
+      "git_blob": "eae11b5880c8f74b4584789d2565c6258ec3ed92"
+    },
+    {
+      "path": "web/apps/user/passkeys.tsx",
+      "sha256": "9b0454b862eaf41e033d5683123be82b64a1e45ffa56c09975ea1d6c31c26d02",
+      "git_blob": "b735eeabe36b0f8ace7539acc2cf4746396c7c57"
+    },
+    {
+      "path": "web/apps/user/public/assets/fonts/.gitattributes",
+      "sha256": "31e7fc8dc7929bd077f7007c92a797978826b1408b52f459b3a126820d59db4d",
+      "git_blob": "a98ddfbaa5e53e75f60314cd5cc6739da04e1b43"
+    },
+    {
+      "path": "web/apps/user/public/assets/fonts/GeistMono-wght.ttf",
+      "sha256": "d00e590b8eb3a59acc329b2d044fd143ae935090b7da33199ebee27cc7de8196",
+      "git_blob": "173867dce0580ea751e4b9c558740d34f20ce549"
+    },
+    {
+      "path": "web/apps/user/public/assets/fonts/OFL-GeistMono.txt",
+      "sha256": "1781d2806a07d91c4edf4740b88449fab7d0eadad53f7c351b94cd4d4eb8c00f",
+      "git_blob": "61f6f4b7853081236aec6407f2dd3c7170997f84"
+    },
+    {
+      "path": "web/apps/user/public/assets/fonts/passkeys-fonts.provenance.json",
+      "sha256": "4981045902443bb2fad12318823243b90d25d5b2da5cdc5340ab30a2a19b42e5",
+      "git_blob": "4273e82442e2e1df20dd64820425048c3b653034"
+    },
+    {
+      "path": "web/apps/user/public/assets/login-bg-indigo.svg",
+      "sha256": "386769332e5a7536059a3a539aba330945509dd625def3c26f653524ded5ee54",
+      "git_blob": "9fec2413eac856c0352f68e68628d6a39cea03c1"
+    },
+    {
+      "path": "web/apps/user/public/assets/login-bg-violet.svg",
+      "sha256": "1a645630b6d50a23c85669b264d54fee83c2e0b282b35be4c58284f9a2d3adf5",
+      "git_blob": "59d3743f25e3f9d51f62c0fea99d6deaeaf3b0a4"
+    },
+    {
+      "path": "web/apps/user/public/assets/login-eye-off.svg",
+      "sha256": "2884ce04366a7fb8bdb338e15f42232ce98e88c325ad89855aec7c99aa18a924",
+      "git_blob": "22bcdd3f9fcb22b9ca814912b6a6936c0de08487"
+    },
+    {
+      "path": "web/apps/user/public/assets/login-google.svg",
+      "sha256": "8e0909066d645c6f7032ade6b7fea6033f51ebbbfde1fa40be4625ebf2d5011e",
+      "git_blob": "3d5f59d2f77d983d1acc2cc8b1518d5bb93a1b81"
+    },
+    {
+      "path": "web/apps/user/public/assets/ready-approved-check.svg",
+      "sha256": "5cf00b5b003b98f240bf74151841185904247362b74039bf350ce8574bbb36db",
+      "git_blob": "f2a574212a36476e41ece6813428f33acfa7fab4"
+    },
+    {
+      "path": "web/apps/user/public/assets/ready-imgBgGlowIndigo.svg",
+      "sha256": "54934000b01f421419fc9a104dcf5068f48b525394d0587534600695fcc37859",
+      "git_blob": "50ce088d7a324ad9a8766f8c8ce5f04d98e85087"
+    },
+    {
+      "path": "web/apps/user/public/assets/ready-imgBgGlowViolet.svg",
+      "sha256": "517d39c4c5d721617a76ccd97aff0f56124cc817d032004c1d20f38d0aae0691",
+      "git_blob": "52a654265eecfc71022dee729077676c2465a9e4"
+    },
+    {
+      "path": "web/apps/user/public/assets/ready-imgEllipse.svg",
+      "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d",
+      "git_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2"
+    },
+    {
+      "path": "web/apps/user/public/assets/ready-imgEllipse1.svg",
+      "sha256": "716e0ee704ab22493cf82ceccfb7c671d1273e61790636451df1f1eb75458bd4",
+      "git_blob": "43fc01cd2c19a6e1e6980780111a6d67d0124293"
+    },
+    {
+      "path": "web/apps/user/public/assets/register-imgBgGlowIndigo.svg",
+      "sha256": "3f46d383407fee017a39de72f9a287348d25736b2747e28874da0c7028efbb78",
+      "git_blob": "316636215995f2622e135defc03374bb077cb287"
+    },
+    {
+      "path": "web/apps/user/public/assets/register-imgBgGlowViolet.svg",
+      "sha256": "6057cd9d95e1b7ee08ba24451f9b5a93e997cb96305ad1401b65718999d0f434",
+      "git_blob": "c37619a12e95724d86983d90c34e5e00cf471b7e"
+    },
+    {
+      "path": "web/apps/user/public/assets/register-imgEllipse.svg",
+      "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d",
+      "git_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2"
+    },
+    {
+      "path": "web/apps/user/public/assets/verify-imgBgGlowIndigo.svg",
+      "sha256": "1cad56a901f56e0bd762afb54fbcf56e388bb865cc48ffa6347704588b6d51c1",
+      "git_blob": "d36a00fe57b0af52fabfc3065b841a080aa9771f"
+    },
+    {
+      "path": "web/apps/user/public/assets/verify-imgBgGlowViolet.svg",
+      "sha256": "517d39c4c5d721617a76ccd97aff0f56124cc817d032004c1d20f38d0aae0691",
+      "git_blob": "52a654265eecfc71022dee729077676c2465a9e4"
+    },
+    {
+      "path": "web/apps/user/public/assets/verify-imgEllipse.svg",
+      "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d",
+      "git_blob": "e62f5fa248c046baf4b4b9ec920bba6c13c798c2"
+    },
+    {
+      "path": "web/apps/user/public/third-party-notices.txt",
+      "sha256": "8f0b059bb262488010314fac9b75a704836a6bb2e40f6659ef78af31eb8b8b13",
+      "git_blob": "4f45b0b4823bf069a733a402e53a991c299cc32f"
+    },
+    {
+      "path": "web/apps/user/recovery-codes.api.ts",
+      "sha256": "1d81d52c2e2699c46d8a666dad49c765bd5b0b37e9075585e472dd1cdd078d67",
+      "git_blob": "d5dc0d5f3f41ab04db2883668f81eb90745815e5"
+    },
+    {
+      "path": "web/apps/user/recovery-codes.content.proposal.json",
+      "sha256": "33b0130c72efb83c63dbc1056472de526982318392c6d7b7aef3a8584c03d3d1",
+      "git_blob": "ad08d9f4aea6d2d10d5eeb0fdbe15c48aee15cf5"
+    },
+    {
+      "path": "web/apps/user/recovery-codes.css",
+      "sha256": "bb378a74ecf81e2d9ae0d4f2c7b6a2331980ef768f5efe424fe97f04b07b2d0f",
+      "git_blob": "0ef3b37cc95de2204656e2c32176d8629dc920b4"
+    },
+    {
+      "path": "web/apps/user/recovery-codes.tsx",
+      "sha256": "a1cf53b5b541e6951923621e3c72e7aef66a714de3377248ba26f213f6444a0e",
+      "git_blob": "e1a853335e1306a81cbc207439cf363689bf2ad5"
+    },
+    {
+      "path": "web/apps/user/recovery-codes.ui.tsx",
+      "sha256": "557155c6b38c9abae21043d3fbcb514ae911ff876f5ad432d38cd63c33441824",
+      "git_blob": "ad6cb57bb1a8130148971a483a776bb50aa9a036"
+    },
+    {
+      "path": "web/apps/user/recovery.api.ts",
+      "sha256": "31ca6d64a88c64293af1c101134146edc65fb5bc8530511cff2d863f29c400db",
+      "git_blob": "5bd99c91016da9f75ea56c312e9097667a1e0a42"
+    },
+    {
+      "path": "web/apps/user/recovery.app.tsx",
+      "sha256": "5200a78dd74a686b0fea988e36a20432a7c64e07fb91f72b63fade7446035bce",
+      "git_blob": "65b64e9e5990736ad4ed4aa9429274e1296fa491"
+    },
+    {
+      "path": "web/apps/user/recovery.content.proposal.json",
+      "sha256": "9f64a123491276558a79ef54348842197a65374e2361a9fc210dceb77806ffd1",
+      "git_blob": "dfb3ae265755bc51ef4f6e4dc6ad479e62d60548"
+    },
+    {
+      "path": "web/apps/user/recovery.css",
+      "sha256": "b2badc8bf6a41913dee5376d1bfbe5d8553b7bfb25e3b95c636532a1d1b17b33",
+      "git_blob": "3b65ba564d1625476caf58864d0785536194dd4f"
+    },
+    {
+      "path": "web/apps/user/recovery.html",
+      "sha256": "2250bd2827401116c787ab05b42379500e1b4f2192ee7f98b8823a756272edf3",
+      "git_blob": "2a4786c9a81509f26bb4e34d7dca34d4015854fd"
+    },
+    {
+      "path": "web/apps/user/recovery.routes.ts",
+      "sha256": "d1fbab4362eed19aa110f69ed2cb6964fa0bd92cdd4229d102c3c76e0a0e6c9c",
+      "git_blob": "c631945bb070cc5373fe9880b25d515aed219273"
+    },
+    {
+      "path": "web/apps/user/recovery.tsx",
+      "sha256": "7521508e04906512dfb2f3eee313004b442dc1c706a8bea14cb780e2ca7746b9",
+      "git_blob": "e24943ab9716e6dcb1f33fd52f3742ab52c7359a"
+    },
+    {
+      "path": "web/apps/user/registration.css",
+      "sha256": "07fbb5fe2f917937ba945b64e0619ed9b2ebf0374832581290c9dac929bc1bbc",
+      "git_blob": "4328967a3a665a40be1f3f111b8485ee4ed1b89e"
+    },
+    {
+      "path": "web/apps/user/registration.federation.ts",
+      "sha256": "3cfad101471fd2173bce2a620145553918f0fb3af372a083a7c6620da6778385",
+      "git_blob": "166dca8cbeba424e1ba75d1affbd56b6ebd08f01"
+    },
+    {
+      "path": "web/apps/user/routes.ts",
+      "sha256": "5266d62b07d6cf4e98612eaf5fffea6cecbd95efd9bd90d4a77e99b4ae4f3299",
+      "git_blob": "60b19ccbe5f2b4d28cc6e15040a4c81363ba7147"
+    },
+    {
+      "path": "web/apps/user/step-up.completion.ts",
+      "sha256": "1f451f8100cb72f00832c9e88be8b7d464b286d8999e691192935c929c2a6413",
+      "git_blob": "40c32ba0791259d0fda949949569767686324dc2"
+    },
+    {
+      "path": "web/apps/user/step-up.content.proposal.json",
+      "sha256": "f3638a44572dddba70188d47cca5b63fa359ffc9fcaece81f0b6423c37f4b499",
+      "git_blob": "d02386b3e8e95864e951f45a68d78c0611d673dc"
+    },
+    {
+      "path": "web/apps/user/step-up.css",
+      "sha256": "d2b834b36459cd1bc374545e5103fbccd235c15908e4f8a8c2c0acd1a58f72a7",
+      "git_blob": "1711d6dd2a21633aea2aa6009d4a006b217e9820"
+    },
+    {
+      "path": "web/apps/user/step-up.federation.tsx",
+      "sha256": "821339815a8246369a96d4800f3beb882415ae6f23de406a718597d47a4e5c85",
+      "git_blob": "9b45cb2c082dde95e2ed2daa620f27978448536b"
+    },
+    {
+      "path": "web/apps/user/step-up.passkey.ts",
+      "sha256": "e1bef6dfece91676d7dc64212a42795070b82324933953a631a7de425618503f",
+      "git_blob": "6ecd273214a5126de046adeb7d3ba4660198a34e"
+    },
+    {
+      "path": "web/apps/user/step-up.totp.tsx",
+      "sha256": "99507fa6461ebb5e3cdcbdff39b9e2f2eb7d82943f2067e6d30bb5fe3ed6e0f4",
+      "git_blob": "f48615cf9d3bc1d0f9d7c8eeda4213af67cfba42"
+    },
+    {
+      "path": "web/apps/user/step-up.tsx",
+      "sha256": "68d47cb50b526a6d8c5a03c23d45dc4080b853231baa7b5206e49179a339800f",
+      "git_blob": "8499d6fc755c19072b912f970d02a8a11fd1715b"
+    },
+    {
+      "path": "web/apps/user/totp-qr.ts",
+      "sha256": "c9195bfb5e7fa209cfebb7913f238b6e919531b627ac8e67cf9d102f4091e59a",
+      "git_blob": "52ee8c525249a0bbb857aa4e8ded01ee7337c2f1"
+    },
+    {
+      "path": "web/apps/user/totp.api.ts",
+      "sha256": "4ec05c3c846acb3237f47964ba3bf4c3258a6929feb65d56cdbba5d875929580",
+      "git_blob": "7e8a4c5f2ca3e46ef78b97eeec93bc9b74a31679"
+    },
+    {
+      "path": "web/apps/user/totp.code.tsx",
+      "sha256": "2bc7d8a675ad6b793e5025c430abaa21b7c035d073e3da919521312a80206357",
+      "git_blob": "cc263705496709cb4192d45c83e64bc4d4d5670d"
+    },
+    {
+      "path": "web/apps/user/totp.content-keys.ts",
+      "sha256": "e0af7e50a591041c674fb992ec33ffbda1630e33149119706627c5cbd328fe14",
+      "git_blob": "cedfa5020970e1fb973c3fb1662954d87879a34c"
+    },
+    {
+      "path": "web/apps/user/totp.content.proposal.json",
+      "sha256": "4bf3b0a31a80bb15a7ffa5d8f955605af42205d8d0467a0f9f25cc8ec376798d",
+      "git_blob": "a62636f37197f6e27388cd81fbd8dfb91c4c7b2e"
+    },
+    {
+      "path": "web/apps/user/totp.css",
+      "sha256": "7b75dabcd05092f584ebebef75b100da52b130a3b2b067e43cef93754c807470",
+      "git_blob": "ac46a8f3077c4e4cc3ea5a3e7b57c62b9caa4741"
+    },
+    {
+      "path": "web/apps/user/totp.html",
+      "sha256": "b29c38372de46e787943ff4665e32e197edf46be36c9262d0cf22d28bda31f34",
+      "git_blob": "dd839a53053eeece2c9023ec00a06dc8cd4aa1d5"
+    },
+    {
+      "path": "web/apps/user/totp.method-row.tsx",
+      "sha256": "63637468dc5e8b54894cfb8d39bf36114cb833c14ee2b8763564593e79e9db4b",
+      "git_blob": "03ca8b437eea31dab3803cd0b6fc69e791fcdd3f"
+    },
+    {
+      "path": "web/apps/user/totp.mfa.tsx",
+      "sha256": "0cac4a920e582cfc4b2abc0184bb7649d2b35264bba07bb5bd5663f05a2b3647",
+      "git_blob": "91a48a99bebed78166992e787f1ed96552b5ef28"
+    },
+    {
+      "path": "web/apps/user/totp.picker.tsx",
+      "sha256": "18143e2ed9bc1b52709386939ed2cab66bc9b68264c79b476d1d11701a6c441c",
+      "git_blob": "c40ab5255bce748d8f56a5cffbff49f7792f3162"
+    },
+    {
+      "path": "web/apps/user/totp.routes.ts",
+      "sha256": "83b1953fb18aea21a25d1dff1af31d2d9ff79c685fbf93cfdeb2ef367fe92898",
+      "git_blob": "d706c1e9bf2c5435f109881995c54664ad32fcf7"
+    },
+    {
+      "path": "web/apps/user/totp.tsx",
+      "sha256": "dcf925a2891a179eb483e62f665480e19b7ac8ba5a27ab49bb5a3fea960a4f29",
+      "git_blob": "308a8e4c0429c0ebd6a5cffd41edd3939cb73f77"
+    },
+    {
+      "path": "web/apps/user/totp.ui.tsx",
+      "sha256": "83a698aa4db1f887ec538f8deeb15024c57740ccb5576be20782d9eccdb45aba",
+      "git_blob": "73d658316490a225400c5f5d818def3f8ddf2243"
+    },
+    {
+      "path": "web/apps/user/totp.validation.ts",
+      "sha256": "3eb9b3316bc680398d337ea95a3374a9c95482030d83e9bff8e517fac97f21da",
+      "git_blob": "ad876cde4f9b1a293562782526222517c989bd58"
+    },
+    {
+      "path": "web/apps/user/validation.ts",
+      "sha256": "54cca3b0c3456301c865bd76b5e84f8ddea77806f51aafe7aabf79676ad9b0cd",
+      "git_blob": "81cf69f2cfcde7cf2a829992bb00b191a8f99cbe"
+    },
+    {
+      "path": "web/apps/user/vite.config.ts",
+      "sha256": "277ce1cb48c5cd056d47f6ab52a5f1837db130f360edf0557ceb2d667e94576f",
+      "git_blob": "6749da30d3fc37af69a3eb0593d0a965226d9f4a"
+    },
+    {
+      "path": "web/fixtures/recovery-case/index.html",
+      "sha256": "903d53fa9a1af0fe6cc938450ebd796cc72ac5ca00322cbbe8dd616590745060",
+      "git_blob": "57b9edd29405ff2282ea4886525bcc835c86ca6e"
+    },
+    {
+      "path": "web/fixtures/recovery-case/main.tsx",
+      "sha256": "1e24f91015e0c42428f96a9ec950888e3ee3d0a67998cdc3e4bae8b1b25b37cd",
+      "git_blob": "b8294f378fb74957ec00cbe42b1883c7fcf738eb"
+    },
+    {
+      "path": "web/fixtures/recovery-case/vite.config.ts",
+      "sha256": "2bfd4b78c1282201a6e5cadaa63b7ec4b3ecad13ec85f1d750fe7531b9a43f4c",
+      "git_blob": "c2b7c83444b46e924e0099d6cf98a355ac904a11"
+    },
+    {
+      "path": "web/fixtures/recovery-codes/index.html",
+      "sha256": "8b2ef5f7b25dcb0129a11f84f74ad57be3a3f7ca765aa28b4bf31e121a4190ad",
+      "git_blob": "fba3ed881c9d6673b69e70e051a809cc8c64b8a9"
+    },
+    {
+      "path": "web/fixtures/recovery-codes/main.tsx",
+      "sha256": "2977a6d5e1b0bf2d782fc6c2d177c681bf7f25774b35a4c75b76fdb7021f762b",
+      "git_blob": "5b3c6a1bb566f7ed4ec6ebd206b19410ee79c64b"
+    },
+    {
+      "path": "web/fixtures/recovery-codes/vite.config.ts",
+      "sha256": "d63b9aad303fe62acff2c93a88da83dedec157cb8920012c36a820189d9d3aba",
+      "git_blob": "9c61dfd96398b529435bf2f9a2ef1bd544b6eab4"
+    },
+    {
+      "path": "web/fixtures/recovery-private/index.html",
+      "sha256": "abf112d476e4c6750653264acee90277b399f2ae5da39b4ddb8e1d7d2f2169cf",
+      "git_blob": "786c452b93e5f96ae027361097997d244f7bdabd"
+    },
+    {
+      "path": "web/fixtures/recovery-private/main.tsx",
+      "sha256": "0791ef135c498bf93f068ecaa14ce6b9291a5db4644991dd32f7022506f584ff",
+      "git_blob": "5adab1672f96e7a0d254bebca523d86e5353b819"
+    },
+    {
+      "path": "web/fixtures/recovery-private/vite.config.ts",
+      "sha256": "ae43391a743ea72c3a968c8688ad651121a88be8047a58ae0e9911a069165d6e",
+      "git_blob": "8bbf09c8812db5c4b38b871fd4eb17ced8aa3195"
+    },
+    {
+      "path": "web/fixtures/step-up/fixture.css",
+      "sha256": "2614e20ae93ef286b670d6adce280481245c062cc224fcc570f167fe8c6b9def",
+      "git_blob": "c532bef191e2ed42d54f5cdf2f992092d761cf88"
+    },
+    {
+      "path": "web/fixtures/step-up/index.html",
+      "sha256": "9fee196152e342822c43183a10cab09ba271db115b24e7d4d69c32a886dabc46",
+      "git_blob": "d1711540f51ec066993cb1b4f5fb90bf46a35d61"
+    },
+    {
+      "path": "web/fixtures/step-up/main.tsx",
+      "sha256": "afce80fc7998b10a688722b659a0ed574c1cf15b9b43175d97e08f4629d540c3",
+      "git_blob": "d9cec43de95b62ed4075250b46f79ea9541b50ed"
+    },
+    {
+      "path": "web/fixtures/step-up/vite.config.ts",
+      "sha256": "7aa43dff66a2c6f12dc7aaa88c7c60b33193fe8dcbfa058039f9f39469fe0984",
+      "git_blob": "23b682c47a73c52e2363aa94727177e9b2d7c5e7"
+    },
+    {
+      "path": "web/fixtures/ui/fixture.css",
+      "sha256": "b9c2ae81f216eb3bfb941658fdd7c9656ac042132e29b24742e73e2afe70ec6f",
+      "git_blob": "a2eda42ec81fcbb71a736546480420f38c58e798"
+    },
+    {
+      "path": "web/fixtures/ui/index.html",
+      "sha256": "e635408db30cb6b59220a5017068da1c1f0664701b25281a8963f5333b6dad49",
+      "git_blob": "77193d5c2121a135c3251fe91e3f2f92490aee61"
+    },
+    {
+      "path": "web/fixtures/ui/main.tsx",
+      "sha256": "17fcbe7cdb857dfbc3e2d04a2bfc899f7c3b5470346caeab28894eac474899ae",
+      "git_blob": "94759d515f274323f5110a763fe9f20715c604fc"
+    },
+    {
+      "path": "web/fixtures/ui/package.json",
+      "sha256": "0d62e5cfa65b5daea90bc3ca34d00bffe70474fe39a918f7a404fdcc76d46c2d",
+      "git_blob": "d7c3195d66e3e191667060f81aaf8683c5573ab2"
+    },
+    {
+      "path": "web/fixtures/ui/vite.config.ts",
+      "sha256": "8aae1e731016368f7cdaa08f6c837fd42ab32e34d56d22e7e93f1ecdff2ee6da",
+      "git_blob": "09456009ca8f37cbcb1e0297b7a9a38c6bbdf4cc"
+    },
+    {
+      "path": "web/package.json",
+      "sha256": "46f497033bdab30d8bda42718fba2d3af353c95cd82dcd3e471082c0c6bc6e95",
+      "git_blob": "17528ac713eb830c4202905944fbaaad0aa521a2"
+    },
+    {
+      "path": "web/packages/ui/package.json",
+      "sha256": "b7c555afbb824533ffd657267a86cd1f295e3fb098e3e6214a0cf3664f6ab95a",
+      "git_blob": "c967243d08c62fbfc4259611ec9adc0a9b0a5df2"
+    },
+    {
+      "path": "web/packages/ui/src/content.tsx",
+      "sha256": "38e6efb190d36c1b1744d55cf200d3c7bd555661a4c78eb20015bff6278e94b6",
+      "git_blob": "e9b10d155b9bf06bc80454e4714e33c75b08029f"
+    },
+    {
+      "path": "web/packages/ui/src/controls.tsx",
+      "sha256": "1efa6f238ddc65c1cf6adcb3639eceb1bc44837d6a20f1c5e26ffa3f37281b78",
+      "git_blob": "ae1d997a7b76eae8a76b74af3328ac1573329c7e"
+    },
+    {
+      "path": "web/packages/ui/src/dialog.tsx",
+      "sha256": "29004f6f70676a49fadaca48020b02c363e61a1d2647130d3963eb0d4ef8560c",
+      "git_blob": "376d07c8953aa24ffe2c03fa4938050b8cd8b0d7"
+    },
+    {
+      "path": "web/packages/ui/src/forms.tsx",
+      "sha256": "c68bbf115c0cb0b5ff80938b56cc09b99e136abe10a218e93a8b24264b16acb3",
+      "git_blob": "a60383e7bbe73eaefc55c250be209fd2eff85b2c"
+    },
+    {
+      "path": "web/packages/ui/src/index.ts",
+      "sha256": "209685a35101961cd76d9d1ad87191559497c7db5ff444856125467768a6b0ac",
+      "git_blob": "650dfdc4736db157004ebde577e29f003a334cd6"
+    },
+    {
+      "path": "web/packages/ui/src/navigation.ts",
+      "sha256": "5a6baa41b6c5b09d5b071844352ced774928d0d7e4eaa9d9f24d72da3878688b",
+      "git_blob": "b6f5541dc8daf14c5ce43f73e99039dd1f86066b"
+    },
+    {
+      "path": "web/packages/ui/src/theme.generated.ts",
+      "sha256": "1a2f5a30ee76a5d11bfbb942d2574bea1048162741dabe550ec6fd9970d73848",
+      "git_blob": "91a639f208ce9ece4f940d27577b3f17467aba45"
+    },
+    {
+      "path": "web/packages/ui/src/theme.tsx",
+      "sha256": "6e88e911d98bc0b19e093302722e52a31606e9af3591a20a3074ad6158b18fa6",
+      "git_blob": "10b5e8d27dd4fc5be41bc2a47be31d919f4c2682"
+    },
+    {
+      "path": "web/packages/ui/styles/components.css",
+      "sha256": "e7d9b15241ab8d0500f090015bf99f9844f1f3c404cfdffb71d27913bdf8a321",
+      "git_blob": "092761c08561df062720631a1977195851ab4273"
+    },
+    {
+      "path": "web/packages/ui/styles/index.css",
+      "sha256": "eb2c9df01fcbfa0bd676fd7dd310f9213ecd47a885cec76318e6edee47f992e1",
+      "git_blob": "4aa6376d43f2d259573e3b9284789efbf550d7c2"
+    },
+    {
+      "path": "web/packages/ui/styles/tailwind.generated.css",
+      "sha256": "fef6ffcc84bb4ea6a9f267dc30656c7e81abf1600c195711030954f42c518dfa",
+      "git_blob": "fee04df0480ff042544ec4c22948dc8115ae76c2"
+    },
+    {
+      "path": "web/packages/ui/styles/tokens.generated.css",
+      "sha256": "a16f8f2495ea4e3b8de58da14315d5bb65499b3f5e746514b3734ad00d3b1373",
+      "git_blob": "8a0ca6dacc0a7d8589716558ee6dd2ea141efbb0"
+    },
+    {
+      "path": "web/packages/ui/theme.tokens.json",
+      "sha256": "e2eaaf4ab92a3d1137ad8e66be0c2d59f30ef6753d731db7a0356d3d96f67266",
+      "git_blob": "b2119a6503fc2abc8d3acd5b7f6f7c76b819cc9e"
+    },
+    {
+      "path": "web/packages/ui/tools/build-theme.mjs",
+      "sha256": "d56bee95ccfc4f43bee47e5b8744d3e30557b111a48924ed10d5231418e25f3d",
+      "git_blob": "12a5cb57c7f4feb2b663482c776672eeed6ba58a"
+    },
+    {
+      "path": "web/packages/ui/vite.config.ts",
+      "sha256": "4fa22352f8e405a1d905c433b14060f74db1572f8e6b3f0ffa2509d574ad6249",
+      "git_blob": "236f142d4a56a80d8032ad79fe12fbe921796eef"
+    },
+    {
+      "path": "web/playwright.authentication.config.ts",
+      "sha256": "95467dd11d3ea6485a0abf826322c2953d44ef9a0fb7972740a18369d5bae118",
+      "git_blob": "a2b82f480e4fc80b56334c561143e5a9e5cbd39f"
+    },
+    {
+      "path": "web/playwright.browser-testing.config.ts",
+      "sha256": "b9cdec14ad0b70e84dd36df2bd6e042b165560f8d93d3b73e1efd41bfcb7057c",
+      "git_blob": "011da8722f71a854734f79e7e358fa37a872c28d"
+    },
+    {
+      "path": "web/playwright.config.ts",
+      "sha256": "7bb33b595cb9b57204dc17df70c875047890d8b0e899962d26d1581c9a5cc84d",
+      "git_blob": "e1fecedb81a03b47e3ce0ca5d8b64f46cccacd75"
+    },
+    {
+      "path": "web/playwright.passkeys.config.ts",
+      "sha256": "e996d351edafd776928aa955e9ddb2699fb5f003db61587e3294e23814d06db5",
+      "git_blob": "93d64d5e63f52a8dba16e85c257a7f7dd4f13dd4"
+    },
+    {
+      "path": "web/playwright.recovery-case.config.ts",
+      "sha256": "ecae42f81dcf22c94d224d93e52a3d0725782f08e0f892b95a3f72a3b481172b",
+      "git_blob": "616b1bd31fc0f291b2c3479b361fd13545ddafb9"
+    },
+    {
+      "path": "web/playwright.recovery-codes.config.ts",
+      "sha256": "365a862ddf2399ae400c638ce5e12d6db68f83181a7f48bfa18b80cde36a0582",
+      "git_blob": "ee0de6bde772b3a9b15054ae31937016b4c0c69b"
+    },
+    {
+      "path": "web/playwright.registration.config.ts",
+      "sha256": "ddffc499fb583333e1118a74d5896288709724ef522704a96dad56fccc13a18c",
+      "git_blob": "a94acb15abe55cb9b74d57e73dea35b91a0bd3c3"
+    },
+    {
+      "path": "web/playwright.step-up.config.ts",
+      "sha256": "bb17fe3538db0e2b5b068ccb6096d03d9346430bba14c49084b30d9d46d1223c",
+      "git_blob": "78b124f0ae40cff290c769d4e2bc940062d0f37c"
+    },
+    {
+      "path": "web/playwright.totp.config.ts",
+      "sha256": "4ce17bcabf93922d225c8c628130431bb0872bf3df0f4caadde1310ffd6049b8",
+      "git_blob": "98c96b96ba823a6b86ad7ea2d7a964464ac1098f"
+    },
+    {
+      "path": "web/pnpm-lock.yaml",
+      "sha256": "4359f7d23d443e4f89577321d03247d50e505c1072cf98016c380f33c7e1cd3d",
+      "git_blob": "39990993c01c11e4228031b5dc1f53de15f53e75"
+    },
+    {
+      "path": "web/pnpm-workspace.yaml",
+      "sha256": "089661df06729950428d6a62e2d96a3e98aba85696d0d91300d50a1d3bdd9546",
+      "git_blob": "779b553344c988738b9c3bc6e5d1a28af3996c4a"
+    },
+    {
+      "path": "web/tests/authentication/authentication.spec.ts",
+      "sha256": "0105f0a7370d1b4b7a7c82a37da8c9c69ad803d33e98feb43ff6c6a787e20dcb",
+      "git_blob": "1a177cce59ac27dd651cafbe3f3c421bdc93bce5"
+    },
+    {
+      "path": "web/tests/authentication/federation.spec.ts",
+      "sha256": "af3ce8137a1d763c5838f1203483b0f6a4a6c86afcc94f1e1c85fa70231ed1b8",
+      "git_blob": "ed6ee9dc78c2b58fe0b6ae3e2bf46c335ba75c07"
+    },
+    {
+      "path": "web/tests/authentication/recovery.spec.ts",
+      "sha256": "6fdec1675d523acb9ed20c26474185acb56d7afb9340286e579fb6070ad3bd46",
+      "git_blob": "6c641ced31ebe578c3d82cc2b592b60c5cea39f3"
+    },
+    {
+      "path": "web/tests/browser-testing/authentication-flow.spec.ts",
+      "sha256": "c1e9ab677a61529e40df9e95a0e1a1e19c5199c80b60c919f462fc45b835adab",
+      "git_blob": "391d1a88c57c34609cd3b6937272d8574e503bbb"
+    },
+    {
+      "path": "web/tests/browser-testing/fixtures.ts",
+      "sha256": "5597f953e482fa0ece951ebd04257f566999b2e34702c44a584131fefd97d402",
+      "git_blob": "fb02ee0222981890a6b1cadd51b82754658e5e77"
+    },
+    {
+      "path": "web/tests/browser-testing/manual-flow.spec.ts",
+      "sha256": "91ef2aae3e3e22081de41c03e1d16418d3ab149c6e879b232a4f5b045b176286",
+      "git_blob": "38cd33da0a48d6f43d6502523e92b6579783e00a"
+    },
+    {
+      "path": "web/tests/browser-testing/passkeys-flow.spec.ts",
+      "sha256": "51d92ec189118a38f1e6db773af088dd81425a8c2610198b98f29f1a82188522",
+      "git_blob": "8569f7723e89a47781265737dea19dbfb4fa6712"
+    },
+    {
+      "path": "web/tests/browser/admin-contrast-review.spec.ts",
+      "sha256": "459d0f1f79487777213a52ae8b27567b942ed938ccc79567dc75b96821420e64",
+      "git_blob": "abf773c2957279cbb9f40da41380becd9c730696"
+    },
+    {
+      "path": "web/tests/browser/foundation.spec.ts",
+      "sha256": "4013ca1b41be8007dfc580265178ca4d23e7265dc69b1194b7927501ca0a9ea7",
+      "git_blob": "594f945ecc2b05dc9496c7e3a131f1e5baf709f4"
+    },
+    {
+      "path": "web/tests/contracts.test.tsx",
+      "sha256": "1348edac3a56ff9cf3264d3c838dc72d7254cedb15cc5d4fad239f7141415ef3",
+      "git_blob": "01c21157cdd87e7e9a863997264a3570dc6e10dd"
+    },
+    {
+      "path": "web/tests/passkeys/federation-management.spec.ts",
+      "sha256": "6d79d7eaabe18c481e4c2b91899ea2e7cdf4c5ef6502d58f12a9edf557cacc4f",
+      "git_blob": "e030be052f0909fe3277677a3a0fa3c0b3a223f8"
+    },
+    {
+      "path": "web/tests/passkeys/fixtures.ts",
+      "sha256": "4a179fdc20e8cc2df91760e6f24ca9a7fa1c3e664df431cf19a05afb95ee14cb",
+      "git_blob": "685995df7b9db7d330d76090d348ff67b6845fe0"
+    },
+    {
+      "path": "web/tests/passkeys/navigation.spec.ts",
+      "sha256": "be0ee8cfaf06f4db5c51c29052d4cda9575a26a766c63f732bc61927c2043971",
+      "git_blob": "966c10a440e05daf9241f416ab8e48a04a2368dd"
+    },
+    {
+      "path": "web/tests/passkeys/passkeys.spec.ts",
+      "sha256": "1ab24aa07a677c3a6b30baf9260e25217d54f872692c08011d932c4367f5435b",
+      "git_blob": "a6840747bafebaea3e4686b1efc317785cee2456"
+    },
+    {
+      "path": "web/tests/passkeys/step-up-passkey.fixtures.ts",
+      "sha256": "14d06fe7a6eb725932ebf072181bb394c1427be083e931d47a61beddb7210fa6",
+      "git_blob": "9d93a4997fcca3983a5d0868d58dd2fd02d351e3"
+    },
+    {
+      "path": "web/tests/passkeys/step-up-passkey.spec.ts",
+      "sha256": "415a2088b3236cb32351a4e8693605379c4bc9cb5647b27cd3b4865b5005495a",
+      "git_blob": "a350b5a594a6a86bd3ee908d795ca5991176e4b1"
+    },
+    {
+      "path": "web/tests/recovery-case.api.test.tsx",
+      "sha256": "8bb84d8313d7ceaa63d1cddc197e2e1e5531dceaebbb356b38efbafd1bc352c4",
+      "git_blob": "07fcbeaa24df9096fa9db430be4e4a2f564166ea"
+    },
+    {
+      "path": "web/tests/recovery-case.presentation.test.tsx",
+      "sha256": "e563bb4a84122805a3a56dbf8b21e25040d76d6717ff71f7e1ccf61f65c6880e",
+      "git_blob": "5e3a8a3fe3c2b13fa908407e04aac6d5d73aad2f"
+    },
+    {
+      "path": "web/tests/recovery-case/presentation.spec.ts",
+      "sha256": "972959f8af13a7d162d1891429ba6f1e52cc9532c045b82378350f87efb0d4e3",
+      "git_blob": "81b5376d3bc49a12128b56fca1871ff783edd5d7"
+    },
+    {
+      "path": "web/tests/recovery-codes.contracts.test.ts",
+      "sha256": "33598975d4e70f20a55eb7b3e934d2618de547fcd848b8ee359932f671643474",
+      "git_blob": "07d141b6ae12e93e52d2127d42d7d4a3a87dce91"
+    },
+    {
+      "path": "web/tests/recovery-codes/ui/presentation.spec.ts",
+      "sha256": "3ca7168cbcf685b7d59f4e3e6bd824b8d9dfad45fbfaf55167170e5a87bcf7dd",
+      "git_blob": "65e890e1bfe67a632f266aa485ed07429c8dc4b8"
+    },
+    {
+      "path": "web/tests/recovery-codes/ui/recovery-codes.fixtures.ts",
+      "sha256": "09e4fba1a90e6a9c288459e39bbf326e847a0ca790b3526bf9148c7c85edbc6a",
+      "git_blob": "8084bfa57068f50d9e132a709ab93b7479cbecda"
+    },
+    {
+      "path": "web/tests/recovery-codes/ui/recovery-codes.spec.ts",
+      "sha256": "a2d06d51c649c77d1fe1672b5e266c4c5aae6038822af37273160824066467de",
+      "git_blob": "63472e48f7566db011fcb46263598afadd4b6425"
+    },
+    {
+      "path": "web/tests/recovery/private/README.md",
+      "sha256": "809222fe12cb8d115858aad59c7aabfd9639b54a7c88dae9861fcf6bbb9dc55c",
+      "git_blob": "28d21b5bb4ba7ed3d06f84c19f20edb11eef4696"
+    },
+    {
+      "path": "web/tests/recovery/private/boundary-tests.mjs",
+      "sha256": "7c00abf962aee84d2ff9699d7d9e1caf397726d17e1a304921c0f802419bde24",
+      "git_blob": "1d94f619b8682990a4708c2343bd2dc565450c3b"
+    },
+    {
+      "path": "web/tests/recovery/private/child.mjs",
+      "sha256": "cb1944f7d5bdf8b77bb3e61a5ea4a020503b645e94ef1c7531cbcfd7de806ef1",
+      "git_blob": "8f6228420af76d5c5dd610768464d92d40d54092"
+    },
+    {
+      "path": "web/tests/recovery/private/contract.mjs",
+      "sha256": "9b0e1b9b7758c532e781fe3d38281560a08e39cc20306c26d9189f39971dd3de",
+      "git_blob": "be1688d91c32a45a3e2b9d0425a15425d37da018"
+    },
+    {
+      "path": "web/tests/recovery/private/controller-public.mjs",
+      "sha256": "6f57186658d07270ed19be20a480efe0110d513e0303e75a80911f99faa97fe1",
+      "git_blob": "65ca7658eb688413e85aade61c8f96502d384cf1"
+    },
+    {
+      "path": "web/tests/recovery/private/journeys.mjs",
+      "sha256": "b296812a7db1852631359ae67bbb71559de1988cf575a439a47737a41dbc3708",
+      "git_blob": "03e4a28cd190b66e5e159ac64c0102b49094e68e"
+    },
+    {
+      "path": "web/tests/recovery/private/prepared-journeys.mjs",
+      "sha256": "c463e11fceb8ede9090efd5f13c5ab819549e6cc5a3a0119eb98799c027cc38d",
+      "git_blob": "8208e3b133907e908c171e997da3057f14fabfea"
+    },
+    {
+      "path": "web/tests/recovery/private/public-faults.mjs",
+      "sha256": "03b08fa98051c40408ee6c5025453fe7c1cce58b2848a48701b02d0fc498eb92",
+      "git_blob": "576a732966a19d9a6ba32d9346a7b478baf927e8"
+    },
+    {
+      "path": "web/tests/recovery/private/supervisor.mjs",
+      "sha256": "1df87ec860b0c306c9aca6337bc45e26f8be097a503300b4f0870dd10696145f",
+      "git_blob": "b7df498750a82a713caadf4b4982b36e43acdb7d"
+    },
+    {
+      "path": "web/tests/recovery/private/surface.mjs",
+      "sha256": "cd59f755bc34f09dc9862e9e606a461ea8fc1f670fc572bc15bd94ad6854876a",
+      "git_blob": "8fe3f0b779d364482a699ca3a3a928e07119b6fb"
+    },
+    {
+      "path": "web/tests/recovery/sensitive/README.md",
+      "sha256": "f73ec72d3f71b1dc6c4f6d16afad498e066da33a6a355837a24ce97938f48331",
+      "git_blob": "4cc47e7b965158812c936d0ad14fc9f27c202fae"
+    },
+    {
+      "path": "web/tests/recovery/sensitive/boundary-tests.mjs",
+      "sha256": "3fea3c1b278d934616c831026e517d560672de38ff4520bd723251042dc83ad0",
+      "git_blob": "e05ce2a65f1900ed06ff08e6abeed6a285cb3f66"
+    },
+    {
+      "path": "web/tests/recovery/sensitive/child.mjs",
+      "sha256": "930c2b3da092aa1b976670fa085e692220a9bca9c2212e336a698c36799d8b89",
+      "git_blob": "f6ffbbc9d6432b791ea46f62f1a226a9cf96d37b"
+    },
+    {
+      "path": "web/tests/recovery/sensitive/contract.mjs",
+      "sha256": "9f9561430f63ee949e4d9c6455074eaa6a1943cd8d91a7ac357c22494e395255",
+      "git_blob": "edee6b23e703e085b7fea773ae274e2c77dad8e1"
+    },
+    {
+      "path": "web/tests/recovery/sensitive/public-canaries.mjs",
+      "sha256": "24c45745ef27c903b2eae0d8b086065a5f9bd121ab33e76595bd36c81b951a93",
+      "git_blob": "dd5b55b9d8f064b66f65b38ce7b9061928873ab8"
+    },
+    {
+      "path": "web/tests/recovery/sensitive/supervisor.mjs",
+      "sha256": "7bc381945e54e80bac4a223f26e6cdd6530b2d32e6ffb0ca2cface2cbc8b4dda",
+      "git_blob": "300f189bdcb1c417d731ecf692223cd45fff13c8"
+    },
+    {
+      "path": "web/tests/registration/federation.spec.ts",
+      "sha256": "a48117d46adbe6d5f269ba2ba6be85b32e9f53584eb4d1d92abd1084fc37fd37",
+      "git_blob": "8e3349b91fe8114811d6dc624219c380a178a63b"
+    },
+    {
+      "path": "web/tests/registration/global-compliance.spec.ts",
+      "sha256": "5ac95939cfb1b87d2fcff54332b14d4e8d8ef82af0722168e2ba525bbcebe029",
+      "git_blob": "75e733c11069359c1ab55ffe0a3928d5b3e6aaa2"
+    },
+    {
+      "path": "web/tests/registration/registration.spec.ts",
+      "sha256": "b8536b08f4c4cbedd8a5e6c8191ea453aed2331296d74a78528cbd0bcbd705b9",
+      "git_blob": "12b0339438362425ef5eec9e3676bb1d2d56ac4b"
+    },
+    {
+      "path": "web/tests/registration/support.ts",
+      "sha256": "c934109f4e10f9149f140dc037b70762eae879d9d029927283edd1cf00a35f58",
+      "git_blob": "18ef89d918331ff5d260d0cd4e9cf1f04acb5d49"
+    },
+    {
+      "path": "web/tests/step-up/federation.spec.ts",
+      "sha256": "91b1868a5f6605277989b9335e66a7cd8a9e0c295fcb36a146cadcc92e72e21a",
+      "git_blob": "0c9fc72e5ecc44863e894f93cba8fc26b2758520"
+    },
+    {
+      "path": "web/tests/step-up/step-up.spec.ts",
+      "sha256": "2ef6d6db2d8f8edd8e6d6936e4170e2aba3f864efa021f978c631e820c7c57e9",
+      "git_blob": "4445d1fd2e126355a3b82967c877e6978aede5d9"
+    },
+    {
+      "path": "web/tests/theme.test.mjs",
+      "sha256": "9f895564d15f303c76243b2d15ec3a011c7a3eb5cbf70f1a3033f77a85b43e09",
+      "git_blob": "ff4770544996bfa23b1631878726f7a8f5fe2109"
+    },
+    {
+      "path": "web/tests/totp.contracts.test.ts",
+      "sha256": "24b2b7d1f650d93eefe9a9b274b3bf9dca6efdc502c98227a3ec07b7367abf04",
+      "git_blob": "5db42f0eec5c3208fb4f163f4cf5a1bf378c41d1"
+    },
+    {
+      "path": "web/tests/totp/QR_VALIDATION.md",
+      "sha256": "776ca779f62eaba630e4978a4539f5b6a06684bdf84172606bcce010660915dc",
+      "git_blob": "bab7f96004660264c1436963e689982941255d97"
+    },
+    {
+      "path": "web/tests/totp/qr.test.mjs",
+      "sha256": "6023b95f89f00767939de645a37212201c713423b1e7d3447105416ce932d981",
+      "git_blob": "cc088eaff559914252cfd0ca7fdee7b8efb493fb"
+    },
+    {
+      "path": "web/tests/totp/sensitive/README.md",
+      "sha256": "b3295c2eb3f57e29aef229f5125004dd7a5bd45bb939ee80e72e15b8d279b07a",
+      "git_blob": "1ff3f9967f71f82a7574439d3f6e908fce5b189e"
+    },
+    {
+      "path": "web/tests/totp/sensitive/boundary-tests.mjs",
+      "sha256": "912d896e9ba7f36557982367bd8f27494f9802df7cc8a8cc9a72f1e175414230",
+      "git_blob": "61e4979a49421b6b25f9c71d7b6307fec1ff308c"
+    },
+    {
+      "path": "web/tests/totp/sensitive/child.mjs",
+      "sha256": "7f82584ace21fdfefe8fefa8997c99f64e63dbf80f9d0242afa6a22b2fcc72a4",
+      "git_blob": "dd4a5d0cffea3421d90cb6fd06e899c0b562e993"
+    },
+    {
+      "path": "web/tests/totp/sensitive/contract.mjs",
+      "sha256": "3ef3c1a5dd44c81d56bcf6fa12f0e37c4801d5973e3891fb4febeb3b9adf356a",
+      "git_blob": "327b760c1a24b7918681645a066f9f39f8148a60"
+    },
+    {
+      "path": "web/tests/totp/sensitive/oracle-bridge.mjs",
+      "sha256": "e0533177f0f3b0904ca09b7d29df34e88d4a8899e3e8f354e1074f9c2881dd94",
+      "git_blob": "becf0277bcd21b29dd395fc941cb1a3fd769f0d4"
+    },
+    {
+      "path": "web/tests/totp/sensitive/private-frames.mjs",
+      "sha256": "1d72b5cdb42415ee1fdaf2b16f91362dd519363f531d94867efdc9888dd4e33e",
+      "git_blob": "7086727be5982939315012caee9ac52c0907b50d"
+    },
+    {
+      "path": "web/tests/totp/sensitive/public-canaries.mjs",
+      "sha256": "60a7fc8a8559443d8e2b2d9c12ebc73f5c8959a796b00c49b2090dafd92ca1a4",
+      "git_blob": "b0e42c68a8962c66fb7017f2bb9400bf716d89bb"
+    },
+    {
+      "path": "web/tests/totp/sensitive/public-real-canaries.mjs",
+      "sha256": "67ac7a9b10b856bcf5117ff971e803b545c18e4cd0ba481e874413289b094571",
+      "git_blob": "b785345005a0bdb88bec3c5b87d81a26d541a79e"
+    },
+    {
+      "path": "web/tests/totp/sensitive/real-child.mjs",
+      "sha256": "2ca20a10562a815c5b23e756f2886f3eb93dc15fff21250ea75877fc404fbd5e",
+      "git_blob": "c64e7deb7d4937fe78c03f5bb18eeb09ad454b86"
+    },
+    {
+      "path": "web/tests/totp/sensitive/real-journey.mjs",
+      "sha256": "c016100492763c342be2c297e94447ac88778b1ec2bbf9708355eba7ada24b79",
+      "git_blob": "ca7023eb5ab260fcc01ca39a1ca38f8c2251168d"
+    },
+    {
+      "path": "web/tests/totp/sensitive/real-supervisor.mjs",
+      "sha256": "7f1c7f73b3418b425cd84101f39f0a67cd157a0d1aba9f5d53c071c6e66234ac",
+      "git_blob": "9c251501625adc02fb9d79afb00281c71ce2c2c8"
+    },
+    {
+      "path": "web/tests/totp/sensitive/supervisor.mjs",
+      "sha256": "3bc08144358150795d9131a26073a87df139365cd613f112a0a553cf030ea396",
+      "git_blob": "4af37a38cd2341552f40a21682e20304ffd93240"
+    },
+    {
+      "path": "web/tests/totp/ui/totp.spec.ts",
+      "sha256": "d0ee44b41069f4b391cef6a5fcf4afce6f402d1ff7b939de2ffc9ba65ca59c48",
+      "git_blob": "2b14911777cbfb81b868c62e05caa88a9c19aed5"
+    },
+    {
+      "path": "web/tests/vite.config.ts",
+      "sha256": "a89dd6cb47d9292d05e3977a623205d544ac8211b5f0f0d256aa675b9732a4ee",
+      "git_blob": "d02e4a36212ba12cba4579819f39694e89166cc1"
+    },
+    {
+      "path": "web/tools/build-qr-vendor.mjs",
+      "sha256": "0d6915f701d39c8762c53ad1090a2b3faa2a4d1f4eaf5c4322cce04fe6567bda",
+      "git_blob": "2aa786f13b72d2389efca8415e59f74145faeaec"
+    },
+    {
+      "path": "web/tsconfig.json",
+      "sha256": "f27ae967a3fca6ae31958cd9a08524a4c42ebc36e339c3beb03e8e4025b1ff0c",
+      "git_blob": "b6b8a3fed78b450451d6a22285902610dbe6ad9a"
+    },
+    {
+      "path": "web/vendor/nayuki/.gitattributes",
+      "sha256": "93c1f982e874382f1029ad38ff70cf969b16c6482e6808ca4eb84899544f8d96",
+      "git_blob": "5b3015a00178ec051ebf0b236886565d6fad6672"
+    },
+    {
+      "path": "web/vendor/nayuki/qrcodegen.d.mts",
+      "sha256": "e5b8a66a1856947a116f784e52f39dbcb8bd8707fdb68f02adc84f5e4e2b1b0c",
+      "git_blob": "7a08b1355e73e921a9c82ce0974994639e095571"
+    },
+    {
+      "path": "web/vendor/nayuki/qrcodegen.mjs",
+      "sha256": "4beab5d288a523ccf61dc0582a29f91be9d4dd6f74b93aa9faef9ae2261b1bee",
+      "git_blob": "c891fa7527e1d351f16d5127f07f141cb4c7a20c"
+    },
+    {
+      "path": "web/vendor/nayuki/upstream/qrcodegen.ts",
+      "sha256": "c4749095a91bf9696e3a303998b9905e467094f53041e64393e65e6d887737fd",
+      "git_blob": "4a2d0acce5a24760245d43c1644a4e1993d70834"
+    }
+  ],
+  "build_outputs": [
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/AWSSDK.Core.dll",
+      "sha256": "8f6bdd4ed0308531bc2ff1c3b7dca6ffca5cce95ddb71b0d008f563d3d62824a"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/AWSSDK.S3.dll",
+      "sha256": "aad004d401202eb19fe8c6727c6cfd11e0ed3f7817ae8893e649bc9f30246574"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/BouncyCastle.Cryptography.dll",
+      "sha256": "ef92fc661e8d7ba8ec4d39a7cdfcdba41f14cb327f0d24fe79d0b5bb428899b5"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Docker.DotNet.Handler.Abstractions.dll",
+      "sha256": "020151a5729f4c05fd0ddce04e11d7d05f5a0317d00742dc112b99c43ba714c9"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Docker.DotNet.LegacyHttp.dll",
+      "sha256": "b2dcade7fd991c63e8628222170bfd0d8f6ca7479d25f687ea55a283ad24021f"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Docker.DotNet.NPipe.dll",
+      "sha256": "dd366e86f1ad474e390e98b01b4a93582fc2bec30191bd9098fc8b346d213cae"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Docker.DotNet.NativeHttp.dll",
+      "sha256": "419cb6b91178711705fca2b0adbcbaa0460cc129647eb941b13421de08f0e8ad"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Docker.DotNet.Unix.dll",
+      "sha256": "dc24e10dc567492da12c48a45b6963cacefdc245a3c7c74dc0c5e4897ff197f6"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Docker.DotNet.X509.dll",
+      "sha256": "17f423bae61e2b7677b608e83673e9140e69ab6b503d96be73e4b9c5666b1fa8"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Docker.DotNet.dll",
+      "sha256": "00a8a4af181137cccd815f9c06cc4b4ddd6d8fb8a367b0630a2e51307f2f7c1e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/ICSharpCode.SharpZipLib.dll",
+      "sha256": "32ea2d0ce3512e74f1c7ad82591fe67e6b8939d76a8a4ff9c93ead030131e71c"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.AspNetCore.Authentication.OpenIdConnect.dll",
+      "sha256": "4bd250283cf2cd573fe408357244bffabf81f5c6abea992e324b5ddc6554afff"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll",
+      "sha256": "7c4d1a714aa878935a99c33a5df24dd1854a5577e55d4632e63e1f15d7e55fbf"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.Bcl.Cryptography.dll",
+      "sha256": "91c6bab93638c268569a38bc87770a5e3ef9932676f5b7a6d47aef4208062925"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.Abstractions.dll",
+      "sha256": "24596b62ac0546c641e308a06bb9ea4bb153e9a776ed2311e730832465f34f5d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.Relational.dll",
+      "sha256": "078ad42527c893d858e1c48b7edc5a0ec755c60b28395e996bc438ede3555cf0"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.EntityFrameworkCore.dll",
+      "sha256": "87faf0bf54de5f62c7d30eb686018b11c53d4acf6c280adb39965b303c5b2b59"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.IdentityModel.Abstractions.dll",
+      "sha256": "84a6c307fe84453c9fc3a1af45bf2302b5d2aba4d5b9bfb7d581d6a28787461f"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.IdentityModel.JsonWebTokens.dll",
+      "sha256": "4f61fd3d3f5003951a09cdd27ffdc3c4841a158d27a6d7247be3e5939e7dab32"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.IdentityModel.Logging.dll",
+      "sha256": "2bc4582ae62236f066901a7dcb2a88d04a181ad1978f2db2f4314df6ae1a50c6"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll",
+      "sha256": "7921aef6fa1da2e563a237dda129b12407ac6c56448bb0eb7eebc59bb6c6babb"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.IdentityModel.Protocols.dll",
+      "sha256": "40ada0b98384788970117cadf63863edd99bd5bd6fb8076f6da68d65f6dbda4f"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.IdentityModel.Tokens.dll",
+      "sha256": "106db045348a9b767f3002d4ec3bb582c9141f6d8e9966e1e0ad58a71ba42b8b"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Microsoft.Net.Http.Client.dll",
+      "sha256": "65743129c2b8a72e8b3841e3813f5b3d129034585a04ca6fd955c043290859e3"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll",
+      "sha256": "94fcf66e8e953fdb02c40c72ca89821dd5eed5324d4c0f12a7219ea8cd3d5a5e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Npgsql.dll",
+      "sha256": "e2bcafe1660fe4543fe9dfcabed972ec8d32259e5ea8009462ce1de23c7034c2"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenIddict.Abstractions.dll",
+      "sha256": "d72ca0187cc63f9608aadc0e4225552141c387496b785cd93cc0dad67362618e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenIddict.Core.dll",
+      "sha256": "a4f06b46bdda9a0bf9ad5d1fb57c1b2fcd656c6d55c4d4d4b2192bafc1b8add4"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenIddict.EntityFrameworkCore.Models.dll",
+      "sha256": "e0bc409ed043609a387f775489a1189e76dce8c4040f72e4419b8d9002d7e3d6"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenIddict.EntityFrameworkCore.dll",
+      "sha256": "7520299821f35f307819a4725347854f2b31336825ab2e1b205195a35ff690eb"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenTelemetry.Api.ProviderBuilderExtensions.dll",
+      "sha256": "dec906a34dbafcfd2c23b73fd05e58defc7f8c1627890fad4e4461c23b8de989"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenTelemetry.Api.dll",
+      "sha256": "b92d1b32ba9f7ddf4f06a7efab22c6424beba8760976f0eb5811ed3713d81f4c"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenTelemetry.Exporter.OpenTelemetryProtocol.dll",
+      "sha256": "be37059eb65a9f4af95081c2d4795afd198a657dbf2e35363cca6444fd75b2ab"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenTelemetry.Extensions.Hosting.dll",
+      "sha256": "5f5157a8042853b21077855d5888ef0178bfda07a1fac815b8e6145b283f72a7"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/OpenTelemetry.dll",
+      "sha256": "6623430269ed62f1a8e097e3909b9c8d778ae72b9b69f096140c71d06e0eb043"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/RESPite.dll",
+      "sha256": "c12704def103a2391c70cb4faf96a839c22d50d32aa0d65528e89926a968daa3"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Renci.SshNet.dll",
+      "sha256": "1eea433e249e328d60512b72a134961074e059c22cfdf5427d03a893ca46ff1e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/StackExchange.Redis.dll",
+      "sha256": "b23e03f4f8b4264060074e1c0cb2ff2461d02611ae705ab28273d32db6c59078"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/System.IO.Hashing.dll",
+      "sha256": "cea6795cf9f7b139b2215ff6de794a6f6e44e78640fb30fa4c0d5fa8472df8e5"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/System.IdentityModel.Tokens.Jwt.dll",
+      "sha256": "3d55b14eabadaf18aefea2c4eb085428e0485063ae3ea91cac072e3b5f951a83"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Testcontainers.dll",
+      "sha256": "da04fa0dafff62c19da23da5f5b8d9d2ea55b8df586447d20133439e946a077d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Accounts.dll",
+      "sha256": "a6f1e30855b909044ae7c7ee328c07ff27767f33ec2e95a57a7e42e782e6bed4"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Accounts.pdb",
+      "sha256": "7f7e21e42358e1b5f34becc20b0bbe4286253d335eb11b6504734fb4ffeb8e34"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.BrowserTesting.deps.json",
+      "sha256": "ce9680778bec196dc66950206e40e3aed8710e2fe534b5b6a1255357d3a65e4e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.BrowserTesting.dll",
+      "sha256": "659faae52b404e4b452d8650122d1456eb8b039561fb75453fd449868ad1c6b7"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.BrowserTesting.pdb",
+      "sha256": "3eb8c31088788d1088e001b25f4fba0c25d096e2876deed9e08547caa55c5b53"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.BrowserTesting.runtimeconfig.json",
+      "sha256": "a5e0a6135c8fc7f0463848f9b69b73f63ec806597dcec65cacdef1fb0832252a"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Database.Migrations.dll",
+      "sha256": "e22491330ac6dfbddf8f6130d4aa291229e19f9ccfad9a1bf112ba7686e1d304"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Database.Migrations.pdb",
+      "sha256": "85b01643e400423636e0d80e0cc0a385a4fc63c104caed55cf329c020cc534f2"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Database.dll",
+      "sha256": "4e7bb0049ec129ec3f7ef85980d4913f733fb1eae989ca3dd082aa61c5fb794d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Database.pdb",
+      "sha256": "d7a6401281d4f04a3acd72101d140352d6bfe338e4cce8310421c32c7b737fb1"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Identity.Persistence.dll",
+      "sha256": "9e8d57bbf1ca9abe7dbdaab0a90c01a333c1c74126627d38198786c50ad0bcb4"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Identity.Persistence.pdb",
+      "sha256": "136e6af6b24dacee712d5bf7becdb063ab44c3f1fe04c2f6dc26c0fdcf7958c2"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Installer.deps.json",
+      "sha256": "dcb1338edb11cc15259a0681a0f80f8963f3112340bed77b8d2896d720439bc2"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Installer.dll",
+      "sha256": "d1ce2223176631632590859d4845deb6cfa8f856f4618bd4d3931cb82cf7bb99"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Installer.exe",
+      "sha256": "79613e6463cb3f23766637e5ce18f8a8f023212c7129dbf21651b64f08e5f92d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Installer.pdb",
+      "sha256": "4352a7f062697f8abe7affcf0a868087d6808a1b29f06de5f7df25fa7ac2be57"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Installer.runtimeconfig.json",
+      "sha256": "501d9a7d5e2b71a3ba56f3f76f421199364e699895ba531a80d370172b551f36"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Observability.dll",
+      "sha256": "0b6b935cf4ada5cdc70e7973f03f55f3b24ad51e1b0df7f303e57dc933396efc"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Observability.pdb",
+      "sha256": "96f73a3aac76c749cb31833720ea09ba97ee223851ce5a3f5559ac2d57b60650"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Platform.dll",
+      "sha256": "9c189fce45b8a73b0bce0c15bd7d18f58853009f79ddc3c0caf568dfd58e471c"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.Platform.pdb",
+      "sha256": "7a745c0533cc49bd94ae3f96c0591f1a70fc71caedc1b1364edfd42816b50daf"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.User.Bff.deps.json",
+      "sha256": "aa4c0f8045b3316f5b888ef9882880e3933021f7a96a899366fb3141a7ab2d48"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.User.Bff.dll",
+      "sha256": "988f11ab98fe0756f75205847d28c0a5d0c55c180fb665c17d1dc0fa3e120b9f"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.User.Bff.exe",
+      "sha256": "a389e9a6ba3b96afd653ce92bd41d659797470c363227319b554930bb59644eb"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.User.Bff.pdb",
+      "sha256": "5191ff01dccf2661229c6dc3617caab0732452574977e1e5acd6c341c1133589"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.User.Bff.runtimeconfig.json",
+      "sha256": "5a26de741a59e2654c7badfe3d6d9a134bf09fe67f621f584e7746147c9d2686"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.User.Bff.staticwebassets.endpoints.json",
+      "sha256": "e973f96721e9b06e510ef16f1c3acec6cf806f10f759b654557e9dd01cd5de02"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/Tunner.User.Bff.staticwebassets.runtime.json",
+      "sha256": "cab116696d2099634e24e238381b2353774af6e5d82ff2a62dc465f56a940717"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/browser-test-authentication-content.json",
+      "sha256": "76f3cd2481cd8e6616120be4f4112bbb342572eb5c341b4a2a98275eda89eace"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/browser-test-content.json",
+      "sha256": "c13b93e2063e0919f40e4abf3052c7ea3bb62a59b9ce15913b69768976009d8a"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/browser-test-passkey-content.json",
+      "sha256": "f1f68961f48d38a2ec787298db6d6b492c75d9e4822bd08ce27a34a3dbb50a51"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/browser-test-recovery-content.json",
+      "sha256": "33b0130c72efb83c63dbc1056472de526982318392c6d7b7aef3a8584c03d3d1"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/browser-test-step-up-content.json",
+      "sha256": "f3638a44572dddba70188d47cca5b63fa359ffc9fcaece81f0b6423c37f4b499"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/browser-test-totp-content.json",
+      "sha256": "4bf3b0a31a80bb15a7ffa5d8f955605af42205d8d0467a0f9f25cc8ec376798d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/authentication-BrDUFRtd.js",
+      "sha256": "cfb711ea2bed00037b22996197735c75467bec6533df4ebbad770905df5cd2e0"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/authentication-Bzg6lNhs.css",
+      "sha256": "b078b392708b39a8d08a6d5cf63a19a0198448f738723c0a8596bbc7a91f3aec"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/federation.api-DFOxqKOu.js",
+      "sha256": "91ed51c620663be989ed9c0f87a98ea956480df3ba5ac327141e881491350c21"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/fonts/.gitattributes",
+      "sha256": "31e7fc8dc7929bd077f7007c92a797978826b1408b52f459b3a126820d59db4d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/fonts/GeistMono-wght.ttf",
+      "sha256": "d00e590b8eb3a59acc329b2d044fd143ae935090b7da33199ebee27cc7de8196"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/fonts/OFL-GeistMono.txt",
+      "sha256": "1781d2806a07d91c4edf4740b88449fab7d0eadad53f7c351b94cd4d4eb8c00f"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/fonts/passkeys-fonts.provenance.json",
+      "sha256": "4981045902443bb2fad12318823243b90d25d5b2da5cdc5340ab30a2a19b42e5"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2",
+      "sha256": "2317fa4bb293c9c0b110e18315d529235c47a0ddd3338cea3d8c7955e927899e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2",
+      "sha256": "6894439694946a589d157ece003086960a6a4013d74a813dab7602efdb3d8c09"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2",
+      "sha256": "824f485b5d26e2f2da3c2b236132ece1bc8e4e43373452950bb0e40548b4313f"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+      "sha256": "19f9c92546aa300c312235e3125af1b81394d8db9a4bc4a425cd5b641d2d54e1"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2",
+      "sha256": "8fa40e5d248247735eb97a0bd593b8852440430600d6ba01364c31fe0abc1fe1"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2",
+      "sha256": "ca157063339ac4ad418f214f3abfed119b0798ab4d377386ce5c9e5a7a435ebd"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2",
+      "sha256": "71d5ee93cc1e9f1d520a3a8b66456de18c7879d8df09d57fcd2eaff75fef0075"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2",
+      "sha256": "6e9e020a25f9b56d418f2c085b1d3c09725a4da23fe693a5b463064606732190"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/inter-greek-wght-normal-CkhJZR-_.woff2",
+      "sha256": "1be3448e292fbf05ffe176fe1e43f135013d50b1e7d324ad1a558f623d3bb6f6"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2",
+      "sha256": "34b9c504cab7a73e37b746343a449132e56cf7b5481af2cb81dc74dcff25c956"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/inter-latin-wght-normal-Dx4kXJAl.woff2",
+      "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2",
+      "sha256": "5c66f9e07e90c6d4ac4922cc68d60de26c17b1858e677fb5e603fce3952b3ff2"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/login-bg-indigo.svg",
+      "sha256": "386769332e5a7536059a3a539aba330945509dd625def3c26f653524ded5ee54"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/login-bg-violet.svg",
+      "sha256": "1a645630b6d50a23c85669b264d54fee83c2e0b282b35be4c58284f9a2d3adf5"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/login-eye-off.svg",
+      "sha256": "2884ce04366a7fb8bdb338e15f42232ce98e88c325ad89855aec7c99aa18a924"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/login-google.svg",
+      "sha256": "8e0909066d645c6f7032ade6b7fea6033f51ebbbfde1fa40be4625ebf2d5011e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/passkeys-BamGzYQI.css",
+      "sha256": "7033e19096755ae6a320b697976015f1412046f67e1aae51a551ffd7596e9e4a"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/passkeys-Bo0uGRPK.css",
+      "sha256": "058df613b40e3c566e8dd085a8a55ee4e0c94568473d2a69bd14c4d914cdf91f"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/passkeys-DMez9Jr9.css",
+      "sha256": "86e51fa1c64f6beaf851e38a8c154984a9d0a347d05635623fe815643010671b"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/passkeys-lIgFOwf0.js",
+      "sha256": "cf28ae4a6b121121e5e5d1c6747c87d26045eaa62f76caf3b6d3d354f78ee7dd"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/passkeys.api-CDpV-7TJ.js",
+      "sha256": "84c24218074a2490e3d4eb2e0e2626949faaa2b54e464007393834bb12056f4c"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/passkeys.native-BRN4FYar.js",
+      "sha256": "05ddf8e690cb7a996200003b22cefd8b47cb585e0678598783d249d0f3440c61"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/ready-approved-check.svg",
+      "sha256": "5cf00b5b003b98f240bf74151841185904247362b74039bf350ce8574bbb36db"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/ready-imgBgGlowIndigo.svg",
+      "sha256": "54934000b01f421419fc9a104dcf5068f48b525394d0587534600695fcc37859"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/ready-imgBgGlowViolet.svg",
+      "sha256": "517d39c4c5d721617a76ccd97aff0f56124cc817d032004c1d20f38d0aae0691"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/ready-imgEllipse.svg",
+      "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/ready-imgEllipse1.svg",
+      "sha256": "716e0ee704ab22493cf82ceccfb7c671d1273e61790636451df1f1eb75458bd4"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/recovery-BquBgfGg.js",
+      "sha256": "26c44a00394ec8f93e323a57727780fabc02c9c9fe6f0cc0d2983f056a53223d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/recovery-UbvY-vrS.css",
+      "sha256": "54270fa0fd4308c22b645de2e77a93f3ac8b2cac9d9dfa56ebd2094850a647f1"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/recovery.routes-gQivvnkQ.js",
+      "sha256": "65d893b9b06ace23d8709a5a4a49a19e3c1775b8c9349c0bd94f6cc12e9be332"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/register-imgBgGlowIndigo.svg",
+      "sha256": "3f46d383407fee017a39de72f9a287348d25736b2747e28874da0c7028efbb78"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/register-imgBgGlowViolet.svg",
+      "sha256": "6057cd9d95e1b7ee08ba24451f9b5a93e997cb96305ad1401b65718999d0f434"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/register-imgEllipse.svg",
+      "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/registration-CTGgoNuS.css",
+      "sha256": "35b18a802528a28938035870cffbc4897ec0f1a1d449dd46663229ff530e69dc"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/registration-Dnc6_b63.js",
+      "sha256": "9cf855cd28ee037736cb01a8e0384674ae7bde640d097fd9a1b5673f4570c6cd"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/step-up-DQziR376.css",
+      "sha256": "49903b5b55f937f6bce87e4927202cc5175904361c959ffb12a98d2393bf6e75"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/step-up-xTrPB78B.css",
+      "sha256": "c537535d782cbf7644057954719a2cecd9c01a30ea0541706324149c08d2be42"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/step-up-xh90rxjY.js",
+      "sha256": "4133cc5867f00990d713f3355a42a43b79ea860582c9a86df500cee7ec971253"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/totp-GgBKBHgO.js",
+      "sha256": "954ffcac02d6d2f8d23460e6608849d0776836859b7ef18594e86ecf9f9e6da1"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/validation-C8aooDdG.js",
+      "sha256": "31b8179e24e917fd5cfe7309185ffe39f7418d5a4b25208a3b748105f5f01a33"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/verify-imgBgGlowIndigo.svg",
+      "sha256": "1cad56a901f56e0bd762afb54fbcf56e388bb865cc48ffa6347704588b6d51c1"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/verify-imgBgGlowViolet.svg",
+      "sha256": "517d39c4c5d721617a76ccd97aff0f56124cc817d032004c1d20f38d0aae0691"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/assets/verify-imgEllipse.svg",
+      "sha256": "eb37331f873999d6fb122fa3594881a0a935da1b41d20101227761c4194a4a2d"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/authentication.html",
+      "sha256": "cd28db906e949dfebeec137d186dd8b1a1da706c70735c7883905bb8908e451a"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/index.html",
+      "sha256": "f7f4f7c2e46f79775aafe8343daeaf2846291a87f36e7305c3f2db007d149ce4"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/passkeys.html",
+      "sha256": "25b0b803a7bc9d08585c2cda95779c5770bc19631911104f4d33a0f014ee15f0"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/recovery.html",
+      "sha256": "b1b6158c479ba37c6233a8b8d50f751eca23f353aa943fa08c2d485ed31841fc"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/third-party-notices.txt",
+      "sha256": "8f0b059bb262488010314fac9b75a704836a6bb2e40f6659ef78af31eb8b8b13"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/registration/totp.html",
+      "sha256": "9932158bd847ffd8c174f755de61e258d6a069b3525e225ab8bba96d95ef6d31"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/geist-cyrillic-ext-wght-normal-DjL33-gN.woff2",
+      "sha256": "2317fa4bb293c9c0b110e18315d529235c47a0ddd3338cea3d8c7955e927899e"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/geist-cyrillic-wght-normal-BEAKL7Jp.woff2",
+      "sha256": "6894439694946a589d157ece003086960a6a4013d74a813dab7602efdb3d8c09"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/geist-latin-ext-wght-normal-DC-KSUi6.woff2",
+      "sha256": "824f485b5d26e2f2da3c2b236132ece1bc8e4e43373452950bb0e40548b4313f"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/geist-latin-wght-normal-BgDaEnEv.woff2",
+      "sha256": "19f9c92546aa300c312235e3125af1b81394d8db9a4bc4a425cd5b641d2d54e1"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/geist-vietnamese-wght-normal-6IgcOCM7.woff2",
+      "sha256": "8fa40e5d248247735eb97a0bd593b8852440430600d6ba01364c31fe0abc1fe1"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/index-C_qU3GIu.js",
+      "sha256": "c927f9319df9cff18f0849f4c91d2c925f93824f4838748519455cbc3711feb5"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/index-DbImAJY8.css",
+      "sha256": "c6b71993e428eb910e914bc355b4497c604d7921d34a41478c695784665b7dae"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/inter-cyrillic-ext-wght-normal-BOeWTOD4.woff2",
+      "sha256": "ca157063339ac4ad418f214f3abfed119b0798ab4d377386ce5c9e5a7a435ebd"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/inter-cyrillic-wght-normal-DqGufNeO.woff2",
+      "sha256": "71d5ee93cc1e9f1d520a3a8b66456de18c7879d8df09d57fcd2eaff75fef0075"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/inter-greek-ext-wght-normal-DlzME5K_.woff2",
+      "sha256": "6e9e020a25f9b56d418f2c085b1d3c09725a4da23fe693a5b463064606732190"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/inter-greek-wght-normal-CkhJZR-_.woff2",
+      "sha256": "1be3448e292fbf05ffe176fe1e43f135013d50b1e7d324ad1a558f623d3bb6f6"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/inter-latin-ext-wght-normal-DO1Apj_S.woff2",
+      "sha256": "34b9c504cab7a73e37b746343a449132e56cf7b5481af2cb81dc74dcff25c956"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/inter-latin-wght-normal-Dx4kXJAl.woff2",
+      "sha256": "3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/assets/inter-vietnamese-wght-normal-CBcvBZtf.woff2",
+      "sha256": "5c66f9e07e90c6d4ac4922cc68d60de26c17b1858e677fb5e603fce3952b3ff2"
+    },
+    {
+      "path": "tools/browser-testing/bin/Debug/net10.0/wwwroot/step-up/index.html",
+      "sha256": "74518be5204c0ff515d8a1f4c15859061bf06f0c8763d64b2c4de5cd443e67b0"
+    }
+  ]
+}

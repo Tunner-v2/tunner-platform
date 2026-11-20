@@ -1,0 +1,590 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2_RECOVERY_CORRECTIONS",
+  "result": "PASS_EXECUTED_ENGINEERING_TESTS",
+  "validated_commit_sha": "c208fdd589ac5bcac9055eb39f8cbe184ccdd123",
+  "behavior_commit_sha": "74a998585c5f51303c3031ac488003a5dccab58d",
+  "recorded_at": "2026-11-09T11:23:18.541Z",
+  "counts": {
+    "identity": 148,
+    "web_unit_theme": 31,
+    "browser": 81,
+    "starter": 7,
+    "architecture": 237,
+    "failed": 0,
+    "skipped": 0,
+    "flaky": 0
+  },
+  "actual_browser_suites": [
+    {
+      "suite": "step-up",
+      "executed_commit_sha": "74a998585c5f51303c3031ac488003a5dccab58d",
+      "stats": {
+        "startTime": "2026-11-09T11:08:38.388Z",
+        "duration": 69746.673,
+        "expected": 22,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    {
+      "suite": "shared",
+      "executed_commit_sha": "74a998585c5f51303c3031ac488003a5dccab58d",
+      "stats": {
+        "startTime": "2026-11-09T11:08:38.827Z",
+        "duration": 46084.035,
+        "expected": 16,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    {
+      "suite": "registration",
+      "executed_commit_sha": "c208fdd589ac5bcac9055eb39f8cbe184ccdd123",
+      "stats": {
+        "startTime": "2026-11-09T11:13:54.737Z",
+        "duration": 84244.474,
+        "expected": 24,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    {
+      "suite": "authentication",
+      "executed_commit_sha": "c208fdd589ac5bcac9055eb39f8cbe184ccdd123",
+      "stats": {
+        "startTime": "2026-11-09T11:15:20.043Z",
+        "duration": 62806.698,
+        "expected": 16,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    },
+    {
+      "suite": "real",
+      "executed_commit_sha": "c208fdd589ac5bcac9055eb39f8cbe184ccdd123",
+      "stats": {
+        "startTime": "2026-11-09T11:16:45.847Z",
+        "duration": 46356.482,
+        "expected": 3,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      }
+    }
+  ],
+  "source_equivalence": {
+    "backend": {
+      "executed_at_sha": "74a998585c5f51303c3031ac488003a5dccab58d",
+      "validated_at_sha": "c208fdd589ac5bcac9055eb39f8cbe184ccdd123",
+      "compared_paths": [
+        "src",
+        "tests/Tunner.Identity.Persistence.Tests",
+        "Directory.Build.props",
+        "Directory.Build.targets",
+        "Directory.Packages.props",
+        "global.json",
+        "NuGet.Config",
+        "Tunner.Platform.slnx"
+      ],
+      "result": "GIT_OBJECT_IDENTICAL"
+    },
+    "web_built_unit_stepup_shared": {
+      "executed_at_sha": "74a998585c5f51303c3031ac488003a5dccab58d",
+      "validated_at_sha": "c208fdd589ac5bcac9055eb39f8cbe184ccdd123",
+      "compared_paths": [
+        "web/apps",
+        "web/packages",
+        "web/fixtures",
+        "web/tests/step-up",
+        "web/tests/browser",
+        "web/tests/contracts.test.tsx",
+        "web/tests/theme.test.mjs",
+        "web/tests/vite.config.ts",
+        "web/package.json",
+        "web/pnpm-lock.yaml",
+        "web/pnpm-workspace.yaml",
+        "web/tsconfig.json",
+        "web/playwright.step-up.config.ts",
+        "web/playwright.config.ts"
+      ],
+      "result": "GIT_OBJECT_IDENTICAL"
+    }
+  },
+  "receipts": [
+    {
+      "raw_ref": "web/test-results/step-up/results.json",
+      "raw_sha256": "793f0a4f834889588dbb50781549f636e316cbc60db93e6a2884bf9e2d0f3802",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/step-up.json",
+      "portable_sha256": "a4025b6e3f021cf8680796a549f685e512c7314bc4bb0d4133c6236f0b772250"
+    },
+    {
+      "raw_ref": "web/test-results/results.json",
+      "raw_sha256": "16395778978f7eab40fe44310c9ba1888b6d056a0fd5b7fc303a0604d6b6d3e2",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/shared.json",
+      "portable_sha256": "b20b764ae6c7dd5e4977acfdb35a53e297ba39793c52e14d60bfc89ccdada0dd"
+    },
+    {
+      "raw_ref": "web/test-results/registration/results.json",
+      "raw_sha256": "76b5e523cf374fd405ae5bd5cd36d565034df88560247b5493c9f30c25b8763e",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/registration.json",
+      "portable_sha256": "477fd516f2e5243cc38b7d680cea8dacf2f6cd28e4575184e2d29f7a11991409"
+    },
+    {
+      "raw_ref": "web/test-results/authentication/results.json",
+      "raw_sha256": "da233725e651a6e022c3c497e14211c1239ebd01dab23a438e3eb6abeb8b4f20",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/authentication.json",
+      "portable_sha256": "cf647bc34aad44717f3ee19349429fa916bbfe6e08dd12d492502d5abd585a65"
+    },
+    {
+      "raw_ref": "artifacts/browser-testing/browser-results.json",
+      "raw_sha256": "ad6c1eaf0568444b2686757a37a9a999f35ab324fbaa15fcde70beeeb646f107",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/real.json",
+      "portable_sha256": "5f1f108ec624d650fdfd221202dbd5ec3667f497d4c2aaa0737ccfca1a49097e"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/identity-corrected.log",
+      "raw_sha256": "e820959ee950b165d95d779675444f4168e5604a70b1b1155d202449ff30b233",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/identity.log",
+      "portable_sha256": "a25bd6cf2d3ff2cd94e89a29bcd3b10a260f6824e644170585da673734ff4ceb"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/tests/identity-corrected.trx",
+      "raw_sha256": "ff50b0aa71e34dfde0eaa020fdf650c863426bb65ccca55cfab48567961f313a",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/identity.trx",
+      "portable_sha256": "cc34ed6cf9f5abcfb229e1c5c50e150d9673167f8775b269fc9a22def65b09a2"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/completion-red.log",
+      "raw_sha256": "2533c0fde52aba6866f9cd33f9ef3a92aeae2f075f9c636ed5aee94ed8176e12",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/completion-red.log",
+      "portable_sha256": "2184f6a101d9a688428e50af37b7dbe1e2bd387b1c1195dffd9e14f34e469c31"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/tests/completion-red.trx",
+      "raw_sha256": "0003b61f2c4952c3aaab28689d29b9dc1c3ec86a2c7204889f55f7fdeea85bdb",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/completion-red.trx",
+      "portable_sha256": "43b0e7a558b60deb096ae7389628e3fa4ccf9c4f9c6d16a72bcc7d332631993c"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/completion-green.log",
+      "raw_sha256": "151e25295878f97b30a45e81b30f9559a6ea6e96bbbe2337707ffc9b53c7b19a",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/completion-green.log",
+      "portable_sha256": "fb6e24d4666b5ae7a3ecd7d60719dad2c5540895e3c2876969e9348354483772"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/completion-browser-red.log",
+      "raw_sha256": "d1e71e270dc324e90406267789dbd960558b4dfdc516288d27f511f51d017c02",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/completion-browser-red.log",
+      "portable_sha256": "14c74842337b41d9908bb68d4c2967f4acda055514ca0433671c89441703bf6d"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/registration-browser-red.log",
+      "raw_sha256": "fa0f6b54d33b4efab0b6296ac6f93b2e238e005bf589019ce9de1036c02a6e05",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/registration-browser-red.log",
+      "portable_sha256": "7541ada336c049ed3d5b2ed1939c40dd28ecc6b4076b96869f057387cf261cc2"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/red-results/step-up.json",
+      "raw_sha256": "2978870fc3758aa8fd3d737d75c13c7a7da22ac203d9f6597b98508a24e9ac3b",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/step-up-red.json",
+      "portable_sha256": "1e2f15d1eec75d1c9d2c769f45f87c5dfec4c1318d02552dcd7904ca8029ff9c"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/red-results/registration.json",
+      "raw_sha256": "74ee3a502d81174a303a2f654662440097a3e141415021deee9e4184d9a3d5c9",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/registration-red.json",
+      "portable_sha256": "e56f699a513132cc2fd618c1940a790a72182bc0b650a148195c89e8c0ae0a7a"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/red-results/registration-first-full.json",
+      "raw_sha256": "932961ba2170e5ec550f9e5939eb748c64ea64968ad4e849b4ab56b21a07196f",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/registration-first-full.json",
+      "portable_sha256": "c430add3c0f39e7a15f6a23dce211c85363e2ee6f784348e3b05f03e98e3c08b"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/registration-corrected.log",
+      "raw_sha256": "2f35e564ee7210df0d3860253473aa2f3d08337a0533faeb10247b6b896ba675",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/registration-first-full.log",
+      "portable_sha256": "bf19de4f60ed72032fd096a9d07d55749c1248d69c37580f19ed8604967df5e7"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/step-up-corrected.log",
+      "raw_sha256": "5282cc3e2d8bcfb847cc55c78fea8c73c4f27134e94190ab801c05adf695bd03",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/step-up.log",
+      "portable_sha256": "5282cc3e2d8bcfb847cc55c78fea8c73c4f27134e94190ab801c05adf695bd03"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/shared-corrected.log",
+      "raw_sha256": "0f66d0deda4ee68599d705665adb34d1984c8d5b4d785184886d0ad385f84c4c",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/shared.log",
+      "portable_sha256": "0f66d0deda4ee68599d705665adb34d1984c8d5b4d785184886d0ad385f84c4c"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/registration-corrected-final.log",
+      "raw_sha256": "4a775161ca5c5f951ab1d8ccd537181cdf4a33b8c1959474f94704c5ba3ea905",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/registration.log",
+      "portable_sha256": "4a775161ca5c5f951ab1d8ccd537181cdf4a33b8c1959474f94704c5ba3ea905"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/authentication-corrected.log",
+      "raw_sha256": "ec8c9127e0ef303e0a1fe4db80e9d759e8dd534a23ee0924763f2f51e4e2ba41",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/authentication.log",
+      "portable_sha256": "ec8c9127e0ef303e0a1fe4db80e9d759e8dd534a23ee0924763f2f51e4e2ba41"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/real-browser-corrected.log",
+      "raw_sha256": "ef6af600c01e54c14e753fbc8d4a6e06f9ca10e804da371952fb82443c8aa1ba",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/real.log",
+      "portable_sha256": "ef6af600c01e54c14e753fbc8d4a6e06f9ca10e804da371952fb82443c8aa1ba"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/starter-corrected.log",
+      "raw_sha256": "13f3f71617e149fc149845ce835e20b66666d96613b9a32859b71422111987eb",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/starter.log",
+      "portable_sha256": "01d259bad8513a07d3dddffe651c40543c185fd7c062bf559f21e437074fdd8c"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/web-build.log",
+      "raw_sha256": "2c511cb5870fb95bf3df8d097c4fcdc832d6a7f2eb3348fbf23ec410a7a5e8e9",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/build.log",
+      "portable_sha256": "ce1a291c24d50134fe65904730df0d7ba3761cfb81c08d7135da719aab65fb64"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/web-unit.log",
+      "raw_sha256": "b7a5b9738311a152d3e4af16b1197d4ad35a7de63c6c913ac6dee807033fa41e",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/unit.log",
+      "portable_sha256": "a4562fce01dd7c49cce42a14eb428aeaf4f9b8671ed7ce840bac75d2f7aedbac"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/final-typecheck.log",
+      "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/typecheck.log",
+      "portable_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/architecture-corrected.log",
+      "raw_sha256": "2a6a1916d0e028d4b2ece8c4252e36745aecbdd35a16ea5a0e40a9f100747567",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/architecture.log",
+      "portable_sha256": "b6ea37981788b9d64503fcdd4b31c3023fd38eab4e8f51050d570f03cc1fdcc1"
+    },
+    {
+      "raw_ref": "artifacts/p2-audit-20261109/tests/architecture-corrected.trx",
+      "raw_sha256": "58fa4be36a01465b48a2816d1799165e79c45b6e0e6b43dbd825e47bccf51147",
+      "portable_ref": "governance/evidence/p2-recovery-20261109/results/architecture.trx",
+      "portable_sha256": "e619d83a2c21832a3064b47ac635c0cc3225a3f8ffa1786b6d4bc9b818d27fd3"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/changed-AUTHENTICATION_REQUIRED.png",
+      "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/changed-FORBIDDEN_SCOPE.png",
+      "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/changed-VERSION_CONFLICT.png",
+      "sha256": "5b444a0a8fb2125fe40730caf9d4aa285917585055004bfe359d900c38c03269"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/chooser-1024.png",
+      "sha256": "596ec0d7d40dfd99d427f9a29849b1c555489c1ead76a4ab28280f0c5c2c0d39"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/chooser-1440.png",
+      "sha256": "f4047c3995cb3f51ed02d6d08c37d850ec498d6164e484251759f70b3c4d0c13"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/chooser-320.png",
+      "sha256": "eb24bb1b7abe58e9ca26ad0a4a1dfa5facab41da4ad68e89212faae29ca05f35"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/chooser-390.png",
+      "sha256": "7b57720ca989a9db69dd31c6dee6d96419849607e4f5c80aaffb53363ff53f20"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/chooser-768.png",
+      "sha256": "ae989a1a7b284f26c9c46ff8db1679f6c7c7d1c2dbabbfd90010798da466366b"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/password-1024.png",
+      "sha256": "d3d3437fc0fd03f2c8c458eb2e5cfde5b0c6e27afa5e2a25023f8db315a3f962"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/password-1440.png",
+      "sha256": "b70fd2a16d78a16ff8ebee758cd64fccffc53e88cf419d344b6c094ab65ffa09"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/password-320.png",
+      "sha256": "eca274980aa6294a02d29217e281629ae72445d7cdbbb5c9a6cf5c62834cdd8f"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/password-390.png",
+      "sha256": "9615a5c8a9eb0beeee54957fa7e5b97e4b5f0937de92539aa2a6b6f94ec52db0"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/password-768.png",
+      "sha256": "9193fcd72b4892f9a9cd890957d3c28c32ae5c2d444d3e87930a49e5715f23a8"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/server-error-1024.png",
+      "sha256": "10304b52d6eae205198b9f51dfa396fa82be32a23788b2e19e8b61b148ae3f9a"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/server-error-1440.png",
+      "sha256": "29f5e41d44a69ad1c6075bce15155b13afd7207cc37c4ee876da26b48457aff9"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/server-error-320.png",
+      "sha256": "81dcbc85cadfdb73b0640ae50ad4df69bbc70df277290df133f178e96ed9473e"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/server-error-390.png",
+      "sha256": "f96cbb908b9b1afaf4f3ecf39714fef629eb8341be1303b60d1d5c0f831487a9"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/server-error-768.png",
+      "sha256": "cc1546e5e9bfbf11db552cbf4f56bb34bdb9d897972c0af40ad2f95953e1a761"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/step-up/short-viewport.png",
+      "sha256": "170d820c7c7e65433188df8da4843853379a3825d954afd5b833d7f17d7d8e79"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/consent-desktop.png",
+      "sha256": "cd2208c6feb04bf5a29a79d43f8bd311555a23b2dbe2e654c0dc8a25704a5256"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/consent-narrow.png",
+      "sha256": "a96bb400f9bb2ee8f5282717844afe7890ab8bdeb3d16e382cf984704f0a7067"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-consent-1440.png",
+      "sha256": "96475af21f1dfb706b36583f5d2c6b6a11b65885f37c895580be86d1be36c8c5"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-consent-320.png",
+      "sha256": "5e425c91d0d31fdf4c87902e03d0c68c08858b8ff1c2c110aec57e4462159e00"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-consent-768.png",
+      "sha256": "069b237a02f9e664e7d99e268f4ffd51f288429d52febc7f2a37508445efddd3"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-personal-1440.png",
+      "sha256": "cc738ae30fd7d7b06c5c328229db8e5fde8a53b981298f523586519a34125e29"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-personal-320.png",
+      "sha256": "14813390b24df9db014392189d7b89adc472dead6b720936aaff59fc2552a5d8"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-personal-768.png",
+      "sha256": "09a645110814d074fe288b38fa6bf2ad8a9502ba86690d18589e6a07dd1235bd"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-personal-errors-1440.png",
+      "sha256": "dd1156f5dfeac742c984719a3a0918a7c8037384eb999ce31eadb5a715d250a4"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-personal-errors-320.png",
+      "sha256": "a96f9dd336557f5b5c3876e33489fc3852096c911a3ef139f5d28bdbe4586a5f"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-personal-errors-768.png",
+      "sha256": "020e363d74b2514d39f91a49b7c4042f75d369554b795a91cfd903e4e1f21612"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-ready-1440.png",
+      "sha256": "be13ff145a99a6107556dea1cabcb35a5b517264451159cfff565be3a5a65280"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-ready-320.png",
+      "sha256": "025b74f24090f0d4be2ae06e3770356ef839183d8b755a889d02534aa9091c59"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-ready-768.png",
+      "sha256": "f61718caa634374344a80ad32fee141b6ff56c0ed08d12abd5e52e25f5799c9e"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-register-1440.png",
+      "sha256": "7c51f87606d2f22f5e94914d488a381a640c3130bc6424c22758cc40da3af9bc"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-register-320.png",
+      "sha256": "e56976f391855bf2f72a7f2879e94b15117164020c23f6010d457953cb16441d"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-register-768.png",
+      "sha256": "bdc70f0a7a0d3b553fbf23c4988613713d019392601573632570c38e5e9e8303"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-registration-errors-1440.png",
+      "sha256": "7ff5697dd008707ead3ae71b79ac284641ea589b15aaf0e5c0472bfee576d240"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-registration-errors-320.png",
+      "sha256": "7b4380a31f92c5ff2c70bf43f7f3bfcb71826b7ab537d459d0a4ba43438f465d"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-registration-errors-768.png",
+      "sha256": "ccdc49527cf20984a64396aa7bc0787536094822e5bf670f37f861d3fdc7bdec"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-verification-errors-1440.png",
+      "sha256": "2a45bf8e51f8fdfd8599da002d94a7c297aa2a3758962f5a00acb17321961cd1"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-verification-errors-320.png",
+      "sha256": "3016882ee2fff13417ecf4f8737a5d88c1e638f5ea679fe3a6f7f8e51b7b9432"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-verification-errors-768.png",
+      "sha256": "e83aee23c504fba9a5e75d0fb59bc8f20f270975da6d271a02ea94949f90b720"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-verify-1440.png",
+      "sha256": "f2e0893e64eec1c110966bfd87828aeaed3a119a937034920a377bb6382a4e6c"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-verify-320.png",
+      "sha256": "d4d9f2fefada4f01260fb5ff78d35711ab2912a5140dd61b4343092ce25280e1"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/global-verify-768.png",
+      "sha256": "abb7d72d8244d7988d29f2133c124a4cf879082a828ea850e18bc013b009ab0c"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/personal-desktop.png",
+      "sha256": "cc738ae30fd7d7b06c5c328229db8e5fde8a53b981298f523586519a34125e29"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/personal-narrow.png",
+      "sha256": "e157403aae53723443c5e440d9226f05688bd3ba1df94e194f59d2016ad44eef"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/ready-desktop.png",
+      "sha256": "be13ff145a99a6107556dea1cabcb35a5b517264451159cfff565be3a5a65280"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/ready-narrow.png",
+      "sha256": "97d65295a6c368f804d67d04c68181466ee9bfc28b3af32f9c826e8c06c8c2af"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/register-desktop.png",
+      "sha256": "7c51f87606d2f22f5e94914d488a381a640c3130bc6424c22758cc40da3af9bc"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/register-narrow.png",
+      "sha256": "2496c5047313c38b74293b86751449a454a084a052db988c0f8b5217480ef794"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/verify-desktop.png",
+      "sha256": "f2e0893e64eec1c110966bfd87828aeaed3a119a937034920a377bb6382a4e6c"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/registration/verify-narrow.png",
+      "sha256": "b75df0739cc5bbae986fcb8352f46fe424e4ff93d7ab19df23065849cc3beac9"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/authentication/login-1024.png",
+      "sha256": "b1ac243fdc0063aa387200bd3647ef511e0f2d117277a69167d215b826a0f10c"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/authentication/login-1440.png",
+      "sha256": "3d3877b7b8e8283e5f71bdd33c2790e5e19c9a946507cc223e8ec0a0e23f7711"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/authentication/login-320.png",
+      "sha256": "db775263c17a8fddb2c7dfac327252a118a5876cad01c15b41783d7c589ff520"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/authentication/login-390.png",
+      "sha256": "84b6ca3082d3262071cdfed445ed534fc0d0fcdf6a0539c5d4e9c885a97dd3fe"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/authentication/login-768.png",
+      "sha256": "bc381235bab2c34a6c26c4a09674e53b8b38247301637f60f9e6765b48a221f5"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/authentication/login-server-error-1440.png",
+      "sha256": "e5c784f92dd0ab829d2ef2f044a20ed1e3726fe8283d0e93bf47842f19ac1dc4"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/authentication/login-server-error-320.png",
+      "sha256": "917befdcfe02f76c142b707b28ab9fe3a8ae37e57731c63b04f4f0cc9e86b165"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/authentication/login-server-error-768.png",
+      "sha256": "e109f3914af8ca8f42231f49568ee8788636ed707218820f49c890bdc9e025bf"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/authentication/signed-in-1024.png",
+      "sha256": "767bb463e8259a8ec81bc39095fad1e3a8abe157be72a7f27c0c524a44e7aef9"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/authentication/signed-in-1440.png",
+      "sha256": "3f43a91de7fdf7b4f2b4826502b462c54a66125f1225cce184843c02b5cc671c"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/authentication/signed-in-320.png",
+      "sha256": "c3a6aa228e158adb0c03e562ea4bfce3ac735b65c811aeaa3e86e46d14374a9d"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/authentication/signed-in-390.png",
+      "sha256": "ce21251222d3e988327c0898619fa2b3134fd1f6ae6b7687c73ad70b160fee81"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/authentication/signed-in-768.png",
+      "sha256": "2ca450361f57376d926fe9c48ec68bc71f2f19a6a4625cce4691073116aad532"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/shared/admin-input-idle-reference-788.png",
+      "sha256": "0d0dc84b92dac4ce7ea94896fc97410019465864ae58eb79ce5ae8fd9b004bf2"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/shared/desktop-light.png",
+      "sha256": "0bc878d8febd1122bf888b5ed819c17c4764562079a331c87f5040e4fb4e15c1"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/shared/narrow-light.png",
+      "sha256": "fc3538e681f1290e8e3cd979448a1c47cbad0bddd9c30f97c826939f4004484e"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/shared/shared-admin-validation-desktop.png",
+      "sha256": "c1b395b65204e5746cbf3be192e133c82674e51d786bfb81b1ef4dba60518218"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/shared/shared-admin-validation-mobile.png",
+      "sha256": "f587bd84fad51c79a3e4cd63e81188e39659153a47a3f5c356c66ed90354e6f7"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/shared/shared-user-validation-desktop.png",
+      "sha256": "bd025d313bae5afc971ba4ee2028fe9b4f9e89f24df32da90bdd0e267692eab3"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/shared/shared-user-validation-mobile.png",
+      "sha256": "8de57fe0dc7a164eadf226e23a2c3af5365b37cdd839950e3e935d7d0aad4aa2"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/real/signed-in-browser-test.png",
+      "sha256": "8805d2a6e56da43c8310fe67eac022956049fe4e4c5594781e64eaf800454b9e"
+    },
+    {
+      "path": "governance/evidence/p2-recovery-20261109/actual/real/step-up-real-completed.png",
+      "sha256": "69b0759401bfc92b03a926e04a9285698f9d5adaa4834eb7ecc9e873e9c12b38"
+    }
+  ],
+  "regression_history": {
+    "before_fix": "1 backend and4 browser new regressions failed at11d316f as expected.",
+    "after_fix": "All5 targeted checks passed at74a9985, then full affected suites passed.",
+    "first_full_registration": "Three navigation tests rejected every POST including protected pointer renewal. The assertion now forbids all authoritative command replay and requires each permitted restart to carry empty body and correct CSRF. Real backend restart/evidence and actual end-to-end behavior remain tested; no business expectation was relaxed."
+  },
+  "remaining_gate": "DEF-TUN-P2-017-GOV-001 remains OPEN. Do not infer whole-P2 readiness from the existing VALIDATION source-proof bypass. Content/configuration and later features remain pending."
+}

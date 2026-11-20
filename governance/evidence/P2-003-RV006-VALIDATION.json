@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-003-RV006",
+  "owner_work_item": "TUN-P2-019",
+  "validation_kind": "COMMITTED",
+  "result": "PASS",
+  "tested_commit_sha": "196d522b52830bae0e57c908883cba3431fd5a81",
+  "validated_commit_sha": "196d522b52830bae0e57c908883cba3431fd5a81",
+  "owned_behavior_paths": [
+    "src/Modules/Identity/Tunner.Identity.Persistence.csproj",
+    "Tunner.Platform.slnx",
+    "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+    "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+    "tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj",
+    "src/Modules/Identity/Migrations/20261116075022_P2IdentityRuntimeConfiguration.cs",
+    "src/Modules/Identity/Migrations/20261116075022_P2IdentityRuntimeConfiguration.Designer.cs"
+  ],
+  "scope": "Narrow technical compatibility for the authorized PresentationContent implementation. Preserve original closed records, production settings, package versions and business behavior; actual affected tests and committed classification must precede closure.",
+  "qualification": {"reviewer":"Independent AI reviewer p214_continuation_qa applied four current role contracts; root records the disclosed assessments.","assessed_head":"8bc60047f1d92aca816efbc28736f876003b7446","scope":"Seven declared compatibility paths only; original TUN-P2-003 DONE and earlier revisions unchanged; no whole-P2-019/Product/production acceptance.","retained_runs":[{"source_sha":"13e4fdd12fa9aa0c418b5326377216cdb870a461","summary_ref":"governance/evidence/p2-019-content-20261116/native/9d7b9df9e7054126b2dd0f340b37f327/summary.json","executed":100,"passed":76,"failed":24,"qualified_subset":"2 Identity migration,31 Content lifecycle and25 of26 configuration cases PASS; initial invocation remains failed."},{"source_sha":"de5f650cece0a541520aa4e18df5d676a21be9fb","summary_ref":"governance/evidence/p2-019-content-20261116/native/3bf29b35ca644014aa6d054560198221/summary.json","executed":31,"passed":31,"failed":0,"qualified_subset":"24 Admin Content,2 change-reason,3 Identity immutability including repaired UPDATE,2 Content migration. Configuration26 distinct PASS across retained runs, not one invocation."},{"source_sha":"196d522b52830bae0e57c908883cba3431fd5a81","summary_ref":"governance/evidence/p2-019-content-20261116/native/13e2ee804aee4647a02a1f347ee4aefd/summary.json","executed":51,"passed":51,"failed":0,"not_executed":0,"timed_out":false,"owned_containers_remaining":0,"borrowed_preserved":true}],"owned_path_equivalence":{"qualified_source_shas":["13e4fdd12fa9aa0c418b5326377216cdb870a461","de5f650cece0a541520aa4e18df5d676a21be9fb","196d522b52830bae0e57c908883cba3431fd5a81"],"git_blobs":{"src/Modules/Identity/Tunner.Identity.Persistence.csproj":"830348347f5fb51660b593dcc7d1c5f272c9795c","Tunner.Platform.slnx":"5732355ee1226a929323a6d37a04cdedf141aec8","src/Modules/Identity/IdentityPersistenceDbContext.cs":"d0ca628be7298db01c4c876a45c65d817aa1739c","src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs":"c8a522eeee629b810e62a4e758ea43a88f0cefe9","tests/Tunner.Identity.Persistence.Tests/Tunner.Identity.Persistence.Tests.csproj":"5f1de1074aeead845a29bb7d6b64bdf9c796ee29","src/Modules/Identity/Migrations/20261116075022_P2IdentityRuntimeConfiguration.cs":"7b9fe3c719e7964c873daf77ed14037c1d833f9b","src/Modules/Identity/Migrations/20261116075022_P2IdentityRuntimeConfiguration.Designer.cs":"6e05a70bc6de240b08f6e291ba58f376e133f6b5"}},"required_reviews":["governance/reviews/REV-P2-003-RV006-solution-architect.yaml","governance/reviews/REV-P2-003-RV006-tester-qa-engineer.yaml","governance/reviews/REV-P2-003-RV006-cyber-security-engineer.yaml","governance/reviews/REV-P2-003-RV006-auditor.yaml"],"remaining":"Native close-check and CLOSED eligibility must pass before lifecycle transition. Other P2-019 work remains IN_PROGRESS."}
+}

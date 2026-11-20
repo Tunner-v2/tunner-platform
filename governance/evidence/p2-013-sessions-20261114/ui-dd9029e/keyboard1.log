@@ -1,0 +1,15 @@
+[WebServer] (node:30344) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./totp.routes" without a file extension (apps/user/vite.config.ts:3:26). Add the file extension
+[WebServer]   - import "./recovery.routes" without a file extension (apps/user/vite.config.ts:4:31). Add the file extension
+[WebServer]   - import "./sessions.routes" without a file extension (apps/user/vite.config.ts:5:30). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 1 test using 1 worker
+
+(node:25872) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 tests\sessions\sessions.spec.ts:54:1 › Keyboard navigation reaches both guarded screens on desktop and narrow mobile (1.3s)
+
+  1 passed (4.7s)

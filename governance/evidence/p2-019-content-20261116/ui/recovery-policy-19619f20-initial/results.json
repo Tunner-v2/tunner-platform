@@ -1,0 +1,426 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.configuration-admin.config.ts",
+      "--grep",
+      "RecoveryCodes|Passkey typed policy.*1440|Registration typed policy.*1440|StepUpContent binding.*1440"
+    ],
+    "configFile": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\playwright.configuration-admin.config.ts",
+    "rootDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/configuration-admin",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/test-results/runs/configuration-admin",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Workspace/AI MCP/Enterprise Solution/TunnerPlatform.V2.0/web/tests/configuration-admin",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/configuration-admin/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.62.1",
+    "workers": 1,
+    "webServer": {
+      "command": "node node_modules/vite/bin/vite.js --config apps/admin/vite.config.ts --port 5298",
+      "url": "http://127.0.0.1:5298/identity/settings/authentication",
+      "reuseExistingServer": false,
+      "timeout": 30000
+    }
+  },
+  "suites": [
+    {
+      "title": "configuration.spec.ts",
+      "file": "configuration.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Registration typed policy validates, preserves retry intent and reviews every immutable field at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12419,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T22:18:11.811Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-664e5af8389092acaf09",
+          "file": "configuration.spec.ts",
+          "line": 168,
+          "column": 84
+        },
+        {
+          "title": "Passkey typed policy validates ordered inputs, retries exact intent and reviews immutable history at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 15546,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T22:18:24.828Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-78c3353e9264b3d118da",
+          "file": "configuration.spec.ts",
+          "line": 248,
+          "column": 31
+        },
+        {
+          "title": "StepUpContent binding validates preserves rejected input retries and reviews exact history at 1440",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13136,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T22:18:40.409Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-0035618c3f4dab00f772",
+          "file": "configuration.spec.ts",
+          "line": 307,
+          "column": 31
+        },
+        {
+          "title": "RecoveryCodes typed policy preserves exact Int64 validation retry and immutable history at 1440",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 16821,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-field=\"values.generationAdmission\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-field=\"values.generationAdmission\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-field=\"values.generationAdmission\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-field=\"values.generationAdmission\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n\n    at assertRecoveryDiff (C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:329:1095)\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:338:387",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                      "column": 1095,
+                      "line": 329
+                    },
+                    "snippet": "  327 | function recoveryCandidate(baseline=false):Extract<Candidate,{family:'RecoveryCodes'}>{const value=candidate('RecoveryCodes',baseline);if(value.family!=='RecoveryCodes')throw new Error('Wrong synthetic RecoveryCodes family');return value;}\n  328 | function recoveryFields(value:ReturnType<typeof recoveryCandidate>):Record<string,string>{const m=value.value.metadata,v=value.value.values,i=m.effectiveInterval,fields:Record<string,string>={'metadata.version':m.versionId,'metadata.status':m.status,'metadata.supersedes':m.supersedesVersionId??'—','metadata.scope':m.scope,'evidence.0':m.approvalEvidenceReferences[0]!,'interval.from':i.from,'interval.includesFrom':String(i.includesFrom),'interval.until':i.until??'—','interval.includesUntil':String(i.includesUntil)};for(const [key,item] of Object.entries(v))if(key!=='crypto')fields['values.'+key]=String(item);for(const [key,item] of Object.entries(v.crypto))fields['values.crypto.'+key]=String(item);return fields;}\n> 329 | async function assertRecoveryDiff(page:Page,value:ReturnType<typeof recoveryCandidate>,column:'current'|'proposed'){const fields=recoveryFields(value),rows=page.locator('.configuration-diff [data-field]');await expect(rows).toHaveCount(36);expect((await rows.evaluateAll(items=>items.map(item=>item.getAttribute('data-field')))).sort()).toEqual(Object.keys(fields).sort());for(const [key,text] of Object.entries(fields))await expect(page.locator('[data-field=\"'+key+'\"]').locator('td').nth(column==='current'?0:1)).toContainText(text);const choices={generationAdmission:labels.withinApprovedActiveSetCapacity,replacementMechanism:labels.retireExactExpectedSetsAtIssueCommit,sessionEffect:labels.noSessionMutation,deliveryMechanism:labels.oneVolatileViewWithOptionalSingleLocalDownload};for(const [key,choice] of Object.entries(choices)){const cell=page.locator('[data-field=\"values.'+key+'\"]').locator('td').nth(column==='current'?0:1);await expect(cell).toContainText(choice);await expect(cell).toContainText('(1)');await expect(cell.locator('[data-content-publication=\"fixture-chrome-p1\"]')).toHaveCount(1);}await expect(page.locator('[data-field=\"values.crypto.maximumHashWork\"]').locator('td').nth(column==='current'?0:1)).toHaveText(new RegExp(value.value.values.crypto.maximumHashWork+'$'));}\n      |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ^\n  330 | for(const width of [1440,390])test(`RecoveryCodes typed policy preserves exact Int64 validation retry and immutable history at ${width}`,async({page},info)=>{\n  331 |  test.setTimeout(120_000);await page.setViewportSize({width,height:width===1440?1024:844});const server=await fixture(page,{unknownOnce:true}),rejected:Record<string,unknown>[]=[];let reject=true;await page.route('**/identity/configuration/recovery-codes/draft',async route=>{if(!reject)return route.fallback();reject=false;rejected.push(route.request().postDataJSON() as Record<string,unknown>);return route.fulfill({status:400,contentType:'application/json',body:JSON.stringify({error_code:'VALIDATION_ERROR',detail:'fixture-private-recovery-policy-detail'})});});await select(page,'RecoveryCodes');const save=page.getByRole('button',{name:'Save draft',exact:true}),version=page.locator('[name=\"version\"]'),work=page.locator('[name=\"crypto.maximumHashWork\"]'),panel=page.locator('.configuration-fixed');await expect(panel).toHaveCount(1);await expect(panel).toHaveCSS('background-color','rgb(247, 249, 250)');await expect(page.locator('.configuration-fixed + .configuration-fields #configuration-version')).toHaveCount(1);await expect(work).toHaveAttribute('type','text');await expect(work).toHaveValue('9007199254740995');await expect(page.locator('input[name^=\"crypto.\"]')).toHaveCount(8);await expect(page.locator('[name=\"formatProfileVersion\"],[name=\"generationAdmission\"],[name=\"replacementMechanism\"],[name=\"sessionEffect\"],[name=\"deliveryMechanism\"],[name=\"crypto.nativeIdentityVersion\"]')).toHaveCount(0);for(const text of ['NATIVE_HEX32_V1','10.0.13',labels.withinApprovedActiveSetCapacity,labels.retireExactExpectedSetsAtIssueCommit,labels.noSessionMutation,labels.oneVolatileViewWithOptionalSingleLocalDownload])await expect(panel.getByText(text,{exact:true})).toBeVisible();await expect(page.getByRole('button',{name:/generate|reveal|download/i})).toHaveCount(0);\n  332 |  await version.fill('');await version.press('Tab');await save.focus();await page.keyboard.press('Enter');await expect(version).toBeFocused();await expect(page.getByRole('alert')).toContainText(labels.validationSummary);expect(rejected).toHaveLength(0);expect(server.writes).toHaveLength(0);await save.evaluate(button=>(button as HTMLButtonElement).form!.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true})));expect(rejected).toHaveLength(0);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);await page.screenshot({path:info.outputPath(`recovery-codes-required-error-${width}.png`),fullPage:true});await version.fill('fixture-v2');await version.press('Tab');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                        "column": 1095,
+                        "line": 329
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-field=\"values.generationAdmission\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-field=\"values.generationAdmission\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n\n\n  327 | function recoveryCandidate(baseline=false):Extract<Candidate,{family:'RecoveryCodes'}>{const value=candidate('RecoveryCodes',baseline);if(value.family!=='RecoveryCodes')throw new Error('Wrong synthetic RecoveryCodes family');return value;}\n  328 | function recoveryFields(value:ReturnType<typeof recoveryCandidate>):Record<string,string>{const m=value.value.metadata,v=value.value.values,i=m.effectiveInterval,fields:Record<string,string>={'metadata.version':m.versionId,'metadata.status':m.status,'metadata.supersedes':m.supersedesVersionId??'—','metadata.scope':m.scope,'evidence.0':m.approvalEvidenceReferences[0]!,'interval.from':i.from,'interval.includesFrom':String(i.includesFrom),'interval.until':i.until??'—','interval.includesUntil':String(i.includesUntil)};for(const [key,item] of Object.entries(v))if(key!=='crypto')fields['values.'+key]=String(item);for(const [key,item] of Object.entries(v.crypto))fields['values.crypto.'+key]=String(item);return fields;}\n> 329 | async function assertRecoveryDiff(page:Page,value:ReturnType<typeof recoveryCandidate>,column:'current'|'proposed'){const fields=recoveryFields(value),rows=page.locator('.configuration-diff [data-field]');await expect(rows).toHaveCount(36);expect((await rows.evaluateAll(items=>items.map(item=>item.getAttribute('data-field')))).sort()).toEqual(Object.keys(fields).sort());for(const [key,text] of Object.entries(fields))await expect(page.locator('[data-field=\"'+key+'\"]').locator('td').nth(column==='current'?0:1)).toContainText(text);const choices={generationAdmission:labels.withinApprovedActiveSetCapacity,replacementMechanism:labels.retireExactExpectedSetsAtIssueCommit,sessionEffect:labels.noSessionMutation,deliveryMechanism:labels.oneVolatileViewWithOptionalSingleLocalDownload};for(const [key,choice] of Object.entries(choices)){const cell=page.locator('[data-field=\"values.'+key+'\"]').locator('td').nth(column==='current'?0:1);await expect(cell).toContainText(choice);await expect(cell).toContainText('(1)');await expect(cell.locator('[data-content-publication=\"fixture-chrome-p1\"]')).toHaveCount(1);}await expect(page.locator('[data-field=\"values.crypto.maximumHashWork\"]').locator('td').nth(column==='current'?0:1)).toHaveText(new RegExp(value.value.values.crypto.maximumHashWork+'$'));}\n      |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ^\n  330 | for(const width of [1440,390])test(`RecoveryCodes typed policy preserves exact Int64 validation retry and immutable history at ${width}`,async({page},info)=>{\n  331 |  test.setTimeout(120_000);await page.setViewportSize({width,height:width===1440?1024:844});const server=await fixture(page,{unknownOnce:true}),rejected:Record<string,unknown>[]=[];let reject=true;await page.route('**/identity/configuration/recovery-codes/draft',async route=>{if(!reject)return route.fallback();reject=false;rejected.push(route.request().postDataJSON() as Record<string,unknown>);return route.fulfill({status:400,contentType:'application/json',body:JSON.stringify({error_code:'VALIDATION_ERROR',detail:'fixture-private-recovery-policy-detail'})});});await select(page,'RecoveryCodes');const save=page.getByRole('button',{name:'Save draft',exact:true}),version=page.locator('[name=\"version\"]'),work=page.locator('[name=\"crypto.maximumHashWork\"]'),panel=page.locator('.configuration-fixed');await expect(panel).toHaveCount(1);await expect(panel).toHaveCSS('background-color','rgb(247, 249, 250)');await expect(page.locator('.configuration-fixed + .configuration-fields #configuration-version')).toHaveCount(1);await expect(work).toHaveAttribute('type','text');await expect(work).toHaveValue('9007199254740995');await expect(page.locator('input[name^=\"crypto.\"]')).toHaveCount(8);await expect(page.locator('[name=\"formatProfileVersion\"],[name=\"generationAdmission\"],[name=\"replacementMechanism\"],[name=\"sessionEffect\"],[name=\"deliveryMechanism\"],[name=\"crypto.nativeIdentityVersion\"]')).toHaveCount(0);for(const text of ['NATIVE_HEX32_V1','10.0.13',labels.withinApprovedActiveSetCapacity,labels.retireExactExpectedSetsAtIssueCommit,labels.noSessionMutation,labels.oneVolatileViewWithOptionalSingleLocalDownload])await expect(panel.getByText(text,{exact:true})).toBeVisible();await expect(page.getByRole('button',{name:/generate|reveal|download/i})).toHaveCount(0);\n  332 |  await version.fill('');await version.press('Tab');await save.focus();await page.keyboard.press('Enter');await expect(version).toBeFocused();await expect(page.getByRole('alert')).toContainText(labels.validationSummary);expect(rejected).toHaveLength(0);expect(server.writes).toHaveLength(0);await save.evaluate(button=>(button as HTMLButtonElement).form!.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true})));expect(rejected).toHaveLength(0);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);await page.screenshot({path:info.outputPath(`recovery-codes-required-error-${width}.png`),fullPage:true});await version.fill('fixture-v2');await version.press('Tab');\n    at assertRecoveryDiff (C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:329:1095)\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:338:387"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T22:18:53.573Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\configuration-admin\\configuration-RecoveryCode-082cf-d-immutable-history-at-1440\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                    "column": 1095,
+                    "line": 329
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-8b8101890e64f947665c",
+          "file": "configuration.spec.ts",
+          "line": 330,
+          "column": 31
+        },
+        {
+          "title": "RecoveryCodes typed policy preserves exact Int64 validation retry and immutable history at 390",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 16439,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-field=\"values.generationAdmission\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-field=\"values.generationAdmission\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-field=\"values.generationAdmission\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-field=\"values.generationAdmission\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n\n    at assertRecoveryDiff (C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:329:1095)\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:338:387",
+                    "location": {
+                      "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                      "column": 1095,
+                      "line": 329
+                    },
+                    "snippet": "  327 | function recoveryCandidate(baseline=false):Extract<Candidate,{family:'RecoveryCodes'}>{const value=candidate('RecoveryCodes',baseline);if(value.family!=='RecoveryCodes')throw new Error('Wrong synthetic RecoveryCodes family');return value;}\n  328 | function recoveryFields(value:ReturnType<typeof recoveryCandidate>):Record<string,string>{const m=value.value.metadata,v=value.value.values,i=m.effectiveInterval,fields:Record<string,string>={'metadata.version':m.versionId,'metadata.status':m.status,'metadata.supersedes':m.supersedesVersionId??'—','metadata.scope':m.scope,'evidence.0':m.approvalEvidenceReferences[0]!,'interval.from':i.from,'interval.includesFrom':String(i.includesFrom),'interval.until':i.until??'—','interval.includesUntil':String(i.includesUntil)};for(const [key,item] of Object.entries(v))if(key!=='crypto')fields['values.'+key]=String(item);for(const [key,item] of Object.entries(v.crypto))fields['values.crypto.'+key]=String(item);return fields;}\n> 329 | async function assertRecoveryDiff(page:Page,value:ReturnType<typeof recoveryCandidate>,column:'current'|'proposed'){const fields=recoveryFields(value),rows=page.locator('.configuration-diff [data-field]');await expect(rows).toHaveCount(36);expect((await rows.evaluateAll(items=>items.map(item=>item.getAttribute('data-field')))).sort()).toEqual(Object.keys(fields).sort());for(const [key,text] of Object.entries(fields))await expect(page.locator('[data-field=\"'+key+'\"]').locator('td').nth(column==='current'?0:1)).toContainText(text);const choices={generationAdmission:labels.withinApprovedActiveSetCapacity,replacementMechanism:labels.retireExactExpectedSetsAtIssueCommit,sessionEffect:labels.noSessionMutation,deliveryMechanism:labels.oneVolatileViewWithOptionalSingleLocalDownload};for(const [key,choice] of Object.entries(choices)){const cell=page.locator('[data-field=\"values.'+key+'\"]').locator('td').nth(column==='current'?0:1);await expect(cell).toContainText(choice);await expect(cell).toContainText('(1)');await expect(cell.locator('[data-content-publication=\"fixture-chrome-p1\"]')).toHaveCount(1);}await expect(page.locator('[data-field=\"values.crypto.maximumHashWork\"]').locator('td').nth(column==='current'?0:1)).toHaveText(new RegExp(value.value.values.crypto.maximumHashWork+'$'));}\n      |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ^\n  330 | for(const width of [1440,390])test(`RecoveryCodes typed policy preserves exact Int64 validation retry and immutable history at ${width}`,async({page},info)=>{\n  331 |  test.setTimeout(120_000);await page.setViewportSize({width,height:width===1440?1024:844});const server=await fixture(page,{unknownOnce:true}),rejected:Record<string,unknown>[]=[];let reject=true;await page.route('**/identity/configuration/recovery-codes/draft',async route=>{if(!reject)return route.fallback();reject=false;rejected.push(route.request().postDataJSON() as Record<string,unknown>);return route.fulfill({status:400,contentType:'application/json',body:JSON.stringify({error_code:'VALIDATION_ERROR',detail:'fixture-private-recovery-policy-detail'})});});await select(page,'RecoveryCodes');const save=page.getByRole('button',{name:'Save draft',exact:true}),version=page.locator('[name=\"version\"]'),work=page.locator('[name=\"crypto.maximumHashWork\"]'),panel=page.locator('.configuration-fixed');await expect(panel).toHaveCount(1);await expect(panel).toHaveCSS('background-color','rgb(247, 249, 250)');await expect(page.locator('.configuration-fixed + .configuration-fields #configuration-version')).toHaveCount(1);await expect(work).toHaveAttribute('type','text');await expect(work).toHaveValue('9007199254740995');await expect(page.locator('input[name^=\"crypto.\"]')).toHaveCount(8);await expect(page.locator('[name=\"formatProfileVersion\"],[name=\"generationAdmission\"],[name=\"replacementMechanism\"],[name=\"sessionEffect\"],[name=\"deliveryMechanism\"],[name=\"crypto.nativeIdentityVersion\"]')).toHaveCount(0);for(const text of ['NATIVE_HEX32_V1','10.0.13',labels.withinApprovedActiveSetCapacity,labels.retireExactExpectedSetsAtIssueCommit,labels.noSessionMutation,labels.oneVolatileViewWithOptionalSingleLocalDownload])await expect(panel.getByText(text,{exact:true})).toBeVisible();await expect(page.getByRole('button',{name:/generate|reveal|download/i})).toHaveCount(0);\n  332 |  await version.fill('');await version.press('Tab');await save.focus();await page.keyboard.press('Enter');await expect(version).toBeFocused();await expect(page.getByRole('alert')).toContainText(labels.validationSummary);expect(rejected).toHaveLength(0);expect(server.writes).toHaveLength(0);await save.evaluate(button=>(button as HTMLButtonElement).form!.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true})));expect(rejected).toHaveLength(0);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);await page.screenshot({path:info.outputPath(`recovery-codes-required-error-${width}.png`),fullPage:true});await version.fill('fixture-v2');await version.press('Tab');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                        "column": 1095,
+                        "line": 329
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('[data-field=\"values.generationAdmission\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m2\u001b[39m\nTimeout:  5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('[data-field=\"values.generationAdmission\"]').locator('td').nth(1).locator('[data-content-publication=\"fixture-chrome-p1\"]')\u001b[22m\n\u001b[2m    14 × locator resolved to 2 elements\u001b[22m\n\u001b[2m       - unexpected value \"2\"\u001b[22m\n\n\n  327 | function recoveryCandidate(baseline=false):Extract<Candidate,{family:'RecoveryCodes'}>{const value=candidate('RecoveryCodes',baseline);if(value.family!=='RecoveryCodes')throw new Error('Wrong synthetic RecoveryCodes family');return value;}\n  328 | function recoveryFields(value:ReturnType<typeof recoveryCandidate>):Record<string,string>{const m=value.value.metadata,v=value.value.values,i=m.effectiveInterval,fields:Record<string,string>={'metadata.version':m.versionId,'metadata.status':m.status,'metadata.supersedes':m.supersedesVersionId??'—','metadata.scope':m.scope,'evidence.0':m.approvalEvidenceReferences[0]!,'interval.from':i.from,'interval.includesFrom':String(i.includesFrom),'interval.until':i.until??'—','interval.includesUntil':String(i.includesUntil)};for(const [key,item] of Object.entries(v))if(key!=='crypto')fields['values.'+key]=String(item);for(const [key,item] of Object.entries(v.crypto))fields['values.crypto.'+key]=String(item);return fields;}\n> 329 | async function assertRecoveryDiff(page:Page,value:ReturnType<typeof recoveryCandidate>,column:'current'|'proposed'){const fields=recoveryFields(value),rows=page.locator('.configuration-diff [data-field]');await expect(rows).toHaveCount(36);expect((await rows.evaluateAll(items=>items.map(item=>item.getAttribute('data-field')))).sort()).toEqual(Object.keys(fields).sort());for(const [key,text] of Object.entries(fields))await expect(page.locator('[data-field=\"'+key+'\"]').locator('td').nth(column==='current'?0:1)).toContainText(text);const choices={generationAdmission:labels.withinApprovedActiveSetCapacity,replacementMechanism:labels.retireExactExpectedSetsAtIssueCommit,sessionEffect:labels.noSessionMutation,deliveryMechanism:labels.oneVolatileViewWithOptionalSingleLocalDownload};for(const [key,choice] of Object.entries(choices)){const cell=page.locator('[data-field=\"values.'+key+'\"]').locator('td').nth(column==='current'?0:1);await expect(cell).toContainText(choice);await expect(cell).toContainText('(1)');await expect(cell.locator('[data-content-publication=\"fixture-chrome-p1\"]')).toHaveCount(1);}await expect(page.locator('[data-field=\"values.crypto.maximumHashWork\"]').locator('td').nth(column==='current'?0:1)).toHaveText(new RegExp(value.value.values.crypto.maximumHashWork+'$'));}\n      |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ^\n  330 | for(const width of [1440,390])test(`RecoveryCodes typed policy preserves exact Int64 validation retry and immutable history at ${width}`,async({page},info)=>{\n  331 |  test.setTimeout(120_000);await page.setViewportSize({width,height:width===1440?1024:844});const server=await fixture(page,{unknownOnce:true}),rejected:Record<string,unknown>[]=[];let reject=true;await page.route('**/identity/configuration/recovery-codes/draft',async route=>{if(!reject)return route.fallback();reject=false;rejected.push(route.request().postDataJSON() as Record<string,unknown>);return route.fulfill({status:400,contentType:'application/json',body:JSON.stringify({error_code:'VALIDATION_ERROR',detail:'fixture-private-recovery-policy-detail'})});});await select(page,'RecoveryCodes');const save=page.getByRole('button',{name:'Save draft',exact:true}),version=page.locator('[name=\"version\"]'),work=page.locator('[name=\"crypto.maximumHashWork\"]'),panel=page.locator('.configuration-fixed');await expect(panel).toHaveCount(1);await expect(panel).toHaveCSS('background-color','rgb(247, 249, 250)');await expect(page.locator('.configuration-fixed + .configuration-fields #configuration-version')).toHaveCount(1);await expect(work).toHaveAttribute('type','text');await expect(work).toHaveValue('9007199254740995');await expect(page.locator('input[name^=\"crypto.\"]')).toHaveCount(8);await expect(page.locator('[name=\"formatProfileVersion\"],[name=\"generationAdmission\"],[name=\"replacementMechanism\"],[name=\"sessionEffect\"],[name=\"deliveryMechanism\"],[name=\"crypto.nativeIdentityVersion\"]')).toHaveCount(0);for(const text of ['NATIVE_HEX32_V1','10.0.13',labels.withinApprovedActiveSetCapacity,labels.retireExactExpectedSetsAtIssueCommit,labels.noSessionMutation,labels.oneVolatileViewWithOptionalSingleLocalDownload])await expect(panel.getByText(text,{exact:true})).toBeVisible();await expect(page.getByRole('button',{name:/generate|reveal|download/i})).toHaveCount(0);\n  332 |  await version.fill('');await version.press('Tab');await save.focus();await page.keyboard.press('Enter');await expect(version).toBeFocused();await expect(page.getByRole('alert')).toContainText(labels.validationSummary);expect(rejected).toHaveLength(0);expect(server.writes).toHaveLength(0);await save.evaluate(button=>(button as HTMLButtonElement).form!.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true})));expect(rejected).toHaveLength(0);expect((await new AxeBuilder({page}).analyze()).violations).toEqual([]);await page.screenshot({path:info.outputPath(`recovery-codes-required-error-${width}.png`),fullPage:true});await version.fill('fixture-v2');await version.press('Tab');\n    at assertRecoveryDiff (C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:329:1095)\n    at C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts:338:387"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T22:19:12.666Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\test-results\\runs\\configuration-admin\\configuration-RecoveryCode-15b8e-nd-immutable-history-at-390\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Workspace\\AI MCP\\Enterprise Solution\\TunnerPlatform.V2.0\\web\\tests\\configuration-admin\\configuration.spec.ts",
+                    "column": 1095,
+                    "line": 329
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-be3a986450f9a616fb2e",
+          "file": "configuration.spec.ts",
+          "line": 330,
+          "column": 31
+        },
+        {
+          "title": "RecoveryCodes canonical routes guard direct entry reload history and capabilities",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5298,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T22:19:31.778Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-632c56986f7f8c8fb3a5",
+          "file": "configuration.spec.ts",
+          "line": 341,
+          "column": 1
+        },
+        {
+          "title": "RecoveryCodes laptop tablet and narrow form preserves exact work text keyboard correction and reflow",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11956,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T22:19:37.723Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-8451f6cdfc3608551daf",
+          "file": "configuration.spec.ts",
+          "line": 344,
+          "column": 1
+        },
+        {
+          "title": "RecoveryCodes conditional chrome preserves earlier ten family publications and blank owner input",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11481,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-16T22:19:49.704Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9271d8ec6470e516d84-21ce3aac7501cf77b728",
+          "file": "configuration.spec.ts",
+          "line": 347,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-16T22:18:08.116Z",
+    "duration": 113860.90199999999,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

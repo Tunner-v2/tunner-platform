@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "defect_id": "DEF-TUN-P2-007-DATA-001",
+  "work_item_id": "TUN-P2-007",
+  "classification": "DATA_INTEGRITY_DEFECT",
+  "severity": "SEV-2",
+  "status": "RESOLVED",
+  "environment": "Read-only review of204797f plus the paused staged/unstaged/untracked snapshot",
+  "description": "Passkey model/session columns are activated in the current in-progress worktree without the additive migration and snapshot. Finish the planned migration, immutable guards and fresh/upgrade/password-compatibility tests before validation.",
+  "expected_behavior_ref": "docs/authority/current/development/17_Account_Identity_and_Session_FRD.md",
+  "evidence": [
+    "governance/evidence/P2-001-007-REVIEW-FINDINGS-20261109.json",
+    "governance/evidence/TUN-P2-007-DEFECT-VERIFICATION-20261110.json",
+    "governance/evidence/p2-recovery-20261109/passkey-proof-nav/execution-index.json"
+  ],
+  "affected_versions": [
+    "204797f9e147f5f3d942baf9074d05cdb2a1f6d7"
+  ],
+  "created_at": "2026-11-09T16:51:56.477Z",
+  "updated_at": "2026-11-10T12:48:20.365Z"
+}

@@ -1,0 +1,3 @@
+import {defineConfig} from '@playwright/test';
+/** Existing runner, controlled BFF and actual User entry; no new framework or runtime policy. */
+export default defineConfig({outputDir:'test-results/runs/devices',testDir:'./tests',testMatch:['**/devices.api.test.tsx','**/devices/devices.spec.ts'],fullyParallel:false,workers:1,reporter:[['list'],['json',{outputFile:'test-results/devices/results.json'}]],use:{baseURL:'http://127.0.0.1:5196',viewport:{width:1440,height:1100},channel:'msedge'},webServer:{command:'node node_modules/vite/bin/vite.js --config apps/user/vite.config.ts --port 5196',url:'http://127.0.0.1:5196/registration/',reuseExistingServer:true,timeout:30000}});

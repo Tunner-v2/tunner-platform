@@ -1,0 +1,1104 @@
+{
+  "schema_version": 1,
+  "scope_id": "TUN-P2-010",
+  "evidence_type": "SCOPED_SOURCE_SECURITY_AND_DEPENDENCY_REUSE",
+  "result": "COMPLETED_SCOPED_CHECKS_WITH_REVIEWED_SECRET_FINDING",
+  "recorded_at": "2026-11-12T20:43:43.5015031+00:00",
+  "tested_commit_sha": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+  "source_binding": {
+    "owned_behavior_path_count": 106,
+    "owned_behavior_paths_changed_against_tested_commit": [],
+    "metadata_changes_do_not_alter_native_build_binding": true
+  },
+  "admitted_scope": {
+    "source": "governance/evidence/TUN-P2-010-VALIDATION.json owned_behavior_paths; existing task evidence and REV-TUN-P2-010 role records",
+    "secret_candidate_count": 183,
+    "binary_nul_skipped": 29,
+    "sast_owned_source_count": 81,
+    "exclusions": [
+      "Unknown %SystemDrive% tree is unread/unscanned.",
+      "Unrelated dirty13/operator settings are not included.",
+      "Later DATA-INVENTORY/DATA-LIFECYCLE metadata and compatibility-RV wrappers are outside this183-file secret scan; root owns final metadata delta.",
+      "The receipt excludes itself from its hash manifest; root owns final metadata-delta scanning.",
+      "No repository-wide secret/SAST clearance, image/container scan, live provider or production-support approval is claimed."
+    ]
+  },
+  "secret_scan": {
+    "status": "FAIL",
+    "invocation": "Invoke-TunnerSecretScan.ps1 -RepositoryRoot <repo-root> -Path <the183 scan_manifest paths>",
+    "script": "tools/security/Invoke-TunnerSecretScan.ps1",
+    "script_sha256": "594e5e1b4d95942e554b9b1a1fbf4016ce7241bb4d17ffedebb924163761c4ca",
+    "started_at": "2026-11-12T20:36:58.2580087Z",
+    "completed_at": "2026-11-12T20:36:58.9807705Z",
+    "content_hash_drift_during_scan": 0,
+    "findings": [
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/FederationOidcNativeProtocolTests.cs",
+        "line": 397,
+        "rule": "generic-secret-assignment",
+        "matched_value_recorded": false,
+        "security_disposition": "FALSE_POSITIVE_PUBLIC_SYNTHETIC_FIXTURE",
+        "independent_reviewer": "cyber-security-engineer (/root/p2_009_recovery_state_audit)",
+        "rationale": "Test-only HttpMessageHandler constant, consumed only by the explicit synthetic test secret source and in-memory token endpoint with one-use code/PKCE; production BFF has no test-assembly dependency. No live credential, rotation, suppression or waiver is inferred."
+      }
+    ],
+    "limitations": [
+      "Actual scanner result remains FAIL; reviewed benign fixture disposition is separate from scanner output."
+    ]
+  },
+  "sast_scan": {
+    "status": "PASS",
+    "candidate_count": 81,
+    "text_inspected": 81,
+    "findings": [],
+    "rules": [
+      "unsafe-binary-serialization",
+      "unsafe-json-polymorphism",
+      "insecure-hash-implementation",
+      "unsafe-xml-resolver"
+    ],
+    "rule_source": "tools/security/Invoke-TunnerSastPolicyScan.ps1",
+    "rule_source_sha256": "3c7e71681b62b44efcc56a486a845dea8f3b48276c91a245e9abd41ec72ee80c",
+    "invocation_type": "SCOPED_INLINE_POWERSHELL_REPLAY_OF_EXISTING_RULES",
+    "command_excerpt": "Read the existing script Name/Pattern literals; require exactly four rules; select only owned_behavior_paths with .cs/.csproj/.props/.targets/.ps1/.sh; skip NUL binary; apply [regex]::Matches and retain path/line/rule only.",
+    "scanner_modified": false,
+    "repository_wide_scanner_invoked": false,
+    "source_manifest": "scan_manifest entries belonging to owned_behavior_paths with the listed extensions",
+    "limitation": "Four policy-pattern checks are not a semantic SAST engine or whole-repository security clearance."
+  },
+  "dependency_reuse": {
+    "packages": [
+      {
+        "id": "Microsoft.AspNetCore.Authentication.OpenIdConnect/10.0.15",
+        "checks": [
+          {
+            "project_assets": "src/Modules/Identity/obj/project.assets.json",
+            "present": false,
+            "content_hash_matches": false
+          },
+          {
+            "project_assets": "src/Tunner.User.Bff/obj/project.assets.json",
+            "present": true,
+            "content_hash_matches": true
+          },
+          {
+            "project_assets": "tests/Tunner.Identity.Persistence.Tests/obj/project.assets.json",
+            "present": true,
+            "content_hash_matches": true
+          }
+        ]
+      },
+      {
+        "id": "Microsoft.IdentityModel.JsonWebTokens/8.19.2",
+        "checks": [
+          {
+            "project_assets": "src/Modules/Identity/obj/project.assets.json",
+            "present": false,
+            "content_hash_matches": false
+          },
+          {
+            "project_assets": "src/Tunner.User.Bff/obj/project.assets.json",
+            "present": true,
+            "content_hash_matches": true
+          },
+          {
+            "project_assets": "tests/Tunner.Identity.Persistence.Tests/obj/project.assets.json",
+            "present": true,
+            "content_hash_matches": true
+          }
+        ]
+      },
+      {
+        "id": "Microsoft.IdentityModel.Protocols/8.19.2",
+        "checks": [
+          {
+            "project_assets": "src/Modules/Identity/obj/project.assets.json",
+            "present": false,
+            "content_hash_matches": false
+          },
+          {
+            "project_assets": "src/Tunner.User.Bff/obj/project.assets.json",
+            "present": true,
+            "content_hash_matches": true
+          },
+          {
+            "project_assets": "tests/Tunner.Identity.Persistence.Tests/obj/project.assets.json",
+            "present": true,
+            "content_hash_matches": true
+          }
+        ]
+      },
+      {
+        "id": "Microsoft.IdentityModel.Protocols.OpenIdConnect/8.19.2",
+        "checks": [
+          {
+            "project_assets": "src/Modules/Identity/obj/project.assets.json",
+            "present": false,
+            "content_hash_matches": false
+          },
+          {
+            "project_assets": "src/Tunner.User.Bff/obj/project.assets.json",
+            "present": true,
+            "content_hash_matches": true
+          },
+          {
+            "project_assets": "tests/Tunner.Identity.Persistence.Tests/obj/project.assets.json",
+            "present": true,
+            "content_hash_matches": true
+          }
+        ]
+      },
+      {
+        "id": "System.IdentityModel.Tokens.Jwt/8.19.2",
+        "checks": [
+          {
+            "project_assets": "src/Modules/Identity/obj/project.assets.json",
+            "present": false,
+            "content_hash_matches": false
+          },
+          {
+            "project_assets": "src/Tunner.User.Bff/obj/project.assets.json",
+            "present": true,
+            "content_hash_matches": true
+          },
+          {
+            "project_assets": "tests/Tunner.Identity.Persistence.Tests/obj/project.assets.json",
+            "present": true,
+            "content_hash_matches": true
+          }
+        ]
+      }
+    ],
+    "receipt_sha256": "d5e5249cfb351da2cfa231495d38d4c0674f7a05a5ea9c48943734654d2c5615",
+    "central_packages_sha256": "5e9dd542890525e9814b7401c0595f1218d957a09202d8f68fb256f7c37dca6a",
+    "assets": [
+      {
+        "path": "src/Modules/Identity/obj/project.assets.json",
+        "sha256": "2a3b9c9934d6bc4e28a2f32be581384e876c6efb8441430b41ebebfa1def3693"
+      },
+      {
+        "path": "src/Tunner.User.Bff/obj/project.assets.json",
+        "sha256": "6b6dfeef8f2579c34f8543950076f3731d7078c164b7db86b603cdf28fcb047a"
+      },
+      {
+        "path": "tests/Tunner.Identity.Persistence.Tests/obj/project.assets.json",
+        "sha256": "d9b903593a43d63f34db4ab6f703e8a94fcafcf3f31a7a43c739c3d6f31464d7"
+      }
+    ],
+    "status": "QUALIFIED_FIVE_PACKAGE_CONTENT_HASHES_REUSED",
+    "qualified_receipt": "artifacts/p2-010-federation-20261112/dependency-qualification/dependency-execution.json",
+    "metadata_qualification": "artifacts/p2-010-federation-20261112/dependency-qualification/oidc-10.0.15-read-only-qualification.json",
+    "findings": [
+      "Existing2026-11-12 audited restore/signature receipt records all5 payload signatures PASS and no prior package version/content-hash drift.",
+      "All5 exact qualified IDs/content hashes match current BFF/test assets and remain absent from Identity assets, as designed.",
+      "Historical restore auditing/signature success is not fresh advisory/SBOM/provenance success; null advisory metadata is not clearance."
+    ]
+  },
+  "fresh_supply_chain": {
+    "status": "PASS",
+    "as_of_date": "2026-11-12",
+    "command": "New-TunnerSupplyChainEvidence.ps1 -AsOf 2026-11-12 -RepositoryRoot <repo-root> -OutputDirectory artifacts/p2-010-federation-20261112/final-supply-chain",
+    "authorization": {
+      "user_condition": "if it takes long then keep external check blocked, if it takes less than 10 minutes then you're authorized",
+      "scope": "Existing read-only NuGet advisory/dependency metadata generator only; no restore/build/install/upgrade.",
+      "single_authorized_attempt": true,
+      "hard_total_limit_seconds": 570
+    },
+    "authorized_attempt": {
+      "status": "PASS",
+      "source_commit": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+      "started_at": "2026-11-12T20:42:50.6814818+00:00",
+      "completed_at": "2026-11-12T20:43:43.5015031+00:00",
+      "elapsed_seconds": 52.821,
+      "hard_total_limit_seconds": 570,
+      "termination_reserve_seconds": 5,
+      "owned_process_id": 25464,
+      "owned_process_start_utc": "2026-11-12T20:42:50.7055721Z",
+      "process_closed": true,
+      "timed_out": false,
+      "owned_tree_stop_requested": false,
+      "exit_code": 0,
+      "script": "tools/security/New-TunnerSupplyChainEvidence.ps1",
+      "script_sha256": "064b43d4b11aa6be3a16cfe1a7f551449ca864926395b8d2156b41bcdb9d5907",
+      "output_directory": "artifacts/p2-010-federation-20261112/final-supply-chain",
+      "stdout_private_log": "artifacts/p2-010-federation-20261112/final-supply-chain/generator.stdout.private.log",
+      "stderr_private_log": "artifacts/p2-010-federation-20261112/final-supply-chain/generator.stderr.private.log",
+      "raw_output_printed": false,
+      "files": [
+        {
+          "path": "artifacts/p2-010-federation-20261112/final-supply-chain/tunner.spdx.json",
+          "sha256": "f0aa3eccdfe316780633e4532de2440e28eda764a8e6c40b2ad7498f9ed75f4f"
+        },
+        {
+          "path": "artifacts/p2-010-federation-20261112/final-supply-chain/tunner.provenance.json",
+          "sha256": "69755f68baad63e46abc47877f739825f0c79823b51d666c7f932a00899e991d"
+        }
+      ]
+    },
+    "output_verification": {
+      "status": "PASS",
+      "sbom_format": "SPDX-2.3",
+      "package_count": 119,
+      "provenance_source": "734828a78d9736eaa8da32c1b80ae0654a7f3641",
+      "working_tree_clean_before_generation": false,
+      "checksum_input_count": 9,
+      "checksum_input_mismatch_count": 0,
+      "dependency_scopes": [
+        "Tunner.Governance.sln",
+        "Tunner.Platform.slnx",
+        "tests/Tunner.Installer.Tests/Tunner.Installer.Tests.csproj"
+      ],
+      "qualified_packages": [
+        {
+          "id": "Microsoft.AspNetCore.Authentication.OpenIdConnect/10.0.15",
+          "present_in_sbom": true
+        },
+        {
+          "id": "Microsoft.IdentityModel.JsonWebTokens/8.19.2",
+          "present_in_sbom": true
+        },
+        {
+          "id": "Microsoft.IdentityModel.Protocols/8.19.2",
+          "present_in_sbom": true
+        },
+        {
+          "id": "Microsoft.IdentityModel.Protocols.OpenIdConnect/8.19.2",
+          "present_in_sbom": true
+        },
+        {
+          "id": "System.IdentityModel.Tokens.Jwt/8.19.2",
+          "present_in_sbom": true
+        }
+      ],
+      "portable_files": [
+        {
+          "path": "governance/evidence/p2-010-federation-20261112/native-734828a/tunner.spdx.json",
+          "sha256": "f0aa3eccdfe316780633e4532de2440e28eda764a8e6c40b2ad7498f9ed75f4f",
+          "byte_exact": true
+        },
+        {
+          "path": "governance/evidence/p2-010-federation-20261112/native-734828a/tunner.provenance.json",
+          "sha256": "69755f68baad63e46abc47877f739825f0c79823b51d666c7f932a00899e991d",
+          "byte_exact": true
+        }
+      ],
+      "private_logs": [
+        {
+          "path": "artifacts/p2-010-federation-20261112/final-supply-chain/generator.stdout.private.log",
+          "sha256": "106bee22ae2c65fd1b0c9fde87c129dc120eb12273f1aa1567f5215c14e7503e",
+          "bytes": 419,
+          "portable": false
+        },
+        {
+          "path": "artifacts/p2-010-federation-20261112/final-supply-chain/generator.stderr.private.log",
+          "sha256": "33b66d6852f7617b2065b1af0068bee732172647a6bdc55287430d19c1cfa26a",
+          "bytes": 1662,
+          "portable": false
+        }
+      ],
+      "stderr_review": {
+        "nuget_or_msbuild_diagnostic_codes": [],
+        "advisory_failure_warning": false,
+        "vulnerability_warning": false,
+        "raw_log_printed": false
+      }
+    },
+    "sbom_emitted": true,
+    "provenance_emitted": true,
+    "raw_output_printed": false,
+    "prior_blocked_history": {
+      "status": "BLOCKED_UNVERIFIED",
+      "command": "New-TunnerSupplyChainEvidence.ps1 -AsOf 2026-11-12 -RepositoryRoot <repo-root> -OutputDirectory <unique artifacts/p2-010-federation-20261112/security-final-* directory>",
+      "first_attempt": {
+        "status": "FAIL",
+        "started_at": "2026-11-12T20:31:23.3894758Z",
+        "completed_at": "2026-11-12T20:32:00.6713119Z",
+        "output_directory": "artifacts/p2-010-federation-20261112/security-final-734828a-2fe2ee6e769e4740a2f531255292ccf1",
+        "classification": "EXISTING_SUPPLY_CHAIN_GENERATOR_FAILED",
+        "exception_type": "RuntimeException",
+        "raw_output_persisted": false
+      },
+      "safe_classification_attempt": {
+        "status": "FAIL",
+        "classification": "DOTNET_COMMAND_FAILED",
+        "scope": "Tunner.Governance.sln",
+        "phase": "ADVISORY",
+        "exit_code": 1,
+        "diagnostic_codes": [],
+        "output_directory": "artifacts/p2-010-federation-20261112/security-final-classify-d6b9a817f2d74a6aa615f7327646d16f",
+        "raw_output_persisted": false
+      },
+      "failing_command": "dotnet list Tunner.Governance.sln package --vulnerable --include-transitive --format json --no-restore",
+      "failing_command_exit_code": 1,
+      "inventory_stage_succeeded": true,
+      "sbom_emitted": false,
+      "provenance_emitted": false,
+      "raw_output_persisted": false,
+      "escalated_retry_executed": false,
+      "automatic_approval_review": {
+        "result": "REJECTED",
+        "reason": "The escalated command would make external NuGet/advisory requests from the repository; authorization for sending repository-derived dependency metadata to that external destination was not established.",
+        "no_bypass": true
+      },
+      "required_next_action": "Await the user's explicit authorization for this read-only NuGet/advisory metadata disclosure before retrying the SAME existing generator; update this receipt after actual result. No alternate transport or substitute generator.",
+      "limitations": [
+        "No vulnerability finding is inferred from exit1.",
+        "No fresh no-vulnerability, SBOM, provenance or release attestation claim is made.",
+        "No prior same-effective-graph SBOM has been established for reuse here; no009 scan is borrowed."
+      ]
+    },
+    "required_next_action": "Root/Cyber independently verify and bind these actual results to final metadata; perform the remaining metadata-delta secret scan. No further generator attempt is required.",
+    "limitations": [
+      "The generator reported no vulnerable resolved package across its three configured dependency scopes as of2026-11-12; this is the actual tool result, not permanent or whole-environment advisory clearance.",
+      "SPDX119-package inventory declares licenseConcluded/licenseDeclared NOASSERTION; declared MIT/package-signature qualification remains its separate existing evidence.",
+      "Local provenance is unsigned, correctly records the dirty metadata working tree, and is not a release attestation or production deployment approval.",
+      "No image/container scan, live-provider authentication, production-support approval, restore, build, package installation or upgrade was performed."
+    ]
+  },
+  "execution_limits": {
+    "restore": false,
+    "install": false,
+    "build": false,
+    "tests": false,
+    "qualifiers": false,
+    "image_or_container_scan": false,
+    "source_changed": false,
+    "dependencies_upgraded": false,
+    "live_provider": false,
+    "external_posts": false
+  },
+  "scan_manifest": [
+    {
+      "path": "Directory.Packages.props",
+      "sha256": "5e9dd542890525e9814b7401c0595f1218d957a09202d8f68fb256f7c37dca6a"
+    },
+    {
+      "path": "docs/contracts/ui-inventory.json",
+      "sha256": "eb906c8d603beeba8ceac30bf3c0f23a5a9f76b43a076c6f853ef04319570290"
+    },
+    {
+      "path": "governance/evidence/P2-010-CALLBACK-FOUNDATION-CHECKPOINT.json",
+      "sha256": "4bc1cd58b9db1f23a46668f2524402d7055da2a2104748adf8aee03032057094"
+    },
+    {
+      "path": "governance/evidence/P2-010-COMPATIBILITY-SCOPE.json",
+      "sha256": "806a0689f19da3225c30f8b61f352e5d6dff9be55bf618b1693ae309e392f76c"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/native-734828a/build-binding.json",
+      "sha256": "9ba2f980e0201af68872d07a77e535bcbbe3b1f391238d0bc5c6d814904f7497"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/native-734828a/private76.json",
+      "sha256": "1681a04d5c7038ed0311137804fb1c0d2c7edff53fe2b9f54758e5eaa4e32367"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/native-734828a/protocol-qualification.json",
+      "sha256": "73af2ad9b127845113bced808b9ce0e51c77008c901f7a51c6e1e2c1e3a387c4"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/native-734828a/resource-details.json",
+      "sha256": "a61745ec5727be229bbb9902f716be98a734f4c08e87b2053aefd73e9c21586d"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/native-734828a/resource-qualification.json",
+      "sha256": "c15aadecc3e9512b4758a49bb4ecfbc6f0309d715b301df12a8f1ba30eaf29af"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/preparation/authority-resolution.json",
+      "sha256": "eee2b76cd1aee8146ab4c1121b24f963ab840316b3eff8fa56a396d8059ea18e"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/preparation/inputs.json",
+      "sha256": "739f287c7b6438c71adba3c71d25ef5c1ed4cdc0dbf3642357732f867d116931"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/preparation/primary-research.json",
+      "sha256": "870c7c20ea43472685a448a6a5287587748d98cdf3840e05de27e8ca4a338ae7"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/preparation/security-compliance-startup-803e802.json",
+      "sha256": "5f97b052f2c1a5f2c10fe98a99e8afc793975cc832873702b21c89d48b763a23"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/preparation/startup-ba-architecture-803e802.json",
+      "sha256": "e3332e93b6f06a86bd43428ffbfcef0476979f2687fc1c065d46a74f8c9cb8a8"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/preparation/ui-startup-review.json",
+      "sha256": "5e11f8ad3efb6ad058325e19215c6f1dd9d7baab48b748c97c1d6a437bcb8990"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/management-proof-shared-stepup-regression/results.json",
+      "sha256": "7e2fc06066e7529576df7071043eca12f7322495c926c561bfd24a0219c13bf2"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/management-shared-passkeys-regression/results.json",
+      "sha256": "4cdf58be7d9529a2ba7396209bd8b9f789a3bfce4d26e337c70f3020bf1a652c"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/management-wip-ui/results.json",
+      "sha256": "c5ffabd84b30525ba9ac3eb554c0f2ec2b96975837e1bdb94c44e748cfef6592"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/management-wip-ui/runs/federation-management-Mana-0d8db-y-and-retained-shell-at-320/federation-unlink-320.png",
+      "sha256": "a22336825c19c9ff49889b90cf41a4144f6b35c1315648d1ce89c984d3080118"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/management-wip-ui/runs/federation-management-Mana-b2306--and-retained-shell-at-1440/federation-unlink-1440.png",
+      "sha256": "b9308e9c78f647b7a30b36297dc300a1805d21bb53dcdb81fad2b26964735e6d"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/operation-proof-focused-completion/results.json",
+      "sha256": "0f24609c49fdd4a72b63df186f9028bdb4425f939fec4035aa7a837b696e5590"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/operation-proof-focused-locator/results.json",
+      "sha256": "6ad086d863f75e01155e0c899699cb7fc0922c2a46ae8cb868edb6c60ee5c5c1"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/operation-proof-wip-ui/results.json",
+      "sha256": "c4edc7d1bc743c03a58168c675dd415eb1ee6cab26d19340da398ae6382f9139"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/operation-proof-wip-ui/runs/federation-Federated-colle-18f8f-accessible-geometry-at-1440/federation-chooser-1440.png",
+      "sha256": "270581cf459a92a0b09da9a33f66e0ee66df7187e3193f49e50474c15346134e"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/operation-proof-wip-ui/runs/federation-Federated-colle-18f8f-accessible-geometry-at-1440/federation-issued-1440.png",
+      "sha256": "62c4cd93b63d4cdfaa8836fa6e31a7d0257e3afd2e8d78bc1b254103792aa75e"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/operation-proof-wip-ui/runs/federation-Federated-colle-527c3--accessible-geometry-at-320/federation-chooser-320.png",
+      "sha256": "e9470ddd15012bd1b8f6a7c5072d049d42907f8a07f5898262e4f16ec2be1dee"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/operation-proof-wip-ui/runs/federation-Federated-colle-527c3--accessible-geometry-at-320/federation-issued-320.png",
+      "sha256": "7b3b4c974a9c81cb5764d973ceae6ee83e24fe2cbe3873bcd2e6d1c5a44e810e"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/exit-code.txt",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/manual-cleanup.txt",
+      "sha256": "3a4bcf45b55f64f91f43334e07d16404c3e6cbcde1809edbc7cef2364fb8aa86"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/exit-code.txt",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/manual-cleanup.txt",
+      "sha256": "054f2c8cb54eb6abc169aa651bda6a62e55604c2f1139a0255bb0dc0e5e74a27"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/ordinary-regression/results.json",
+      "sha256": "ac2e11ce14815cbee0f576d10e4b4d36341db2782524b02e8177eef1d823f097"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/results.json",
+      "sha256": "60a64317967ae0c5bdb1957b79fa1cbd652e9c001ae836e0c07999a0257bc250"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-11b05-rd-and-accessibility-at-320/federation-intake-error-320.png",
+      "sha256": "0288d864da2e0f12c3280fae75ecd78ef1529dc9830b1a7052c011f82e7d5a46"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-11b05-rd-and-accessibility-at-320/federation-intake-normal-320.png",
+      "sha256": "dc46a2fca01684ad972ce0e635ca20d0ba2256fc9ee183a0aeb0ac0233e6fae3"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-96131-rd-and-accessibility-at-390/federation-intake-error-390.png",
+      "sha256": "b6ba77cd4225dde2eb31b340bbd24755114a1a8dcfeaf4dfa16d54a469a686e8"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-96131-rd-and-accessibility-at-390/federation-intake-normal-390.png",
+      "sha256": "2aed60a118551d13a522af9b9845f84ef03874b7fa4abaca2b5e8e85e1db81ab"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-e5cef-d-and-accessibility-at-1440/federation-intake-error-1440.png",
+      "sha256": "149502cc078de9c095ac32a49e3b86e8c3852ac3f0984144ede9d9650383c5e2"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/runs/federation-Approved-passwo-e5cef-d-and-accessibility-at-1440/federation-intake-normal-1440.png",
+      "sha256": "edc1775e7b4e3b4129dc08ac08de8b7e9dfc84296ccc326b552085af2a0076e6"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/tsc.exit-code.txt",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/exit-code.txt",
+      "sha256": "13bf7b3039c63bf5a50491fa3cfd8eb4e699d1ba1436315aef9cbe5711530354"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/manual-cleanup.txt",
+      "sha256": "36364095946b9bf1474f1b8419364d80f28b278a7a05f0af3b4168e6c0b3251f"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/results.json",
+      "sha256": "fd62a7b7f75f5baec6b99db8e83a7c46d63d1d8d5e82ba7db1fa1275169b97e8"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/runs/federation-V01-focused-EXP-996e5-t-desktop-and-narrow-mobile/federation-expired-1440.png",
+      "sha256": "a35b2ee99719ff36a5a0a81fff4181ef288de00f50013feb46a19f537e928a61"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/runs/federation-V01-focused-EXP-996e5-t-desktop-and-narrow-mobile/federation-expired-320.png",
+      "sha256": "629373d97c4c8becae68e9c33e1c5bb96dc29093f56bc58d6ad18171f16f1266"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/runs/federation-V01-focused-REJ-4cc6b-t-desktop-and-narrow-mobile/federation-rejected-1440.png",
+      "sha256": "bb852a69d8c69ec020c333083dfe71be5fc336944294b6455ff7e0a5c94657ae"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/runs/federation-V01-focused-REJ-4cc6b-t-desktop-and-narrow-mobile/federation-rejected-320.png",
+      "sha256": "e7cdf786734119310e01e7d0ab4f09cd20316ca38e2e8661c6351d1816b11389"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/runs/federation-V01-focused-UNK-79761-t-desktop-and-narrow-mobile/federation-unknown-1440.png",
+      "sha256": "ef9b021066d9a99816de58a99c39f225afede809ccca2ef3bea7c9b56d22140f"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/registration-wip-ui/v01-regression/runs/federation-V01-focused-UNK-79761-t-desktop-and-narrow-mobile/federation-unknown-320.png",
+      "sha256": "709d206bd3b53c7d60c9718e3c52e70e7999b17bdbad6a516ef08370fc2daf87"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/sign-in-5fc094e-ui-focused/results.json",
+      "sha256": "0d136a7fee2e48fbefd12a7c1aef6992a6d8485de1f99dab38870f81028122d8"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/sign-in-wip-ui/results.json",
+      "sha256": "78b38204977647a66f3bc7d6261de125e13812eddef5c2fbfb2384f21fd98da8"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/sign-in-wip-ui/screenshots/federation-recovery-1440.png",
+      "sha256": "d64e9379c875ace6d417f707539fc400b6bee7eb1f0bd5576c21a79276e048fc"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/sign-in-wip-ui/screenshots/federation-recovery-320.png",
+      "sha256": "5890e3cfd501b5383bfb8ffdd93c20508f93a1a9ba9c475663936fe0542bae67"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/sign-in-wip-ui/screenshots/federation-recovery-390.png",
+      "sha256": "0d02f31446c754dd235fafe39d124a5d74329ef3778da4b3569881e3866b782e"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/public/sign-in-wip-ui/screenshots/federation-recovery-768.png",
+      "sha256": "2785f466aa58210919899cd451b40d19b16d2a5c077da711a698b8b1a000d3bb"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/references/figma-13-2.png",
+      "sha256": "bd851601401d6f00052765d6ae184f3c4e5545f91e49c037818b4029df3bc565"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/references/figma-2-4.png",
+      "sha256": "b847c61833c053614ca4b33fa15d4231f4851ce0504b44c37668dc1fb5657d73"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/references/figma-36-2.png",
+      "sha256": "c6ed14acb9a898acbe08f6fa26733ef22be7f025554c39269a42c53a785df9cd"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/references/figma-46-116.png",
+      "sha256": "14a7b69b98be038391403fdfd2b689f980188380cafa3e9a6efb24849b1099ba"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/references/figma-46-24.png",
+      "sha256": "4bbb0f8a2931b48ce2ca3391a7635ef3b15289fae32666ffa3fb086830b30cb0"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/references/figma-46-44.png",
+      "sha256": "c72db0ddc0c5186a62a43a4d861e6c33f607350d1711d55b0b86ad9a08ab5e9a"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/references/figma-98-28.png",
+      "sha256": "3fcb345a9475b6776cfc62bf77388ab8512bff8f9362453e9dbd330f7f75a643"
+    },
+    {
+      "path": "governance/evidence/p2-010-federation-20261112/startup-native.json",
+      "sha256": "06c4db479a9a54d5157b6b9db79eceb77ad6f10a14774237d0b349c15ac3dbff"
+    },
+    {
+      "path": "governance/evidence/TUN-P2-010-STARTUP-REVIEWS.json",
+      "sha256": "56f2e29a2c4e2f7dd9b49c973ec7b65be32aa1424df6891e97e58c986cd6b150"
+    },
+    {
+      "path": "governance/evidence/TUN-P2-010-UI-COMPLIANCE.json",
+      "sha256": "70d397e5bafa2ffb517199cc3943f9adefe9230e328d476a77e74f2f9df6263b"
+    },
+    {
+      "path": "governance/evidence/TUN-P2-010-VALIDATION.json",
+      "sha256": "efccac8adf629c0a6d4ed69cb13028e88f846b7c2b2603a34ccd1b9658e5f3ab"
+    },
+    {
+      "path": "governance/evidence/TUN-P2-010-VISUAL-CONSENT.json",
+      "sha256": "f14f0d8bd6e11821fc252b6be4854a58f679c0a1e8dc3e505d66596c7f00e12c"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-010-auditor.yaml",
+      "sha256": "48ef1e27d19c8c6826b419f7308c91833a33b21ffb6a53080a839aa96621048f"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-010-compliance-specialist.yaml",
+      "sha256": "b8bef4be820c964695042c441f067016203c2435fe213e348a0be654d9b48600"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-010-content-writer.yaml",
+      "sha256": "a395aabe9cf795c967bde78ee2d7a80a377115d603cf3f50baaf431e7bccee6d"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-010-cyber-security-engineer.yaml",
+      "sha256": "e329ae0a0b26fbb1ca00c5a7ec0f04c37480f7d91ee5b393bd9df74819f97926"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-010-end-user-ux-reviewer.yaml",
+      "sha256": "03939b415b0c67ab0a8e4c0c33cc181bec1ea2aa94e1cd5a8535feb4e21c0ce0"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-010-frontend-engineer.yaml",
+      "sha256": "6ffa795414e072adb8080ba7958ecf874b84d996e9dc4e5c611d73683c0a8fa4"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-010-full-stack-engineer.yaml",
+      "sha256": "85092482120100f183827e33f5f6f257cc39160e6475201f68c30b4acb480212"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-010-rd-engineer.yaml",
+      "sha256": "0e49a51cbd01e23bad842e2a54b186d96b706c27f06c4a16ffbdb07cb57b025f"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-010-sdk-engineer.yaml",
+      "sha256": "4aee0722540241363cec57679637a6e3c2725a8754a61933828d2163a71b2eab"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-010-solution-architect.yaml",
+      "sha256": "a1d35d0e5119989daa273a6ffcfa7d17b4cdaefee305ffc1cb942f43ef8791d3"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-010-tester-qa-engineer.yaml",
+      "sha256": "74396adb37b3e47306651ae8f843e7df79eb2f2eeadd58bb5a5caea8393dd627"
+    },
+    {
+      "path": "governance/reviews/REV-TUN-P2-010-ui-ux-engineer.yaml",
+      "sha256": "d9ea6a0d2ebe9be7d4d7728fccc973920df6ce054eb24da365395e68d7126c4f"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationApplication.cs",
+      "sha256": "cdfbf88b4a820a20641483882ee95e6be2a856c7acfef95701d655ce91166018"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationEndpoints.cs",
+      "sha256": "2a1912390a8b14c41f67093b1f74067c82273169073c77181fa48eb373cf9535"
+    },
+    {
+      "path": "src/Modules/Identity/AuthenticationRows.cs",
+      "sha256": "16856a070153fcfc44c5784108c6121075877d596ef771a0182e15f5ea2a5225"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAttemptApplication.cs",
+      "sha256": "40c52f51412e2601fcb890da620c8d4c7d99982326818d05d059e8f5a0755d9b"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAttemptBinding.cs",
+      "sha256": "cdacfffb6e1b8f0822cc063d7ae955ba09fdbdac23e7357a7672afecf41bc7a0"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAttemptMigrationSql.cs",
+      "sha256": "ca8717c50ecdc08bece3cd46d3cde26963cb76601de87d8533432b85090cd4cb"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAttemptOperationProof.cs",
+      "sha256": "cef6e8d812803e3b1ca6dbfdd63a71ce877b5b171d43b037ca2e37d1d5a01385"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAttemptRegistrationIntake.cs",
+      "sha256": "31441ef715abf459d879525047e843073d132746f821c35449d475eed6e01f30"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAttemptRows.cs",
+      "sha256": "6ad434280103c1946c01d855da94423a2b662c4c7ffa54f94b7bdfa3aaf94216"
+    },
+    {
+      "path": "src/Modules/Identity/FederationAuthentication.cs",
+      "sha256": "282fa4499720fdae714f55634970d8e4ba26eb1ec4c91b2d9c4d1cd0bf626dc8"
+    },
+    {
+      "path": "src/Modules/Identity/FederationBrowserService.cs",
+      "sha256": "454fe354ce246577c175f2d4d32b463b7d692762c270887c389f4eb2ae2fa27f"
+    },
+    {
+      "path": "src/Modules/Identity/FederationContracts.cs",
+      "sha256": "e3c2f71c7af6a42f2714f7468f813fc8e43a9058a3496fceea41f34dc893d474"
+    },
+    {
+      "path": "src/Modules/Identity/FederationFreshAuthentication.cs",
+      "sha256": "7cce1bf69b77252947d47f857bb47fc96fb38eec78ef2e36344b9e1b6e48b021"
+    },
+    {
+      "path": "src/Modules/Identity/FederationIdentityBinding.cs",
+      "sha256": "a7da4f3390e5275b2052c70c58a266964cb75b6ca1c06f8c8efd0887e03932ee"
+    },
+    {
+      "path": "src/Modules/Identity/FederationLinkApplication.cs",
+      "sha256": "b9017323e9fce73548e5a6c6d5a9c7fb79f79297dfc41e90faec776939d60dad"
+    },
+    {
+      "path": "src/Modules/Identity/FederationLinkBrowserService.cs",
+      "sha256": "34377f6f9dd72d64c8797c58eaade763e471c3fcffb35b372016667da4f3ea1f"
+    },
+    {
+      "path": "src/Modules/Identity/FederationLinkLifecycle.cs",
+      "sha256": "5b945fa7cc5c023ac4e141923ffed5e9665af1e3d9542959afeed3583f5db365"
+    },
+    {
+      "path": "src/Modules/Identity/FederationLinkManagementContracts.cs",
+      "sha256": "a32db12f9048c1d9c606ecabe8a0b8c8df7b223d32b185f5047048823eb3fcf1"
+    },
+    {
+      "path": "src/Modules/Identity/FederationLinkManagementMigrationSql.cs",
+      "sha256": "a4bf86efa3303745814ab430fbf202d085c94fe34fe9035ff5d8c8a217af4512"
+    },
+    {
+      "path": "src/Modules/Identity/FederationLinkOperationRows.cs",
+      "sha256": "b737458263488c977626d7da99db2996e3ad8545fce8943149b7a5904ba27a4f"
+    },
+    {
+      "path": "src/Modules/Identity/FederationOperationProofAuthentication.cs",
+      "sha256": "616ec1211d929619be9ac404f626a21142a798bb7d8a92f7d5563e477319ef23"
+    },
+    {
+      "path": "src/Modules/Identity/FederationOperationProofBrowserService.cs",
+      "sha256": "858007d79e7cf4b69cbf229c01e5fd77ec63a0b955cb49d616b16cff7aea9219"
+    },
+    {
+      "path": "src/Modules/Identity/FederationRegistration.cs",
+      "sha256": "a80f93073780e04c796521a2d97126c5dbc7233f659388e003a78e453af75c43"
+    },
+    {
+      "path": "src/Modules/Identity/FederationSessionEffects.cs",
+      "sha256": "0c9f96344d00444bb59599bc1fe78e2fa688f8d529efbfbf8fa9778a921c19c0"
+    },
+    {
+      "path": "src/Modules/Identity/FederationSessionEffectsMigrationSql.cs",
+      "sha256": "d421a591ac9f7542e3c18e0395f11f9640d1ac5713110e80bc3744432f122465"
+    },
+    {
+      "path": "src/Modules/Identity/FederationSessionMigrationSql.cs",
+      "sha256": "4937eeca5337c09ee29e8cf72738379245228fd87c4d9a9071e4b0eb6f4a8d9a"
+    },
+    {
+      "path": "src/Modules/Identity/FederationStepUpOwner.cs",
+      "sha256": "e47521e6149aaffca2316b24e13a3009c2999076109bd44bd987cc0adf37f824"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityModelConfiguration.cs",
+      "sha256": "0a48d576beeeb8246f4b7568538b49aee9caee122fe993c614e2dd2cd422717b"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityPersistenceDbContext.cs",
+      "sha256": "37bd7abf963118998a05093f5a8cd38903d42ae4958829e91728651014b7f387"
+    },
+    {
+      "path": "src/Modules/Identity/IdentityRows.cs",
+      "sha256": "c8116114901817fac6c4695663b22a2ad51d6f5a6fff06b2527be97641730528"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261112145042_P2FederationSignIn.cs",
+      "sha256": "e43c3a31db296a2d51b417a89a9a57783c5e62a6a3b55a44aecc310549fc1b5e"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261112145042_P2FederationSignIn.Designer.cs",
+      "sha256": "241dd2784eb0b86997db6f84da24e7619dc97faf34c097d1d5e3a59cc082d485"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261112162142_P2FederationManagementAndProofs.cs",
+      "sha256": "ec37a69973a593961607f3fa47af07dbc891034ea50043e853016fc78b491fd0"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261112162142_P2FederationManagementAndProofs.Designer.cs",
+      "sha256": "f6074ee2c54df099b2fe7222319f325bfa0a541293701265f6a0a18b3ea4cd2a"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261112175254_P2FederatedRegistration.cs",
+      "sha256": "bf5858d6193821a87a8ec965c7f65a9f452e7427d1a20e7b092077e9c3bcc5de"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/20261112175254_P2FederatedRegistration.Designer.cs",
+      "sha256": "1547389ad3deb494f50ee217129b36655a7cb3279ec7173bf301faa87218fd62"
+    },
+    {
+      "path": "src/Modules/Identity/Migrations/IdentityPersistenceDbContextModelSnapshot.cs",
+      "sha256": "3968b276513fc86d2a69e4836054d401f2823650a0b865d04fb9b06e11699322"
+    },
+    {
+      "path": "src/Modules/Identity/PasskeyEndpoints.cs",
+      "sha256": "fe08d98f7b68b945cb1ae5433ad302e774c89c18e8bf72890dae3ddc27167dec"
+    },
+    {
+      "path": "src/Modules/Identity/RecoveryCodeEndpoints.cs",
+      "sha256": "0fb983f05069d2e4d6cd60a2de2bb6e00af21a2f16f87e0042ebd664488ab346"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationApplication.cs",
+      "sha256": "7502d348708b28738ce3a8e70301fa010f211124e052c9fe2da71c785bd77b59"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationEndpoints.cs",
+      "sha256": "68c22f09729744d862c2b90cdba2302c26242ce4df5b449243fd04727601d004"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationFederationIntake.cs",
+      "sha256": "cbc6344500b1e9765c69f7e71d7d5b23228962dbcf92a26d489bac8b9397ec76"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationFederationMigrationSql.cs",
+      "sha256": "3e3817ee8c56781387c3e96c06e377354808d6d74f57a39da49bf255a38793d3"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationPersonalInformation.cs",
+      "sha256": "4e998660fcfeb8d590782b5c09a8f29608f6c325294b449fb55923096f499aaa"
+    },
+    {
+      "path": "src/Modules/Identity/RegistrationRows.cs",
+      "sha256": "f8ebe0b415359615e843126bf6554617b458bb0cf38cda3c5ec16ba8ba3e38c6"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpApplication.cs",
+      "sha256": "cea24a73088c2343d9b23903a35aaadce955c44e9532838553060ce189e3a29e"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpBrowserEndpoints.cs",
+      "sha256": "5af0f67f3a9e237c941629a06660ab67f45df90e69addef4443fedf6dcbb955b"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpFederationBrowserEndpoints.cs",
+      "sha256": "e7fdb8b44a59c48c6e5536c5078f84f56d751bea38e7b120c48dbbfc78fea0d3"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpOutcomes.cs",
+      "sha256": "3a277947ef9ab2e3cd6a80276d303af3c12f6db36f2a413df9b501a1ab01f14c"
+    },
+    {
+      "path": "src/Modules/Identity/StepUpRows.cs",
+      "sha256": "48220adbe97dabd41ef7d4d863504c647328dfd85f00777d3dfd36190e1d6d75"
+    },
+    {
+      "path": "src/Modules/Identity/TotpAuthenticationAuthority.cs",
+      "sha256": "2be233840714856bed20cd42936a770bffdd79cd3363e492b0359c6f2333ab74"
+    },
+    {
+      "path": "src/Modules/Identity/TotpContracts.cs",
+      "sha256": "f74317d5b2543609048f4391ad07e1e788e1775d84fd3c6963e9a55a698730f3"
+    },
+    {
+      "path": "src/Modules/Identity/TotpEndpoints.cs",
+      "sha256": "9746e7dd21be56edd7a596e4c050afe254185169d337060e5da917c13eed6b66"
+    },
+    {
+      "path": "src/Modules/Identity/TotpPrimaryMfa.cs",
+      "sha256": "3d197a7cf0f9f80f8b2c6fc396c41edc3b64a730c6b2afbbdaf824b4b0c64596"
+    },
+    {
+      "path": "src/Modules/Identity/TotpRows.cs",
+      "sha256": "c3ff4e8f4544b56d54b90bad89f4a5e9239e82d02a445f787fda62eb2baf414f"
+    },
+    {
+      "path": "src/Tunner.Platform/Bff/BffProtocolCallback.cs",
+      "sha256": "97515a6d18c048b480630d3c10f31bffba1f052da339162c71d81151f4832e6d"
+    },
+    {
+      "path": "src/Tunner.Platform/Bff/TunnerBffFoundation.cs",
+      "sha256": "f04a36893a028745e50c5135590181b300f5c1c9d9b6bb48d816e78cdca00cd9"
+    },
+    {
+      "path": "src/Tunner.User.Bff/AssemblyInfo.cs",
+      "sha256": "57c1f2c2bdcc3c56c68cb04d1417c18b179537447168824c21e111d4fd8ef84b"
+    },
+    {
+      "path": "src/Tunner.User.Bff/FederationManagementBffEndpoints.cs",
+      "sha256": "be713452db8e4e0f21a0b27bc7cbde73080edb95accac0e84696cf1cd21039f7"
+    },
+    {
+      "path": "src/Tunner.User.Bff/FederationOidcEndpoints.cs",
+      "sha256": "28148fe61ef049cb1a6f5637399689a4ee8bd5acd552c7923674576936dba92f"
+    },
+    {
+      "path": "src/Tunner.User.Bff/FederationOidcRegistration.cs",
+      "sha256": "e09c14481a44f9b1270d195048923d6cd9bcc324ca012cbcc27a2e0e62729592"
+    },
+    {
+      "path": "src/Tunner.User.Bff/FederationOidcTransport.cs",
+      "sha256": "f0553abd0410f8cd9b28f66bd69b988ae87aca9b940786942d0e6a0f2e4a1034"
+    },
+    {
+      "path": "src/Tunner.User.Bff/Tunner.User.Bff.csproj",
+      "sha256": "0f0e2cd9dd53c56c6db5277f3fa4ce23e7dc5b1da12d24a8928a597982960a32"
+    },
+    {
+      "path": "src/Tunner.User.Bff/TunnerAuthenticatedUserBffHost.cs",
+      "sha256": "de8e010162bce8676e0c9d754534cf0955de41fe51fe0ed27c5a91521565288c"
+    },
+    {
+      "path": "tests/Shared/RecoveryCodeOwnedDockerFixture.cs",
+      "sha256": "bb260960b3000c365adc969b15b668519d194ecdf79f51ed8b8a43a7d23b8318"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/AuthenticationTestHost.cs",
+      "sha256": "6392c6ba1c7f457689b87278504504ca16ec676dec78c808c49523bf6cde2143"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationAttemptBindingTests.cs",
+      "sha256": "0ec803e8b04bdee54e41056439582b5dccebb856aa3375d5af63e8cd71ab7c65"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationBffPrivateIntegrationTests.cs",
+      "sha256": "2c805ebc02e2167df85f8b3483c54774e755d979644abd30b2aef3d41e68f5f2"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationFreshAuthenticationTests.cs",
+      "sha256": "2333565d20e9560467ef0fc07597868945c2f14703f91d0f45bf3133b868db12"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationIdentityBindingTests.cs",
+      "sha256": "4d19cd03f3426af8e2c620a61c9d92ff8fa465da786d3d578dba27d34173d3e4"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationIdentityPersistenceTests.cs",
+      "sha256": "f65e8b913707368b42fdf29a9497c9f5d161e6e079912acbd682384fafe32327"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationManagementPrivateIntegrationTests.cs",
+      "sha256": "c9c7b325e40ec00e5bc2d28025c8d48257b275b27a842787238a88e7d0360b95"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationOidcNativeProtocolTests.cs",
+      "sha256": "5334f60b6287a6b48ef0c7e00186fc8a333826a7bd7b9a9decb9ee1ce7afe965"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationOidcTransportTests.cs",
+      "sha256": "b07a70d1abf7e8512fdfcf299fafb8741fe3375ef1cd2703aa8d7249c96d6c15"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationPrivateIntegrationTests.cs",
+      "sha256": "ff8ffdb822f18a295776efc2c0ae221b82a69f807035b37b5cd3ffb4f379ae5d"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationSessionModelTests.cs",
+      "sha256": "e46c3b2761be6e32489639711a53854057846d74661f9ce34abf43f49226d6cf"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/FederationSqlIntegrityTests.cs",
+      "sha256": "bdc9b1085337dddfaac15aeca152117eeddb563fc58766cb8950c29f04a59df1"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RecoveryCodeFiniteNativeExecution.cs",
+      "sha256": "61a3e3fffa88ec7710b0b27c8dc8c79a22effc8d9bb3fac53a5f789d77d33677"
+    },
+    {
+      "path": "tests/Tunner.Identity.Persistence.Tests/RegistrationBffTests.cs",
+      "sha256": "9c172519187ea2000f80bd5a5da18e2201acd4a8f99aaf07261bd93abd2e57be"
+    },
+    {
+      "path": "tests/Tunner.Platform.ArchitectureTests/BffProtocolCallbackTests.cs",
+      "sha256": "b5dc1a288c8484a830fd5b03034e5013527c567d1b21e321a489b38e5700a148"
+    },
+    {
+      "path": "tools/recovery-native-testing/cases.json",
+      "sha256": "23fa0a29174a709b8a62a71b7b4d7ada205f0edbe350e7f6889ff4e446902f5d"
+    },
+    {
+      "path": "web/apps/user/authentication.content.proposal.json",
+      "sha256": "76f3cd2481cd8e6616120be4f4112bbb342572eb5c341b4a2a98275eda89eace"
+    },
+    {
+      "path": "web/apps/user/authentication.css",
+      "sha256": "4071c081a59265183121b27030400cebf7c149f8a959211261810ce19adcbc6f"
+    },
+    {
+      "path": "web/apps/user/authentication.tsx",
+      "sha256": "081732ce30ca734e4c57f0f1a80c297516faf241baf13ab52eba5de6af738123"
+    },
+    {
+      "path": "web/apps/user/content.proposal.json",
+      "sha256": "c13b93e2063e0919f40e4abf3052c7ea3bb62a59b9ce15913b69768976009d8a"
+    },
+    {
+      "path": "web/apps/user/federation.api.ts",
+      "sha256": "9ee3b75d1decf850df4269e463a9f09c6309d9be369cd1a743f7a0ea9606500e"
+    },
+    {
+      "path": "web/apps/user/federation.management.api.ts",
+      "sha256": "dda899f5827f97414c70ce979da57432250183b2380a6cde2e907a2cefb95970"
+    },
+    {
+      "path": "web/apps/user/federation.management.tsx",
+      "sha256": "b135c1d0684542205c16147f5568c6e63188126f810ca671b9000f0649f977e1"
+    },
+    {
+      "path": "web/apps/user/federation.sign-in.tsx",
+      "sha256": "f0899254d0d0122d9f42786150bdeafe1096f9c26221998f6a787a841b0dbe99"
+    },
+    {
+      "path": "web/apps/user/main.tsx",
+      "sha256": "4299b574abbe5ee175551a609750c97d078da83e9078db6ae09c51ac718c666f"
+    },
+    {
+      "path": "web/apps/user/passkeys.api.ts",
+      "sha256": "7d21b6fc9cc8917294a30451d5e552b65c731ac68139bee9018c60d7900372ad"
+    },
+    {
+      "path": "web/apps/user/passkeys.content.proposal.json",
+      "sha256": "f1f68961f48d38a2ec787298db6d6b492c75d9e4822bd08ce27a34a3dbb50a51"
+    },
+    {
+      "path": "web/apps/user/passkeys.css",
+      "sha256": "72876ac0e8aa88f68acb6010c438d99393261591e64451c243c70317b2e84ce5"
+    },
+    {
+      "path": "web/apps/user/passkeys.tsx",
+      "sha256": "9b0454b862eaf41e033d5683123be82b64a1e45ffa56c09975ea1d6c31c26d02"
+    },
+    {
+      "path": "web/apps/user/registration.css",
+      "sha256": "07fbb5fe2f917937ba945b64e0619ed9b2ebf0374832581290c9dac929bc1bbc"
+    },
+    {
+      "path": "web/apps/user/registration.federation.ts",
+      "sha256": "3cfad101471fd2173bce2a620145553918f0fb3af372a083a7c6620da6778385"
+    },
+    {
+      "path": "web/apps/user/step-up.content.proposal.json",
+      "sha256": "f3638a44572dddba70188d47cca5b63fa359ffc9fcaece81f0b6423c37f4b499"
+    },
+    {
+      "path": "web/apps/user/step-up.css",
+      "sha256": "d2b834b36459cd1bc374545e5103fbccd235c15908e4f8a8c2c0acd1a58f72a7"
+    },
+    {
+      "path": "web/apps/user/step-up.federation.tsx",
+      "sha256": "821339815a8246369a96d4800f3beb882415ae6f23de406a718597d47a4e5c85"
+    },
+    {
+      "path": "web/apps/user/step-up.tsx",
+      "sha256": "68d47cb50b526a6d8c5a03c23d45dc4080b853231baa7b5206e49179a339800f"
+    },
+    {
+      "path": "web/tests/authentication/federation.spec.ts",
+      "sha256": "af3ce8137a1d763c5838f1203483b0f6a4a6c86afcc94f1e1c85fa70231ed1b8"
+    },
+    {
+      "path": "web/tests/passkeys/federation-management.spec.ts",
+      "sha256": "6d79d7eaabe18c481e4c2b91899ea2e7cdf4c5ef6502d58f12a9edf557cacc4f"
+    },
+    {
+      "path": "web/tests/registration/federation.spec.ts",
+      "sha256": "a48117d46adbe6d5f269ba2ba6be85b32e9f53584eb4d1d92abd1084fc37fd37"
+    },
+    {
+      "path": "web/tests/step-up/federation.spec.ts",
+      "sha256": "91b1868a5f6605277989b9335e66a7cd8a9e0c295fcb36a146cadcc92e72e21a"
+    }
+  ]
+}

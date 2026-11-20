@@ -1,0 +1,97 @@
+diff --git a/tools/browser-testing/BrowserTestGovernedContent.cs b/tools/browser-testing/BrowserTestGovernedContent.cs
+--- a/tools/browser-testing/BrowserTestGovernedContent.cs
++++ b/tools/browser-testing/BrowserTestGovernedContent.cs
+@@ -153,11 +153,15 @@
+         });
+         app.MapGet("/browser-testing/status", (HttpContext http) =>
+         { RequireLocalRequest(http); return new { mode = options.Mode, instanceId = options.RunId, ready = initialized, governedContent = true }; }).AllowAnonymous();
++        var themeLinks = MapFixtureTheme(app);
+         app.MapGet("/browser-testing/admin", (HttpContext http, IAntiforgery antiforgery) =>
+         {
+             RequireLocalRequest(http); NoStore(http);
++            // Same CSP as BffWebAssets.Render; the isolated custom HTML must retain frame and self-only protections.
++            http.Response.Headers.ContentSecurityPolicy = "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";
+             var token = antiforgery.GetAndStoreTokens(http).RequestToken ?? throw new InvalidOperationException("Synthetic Admin CSRF unavailable.");
++            return Results.Content(BootstrapPage.Replace("CSRF_TOKEN", WebUtility.HtmlEncode(token), StringComparison.Ordinal)
++                .Replace("ADMIN_THEME_LINKS", themeLinks, StringComparison.Ordinal), "text/html; charset=utf-8");
+-            return Results.Content(BootstrapPage.Replace("CSRF_TOKEN", WebUtility.HtmlEncode(token), StringComparison.Ordinal), "text/html; charset=utf-8");
+         }).AllowAnonymous();
+         app.MapGet("/browser-testing/admin/bootstrap.js", (HttpContext http) =>
+         { RequireLocalRequest(http); NoStore(http); return Results.Text(BootstrapScript, "text/javascript; charset=utf-8"); }).AllowAnonymous();
+@@ -198,6 +202,56 @@
+         return app;
+     }
+ 
++    // Fixture-only static transport of the already-built Admin theme. The production /admin-assets guards stay unchanged.
++    // Only entry-linked CSS and its exact packaged WOFF2 references are exposed; no script, map, HTML or request-derived path.
++    private string MapFixtureTheme(WebApplication app)
++    {
++        RequireIsolated();
++        const string prefix = "/browser-testing/admin/theme/";
++        var assetsRoot = Path.Combine(AppContext.BaseDirectory, "wwwroot", "admin", "assets");
++        if ((File.GetAttributes(assetsRoot) & FileAttributes.ReparsePoint) != 0)
++            throw new InvalidOperationException("Packaged Admin theme directory is required.");
++        var entry = File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "wwwroot", "admin", "content.html"));
++        var styles = System.Text.RegularExpressions.Regex.Matches(entry,
++            """<link\b[^>]*\brel=["']stylesheet["'][^>]*\bhref=["']/admin-assets/assets/(?<name>[A-Za-z0-9_-]+\.css)["'][^>]*>""",
++            System.Text.RegularExpressions.RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1))
++            .Select(match => match.Groups["name"].Value).Distinct(StringComparer.Ordinal).ToArray();
++        if (styles.Length == 0) throw new InvalidOperationException("Packaged Admin entry styles are required.");
++        var allowed = new Dictionary<string, (string File, string Type, string? Text)>(StringComparer.Ordinal);
++        string Packaged(string name)
++        {
++            var file = Path.Combine(assetsRoot, name);
++            if (!File.Exists(file) || (File.GetAttributes(file) & FileAttributes.ReparsePoint) != 0)
++                throw new InvalidOperationException("Exact packaged Admin theme file is required.");
++            return file;
++        }
++        foreach (var name in styles)
++        {
++            var file = Packaged(name); var css = File.ReadAllText(file);
++            if (System.Text.RegularExpressions.Regex.IsMatch(css, @"@import\b",
++                System.Text.RegularExpressions.RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1)))
++                throw new InvalidOperationException("The fixture requires bundled Admin styles.");
++            var fonts = System.Text.RegularExpressions.Regex.Matches(css,
++                """url\(\s*["']?(?<url>/admin-assets/assets/(?<name>[A-Za-z0-9_-]+\.woff2))["']?\s*\)""",
++                System.Text.RegularExpressions.RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1));
++            foreach (System.Text.RegularExpressions.Match font in fonts)
++            {
++                var fontName = font.Groups["name"].Value;
++                allowed.TryAdd(prefix + fontName, (Packaged(fontName), "font/woff2", null));
++                // Preserve the compiled declarations/tokens exactly; relocate only the already-allowlisted font URL.
++                css = css.Replace(font.Groups["url"].Value, prefix + fontName, StringComparison.Ordinal);
++            }
++            allowed.Add(prefix + name, (file, "text/css; charset=utf-8", css));
++        }
++        foreach (var (route, asset) in allowed)
++            app.MapGet(route, (HttpContext http) =>
++            {
++                RequireLocalRequest(http); NoStore(http);
++                return asset.Text is { } css ? (IResult)Results.Text(css, asset.Type) : Results.File(asset.File, asset.Type);
++            }).AllowAnonymous();
++        return string.Join("", styles.Select(name => "<link rel=\"stylesheet\" href=\"" + WebUtility.HtmlEncode(prefix + name) + "\">"));
++    }
++
+     private async Task ValidateSyntheticSignInAsync(CookieSigningInContext context)
+     {
+         var http = context.HttpContext; RequireLocalRequest(http);
+@@ -306,10 +360,16 @@
+     }
+ 
+     // Diagnostic fixture controls only, outside the production Admin screens. No URL credential, arbitrary claim or return target.
++    // Approved Admin ThemeProvider attributes, typography/card/actions and native compiled PrimaryButton classes.
++    // This remains the same isolated actor control; no new application workflow, custom stylesheet or auth action.
+     private const string BootstrapPage = """
++<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Isolated Admin fixture</title><meta name="tunner-csrf" content="CSRF_TOKEN">ADMIN_THEME_LINKS<script src="/browser-testing/admin/bootstrap.js" defer></script></head>
++<body><div class="tn-theme" data-tunner-surface="admin" data-tunner-theme="light"><div class="admin-content">
++<a class="content-skip" href="#fixture-main">Skip to content</a><header class="content-header"><div class="content-brand"><span class="tn-brand">Tunner</span></div></header>
++<main id="fixture-main" class="content-main"><section class="content-panel" aria-labelledby="fixture-title"><div class="content-panel-heading"><h1 id="fixture-title">Isolated Admin fixture</h1></div>
++<p>Synthetic local test data only. This is not workforce authentication or a production approval.</p><p>Select a fixed synthetic actor. Author edits and validates; approver approves; publisher publishes. The Content owner enforces separate actors.</p>
++<div class="content-editor-footer"><div class="content-actions"><button type="button" class="tn-primary-button" data-presentation="standard" data-appearance="filled" data-actor="author">Use synthetic author</button> <button type="button" class="tn-primary-button" data-presentation="standard" data-appearance="filled" data-actor="approver">Use synthetic approver</button> <button type="button" class="tn-primary-button" data-presentation="standard" data-appearance="filled" data-actor="publisher">Use synthetic publisher</button></div></div>
++<p id="message" role="status" aria-live="polite"></p></section></main></div></div></body></html>
+-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Isolated Admin fixture</title><meta name="tunner-csrf" content="CSRF_TOKEN"><script src="/browser-testing/admin/bootstrap.js" defer></script></head>
+-<body><main><h1>Isolated Admin fixture</h1><p>Synthetic local test data only. This is not workforce authentication or a production approval.</p><p>Select a fixed synthetic actor. Author edits and validates; approver approves; publisher publishes. The Content owner enforces separate actors.</p>
+-<button type="button" data-actor="author">Use synthetic author</button> <button type="button" data-actor="approver">Use synthetic approver</button> <button type="button" data-actor="publisher">Use synthetic publisher</button><p id="message" role="status" aria-live="polite"></p></main></body></html>
+ """;
+     private const string BootstrapScript = """
+ 'use strict';
