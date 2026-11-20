@@ -60,7 +60,7 @@ public sealed class OutboxReceiveBrokerFixture : IAsyncLifetime
         if (run is null)
         {
             portable = TestcontainersBaseline.CreateRabbitMqContainer("fixture", password);
-            try { await portable.StartAsync(); }
+            try { await portable.StartAsync(); await RequireBrokerStartupAsync(portable); }
             catch { await DisposeAsync(); throw; }
             return;
         }
@@ -100,6 +100,7 @@ public sealed class OutboxReceiveBrokerFixture : IAsyncLifetime
             if (actual.Image != Image || ports is null || !ports.TryGetValue("5672/tcp", out var bindings) ||
                 bindings is not { Count: 1 } || bindings[0].HostIP != "127.0.0.1")
                 throw new InvalidOperationException("The owned RabbitMQ fixture boundary is invalid.");
+            await RequireBrokerStartupAsync(container);
         }
         catch { await DisposeAsync(); throw; }
     }
@@ -121,10 +122,19 @@ public sealed class OutboxReceiveBrokerFixture : IAsyncLifetime
 
     public async Task StartAsync()
     {
-        if (portable is not null) { await portable.StartAsync(); return; }
+        if (portable is not null) { await portable.StartAsync(); await RequireBrokerStartupAsync(portable); return; }
         if (container is null || docker is null) throw new InvalidOperationException("The owned RabbitMQ fixture is unavailable.");
         RequireOwned(await docker.Containers.InspectContainerAsync(container.Id));
         await container.StartAsync();
+        await RequireBrokerStartupAsync(container);
+    }
+
+    private static async Task RequireBrokerStartupAsync(IContainer broker)
+    {
+        // Reuse the bounded application-readiness check already qualified by publisher tests.
+        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+        var ready = await broker.ExecAsync(["rabbitmqctl", "--timeout", "30", "await_startup"], timeout.Token);
+        Assert.Equal(0, ready.ExitCode);
     }
 
     public async Task DisposeAsync()
