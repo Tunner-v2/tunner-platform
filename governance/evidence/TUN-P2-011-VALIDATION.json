@@ -354,5 +354,57 @@
     "container_gate":"FAIL_KNOWN_LGTM_REMEDIATION_STOPPED_BY_USER",
     "boundary":"Not whole-CI PASS. Scoped Recovery gate passed; final contact/scoped/global evidence and required subsequent CI remain to be qualified."
   },
-  "next_action": "Commit the qualified contact/scoped/global evidence and specifically authorized native technical recording; run both UI gates and RV011/RV012 native validation/closure gates, closing only after PASS. Publish through existing draft PR and observe required CI. Preserve completed143 and previous closures without reruns. Governed producer/contact-independent admission awaits owner FRD17/catalog32 update and qualified source/control references. Whole011 remains IN_PROGRESS/PENDING; production, protected-main merge and release remain separate."
+  "native_resource_checkpoint_20261120": {
+    "state": "QUALIFICATION_HELD_PENDING_USER_DIRECTION",
+    "implementation_source_sha": "1ce792e99956fe607af962d36efff910d2a9f3b5",
+    "latest_diagnostic_source_sha": "20f39f24acba0fc6c14b2b52d95d5c285211319a",
+    "builds": {
+      "browser": "PASS zero warnings/errors;56.71s",
+      "native": "PASS zero warnings/errors;31.44s",
+      "scoped_secret_scan": "PASS one file; zero unreviewed matches"
+    },
+    "retained_boundary_tests": {
+      "source_sha": "1ce792e99956fe607af962d36efff910d2a9f3b5",
+      "passed": 35,
+      "new_run": false
+    },
+    "prior_resource_result": {
+      "source_sha": "1ce792e99956fe607af962d36efff910d2a9f3b5",
+      "passed": 2,
+      "total": 6,
+      "result": "FAIL"
+    },
+    "last_canary": {
+      "source_sha": "48a15b6c05d47f27439fc0a882deea6057e58df0",
+      "failure_code": "PUBLIC_CANARY_START_AFTER_CAPTURE_INVALID_OPERATION",
+      "first_failed_case": "AFTER_START",
+      "source_process_cleanup_borrowed_checks": "PASS",
+      "ownership_flag_meaning": "Captured creation only; does not prove later loopback/readiness",
+      "receipt_ref": "governance/evidence/p2-011-recovery-20261112/resource-canary-48a15b6c.json",
+      "sha256": "352965b0d579ec78fabde3260888baaf82ce88b67afe5d6e2e3f9e6b9dd8e92c"
+    },
+    "latest_protocol": {
+      "source_sha": "20f39f24acba0fc6c14b2b52d95d5c285211319a",
+      "result": "FAIL_PHASE_TIMEOUT_NO_CASE_SUMMARY",
+      "configured_cap_seconds": 600,
+      "recorded_elapsed_seconds": 39387.667,
+      "outer_process_closed": true,
+      "streams_drained": true,
+      "identity_verified_forced_close": true,
+      "inputs_unchanged": true,
+      "child_cleanup_and_borrowed_state": "UNVERIFIED without case receipts",
+      "receipt_ref": "governance/evidence/p2-011-recovery-20261112/protocol-interrupted-20f39f24.json",
+      "sha256": "31e681e4a0e2e87fcb65af343c68dbc273e4bf2ac1367a953f4de9a38212f9ca"
+    },
+    "final_discriminator": "Two fixed sentinel categories compiled and independently reviewed; final public canary NOT_RUN after protocol interruption",
+    "new_password_repair_journey": "IMPLEMENTED_COMPILED; actual eighth native-browser journey NOT_RUN",
+    "ci_48a15b6c": {
+      "run_id": 44668073495,
+      "security_baseline": "SUCCESS",
+      "web_build_tests_dependency_audit": "SUCCESS",
+      "container_gate": "FAIL_KNOWN_LGTM_REMEDIATION_STOPPED"
+    },
+    "boundaries": "No test/gate/role/validation/lifecycle promotion; all active technical revisions remain pending. Owner FRD17/catalog32 update not published; production/main merge/release remain separate."
+  },
+  "next_action": "Await user direction under goal section3 before further protocol/resource investigations or runs. Next recommended bounded recovery: verify execution service and exact owned-resource/engine state, then one existing protocol qualification and fixed PUBLIC_CANARIES diagnostic only if admitted. Governed producer/contact-independent binding awaits owner FRD17/catalog32 update. Image remediation remains stopped; no feature/Product/production/merge/release completion."
 }
