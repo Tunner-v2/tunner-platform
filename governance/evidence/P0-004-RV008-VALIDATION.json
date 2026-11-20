@@ -15,7 +15,15 @@
     "actual": "Resolver uses literal child scope while allocator excludes RV originals, so no later proof can refresh changed child-owned sources without altering closed state.",
     "expected": "The child's committed owning revision determines original scope and strict later-revision cutoff; every existing proof/control remains."
   },
-  "source_review": "PENDING exact unapplied patch and independent review. No code applied.",
+  "source_review": "PASS_SOURCE_ONLY: root independently applied Governance/Cyber contracts; independent recovery_password_ui QA review resolved two coverage gaps in v2 and reports PASS. Diag agent authored patch. No runtime PASS is claimed.",
+  "candidate_patch_sha256": "fd1eeadfcd691884e55c0b50b09a0573f868074a2a7c860795f44620be1dd16c",
+  "candidate_patch_ref": "artifacts/p2-011-recovery-20261112/revision-child-proof-currentness-v2.patch",
+  "activation": {
+    "native_approved_check": "ALLOWED",
+    "native_active_check": "ALLOWED",
+    "context_ref": "artifacts/p0-004-rv008-child-proof/context/manifest.json",
+    "context_before_activation": "GENERATED then CURRENT with zero findings; no post-transition freshness assertion"
+  },
   "qualification": "PENDING focused existing committed-proof regressions, full governance functional regression, committed-source binding and native closure. Does not resume RV006 performance work or image remediation.",
   "acceptance_classification": {
     "product_acceptance_required": false,
