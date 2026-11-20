@@ -24,5 +24,29 @@
     "identity_passed": 1421,
     "classification": "Confirmed fixture TCP-only readiness gap; startup race fits initial AMQP connection failures, but exact CI root cause remains unproven."
   },
-  "qualification": "PENDING: compile both linked projects, focused six receiver cases and linked Identity regression in required CI. Existing native no-pull runner may be used only after unchanged preflight/admission succeeds. Do not retry held Recovery/PostgreSQL qualification or pull/change images."
+  "qualification": "PENDING required CI for the repaired portable six receiver cases and linked Identity post-commit case. Both projects compile; local native tests did not start because exact engine admission failed. Native runtime remains unverified; no validation, lifecycle or Product promotion.",
+  "build_source_sha": "b6f38be38f9ebb5aa5c06062ae702590aac099c8",
+  "builds": {
+    "worker": {
+      "result": "PASS",
+      "warnings": 0,
+      "errors": 0,
+      "elapsed_seconds": 48.35
+    },
+    "identity_compile_link": {
+      "result": "PASS",
+      "warnings": 0,
+      "errors": 0,
+      "elapsed_seconds": 67.11
+    }
+  },
+  "local_receiver_qualification": {
+    "state": "NOT_RUN_ENGINE_ADMISSION_UNAVAILABLE",
+    "expected_cases": 6,
+    "tests_started": false,
+    "launcher": "artifacts/p2-014-authorization-20261115/Invoke-QualifiedProtocolTests.ps1",
+    "launcher_sha256": "e266e68e58e7fda48b945afa060033b4f317a631db4b447d4812eea9215ab361",
+    "tool_receipt": "578096",
+    "bounds": "Existing launcher failed before test-process creation; no cached-image identity replacement, pulls, engine restart or Recovery run."
+  }
 }
