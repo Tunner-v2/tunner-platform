@@ -7,7 +7,7 @@
   "parent_milestone_revision_id": null,
   "title": "Require RabbitMQ application readiness in the receiver test fixture",
   "revision_type": "CORRECTIVE",
-  "status": "VALIDATION",
+  "status": "CLOSED",
   "reason": "CI44759011999 fails six receiver cases at their first AMQP connection. The shared receiver fixture waits only for TCP, while publisher tests already use a qualified bounded application-startup check. Correct this confirmed fixture-readiness gap without claiming a production defect or changing delivery behavior.",
   "authority_refs": [
     "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
@@ -38,7 +38,7 @@
     "governance/evidence/P2-016-RV001-VALIDATION.json"
   ],
   "created_at": "2026-11-20T15:30:49.2210221+00:00",
-  "closed_at": null,
+  "closed_at": "2026-11-20T16:59:10.143Z",
   "product_acceptance_required": false,
   "git_state": {
     "repository_changed": true,
