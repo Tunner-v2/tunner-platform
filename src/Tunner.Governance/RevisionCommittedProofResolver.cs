@@ -1,4 +1,6 @@
 using System.Text.Json;
+using YamlDotNet.Core;
+using YamlDotNet.RepresentationModel;
 
 namespace Tunner.Governance;
 
@@ -19,11 +21,25 @@ internal sealed class RevisionCommittedProofResolver
         this.assessment = assessment;
         records = GovernanceApplication.LoadRecords(repository, []);
         var originalId = original.Type.DefinitionName == "revision" ? original.Scalar("original_scope_id") : original.Identifier;
+        var cutoffId = original.Identifier;
+        if (original.Type.DefinitionName == "work-item" && original.Scalar("revision_ref") is { } ownerId)
+        {
+            var owner = records.SingleOrDefault(r => r.Type.DefinitionName == "revision" && r.Identifier == ownerId &&
+                r.Scalar("revision_scope") == "WORK_ITEM");
+            // A decomposed child follows its committed owning Revision's root lineage, never a forged live link.
+            if (owner is not null && original.Identifier.StartsWith(owner.Identifier + "-", StringComparison.Ordinal) &&
+                owner.StringList("work_items").Contains(original.Identifier, StringComparer.Ordinal) &&
+                IsCommitted(RepositoryRootResolver.ToLogicalPath(repository, owner.Path)) && HasCommittedChildBinding(original, ownerId))
+            {
+                originalId = owner.Scalar("original_scope_id");
+                cutoffId = owner.Identifier;
+            }
+        }
         var sameScope = records.Where(r => r.Type.DefinitionName == "revision" && r.Scalar("revision_scope") == "WORK_ITEM" &&
             r.Scalar("original_scope_id") == originalId).ToDictionary(r => r.Identifier, StringComparer.Ordinal);
         // Existing monotonic ordering also guarantees strictly later recursion when checking prior Revision proof.
         candidates = RevisionApplication.Status(sameScope.Values.ToArray()).Reverse()
-            .TakeWhile(r => r.Id != original.Identifier).Where(r => r.Status == "CLOSED")
+            .TakeWhile(r => r.Id != cutoffId).Where(r => r.Status == "CLOSED")
             .Select(r => sameScope[r.Id]).ToArray();
     }
 
@@ -111,6 +127,23 @@ internal sealed class RevisionCommittedProofResolver
             catch (Exception exception) when (exception is JsonException or InvalidOperationException) { }
         }
         return (matched ? sha : null, paths);
+    }
+
+    private bool HasCommittedChildBinding(GovernanceRecord child, string ownerId)
+    {
+        var path = RepositoryRootResolver.ToLogicalPath(repository, child.Path);
+        if (!IsCommitted(path) || CommitReadinessApplication.Read(child)?.ValidatedCommitSha is not { } sha ||
+            !CommittedEvidenceApplication.IsSha(sha)) return false;
+        try
+        {
+            var stream = new YamlStream();
+            stream.Load(new StringReader(CommittedEvidenceApplication.Git(repository, assessment, "show", sha + ":" + path)));
+            if (stream.Documents.Count != 1 || stream.Documents[0].RootNode is not YamlMappingNode mapping) return false;
+            var fields = GovernanceApplication.Fields(mapping);
+            return GovernanceApplication.Scalar(fields, "work_item_id") == child.Identifier &&
+                GovernanceApplication.Scalar(fields, "revision_ref") == ownerId;
+        }
+        catch (YamlException) { return false; }
     }
 
     private bool IsCommitted(string logicalPath)

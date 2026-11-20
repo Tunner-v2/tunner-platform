@@ -952,9 +952,9 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
 
         string[] auditorRoles = ["auditor"];
         string[] fixtureAuthorityReferences = ["docs/authority/mirror.txt"];
-        string Candidate(string[] owned, string value)
+        string Candidate(string[] owned, string value, string scope = originalId)
         {
-            var created = RevisionApplication.Create(fixture, new(originalId, "CORRECTIVE", "Fixture revision",
+            var created = RevisionApplication.Create(fixture, new(scope, "CORRECTIVE", "Fixture revision",
                 "Later validated behavior", "NON_BLOCKING", [], [], [], ["exact committed proof"]));
             if (created.ExitCode != 0) throw new InvalidOperationException(GovernanceApplication.Serialize(created));
             var id = ((RevisionOperationPayload)created.Payload).RevisionId;
@@ -1215,6 +1215,132 @@ static void RunRevisionCommittedProofChecks(DirectoryInfo repositoryRoot, IColle
         Check(File.ReadAllBytes(workFile).SequenceEqual(originalWorkBytes) &&
             File.ReadAllBytes(Path.Combine(fixture.FullName, originalProof)).SequenceEqual(originalProofBytes),
             "original completion record and evidence remain byte-identical");
+        var parent = Candidate(secondPaths, "child-parent");
+        var createdChild = RevisionApplication.CreateChild(fixture, parent, "Committed child source proof");
+        if (createdChild.ExitCode != 0) throw new InvalidOperationException(GovernanceApplication.Serialize(createdChild));
+        var childId = ((RevisionOperationPayload)createdChild.Payload).RevisionId;
+        var childWork = "governance/work-items/" + childId + ".yaml";
+        var childFile = Path.Combine(fixture.FullName, childWork);
+        var childProof = "governance/evidence/" + childId + "-proof.json";
+        var childRoleProof = "governance/evidence/" + childId + "-ROLE-REVIEWS.json";
+        var childPath = originalPaths[0];
+        // Reuse the existing legacy synthetic work-item fixture; this case isolates committed source lineage.
+        WriteWorkItem(fixture, childId, "DONE", "[]", false);
+        EditRevision(childFile, "revision_ref", parent);
+        EditRevision(childFile, "authority_refs", fixtureAuthorityReferences);
+        EditRevision(childFile, "required_evidence", new[] { childProof });
+        File.WriteAllText(Path.Combine(fixture.FullName, childRoleProof), "{}");
+        File.WriteAllText(Path.Combine(fixture.FullName, childProof), JsonSerializer.Serialize(new
+        {
+            scope_id = childId, validation_kind = "COMMITTED", owned_behavior_paths = secondPaths
+        }));
+        RunGit(fixture, "add", "--", "governance/revisions/" + parent + ".yaml",
+            "governance/evidence/" + parent + "-proof.json", childWork, childProof, childRoleProof);
+        RunGit(fixture, "commit", "--quiet", "-m", "Committed revision child candidate");
+        var childSha = RunGitOutput(fixture, "rev-parse", "HEAD");
+        EditRevision(childFile, "git_state", State(childSha));
+        Proof(childProof, childId, childSha, secondPaths);
+        RunGit(fixture, "add", "--", childWork, childProof);
+        RunGit(fixture, "commit", "--quiet", "-m", "Committed revision child completion");
+        Close(parent, true);
+        var parentFile = Path.Combine(fixture.FullName, "governance/revisions/" + parent + ".yaml");
+        var parentBytes = File.ReadAllBytes(parentFile);
+        var childBytes = File.ReadAllBytes(childFile);
+        var childProofBytes = File.ReadAllBytes(Path.Combine(fixture.FullName, childProof));
+        GovernanceRecord ChildRecord() => GovernanceApplication.LoadRecords(fixture, []).Single(record => record.Identifier == childId);
+        bool ChildReady() => CommitReadinessApplication.Check(fixture, ChildRecord()).Count == 0;
+        (string? Sha, string? Failure) ChildResolution()
+        {
+            var resolver = new RevisionCommittedProofResolver(fixture, ChildRecord(), new CommittedProofAssessment(fixture));
+            var sha = resolver.Resolve(childPath, out var failure);
+            return (sha, failure);
+        }
+        Check(ChildReady() && RevisionApplication.CloseCheck(fixture, parent).ExitCode == 0,
+            "committed completed child and owning closed Revision begin with valid proof");
+        Check(ChildResolution() == (null, null), "child never substitutes its own parent or earlier root Revision proof");
+        File.WriteAllText(Path.Combine(fixture.FullName, childPath), "revision-two");
+        RunGit(fixture, "add", "--", childPath);
+        RunGit(fixture, "commit", "--quiet", "-m", "Changed child source matching older root proof");
+        Check(!ChildReady() && ChildResolution() == (null, null), "older root ownership cannot waive changed child source");
+
+        const string foreignId = "TUN-P1-023";
+        var foreignWork = "governance/work-items/" + foreignId + ".yaml";
+        WriteWorkItem(fixture, foreignId, "DONE", "[]", false);
+        EditRevision(Path.Combine(fixture.FullName, foreignWork), "authority_refs", fixtureAuthorityReferences);
+        EditRevision(Path.Combine(fixture.FullName, foreignWork), "required_evidence", Array.Empty<string>());
+        RunGit(fixture, "add", "--", foreignWork);
+        RunGit(fixture, "commit", "--quiet", "-m", "Unrelated completed fixture owner");
+        var foreign = Candidate(secondPaths, "foreign-child-claim", foreignId);
+        Close(foreign, true);
+        Check(RevisionApplication.CloseCheck(fixture, foreign).ExitCode == 0 && !ChildReady() && ChildResolution() == (null, null),
+            "valid committed CLOSED ownership from a foreign root cannot cover the child");
+        var later = Candidate(secondPaths, "child-current");
+        var laterFile = Path.Combine(fixture.FullName, "governance/revisions/" + later + ".yaml");
+        EditRevision(laterFile, "status", "ACTIVE");
+        RunGit(fixture, "add", "--", "governance/revisions/" + later + ".yaml", "governance/evidence/" + later + "-proof.json");
+        RunGit(fixture, "commit", "--quiet", "-m", "Committed active child compatibility claim");
+        Check(!ChildReady() && ChildResolution() == (null, null), "ACTIVE later-root ownership cannot waive the child proof");
+        Close(later, false);
+        Check(!ChildReady(), "uncommitted CLOSED later-root ownership cannot waive the child proof");
+        Close(later, true);
+        var laterState = CommitReadinessApplication.Read(GovernanceApplication.LoadRecords(fixture, []).Single(record => record.Identifier == later));
+        Check(ChildReady() && ChildResolution() == (laterState!.ValidatedCommitSha, null) &&
+            RevisionApplication.CloseCheck(fixture, parent).ExitCode == 0,
+            "a valid strictly later committed CLOSED root Revision restores child and parent proof without self recursion");
+        var missingOriginalLink = ChildRecord();
+        var missingLinkState = (YamlDotNet.RepresentationModel.YamlMappingNode)missingOriginalLink.Fields["git_state"];
+        missingLinkState.Children[new YamlDotNet.RepresentationModel.YamlScalarNode("validated_commit_sha")] =
+            new YamlDotNet.RepresentationModel.YamlScalarNode(originalSha);
+        var missingLinkResolver = new RevisionCommittedProofResolver(fixture, missingOriginalLink, new CommittedProofAssessment(fixture));
+        Check(missingLinkResolver.Resolve(childPath, out var missingLinkFailure) is null && missingLinkFailure is null,
+            "a committed live child link cannot substitute for its missing original validated binding");
+        try
+        {
+            EditRevision(childFile, "title", "Uncommitted child metadata with unchanged owner");
+            Check(ChildResolution() == (null, null), "uncommitted child metadata cannot select root proof even with its original owner link");
+        }
+        finally { File.WriteAllBytes(childFile, childBytes); }
+        try
+        {
+            EditRevision(childFile, "revision_ref", foreign);
+            Check(!ChildReady() && ChildResolution() == (null, null), "uncommitted foreign child linkage cannot select root proof");
+        }
+        finally { File.WriteAllBytes(childFile, childBytes); }
+        try
+        {
+            EditRevision(parentFile, "reason", "Uncommitted owning Revision link");
+            Check(!ChildReady() && ChildResolution() == (null, null), "uncommitted owning Revision cannot supply child lineage");
+        }
+        finally { File.WriteAllBytes(parentFile, parentBytes); }
+        try
+        {
+            EditRevision(parentFile, "work_items", Array.Empty<string>());
+            Check(!ChildReady() && ChildResolution() == (null, null), "owning Revision must actually list the child");
+        }
+        finally { File.WriteAllBytes(parentFile, parentBytes); }
+        try
+        {
+            EditRevision(parentFile, "work_items", Array.Empty<string>());
+            RunGit(fixture, "add", "--", "governance/revisions/" + parent + ".yaml");
+            RunGit(fixture, "commit", "--quiet", "-m", "Committed fixture parent without child membership");
+            Check(ChildResolution() == (null, null), "committed current owning Revision must actually list the child");
+        }
+        finally
+        {
+            File.WriteAllBytes(parentFile, parentBytes);
+            RunGit(fixture, "add", "--", "governance/revisions/" + parent + ".yaml");
+            RunGit(fixture, "commit", "--quiet", "-m", "Restore exact committed fixture parent membership");
+        }
+        Check(ChildReady() && ChildResolution() == (laterState!.ValidatedCommitSha, null),
+            "restoring exact committed parent bytes restores healthy later-root child proof");
+        File.WriteAllText(Path.Combine(fixture.FullName, childPath), "uncommitted child drift");
+        Check(!ChildReady(), "later-root child coverage still rejects changed working source");
+        File.WriteAllText(Path.Combine(fixture.FullName, childPath), "child-current");
+        Check(ChildReady() && File.ReadAllBytes(parentFile).SequenceEqual(parentBytes) &&
+            File.ReadAllBytes(childFile).SequenceEqual(childBytes) &&
+            File.ReadAllBytes(Path.Combine(fixture.FullName, childProof)).SequenceEqual(childProofBytes),
+            "current child coverage preserves the exact closed parent and original child state and evidence");
+
         string[] missingClassification = [];
         var invalid = Candidate(missingClassification, "unused");
         Close(invalid, true);
