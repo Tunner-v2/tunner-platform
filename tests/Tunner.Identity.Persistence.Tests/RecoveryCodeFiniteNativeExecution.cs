@@ -515,6 +515,8 @@ public static class RecoveryCodeFiniteNativeExecution
             InvalidOperationException { Message: "RECOVERY_OWNERSHIP_ACK_REJECTED" } => "ACK_REJECTED",
             InvalidOperationException { Message: "RECOVERY_RESOURCE_IDENTITY_INVALID" } => "IDENTITY",
             InvalidOperationException { Message: "RECOVERY_RESOURCE_START_REJECTED" } => "START_REJECTED",
+            InvalidOperationException { Message: "RECOVERY_LOOPBACK_BINDING_INVALID" } => "LOOPBACK_BINDING",
+            InvalidOperationException { Message: "RECOVERY_POSTGRES_READINESS_FAILED" } => "POSTGRES_READINESS",
             Docker.DotNet.DockerApiException { StatusCode: System.Net.HttpStatusCode.BadRequest } => "DOCKER_BAD_REQUEST",
             Docker.DotNet.DockerApiException { StatusCode: System.Net.HttpStatusCode.Conflict } => "DOCKER_CONFLICT",
             Docker.DotNet.DockerApiException { StatusCode: System.Net.HttpStatusCode.NotFound } => "DOCKER_NOT_FOUND",
