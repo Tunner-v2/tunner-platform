@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-016-RV001",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-016",
+  "parent_revision_id": null,
+  "parent_milestone_revision_id": null,
+  "title": "Require RabbitMQ application readiness in the receiver test fixture",
+  "revision_type": "CORRECTIVE",
+  "status": "PROPOSED",
+  "reason": "CI44759011999 fails six receiver cases at their first AMQP connection. The shared receiver fixture waits only for TCP, while publisher tests already use a qualified bounded application-startup check. Correct this confirmed fixture-readiness gap without claiming a production defect or changing delivery behavior.",
+  "authority_refs": [
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [
+    "tests/Tunner.Worker.Tests/OutboxReceiveBrokerFixture.cs",
+    "governance/evidence/P2-016-RV001-VALIDATION.json"
+  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Own only tests/Tunner.Worker.Tests/OutboxReceiveBrokerFixture.cs. Reuse the existing thirty-second rabbitmqctl await_startup and exit-zero check for initialization and restart. Preserve images, engine/ownership/no-log/loopback/cleanup guards, test assertions and production retry/ack semantics. Require independent source review, compile-linked project builds, focused six receiver cases and linked Identity post-commit regression or exact required-CI coverage. Do not run held Recovery qualification or pull/change images."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "tester-qa-engineer",
+    "cyber-security-engineer",
+    "solution-architect"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P2-016-RV001-VALIDATION.json"
+  ],
+  "created_at": "2026-11-20T15:30:49.2210221+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "scope_id": "P2-016-RV001",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "tests/Tunner.Worker.Tests/OutboxReceiveBrokerFixture.cs"
+  ],
+  "context_ref": "artifacts/p2-016-notifications-20261115/receiver-readiness-context/manifest.json",
+  "candidate_patch_ref": "artifacts/p2-016-notifications-20261115/receiver-readiness.patch",
+  "candidate_patch_sha256": "c688c7ed69e6868768c863e8fff1435c090bf77bf628ebc95269d9937c80eea7",
+  "source_review": {
+    "result": "PASS_SOURCE_ONLY",
+    "reviewer": "/root/totp_replay_diagnosis; one independent AI applying Cyber Security1.0, Solution Architecture1.0 and QA1.1 contracts",
+    "assessment": "Fixed bounded application-startup check reuses publisher pattern. Ownership, images, loopback, no-log, failure cleanup, test assertions and production delivery behavior remain. Compilation and runtime unexecuted."
+  },
+  "ci_finding": {
+    "run_id": 44759011999,
+    "source_head_sha": "18cba6c486d89f7d3b1d52e20a7b0fee862ff7e8",
+    "receiver_failed": 6,
+    "other_worker_passed": 21,
+    "identity_passed": 1421,
+    "classification": "Confirmed fixture TCP-only readiness gap; startup race fits initial AMQP connection failures, but exact CI root cause remains unproven."
+  },
+  "qualification": "PENDING: compile both linked projects, focused six receiver cases and linked Identity regression in required CI. Existing native no-pull runner may be used only after unchanged preflight/admission succeeds. Do not retry held Recovery/PostgreSQL qualification or pull/change images."
+}
