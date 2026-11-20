@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-009-RV016",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-009",
+  "parent_revision_id": "P2-009-RV015",
+  "parent_milestone_revision_id": null,
+  "title": "Qualify one real browser and native password-repair journey",
+  "revision_type": "COMPATIBILITY",
+  "status": "APPROVED",
+  "reason": "Extend the existing finite Recovery fixture only for the approved P2-011 V04 flow. Independently reviewed patch v2 adds exact native issuance binding and durable single-use repair assertions; preserve original seven journeys and all closed history.",
+  "authority_refs": [
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [
+    "tools/browser-testing/BrowserTestRecoveryCodes.cs",
+    "tools/browser-testing/FiniteRecoveryCoordinator.cs",
+    "web/tests/recovery/private/contract.mjs",
+    "web/tests/recovery/private/prepared-journeys.mjs",
+    "web/tests/recovery/private/boundary-tests.mjs",
+    "web/tests/totp/sensitive/real-journey.mjs",
+    "governance/evidence/P2-009-RV016-VALIDATION.json"
+  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Own only the six changed existing Recovery fixture and private-browser helper paths declared by exact v2 patch08fb3663; P011 Case fixture remains P011-owned and the shared TOTP literal is additionally covered by P2-008-RV003. Require source-bound compile/boundary qualification, actual eighth native-browser journey and existing regression/cleanup gates. Preserve secret containment, no new IPC/public API/policy, original closed proof, production, merge and release boundaries."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "cyber-security-engineer",
+    "solution-architect",
+    "tester-qa-engineer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P2-009-RV016-VALIDATION.json"
+  ],
+  "created_at": "2026-11-20T00:31:23.3563056+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}

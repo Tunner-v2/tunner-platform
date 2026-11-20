@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "revision_id": "P2-008-RV003",
+  "revision_scope": "WORK_ITEM",
+  "original_scope_id": "TUN-P2-008",
+  "parent_revision_id": "P2-008-RV002",
+  "parent_milestone_revision_id": null,
+  "title": "Admit one literal recovery repair journey to the existing preparation helper",
+  "revision_type": "COMPATIBILITY",
+  "status": "APPROVED",
+  "reason": "The approved P2-011 V04 UI needs one real browser/native password-repair journey. Add only its literal to the existing shared test helper allowlist; preserve all existing TOTP/default paths and original closed history.",
+  "authority_refs": [
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
+  ],
+  "decision_refs": [],
+  "defect_refs": [],
+  "change_refs": [
+    "web/tests/totp/sensitive/real-journey.mjs",
+    "governance/evidence/P2-008-RV003-VALIDATION.json"
+  ],
+  "impact_classification": "NON_BLOCKING",
+  "blocked_scope": [],
+  "acceptance_criteria": [
+    "Own only web/tests/totp/sensitive/real-journey.mjs. Add one literal ID with unchanged helper mechanics, original seven Recovery journeys and default TOTP dispatcher. Require exact independent Cyber/Architecture/QA source review, focused boundaries and actual eighth browser/native journey; preserve privacy/cleanup and committed-source proof. No business policy, production activation, merge or release."
+  ],
+  "prerequisites": [],
+  "work_items": [],
+  "required_gates": [],
+  "required_roles": [
+    "cyber-security-engineer",
+    "solution-architect",
+    "tester-qa-engineer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P2-008-RV003-VALIDATION.json"
+  ],
+  "created_at": "2026-11-20T00:28:42.4333794+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
+}
