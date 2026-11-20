@@ -23,7 +23,7 @@
     "context_ref": "artifacts/p0-004-rv008-child-proof/context/manifest.json",
     "context_before_activation": "GENERATED then CURRENT with zero findings; no post-transition freshness assertion"
   },
-  "qualification": "Actual committed3c build PASS0warnings0errors; focused56ownership and full governance suite PASS, including56ownership/41effective-readiness. Focused56 repeats within full, not112unique. Scoped2file secret scan PASS. Native closure remains required; no P2/wholeCI/Product/production/merge/release acceptance.",
+  "qualification": "Actual committed3c build PASS0warnings0errors; focused56ownership and full governance suite PASS, including56ownership/41effective-readiness. Focused56 repeats within full, not112unique. Scoped2file secret scan PASS. Native VALIDATION and CLOSED checks ALLOWED with zero findings; no P2/wholeCI/Product/production/merge/release acceptance.",
   "acceptance_classification": {
     "product_acceptance_required": false,
     "reason": "Correct implementation of existing Doc03 child/effective-lineage policy; no Product/business/security policy change or authority override."
@@ -84,5 +84,12 @@
     "governance/reviews/REV-P0-004-RV008-cyber-security-engineer.yaml",
     "governance/reviews/REV-P0-004-RV008-tester-qa-engineer.yaml"
   ],
-  "handoff_context_ref": "artifacts/p0-004-rv008-child-proof/closure-context/manifest.json"
+  "handoff_context_ref": "artifacts/p0-004-rv008-child-proof/closure-context/manifest.json",
+  "native_closure_checks": {
+    "validation": "ALLOWED",
+    "closed": "ALLOWED",
+    "closed_checked_commit_sha": "fa3ff6ee9ba9b61993fef693d88dd6e591232453",
+    "closed_tool_chunk": "5b237a",
+    "findings": []
+  }
 }
