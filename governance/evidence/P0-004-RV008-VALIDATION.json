@@ -2,29 +2,28 @@
   "schema_version": 1,
   "scope_id": "P0-004-RV008",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "result": "PASS",
+  "tested_commit_sha": "3c7e080bca5448bc3be6eea5242276d7381b57d0",
+  "validated_commit_sha": "3c7e080bca5448bc3be6eea5242276d7381b57d0",
   "owned_behavior_paths": [
     "src/Tunner.Governance/RevisionCommittedProofResolver.cs",
     "tests/Tunner.Governance.FunctionalTests/Program.cs"
   ],
   "defect": {
-    "status": "OPEN",
+    "status": "RESOLVED_ENGINEERING",
     "kind": "COMPLETED_REVISION_CHILD_PROOF_GAP",
     "actual": "Resolver uses literal child scope while allocator excludes RV originals, so no later proof can refresh changed child-owned sources without altering closed state.",
     "expected": "The child's committed owning revision determines original scope and strict later-revision cutoff; every existing proof/control remains."
   },
-  "source_review": "PASS_SOURCE_ONLY: root independently applied Governance/Cyber contracts; independent recovery_password_ui QA review resolved two coverage gaps in v2 and reports PASS. Diag agent authored patch. No runtime PASS is claimed.",
+  "source_review": "PASS: independent root Governance/Cyber source assessment; separate recovery_password_ui QA reviewed v2 and actual full raw output/hash, verified exact reviewed patch equals committed/working3c. Primary AI applies two contracts, separate AI applies QA; totp_replay_diagnosis authored code.",
   "candidate_patch_sha256": "fd1eeadfcd691884e55c0b50b09a0573f868074a2a7c860795f44620be1dd16c",
-  "candidate_patch_ref": "artifacts/p2-011-recovery-20261112/revision-child-proof-currentness-v2.patch",
   "activation": {
     "native_approved_check": "ALLOWED",
     "native_active_check": "ALLOWED",
     "context_ref": "artifacts/p0-004-rv008-child-proof/context/manifest.json",
     "context_before_activation": "GENERATED then CURRENT with zero findings; no post-transition freshness assertion"
   },
-  "qualification": "PENDING focused existing committed-proof regressions, full governance functional regression, committed-source binding and native closure. Does not resume RV006 performance work or image remediation.",
+  "qualification": "Actual committed3c build PASS0warnings0errors; focused56ownership and full governance suite PASS, including56ownership/41effective-readiness. Focused56 repeats within full, not112unique. Scoped2file secret scan PASS. Native closure remains required; no P2/wholeCI/Product/production/merge/release acceptance.",
   "acceptance_classification": {
     "product_acceptance_required": false,
     "reason": "Correct implementation of existing Doc03 child/effective-lineage policy; no Product/business/security policy change or authority override."
@@ -34,5 +33,56 @@
     "src/Tunner.Governance/RevisionCommittedProofResolver.cs:21",
     "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md:425",
     "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md:464"
-  ]
+  ],
+  "git_state": {
+    "repository_changed": true,
+    "tested_commit_sha": "3c7e080bca5448bc3be6eea5242276d7381b57d0",
+    "validated_commit_sha": "3c7e080bca5448bc3be6eea5242276d7381b57d0",
+    "work_item_commit_shas": [
+      "3c7e080bca5448bc3be6eea5242276d7381b57d0"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/",
+      "docs/project/",
+      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/",
+      "%SystemDrive%/",
+      ".vscode/",
+      "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode/"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  },
+  "focused_execution": {
+    "source_commit_sha": "3c7e080bca5448bc3be6eea5242276d7381b57d0",
+    "build": {
+      "exit_code": 0,
+      "warnings": 0,
+      "errors": 0,
+      "elapsed_seconds": 19.81
+    },
+    "command": "dotnet run --no-build --no-restore --project tests/Tunner.Governance.FunctionalTests -- --revision-committed-proof-only",
+    "result": "PASS",
+    "checks": 56,
+    "exit_code": 0,
+    "output_chunk": "d7fb43",
+    "capture": "Structured transcription of actual tool stdout; not a new invocation"
+  },
+  "full_execution": {
+    "source_commit_sha": "3c7e080bca5448bc3be6eea5242276d7381b57d0",
+    "exit_code": 0,
+    "capture": "Exact UTF8 stdout from original full-suite run; decoded stdout hashes to original raw log. No rerun for recording.",
+    "stdout": "Harness failure reporting checks: 1\r\nResolved UI_REQUIRED lifecycle checks: 15\r\nGlobal UI evidence gate checks: 28\r\nMilestone Revision review checks: 9\r\nPASS: 63 RV schema/lifecycle/context/recovery/portability checks\r\nPASS: 56 closed-revision committed ownership checks\r\nPASS: 41 effective VALIDATION source-readiness checks\r\nPASS: Tunner.Governance functional checks\r\n",
+    "stdout_sha256": "c7ad5433eedcde0518beb1c7569e92d99833171fab6120aa754c02742189f6f7",
+    "original_tool_session": 58507
+  },
+  "owned_git_blobs": {
+    "src/Tunner.Governance/RevisionCommittedProofResolver.cs": "3d8cdb16837854e8b8b53ef4ccc73e6932ec0a70",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs": "485a0f53af263c0ee08b98e0897d84833ca76ea7"
+  },
+  "review_refs": [
+    "governance/reviews/REV-P0-004-RV008-governance-engineer.yaml",
+    "governance/reviews/REV-P0-004-RV008-cyber-security-engineer.yaml",
+    "governance/reviews/REV-P0-004-RV008-tester-qa-engineer.yaml"
+  ],
+  "handoff_context_ref": "artifacts/p0-004-rv008-child-proof/closure-context/manifest.json"
 }
