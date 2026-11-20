@@ -81,7 +81,7 @@ public static class RecoveryCodeFiniteNativeExecution
                 {
                     var result = await CanaryAsync(endpoint, repository, id).ConfigureAwait(false);
                     cases[id] = result.Observed; ownership &= result.Ownership; noLogs &= result.NoLogs; absence &= result.Absent; cleanup &= result.Cleanup;
-                    if (!result.Observed || !result.Cleanup) { failure = "PUBLIC_CANARY_FAILED"; break; }
+                    if (!result.Observed || !result.Cleanup) { failure = result.FailureCode ?? "PUBLIC_CANARY_FAILED"; break; }
                 }
                 // NONFUNCTIONAL PUBLIC reducer vectors only: no private method or value is created/executed here.
                 var publicVector = new RecoveryCodeNativeReceipt(1, "nativeReceipt", nameof(RecoveryCodeNativeCohort.PrivateRecovery), "NONE",
@@ -460,11 +460,13 @@ public static class RecoveryCodeFiniteNativeExecution
         };
     }
 
-    private sealed record CanaryResult(bool Observed, bool Ownership, bool NoLogs, bool Absent, bool Cleanup);
+    private enum CanaryFailureStage { START, MIGRATION, REPORT, CLEANUP }
+    private sealed record CanaryResult(bool Observed, bool Ownership, bool NoLogs, bool Absent, bool Cleanup, string? FailureCode);
     private static async Task<CanaryResult> CanaryAsync(RecoveryCodeLocalDockerEndpoint endpoint, DirectoryInfo repository, string id)
     {
         var owner = RecoveryCodeOwnedDockerFixture.PrepareNativePostgres(endpoint, repository);
         var reached = false; var expectedFailureObserved = false; var cleanup = false;
+        var stage = CanaryFailureStage.START; string? failureCode = null;
         try
         {
             using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(90));
@@ -474,22 +476,28 @@ public static class RecoveryCodeFiniteNativeExecution
                 await owner.StartAsync(deadline.Token).ConfigureAwait(false); reached = owner.OwnershipVerified;
                 if (id is "AFTER_MIGRATION" or "CASE_FAILURE")
                 {
+                    stage = CanaryFailureStage.MIGRATION;
                     var fixture = new IdentityPostgresFixture(owner);
                     try { await using var database = await fixture.CreateFiniteDatabaseAsync(deadline.Token).ConfigureAwait(false); }
                     finally { await fixture.DisposeAsync().ConfigureAwait(false); }
                 }
             }
             else reached = true;
+            stage = CanaryFailureStage.REPORT;
             if (id != "BEFORE_CREATE" && reached) await endpoint.Ownership.PublicStageAsync(owner.InstanceId.ToString("N"), id, deadline.Token).ConfigureAwait(false);
             // This unmistakable public sentinel occurs without calling any account/code-producing method.
             if (id == "CASE_FAILURE") throw new PublicCanaryException();
         }
         catch (PublicCanaryException) { expectedFailureObserved = true; }
-        catch (Exception error) when (error is not OutOfMemoryException) { reached = false; }
+        catch (Exception error) when (error is not OutOfMemoryException)
+        {
+            reached = false; failureCode = CanaryFailureCode(stage, owner.CreatedIdentityCaptured, error);
+        }
         finally
         {
             try { await owner.DisposeAsync().ConfigureAwait(false); cleanup = owner.CleanupVerified; }
-            catch (Exception error) when (error is not OutOfMemoryException) { }
+            catch (Exception error) when (error is not OutOfMemoryException)
+            { failureCode ??= CanaryFailureCode(CanaryFailureStage.CLEANUP, owner.CreatedIdentityCaptured, error); }
         }
         // Cleanup rejection is simulated only after actual cleanup; it can never set SensitiveAccepted.
         var sensitiveCleanupAccepted = AcceptSensitive(reached, owner.CreatedIdentityCaptured, owner.NoLogPersistenceVerified,
@@ -497,7 +505,27 @@ public static class RecoveryCodeFiniteNativeExecution
         var observed = reached && cleanup && owner.ContainerAbsentVerified &&
             (id != "CASE_FAILURE" || expectedFailureObserved) && (id != "CLEANUP_REJECT" || !sensitiveCleanupAccepted);
         var noContainer = id == "BEFORE_CREATE";
-        return new(observed, noContainer || owner.CreatedIdentityCaptured, noContainer || owner.NoLogPersistenceVerified, owner.ContainerAbsentVerified, cleanup);
+        return new(observed, noContainer || owner.CreatedIdentityCaptured, noContainer || owner.NoLogPersistenceVerified, owner.ContainerAbsentVerified, cleanup, failureCode);
+    }
+    private static string CanaryFailureCode(CanaryFailureStage stage, bool created, Exception error)
+    {
+        var boundary = stage == CanaryFailureStage.START ? created ? "START_AFTER_CAPTURE" : "START_BEFORE_CAPTURE" : stage.ToString();
+        var category = error switch
+        {
+            InvalidOperationException { Message: "RECOVERY_OWNERSHIP_ACK_REJECTED" } => "ACK_REJECTED",
+            InvalidOperationException { Message: "RECOVERY_RESOURCE_IDENTITY_INVALID" } => "IDENTITY",
+            InvalidOperationException { Message: "RECOVERY_RESOURCE_START_REJECTED" } => "START_REJECTED",
+            Docker.DotNet.DockerApiException { StatusCode: System.Net.HttpStatusCode.BadRequest } => "DOCKER_BAD_REQUEST",
+            Docker.DotNet.DockerApiException { StatusCode: System.Net.HttpStatusCode.Conflict } => "DOCKER_CONFLICT",
+            Docker.DotNet.DockerApiException { StatusCode: System.Net.HttpStatusCode.NotFound } => "DOCKER_NOT_FOUND",
+            Docker.DotNet.DockerApiException => "DOCKER_API",
+            OperationCanceledException => "CANCELED",
+            Npgsql.NpgsqlException => "POSTGRES",
+            InvalidOperationException => "INVALID_OPERATION",
+            _ => "OTHER"
+        };
+        // Closed literals only; never retain/project exception text, inner exceptions, SQL or daemon payloads.
+        return "PUBLIC_CANARY_" + boundary + "_" + category;
     }
     private sealed class PublicCanaryException : Exception;
 }
