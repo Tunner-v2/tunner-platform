@@ -2,15 +2,15 @@
   "schema_version": 1,
   "scope_id": "P2-005-RV002",
   "validation_kind": "COMMITTED",
-  "result": "PENDING",
+  "result": "PASS",
   "context_ref": "artifacts/p2-011-recovery-20261112/v04-currentness-context/manifest.json",
   "context_scope": "One bounded coordinating RV017 pack includes all six related revision/evidence records, common three role contracts and shared authority. Explicit owned_behavior_paths remain scope-specific; no historical DONE fallback or broader ownership.",
-  "tested_commit_sha": null,
-  "validated_commit_sha": null,
+  "tested_commit_sha": "cf604f8503e269fcd1c19d8f1b8ccc7956e42614",
+  "validated_commit_sha": "cf604f8503e269fcd1c19d8f1b8ccc7956e42614",
   "owned_behavior_paths": [
     "docs/contracts/ui-inventory.json"
   ],
-  "qualification": "PENDING final committed-carrier equality and native lifecycle checks. Reuse existing actual qualification; no runtime rerun at the future metadata carrier.",
+  "qualification": "Actual committed-carrier source comparison PASS atcf604f85. Each owned Git object equals its declared qualified source and working tree; no affected file changed since independent9e53 review and no closed parent/child history changed. Actual runtime execution identities remain separate; native final gates pending.",
   "review_group_ref": "governance/evidence/P2-011-COMPATIBILITY-SCOPE.json",
   "review_group_key": "v04_source_currentness",
   "source_comparison": {
@@ -46,5 +46,28 @@
     "owner_rows_unchanged": 3,
     "root_metadata_unchanged": true,
     "sha256": "8b62097d5505a8f9171ddd72f562aa9a0ef1fc36b76de76a4b0184caa0fbd255"
-  }
+  },
+  "git_state": {
+    "repository_changed": true,
+    "tested_commit_sha": "cf604f8503e269fcd1c19d8f1b8ccc7956e42614",
+    "validated_commit_sha": "cf604f8503e269fcd1c19d8f1b8ccc7956e42614",
+    "work_item_commit_shas": [
+      "cf604f8503e269fcd1c19d8f1b8ccc7956e42614"
+    ],
+    "closure_commit_sha": null,
+    "remaining_uncommitted_paths": [
+      "docs/context/current/",
+      "docs/project/",
+      "governance/evidence/p2-009-recovery-20261111/public-integration-c71495c/",
+      "%SystemDrive%/",
+      ".vscode/",
+      "governance/evidence/p2-019-content-20261116/user-browser-dfdb144a/default-mode/"
+    ],
+    "remaining_uncommitted_classification": "PREEXISTING_UNRELATED"
+  },
+  "source_binding_meaning": "tested/validated SHA denotes the actual metadata Git-equality qualification, not a new software run. Runtime46041/focused frontendf77/legacy keyboard0f remain at original actual sources as applicable.",
+  "owned_git_blobs": {
+    "docs/contracts/ui-inventory.json": "1b24617880074b072205f5176a64592e152df1d9"
+  },
+  "activation": "All six native APPROVED and ACTIVE checks ALLOWED0; coordinating bounded context GENERATED and verified CURRENT before activation."
 }
