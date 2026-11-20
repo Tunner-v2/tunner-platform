@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "scope_id": "P0-004-RV008",
+  "validation_kind": "COMMITTED",
+  "result": "PENDING",
+  "tested_commit_sha": null,
+  "validated_commit_sha": null,
+  "owned_behavior_paths": [
+    "src/Tunner.Governance/RevisionCommittedProofResolver.cs",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs"
+  ],
+  "defect": {
+    "status": "OPEN",
+    "kind": "COMPLETED_REVISION_CHILD_PROOF_GAP",
+    "actual": "Resolver uses literal child scope while allocator excludes RV originals, so no later proof can refresh changed child-owned sources without altering closed state.",
+    "expected": "The child's committed owning revision determines original scope and strict later-revision cutoff; every existing proof/control remains."
+  },
+  "source_review": "PENDING exact unapplied patch and independent review. No code applied.",
+  "qualification": "PENDING focused existing committed-proof regressions, full governance functional regression, committed-source binding and native closure. Does not resume RV006 performance work or image remediation.",
+  "acceptance_classification": {
+    "product_acceptance_required": false,
+    "reason": "Correct implementation of existing Doc03 child/effective-lineage policy; no Product/business/security policy change or authority override."
+  },
+  "diagnosis_refs": [
+    "src/Tunner.Governance/RevisionApplication.cs:496",
+    "src/Tunner.Governance/RevisionCommittedProofResolver.cs:21",
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md:425",
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md:464"
+  ]
+}

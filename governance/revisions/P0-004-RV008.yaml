@@ -7,24 +7,38 @@
   "parent_milestone_revision_id": null,
   "title": "Resolve later committed proof for completed revision children",
   "revision_type": "CORRECTIVE",
-  "status": "PROPOSED",
+  "status": "APPROVED",
   "reason": "Confirmed tooling gap: closed revision-child proof resolves against its literal child ID, but the native allocator intentionally forbids RV-of-RV originals. Later same-root corrective qualification cannot cover child-owned changed files. Repair only proof-owner resolution with a strict cutoff after the owning revision; preserve immutable closure and all source/gate safeguards.",
   "authority_refs": [
-    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md"
+    "docs/authority/current/development/03_Governed_Development_Lifecycle_Scrum_Git.md",
+    "docs/authority/current/development/09_Testing_Acceptance_Evidence_and_Quality_Gates.md"
   ],
   "decision_refs": [],
   "defect_refs": [],
-  "change_refs": [],
-  "impact_classification": "NON_BLOCKING",
-  "blocked_scope": [],
+  "change_refs": [
+    "src/Tunner.Governance/RevisionCommittedProofResolver.cs",
+    "tests/Tunner.Governance.FunctionalTests/Program.cs",
+    "governance/evidence/P0-004-RV008-VALIDATION.json"
+  ],
+  "impact_classification": "SCOPED_BLOCKING",
+  "blocked_scope": [
+    "TUN-P2-011"
+  ],
   "acceptance_criteria": [
     "Exact independently reviewed resolver-only correction plus existing functional regressions must accept valid strictly-later same-original-scope CLOSED committed child coverage and reject parent/older/foreign/active/uncommitted/tampered/cyclic proof. Preserve original records, runtime identities, comparison/live checks, Product authority and release boundaries. No cache optimization, authority/business change or nested revision IDs."
   ],
   "prerequisites": [],
   "work_items": [],
   "required_gates": [],
-  "required_roles": [],
-  "evidence_refs": [],
-  "created_at": "2026-11-20T00:51:54.0714795\u002B00:00",
-  "closed_at": null
+  "required_roles": [
+    "governance-engineer",
+    "cyber-security-engineer",
+    "tester-qa-engineer"
+  ],
+  "evidence_refs": [
+    "governance/evidence/P0-004-RV008-VALIDATION.json"
+  ],
+  "created_at": "2026-11-20T00:51:54.0714795+00:00",
+  "closed_at": null,
+  "product_acceptance_required": false
 }
