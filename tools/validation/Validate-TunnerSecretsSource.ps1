@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param([string]$RepositoryRoot)
+param([string]$RepositoryRoot, [string[]]$Path)
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
@@ -40,7 +40,7 @@ if ($bootstrapTool -notmatch 'bao secrets enable -path=tunner kv-v2') {
     throw "Bootstrap tool must provision the local KV-v2 mount before applying policies."
 }
 
-& (Join-Path $RepositoryRoot "tools/security/Invoke-TunnerSecretScan.ps1") -RepositoryRoot $RepositoryRoot
+& (Join-Path $RepositoryRoot "tools/security/Invoke-TunnerSecretScan.ps1") -RepositoryRoot $RepositoryRoot -Path $Path
 
 $scannerPath = Join-Path $RepositoryRoot 'tools/security/Invoke-TunnerSecretScan.ps1'
 $configurationText = [IO.File]::ReadAllText((Join-Path $RepositoryRoot 'tools/security/secret-scan-allowances.json'))
@@ -51,7 +51,7 @@ $genericRule = $scannerAst.FindAll({ param($node) $node -is [System.Management.A
     ForEach-Object { try { $_.SafeGetValue() } catch { } } |
     Where-Object { $_.Contains('Name') -and $_.Name -eq 'generic-secret-assignment' } |
     Select-Object -First 1
-if ($null -eq $genericRule -or $configuration.allowances.Count -ne 6) { throw 'Secret-scan qualification inputs changed; review the case set.' }
+if ($null -eq $genericRule -or $configuration.allowances.Count -ne 7) { throw 'Secret-scan qualification inputs changed; review the case set.' }
 $reviewedMatches = @(
     foreach ($allowance in $configuration.allowances) {
         $content = [IO.File]::ReadAllText((Join-Path $RepositoryRoot $allowance.path))

@@ -1,5 +1,15 @@
 {
   "schema_version": 1,
+  "recovery_identifier_scan_correction": {
+    "phase": "PRE_EDIT_CLASSIFIED",
+    "ci_run": 44642404082,
+    "source_commit_sha": "2eb6a7e6259a61a5fc393e86c9ecefbf552d76d4",
+    "owned_paths": ["tools/security/secret-scan-allowances.json", "tools/validation/Validate-TunnerSecretsSource.ps1"],
+    "scope": "One independently reviewed benign bare-identifier allowance, finite count6to7 and forwarding the scanner's existing optional Path for focused local qualification. Default full scanning and all negative cases remain.",
+    "reviewer": "/root/totp_replay_diagnosis; independent security review PASS; no edits or execution.",
+    "match_sha256": "1e613f7a1f10ca047f7bbc0323448c3610bda03aeea5ab2ebf527835cad17c75",
+    "qualification": "PENDING"
+  },
   "scope_id": "P1-RV001-001",
   "result": "LOCAL_TEST_CORRECTIONS_PASS_INTEGRATION_BLOCKED",
   "tested_commit_sha": "da27cec467ad94183ac5320eae4a48998fca1cc6",
