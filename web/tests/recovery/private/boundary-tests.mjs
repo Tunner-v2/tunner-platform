@@ -107,7 +107,8 @@ test('private marker overlap detects public sentinel across an owned profile chu
   });
 });
 test('guarded registered dispatcher rejects each missing dependency before work or observations', async () => {
-  const ids=Object.keys(journeys);assert.equal(ids.length,7);
+  const ids=Object.keys(journeys);assert.equal(ids.length,8);
+  assert.deepEqual(ids.filter(id=>id!=='RECOVERY_CASE_PASSWORD_REPAIR_V1'),['RECOVERY_CASE_V01_V03_V1','RECOVERY_GENERATE_PASSWORD_V1','RECOVERY_REPLACE_PASSWORD_V1','RECOVERY_GENERATE_PASSKEY_V1','RECOVERY_REPLACE_PASSKEY_V1','RECOVERY_GENERATE_TOTP_V1','RECOVERY_REPLACE_TOTP_V1']);
   for(const id of ids)for(const missing of ['browser','onContext','fixtureControl','nativeCode','requestOwnedDownload','inspectOwnedSurface']){
     let work=0;const seen=[],attempted=()=>{work++;throw fixedError('PREDICATE_FAILED');};
     const input={control:{...liveControl(),journeyId:id},check(key,value){seen.push([key,value]);},browser:{contexts:attempted},onContext:attempted,fixtureControl:attempted,nativeCode:attempted,requestOwnedDownload:attempted,inspectOwnedSurface:attempted};
@@ -135,6 +136,17 @@ test('conditional coordinator facts cannot be supplied by the browser or another
  required.EXACT_SUBSET_REPLACEMENT=true;required.PUBLICATION_DRIFT_ROLLED_BACK=true;assert.equal(realAccepted(child,control,map(supervisorChecks),required),false);
  const tid='RECOVERY_REPLACE_TOTP_V1',tc={...liveControl(),journeyId:tid},tchild={...winning(),journeyId:tid,checks:map(['BROWSER_ENGINE','SURFACE_CHECKED',...journeys[tid]])},tr=map(requiredCoordinatorChecks(tid));assert.equal(realAccepted(tchild,tc,map(supervisorChecks),tr),true);tr.PUBLICATION_DRIFT_ROLLED_BACK=false;assert.equal(realAccepted(tchild,tc,map(supervisorChecks),tr),false);
 });
+test('password repair requires its coordinator-owned fact and exact browser map',async()=>{
+ const {requiredCoordinatorChecks}=await import('./contract.mjs'),id='RECOVERY_CASE_PASSWORD_REPAIR_V1',control={...liveControl(),journeyId:id};
+ const child={...winning(),journeyId:id,checks:map(['BROWSER_ENGINE','SURFACE_CHECKED',...journeys[id]])},required=map(requiredCoordinatorChecks(id));
+ assert.equal(realAccepted(child,control,map(supervisorChecks),required),true);
+ delete required.RECOVERY_PASSWORD_OWNERSHIP;assert.equal(realAccepted(child,control,map(supervisorChecks),required),false);
+ required.RECOVERY_PASSWORD_OWNERSHIP=false;assert.equal(realAccepted(child,control,map(supervisorChecks),required),false);
+ required.RECOVERY_PASSWORD_OWNERSHIP=true;assert.equal(validChildResult({...child,checks:{...child.checks,RECOVERY_PASSWORD_OWNERSHIP:true}},control),false);
+ for(const key of journeys[id]){const checks={...child.checks};delete checks[key];assert.equal(childAccepted({...child,checks},control),false);checks[key]=false;assert.equal(childAccepted({...child,checks},control),false);}
+ assert.equal(childAccepted({...child,checks:{...child.checks,CANCEL_ORIGINAL_RESULT:true}},control),false);
+});
+
 test('public server exit is required independently of browser closure',async()=>{
  const {validCleanup}=await import('./contract.mjs'),value=winning(),control=liveControl();delete value.serverExited;assert.equal(validChildResult(value,control),false);value.serverExited=false;assert.equal(validChildResult(value,control),true);assert.equal(childAccepted(value,control),false);
  assert.equal(validCleanup({version,type:'recoveryPrivateCleanup',journeyId,contextClosed:true,browserClosed:true,serverExited:false,oracleExited:true},control),false);

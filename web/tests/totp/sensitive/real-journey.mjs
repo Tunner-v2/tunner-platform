@@ -464,7 +464,7 @@ export async function runPublicJourneyCanary({page,context,browser,signal}) {
 
 // Explicit preparation capability for the separate recovery child. No TOTP dispatcher/default changes.
 export function createRecoveryAccountMechanics(input){
- const ids=['RECOVERY_GENERATE_PASSWORD_V1','RECOVERY_REPLACE_PASSWORD_V1','RECOVERY_GENERATE_PASSKEY_V1','RECOVERY_REPLACE_PASSKEY_V1','RECOVERY_GENERATE_TOTP_V1','RECOVERY_REPLACE_TOTP_V1','RECOVERY_CASE_V01_V03_V1'];
+ const ids=['RECOVERY_GENERATE_PASSWORD_V1','RECOVERY_REPLACE_PASSWORD_V1','RECOVERY_GENERATE_PASSKEY_V1','RECOVERY_REPLACE_PASSKEY_V1','RECOVERY_GENERATE_TOTP_V1','RECOVERY_REPLACE_TOTP_V1','RECOVERY_CASE_V01_V03_V1','RECOVERY_CASE_PASSWORD_REPAIR_V1'];
  requireTrue(object(input)&&ids.includes(input.journeyId)&&typeof input.runId==='string'&&/^[a-f0-9]{32}$/.test(input.runId)&&typeof input.remember==='function'&&typeof input.fixtureControl==='function'&&typeof input.nativeCode==='function'&&typeof input.onContext==='function');
  const mechanicsInput={...input}; delete mechanicsInput.control;
  const run=new Journey({...mechanicsInput,reportStep:typeof input.reportStep==='function'?input.reportStep:()=>{},recoveryPreparation:true,onPreparedContext:input.onContext,identityMode:'FINITE_RECOVERY_BROWSER_TESTING',safeCountKeys:['ownerCommits','operations','sets','replacedSets','entries','proofs','consumedProofs','sessions','outbox','codeAcceptances'],privateRemember:input.remember,fixtureControl:async action=>{requireTrue(action==='READ_SAFE_COUNTS');return input.fixtureControl(action);}});

@@ -177,6 +177,67 @@ class RecoveryJourney {
   if(pagehide)this.prove('PAGEHIDE_NO_REVEAL',true);
   const text=await this.page.locator('body').textContent();this.prove('REQUESTED_NOT_SAVED',!text.includes('file was saved')&&!text.includes('Download requested'));
  }
+ async passwordRepair(){
+  await this.page.setViewportSize({width:390,height:900});
+  await this.setup();const held=await this.begin('GENERATE'),delivered=await this.proof(held);
+  await this.duplicate(held,delivered);let code=delivered.codes[0],password='Changed-'+this.account.password;
+  this.remember(code,password);await this.clear(held.op);
+  // A second real native session remains live while the original signs out; repair must invalidate it.
+  const other=await this.mechanics.newPage();this.pages.push(other);await this.mechanics.passwordLogin(other,this.account,false);
+  requireTrue((await this.mechanics.session(other)).ok);
+  const signed=await this.mechanics.session(this.page);requireTrue(signed.ok);
+  const ended=await this.mechanics.post(this.page,'/authentication/sign-out',{},signed.body.csrfToken);requireTrue(ended.ok&&ended.body.authenticated===false);
+  let starts=0,repairs=0,unexpected=false;
+  const observe=request=>{const url=new URL(request.url());if(url.origin!==this.control.origin||!url.pathname.startsWith('/recovery/')||request.method()!=='POST')return;
+   if(url.pathname==='/recovery/start')starts++;else if(url.pathname==='/recovery/repair')repairs++;else if(url.pathname!=='/recovery/result')unexpected=true;};
+  this.page.on('request',observe);
+  try{
+   this.checkpoint?.('CASE_ENTRY');await this.page.goto(new URL('/login',this.control.origin).href);
+   await this.page.getByRole('button',{name:'Forgot password?',exact:true}).click();await this.mechanics.at(this.page,'/recovery');
+   await this.page.getByLabel('Email address',{exact:true}).fill(this.account.email);
+   await this.page.getByRole('radio',{name:/^Recover account access/}).click();
+   const started=await this.response(this.page,'/recovery/start',()=>this.page.getByRole('button',{name:'Continue',exact:true}).click());
+   requireTrue(started.ok&&Object.keys(started.sent).sort().join('|')==='email|goalReference|requestId'&&started.sent.email===this.account.email&&started.sent.goalReference==='SYNTHETIC_FINITE_RECOVERY_011_GOAL_V1');
+   const requestId=started.sent.requestId;this.remember(requestId);requireTrue(started.body.operation?.requestId===requestId&&started.body.operation.status==='AWAITING_PROOF');
+   await this.mechanics.at(this.page,'/recovery/verify');await this.page.getByRole('button',{name:/^Use a recovery code/}).click();
+   await privateFill(this.page.getByLabel('Recovery code',{exact:true}),code);
+   await this.page.getByRole('button',{name:'Continue',exact:true}).click();await this.mechanics.at(this.page,'/recovery/repair');
+   await this.page.getByRole('heading',{name:'Choose a new password',exact:true}).waitFor();
+   this.prove('NO_EARLY_REPAIR',starts===1&&repairs===0&&!unexpected&&await this.page.getByLabel('Recovery code',{exact:true}).count()===0);
+   this.checkpoint?.('CASE_VALIDATION');const form=this.page.locator('form'),first=this.page.getByLabel('New password',{exact:true}),confirmation=this.page.getByLabel('Confirm password',{exact:true});
+   await this.page.getByRole('button',{name:'Save new password',exact:true}).click();
+   await this.page.waitForFunction(()=>document.activeElement?.getAttribute('name')==='password',null,{timeout:budgets.action});
+   requireTrue(await first.getAttribute('aria-invalid')==='true'&&repairs===0);
+   const boot=await this.mechanics.get(this.page,'/recovery/options');requireTrue(boot.ok&&boot.body.operation?.requestId===requestId&&boot.body.operation.version===1);
+   const length=[...password].length;requireTrue(Number.isSafeInteger(boot.body.repair.passwordMinimumLength)&&Number.isSafeInteger(boot.body.repair.passwordMaximumLength)&&length>=boot.body.repair.passwordMinimumLength&&length<=boot.body.repair.passwordMaximumLength);
+   await privateFill(first,password);await privateFill(confirmation,password+'x');await first.focus();
+   await this.page.getByRole('button',{name:'Save new password',exact:true}).click();
+   requireTrue(await confirmation.getAttribute('aria-invalid')==='true'&&repairs===0);
+   await privateFill(confirmation,password);await first.focus();
+   this.prove('REPAIR_VALIDATION',await confirmation.getAttribute('aria-invalid')!=='true'&&repairs===0);
+   const fields=await this.page.locator('input[type=password]').elementHandles();requireTrue(fields.length===2);
+   // Observe actual UI pending composition without intercepting, replacing or delaying native traffic.
+   const pending=this.page.evaluate(()=>new Promise(resolve=>{
+    let observer,timer;const inspect=()=>{if([...document.querySelectorAll('h1,h2')].some(h=>h.textContent==='Updating your password')&&document.querySelectorAll('input').length===0){observer?.disconnect();clearTimeout(timer);resolve(true);}};
+    observer=new MutationObserver(inspect);observer.observe(document.body,{subtree:true,childList:true,characterData:true});timer=setTimeout(()=>{observer.disconnect();resolve(false);},5000);inspect();
+   }));pending.catch(()=>{});
+   const repaired=await this.response(this.page,'/recovery/repair',()=>form.evaluate(form=>{form.requestSubmit();form.requestSubmit();}));
+   this.prove('PENDING_SECRETS_CLEARED',await pending&&await Promise.all(fields.map(field=>field.evaluate(input=>input.value===''))).then(flags=>flags.every(Boolean)));
+   this.prove('ATOMIC_PASSWORD_REPAIR',repaired.ok&&repairs===1&&!unexpected&&Object.keys(repaired.sent).sort().join('|')==='code|expectedVersion|password|passwordConfirmation|requestId'&&repaired.sent.requestId===requestId&&repaired.sent.expectedVersion===1&&repaired.sent.code===code&&repaired.sent.password===password&&repaired.sent.passwordConfirmation===password&&repaired.body.operation?.requestId===requestId&&repaired.body.operation.status==='PASSWORD_REPAIRED_NO_SESSION'&&repaired.body.operation.version===2&&repaired.body.operation.authenticated===false&&repaired.body.operation.result?.outcome==='PASSWORD_REPAIRED_NO_SESSION');
+   const safe=JSON.stringify(repaired.body);requireTrue(!safe.includes(code)&&!safe.includes(password));
+   code='';password='';delivered.codes.fill('');
+   await this.page.getByRole('heading',{name:'Password updated',exact:true}).waitFor();
+   this.prove('PASSWORD_UPDATED_HANDOFF',new URL(this.page.url()).pathname==='/recovery/repair'&&await this.page.locator('input').count()===0&&await this.page.getByRole('button').count()===1);
+   await this.page.getByRole('button',{name:'View recovery result',exact:true}).click();await this.mechanics.at(this.page,'/recovery/result');
+   await this.page.getByRole('heading',{name:'Recovery result',exact:true}).waitFor();await this.page.reload();await this.mechanics.at(this.page,'/recovery/result');
+   await this.page.getByRole('heading',{name:'Recovery result',exact:true}).waitFor();
+   const current=await this.mechanics.get(this.page,'/recovery/options');
+   this.prove('ORIGINAL_REPAIR_RESULT',current.ok&&current.body.operation?.requestId===requestId&&current.body.operation.status==='PASSWORD_REPAIRED_NO_SESSION'&&current.body.operation.result?.outcome==='PASSWORD_REPAIRED_NO_SESSION'&&repairs===1&&starts===1&&!unexpected&&await this.page.locator('input').count()===0);
+   this.prove('EXISTING_SESSION_INVALIDATED',(await this.mechanics.session(other)).status===401);
+   this.prove('NO_AUTHENTICATED_SESSION',(await this.mechanics.session(this.page)).status===401&&!(await this.context.cookies()).some(cookie=>cookie.name==='__Host-Tunner.User.Session'));
+   await this.privacy();this.prove('STRICT_OWNED_SURFACE',await this.inspectOwnedSurface());
+  }finally{this.page.off('request',observe);code='';password='';delivered.codes.fill('');}
+ }
  async execute(){
   await this.setup();
   if(this.kind==='REPLACE'){
@@ -230,7 +291,7 @@ export async function runPreparedJourney(input){
  requireTrue(registeredJourney(input.control?.journeyId)&&typeof input.browser?.contexts==='function'&&typeof input.onContext==='function'&&typeof input.fixtureControl==='function'&&typeof input.nativeCode==='function'&&typeof input.requestOwnedDownload==='function'&&typeof input.inspectOwnedSurface==='function','INPUT_INVALID');
  if(input.control.journeyId==='RECOVERY_CASE_V01_V03_V1')return runRecoveryCaseJourney(input);
  const run=new RecoveryJourney(input);let failed=false;
- try{await run.execute();}catch{failed=true;}
+ try{if(input.control.journeyId==='RECOVERY_CASE_PASSWORD_REPAIR_V1')await run.passwordRepair();else await run.execute();}catch{failed=true;}
  try{run.observations.finish(input.check);}catch{failed=true;}
  try{await run.close();}catch{throw fixedError('CLEANUP_FAILED');}
  if(failed)throw fixedError('PREDICATE_FAILED');

@@ -16,7 +16,7 @@ using Tunner.Testing.Recovery;
 /// <summary>One finite Development-only recovery browser composition; no owner consumption workflow.</summary>
 internal static class FiniteRecoveryCoordinator
 {
-    private static readonly string[] JourneyIds = [.. BrowserTestRecoveryCodes.JourneyIds, BrowserTestRecoveryCase.JourneyId];
+    private static readonly string[] JourneyIds = [.. BrowserTestRecoveryCodes.JourneyIds, BrowserTestRecoveryCase.JourneyId, BrowserTestRecoveryCase.PasswordJourneyId];
     private static readonly string[] RecoveryCaseBrowserIds = ["BROWSER_ENGINE", "SURFACE_CHECKED", "BFF_IDENTITY", "NEUTRAL_ENTRY", "SHARED_FORM_VALIDATION", "PENDING_NO_STANDALONE_PROOF", "ORIGINAL_RELOAD_HISTORY", "ORIGINAL_POINTER_RESTORE", "FOREIGN_BROWSER_DENIED", "LIVE_CSRF_ORIGIN_GUARDS", "CANCEL_ORIGINAL_RESULT", "NO_AUTHENTICATED_SESSION", "NO_SECRET_URL_OR_STORAGE", "COOKIE_FLAGS", "STRICT_OWNED_SURFACE", "ALL_FOUR_VIEWPORTS"];
     private static readonly string[] PublicFaults = ["happy", "unarmed", "duplicate", "wrong-page", "wrong-bytes", "oversize", "outside-identity", "stream-error", "delete-error", "unexpected-output", "invalid-result", "action-timeout", "child-timeout", "unexpected-artifact", "fatal-rejection", "journey-entry", "missing-predicate", "cross-component", "cleanup", "oracle-roundtrip", "oracle-input", "oracle-exit", "oracle-timeout", "oracle-stderr", "production-controller", "relay-roundtrip", "relay-malformed", "relay-timeout", "popup-extra", "iframe-extra", "simultaneous-extra", "cancel-initiation", "stalled-partial-read", "cancel-stream-read", "stalled-delete", "cancel-delete", "secondary-context-extra"];
     private static readonly string[] PublicCancelFaults = ["child-timeout", "cancel-initiation", "cancel-stream-read", "cancel-delete"];
@@ -27,6 +27,7 @@ internal static class FiniteRecoveryCoordinator
     private static readonly string[] SupervisorIds = ["SOURCE_CURRENT", "PROTOCOL_VALID", "OUTPUT_CONTAINED", "CHILD_CLOSED", "ORACLE_CLOSED", "CHILD_SURFACES_CLOSED", "SURFACE_REMOVED"];
     private static readonly string[] CoordinatorIds = ["SOURCE_BUILD_CURRENT", "OWNED_DATABASE", "OWNED_MAILPIT", "EPHEMERAL_DP", "CURRENT_MIGRATIONS", "SAFE_PERSISTENCE", "SAFE_OUTBOX", "HOST_STOPPED", "RESOURCES_REMOVED", "BORROWED_POSTGRES_PRESERVED"];
     private static readonly string[] CommonBrowserIds = ["BROWSER_ENGINE", "SURFACE_CHECKED", "BFF_IDENTITY", "ACTUAL_PROOF_METHOD", "EXACT_OWNER_AND_STEP_UP_BINDING", "CANONICAL_FIRST_DELIVERY", "DUPLICATE_NO_REDISCLOSURE", "NO_EARLY_DELIVERY", "COOKIE_FLAGS", "NO_SECRET_URL_OR_STORAGE", "VOLATILE_CLEAR", "REQUESTED_NOT_SAVED", "STRICT_OWNED_SURFACE"];
+    private static readonly string[] PasswordRepairBrowserIds = [.. CommonBrowserIds, "NO_EARLY_REPAIR", "REPAIR_VALIDATION", "PENDING_SECRETS_CLEARED", "ATOMIC_PASSWORD_REPAIR", "PASSWORD_UPDATED_HANDOFF", "ORIGINAL_REPAIR_RESULT", "EXISTING_SESSION_INVALIDATED", "NO_AUTHENTICATED_SESSION"];
     private static readonly string[] ClosedLiveFacts = ["contextClosed", "browserClosed", "serverExited", "oracleExited", "oracleGraceful", "surfaceClean", "surfaceRemoved", "cleanupCompleted"];
     private static readonly string[] ClosedPublicFacts = ["contextClosed", "browserClosed", "serverExited", "oracleExited", "surfaceRemoved"];
     private static readonly string[] ClosedPublicSupervisorFacts = ["SOURCE_CURRENT", "CHILD_CLOSED", "ORACLE_CLOSED", "CHILD_SURFACES_CLOSED", "SURFACE_REMOVED"];
@@ -363,7 +364,7 @@ internal static class FiniteRecoveryCoordinator
         JsonElement? browser = null; FiniteTotpBuildIdentity? binding = null; FiniteTotpBuildIdentity? nativeBinding = null; RecoveryCodeBorrowedPostgres? borrowed = null; DirectoryInfo? root = null;
         RecoveryCodeFixtureOwnershipChannel? ownership = null; Uri? localDockerEndpoint = null;
         BrowserTestRecoveryCodes? profile = null; RecoveryCodeOwnedPostgres? postgres = null; RecoveryCodeOwnedMailpit? mailpit = null; RecoveryCodeLocalDockerEndpoint? docker = null;
-        RecoveryCodeOwnedOpenBao? vault = null; LocalOpenBaoSession? session = null; WebApplication? app = null; X509Certificate2? certificate = null; string? databaseConnection = null;
+        RecoveryCodeOwnedOpenBao? vault = null; BrowserTestRecoveryCase? recoveryCase = null; LocalOpenBaoSession? session = null; WebApplication? app = null; X509Certificate2? certificate = null; string? databaseConnection = null;
         var interrupted = false; var browserExited = false; var raw = false; var browserExit = -1;
         using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(270));
         try
@@ -437,11 +438,16 @@ internal static class FiniteRecoveryCoordinator
                 }
                 var listener = new TcpListener(IPAddress.Loopback, 0); listener.Start(); var port = ((IPEndPoint)listener.LocalEndpoint).Port; listener.Stop(); origin = "https://localhost:" + port;
                 BrowserTestTotp? totp = seeds is null ? null : new(origin, BrowserTestTotp.JourneyIds[0], databaseConnection, seeds);
-                BrowserTestRecoveryCase? recoveryCase = null;
                 if (journey == BrowserTestRecoveryCase.JourneyId) recoveryCase = new(origin, TimeProvider.System);
-                else profile = new(origin, journey, databaseConnection, TimeProvider.System);
+                else
+                {
+                    profile = new(origin, journey, databaseConnection, TimeProvider.System);
+                    if (journey == BrowserTestRecoveryCase.PasswordJourneyId) recoveryCase = new(origin, TimeProvider.System, passwordRepair: true);
+                }
                 var options = new BrowserTestHostOptions(origin, port, databaseConnection, certificate, mailpit.SmtpPort, null, "FINITE_RECOVERY_BROWSER_TESTING", runId, totp, profile, recoveryCase);
-                cleanup["app"] = false; app = BrowserTestHost.Create(options); await BrowserTestHost.MigrateAndMapAsync(app, options, deadline.Token).ConfigureAwait(false);
+                cleanup["app"] = false; app = BrowserTestHost.Create(options);
+                recoveryCase?.MapIssuedBinding(app, databaseConnection);
+                await BrowserTestHost.MigrateAndMapAsync(app, options, deadline.Token).ConfigureAwait(false);
                 checks["CURRENT_MIGRATIONS"] = checks["EPHEMERAL_DP"] = true; await app.StartAsync(deadline.Token).ConfigureAwait(false); Interrupt("after-app-start"); Interrupt("cleanup-reject");
             }
             failure = "BROWSER_FAILED";
@@ -449,9 +455,11 @@ internal static class FiniteRecoveryCoordinator
                 sourceCommit = source, sourceCommitted = true, origin, mailpitOrigin, runId };
             (browser, browserExited, browserExit, raw) = await RunBrowserAsync(root, control, journey, source, publicMode, profile, deadline.Token).ConfigureAwait(false);
             if (FiniteTotpBuildBinding.Verify(root, recovery: true) != binding || FiniteTotpBuildBinding.VerifyRecoveryNative(root) != nativeBinding || FiniteTotpCoordinator.Git(root, "rev-parse", "HEAD") != source) { checks["SOURCE_BUILD_CURRENT"] = false; throw new InvalidOperationException(); }
-            if (!publicMode && databaseConnection is not null && postgres is not null) (checks["SAFE_PERSISTENCE"], checks["SAFE_OUTBOX"]) = await InspectPersistenceAsync(databaseConnection, postgres.OwnershipVerified, deadline.Token).ConfigureAwait(false);
+            if (!publicMode && databaseConnection is not null && postgres is not null) (checks["SAFE_PERSISTENCE"], checks["SAFE_OUTBOX"]) = await InspectPersistenceAsync(databaseConnection, postgres.OwnershipVerified, deadline.Token, passwordRepair: journey == BrowserTestRecoveryCase.PasswordJourneyId).ConfigureAwait(false);
             if (!publicMode && journey == BrowserTestRecoveryCase.JourneyId && databaseConnection is not null)
                 checks["RECOVERY_CASE_OWNERSHIP"] = await InspectRecoveryCaseOutcomeAsync(databaseConnection, deadline.Token).ConfigureAwait(false);
+            if (!publicMode && journey == BrowserTestRecoveryCase.PasswordJourneyId && databaseConnection is not null && recoveryCase?.IssuedSet is { } issued)
+                checks["RECOVERY_PASSWORD_OWNERSHIP"] = await InspectPasswordRepairOutcomeAsync(databaseConnection, issued, deadline.Token).ConfigureAwait(false);
             if (!publicMode && databaseConnection is not null && profile is not null)
             {
                 if (journey == "RECOVERY_REPLACE_PASSWORD_V1") checks["EXACT_SUBSET_REPLACEMENT"] = await InspectOwnerOutcomeAsync(databaseConnection, profile, completed: true, deadline.Token).ConfigureAwait(false);
@@ -597,14 +605,14 @@ internal static class FiniteRecoveryCoordinator
         else if (value.GetProperty("publicFault").ValueKind != JsonValueKind.Null || value.GetProperty("publicOwnership").ValueKind != JsonValueKind.Null) throw new InvalidOperationException();
         if (True(value, "accepted") && (publicMode || value.GetProperty("status").GetString() != "JOURNEY_OK" || value.GetProperty("stage").GetString() != "COMPLETE" || value.GetProperty("failureCode").GetString() != "NONE" || !True(value, "childResultAccepted") || True(value, "protocolRejected") || value.GetProperty("browserVersion").ValueKind == JsonValueKind.Null || value.GetProperty("exitCode").ValueKind != JsonValueKind.Number || !value.GetProperty("exitCode").TryGetInt32(out var acceptedChildExit) || acceptedChildExit != 0 || checkRows.Length != BrowserIds(journey).Length || BrowserIds(journey).Any(id => !True(value.GetProperty("checks"), id)) || checkRows.Any(x => x.Value.ValueKind != JsonValueKind.True) || SupervisorIds.Any(x => !True(value.GetProperty("supervisor"), x)) || !True(value, "sourceCommitted") || True(value, "publicFaultObserved") || True(value, "rawOutputRejected") || True(value, "timedOut") || True(value, "cleanupForced") || ClosedLiveFacts.Any(x => !True(value, x)))) throw new InvalidOperationException();
     }
-    private static string[] BrowserIds(string journey) => journey == BrowserTestRecoveryCase.JourneyId ? RecoveryCaseBrowserIds : [.. CommonBrowserIds, .. (journey switch
+    private static string[] BrowserIds(string journey) => journey == BrowserTestRecoveryCase.JourneyId ? RecoveryCaseBrowserIds : journey == BrowserTestRecoveryCase.PasswordJourneyId ? PasswordRepairBrowserIds : [.. CommonBrowserIds, .. (journey switch
     {
         "RECOVERY_GENERATE_PASSWORD_V1" => new[] { "ONE_REQUESTED_DOWNLOAD", "CLOSE_NO_REVEAL" }, "RECOVERY_REPLACE_PASSWORD_V1" => ["PUBLISHED_IMPACT_ORIGINAL_BINDING", "BODY_LOSS_NO_REDISCLOSURE"],
         "RECOVERY_GENERATE_PASSKEY_V1" => ["NATIVE_PASSKEY_PROOF", "OWNER_FAILURE_SAME_PROOF"], "RECOVERY_REPLACE_PASSKEY_V1" => ["NATIVE_PASSKEY_PROOF", "SOURCE_FRESHNESS", "NO_SESSION_MUTATION"],
         "RECOVERY_GENERATE_TOTP_V1" => ["NATIVE_TOTP_PROOF", "OWNER_FAILURE_SAME_PROOF", "PAGEHIDE_NO_REVEAL"], "RECOVERY_REPLACE_TOTP_V1" => ["NATIVE_TOTP_PROOF", "CURRENT_PUBLICATION", "NO_SESSION_MUTATION"], _ => []
     })];
     private static bool True(JsonElement value, string key) => value.ValueKind == JsonValueKind.Object && value.TryGetProperty(key, out var property) && property.ValueKind == JsonValueKind.True;
-    private static string[] CoordinatorIdsFor(string journey) => [.. CoordinatorIds, .. (journey switch { "RECOVERY_REPLACE_PASSWORD_V1" => new[] { "EXACT_SUBSET_REPLACEMENT" }, "RECOVERY_REPLACE_TOTP_V1" => ["PUBLICATION_DRIFT_ROLLED_BACK"], BrowserTestRecoveryCase.JourneyId => ["RECOVERY_CASE_OWNERSHIP"], _ => [] })];
+    private static string[] CoordinatorIdsFor(string journey) => [.. CoordinatorIds, .. (journey switch { "RECOVERY_REPLACE_PASSWORD_V1" => new[] { "EXACT_SUBSET_REPLACEMENT" }, "RECOVERY_REPLACE_TOTP_V1" => ["PUBLICATION_DRIFT_ROLLED_BACK"], BrowserTestRecoveryCase.JourneyId => ["RECOVERY_CASE_OWNERSHIP"], BrowserTestRecoveryCase.PasswordJourneyId => ["RECOVERY_PASSWORD_OWNERSHIP"], _ => [] })];
     private static bool Accepted(long managedOutput, bool real, string failure, bool browser, Dictionary<string, bool> checks, string journey) => managedOutput == 0 && real && failure == "NONE" && browser && checks.Count == CoordinatorIdsFor(journey).Length && CoordinatorIdsFor(journey).All(id => checks.TryGetValue(id, out var observed) && observed);
     private static bool PublicContained(JsonElement value, string fault)
     {
@@ -660,6 +668,44 @@ internal static class FiniteRecoveryCoordinator
         _ = command.Parameters.AddWithValue("goal", BrowserTestRecoveryCase.GoalReference);
         return await command.ExecuteScalarAsync(token).ConfigureAwait(false) is true;
     }
+    private static async Task<bool> InspectPasswordRepairOutcomeAsync(string connectionString, BrowserTestRecoveryCase.IssuedSetBinding issued, CancellationToken token)
+    {
+        await using var connection = new NpgsqlConnection(connectionString); await connection.OpenAsync(token).ConfigureAwait(false);
+        await using var command = new NpgsqlCommand("""
+            SELECT (SELECT count(*) FROM accounts.accounts)=1 AND (SELECT count(*) FROM identity."AspNetUsers")=1
+              AND (SELECT count(*) FROM identity.recovery_entries)=1 AND (SELECT count(*) FROM identity.recovery_cases)=1
+              AND (SELECT count(*) FROM identity.recovery_results)=1 AND (SELECT count(*) FROM identity.recovery_code_operations)=1
+              AND (SELECT count(*) FROM identity.recovery_code_sets)=1 AND (SELECT count(*) FROM identity.recovery_code_entries)=4
+              AND (SELECT count(*) FROM identity.step_up_proofs)=1 AND NOT EXISTS(SELECT 1 FROM identity.step_up_proofs WHERE state<>'CONSUMED')
+              AND NOT EXISTS(SELECT 1 FROM identity.recovery_contact_challenges)
+              AND EXISTS(SELECT 1 FROM identity.recovery_entries e JOIN identity.recovery_cases c ON c.entry_id=e.entry_id AND c.request_id=e.request_id
+                JOIN identity.recovery_results r ON r.case_id=c.case_id AND r.result_id=c.result_id
+                JOIN identity.recovery_code_sets s ON s.set_reference=c.set_reference AND s.account_id=c.account_id
+                JOIN identity.recovery_code_operations o ON o.operation_id=s.issuance_operation_id AND o.set_reference=s.set_reference AND o.account_id=s.account_id
+                WHERE c.account_id=@account AND o.operation_id=@issued AND s.set_reference=@set AND s.lifecycle_version=@lifecycle
+                  AND s.state='ACTIVE' AND s.usage_version=1 AND o.kind='GENERATE' AND o.state='COMPLETED' AND o.expected_version=@version
+                  AND e.state='REPAIRED' AND e.version=2 AND e.goal_reference=@goal AND e.policy_version='SYNTHETIC_FINITE_RECOVERY_011_POLICY_V1'
+                  AND c.state='REPAIRED' AND c.version=2 AND c.proof_kind='CODE' AND c.goal='RepairPassword'
+                  AND c.expected_set_lifecycle_version=s.lifecycle_version AND r.set_reference=s.set_reference AND r.set_lifecycle_version=s.lifecycle_version
+                  AND r.outcome='PASSWORD_REPAIRED_NO_SESSION' AND r.session_effect='InvalidateExistingTunnerSessions'
+                  AND r.prior_password_digest<>r.repaired_password_digest AND r.prior_security_stamp_digest<>r.repaired_security_stamp_digest
+                  AND (SELECT count(*) FROM identity.recovery_code_entries code WHERE code.set_reference=s.set_reference AND code.account_id=c.account_id
+                    AND code.consumed_at IS NOT NULL AND code.version=2 AND code.consumed_by_operation_id='OP-RECOVERY-CASE-'||replace(c.case_id::text,'-','')
+                    AND code.consumption_correlation_id=replace(c.request_id::text,'-','') AND code.consumption_context_digest=c.context_digest
+                    AND code.consumption_outcome_reference=replace(r.result_id::text,'-',''))=1
+                  AND (SELECT count(*) FROM identity.recovery_code_entries code WHERE code.set_reference=s.set_reference AND code.consumed_at IS NULL AND code.version=1)=3
+                  AND (SELECT count(*) FROM identity.tunner_sessions)=2 AND NOT EXISTS(SELECT 1 FROM identity.tunner_sessions session
+                    WHERE session.account_id<>c.account_id OR session.security_stamp_digest<>c.prior_security_stamp_digest OR session.authenticated_at>=r.recorded_at)
+                  AND EXISTS(SELECT 1 FROM platform.outbox_messages m WHERE m.event_id=r.repair_outbox_event_id AND m.event_type='IdentitySecurityActivityRequested'
+                    AND m.subject=replace(c.case_id::text,'-','') AND m.operation_id='OP-RECOVERY-CASE-'||replace(c.case_id::text,'-','')
+                    AND m.correlation_id=replace(c.request_id::text,'-','') AND (SELECT count(*) FROM jsonb_object_keys(m.payload))=1
+                    AND m.payload->>'reference'=replace(r.result_id::text,'-','')))
+            """, connection);
+        command.Parameters.AddWithValue("account", issued.AccountId); command.Parameters.AddWithValue("issued", issued.OperationId);
+        command.Parameters.AddWithValue("set", issued.SetReference); command.Parameters.AddWithValue("version", issued.AccountVersion);
+        command.Parameters.AddWithValue("lifecycle", issued.LifecycleVersion); command.Parameters.AddWithValue("goal", BrowserTestRecoveryCase.GoalReference);
+        return await command.ExecuteScalarAsync(token).ConfigureAwait(false) is true;
+    }
     private static async Task<bool> InspectOwnerOutcomeAsync(string connectionString, BrowserTestRecoveryCodes profile, bool completed, CancellationToken token)
     {
         await using var connection = new NpgsqlConnection(connectionString); await connection.OpenAsync(token).ConfigureAwait(false);
@@ -711,7 +757,7 @@ internal static class FiniteRecoveryCoordinator
         rollback.Parameters.AddWithValue("account", account); rollback.Parameters.AddWithValue("operation", "OP-RECOVERY-CODE-" + operation.ToString("N")); rollback.Parameters.AddWithValue("context", context);
         return await rollback.ExecuteScalarAsync(token).ConfigureAwait(false) is true;
     }
-    private static async Task<(bool Safe, bool Audit)> InspectPersistenceAsync(string connectionString, bool databaseOwned, CancellationToken token)
+    private static async Task<(bool Safe, bool Audit)> InspectPersistenceAsync(string connectionString, bool databaseOwned, CancellationToken token, bool passwordRepair = false)
     {
         if (!databaseOwned) return (false, false); await using var connection = new NpgsqlConnection(connectionString); await connection.OpenAsync(token).ConfigureAwait(false);
         await using var shape = new NpgsqlCommand("SELECT NOT EXISTS(SELECT 1 FROM information_schema.columns WHERE table_schema='identity' AND table_name LIKE 'recovery_code_%' AND column_name IN ('code','codes','plaintext','protected_code','secret')) AND NOT EXISTS(SELECT 1 FROM identity.\"AspNetUserTokens\") AND NOT EXISTS(SELECT 1 FROM identity.recovery_code_entries WHERE length(verifier)<>84 OR crypto_profile_version<>'SYNTHETIC_FINITE_RECOVERY_009_CRYPTO_V1')", connection);
@@ -726,6 +772,12 @@ internal static class FiniteRecoveryCoordinator
                     m.correlation_id=replace(o.operation_id::text,'-','') AND m.subject=replace(o.set_reference::text,'-','') AND
                     payload->>'reference'=replace(o.operation_id::text,'-','') AND payload->>'setReference'=o.set_reference::text AND
                     payload->>'operation'=CASE o.kind WHEN 'GENERATE' THEN 'GENERATE_RECOVERY_CODES' ELSE 'REPLACE_RECOVERY_CODES' END))
+              WHEN @passwordRepair AND event_type='IdentitySecurityActivityRequested' AND operation_id LIKE 'OP-RECOVERY-CASE-%' THEN NOT (
+                (SELECT count(*) FROM jsonb_object_keys(payload))=1 AND EXISTS(SELECT 1 FROM identity.recovery_results r
+                  JOIN identity.recovery_cases c ON c.case_id=r.case_id AND c.result_id=r.result_id
+                  WHERE r.repair_outbox_event_id=m.event_id AND r.outcome='PASSWORD_REPAIRED_NO_SESSION' AND c.proof_kind='CODE'
+                    AND m.subject=replace(c.case_id::text,'-','') AND m.operation_id='OP-RECOVERY-CASE-'||replace(c.case_id::text,'-','')
+                    AND m.correlation_id=replace(c.request_id::text,'-','') AND payload->>'reference'=replace(r.result_id::text,'-','')))
               ELSE EXISTS(SELECT 1 FROM jsonb_each(m.payload) p WHERE NOT CASE lower(p.key)
                 WHEN 'reference' THEN jsonb_typeof(p.value)='string' AND (
                   ((p.value #>> '{}') IN (m.subject,m.operation_id) AND (p.value #>> '{}') ~ '^(ACC-|OP-|OP-TOTP-|OP-PASSKEY-|OP-RECOVERY-CODE-|OP-LOCAL-STEP-UP-)?[A-Fa-f0-9-]{32,36}$') OR
@@ -740,6 +792,7 @@ internal static class FiniteRecoveryCoordinator
                 WHEN 'eventtype' THEN jsonb_typeof(p.value)='string' AND (p.value #>> '{}')=m.event_type
                 ELSE false END) END)
             """, connection);
+        audit.Parameters.AddWithValue("passwordRepair", passwordRepair);
         return (safe, await audit.ExecuteScalarAsync(token).ConfigureAwait(false) is true);
     }
     private sealed class ResourceInterruption : Exception { }

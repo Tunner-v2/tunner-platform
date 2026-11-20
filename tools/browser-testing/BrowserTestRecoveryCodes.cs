@@ -25,7 +25,7 @@ internal sealed class BrowserTestRecoveryCodes(string origin, string journeyId, 
     internal bool OwnerFailureObserved { get; private set; }
     internal bool PublicationFinalFaultObserved { get; private set; }
     internal bool BodyDropObserved { get; private set; }
-    internal string JourneyId { get; } = JourneyIds.Contains(journeyId, StringComparer.Ordinal) ? journeyId : throw new InvalidOperationException("FINITE_RECOVERY_JOURNEY_INVALID");
+    internal string JourneyId { get; } = (JourneyIds.Contains(journeyId, StringComparer.Ordinal) || journeyId == BrowserTestRecoveryCase.PasswordJourneyId) ? journeyId : throw new InvalidOperationException("FINITE_RECOVERY_JOURNEY_INVALID");
     internal bool NeedsTotp => JourneyId.EndsWith("_TOTP_V1", StringComparison.Ordinal);
     internal string ProfileId => JourneyId == "RECOVERY_REPLACE_PASSWORD_V1" ? "R009_FINITE_SUBSET_V1" : "R009_FINITE_SINGLE_V1";
     internal RecoveryCodeCryptoProfile Crypto { get; } = new("SYNTHETIC_FINITE_RECOVERY_009_CRYPTO_V1", "10.0.13", 4, 4, 10000, 40000, 16, 1, TimeSpan.FromSeconds(2));
